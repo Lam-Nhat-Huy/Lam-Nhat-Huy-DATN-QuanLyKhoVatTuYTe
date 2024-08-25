@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>@yield('title', 'Kho Y Tế Nhà Bee')</title>
+
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('css/fullcalendar.bundle.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('css/plugins.bundle.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <link rel="shortcut icon" href="https://i.pinimg.com/originals/36/b0/a0/36b0a084544360c807d7c778358f762d.png" />
+
+    {{-- Link css riêng cho mỗi view blade --}}
+    @yield('styles')
+</head>
+
+<body id="kt_body"
+    class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
+    style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
+
+    <div class="d-flex flex-column flex-root">
+
+        <div class="page d-flex flex-row flex-column-fluid">
+
+            <navbar>
+                @include('master_layout.components.navbar')
+            </navbar>
+
+            <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+
+                <sidebar>
+                    @include('master_layout.components.sidebar')
+                </sidebar>
+
+                <main>
+                    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                        <div class="toolbar" id="kt_toolbar">
+                            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                                <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                                    data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                                    class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                                    <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">
+                                        @yield('title', 'Kho Y Tế Nhà Bee')
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post d-flex flex-column-fluid" id="kt_post">
+                            <div id="kt_content_container" class="container-xxl">
+                                <div class="row gy-5 g-xl-8">
+                                    <div class="col-xxl-12">
+                                        @yield('content')
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+                <footer>
+                    @include('master_layout.components.footer')
+                </footer>
+
+                <chat>
+                    @include('master_layout.components.chat_modal')
+                </chat>
+
+                <notification>
+                    @include('master_layout.components.notification_modal')
+                </notification>
+
+                <scrolltop>
+                    @include('master_layout.components.scroll_top')
+                </scrolltop>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="{{ asset('js/app.js') }}"></script>
+
+    <script src="{{ asset('js/plugins.bundle.js') }}"></script>
+
+    <script src="{{ asset('js/scripts.bundle.js') }}"></script>
+
+    <script src="{{ asset('js/fullcalender.bundle.js') }}"></script>
+
+    <script src="{{ asset('js/widgets.js') }}"></script>
+
+    <script src="{{ asset('js/chat.js') }}"></script>
+
+    <script src="{{ asset('js/create-app.js') }}"></script>
+
+    <script src="{{ asset('js/upgrade-plan.js') }}"></script>
+
+    {{-- Link js riêng cho mỗi view blade --}}
+    @yield('scripts')
+</body>
+
+</html>
