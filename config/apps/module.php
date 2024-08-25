@@ -41,5 +41,25 @@ return [
                 ]
             ]
         ],
+        [
+            'user_role' => [],
+            'title' => 'Nhắn Tin',
+            'icon' => 'fa fa-inbox',
+            'route' => ['chat.list', 'chat.contact'],
+            'subModule' => [
+                [
+                    'title' => 'Nhắn Tin',
+                    'route' => 'chat.list',
+                    'icon' => 'fa fa-message',
+                    'user_role' => []
+                ],
+                [
+                    'title' => 'Danh Bạ',
+                    'route' => 'chat.contact',
+                    'icon' => 'fa fa-address-book',
+                    'user_role' => []
+                ]
+            ]
+        ],
     ]
 ];

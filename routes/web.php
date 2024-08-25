@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Warehouse\ExportController;
 use App\Http\Controllers\Warehouse\ImportController;
@@ -20,6 +21,16 @@ Route::prefix('system')->group(function () {
         Route::get('/', [ImportController::class, 'index'])->name('warehouse.import');
     
         Route::get('/warehouse_export', [ExportController::class, 'index'])->name('warehouse.export');
+        
+    });
+
+    Route::prefix('chat')->group(function () {
+    
+        Route::get('/', [ChatController::class, 'index'])->name('chat.list');
+    
+        Route::get('/contact', [ChatController::class, 'contact'])->name('chat.contact');
+    
+        Route::get('/detail/{id}', [ChatController::class, 'detail'])->name('chat.detail');
         
     });
 });

@@ -73,10 +73,6 @@
                     @include('master_layout.components.footer')
                 </footer>
 
-                <chat>
-                    @include('master_layout.components.chat_modal')
-                </chat>
-
                 <notification>
                     @include('master_layout.components.notification_modal')
                 </notification>
