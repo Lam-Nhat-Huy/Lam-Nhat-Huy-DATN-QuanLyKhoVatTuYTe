@@ -221,7 +221,7 @@
                             </div>
                             <div class="separator"></div>
                             <div class="menu-item">
-                                <a href="" class="menu-link">Hồ Sơ</a>
+                                <a href="{{ route('profile.index') }}" class="menu-link">Hồ Sơ</a>
                             </div>
                             <div class="separator"></div>
                             <div class="menu-item">
