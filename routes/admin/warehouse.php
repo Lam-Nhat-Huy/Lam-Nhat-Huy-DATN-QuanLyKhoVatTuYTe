@@ -5,9 +5,10 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::prefix('warehouse')->group(function () {
-    
+
     Route::get('/import', [WarehouseController::class, 'import'])->name('warehouse.import');
 
     Route::get('/export', [WarehouseController::class, 'export'])->name('warehouse.export');
-    
+
+    Route::get('/create_import', [WarehouseController::class, 'create_import'])->name('warehouse.create_import');
 });

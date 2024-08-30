@@ -668,8 +668,8 @@
                 <div class="card-footer pt-4" id="kt_chat_messenger_footer">
 
                     <div class="d-flex">
-                        <input class="form-control form-control-flush form-control-sm border me-3 rounded" rows="1" data-kt-element="input"
-                            placeholder="Phản hồi của bạn">
+                        <input class="form-control form-control-flush form-control-sm border me-3 rounded" rows="1"
+                            data-kt-element="input" placeholder="Phản hồi của bạn">
 
                         <button class="btn btn-primary btn-sm" type="button">Gửi</button>
                     </div>
