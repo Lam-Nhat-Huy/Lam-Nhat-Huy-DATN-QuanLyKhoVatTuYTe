@@ -11,10 +11,4 @@ Route::prefix('warehouse')->group(function () {
     Route::get('/export', [WarehouseController::class, 'export'])->name('warehouse.export');
 
     Route::get('/create_import', [WarehouseController::class, 'create_import'])->name('warehouse.create_import');
-
-    Route::get('/create_export', [WarehouseController::class, 'create_export'])->name('warehouse.create_export');
-
-    Route::post('/store_export', [WarehouseController::class, 'store_export'])->name('warehouse.store_export');
-
-    Route::post('/store_import', [WarehouseController::class, 'store_import'])->name('warehouse.store_import');
 });
