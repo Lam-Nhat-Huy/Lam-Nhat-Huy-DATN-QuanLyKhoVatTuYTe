@@ -45,8 +45,9 @@
         </div>
 
         <div class="card-body">
-            <form action="" method="POST">
+            <form action="{{ route('warehouse.store_import') }}" method="POST">
                 @csrf
+
                 <div class="card p-4 mb-4">
                     <div class="row mb-3">
                         <div class="col-md-4">
@@ -158,14 +159,14 @@
 
                 </div>
 
+                <div id="materials-hidden-inputs"></div>
+
                 <!-- Submit Button -->
                 <div class="text-end mb-4">
-                    <button type="submit" class="btn btn-success btn-sm">Thêm sản phẩm</button>
+                    <button type="button" id="add-material" class="btn btn-success btn-sm">Thêm sản phẩm</button>
                 </div>
-            </form>
 
-            <form action="" action="POST">
-                @csrf
+
                 <!-- Block 3: Receipt Items List -->
                 <div class="card p-4 mb-4 col-md-12">
                     <div class="row">
@@ -187,43 +188,7 @@
                                             <th scope="col">ACT</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Vật liệu A</td>
-                                            <td>10</td>
-                                            <td>{{ number_format(20000, 0, ',', '.') }}</td>
-                                            <td>{{ number_format(20000, 0, ',', '.') }}</td>
-                                            <td>125</td>
-                                            <td>2025</td>
-                                            <td>5%</td>
-                                            <td>10%</td>
-                                            <td>{{ number_format(18000, 0, ',', '.') }}</td>
-                                            <td>{{ number_format(19000, 0, ',', '.') }}</td>
-                                            <td>
-                                                <div class="d-flex justify-content-end flex-shrink-0">
-
-                                                    <a href="#"
-                                                        class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
-                                                        <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
-                                                        <span class="svg-icon svg-icon-3">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                height="24" viewBox="0 0 24 24" fill="none">
-                                                                <path
-                                                                    d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z"
-                                                                    fill="black"></path>
-                                                                <path opacity="0.5"
-                                                                    d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z"
-                                                                    fill="black"></path>
-                                                                <path opacity="0.5"
-                                                                    d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z"
-                                                                    fill="black"></path>
-                                                            </svg>
-                                                        </span>
-                                                        <!--end::Svg Icon-->
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                    <tbody id="materials-list">
                                     </tbody>
                                 </table>
                             </div>
@@ -254,13 +219,16 @@
                                     10,500,000 <!-- Giá trị cứng -->
                                 </p>
                                 <hr>
-                                <button class="btn btn-primary btn-sm w-100 mt-3" id="saveReceipt">Lưu phiếu nhập</button>
+                                <div class="text-end mb-4">
+                                    <button type="submit" class="btn btn-success btn-sm">Gửi dữ liệu</button>
+                                </div>
                             </div>
                         </div>
 
                     </div>
                 </div>
             </form>
+
         </div>
     </div>
 @endsection
@@ -268,6 +236,13 @@
 @section('scripts')
     <script>
         const materials = @json($receiptItems);
+        const addedMaterials = [];
+        const materialsList = document.getElementById('materials-list');
+        const materialsHiddenInputs = document.getElementById('materials-hidden-inputs');
+        const selectedMaterialDiv = document.getElementById('selected-material');
+        const materialInput = document.getElementById('material');
+        let selectedMaterial = null;
+
 
         function autocomplete(input, items) {
             let currentFocus;
@@ -365,8 +340,78 @@
             }
         }
 
+        // Thêm vật tư vào danh sách
+        document.getElementById('add-material').addEventListener('click', function() {
+            const material_id = document.getElementById('material_id').value;
+            const unit_price = parseFloat(document.getElementById('unit_price').value) || 0;
+            const quantity = parseFloat(document.getElementById('quantity').value) || 0;
+            const discount_rate = parseFloat(document.getElementById('discount_rate').value) || 0;
+            const vat_rate = parseFloat(document.getElementById('vat_rate').value) || 0;
+            const batch_number = document.getElementById('batch_number').value;
+            const expiry_date = document.getElementById('expiry_date').value;
+
+            // Tính toán chiết khấu và VAT
+            const discountAmount = (unit_price * quantity) * (discount_rate / 100);
+            const totalBeforeVAT = (unit_price * quantity) - discountAmount;
+            const totalPrice = totalBeforeVAT + (totalBeforeVAT * vat_rate / 100);
+
+            // Tạo hàng mới cho bảng
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${material_id}</td>
+                <td>${quantity}</td>
+                <td>${unit_price}</td>
+                <td>${quantity * unit_price}</td>
+                <td>${batch_number}</td>
+                <td>${expiry_date}</td>
+                <td>${discount_rate}</td>
+                <td>${vat_rate}</td>
+                <td>${totalBeforeVAT}</td>
+                <td>${totalPrice}</td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm remove-material">Xóa</button>
+                </td>
+            `;
+            materialsList.appendChild(tr);
+
+            // Tạo input ẩn để gửi dữ liệu
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'materials[]';
+            hiddenInput.value = JSON.stringify({
+                material_id,
+                quantity,
+                unit_price,
+                discount_rate,
+                vat_rate,
+                batch_number,
+                expiry_date
+            });
+            materialsHiddenInputs.appendChild(hiddenInput);
+
+            // Thêm sự kiện xóa cho nút xóa
+            tr.querySelector('.remove-material').addEventListener('click', function() {
+                tr.remove(); // Xóa hàng khỏi bảng
+                hiddenInput.remove(); // Xóa input ẩn khỏi danh sách
+            });
+
+            // Xóa các ô nhập liệu sau khi thêm vào danh sách
+            document.getElementById('material_id').value = '';
+            document.getElementById('unit_price').value = '';
+            document.getElementById('quantity').value = '';
+            document.getElementById('discount_rate').value = '';
+            document.getElementById('vat_rate').value = '';
+            document.getElementById('batch_number').value = '';
+            document.getElementById('expiry_date').value = '';
+        });
+
+
         document.addEventListener('DOMContentLoaded', function() {
             autocomplete(document.getElementById("material_id"), materials);
+
+            document.querySelector('button[type="submit"]').addEventListener('click', function() {
+                addMaterial();
+            });
         });
     </script>
 @endsection
