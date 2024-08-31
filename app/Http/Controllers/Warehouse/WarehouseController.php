@@ -60,4 +60,22 @@ class WarehouseController extends Controller
 
         return view("{$this->route}.create_import", compact('title', 'receiptItems'));
     }
+
+    public function create_export()
+    {
+        $title = 'Tạo Phiếu Xuất Kho';
+
+
+        return view("{$this->route}.create_export", compact('title'));
+    }
+
+    public function store_export(Request $request)
+    {
+        dd($request->all());
+    }
+
+    public function store_import(Request $request)
+    {
+        dd($request->all());
+    }
 }

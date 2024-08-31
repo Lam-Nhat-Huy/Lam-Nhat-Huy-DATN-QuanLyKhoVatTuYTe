@@ -41,8 +41,6 @@
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">Tạo Phiếu Xuất</span>
             </h3>
-
-            <a href="{{ route('warehouse.export') }}" class="fw-bold text-dark">Quay về</a>
         </div>
 
         <div class="card-body">
@@ -53,29 +51,27 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="created_by" class="form-label mb-2">Người tạo</label>
-                            <select class="form-select setupSelect2" id="created_by" name="created_by">
+                            <select class="form-select" id="created_by" name="created_by">
                                 <option value="">Chọn người tạo</option>
                                 <option value="user1">Người tạo 1</option>
                                 <option value="user2">Người tạo 2</option>
                             </select>
                         </div>
                         <div class="col-md-6">
+                            <label for="export_date" class="form-label mb-2">Ngày xuất</label>
+                            <input type="date" class="form-control" id="export_date" name="export_date">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
                             <label for="export_type_id" class="form-label mb-2">Loại Xuất</label>
-                            <select class="form-select setupSelect2" id="export_type_id" name="export_type_id">
+                            <select class="form-select" id="export_type_id" name="export_type_id">
                                 <option value="">Chọn loại xuất</option>
                                 <option value="retail">Xuất bán lẻ</option>
                                 <option value="wholesale">Xuất bán sỉ</option>
                             </select>
                         </div>
-
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="export_date" class="form-label mb-2">Ngày xuất</label>
-                            <input type="date" class="form-control" id="export_date" name="export_date">
-                        </div>
-
                         <div class="col-md-6">
                             <label for="note" class="form-label mb-2">Ghi chú</label>
                             <textarea class="form-control" id="note" name="note" rows="3" placeholder="Nhập ghi chú"></textarea>
@@ -101,15 +97,16 @@
                     <div id="selected-material" class="col-md-12 mt-3"></div>
                     <div class="text-end mt-3">
                         <button type="button" id="add-material" class="btn btn-primary btn-sm">Thêm Vật Tư</button>
-
-                        <button type="submit" class="btn btn-danger btn-sm">Tạo phiếu nhập</button>
                     </div>
                 </div>
 
                 <!-- Các input ẩn để lưu dữ liệu vật tư đã chọn -->
                 <div id="materials-hidden-inputs"></div>
 
-
+                <!-- Nút gửi dữ liệu -->
+                <div class="text-end mb-4">
+                    <button type="submit" class="btn btn-success btn-sm">Gửi dữ liệu</button>
+                </div>
             </form>
 
             <!-- Danh sách vật tư đã chọn -->
@@ -156,7 +153,7 @@
                 {
                     name: 'Ibuprofen',
                     lot: 'I789',
-                    stock: 5,
+                    stock: 8,
                     expiry: '05-05-2024'
                 },
                 {
@@ -172,7 +169,6 @@
             const selectedMaterialDiv = document.getElementById('selected-material');
             const materialsList = document.getElementById('materials-list');
             const materialsHiddenInputs = document.getElementById('materials-hidden-inputs');
-            const quantityInput = document.getElementById('export_quantity');
             let selectedMaterial = null;
 
             // Tìm kiếm vật tư khi nhập vào
@@ -189,20 +185,11 @@
                                 materialInput.value = material.name;
                                 selectedMaterial = material;
 
-                                // Disable input số lượng nếu tồn kho thấp
-                                if (selectedMaterial.stock <= 5) {
-                                    quantityInput.disabled = true;
-                                    quantityInput.placeholder = 'Không được nhập';
-                                } else {
-                                    quantityInput.disabled = false;
-                                    quantityInput.placeholder = 'Nhập số lượng';
-                                }
-
                                 // Tạo một đoạn HTML để hiển thị thông tin vật tư đã chọn
                                 const infoHTML = `
                         <p>Vật tư đã chọn: ${material.name} - Số lô: ${material.lot}
                         (tồn: ${material.stock})
-                        ${material.stock <= 5 ? '<span style="color: red;">(Số lượng tồn kho thấp)</span>' : ''}
+                        ${material.stock < 5 ? '<span style="color: red;">(Số lượng tồn kho thấp)</span>' : ''}
                         (HSD: ${material.expiry})</p>
                     `;
                                 selectedMaterialDiv.innerHTML = infoHTML;
