@@ -42,6 +42,8 @@
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">Tạo Phiếu Nhập</span>
             </h3>
+
+            <a href="{{ route('warehouse.export') }}" class="fw-bold text-dark">Quay về</a>
         </div>
 
         <div class="card-body">
@@ -52,7 +54,7 @@
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label for="supplier_id" class="form-label mb-2">Nhà cung cấp</label>
-                            <select class="form-select" id="supplier_id" name="supplier_id">
+                            <select class="form-select setupSelect2" id="supplier_id" name="supplier_id">
                                 <option value="">Chọn nhà cung cấp</option>
                                 <option value="supplier1">Nhà cung cấp 1</option>
                                 <option value="supplier2">Nhà cung cấp 2</option>
@@ -62,7 +64,7 @@
 
                         <div class="col-md-4">
                             <label for="created_by" class="form-label mb-2">Người tạo</label>
-                            <select class="form-select" id="created_by" name="created_by">
+                            <select class="form-select setupSelect2" id="created_by" name="created_by">
                                 <option value="">Chọn người tạo</option>
                                 <option value="user1">Người tạo 1</option>
                                 <option value="user2">Người tạo 2</option>
@@ -164,6 +166,8 @@
                 <!-- Submit Button -->
                 <div class="text-end mb-4">
                     <button type="button" id="add-material" class="btn btn-success btn-sm">Thêm sản phẩm</button>
+
+                    <button type="submit" class="btn btn-danger btn-sm">Tạo phiếu nhập</button>
                 </div>
 
 
@@ -219,9 +223,6 @@
                                     10,500,000 <!-- Giá trị cứng -->
                                 </p>
                                 <hr>
-                                <div class="text-end mb-4">
-                                    <button type="submit" class="btn btn-success btn-sm">Gửi dữ liệu</button>
-                                </div>
                             </div>
                         </div>
 
