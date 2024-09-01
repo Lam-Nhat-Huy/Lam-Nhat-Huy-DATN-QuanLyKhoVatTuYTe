@@ -22,6 +22,8 @@
 
     <link rel="shortcut icon" href="https://i.pinimg.com/originals/36/b0/a0/36b0a084544360c807d7c778358f762d.png" />
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+
     {{-- Link css riêng cho mỗi view blade --}}
     @yield('styles')
 </head>
@@ -102,6 +104,10 @@
     <script src="{{ asset('js/create-app.js') }}"></script>
 
     <script src="{{ asset('js/upgrade-plan.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script src="{{ asset('lib/library.js') }}"></script>
 
     {{-- Link js riêng cho mỗi view blade --}}
     @yield('scripts')
