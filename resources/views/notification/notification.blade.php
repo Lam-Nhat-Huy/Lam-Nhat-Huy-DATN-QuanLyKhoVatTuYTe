@@ -3,64 +3,58 @@
 @section('styles')
 @endsection
 
-@section('scripts')
-@endsection
-
 @section('title')
     {{ $title }}
+@endsection
+
+@section('scripts')
 @endsection
 
 @section('content')
     <div class="card mb-5 mb-xl-8">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Báo Cáo</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Thông Báo</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('report.report_trash') }}" class="btn btn-sm btn-danger me-2">
+                <a href="{{ route('notification.notification_trash') }}" class="btn btn-sm btn-danger me-2">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-trash me-1"></i>
                         Thùng Rác
                     </span>
                 </a>
-                <a href="{{ route('report.insert_report') }}" class="btn btn-sm btn-twitter">
+                <a href="{{ route('notification.notification_add') }}" class="btn btn-sm btn-twitter">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-plus me-1"></i>
-                        Tạo Báo Cáo
+                        Thêm Thông Báo
                     </span>
                 </a>
             </div>
         </div>
         <div class="card-body py-1 me-6">
             <form action="" class="row">
-                <div class="col-3">
-                    <select name="ur" id="ur" class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
-                        <option value="" selected>--Theo Người Báo Cáo--</option>
+                <div class="col-4">
+                    <select name="ur" id="ur"
+                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                        <option value="" selected>--Theo Người Tạo--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
                 </div>
-                <div class="col-3">
-                    <select name="rt" id="rt" class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
-                        <option value="" selected>--Theo Loại Báo Cáo--</option>
-                        @foreach ($AllReportType as $item)
-                            <option value={{ $item['id'] }} {{ request()->rt == $item['id'] ? 'selected' : '' }}>
-                                {{ $item['name'] }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-3">
-                    <select name="stt" id="stt" class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                <div class="col-4">
+                    <select name="stt" id="stt"
+                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
                         <option value="" selected>--Theo Trạng Thái--</option>
                         <option value="1" {{ request()->stt == 1 ? 'selected' : '' }}>Chưa Duyệt</option>
                         <option value="2" {{ request()->stt == 2 ? 'selected' : '' }}>Đã Duyệt</option>
                     </select>
                 </div>
-                <div class="col-3">
+                <div class="col-4">
                     <div class="row">
                         <div class="col-10">
-                            <input type="search" name="kw" placeholder="Tìm Kiếm Mã Báo Cáo.."
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success" value="{{ request()->kw }}">
+                            <input type="search" name="kw" placeholder="Tìm Kiếm Mã Thông Báo.."
+                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                value="{{ request()->kw }}">
                         </div>
                         <div class="col-2">
                             <button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
@@ -74,20 +68,19 @@
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
                         <tr class="fw-bolder bg-success">
-                            <th class="ps-4">Mã Báo Cáo</th>
-                            <th class="">Người Báo Cáo</th>
-                            <th class="">Nội Dung Báo Cáo</th>
-                            <th class="">Loại Báo Cáo</th>
-                            <th class="">File Báo Cáo</th>
+                            <th class="ps-4">Mã Thông Báo</th>
+                            <th class="">Người Tạo</th>
+                            <th class="">Nội Dung</th>
+                            <th class="">Ngày Tạo</th>
                             <th class="">Trạng Thái</th>
                             <th class="pe-3">Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($AllReport as $item)
+                        @foreach ($AllNotification as $item)
                             <tr class="text-center">
                                 <td>
-                                    #{{ $item['code'] }}
+                                    #{{ $item['notification_code'] }}
                                 </td>
                                 <td>
                                     {{ $item['user_create'] }}
@@ -96,12 +89,7 @@
                                     {{ $item['content'] }}
                                 </td>
                                 <td>
-                                    {{ $item['report_type_id'] }}
-                                </td>
-                                <td>
-                                    <strong style="cursor: pointer; color: rgb(33, 64, 178);"
-                                        download="{{ $item['file'] }}">Tải
-                                        Xuống</strong>
+                                    {{ $item['date_of_entry'] }}
                                 </td>
                                 <td>
                                     @if ($item['status'] == 1)
@@ -122,14 +110,15 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h3 class="modal-title" id="checkModalLabel">Duyệt Báo Cáo</h3>
+                                                        <h3 class="modal-title" id="checkModalLabel">Duyệt Thông Báo
+                                                        </h3>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <form action="" method="">
                                                             @csrf
-                                                            <h4 class="text-danger">Duyệt Báo Cáo Này?</h4>
+                                                            <h4 class="text-danger">Duyệt Thông Báo Này?</h4>
                                                         </form>
                                                     </div>
                                                     <div class="modal-footer">
@@ -141,7 +130,8 @@
                                             </div>
                                         </div>
 
-                                        <a class="btn btn-sm btn-twitter" href="{{ route('report.update_report') }}">
+                                        <a class="btn btn-sm btn-twitter"
+                                            href="{{ route('notification.notification_edit') }}">
                                             <i class="fa fa-edit"></i>Sửa
                                         </a>
                                     @endif
@@ -156,14 +146,15 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h3 class="modal-title" id="deleteModalLabel">Xóa Báo Cáo</h3>
+                                                    <h3 class="modal-title" id="deleteModalLabel">Xóa Thông Báo
+                                                    </h3>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <form action="" method="">
                                                         @csrf
-                                                        <h4 class="text-danger">Xóa Báo Cáo Này?</h4>
+                                                        <h4 class="text-danger">Xóa Thông Báo Này?</h4>
                                                     </form>
                                                 </div>
                                                 <div class="modal-footer">

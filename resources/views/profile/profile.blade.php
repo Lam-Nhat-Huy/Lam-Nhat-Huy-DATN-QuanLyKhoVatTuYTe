@@ -129,7 +129,7 @@
                 </div>
 
 
-                <a href="" class="btn btn-primary btn-sm align-self-center">Chỉnh Sửa</a>
+                <a href="" class="btn btn-twitter btn-sm align-self-center">Chỉnh Sửa</a>
 
             </div>
 

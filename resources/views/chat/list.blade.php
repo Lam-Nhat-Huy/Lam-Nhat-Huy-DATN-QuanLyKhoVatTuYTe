@@ -671,7 +671,7 @@
                         <input class="form-control form-control-flush form-control-sm border me-3 rounded" rows="1"
                             data-kt-element="input" placeholder="Phản hồi của bạn">
 
-                        <button class="btn btn-primary btn-sm" type="button">Gửi</button>
+                        <button class="btn btn-twitter btn-sm" type="button">Gửi</button>
                     </div>
 
                 </div>

@@ -3,9 +3,6 @@
 @section('styles')
 @endsection
 
-@section('scripts')
-@endsection
-
 @section('title')
     {{ $title }}
 @endsection
@@ -14,19 +11,19 @@
     <div class="card mb-5 mb-xl-8">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Báo Cáo</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Yêu Cầu Đặt Hàng</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('report.report_trash') }}" class="btn btn-sm btn-danger me-2">
+                <a href="{{ route('order_request.order_request_trash') }}" class="btn btn-sm btn-danger me-2">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-trash me-1"></i>
                         Thùng Rác
                     </span>
                 </a>
-                <a href="{{ route('report.insert_report') }}" class="btn btn-sm btn-twitter">
+                <a href="{{ route('order_request.insert_order_request') }}" class="btn btn-sm btn-twitter">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-plus me-1"></i>
-                        Tạo Báo Cáo
+                        Tạo Yêu Cầu
                     </span>
                 </a>
             </div>
@@ -35,18 +32,16 @@
             <form action="" class="row">
                 <div class="col-3">
                     <select name="ur" id="ur" class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
-                        <option value="" selected>--Theo Người Báo Cáo--</option>
+                        <option value="" selected>--Theo Nhà Cung Cấp--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
                 </div>
                 <div class="col-3">
-                    <select name="rt" id="rt" class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
-                        <option value="" selected>--Theo Loại Báo Cáo--</option>
-                        @foreach ($AllReportType as $item)
-                            <option value={{ $item['id'] }} {{ request()->rt == $item['id'] ? 'selected' : '' }}>
-                                {{ $item['name'] }}</option>
-                        @endforeach
+                    <select name="ur" id="ur" class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                        <option value="" selected>--Theo Người Tạo--</option>
+                        <option value="a">A</option>
+                        <option value="b">B</option>
                     </select>
                 </div>
                 <div class="col-3">
@@ -59,8 +54,9 @@
                 <div class="col-3">
                     <div class="row">
                         <div class="col-10">
-                            <input type="search" name="kw" placeholder="Tìm Kiếm Mã Báo Cáo.."
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success" value="{{ request()->kw }}">
+                            <input type="search" name="kw" placeholder="Tìm Kiếm Mã Yêu Cầu.."
+                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                value="{{ request()->kw }}">
                         </div>
                         <div class="col-2">
                             <button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
@@ -74,34 +70,28 @@
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
                         <tr class="fw-bolder bg-success">
-                            <th class="ps-4">Mã Báo Cáo</th>
-                            <th class="">Người Báo Cáo</th>
-                            <th class="">Nội Dung Báo Cáo</th>
-                            <th class="">Loại Báo Cáo</th>
-                            <th class="">File Báo Cáo</th>
+                            <th class="ps-4">Mã Yêu Cầu</th>
+                            <th class="">Nhà Cung Cấp</th>
+                            <th class="">Người Tạo</th>
+                            <th class="">Ngày Tạo</th>
                             <th class="">Trạng Thái</th>
                             <th class="pe-3">Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($AllReport as $item)
+                        @foreach ($AllOrderRequest as $item)
                             <tr class="text-center">
                                 <td>
-                                    #{{ $item['code'] }}
+                                    #{{ $item['order_request_code'] }}
+                                </td>
+                                <td>
+                                    {{ $item['supplier_id'] }}
                                 </td>
                                 <td>
                                     {{ $item['user_create'] }}
                                 </td>
                                 <td>
-                                    {{ $item['content'] }}
-                                </td>
-                                <td>
-                                    {{ $item['report_type_id'] }}
-                                </td>
-                                <td>
-                                    <strong style="cursor: pointer; color: rgb(33, 64, 178);"
-                                        download="{{ $item['file'] }}">Tải
-                                        Xuống</strong>
+                                    {{ $item['date_of_entry'] }}
                                 </td>
                                 <td>
                                     @if ($item['status'] == 1)
@@ -122,14 +112,14 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h3 class="modal-title" id="checkModalLabel">Duyệt Báo Cáo</h3>
+                                                        <h3 class="modal-title" id="checkModalLabel">Duyệt Yêu Cầu Đặt Hàng</h3>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <form action="" method="">
                                                             @csrf
-                                                            <h4 class="text-danger">Duyệt Báo Cáo Này?</h4>
+                                                            <h4 class="text-danger">Duyệt Yêu Cầu Đặt Hàng Này?</h4>
                                                         </form>
                                                     </div>
                                                     <div class="modal-footer">
@@ -141,7 +131,7 @@
                                             </div>
                                         </div>
 
-                                        <a class="btn btn-sm btn-twitter" href="{{ route('report.update_report') }}">
+                                        <a class="btn btn-sm btn-twitter" href="{{ route('order_request.update_order_request') }}">
                                             <i class="fa fa-edit"></i>Sửa
                                         </a>
                                     @endif
@@ -150,20 +140,20 @@
                                         data-bs-target="#deleteModal_{{ $item['id'] }}"><i
                                             class="fa fa-trash"></i>Xóa</button>
 
-                                    <div class="modal fade" id="deleteModal_{{ $item['id'] }}" data-bs-backdrop="static"
-                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
-                                        aria-hidden="true">
+                                    <div class="modal fade" id="deleteModal_{{ $item['id'] }}"
+                                        data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                        aria-labelledby="deleteModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h3 class="modal-title" id="deleteModalLabel">Xóa Báo Cáo</h3>
+                                                    <h3 class="modal-title" id="deleteModalLabel">Xóa Yêu Cầu Đặt Hàng</h3>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <form action="" method="">
                                                         @csrf
-                                                        <h4 class="text-danger">Xóa Báo Cáo Này?</h4>
+                                                        <h4 class="text-danger">Xóa Yêu Cầu Đặt Hàng Này?</h4>
                                                     </form>
                                                 </div>
                                                 <div class="modal-footer">
@@ -182,4 +172,7 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
 @endsection

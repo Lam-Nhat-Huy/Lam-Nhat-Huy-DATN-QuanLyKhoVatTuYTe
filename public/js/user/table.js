@@ -162,7 +162,7 @@ var KTUsersList = function () {
                             buttonsStyling: false,
                             confirmButtonText: "Ok, got it!",
                             customClass: {
-                                confirmButton: "btn fw-bold btn-primary",
+                                confirmButton: "btn fw-bold btn-twitter",
                             }
                         }).then(function () {
                             // Remove current row
@@ -178,7 +178,7 @@ var KTUsersList = function () {
                             buttonsStyling: false,
                             confirmButtonText: "Ok, got it!",
                             customClass: {
-                                confirmButton: "btn fw-bold btn-primary",
+                                confirmButton: "btn fw-bold btn-twitter",
                             }
                         });
                     }
@@ -231,7 +231,7 @@ var KTUsersList = function () {
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",
                         customClass: {
-                            confirmButton: "btn fw-bold btn-primary",
+                            confirmButton: "btn fw-bold btn-twitter",
                         }
                     }).then(function () {
                         // Remove all selected customers
@@ -255,7 +255,7 @@ var KTUsersList = function () {
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",
                         customClass: {
-                            confirmButton: "btn fw-bold btn-primary",
+                            confirmButton: "btn fw-bold btn-twitter",
                         }
                     });
                 }

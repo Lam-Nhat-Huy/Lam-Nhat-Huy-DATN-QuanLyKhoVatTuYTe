@@ -59,7 +59,7 @@ var KTModalExportUsers = function () {
                                 buttonsStyling: false,
                                 confirmButtonText: "Ok, got it!",
                                 customClass: {
-                                    confirmButton: "btn btn-primary"
+                                    confirmButton: "btn btn-twitter"
                                 }
                             }).then(function (result) {
                                 if (result.isConfirmed) {
@@ -79,7 +79,7 @@ var KTModalExportUsers = function () {
                             buttonsStyling: false,
                             confirmButtonText: "Ok, got it!",
                             customClass: {
-                                confirmButton: "btn btn-primary"
+                                confirmButton: "btn btn-twitter"
                             }
                         });
                     }
@@ -100,7 +100,7 @@ var KTModalExportUsers = function () {
                 confirmButtonText: "Yes, cancel it!",
                 cancelButtonText: "No, return",
                 customClass: {
-                    confirmButton: "btn btn-primary",
+                    confirmButton: "btn btn-twitter",
                     cancelButton: "btn btn-active-light"
                 }
             }).then(function (result) {
@@ -114,7 +114,7 @@ var KTModalExportUsers = function () {
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",
                         customClass: {
-                            confirmButton: "btn btn-primary",
+                            confirmButton: "btn btn-twitter",
                         }
                     });
                 }
@@ -134,7 +134,7 @@ var KTModalExportUsers = function () {
                 confirmButtonText: "Yes, cancel it!",
                 cancelButtonText: "No, return",
                 customClass: {
-                    confirmButton: "btn btn-primary",
+                    confirmButton: "btn btn-twitter",
                     cancelButton: "btn btn-active-light"
                 }
             }).then(function (result) {
@@ -148,7 +148,7 @@ var KTModalExportUsers = function () {
                         buttonsStyling: false,
                         confirmButtonText: "Ok, got it!",
                         customClass: {
-                            confirmButton: "btn btn-primary",
+                            confirmButton: "btn btn-twitter",
                         }
                     });
                 }

@@ -52,7 +52,7 @@
                                     {{-- @if (in_array(session('user_role'), (array) $sub['user_role'])) --}}
                                     @if (Route::has($sub['route']))
                                         <div class="menu-item">
-                                            <a class="menu-link {{ Route::currentRouteName() === $sub['route'] ? 'active' : '' }}"
+                                            <a class="menu-link {{ in_array(Route::currentRouteName(), (array) $sub['route']) ? 'active' : '' }}"
                                                 href="{{ route($sub['route']) }}">
                                                 <i class="{{ $sub['icon'] }} me-2"></i>
                                                 <span class="menu-title">{{ $sub['title'] }}</span>
