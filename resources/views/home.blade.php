@@ -8,7 +8,7 @@
 
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>@yield('title', 'Kho Y Tế Nhà Bee')</title>
+    <title>@yield('title', 'BeeSoft')</title>
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
@@ -45,10 +45,10 @@
                         <!--end::Logo-->
                         <!--begin::Title-->
                         <h1 class="fw-bolder fs-2qx" style="color: #000000;">Chào Mừng Đến Với</h1>
-                        <h1 class="fw-bolder fs-2qx pb-5 pb-md-10" style="color: #128833;">Kho Y Tế Nhà Bee</h1>
+                        <h1 class="fw-bolder fs-2qx pb-5 pb-md-10" style="color: #128833;">BeeSoft</h1>
                         <!--end::Title-->
                         <!--begin::Description-->
-                        <p class="fw-bold fs-2" style="color: #000000;">Kho Y Tế Nhà Bee luôn nỗ lực sáng tạo sản phẩm ngày một
+                        <p class="fw-bold fs-2" style="color: #000000;">BeeSoft luôn nỗ lực sáng tạo sản phẩm ngày một
                             thông minh hơn và tiện ích hơn nhằm thực hiện khát vọng ứng dụng những thành tựu của CNTT
                             vào lĩnh vực y tế
                         </p>
@@ -112,7 +112,7 @@
                             <!--begin::Actions-->
                             <div class="text-center">
                                 <!--begin::Submit button-->
-                                <button type="submit" id="kt_sign_in_submit" class="btn btn-lg btn-primary w-100 mb-5">
+                                <button type="submit" id="kt_sign_in_submit" class="btn btn-lg btn-twitter w-100 mb-5">
                                     <span class="indicator-label">Đăng Nhập</span>
                                     <span class="indicator-progress">Đợi Chút...
                                         <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>

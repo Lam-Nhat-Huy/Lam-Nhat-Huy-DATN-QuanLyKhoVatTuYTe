@@ -15,7 +15,7 @@ class RouteLoader
             if (file_exists($filePath)) {
                 require_once $filePath;
             } else {
-                Log::error("Route không tồn tại: " . $filePath);
+                Log::error("Đường dẫn không tồn tại: " . $filePath);
             }
         }
     }

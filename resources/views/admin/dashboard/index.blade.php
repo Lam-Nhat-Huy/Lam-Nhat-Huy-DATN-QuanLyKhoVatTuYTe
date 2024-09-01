@@ -15,7 +15,7 @@
                 <span class="text-muted mt-1 fw-bold fs-7">2 Báo Cáo Mới Nhất</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('report.index') }}" class="btn btn-sm btn-light-primary">
+                <a href="{{ route('report.index') }}" class="btn btn-sm btn-twitter">
                     <span class="align-items-center d-flex">
                         Xem Tất Cả Báo Cáo
                         <i class="fa fa-arrow-right ms-2"></i>
@@ -35,12 +35,12 @@
             <div class="table-responsive">
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
-                        <tr class="fw-bolder text-muted bg-light">
-                            <th class="ps-4 rounded-start">Mã Báo Cáo</th>
+                        <tr class="fw-bolder bg-success">
+                            <th class="ps-4">Mã Báo Cáo</th>
                             <th class="">Người Báo Cáo</th>
                             <th class="">Nội Dung Báo Cáo</th>
                             <th class="">Loại Báo Cáo</th>
-                            <th class="rounded-end">File Báo Cáo</th>
+                            <th class="pe-3">File Báo Cáo</th>
                             {{-- <th class="rounded-end">Hành Động</th> --}}
                         </tr>
                     </thead>
@@ -95,7 +95,7 @@
                 <span class="text-muted mt-1 fw-bold fs-7">2 Vật Tư Mới Nhất</span>
             </h3>
             <div class="card-toolbar">
-                <a href="#" class="btn btn-sm btn-light-primary">
+                <a href="#" class="btn btn-sm btn-twitter">
                     <span class="align-items-center d-flex">
                         <span class="align-items-center d-flex">
                             Xem Tất Cả Kho
@@ -141,8 +141,8 @@
             <div class="table-responsive">
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
-                        <tr class="fw-bolder text-muted bg-light">
-                            <th class="ps-4 rounded-start">Mã VT</th>
+                        <tr class="fw-bolder bg-success">
+                            <th class="ps-4">Mã VT</th>
                             <th class="">Tên VT</th>
                             <th class="">ĐVT</th>
                             <th class="">Số Lô</th>
@@ -153,7 +153,7 @@
                             <th class="">Tổng Nhập</th>
                             <th class="">Tổng Xuất</th>
                             <th class="">Tồn Cuối</th>
-                            <th class="rounded-end">TT Tồn Cuối</th>
+                            <th class="pe-3">TT Tồn Cuối</th>
                             {{-- <th class="rounded-end">Hành Động</th> --}}
                         </tr>
                     </thead>

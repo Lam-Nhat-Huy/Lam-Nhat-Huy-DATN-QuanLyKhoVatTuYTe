@@ -6,7 +6,9 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>@yield('title', 'Kho Y Tế Nhà Bee')</title>
+    <title>@yield('title', 'BeeSoft')</title>
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
@@ -54,7 +56,7 @@
                                     data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                     class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                     <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">
-                                        @yield('title', 'Kho Y Tế Nhà Bee')
+                                        @yield('title', 'BeeSoft')
                                     </h1>
                                 </div>
                             </div>
