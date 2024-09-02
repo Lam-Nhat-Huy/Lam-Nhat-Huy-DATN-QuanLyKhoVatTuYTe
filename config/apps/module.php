@@ -25,7 +25,7 @@ return [
             'user_role' => [],
             'title' => 'Kho',
             'icon' => 'fa fa-warehouse',
-            'route' => ['warehouse.import', 'warehouse.export','warehouse.check'],
+            'route' => ['warehouse.import', 'warehouse.export', 'warehouse.check'],
             'subModule' => [
                 [
                     'title' => 'Nhập Kho',
@@ -38,12 +38,11 @@ return [
                     'route' => 'warehouse.export',
                     'icon' => 'fa fa-upload',
                     'user_role' => []
-                ]
-                ,
+                ],
                 [
                     'title' => 'Kiểm Kho',
-                    'route' => 'warehouse.check',
-                    'icon' => 'fa fa-upload',
+                    'route' => 'check_warehouse.index',
+                    'icon' => 'fa fa-archive',
                     'user_role' => []
                 ]
             ]

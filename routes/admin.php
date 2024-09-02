@@ -5,12 +5,13 @@ use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Log;
 
 Route::prefix('system')->group(function () {
-    
+
     Route::get('/', [DashboardController::class, 'index'])->name('system.index');
 
     $routeFiles = [
         'admin/report.php',
         'admin/warehouse.php',
+        'admin/check_warehouse.php',
         'admin/chat.php',
         'admin/profile.php',
         'admin/material.php',
