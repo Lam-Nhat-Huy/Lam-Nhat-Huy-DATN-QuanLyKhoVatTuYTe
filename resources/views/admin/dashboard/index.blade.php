@@ -1,6 +1,65 @@
 @extends('master_layout.layout')
 
 @section('styles')
+    <style>
+      .container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .chart-container {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .alert-wrapper {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .alert-container {
+            width: 48%;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .high-alert-container {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+        }
+
+        .alert-list li {
+            font-weight: bold;
+        }
+
+        .forecast-container {
+            margin-top: 40px;
+        }
+
+        .forecast-container canvas,
+        .chart-container canvas {
+            width: 100%;
+            height: 400px;
+        }
+
+        .card-body {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .card-body input[type="date"],
+        .card-body select,
+        .card-body input[type="search"],
+        .card-body button {
+            margin-bottom: 10px;
+        }
+    </style>
 @endsection
 
 @section('title')
@@ -8,99 +67,17 @@
 @endsection
 
 @section('content')
-    <div class="card mb-5 mb-xl-8">
-        <div class="card-header border-0 pt-5">
-            <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Báo Cáo</span>
-                <span class="text-muted mt-1 fw-bold fs-7">2 Báo Cáo Mới Nhất</span>
-            </h3>
-            <div class="card-toolbar">
-                <a href="{{ route('report.index') }}" class="btn btn-sm btn-twitter">
-                    <span class="align-items-center d-flex">
-                        Xem Tất Cả Báo Cáo
-                        <i class="fa fa-arrow-right ms-2"></i>
-                    </span>
-                </a>
-            </div>
-        </div>
-        <div class="card-body py-1 text-right">
-            <select name="" id="" class="mt-2 mb-2">
-                <option value="0" selected>Theo Loại Báo Cáo</option>
-                <option value="">A</option>
-                <option value="">B</option>
-                <option value="">C</option>
-            </select>
-        </div>
-        <div class="card-body py-3">
-            <div class="table-responsive">
-                <table class="table table-striped align-middle gs-0 gy-4">
-                    <thead>
-                        <tr class="fw-bolder bg-success">
-                            <th class="ps-4">Mã Báo Cáo</th>
-                            <th class="">Người Báo Cáo</th>
-                            <th class="">Nội Dung Báo Cáo</th>
-                            <th class="">Loại Báo Cáo</th>
-                            <th class="pe-3">File Báo Cáo</th>
-                            {{-- <th class="rounded-end">Hành Động</th> --}}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="text-center">
-                            <td>
-                                #123
-                            </td>
-                            <td>
-                                Lữ Phát Huy - Kế Toán
-                            </td>
-                            <td>
-                                Báo Cáo Chi Phí Hóa Đơn Nhập Kho
-                            </td>
-                            <td>
-                                Hóa Đơn Nhập Kho
-                            </td>
-                            <td>
-                                <strong style="cursor: pointer; color: rgb(33, 64, 178);"
-                                    download="file:///C:/Users/admin/Documents/Zalo%20Received%20Files/cv-pc05334.pdf">Tải
-                                    Xuống</strong>
-                            </td>
-                        </tr>
-                        <tr class="text-center">
-                            <td>
-                                #343
-                            </td>
-                            <td>
-                                Lâm Nhật Huy - Nhân Viên Mua Hàng
-                            </td>
-                            <td>
-                                Báo Cáo Chi Phí Hóa Đơn Xuất Kho
-                            </td>
-                            <td>
-                                Hóa Đơn Xuất Kho
-                            </td>
-                            <td>
-                                <strong style="cursor: pointer; color: rgb(33, 64, 178);"
-                                    download="file:///C:/Users/admin/Documents/Zalo%20Received%20Files/cv-pc05334.pdf">Tải
-                                    Xuống</strong>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="card mb-5 mb-xl-8">
+    <div class="card mb-5 mb-xl-12">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">Tồn Kho</span>
                 <span class="text-muted mt-1 fw-bold fs-7">2 Vật Tư Mới Nhất</span>
             </h3>
             <div class="card-toolbar">
-                <a href="#" class="btn btn-sm btn-twitter">
+                <a href="#" class="btn btn-sm btn-light-primary">
                     <span class="align-items-center d-flex">
-                        <span class="align-items-center d-flex">
-                            Xem Tất Cả Kho
-                            <i class="fa fa-arrow-right ms-2"></i>
-                        </span>
+                        Xem Tất Cả Kho
+                        <i class="fa fa-arrow-right ms-2"></i>
                     </span>
                 </a>
             </div>
@@ -141,8 +118,8 @@
             <div class="table-responsive">
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
-                        <tr class="fw-bolder bg-success">
-                            <th class="ps-4">Mã VT</th>
+                        <tr class="fw-bolder text-muted bg-light">
+                            <th class="ps-4 rounded-start">Mã VT</th>
                             <th class="">Tên VT</th>
                             <th class="">ĐVT</th>
                             <th class="">Số Lô</th>
@@ -153,15 +130,12 @@
                             <th class="">Tổng Nhập</th>
                             <th class="">Tổng Xuất</th>
                             <th class="">Tồn Cuối</th>
-                            <th class="pe-3">TT Tồn Cuối</th>
-                            {{-- <th class="rounded-end">Hành Động</th> --}}
+                            <th class="rounded-end">TT Tồn Cuối</th>
                         </tr>
                     </thead>
                     <thead id="thead_2">
                         <tr>
-                            <th colspan="6" class="ps-4 fw-bold" id="thead_th_1">Số Lượng Vật Tư:
-                                2
-                            </th>
+                            <th colspan="6" class="ps-4 fw-bold" id="thead_th_1">Số Lượng Vật Tư: 2</th>
                             <th>2</th>
                             <th>2</th>
                             <th>2</th>
@@ -172,160 +146,151 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            {{-- <td class="">
-                                <a href="#"
-                                    class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-                                    <!--begin::Svg Icon | path: icons/duotune/art/art005.svg-->
-                                    <span class="svg-icon svg-icon-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                            height="24" viewBox="0 0 24 24" fill="none">
-                                            <path opacity="0.3"
-                                                d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.474C21.7817 5.85581 21.9962 6.37355 21.9962 6.91345C21.9962 7.45335 21.7817 7.97122 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z"
-                                                fill="black" />
-                                            <path
-                                                d="M5.574 21.3L3.692 21.928C3.46591 22.0032 3.22334 22.0141 2.99144 21.9594C2.75954 21.9046 2.54744 21.7864 2.3789 21.6179C2.21036 21.4495 2.09202 21.2375 2.03711 21.0056C1.9822 20.7737 1.99289 20.5312 2.06799 20.3051L2.696 18.422L5.574 21.3ZM4.13499 14.105L9.891 19.861L19.245 10.507L13.489 4.75098L4.13499 14.105Z"
-                                                fill="black" />
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                </a>
-                                <a href="#"
-                                    class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
-                                    <span class="svg-icon svg-icon-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                            height="24" viewBox="0 0 24 24" fill="none">
-                                            <path
-                                                d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z"
-                                                fill="black" />
-                                            <path opacity="0.5"
-                                                d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z"
-                                                fill="black" />
-                                            <path opacity="0.5"
-                                                d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z"
-                                                fill="black" />
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                </a>
-                            </td> --}}
+                            <td>#03941384</td>
+                            <td>#03941384</td>
+                            <td>#03941384</td>
+                            <td>#03941384</td>
+                            <td>#03941384</td>
+                            <td>#03941384</td>
+                            <td>#03941384</td>
+                            <td>#03941384</td>
+                            <td>#03941384</td>
+                            <td>#03941384</td>
+                            <td>#03941384</td>
+                            <td>#03941384</td>
                         </tr>
-                        <tr>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            <td>
-                                #03941384
-                            </td>
-                            {{-- <td class="">
-                                <a href="#"
-                                    class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-                                    <!--begin::Svg Icon | path: icons/duotune/art/art005.svg-->
-                                    <span class="svg-icon svg-icon-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                            height="24" viewBox="0 0 24 24" fill="none">
-                                            <path opacity="0.3"
-                                                d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.474C21.7817 5.85581 21.9962 6.37355 21.9962 6.91345C21.9962 7.45335 21.7817 7.97122 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z"
-                                                fill="black" />
-                                            <path
-                                                d="M5.574 21.3L3.692 21.928C3.46591 22.0032 3.22334 22.0141 2.99144 21.9594C2.75954 21.9046 2.54744 21.7864 2.3789 21.6179C2.21036 21.4495 2.09202 21.2375 2.03711 21.0056C1.9822 20.7737 1.99289 20.5312 2.06799 20.3051L2.696 18.422L5.574 21.3ZM4.13499 14.105L9.891 19.861L19.245 10.507L13.489 4.75098L4.13499 14.105Z"
-                                                fill="black" />
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                </a>
-                                <a href="#"
-                                    class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
-                                    <span class="svg-icon svg-icon-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                            height="24" viewBox="0 0 24 24" fill="none">
-                                            <path
-                                                d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z"
-                                                fill="black" />
-                                            <path opacity="0.5"
-                                                d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z"
-                                                fill="black" />
-                                            <path opacity="0.5"
-                                                d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z"
-                                                fill="black" />
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                </a>
-                            </td> --}}
-                        </tr>
+                        <!-- Add more rows as needed -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <div class="container">
+        <div class="chart-container">
+            <h2>Biểu đồ tồn kho theo thời gian</h2>
+            <canvas id="inventoryChart"></canvas>
+        </div>
+
+        <div class="alert-wrapper">
+            <div class="alert-container">
+                <h2>Cảnh báo tồn kho thấp</h2>
+                <ul id="lowAlertList" class="alert-list">
+                    <!-- Low stock alerts will be dynamically inserted here -->
+                </ul>
+            </div>
+
+            <div class="alert-container high-alert-container">
+                <h2>Cảnh báo tồn kho cao</h2>
+                <ul id="highAlertList" class="alert-list">
+                    <!-- High stock alerts will be dynamically inserted here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="forecast-container">
+        <h2>Dự Báo Tồn Kho Tương Lai</h2>
+        <canvas id="forecastChart"></canvas>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+            // Inventory Chart data and configuration
+            const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+            const data = {
+                labels: labels,
+                datasets: [{
+                    label: 'Tồn Kho',
+                    data: [12, 19, 3, 5, 2, 3, 7],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            const config = {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+
+            const ctx = document.getElementById('inventoryChart').getContext('2d');
+            new Chart(ctx, config);
+
+            // Low Stock Alerts
+            const lowAlerts = [
+                { text: 'Vật tư A đã đạt ngưỡng thấp', quantity: 5 },
+                { text: 'Vật tư B sắp hết hàng', quantity: 2 }
+            ];
+
+            const lowAlertList = document.getElementById('lowAlertList');
+            lowAlerts.forEach(alert => {
+                const li = document.createElement('li');
+                li.textContent = `${alert.text} (${alert.quantity} items)`;
+                li.style.color = '#721c24';
+                lowAlertList.appendChild(li);
+            });
+
+            // High Stock Alerts
+            const highAlerts = [
+                { text: 'Vật tư C vượt mức tồn kho tối đa', quantity: 100 },
+                { text: 'Vật tư D tồn kho cao bất thường', quantity: 150 }
+            ];
+
+            const highAlertList = document.getElementById('highAlertList');
+            highAlerts.forEach(alert => {
+                const li = document.createElement('li');
+                li.textContent = `${alert.text} (${alert.quantity} items)`;
+                li.style.color = '#856404';
+                highAlertList.appendChild(li);
+            });
+        });
+
+        const forecastLabels = @json(array_column($forecastData, 'month'));
+        const forecastValues = @json(array_column($forecastData, 'inventory'));
+
+        const forecastData = {
+            labels: forecastLabels,
+            datasets: [{
+                label: 'Dự Báo Tồn Kho',
+                data: forecastValues,
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        const forecastConfig = {
+            type: 'line',
+            data: forecastData,
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        const forecastCtx = document.getElementById('forecastChart').getContext('2d');
+        new Chart(forecastCtx, forecastConfig);
+    </script>
 @endsection
 
 @section('scripts')
