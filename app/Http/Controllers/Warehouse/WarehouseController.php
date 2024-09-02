@@ -13,14 +13,14 @@ class WarehouseController extends Controller
     {
         $title = 'Nhập Kho';
 
-        return view("{$this->route}.import", compact('title'));
+        return view("{$this->route}.import_warehouse.import", compact('title'));
     }
 
     public function export()
     {
         $title = 'Xuất Kho';
 
-        return view("{$this->route}.export", compact('title'));
+        return view("{$this->route}.export_warehouse.export", compact('title'));
     }
 
     public function create_import()
@@ -58,7 +58,7 @@ class WarehouseController extends Controller
             ]
         ];
 
-        return view("{$this->route}.create_import", compact('title', 'receiptItems'));
+        return view("{$this->route}.import_warehouse.create_import", compact('title', 'receiptItems'));
     }
 
     public function create_export()
@@ -66,7 +66,7 @@ class WarehouseController extends Controller
         $title = 'Tạo Phiếu Xuất Kho';
 
 
-        return view("{$this->route}.create_export", compact('title'));
+        return view("{$this->route}.export_warehouse.create_export", compact('title'));
     }
 
     public function store_export(Request $request)

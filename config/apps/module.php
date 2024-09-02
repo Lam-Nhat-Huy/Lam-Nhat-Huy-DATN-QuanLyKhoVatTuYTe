@@ -44,6 +44,12 @@ return [
                     'route' => 'check_warehouse.index',
                     'icon' => 'fa fa-archive',
                     'user_role' => []
+                ],
+                [
+                    'title' => 'Thẻ Kho',
+                    'route' => 'card_warehouse.index',
+                    'icon' => 'fa fa-clipboard',
+                    'user_role' => []
                 ]
             ]
         ],

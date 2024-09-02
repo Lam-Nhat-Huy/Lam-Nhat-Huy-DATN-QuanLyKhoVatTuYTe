@@ -70,7 +70,8 @@
                     <!--begin::Wrapper-->
                     <div class="w-lg-500px p-10 p-lg-15 mx-auto">
                         <!--begin::Form-->
-                        <form method="POST" class="form w-100" novalidate="novalidate" id="kt_sign_in_form" action="#">
+                        <form method="POST" class="form w-100" novalidate="novalidate" id="kt_sign_in_form"
+                            action="#">
                             @csrf
                             <!--begin::Heading-->
                             <div class="text-center mb-10">
@@ -168,6 +169,8 @@
     <script src="{{ asset('js/upgrade-plan.js') }}"></script>
 
     <script src="{{ asset('js/login/login.js') }}"></script>
+
+
 </body>
 
 </html>
