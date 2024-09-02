@@ -29,7 +29,7 @@
             <div class="table-responsive">
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
-                        <tr class="fw-bolder bg-primary">
+                        <tr class="fw-bolder bg-success">
                             <th class="ps-4">Mã Loại</th>
                             <th class="">Tên Loại</th>
                             <th>Hành Động</th>

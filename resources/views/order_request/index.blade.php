@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    <div class="card mb-5 mb-xl-8">
+    <div class="card mb-5 pb-5 mb-xl-8">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Yêu Cầu Đặt Hàng</span>
@@ -29,26 +29,23 @@
             </div>
         </div>
         <div class="card-body py-1 me-6">
-            <form action="" class="row  align-items-center">
+            <form action="" class="row align-items-center">
                 <div class="col-3">
-                    <select name="ur" id="ur"
-                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
                         <option value="" selected>--Theo Nhà Cung Cấp--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
                 </div>
                 <div class="col-3">
-                    <select name="ur" id="ur"
-                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
                         <option value="" selected>--Theo Người Tạo--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
                 </div>
                 <div class="col-3">
-                    <select name="stt" id="stt"
-                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                    <select name="stt" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
                         <option value="" selected>--Theo Trạng Thái--</option>
                         <option value="1" {{ request()->stt == 1 ? 'selected' : '' }}>Chưa Duyệt</option>
                         <option value="2" {{ request()->stt == 2 ? 'selected' : '' }}>Đã Duyệt</option>
@@ -72,7 +69,7 @@
             <div class="table-responsive">
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
-                        <tr class="fw-bolder bg-primary">
+                        <tr class="fw-bolder bg-success">
                             <th class="ps-4">Mã Yêu Cầu</th>
                             <th class="">Nhà Cung Cấp</th>
                             <th class="">Người Tạo</th>
@@ -104,54 +101,75 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($item['status'] == 1)
-                                        <button class="btn btn-sm btn-dark" data-bs-toggle="modal"
-                                            data-bs-target="#checkModal_{{ $item['id'] }}"><i
-                                                class="fa fa-clipboard-check"></i>Duyệt</button>
+                                    <div class="btn-group">
+                                        <button type="button" data-bs-toggle="dropdown">
+                                            <i class="fa fa-ellipsis-h me-2"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+                                            @if ($item['status'] == 1)
+                                                <li>
+                                                    <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#browse_{{ $item['id'] }}">Duyệt</a>
+                                                </li>
+                                            @endif
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('order_request.update_order_request') }}">
+                                                    Sửa
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item pointer" data-bs-toggle="modal"
+                                                    data-bs-target="#detailModal_{{ $item['id'] }}">
+                                                    Chi Tiết
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item pointer" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal_{{ $item['id'] }}">
+                                                    Xóa
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                                        <div class="modal fade" id="checkModal_{{ $item['id'] }}"
-                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                            aria-labelledby="checkModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title" id="checkModalLabel">Duyệt Yêu Cầu Đặt Hàng
-                                                        </h3>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form action="" method="">
-                                                            @csrf
-                                                            <h4 class="text-danger">Duyệt Yêu Cầu Đặt Hàng Này?</h4>
-                                                        </form>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-sm btn-secondary"
-                                                            data-bs-dismiss="modal">Đóng</button>
-                                                        <button type="button" class="btn btn-sm btn-twitter">Duyệt</button>
-                                                    </div>
+                                    {{-- Duyệt --}}
+                                    <div class="modal fade" id="browse_{{ $item['id'] }}" data-bs-backdrop="static"
+                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="checkModalLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id="checkModalLabel">Duyệt Yêu Cầu Đặt
+                                                        Hàng
+                                                    </h3>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="" method="">
+                                                        @csrf
+                                                        <h4 class="text-danger">Duyệt Yêu Cầu Đặt Hàng Này?</h4>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-secondary"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="button" class="btn btn-sm btn-twitter">Duyệt</button>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <a class="btn btn-sm btn-twitter"
-                                            href="{{ route('order_request.update_order_request') }}">
-                                            <i class="fa fa-edit"></i>Sửa
-                                        </a>
-                                    @endif
-
-                                    <button class="btn btn-sm btn-info" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal_{{ $item['id'] }}"><i class="fa fa-eye"></i>Chi
-                                        Tiết</button>
-
-                                    <div class="modal fade" id="deleteModal_{{ $item['id'] }}" data-bs-backdrop="static"
-                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
-                                        aria-hidden="true">
+                                    {{-- Chi tiết --}}
+                                    <div class="modal fade" id="detailModal_{{ $item['id'] }}"
+                                        data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                        aria-labelledby="deleteModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h3 class="modal-title" id="deleteModalLabel">Chi Tiết Mặt Hàng Cần Mua
+                                                    <h3 class="modal-title" id="deleteModalLabel">Chi Tiết Mặt Hàng Cần
+                                                        Mua
                                                     </h3>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
@@ -160,7 +178,7 @@
                                                     <div class="table-responsive">
                                                         <table class="table table-striped align-middle gs-0 gy-4">
                                                             <thead>
-                                                                <tr class="fw-bolder bg-primary">
+                                                                <tr class="fw-bolder bg-success">
                                                                     <th style="width: 33%;">Vật Tư</th>
                                                                     <th style="width: 33%;">Đơn Vị</th>
                                                                     <th style="width: 33%;">Số Lượng</th>
@@ -190,10 +208,7 @@
                                         </div>
                                     </div>
 
-                                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal_{{ $item['id'] }}"><i
-                                            class="fa fa-trash"></i>Xóa</button>
-
+                                    {{-- Xóa --}}
                                     <div class="modal fade" id="deleteModal_{{ $item['id'] }}"
                                         data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                                         aria-labelledby="deleteModalLabel" aria-hidden="true">

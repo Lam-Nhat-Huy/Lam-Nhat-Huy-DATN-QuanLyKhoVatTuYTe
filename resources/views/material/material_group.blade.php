@@ -113,15 +113,16 @@
                         <div class="mb-5">
                             <label class="required fs-5 fw-bold mb-3">Tên Nhóm Vật Tư</label>
 
-                            <input type="text" class="form-control form-control-sm form-control-solid border border-primary"
+                            <input type="text"
+                                class="form-control form-control-sm form-control-solid border border-success"
                                 placeholder="Tên Nhóm Vật Tư.." name="material_type_name" />
                         </div>
 
                         <div class="mb-5">
                             <label class="required fs-5 fw-bold mb-2">Mô Tả</label>
 
-                            <textarea name="content" class="form-control form-control-sm form-control-solid border border-primary" cols="30" rows="5"
-                                placeholder="Mô Tả"></textarea>
+                            <textarea name="content" class="form-control form-control-sm form-control-solid border border-success" cols="30"
+                                rows="5" placeholder="Mô Tả"></textarea>
                         </div>
 
                         <div class="mb-5">
@@ -141,10 +142,10 @@
             <div class="col-8">
                 <div class="row">
                     <div class="card-body py-8 me-7 col-12">
-                        <form action="" class="row  align-items-center">
+                        <form action="" class="row align-items-center">
                             <div class="col-6">
                                 <select name="ur" id="ur"
-                                    class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                                    class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
                                     <option value="" selected>--Theo Trạng Thái--</option>
                                     <option value="a">A</option>
                                     <option value="b">B</option>
@@ -164,11 +165,11 @@
                             </div>
                         </form>
                     </div>
-                    <div class="card-body py-5 me-3 col-12">
+                    <div class="card-body py-1 me-3 col-12">
                         <div class="table-responsive">
                             <table class="table table-striped align-middle gs-0 gy-4">
                                 <thead>
-                                    <tr class="fw-bolder bg-primary">
+                                    <tr class="fw-bolder bg-success">
                                         <th class="ps-4">Mã Nhóm Vật Tư</th>
                                         <th class="">Tên</th>
                                         <th class="">Mô Tả</th>
@@ -196,15 +197,34 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a class="btn btn-sm btn-twitter mb-1 mt-1"
-                                                    href="{{ route('material.update_material_group') }}">
-                                                    <i class="fa fa-edit"></i>Sửa
-                                                </a>
+                                                <div class="btn-group">
+                                                    <button type="button" data-bs-toggle="dropdown">
+                                                        <i class="fa fa-ellipsis-h me-2"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+                                                        @if ($item['status'] == 1)
+                                                            <li>
+                                                                <a class="dropdown-item" href="#"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#browse">Duyệt</a>
+                                                            </li>
+                                                        @endif
+                                                        <li>
+                                                            <a class="dropdown-item"
+                                                                href="{{ route('material.update_material_group') }}">
+                                                                Sửa
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item pointer" data-bs-toggle="modal"
+                                                                data-bs-target="#deleteModal_{{ $item['id'] }}">
+                                                                Xóa
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
 
-                                                <button class="btn btn-sm btn-danger mb-1 mt-1" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal_{{ $item['id'] }}"><i
-                                                        class="fa fa-trash"></i>Xóa</button>
-
+                                                {{-- Modal Xóa --}}
                                                 <div class="modal fade" id="deleteModal_{{ $item['id'] }}"
                                                     data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                                                     aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -232,6 +252,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
                                             </td>
                                         </tr>
                                     @endforeach

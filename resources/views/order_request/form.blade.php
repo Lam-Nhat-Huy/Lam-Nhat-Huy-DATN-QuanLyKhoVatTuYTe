@@ -19,7 +19,7 @@
     }
 @endphp
 
-@section('content') 
+@section('content')
     <form class="form" action="{{ $action }}" enctype="multipart/form-data">
         @csrf
         <div class="card mb-5 mb-xl-8 pb-5">
@@ -40,13 +40,13 @@
 
                 <div class="me-n7 pe-7">
 
-                    <div class="row mb-5">
+                    <div class="row align-items-center mb-5">
 
                         <div class="col-md-6 fv-row">
 
                             <label class="required fs-5 fw-bold mb-3">Nhà Cung Cấp</label>
 
-                            <select name="" class="form-select form-select-sm form-select-solid">
+                            <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
                                 <option value="0">Chọn Nhà Cung Cấp...</option>
                                 @foreach ($AllSuppiler as $item)
                                     <option value="{{ $item['id'] }}"
@@ -63,7 +63,8 @@
                             <label class="fs-5 fw-bold mb-2">Ghi Chú</label>
 
 
-                            <input type="text" class="form-control form-control-sm form-control-solid border border-primary"
+                            <input type="text"
+                                class="form-control form-control-sm form-control-solid border border-success"
                                 placeholder="Nhập Ghi Chú Cho Đơn Đặt Hàng.." name="last-name" />
 
                         </div>
@@ -81,13 +82,13 @@
 
                     <div class="me-n7 pe-7">
 
-                        <div class="row mb-5">
+                        <div class="row align-items-center mb-5">
 
                             <div class="col-md-6 fv-row">
 
                                 <label class="required fs-5 fw-bold mb-3">Vật Tư</label>
 
-                                <select name="material" class="form-select form-select-sm form-select-solid">
+                                <select name="material" class="form-select form-select-sm form-select-solid setupSelect2">
                                     <option value="">Chọn Vật Tư...</option>
                                     @foreach ($AllMaterial as $item)
                                         <option value="{{ $item['id'] }}"
@@ -105,26 +106,27 @@
                                 <label class="fs-5 fw-bold mb-2">Số Lượng</label>
 
 
-                                <input type="number" class="form-control form-control-sm form-control-solid border border-primary" value="0"
-                                    name="quantity" />
+                                <input type="number"
+                                    class="form-control form-control-sm form-control-solid border border-success"
+                                    value="0" name="quantity" />
 
                             </div>
 
                         </div>
 
                     </div>
-                </div>
 
-                <div class="modal-footer flex-right border-0 pt-0">
-                    <button type="submit" class="btn btn-success btn-sm">
-                        Thêm Vật Tư
-                    </button>
+                    <div class="modal-footer flex-right border-0 pe-0">
+                        <button type="submit" class="btn btn-success btn-sm">
+                            Thêm Vật Tư
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
 
         <div class="card mb-5 mb-xl-8 pt-5">
-            <div class="card-body py-3">
+            <div class="card-body py-3 px-17">
                 <div class="table-responsive">
                     <table class="table table-striped align-middle gs-0 gy-4">
                         <thead>
@@ -153,13 +155,14 @@
                         </tbody>
                     </table>
                 </div>
+                
+                <div class="modal-footer flex-right pe-0">
+                    <button type="submit" class="btn btn-twitter btn-sm">
+                        {{ $button_text }}
+                    </button>
+                </div>
             </div>
 
-            <div class="modal-footer flex-right">
-                <button type="submit" class="btn btn-twitter btn-sm">
-                    {{ $button_text }}
-                </button>
-            </div>
         </div>
     </form>
 @endsection

@@ -116,7 +116,8 @@
                         <div class="mb-5">
                             <label class="required fs-5 fw-bold mb-3">Tên Loại</label>
 
-                            <input type="text" class="form-control form-control-sm form-control-solid border border-primary"
+                            <input type="text"
+                                class="form-control form-control-sm form-control-solid border border-success"
                                 placeholder="Tên Loại Thông Báo.." name="material_type_name" />
                         </div>
 
@@ -136,10 +137,10 @@
             </div>
             <div class="col-8">
                 <div class="card-body py-1 me-6">
-                    <form action="" class="row  align-items-center">
+                    <form action="" class="row align-items-center">
                         <div class="col-6">
                             <select name="stt" id="stt"
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                                class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
                                 <option value="" selected>--Theo Trạng Thái--</option>
                                 <option value="1" {{ request()->stt == 1 ? 'selected' : '' }}>Không</option>
                                 <option value="2" {{ request()->stt == 2 ? 'selected' : '' }}>Có</option>
@@ -163,7 +164,7 @@
                     <div class="table-responsive">
                         <table class="table table-striped align-middle gs-0 gy-4">
                             <thead>
-                                <tr class="fw-bolder bg-primary">
+                                <tr class="fw-bolder bg-success">
                                     <th class="ps-4">Mã Loại</th>
                                     <th class="">Tên Loại</th>
                                     <th class="">Trạng Thái</th>
@@ -187,22 +188,36 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a class="btn btn-sm btn-twitter"
-                                                href="{{ route('notification.notification_type_edit') }}">
-                                                <i class="fa fa-edit"></i>Sửa
-                                            </a>
 
-                                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal_{{ $item['id'] }}"><i
-                                                    class="fa fa-trash"></i>Xóa</button>
+                                            <div class="btn-group">
+                                                <button type="button" data-bs-toggle="dropdown">
+                                                    <i class="fa fa-ellipsis-h me-2"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('notification.notification_type_edit') }}">
+                                                            Sửa
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item pointer" data-bs-toggle="modal"
+                                                            data-bs-target="#deleteModal_{{ $item['id'] }}">
+                                                            Xóa
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
 
+                                            {{-- Xóa --}}
                                             <div class="modal fade" id="deleteModal_{{ $item['id'] }}"
                                                 data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                                                 aria-labelledby="deleteModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h3 class="modal-title" id="deleteModalLabel">Xóa Loại Thông Báo
+                                                            <h3 class="modal-title" id="deleteModalLabel">Xóa Loại Thông
+                                                                Báo
                                                             </h3>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                                 aria-label="Close"></button>
@@ -222,6 +237,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </td>
                                     </tr>
                                 @endforeach

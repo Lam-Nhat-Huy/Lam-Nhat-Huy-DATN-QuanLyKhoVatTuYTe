@@ -55133,3 +55133,7 @@ tr th {
     border: solid 1px #50cd89 !important;
     background-color: #f5f8fa !important;
 }
+
+.pointer {
+    cursor: pointer;
+}

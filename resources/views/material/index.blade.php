@@ -29,16 +29,16 @@
             </div>
         </div>
         <div class="card-body py-1 me-6">
-            <form action="" class="row  align-items-center">
+            <form action="" class="row align-items-center">
                 <div class="col-4">
-                    <select name="ur" id="ur" class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success border border-primary">
+                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
                         <option value="" selected>--Theo Nhóm Vật Tư--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
                 </div>
                 <div class="col-4">
-                    <select name="ur" id="ur" class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
                         <option value="" selected>--Theo Đơn Vị Tính--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
@@ -62,7 +62,7 @@
             <div class="table-responsive">
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
-                        <tr class="fw-bolder bg-primary">
+                        <tr class="fw-bolder bg-success">
                             <th class="ps-4">Mã Vật Tư</th>
                             <th class="">Hình Ảnh</th>
                             <th class="">Tên</th>
@@ -70,6 +70,7 @@
                             <th class="">Đơn Vị Tính</th>
                             <th class="" style="width: 200px;">Mô Tả</th>
                             <th class="">Hạn Sử Dụng</th>
+                            <th class="">Trạng Thái</th>
                             <th>Hành Động</th>
                         </tr>
                     </thead>
@@ -98,15 +99,40 @@
                                     {{ $item['expiry'] > 0 ? $item['expiry'] . ' Tháng' : 'Không Có' }}
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm btn-twitter mb-1 mt-1"
-                                        href="{{ route('material.update_material') }}">
-                                        <i class="fa fa-edit"></i>Sửa
-                                    </a>
+                                    @if ($item['status'] == 1)
+                                        <span class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</span>
+                                    @else
+                                        <span class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" data-bs-toggle="dropdown">
+                                            <i class="fa fa-ellipsis-h me-2"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+                                            @if ($item['status'] == 1)
+                                                <li>
+                                                    <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#browse">Duyệt</a>
+                                                </li>
+                                            @endif
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('material.update_material') }}">
+                                                    Sửa
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item pointer" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal_{{ $item['id'] }}">
+                                                    Xóa
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                                    <button class="btn btn-sm btn-danger mb-1 mt-1" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal_{{ $item['id'] }}"><i
-                                            class="fa fa-trash"></i>Xóa</button>
-
+                                    {{-- Modal Xóa --}}
                                     <div class="modal fade" id="deleteModal_{{ $item['id'] }}" data-bs-backdrop="static"
                                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
                                         aria-hidden="true">
@@ -132,6 +158,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                 </td>
                             </tr>
                         @endforeach

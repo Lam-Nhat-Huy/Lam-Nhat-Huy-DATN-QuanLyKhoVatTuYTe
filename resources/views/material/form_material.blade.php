@@ -43,13 +43,14 @@
 
                 <div class="me-n7 pe-7">
 
-                    <div class="row mb-8">
+                    <div class="row align-items-center mb-8">
 
                         <div class="col-md-6 fv-row">
 
                             <label class="required fs-5 fw-bold mb-3">Tên Vật Tư</label>
 
-                            <input type="text" class="form-control form-control-sm form-control-solid border border-primary" name=""
+                            <input type="text"
+                                class="form-control form-control-sm form-control-solid border border-success" name=""
                                 placeholder="Tên Vật Tư..">
 
                         </div>
@@ -58,7 +59,7 @@
 
                             <label class="required fs-5 fw-bold mb-3">Nhóm Vật Tư</label>
 
-                            <select name="" class="form-select form-select-sm form-select-solid">
+                            <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
                                 <option value="0">Chọn Nhóm Vật Tư...</option>
                                 <option value="A">A</option>
                             </select>
@@ -66,13 +67,13 @@
 
                     </div>
 
-                    <div class="row mb-8">
+                    <div class="row align-items-center mb-8">
 
                         <div class="col-md-6 fv-row">
 
                             <label class="required fs-5 fw-bold mb-3">Đơn Vị Tính</label>
 
-                            <select name="" class="form-select form-select-sm form-select-solid">
+                            <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
                                 <option value="0">Chọn Đơn Vị Tính...</option>
                                 <option value="box">Hộp</option>
                                 <option value="bottle">Chai</option>
@@ -103,20 +104,22 @@
 
                             <label class="required fs-5 fw-bold mb-3">Số Lượng</label>
 
-                            <input type="number" class="form-control form-control-sm form-control-solid border border-primary" name=""
+                            <input type="number"
+                                class="form-control form-control-sm form-control-solid border border-success" name=""
                                 value="0">
 
                         </div>
 
                     </div>
 
-                    <div class="row mb-8">
+                    <div class="row align-items-center mb-8">
 
                         <div class="col-md-6 fv-row">
 
                             <label class="required fs-5 fw-bold mb-3">Giá</label>
 
-                            <input type="number" class="form-control form-control-sm form-control-solid border border-primary" name=""
+                            <input type="number"
+                                class="form-control form-control-sm form-control-solid border border-success" name=""
                                 value="0">
                         </div>
 
@@ -124,19 +127,21 @@
 
                             <label class="fs-5 fw-bold mb-3">Hạn Sử Dụng (Nếu Có)</label>
 
-                            <input type="date" class="form-control form-control-sm form-control-solid border border-primary" name="">
+                            <input type="date"
+                                class="form-control form-control-sm form-control-solid border border-success"
+                                name="">
 
                         </div>
 
                     </div>
 
-                    <div class="row mb-8">
+                    <div class="row align-items-center mb-8">
 
                         <div class="col-md-6 fv-row">
 
                             <label class="required fs-5 fw-bold mb-3">Nhà Cung Cấp</label>
 
-                            <select name="" class="form-select form-select-sm form-select-solid">
+                            <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
                                 <option value="0">Chọn Nhà Cung Cấp...</option>
                                 <option value="A">A</option>
                             </select>
@@ -146,8 +151,7 @@
 
                             <label class="required fs-5 fw-bold mb-3">Nước Cung Cấp</label>
 
-                            <select name="" data-control="select2" data-dropdown-parent="#kt_modal_new_address"
-                                class="form-select form-select-sm form-select-solid">
+                            <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
                                 <option value="Afghanistan">Afghanistan</option>
                                 <option value="Aland Islands">Quần đảo Aland</option>
                                 <option value="Albania">Albania</option>
@@ -383,14 +387,15 @@
 
                     </div>
 
-                    <div class="row mb-8">
+                    <div class="row align-items-center mb-8">
 
                         <div class="col-md-6 fv-row">
 
                             <div class="mb-5">
                                 <label class="fs-5 fw-bold mb-3">Hình Ảnh</label>
 
-                                <input type="file" class="form-control form-control-sm form-control-solid border border-primary"
+                                <input type="file"
+                                    class="form-control form-control-sm form-control-solid border border-success"
                                     name="" accept="image/*">
                             </div>
 
@@ -408,7 +413,7 @@
                             <label class="required fs-5 fw-bold mb-3">Mô Tả</label>
 
                             <textarea name="" id="" cols="30" rows="10"
-                                class="form-control form-control-sm form-control-solid border border-primary"></textarea>
+                                class="form-control form-control-sm form-control-solid border border-success" placeholder="Thêm Mô Tả Cho Vật Tư.."></textarea>
                         </div>
 
                     </div>

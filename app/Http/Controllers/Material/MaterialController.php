@@ -22,6 +22,7 @@ class MaterialController extends Controller
                 'material_type_id' => 'Vật tư tiêu hao',
                 'unit_id' => 'Gói',
                 'description' => 'Dùng lau rửa vết thương, thấm máu và thấm dịch vùng phẫu thuật',
+                'status' => 1,
                 'expiry' => 24,
             ],
             [
@@ -32,6 +33,7 @@ class MaterialController extends Controller
                 'material_type_id' => 'Thiết bị y tế nhỏ',
                 'unit_id' => 'Cái',
                 'description' => 'Dùng để đo lường lượng glucose trong máu, giúp bệnh nhân tiểu đường kiểm soát lượng đường huyết của họ',
+                'status' => 2,
                 'expiry' => 0,
             ],
         ];
