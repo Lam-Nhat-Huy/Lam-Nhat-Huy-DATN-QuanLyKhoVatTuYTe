@@ -78,11 +78,4 @@ class WarehouseController extends Controller
     {
         dd($request->all());
     }
-
-    public function check()
-    {
-        $title = 'Kiểm Kho';
-
-        return view("{$this->route}.check", compact('title'));
-    }
 }
