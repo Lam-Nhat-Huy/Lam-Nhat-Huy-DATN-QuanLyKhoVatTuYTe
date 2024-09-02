@@ -29,10 +29,10 @@
             <div class="table-responsive">
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
-                        <tr class="fw-bolder bg-success">
+                        <tr class="fw-bolder bg-primary">
                             <th class="ps-4">Mã Loại</th>
                             <th class="">Tên Loại</th>
-                            <th class="pe-3">Hành Động</th>
+                            <th>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>

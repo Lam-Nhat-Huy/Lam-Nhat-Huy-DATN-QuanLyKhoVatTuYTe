@@ -116,7 +116,7 @@
                     <div class="mb-5">
                         <label class="required fs-5 fw-bold mb-3">Tên Loại</label>
 
-                        <input type="text" class="form-control form-control-sm form-control-solid"
+                        <input type="text" class="form-control form-control-sm form-control-solid border border-primary"
                             placeholder="Tên Nhóm Vật Tư.." name="material_type_name" />
                     </div>
 

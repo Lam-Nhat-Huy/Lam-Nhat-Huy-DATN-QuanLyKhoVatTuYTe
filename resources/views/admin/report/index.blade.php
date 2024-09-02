@@ -32,16 +32,18 @@
             </div>
         </div>
         <div class="card-body py-1 me-6">
-            <form action="" class="row">
+            <form action="" class="row align-items-center">
                 <div class="col-3">
-                    <select name="ur" id="ur" class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                    <select name="ur" id="ur"
+                        class="mt-2 mb-2 form-select form-select-sm form-select-solid border border-success setupSelect2">
                         <option value="" selected>--Theo Người Báo Cáo--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
                 </div>
                 <div class="col-3">
-                    <select name="rt" id="rt" class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                    <select name="rt" id="rt"
+                        class="mt-2 mb-2 form-select form-select-sm form-select-solid border border-success setupSelect2">
                         <option value="" selected>--Theo Loại Báo Cáo--</option>
                         @foreach ($AllReportType as $item)
                             <option value={{ $item['id'] }} {{ request()->rt == $item['id'] ? 'selected' : '' }}>
@@ -50,7 +52,8 @@
                     </select>
                 </div>
                 <div class="col-3">
-                    <select name="stt" id="stt" class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                    <select name="stt" id="stt"
+                        class="mt-2 mb-2 form-select form-select-sm form-select-solid border border-success setupSelect2">
                         <option value="" selected>--Theo Trạng Thái--</option>
                         <option value="1" {{ request()->stt == 1 ? 'selected' : '' }}>Chưa Duyệt</option>
                         <option value="2" {{ request()->stt == 2 ? 'selected' : '' }}>Đã Duyệt</option>
@@ -60,7 +63,8 @@
                     <div class="row">
                         <div class="col-10">
                             <input type="search" name="kw" placeholder="Tìm Kiếm Mã Báo Cáo.."
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success" value="{{ request()->kw }}">
+                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                value="{{ request()->kw }}">
                         </div>
                         <div class="col-2">
                             <button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
@@ -80,7 +84,7 @@
                             <th class="">Loại Báo Cáo</th>
                             <th class="">File Báo Cáo</th>
                             <th class="">Trạng Thái</th>
-                            <th class="pe-3">Hành Động</th>
+                            <th>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>

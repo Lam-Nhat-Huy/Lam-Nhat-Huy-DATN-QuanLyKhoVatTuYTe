@@ -117,14 +117,14 @@
                     <div class="mb-5">
                         <label class="required fs-5 fw-bold mb-3">Tên Nhóm Vật Tư</label>
 
-                        <input type="text" class="form-control form-control-sm form-control-solid"
+                        <input type="text" class="form-control form-control-sm form-control-solid border border-primary"
                             placeholder="Tên Nhóm Vật Tư.." name="material_type_name" />
                     </div>
 
                     <div class="mb-5">
                         <label class="required fs-5 fw-bold mb-2">Mô Tả</label>
 
-                        <textarea name="content" class="form-control form-control-sm form-control-solid" cols="30" rows="5"
+                        <textarea name="content" class="form-control form-control-sm form-control-solid border border-primary" cols="30" rows="5"
                             placeholder="Mô Tả"></textarea>
                     </div>
 

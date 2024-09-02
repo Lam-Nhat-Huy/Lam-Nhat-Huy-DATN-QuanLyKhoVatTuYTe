@@ -26,7 +26,7 @@
             <div class="table-responsive">
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
-                        <tr class="fw-bolder bg-success">
+                        <tr class="fw-bolder bg-primary">
                             <th class="ps-4">Mã Vật Tư</th>
                             <th class="">Hình Ảnh</th>
                             <th class="">Tên</th>
@@ -34,7 +34,7 @@
                             <th class="">Đơn Vị Tính</th>
                             <th class="" style="width: 200px;">Mô Tả</th>
                             <th class="">Hạn Sử Dụng</th>
-                            <th class="pe-3">Hành Động</th>
+                            <th>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
