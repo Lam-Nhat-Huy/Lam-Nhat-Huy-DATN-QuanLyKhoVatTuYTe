@@ -25,7 +25,7 @@ return [
             'user_role' => [],
             'title' => 'Kho',
             'icon' => 'fa fa-warehouse',
-            'route' => ['warehouse.import', 'warehouse.export', 'warehouse.check'],
+            'route' => ['warehouse.import', 'warehouse.export', 'check_warehouse.index', 'card_warehouse.index'],
             'subModule' => [
                 [
                     'title' => 'Nhập Kho',
@@ -49,26 +49,6 @@ return [
                     'title' => 'Thẻ Kho',
                     'route' => 'card_warehouse.index',
                     'icon' => 'fa fa-clipboard',
-                    'user_role' => []
-                ]
-            ]
-        ],
-        [
-            'user_role' => [],
-            'title' => 'Nhắn Tin',
-            'icon' => 'fa fa-inbox',
-            'route' => ['chat.list', 'chat.contact'],
-            'subModule' => [
-                [
-                    'title' => 'Nhắn Tin',
-                    'route' => 'chat.list',
-                    'icon' => 'fa fa-message',
-                    'user_role' => []
-                ],
-                [
-                    'title' => 'Danh Bạ',
-                    'route' => 'chat.contact',
-                    'icon' => 'fa fa-address-book',
                     'user_role' => []
                 ]
             ]
@@ -125,6 +105,26 @@ return [
                     'icon' => 'fa fa-list',
                     'user_role' => []
                 ],
+            ]
+        ],
+        [
+            'user_role' => [],
+            'title' => 'Nhắn Tin',
+            'icon' => 'fa fa-inbox',
+            'route' => ['chat.list', 'chat.contact'],
+            'subModule' => [
+                [
+                    'title' => 'Nhắn Tin',
+                    'route' => 'chat.list',
+                    'icon' => 'fa fa-message',
+                    'user_role' => []
+                ],
+                [
+                    'title' => 'Danh Bạ',
+                    'route' => 'chat.contact',
+                    'icon' => 'fa fa-address-book',
+                    'user_role' => []
+                ]
             ]
         ],
     ]
