@@ -26,12 +26,12 @@
             <div class="table-responsive">
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
-                        <tr class="fw-bolder bg-success">
+                        <tr class="fw-bolder bg-primary">
                             <th class="ps-4">Mã Yêu Cầu</th>
                             <th class="">Nhà Cung Cấp</th>
                             <th class="">Người Tạo</th>
                             <th class="">Ngày Tạo</th>
-                            <th class="pe-3">Hành Động</th>
+                            <th>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>

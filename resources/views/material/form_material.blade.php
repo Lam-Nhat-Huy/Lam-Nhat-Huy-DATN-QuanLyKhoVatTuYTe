@@ -49,7 +49,7 @@
 
                             <label class="required fs-5 fw-bold mb-3">Tên Vật Tư</label>
 
-                            <input type="text" class="form-control form-control-sm form-control-solid" name=""
+                            <input type="text" class="form-control form-control-sm form-control-solid border border-primary" name=""
                                 placeholder="Tên Vật Tư..">
 
                         </div>
@@ -103,7 +103,7 @@
 
                             <label class="required fs-5 fw-bold mb-3">Số Lượng</label>
 
-                            <input type="number" class="form-control form-control-sm form-control-solid" name=""
+                            <input type="number" class="form-control form-control-sm form-control-solid border border-primary" name=""
                                 value="0">
 
                         </div>
@@ -116,7 +116,7 @@
 
                             <label class="required fs-5 fw-bold mb-3">Giá</label>
 
-                            <input type="number" class="form-control form-control-sm form-control-solid" name=""
+                            <input type="number" class="form-control form-control-sm form-control-solid border border-primary" name=""
                                 value="0">
                         </div>
 
@@ -124,7 +124,7 @@
 
                             <label class="fs-5 fw-bold mb-3">Hạn Sử Dụng (Nếu Có)</label>
 
-                            <input type="date" class="form-control form-control-sm form-control-solid" name="">
+                            <input type="date" class="form-control form-control-sm form-control-solid border border-primary" name="">
 
                         </div>
 
@@ -390,7 +390,7 @@
                             <div class="mb-5">
                                 <label class="fs-5 fw-bold mb-3">Hình Ảnh</label>
 
-                                <input type="file" class="form-control form-control-sm form-control-solid"
+                                <input type="file" class="form-control form-control-sm form-control-solid border border-primary"
                                     name="" accept="image/*">
                             </div>
 
@@ -408,7 +408,7 @@
                             <label class="required fs-5 fw-bold mb-3">Mô Tả</label>
 
                             <textarea name="" id="" cols="30" rows="10"
-                                class="form-control form-control-sm form-control-solid"></textarea>
+                                class="form-control form-control-sm form-control-solid border border-primary"></textarea>
                         </div>
 
                     </div>

@@ -17,7 +17,7 @@
     --bs-gray-200: #EFF2F5;
     --bs-gray-300: #E4E6EF;
     --bs-gray-400: #B5B5C3;
-    --bs-gray-500: #A1A5B7;
+    --bs-gray-500: #000;
     --bs-gray-600: #7E8299;
     --bs-gray-700: #000;
     --bs-gray-800: #000;
@@ -327,7 +327,7 @@ table {
 caption {
     padding-top: .75rem;
     padding-bottom: .75rem;
-    color: #a1a5b7;
+    color: #000;
     text-align: left
 }
 
@@ -2545,7 +2545,7 @@ progress {
 .form-text {
     margin-top: .5rem;
     font-size: .925rem;
-    color: #a1a5b7
+    color: #000
 }
 
 .form-control {
@@ -2592,7 +2592,7 @@ progress {
 }
 
 .form-control::placeholder {
-    color: #a1a5b7;
+    color: #000;
     opacity: 1
 }
 
@@ -3023,11 +3023,11 @@ textarea.form-control-lg {
 }
 
 .form-range:disabled::-webkit-slider-thumb {
-    background-color: #a1a5b7
+    background-color: #000
 }
 
 .form-range:disabled::-moz-range-thumb {
-    background-color: #a1a5b7
+    background-color: #000
 }
 
 .form-floating {
@@ -4596,7 +4596,7 @@ fieldset:disabled .btn {
 
 .dropdown-item.disabled,
 .dropdown-item:disabled {
-    color: #a1a5b7;
+    color: #000;
     pointer-events: none;
     background-color: transparent
 }
@@ -4644,7 +4644,7 @@ fieldset:disabled .btn {
 
 .dropdown-menu-dark .dropdown-item.disabled,
 .dropdown-menu-dark .dropdown-item:disabled {
-    color: #a1a5b7
+    color: #000
 }
 
 .dropdown-menu-dark .dropdown-divider {
@@ -4656,7 +4656,7 @@ fieldset:disabled .btn {
 }
 
 .dropdown-menu-dark .dropdown-header {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn-group,
@@ -11461,7 +11461,7 @@ fieldset:disabled .btn {
 
 .text-muted {
     --bs-text-opacity: 1;
-    color: #a1a5b7 !important
+    color: #000 !important
 }
 
 .text-black-50 {
@@ -31632,7 +31632,7 @@ fieldset:disabled .btn {
     --bs-gray-200: #EFF2F5;
     --bs-gray-300: #E4E6EF;
     --bs-gray-400: #B5B5C3;
-    --bs-gray-500: #A1A5B7;
+    --bs-gray-500: #000;
     --bs-gray-600: #7E8299;
     --bs-gray-700: #000;
     --bs-gray-800: #000;
@@ -32475,7 +32475,7 @@ fieldset:disabled .btn {
 }
 
 .border-gray-500 {
-    border-color: #a1a5b7 !important
+    border-color: #000 !important
 }
 
 .border-gray-600 {
@@ -33914,7 +33914,7 @@ fieldset:disabled .btn {
 }
 
 .text-muted {
-    color: #a1a5b7 !important
+    color: #000 !important
 }
 
 .text-hover-muted {
@@ -33927,17 +33927,17 @@ fieldset:disabled .btn {
 
 .text-hover-muted:hover {
     transition: color .2s ease, background-color .2s ease;
-    color: #a1a5b7 !important
+    color: #000 !important
 }
 
 .text-hover-muted:hover i {
     transition: color .2s ease, background-color .2s ease;
-    color: #a1a5b7 !important
+    color: #000 !important
 }
 
 .text-hover-muted:hover .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .text-hover-muted:hover .svg-icon svg:hover [fill]:not(.permanent):not(g) {
@@ -33954,17 +33954,17 @@ fieldset:disabled .btn {
 
 .text-active-muted.active {
     transition: color .2s ease, background-color .2s ease;
-    color: #a1a5b7 !important
+    color: #000 !important
 }
 
 .text-active-muted.active i {
     transition: color .2s ease, background-color .2s ease;
-    color: #a1a5b7 !important
+    color: #000 !important
 }
 
 .text-active-muted.active .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .text-active-muted.active .svg-icon svg:hover [fill]:not(.permanent):not(g) {
@@ -34204,7 +34204,7 @@ fieldset:disabled .btn {
 }
 
 .text-gray-500 {
-    color: #a1a5b7 !important
+    color: #000 !important
 }
 
 .text-hover-gray-500 {
@@ -34217,17 +34217,17 @@ fieldset:disabled .btn {
 
 .text-hover-gray-500:hover {
     transition: color .2s ease, background-color .2s ease;
-    color: #a1a5b7 !important
+    color: #000 !important
 }
 
 .text-hover-gray-500:hover i {
     transition: color .2s ease, background-color .2s ease;
-    color: #a1a5b7 !important
+    color: #000 !important
 }
 
 .text-hover-gray-500:hover .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .text-hover-gray-500:hover .svg-icon svg:hover [fill]:not(.permanent):not(g) {
@@ -34244,17 +34244,17 @@ fieldset:disabled .btn {
 
 .text-active-gray-500.active {
     transition: color .2s ease, background-color .2s ease;
-    color: #a1a5b7 !important
+    color: #000 !important
 }
 
 .text-active-gray-500.active i {
     transition: color .2s ease, background-color .2s ease;
-    color: #a1a5b7 !important
+    color: #000 !important
 }
 
 .text-active-gray-500.active .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .text-active-gray-500.active .svg-icon svg:hover [fill]:not(.permanent):not(g) {
@@ -34516,7 +34516,7 @@ fieldset:disabled .btn {
 i {
     line-height: 1;
     font-size: 1rem;
-    color: #a1a5b7
+    color: #000
 }
 
 a {
@@ -34697,7 +34697,7 @@ a:hover {
 }
 
 .nav-line-tabs .nav-item .nav-link {
-    color: #a1a5b7;
+    color: #000;
     border: 0;
     border-bottom: 1px solid transparent;
     transition: color .2s ease, background-color .2s ease;
@@ -36965,20 +36965,20 @@ a:hover {
 }
 
 .menu-muted .menu-item .menu-link {
-    color: #a1a5b7
+    color: #000
 }
 
 .menu-muted .menu-item .menu-link .menu-title {
-    color: #a1a5b7
+    color: #000
 }
 
 .menu-muted .menu-item .menu-link .menu-icon i {
-    color: #a1a5b7
+    color: #000
 }
 
 .menu-muted .menu-item .menu-link .menu-icon .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .menu-muted .menu-item .menu-link .menu-icon .svg-icon svg:hover [fill]:not(.permanent):not(g) {
@@ -36986,7 +36986,7 @@ a:hover {
 }
 
 .menu-muted .menu-item .menu-link .menu-bullet .bullet {
-    background-color: #a1a5b7
+    background-color: #000
 }
 
 .menu-muted .menu-item .menu-link .menu-arrow:after {
@@ -37001,20 +37001,20 @@ a:hover {
 }
 
 .menu-title-muted .menu-item .menu-link {
-    color: #a1a5b7
+    color: #000
 }
 
 .menu-title-muted .menu-item .menu-link .menu-title {
-    color: #a1a5b7
+    color: #000
 }
 
 .menu-icon-muted .menu-item .menu-link .menu-icon i {
-    color: #a1a5b7
+    color: #000
 }
 
 .menu-icon-muted .menu-item .menu-link .menu-icon .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .menu-icon-muted .menu-item .menu-link .menu-icon .svg-icon svg:hover [fill]:not(.permanent):not(g) {
@@ -37022,7 +37022,7 @@ a:hover {
 }
 
 .menu-bullet-muted .menu-item .menu-link .menu-bullet .bullet {
-    background-color: #a1a5b7
+    background-color: #000
 }
 
 .menu-arrow-muted .menu-item .menu-link .menu-arrow:after {
@@ -37325,20 +37325,20 @@ a:hover {
 }
 
 .menu-gray-500 .menu-item .menu-link {
-    color: #a1a5b7
+    color: #000
 }
 
 .menu-gray-500 .menu-item .menu-link .menu-title {
-    color: #a1a5b7
+    color: #000
 }
 
 .menu-gray-500 .menu-item .menu-link .menu-icon i {
-    color: #a1a5b7
+    color: #000
 }
 
 .menu-gray-500 .menu-item .menu-link .menu-icon .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .menu-gray-500 .menu-item .menu-link .menu-icon .svg-icon svg:hover [fill]:not(.permanent):not(g) {
@@ -37346,7 +37346,7 @@ a:hover {
 }
 
 .menu-gray-500 .menu-item .menu-link .menu-bullet .bullet {
-    background-color: #a1a5b7
+    background-color: #000
 }
 
 .menu-gray-500 .menu-item .menu-link .menu-arrow:after {
@@ -37361,20 +37361,20 @@ a:hover {
 }
 
 .menu-title-gray-500 .menu-item .menu-link {
-    color: #a1a5b7
+    color: #000
 }
 
 .menu-title-gray-500 .menu-item .menu-link .menu-title {
-    color: #a1a5b7
+    color: #000
 }
 
 .menu-icon-gray-500 .menu-item .menu-link .menu-icon i {
-    color: #a1a5b7
+    color: #000
 }
 
 .menu-icon-gray-500 .menu-item .menu-link .menu-icon .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .menu-icon-gray-500 .menu-item .menu-link .menu-icon .svg-icon svg:hover [fill]:not(.permanent):not(g) {
@@ -37382,7 +37382,7 @@ a:hover {
 }
 
 .menu-bullet-gray-500 .menu-item .menu-link .menu-bullet .bullet {
-    background-color: #a1a5b7
+    background-color: #000
 }
 
 .menu-arrow-gray-500 .menu-item .menu-link .menu-arrow:after {
@@ -38829,7 +38829,7 @@ a:hover {
     margin-left: -1.25em;
     font-weight: 500;
     font-size: .8em;
-    color: #a1a5b7;
+    color: #000;
     transition: all .2s ease
 }
 
@@ -38918,7 +38918,7 @@ a:hover {
 
 .card .card-header .card-title .small,
 .card .card-header .card-title small {
-    color: #a1a5b7;
+    color: #000;
     font-size: 1rem
 }
 
@@ -42947,16 +42947,16 @@ a:hover {
 }
 
 .btn.btn-color-muted {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn.btn-color-muted i {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn.btn-color-muted .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .btn.btn-color-muted .svg-icon svg:hover [fill]:not(.permanent):not(g) {
@@ -42964,7 +42964,7 @@ a:hover {
 }
 
 .btn.btn-color-muted.dropdown-toggle:after {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn-check:active+.btn.btn-active-color-muted,
@@ -42975,7 +42975,7 @@ a:hover {
 .btn.btn-active-color-muted:focus:not(.btn-active),
 .btn.btn-active-color-muted:hover:not(.btn-active),
 .show>.btn.btn-active-color-muted {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn-check:active+.btn.btn-active-color-muted i,
@@ -42986,7 +42986,7 @@ a:hover {
 .btn.btn-active-color-muted:focus:not(.btn-active) i,
 .btn.btn-active-color-muted:hover:not(.btn-active) i,
 .show>.btn.btn-active-color-muted i {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn-check:active+.btn.btn-active-color-muted .svg-icon svg [fill]:not(.permanent):not(g),
@@ -42998,7 +42998,7 @@ a:hover {
 .btn.btn-active-color-muted:hover:not(.btn-active) .svg-icon svg [fill]:not(.permanent):not(g),
 .show>.btn.btn-active-color-muted .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .btn-check:active+.btn.btn-active-color-muted .svg-icon svg:hover [fill]:not(.permanent):not(g),
@@ -43020,16 +43020,16 @@ a:hover {
 .btn.btn-active-color-muted:focus:not(.btn-active).dropdown-toggle:after,
 .btn.btn-active-color-muted:hover:not(.btn-active).dropdown-toggle:after,
 .show>.btn.btn-active-color-muted.dropdown-toggle:after {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn.btn-icon-muted i {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn.btn-icon-muted .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .btn.btn-icon-muted .svg-icon svg:hover [fill]:not(.permanent):not(g) {
@@ -43037,7 +43037,7 @@ a:hover {
 }
 
 .btn.btn-icon-muted.dropdown-toggle:after {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn-check:active+.btn.btn-active-icon-muted i,
@@ -43048,7 +43048,7 @@ a:hover {
 .btn.btn-active-icon-muted:focus:not(.btn-active) i,
 .btn.btn-active-icon-muted:hover:not(.btn-active) i,
 .show>.btn.btn-active-icon-muted i {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn-check:active+.btn.btn-active-icon-muted .svg-icon svg [fill]:not(.permanent):not(g),
@@ -43060,7 +43060,7 @@ a:hover {
 .btn.btn-active-icon-muted:hover:not(.btn-active) .svg-icon svg [fill]:not(.permanent):not(g),
 .show>.btn.btn-active-icon-muted .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .btn-check:active+.btn.btn-active-icon-muted .svg-icon svg:hover [fill]:not(.permanent):not(g),
@@ -43082,11 +43082,11 @@ a:hover {
 .btn.btn-active-icon-muted:focus:not(.btn-active).dropdown-toggle:after,
 .btn.btn-active-icon-muted:hover:not(.btn-active).dropdown-toggle:after,
 .show>.btn.btn-active-icon-muted.dropdown-toggle:after {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn.btn-text-muted {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn-check:active+.btn.btn-active-text-muted,
@@ -43097,7 +43097,7 @@ a:hover {
 .btn.btn-active-text-muted:focus:not(.btn-active),
 .btn.btn-active-text-muted:hover:not(.btn-active),
 .show>.btn.btn-active-text-muted {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn.btn-color-gray-100 {
@@ -43717,16 +43717,16 @@ a:hover {
 }
 
 .btn.btn-color-gray-500 {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn.btn-color-gray-500 i {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn.btn-color-gray-500 .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .btn.btn-color-gray-500 .svg-icon svg:hover [fill]:not(.permanent):not(g) {
@@ -43734,7 +43734,7 @@ a:hover {
 }
 
 .btn.btn-color-gray-500.dropdown-toggle:after {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn-check:active+.btn.btn-active-color-gray-500,
@@ -43745,7 +43745,7 @@ a:hover {
 .btn.btn-active-color-gray-500:focus:not(.btn-active),
 .btn.btn-active-color-gray-500:hover:not(.btn-active),
 .show>.btn.btn-active-color-gray-500 {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn-check:active+.btn.btn-active-color-gray-500 i,
@@ -43756,7 +43756,7 @@ a:hover {
 .btn.btn-active-color-gray-500:focus:not(.btn-active) i,
 .btn.btn-active-color-gray-500:hover:not(.btn-active) i,
 .show>.btn.btn-active-color-gray-500 i {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn-check:active+.btn.btn-active-color-gray-500 .svg-icon svg [fill]:not(.permanent):not(g),
@@ -43768,7 +43768,7 @@ a:hover {
 .btn.btn-active-color-gray-500:hover:not(.btn-active) .svg-icon svg [fill]:not(.permanent):not(g),
 .show>.btn.btn-active-color-gray-500 .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .btn-check:active+.btn.btn-active-color-gray-500 .svg-icon svg:hover [fill]:not(.permanent):not(g),
@@ -43790,16 +43790,16 @@ a:hover {
 .btn.btn-active-color-gray-500:focus:not(.btn-active).dropdown-toggle:after,
 .btn.btn-active-color-gray-500:hover:not(.btn-active).dropdown-toggle:after,
 .show>.btn.btn-active-color-gray-500.dropdown-toggle:after {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn.btn-icon-gray-500 i {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn.btn-icon-gray-500 .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .btn.btn-icon-gray-500 .svg-icon svg:hover [fill]:not(.permanent):not(g) {
@@ -43807,7 +43807,7 @@ a:hover {
 }
 
 .btn.btn-icon-gray-500.dropdown-toggle:after {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn-check:active+.btn.btn-active-icon-gray-500 i,
@@ -43818,7 +43818,7 @@ a:hover {
 .btn.btn-active-icon-gray-500:focus:not(.btn-active) i,
 .btn.btn-active-icon-gray-500:hover:not(.btn-active) i,
 .show>.btn.btn-active-icon-gray-500 i {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn-check:active+.btn.btn-active-icon-gray-500 .svg-icon svg [fill]:not(.permanent):not(g),
@@ -43830,7 +43830,7 @@ a:hover {
 .btn.btn-active-icon-gray-500:hover:not(.btn-active) .svg-icon svg [fill]:not(.permanent):not(g),
 .show>.btn.btn-active-icon-gray-500 .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .btn-check:active+.btn.btn-active-icon-gray-500 .svg-icon svg:hover [fill]:not(.permanent):not(g),
@@ -43852,11 +43852,11 @@ a:hover {
 .btn.btn-active-icon-gray-500:focus:not(.btn-active).dropdown-toggle:after,
 .btn.btn-active-icon-gray-500:hover:not(.btn-active).dropdown-toggle:after,
 .show>.btn.btn-active-icon-gray-500.dropdown-toggle:after {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn.btn-text-gray-500 {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn-check:active+.btn.btn-active-text-gray-500,
@@ -43867,7 +43867,7 @@ a:hover {
 .btn.btn-active-text-gray-500:focus:not(.btn-active),
 .btn.btn-active-text-gray-500:hover:not(.btn-active),
 .show>.btn.btn-active-text-gray-500 {
-    color: #a1a5b7
+    color: #000
 }
 
 .btn.btn-color-gray-600 {
@@ -45298,11 +45298,11 @@ code:not([class*=language-]) {
 }
 
 .form-control.form-control-solid::placeholder {
-    color: #a1a5b7
+    color: #9f9f9f;
 }
 
 .form-control.form-control-solid::-moz-placeholder {
-    color: #a1a5b7;
+    color: #000;
     opacity: 1
 }
 
@@ -45340,11 +45340,11 @@ code:not([class*=language-]) {
 }
 
 .placeholder-gray-500::placeholder {
-    color: #a1a5b7
+    color: #9f9f9f;
 }
 
 .placeholder-gray-500::-moz-placeholder {
-    color: #a1a5b7;
+    color: #000;
     opacity: 1
 }
 
@@ -45373,11 +45373,11 @@ code:not([class*=language-]) {
 }
 
 .form-select.form-select-solid::placeholder {
-    color: #a1a5b7
+    color: #9f9f9f;
 }
 
 .form-select.form-select-solid::-moz-placeholder {
-    color: #a1a5b7;
+    color: #000;
     opacity: 1
 }
 
@@ -45399,11 +45399,11 @@ code:not([class*=language-]) {
 }
 
 .form-select.form-select-white::placeholder {
-    color: #a1a5b7
+    color: #9f9f9f;
 }
 
 .form-select.form-select-white::-moz-placeholder {
-    color: #a1a5b7;
+    color: #000;
     opacity: 1
 }
 
@@ -45733,7 +45733,7 @@ code:not([class*=language-]) {
 }
 
 .table.table-row-gray-500 tr {
-    border-bottom-color: #a1a5b7
+    border-bottom-color: #000
 }
 
 .table.table-row-gray-600 tr {
@@ -47564,7 +47564,7 @@ code:not([class*=language-]) {
 }
 
 .popover .popover-dismiss i {
-    color: #a1a5b7
+    color: #000
 }
 
 .popover .popover-dismiss:hover i {
@@ -47701,12 +47701,12 @@ code:not([class*=language-]) {
 }
 
 .accordion.accordion-icon-toggle .collapsed .accordion-icon i {
-    color: #a1a5b7
+    color: #000
 }
 
 .accordion.accordion-icon-toggle .collapsed .accordion-icon .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .accordion.accordion-icon-toggle .collapsed .accordion-icon .svg-icon svg:hover [fill]:not(.permanent):not(g) {
@@ -51458,7 +51458,7 @@ code:not([class*=language-]) {
     opacity: 0;
     border-width: 3px;
     border-style: solid;
-    border-color: #a1a5b7
+    border-color: #000
 }
 
 @keyframes animation-pulse {
@@ -51594,7 +51594,7 @@ code:not([class*=language-]) {
 
 .svg-icon svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .svg-icon svg:hover [fill]:not(.permanent):not(g) {
@@ -51684,7 +51684,7 @@ code:not([class*=language-]) {
 
 .svg-icon.svg-icon-muted svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .svg-icon.svg-icon-muted svg:hover [fill]:not(.permanent):not(g) {
@@ -51729,7 +51729,7 @@ code:not([class*=language-]) {
 
 .svg-icon.svg-icon-gray-500 svg [fill]:not(.permanent):not(g) {
     transition: fill .3s ease;
-    fill: #a1a5b7
+    fill: #000
 }
 
 .svg-icon.svg-icon-gray-500 svg:hover [fill]:not(.permanent):not(g) {
@@ -53451,7 +53451,7 @@ label.rating-label:hover~.rating-label>.svg-icon svg:hover [fill]:not(.permanent
 }
 
 .stepper.stepper-pills .stepper-item .stepper-label .stepper-desc {
-    color: #a1a5b7
+    color: #000
 }
 
 .stepper.stepper-pills .stepper-item.current {
@@ -53500,7 +53500,7 @@ label.rating-label:hover~.rating-label>.svg-icon svg:hover [fill]:not(.permanent
 
 .stepper.stepper-pills .stepper-item.completed .stepper-label .stepper-title,
 .stepper.stepper-pills .stepper-item.current:last-child .stepper-label .stepper-title {
-    color: #a1a5b7
+    color: #000
 }
 
 .stepper.stepper-pills .stepper-item.completed .stepper-label .stepper-desc,
@@ -55106,7 +55106,7 @@ tr td {
 
 tr th {
     text-align: center !important;
-    color: #1e1e1e !important;
+    color: #fff !important;
 }
 
 #thead_2 #thead_th_1 {
@@ -55123,4 +55123,13 @@ tr th {
 .active_navbar {
     background-color: rgb(80 205 137) !important;
     border-radius: .475rem;
+}
+
+.active_navbar span {
+    color: #fff !important;
+}
+
+.select2-selection {
+    border: solid 1px #50cd89 !important;
+    background-color: #f5f8fa !important;
 }

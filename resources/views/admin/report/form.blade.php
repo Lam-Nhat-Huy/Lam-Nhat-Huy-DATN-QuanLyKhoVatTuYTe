@@ -46,7 +46,7 @@
 
                             <label class="required fs-5 fw-bold mb-3">Loại Báo Cáo</label>
 
-                            <select name="" class="form-select form-select-sm form-select-solid">
+                            <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
                                 <option value="0">Chọn Loại Báo Cáo...</option>
                                 @foreach ($AllReportType as $item)
                                     <option value="{{ $item['id'] }}"
@@ -59,28 +59,25 @@
 
 
                         <div class="col-md-6 fv-row">
-
                             <label class="required fs-5 fw-bold mb-2">File Báo Cáo</label>
 
 
-                            <input type="file" class="form-control form-control-sm form-control-solid" placeholder=""
+                            <input type="file"
+                                class="form-control form-control-sm form-control-solid border border-success" placeholder=""
                                 name="last-name" />
 
                         </div>
-
                     </div>
 
 
                     <div class="d-flex flex-column mb-5 fv-row">
                         <label class="required fs-5 fw-bold mb-2">Nội Dung Báo Cáo</label>
 
-                        <textarea name="content" class="form-control form-control-sm form-control-solid" cols="30" rows="10"
-                            placeholder="Nhập Nội Dung Báo Cáo..">{{ !empty($FirstReport['content']) ? $FirstReport['content'] : old('content') }}</textarea>
+                        <textarea name="content" class="form-control form-control-sm form-control-solid border border-success" cols="30"
+                            rows="10" placeholder="Nhập Nội Dung Báo Cáo..">{{ !empty($FirstReport['content']) ? $FirstReport['content'] : old('content') }}</textarea>
                     </div>
-
                 </div>
             </div>
-
 
             <div class="modal-footer flex-right">
                 <button type="submit" id="kt_modal_new_address_submit" class="btn btn-twitter btn-sm">

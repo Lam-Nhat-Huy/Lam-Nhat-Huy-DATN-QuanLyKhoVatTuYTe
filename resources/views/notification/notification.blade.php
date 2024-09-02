@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="card-body py-1 me-6">
-            <form action="" class="row">
+            <form action="" class="row  align-items-center">
                 <div class="col-4">
                     <select name="ur" id="ur"
                         class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
@@ -67,13 +67,13 @@
             <div class="table-responsive">
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
-                        <tr class="fw-bolder bg-success">
+                        <tr class="fw-bolder bg-primary">
                             <th class="ps-4">Mã Thông Báo</th>
                             <th class="">Người Tạo</th>
                             <th class="">Nội Dung</th>
                             <th class="">Ngày Tạo</th>
                             <th class="">Trạng Thái</th>
-                            <th class="pe-3">Hành Động</th>
+                            <th>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>

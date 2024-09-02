@@ -35,203 +35,219 @@
     </style>
 @endsection
 
+@section('title')
+    Nhập Kho
+@endsection
+
 @section('content')
-    <div class="card mb-5 mb-xl-8" style="background-color: #e1e9f4">
+    <form action="{{ route('warehouse.store_import') }}" method="POST">
+        @csrf
+        <div class="card pb-5 mb-xl-8">
+            <div class="card-header border-0 pt-5">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bolder fs-3 mb-1">Tạo Phiếu Nhập Kho</span>
+                </h3>
+                <div class="card-toolbar">
+                    <a href="{{ route('warehouse.import') }}" class="btn btn-sm btn-dark">
+                        <span class="align-items-center d-flex">
+                            <i class="fa fa-arrow-left me-1"></i>
+                            Trở Lại
+                        </span>
+                    </a>
+                </div>
+            </div>
 
-        <div class="card-header border-0 pt-5">
-            <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Tạo Phiếu Nhập</span>
-            </h3>
+            <div class="py-5 px-lg-17">
 
-            <a href="{{ route('warehouse.export') }}" class="fw-bold text-dark">Quay về</a>
-        </div>
+                <div class="me-n7 pe-7">
 
-        <div class="card-body">
-            <form action="{{ route('warehouse.store_import') }}" method="POST">
-                @csrf
-
-                <div class="card p-4 mb-4">
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label for="supplier_id" class="form-label mb-2">Nhà cung cấp</label>
-                            <select class="form-select setupSelect2" id="supplier_id" name="supplier_id">
-                                <option value="">Chọn nhà cung cấp</option>
+                    <div class="row mb-5">
+                        <div class="col-6 mb-4">
+                            <label for="supplier_id" class="required form-label mb-2">Nhà cung cấp</label>
+                            <select class="form-select form-select-sm form-select-solid border border-success setupSelect2"
+                                id="supplier_id" name="supplier_id">
+                                <option value="">--Chọn nhà cung cấp--</option>
                                 <option value="supplier1">Nhà cung cấp 1</option>
                                 <option value="supplier2">Nhà cung cấp 2</option>
                             </select>
                         </div>
 
-
-                        <div class="col-md-4">
-                            <label for="created_by" class="form-label mb-2">Người tạo</label>
-                            <select class="form-select setupSelect2" id="created_by" name="created_by">
-                                <option value="">Chọn người tạo</option>
-                                <option value="user1">Người tạo 1</option>
-                                <option value="user2">Người tạo 2</option>
-                            </select>
+                        <div class="col-6 mb-4">
+                            <label for="receipt_date" class="required form-label mb-2">Ngày nhập</label>
+                            <input type="date"
+                                class="form-control form-control-sm form-control-solid border border-success"
+                                id="receipt_date" name="receipt_date">
                         </div>
 
-
-                        <div class="col-md-4">
-                            <label for="receipt_date" class="form-label mb-2">Ngày nhập</label>
-                            <input type="date" class="form-control" id="receipt_date" name="receipt_date">
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="invoice_number" class="form-label mb-2">Số hóa đơn</label>
-                            <input type="number" class="form-control" id="invoice_number" name="invoice_number">
+                        <div class="col-6 mb-4">
+                            <label for="invoice_number" class="required form-label mb-2">Số hóa đơn</label>
+                            <input type="number"
+                                class="form-control form-control-sm form-control-solid border border-success"
+                                id="invoice_number" name="invoice_number" placeholder="Nhập Số Hóa Đơn...">
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="invoice_symbol" class="form-label mb-2">Kí hiệu hóa đơn</label>
-                            <input type="number" class="form-control" id="invoice_symbol" name="invoice_symbol">
+                        <div class="col-6 mb-4">
+                            <label for="invoice_symbol" class="required form-label mb-2">Kí hiệu hóa đơn</label>
+                            <input type="number"
+                                class="form-control form-control-sm form-control-solid border border-success"
+                                id="invoice_symbol" name="invoice_symbol" placeholder="Nhập Kí Hiệu Hóa Đơn...">
                         </div>
-                    </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-12">
+                        <div class="col-12">
                             <label for="note" class="form-label mb-2">Ghi chú</label>
-                            <textarea class="form-control" id="note" name="note" rows="3" placeholder="Nhập ghi chú"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card p-4 mb-4">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="material_id" class="form-label mb-2">Tên vật tư</label>
-                            <input type="text" class="form-control" id="material_id" name="material_id"
-                                placeholder="Nhập tên vật tư">
-                            <div id="autocomplete-list" class="autocomplete-items"></div>
-                        </div>
-
-
-
-                        <div class="col-md-6">
-                            <label for="unit_price" class="form-label mb-2">Giá nhập</label>
-                            <input type="text" class="form-control" id="unit_price" name="unit_price"
-                                placeholder="Nhập đơn giá">
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-
-
-                        <div class="col-md-6">
-                            <label for="quantity" class="form-label mb-2">Số lượng</label>
-                            <input type="number" class="form-control" id="quantity" name="quantity"
-                                placeholder="Nhập số lượng">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="discount_rate" class="form-label mb-2">Chiết khấu (%)</label>
-                            <input type="text" class="form-control" id="discount_rate" name="discount_rate"
-                                placeholder="Nhập chiết khấu (%)">
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="vat_rate" class="form-label mb-2">VAT (%)</label>
-                            <input type="text" class="form-control" id="vat_rate" name="vat_rate"
-                                placeholder="Nhập VAT (%)">
-                        </div>
-
-
-                        <div class="col-md-6">
-                            <label for="batch_number" class="form-label mb-2">Số lô</label>
-                            <input type="text" class="form-control" id="batch_number" name="batch_number"
-                                placeholder="Nhập số lô">
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="product_date" class="form-label mb-2">Ngày sản xuất</label>
-                            <input type="date" class="form-control" id="product_date" name="product_date">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="expiry_date" class="form-label mb-2">Hạn sử dụng</label>
-                            <input type="date" class="form-control" id="expiry_date" name="expiry_date">
+                            <textarea class="form-control form-control-sm form-control-solid border border-success" id="note" name="note"
+                                rows="3" placeholder="Nhập ghi chú"></textarea>
                         </div>
                     </div>
 
                 </div>
-
-                <div id="materials-hidden-inputs"></div>
-
-                <!-- Submit Button -->
-                <div class="text-end mb-4">
-                    <button type="button" id="add-material" class="btn btn-success btn-sm">Thêm sản phẩm</button>
-
-                    <button type="submit" class="btn btn-danger btn-sm">Tạo phiếu nhập</button>
-                </div>
-
-
-                <!-- Block 3: Receipt Items List -->
-                <div class="card p-4 mb-4 col-md-12">
-                    <div class="row">
-                        <div class="col-md-9">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover text-center">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th scope="col">Tên</th>
-                                            <th scope="col">Số lượng</th>
-                                            <th scope="col">Giá nhập</th>
-                                            <th scope="col">Tổng cộng</th>
-                                            <th scope="col">Số lô</th>
-                                            <th scope="col">Hạn dùng</th>
-                                            <th scope="col">CK (%)</th>
-                                            <th scope="col">VAT (%)</th>
-                                            <th scope="col">TT trước VAT</th>
-                                            <th scope="col">Thành tiền</th>
-                                            <th scope="col">ACT</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="materials-list">
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Total Price Summary -->
-                        <div class="col-md-3">
-                            <div class="card p-3" style="background: #e1e9f4">
-                                <h5 class="card-title">Tổng kết</h5>
-                                <hr>
-                                <p class="mb-1">Tổng tiền hàng:
-                                    <span class="fw-bold">
-                                        10,000,000 <!-- Giá trị cứng -->
-                                    </span>
-                                </p>
-                                <p class="mb-1">Tổng chiết khấu:
-                                    <span class="fw-bold">
-                                        500,000 <!-- Giá trị cứng -->
-                                    </span>
-                                </p>
-                                <p class="mb-1">Tổng VAT:
-                                    <span class="fw-bold">
-                                        1,000,000 <!-- Giá trị cứng -->
-                                    </span>
-                                </p>
-                                <hr>
-                                <p class="fs-4 fw-bold">Tổng giá:
-                                    10,500,000 <!-- Giá trị cứng -->
-                                </p>
-                                <hr>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </form>
-
+            </div>
         </div>
-    </div>
+
+
+        <div class="card py-5 mb-xl-8">
+            <div class="py-5 px-lg-17">
+                <div class="me-n7 pe-7">
+                    <div class="mb-5">
+                        <div class="row mb-3">
+                            <div class="col-6 mb-4">
+                                <label for="material_id" class="required form-label mb-2">Tên vật tư</label>
+                                <select
+                                    class="form-select form-select-sm form-select-solid border border-success setupSelect2"
+                                    id="material_id" name="material_id">
+                                    <option value="">--Chọn Vật Tư--</option>
+                                    <option value="">Vật Tư 1</option>
+                                    <option value="">Vật Tư 2</option>
+                                </select>
+                            </div>
+
+                            <div class="col-6 mb-4">
+                                <label for="unit_price" class="required form-label mb-2">Giá nhập</label>
+                                <input type="text"
+                                    class="form-control form-control-sm form-control-solid border border-success"
+                                    id="unit_price" name="unit_price" placeholder="Nhập đơn giá">
+                            </div>
+
+                            <div class="col-6 mb-4">
+                                <label for="quantity" class="required form-label mb-2">Số lượng</label>
+                                <input type="number"
+                                    class="form-control form-control-sm form-control-solid border border-success"
+                                    id="quantity" name="quantity" placeholder="Nhập số lượng">
+                            </div>
+
+                            <div class="col-6 mb-4">
+                                <label for="discount_rate" class="required form-label mb-2">Chiết khấu (%)</label>
+                                <input type="text"
+                                    class="form-control form-control-sm form-control-solid border border-success"
+                                    id="discount_rate" name="discount_rate" placeholder="Nhập chiết khấu (%)">
+                            </div>
+
+                            <div class="col-6 mb-4">
+                                <label for="vat_rate" class="required form-label mb-2">VAT (%)</label>
+                                <input type="text"
+                                    class="form-control form-control-sm form-control-solid border border-success"
+                                    id="vat_rate" name="vat_rate" placeholder="Nhập VAT (%)">
+                            </div>
+
+
+                            <div class="col-6 mb-4">
+                                <label for="batch_number" class="required form-label mb-2">Số lô</label>
+                                <input type="text"
+                                    class="form-control form-control-sm form-control-solid border border-success"
+                                    id="batch_number" name="batch_number" placeholder="Nhập số lô">
+                            </div>
+
+                            <div class="col-6 mb-4">
+                                <label for="product_date" class="required form-label mb-2">Ngày sản xuất</label>
+                                <input type="date"
+                                    class="form-control form-control-sm form-control-solid border border-success"
+                                    id="product_date" name="product_date">
+                            </div>
+
+                            <div class="col-6 mb-4">
+                                <label for="expiry_date" class="form-label mb-2">Hạn sử dụng</label>
+                                <input type="date"
+                                    class="form-control form-control-sm form-control-solid border border-success"
+                                    id="expiry_date" name="expiry_date">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="materials-hidden-inputs"></div>
+
+                    <div class="text-end mb-4">
+                        <button type="button" id="add-material" class="btn btn-success btn-sm me-2">Thêm Sản
+                            Phẩm</button>
+                    </div>
+
+                    <div class="card p-4 mb-4 col-md-12">
+                        <div class="row">
+                            <div class="col-md-9 ps-0">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover text-center">
+                                        <thead class="fw-bolder bg-success">
+                                            <tr>
+                                                <th class="ps-4">Tên</th>
+                                                <th class="">Số lượng</th>
+                                                <th class="">Giá nhập</th>
+                                                <th class="">Tổng cộng</th>
+                                                <th class="">Số lô</th>
+                                                <th class="">Hạn dùng</th>
+                                                <th class="">CK (%)</th>
+                                                <th class="">VAT (%)</th>
+                                                <th class="">TT trước VAT</th>
+                                                <th class="">Thành tiền</th>
+                                                <th class="pe-3">ACT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="materials-list">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Total Price Summary -->
+                            <div class="col-md-3 pe-0">
+                                <div class="card p-5" style="background: #e1e9f4">
+                                    <h5 class="card-title">Tổng Cộng</h5>
+                                    <hr>
+                                    <p class="mb-1">Tổng Tiền Hàng:
+                                        <span class="fw-bold">
+                                            10,000,000 <!-- Giá trị cứng -->
+                                        </span>
+                                    </p>
+                                    <p class="mb-1">Tổng Chiết Khấu:
+                                        <span class="fw-bold">
+                                            500,000 <!-- Giá trị cứng -->
+                                        </span>
+                                    </p>
+                                    <p class="mb-1">Tổng VAT:
+                                        <span class="fw-bold">
+                                            1,000,000 <!-- Giá trị cứng -->
+                                        </span>
+                                    </p>
+                                    <hr>
+                                    <p class="fs-4 fw-bold mb-0">Tổng:
+                                        10,500,000 <!-- Giá trị cứng -->
+                                    </p>
+                                    <hr>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="modal-footer flex-right pe-0">
+                        <button type="submit" class="btn btn-twitter btn-sm">
+                            Tạo Phiếu Nhập
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
 @endsection
 
 @section('scripts')
@@ -343,7 +359,7 @@
 
         // Thêm vật tư vào danh sách
         document.getElementById('add-material').addEventListener('click', function() {
-            const material_id = document.getElementById('material_id').value;
+            const material_id = document.getElementById('material_id').value; // Em mới đổi qua option
             const unit_price = parseFloat(document.getElementById('unit_price').value) || 0;
             const quantity = parseFloat(document.getElementById('quantity').value) || 0;
             const discount_rate = parseFloat(document.getElementById('discount_rate').value) || 0;

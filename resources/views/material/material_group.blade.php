@@ -113,14 +113,14 @@
                         <div class="mb-5">
                             <label class="required fs-5 fw-bold mb-3">Tên Nhóm Vật Tư</label>
 
-                            <input type="text" class="form-control form-control-sm form-control-solid"
+                            <input type="text" class="form-control form-control-sm form-control-solid border border-primary"
                                 placeholder="Tên Nhóm Vật Tư.." name="material_type_name" />
                         </div>
 
                         <div class="mb-5">
                             <label class="required fs-5 fw-bold mb-2">Mô Tả</label>
 
-                            <textarea name="content" class="form-control form-control-sm form-control-solid" cols="30" rows="5"
+                            <textarea name="content" class="form-control form-control-sm form-control-solid border border-primary" cols="30" rows="5"
                                 placeholder="Mô Tả"></textarea>
                         </div>
 
@@ -141,7 +141,7 @@
             <div class="col-8">
                 <div class="row">
                     <div class="card-body py-8 me-7 col-12">
-                        <form action="" class="row">
+                        <form action="" class="row  align-items-center">
                             <div class="col-6">
                                 <select name="ur" id="ur"
                                     class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
@@ -168,12 +168,12 @@
                         <div class="table-responsive">
                             <table class="table table-striped align-middle gs-0 gy-4">
                                 <thead>
-                                    <tr class="fw-bolder bg-success">
+                                    <tr class="fw-bolder bg-primary">
                                         <th class="ps-4">Mã Nhóm Vật Tư</th>
                                         <th class="">Tên</th>
                                         <th class="">Mô Tả</th>
                                         <th class="">Trạng Thái</th>
-                                        <th class="pe-3">Hành Động</th>
+                                        <th>Hành Động</th>
                                     </tr>
                                 </thead>
                                 <tbody>

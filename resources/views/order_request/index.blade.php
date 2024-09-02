@@ -29,23 +29,26 @@
             </div>
         </div>
         <div class="card-body py-1 me-6">
-            <form action="" class="row">
+            <form action="" class="row  align-items-center">
                 <div class="col-3">
-                    <select name="ur" id="ur" class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                    <select name="ur" id="ur"
+                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
                         <option value="" selected>--Theo Nhà Cung Cấp--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
                 </div>
                 <div class="col-3">
-                    <select name="ur" id="ur" class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                    <select name="ur" id="ur"
+                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
                         <option value="" selected>--Theo Người Tạo--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
                 </div>
                 <div class="col-3">
-                    <select name="stt" id="stt" class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                    <select name="stt" id="stt"
+                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
                         <option value="" selected>--Theo Trạng Thái--</option>
                         <option value="1" {{ request()->stt == 1 ? 'selected' : '' }}>Chưa Duyệt</option>
                         <option value="2" {{ request()->stt == 2 ? 'selected' : '' }}>Đã Duyệt</option>
@@ -69,13 +72,13 @@
             <div class="table-responsive">
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
-                        <tr class="fw-bolder bg-success">
+                        <tr class="fw-bolder bg-primary">
                             <th class="ps-4">Mã Yêu Cầu</th>
                             <th class="">Nhà Cung Cấp</th>
                             <th class="">Người Tạo</th>
                             <th class="">Ngày Tạo</th>
                             <th class="">Trạng Thái</th>
-                            <th class="pe-3">Hành Động</th>
+                            <th>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -112,7 +115,8 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h3 class="modal-title" id="checkModalLabel">Duyệt Yêu Cầu Đặt Hàng</h3>
+                                                        <h3 class="modal-title" id="checkModalLabel">Duyệt Yêu Cầu Đặt Hàng
+                                                        </h3>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
@@ -131,10 +135,60 @@
                                             </div>
                                         </div>
 
-                                        <a class="btn btn-sm btn-twitter" href="{{ route('order_request.update_order_request') }}">
+                                        <a class="btn btn-sm btn-twitter"
+                                            href="{{ route('order_request.update_order_request') }}">
                                             <i class="fa fa-edit"></i>Sửa
                                         </a>
                                     @endif
+
+                                    <button class="btn btn-sm btn-info" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal_{{ $item['id'] }}"><i class="fa fa-eye"></i>Chi
+                                        Tiết</button>
+
+                                    <div class="modal fade" id="deleteModal_{{ $item['id'] }}" data-bs-backdrop="static"
+                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id="deleteModalLabel">Chi Tiết Mặt Hàng Cần Mua
+                                                    </h3>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped align-middle gs-0 gy-4">
+                                                            <thead>
+                                                                <tr class="fw-bolder bg-primary">
+                                                                    <th style="width: 33%;">Vật Tư</th>
+                                                                    <th style="width: 33%;">Đơn Vị</th>
+                                                                    <th style="width: 33%;">Số Lượng</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr class="text-center">
+                                                                    <td>
+                                                                        Bình Oxy Y Tế - (Bình 5 Lít)
+                                                                    </td>
+                                                                    <td>
+                                                                        Bình
+                                                                    </td>
+                                                                    <td>
+                                                                        100
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-secondary"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
                                         data-bs-target="#deleteModal_{{ $item['id'] }}"><i
@@ -146,7 +200,8 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h3 class="modal-title" id="deleteModalLabel">Xóa Yêu Cầu Đặt Hàng</h3>
+                                                    <h3 class="modal-title" id="deleteModalLabel">Xóa Yêu Cầu Đặt Hàng
+                                                    </h3>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>

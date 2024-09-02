@@ -19,7 +19,7 @@
     }
 @endphp
 
-@section('content')
+@section('content') 
     <form class="form" action="{{ $action }}" enctype="multipart/form-data">
         @csrf
         <div class="card mb-5 mb-xl-8 pb-5">
@@ -63,7 +63,7 @@
                             <label class="fs-5 fw-bold mb-2">Ghi Chú</label>
 
 
-                            <input type="text" class="form-control form-control-sm form-control-solid"
+                            <input type="text" class="form-control form-control-sm form-control-solid border border-primary"
                                 placeholder="Nhập Ghi Chú Cho Đơn Đặt Hàng.." name="last-name" />
 
                         </div>
@@ -105,7 +105,7 @@
                                 <label class="fs-5 fw-bold mb-2">Số Lượng</label>
 
 
-                                <input type="number" class="form-control form-control-sm form-control-solid" value="0"
+                                <input type="number" class="form-control form-control-sm form-control-solid border border-primary" value="0"
                                     name="quantity" />
 
                             </div>
@@ -129,10 +129,10 @@
                     <table class="table table-striped align-middle gs-0 gy-4">
                         <thead>
                             <tr class="fw-bolder bg-success">
-                                <th class="ps-4">Vật Tư</th>
+                                <th class="">Vật Tư</th>
                                 <th class="">Đơn Vị</th>
                                 <th class="">Số Lượng</th>
-                                <th class="pe-3">Hành Động</th>
+                                <th>Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>

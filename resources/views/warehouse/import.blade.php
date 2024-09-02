@@ -16,49 +16,56 @@
     <div class="card mb-5 mb-xl-8">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Danh sách nhập kho</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Nhập Kho</span>
             </h3>
 
             <div class="card-toolbar">
-                <a href="{{ route('warehouse.create_import') }}" class="btn btn-sm btn-success">Tạo Phiếu Nhập</a>
+                <a href="{{ route('warehouse.create_import') }}" class="btn btn-sm btn-twitter"><i class="fa fa-plus"></i>Tạo
+                    Phiếu Nhập</a>
             </div>
         </div>
 
-        <div class="card-body py-1 ">
-
-            <form action="" class="row">
-                <div class="col-3">
+        <div class="card-body py-1">
+            <form action="" class="row  align-items-center">
+                <div class="col-4">
+                    <div class="row align-items-center">
+                        <div class="col-5 pe-0">
+                            <input type="date"
+                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                value="{{ \Carbon\Carbon::now()->subMonths(3)->format('Y-m-d') }}">
+                        </div>
+                        <div class="col-2 text-center">
+                            Đến
+                        </div>
+                        <div class="col-5 ps-0">
+                            <input type="date"
+                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <select name="stt" id="stt"
+                        class="mt-2 mb-2 form-select form-select-sm form-select-solid border border-success setupSelect2">
+                        <option value="" selected>--Theo NCC--</option>
+                        <option value="1" {{ request()->stt == 1 ? 'selected' : '' }}>Chưa Duyệt</option>
+                        <option value="2" {{ request()->stt == 2 ? 'selected' : '' }}>Đã Duyệt</option>
+                    </select>
+                </div>
+                <div class="col-2">
                     <select name="ur" id="ur"
-                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
-                        <option value="" selected="">--Theo Người Tạo--</option>
+                        class="mt-2 mb-2 form-select form-select-sm form-select-solid border border-success setupSelect2">
+                        <option value="" selected>--Theo Người Tạo--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
                 </div>
-                <div class="col-3">
-                    <select name="rt" id="rt"
-                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
-                        <option value="" selected="">--Theo Nhà Cung Cấp--</option>
-                        <option value="1">
-                            Type 1</option>
-                        <option value="2">
-                            Type 2</option>
-                    </select>
-                </div>
-                <div class="col-3">
-                    <select name="stt" id="stt"
-                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
-                        <option value="" selected="">--Theo Trạng Thái--</option>
-                        <option value="1">Chưa Duyệt</option>
-                        <option value="2">Đã Duyệt</option>
-                    </select>
-                </div>
-                <div class="col-3">
+                <div class="col-4 pe-8">
                     <div class="row">
                         <div class="col-10">
-                            <input type="search" name="kw" placeholder="Tìm Kiếm Mã Hóa Đơn.."
+                            <input type="search" name="kw" placeholder="Tìm Kiếm Mã, Số Hóa Đơn.."
                                 class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
-                                value="">
+                                value="{{ request()->kw }}">
                         </div>
                         <div class="col-2">
                             <button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
@@ -72,24 +79,20 @@
             <div class="table-responsive">
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
-                        <tr class="fw-bolder text-muted bg-light">
-                            <th class="ps-4 rounded-start">STT</th>
-                            <th class="">Mã Hóa Đơn</th>
+                        <tr class="fw-bolder bg-success">
+                            <th class="ps-4">Mã Hóa Đơn</th>
                             <th class="">Số Hóa Đơn</th>
                             <th class="">Nhà Cung Cấp</th>
                             <th class="">Tạo Bởi</th>
                             <th class="">Ngày Nhập</th>
                             <th class="">Trạng Thái</th>
                             <th class="">Tổng Cộng</th>
-                            <th class="rounded-end">Hành Động</th>
+                            <th class="pe-3">Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
                         @for ($i = 0; $i < 6; $i++)
                             <tr class="text-center hover-table">
-                                <td>
-                                    1
-                                </td>
                                 <td>
                                     PD199001
                                 </td>
@@ -106,8 +109,11 @@
                                     26/08/2024
                                 </td>
                                 <td>
-                                    <span class="text-success">
-                                        Đã hoàn tất</span>
+                                    @if ($i > 2)
+                                        <span class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</span>
+                                    @else
+                                        <span class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</span>
+                                    @endif
                                 </td>
                                 <td>
                                     12.000.000VNĐ
@@ -121,22 +127,47 @@
                                             <li>
                                                 <a class="dropdown-item" href="#" data-bs-toggle="modal"
                                                     data-bs-target="#detailsModal">Chi
-                                                    tiết</a>
+                                                    tiết
+                                                </a>
                                             </li>
-                                            <li><a class="dropdown-item" href="#">Duyệt đơn</a></li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#browse">Duyệt đơn</a>
+                                            </li>
                                             <li><a class="dropdown-item" href="#">Chỉnh sửa</a></li>
                                         </ul>
                                     </div>
                                 </td>
-
                             </tr>
                         @endfor
                     </tbody>
                 </table>
             </div>
         </div>
+    </div>
 
-
+    {{-- Duyệt Phiếu --}}
+    <div class="modal fade" id="browse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="browseLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="browseLabel">Duyệt Phiếu Nhập Kho
+                    </h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="">
+                        @csrf
+                        <h4 class="text-danger text-center">Duyệt Phiếu Nhập Kho Này?</h4>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-twitter">Duyệt</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Modal -->
@@ -145,7 +176,8 @@
             <div class="modal-content rounded shadow-sm border-0">
                 <!-- Modal header -->
                 <div class="modal-header pb-0 border-0 justify-content-end">
-                    <button type="button" class="btn btn-sm btn-icon btn-light" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn btn-sm btn-icon btn-light" data-bs-dismiss="modal"
+                        aria-label="Close">
                         <i class="fa fa-times"></i>
                     </button>
                 </div>
@@ -154,17 +186,17 @@
                     <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
                         <form action="" method="post">
                             <div class="text-center mb-13">
-                                <h1 class="mb-3 text-uppercase text-primary">Chi Tiết Phiếu Nhập</h1>
-                                <div class="text-muted fw-bold fs-6">Tất cả thông tin chi tiết về phiếu nhập kho
-                                    <span class="link-primary fw-bolder">BEESOFT</span>.
+                                <h1 class="mb-3 text-uppercase text-primary">Phiếu Nhập</h1>
+                                <div class="text-muted fw-bold fs-6">Thông Tin Chi Tiết Về Phiếu Nhập Kho
+                                    <span class="link-primary fw-bolder">#MaNhapKho</span>.
                                 </div>
                             </div>
                             <div class="mb-15">
                                 <!-- Begin::Receipt Info -->
                                 <div class="mb-4">
-                                    <h5 class="text-primary border-bottom pb-2">Thông tin phiếu nhập</h5>
-                                    <div class="row">
-                                        <div class="col-md-4">
+                                    <h4 class="text-primary border-bottom border-dark pb-4">Thông Tin Phiếu Nhập</h4>
+                                    <div class="row pt-3">
+                                        <div class="col-4">
                                             <p><strong>Mã Hóa Đơn:</strong> <span id="modalInvoiceCode">HD00019</span></p>
                                             <p><strong>Số Hóa Đơn:</strong> <span id="modalContractNumber">025</span></p>
                                             <p><strong>Nhà Cung Cấp:</strong> <span id="modalSupplier">Trung Sơn</span></p>
@@ -179,18 +211,18 @@
 
                                 <!-- Begin::Receipt Items -->
                                 <div class="mb-4">
-                                    <h5 class="text-primary border-bottom pb-2">Danh sách vật tư</h5>
+                                    <h4 class="text-primary border-bottom border-dark pb-4 mb-4">Danh sách vật tư</h4>
                                     <div class="table-responsive">
-                                        <table class="table table-bordered table-sm table-hover">
-                                            <thead class="bg-light">
+                                        <table class="table table-striped table-sm table-hover">
+                                            <thead class="fw-bolder bg-success">
                                                 <tr>
-                                                    <th>Mã vật tư</th>
+                                                    <th class="ps-4">Mã vật tư</th>
                                                     <th>Tên vật tư</th>
                                                     <th>Số lượng</th>
                                                     <th>Số lô</th>
                                                     <th>Chiết khấu (%)</th>
                                                     <th>VAT (%)</th>
-                                                    <th>Thành tiền</th>
+                                                    <th class="pe-3">Thành tiền</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="modalItemsTableBody">
@@ -229,7 +261,7 @@
 
                                 <!-- Begin::Summary -->
                                 <div class="card p-4" style="background: #f9f9f9; border: 1px solid #e3e3e3;">
-                                    <h5 class="card-title text-primary">Tổng kết</h5>
+                                    <h5 class="card-title text-primary">Tổng Cộng</h5>
                                     <hr>
                                     <p class="mb-1">Tổng tiền hàng: <span class="fw-bold" id="modalSubtotal">12.000.000
                                             VND</span></p>
@@ -241,23 +273,16 @@
                                     <p class="mb-1">Phí khác: <span class="fw-bold" id="modalOtherFees">0 VND</span>
                                     </p>
                                     <hr>
-                                    <p class="fs-4 fw-bold text-danger">Tổng giá: <span id="modalFinalTotal">12.000.000
+                                    <p class="fs-4 fw-bold text-danger">Tổng: <span id="modalFinalTotal">12.000.000
                                             VND</span></p>
 
 
                                 </div>
 
-                                <div class="d-flex justify-content-between mt-3">
+                                <div class="d-flex justify-content-between mt-5">
                                     <!-- Print Button -->
-                                    <button type="button" id="printPdfBtn" class="btn btn-primary btn-sm me-2"
-                                        style="border-radius: 30px; font-size: 1rem; padding: 10px 20px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+                                    <button type="button" id="printPdfBtn" class="btn btn-twitter btn-sm me-2">
                                         <i class="fa fa-print me-2"></i>In Phiếu
-                                    </button>
-
-                                    <!-- Approve Button -->
-                                    <button type="button" id="approveOrderBtn" class="btn btn-success btn-sm"
-                                        style="border-radius: 30px; font-size: 1rem; padding: 10px 20px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-                                        <i class="fa fa-check me-2"></i>Duyệt Đơn
                                     </button>
                                 </div>
                                 <!-- End::Summary -->
