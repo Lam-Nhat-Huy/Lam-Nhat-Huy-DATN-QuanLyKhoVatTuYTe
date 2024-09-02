@@ -109,25 +109,27 @@
                                             @if ($item['status'] == 1)
                                                 <li>
                                                     <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#browse_{{ $item['id'] }}">Duyệt</a>
+                                                        data-bs-target="#browse_{{ $item['id'] }}">
+                                                        <i class="fa fa-clipboard-check me-1"></i>Duyệt
+                                                    </a>
                                                 </li>
                                             @endif
                                             <li>
                                                 <a class="dropdown-item"
                                                     href="{{ route('order_request.update_order_request') }}">
-                                                    Sửa
+                                                    <i class="fa fa-edit me-1"></i>Sửa
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="dropdown-item pointer" data-bs-toggle="modal"
                                                     data-bs-target="#detailModal_{{ $item['id'] }}">
-                                                    Chi Tiết
+                                                    <i class="fa fa-eye me-1"></i>Chi Tiết
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="dropdown-item pointer" data-bs-toggle="modal"
                                                     data-bs-target="#deleteModal_{{ $item['id'] }}">
-                                                    Xóa
+                                                    <i class="fa fa-trash me-1"></i>Xóa
                                                 </a>
                                             </li>
                                         </ul>
@@ -161,48 +163,131 @@
                                         </div>
                                     </div>
 
-                                    {{-- Chi tiết --}}
-                                    <div class="modal fade" id="detailModal_{{ $item['id'] }}"
-                                        data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                        aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                    {{-- Chi Tiết --}}
+                                    <div class="modal fade" id="detailModal_{{ $item['id'] }}" tabindex="-1"
+                                        aria-labelledby="detailsModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h3 class="modal-title" id="deleteModalLabel">Chi Tiết Mặt Hàng Cần
-                                                        Mua
-                                                    </h3>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
+                                            <div class="modal-content rounded shadow-sm border-0">
+                                                <!-- Modal header -->
+                                                <div class="modal-header pb-0 border-0 justify-content-end">
+                                                    <button type="button" class="btn btn-sm btn-icon btn-light"
+                                                        data-bs-dismiss="modal" aria-label="Close">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
                                                 </div>
-                                                <div class="modal-body">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-striped align-middle gs-0 gy-4">
-                                                            <thead>
-                                                                <tr class="fw-bolder bg-success">
-                                                                    <th style="width: 33%;">Vật Tư</th>
-                                                                    <th style="width: 33%;">Đơn Vị</th>
-                                                                    <th style="width: 33%;">Số Lượng</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr class="text-center">
-                                                                    <td>
-                                                                        Bình Oxy Y Tế - (Bình 5 Lít)
-                                                                    </td>
-                                                                    <td>
-                                                                        Bình
-                                                                    </td>
-                                                                    <td>
-                                                                        100
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
+                                                <div id="printArea">
+                                                    <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                                                        <form action="" method="post">
+                                                            <div class="text-center mb-13">
+                                                                <h1 class="mb-3 text-uppercase text-primary">Phiếu Yêu Cầu
+                                                                    Đặt Hàng
+                                                                </h1>
+                                                                <div class="text-muted fw-bold fs-6">Thông Tin Chi Tiết Về
+                                                                    Phiếu Yêu Cầu Đặt Hàng
+                                                                    <span
+                                                                        class="link-primary fw-bolder">#MaYeuCauMuaHang</span>.
+                                                                </div>
+                                                                <div class="text-muted fw-bold fs-6">
+                                                                    Ngày Lập 2-9-2024
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-15 text-left">
+                                                                <!-- Begin::Receipt Info -->
+                                                                <div class="mb-4">
+                                                                    <h4
+                                                                        class="text-primary border-bottom border-dark pb-4">
+                                                                        Thông Tin Đặt Hàng</h4>
+                                                                    <div class="pt-2">
+                                                                        <p><strong>Người Yêu Cầu:</strong> <span
+                                                                                id="modalSupplier">Lữ Phát Huy</span>
+                                                                        </p>
+                                                                        <p><strong>Địa Chỉ:</strong> <span
+                                                                                id="modalSupplier">24, Trần Chiên, Lê Bình,
+                                                                                Cái Răng, Cần Thơ</span>
+                                                                        </p>
+                                                                        <p><strong>Số Điện Thoại:</strong> <span
+                                                                                id="modalSupplier">0945 567 048</span>
+                                                                        </p>
+                                                                        <p><strong>Mã Yêu Cầu:</strong> <span
+                                                                                id="modalInvoiceCode">#HD001</span>
+                                                                        </p>
+                                                                        <h6><span id="modalSupplier">Công Ty BeeSoft Có Nhu
+                                                                                Cầu Đặt Hàng Tại
+                                                                                <strong>#TenNhaCungCap</strong> theo mẫu yêu
+                                                                                cầu như sau:</span>
+                                                                        </h6>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- End::Receipt Info -->
+
+                                                                <!-- Begin::Receipt Items -->
+                                                                <div class="mb-4">
+                                                                    <h4
+                                                                        class="text-primary border-bottom border-dark pb-4 mb-4">
+                                                                        Danh Sách Vật Tư</h4>
+                                                                    <div class="table-responsive">
+                                                                        <table
+                                                                            class="table table-striped align-middle gs-0 gy-4">
+                                                                            <thead>
+                                                                                <tr class="fw-bolder bg-success">
+                                                                                    <th style="width: 33%;">Vật Tư</th>
+                                                                                    <th style="width: 33%;">Đơn Vị</th>
+                                                                                    <th style="width: 33%;">Số Lượng
+                                                                                    </th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr class="text-center">
+                                                                                    <td>
+                                                                                        Bình Oxy Y Tế - (Bình 5 Lít)
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        Bình
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        100
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p><strong>Ghi Chú: </strong><span>Giao Lẹ</span>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-7"></div>
+                                                                        <div class="col-5 text-center">
+                                                                            <p class="m-0 p-0">
+                                                                                Cần Thơ, ngày
+                                                                                {{ \Carbon\Carbon::now()->day }}
+                                                                                tháng
+                                                                                {{ \Carbon\Carbon::now()->month }} năm
+                                                                                {{ \Carbon\Carbon::now()->year }}
+                                                                            </p>
+                                                                            <p class="m-0 p-0">
+                                                                                <strong>Người Lập</strong>
+                                                                            </p>
+                                                                            <p style="margin-top: 70px !important;">
+                                                                                Lữ Phát Huy
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                @if ($item['status'] == 2)
+                                                                    <div class="d-flex justify-content-between mt-5">
+                                                                        <!-- Print Button -->
+                                                                        <button type="button" id="printPdfBtn"
+                                                                            class="btn btn-twitter btn-sm me-2">
+                                                                            <i class="fa fa-print me-2"></i>In Phiếu
+                                                                        </button>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        </form>
                                                     </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-sm btn-secondary"
-                                                        data-bs-dismiss="modal">Đóng</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -215,7 +300,8 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h3 class="modal-title" id="deleteModalLabel">Xóa Yêu Cầu Đặt Hàng
+                                                    <h3 class="modal-title" id="deleteModalLabel">Xóa Yêu Cầu
+                                                        Đặt Hàng
                                                     </h3>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
@@ -245,4 +331,21 @@
 @endsection
 
 @section('scripts')
+    <script>
+        document.getElementById('printPdfBtn').addEventListener('click', function() {
+            // Chọn phần tử chứa nội dung phiếu nhập mà bạn muốn in
+            var printContents = document.getElementById('printArea').innerHTML;
+
+            // Tạo một cửa sổ mới
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            // Thực hiện lệnh in
+            window.print();
+
+            // Đặt lại nội dung của trang
+            document.body.innerHTML = originalContents;
+        });
+    </script>
 @endsection

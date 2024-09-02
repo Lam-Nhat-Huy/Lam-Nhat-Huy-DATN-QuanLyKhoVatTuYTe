@@ -30,6 +30,30 @@ class OrderRequestController extends Controller
                 'date_of_entry' => '10/09/2024',
                 'status' => 2
             ],
+            [
+                'id' => 3,
+                'order_request_code' => 'HD002',
+                'supplier_id' => 2,
+                'user_create' => 'Lữ Phát Huy - KT - BS2334',
+                'date_of_entry' => '10/09/2024',
+                'status' => 2
+            ],
+            [
+                'id' => 4,
+                'order_request_code' => 'HD002',
+                'supplier_id' => 2,
+                'user_create' => 'Lữ Phát Huy - KT - BS2334',
+                'date_of_entry' => '10/09/2024',
+                'status' => 2
+            ],
+            [
+                'id' => 5,
+                'order_request_code' => 'HD002',
+                'supplier_id' => 2,
+                'user_create' => 'Lữ Phát Huy - KT - BS2334',
+                'date_of_entry' => '10/09/2024',
+                'status' => 2
+            ],
         ];
 
         return view("{$this->route}.index", compact('title', 'AllOrderRequest'));
