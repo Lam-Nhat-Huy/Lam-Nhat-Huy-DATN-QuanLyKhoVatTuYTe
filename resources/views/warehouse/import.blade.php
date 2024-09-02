@@ -26,27 +26,46 @@
 
         <div class="card-body py-1 ">
 
-            <input type="date" name="date_first" class="me-3 mt-2 mb-2" value="2024-07-29">
-
-            <span class="me-3 mt-2 mb-2">Đến</span>
-
-            <input type="date" name="date_last" class="me-3 mt-2 mb-2" value="2024-08-29">
-
-            <select name="" id="" class="me-3 mt-2 mb-2">
-                <option value="0" selected="">Theo Nhóm Vật Tư</option>
-                <option value="">A</option>
-                <option value="">B</option>
-                <option value="">C</option>
-            </select>
-
-            <select name="" id="" class="me-3 mt-2 mb-2">
-                <option value="0" selected="">Theo Nhà Cung Cấp</option>
-                <option value="">A</option>
-                <option value="">B</option>
-                <option value="">C</option>
-            </select>
-
-            <input type="search" name="search" placeholder="Tìm Kiếm..." class="me-3 mt-2 mb-2">
+            <form action="" class="row">
+                <div class="col-3">
+                    <select name="ur" id="ur"
+                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                        <option value="" selected="">--Theo Người Tạo--</option>
+                        <option value="a">A</option>
+                        <option value="b">B</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select name="rt" id="rt"
+                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                        <option value="" selected="">--Theo Nhà Cung Cấp--</option>
+                        <option value="1">
+                            Type 1</option>
+                        <option value="2">
+                            Type 2</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select name="stt" id="stt"
+                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                        <option value="" selected="">--Theo Trạng Thái--</option>
+                        <option value="1">Chưa Duyệt</option>
+                        <option value="2">Đã Duyệt</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <div class="row">
+                        <div class="col-10">
+                            <input type="search" name="kw" placeholder="Tìm Kiếm Mã Hóa Đơn.."
+                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                value="">
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
 
         <div class="card-body py-3">

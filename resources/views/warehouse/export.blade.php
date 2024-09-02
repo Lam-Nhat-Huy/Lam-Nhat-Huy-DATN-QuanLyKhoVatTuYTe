@@ -20,25 +20,47 @@
         </div>
 
         <div class="card-body py-1">
-            <input type="date" name="date_first" class="me-3 mt-2 mb-2" value="2024-07-29">
-            <span class="me-3 mt-2 mb-2">Đến</span>
-            <input type="date" name="date_last" class="me-3 mt-2 mb-2" value="2024-08-29">
+            <form action="" class="row">
+                <div class="col-3">
+                    <select name="ur" id="ur"
+                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                        <option value="" selected="">--Theo Người Tạo--</option>
+                        <option value="a">A</option>
+                        <option value="b">B</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select name="rt" id="rt"
+                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                        <option value="" selected="">--Theo Loại Xuất--</option>
+                        <option value="1">
+                            Type 1</option>
+                        <option value="2">
+                            Type 2</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select name="stt" id="stt"
+                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success">
+                        <option value="" selected="">--Theo Trạng Thái--</option>
+                        <option value="1">Chưa Duyệt</option>
+                        <option value="2">Đã Duyệt</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <div class="row">
+                        <div class="col-10">
+                            <input type="search" name="kw" placeholder="Tìm Kiếm Mã Phiếu Xuất.."
+                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                value="">
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
+                        </div>
+                    </div>
+                </div>
 
-            <select name="" id="" class="me-3 mt-2 mb-2">
-                <option value="0" selected="">Theo Người Tạo</option>
-                <option value="">A</option>
-                <option value="">B</option>
-                <option value="">C</option>
-            </select>
-
-            <select name="" id="" class="me-3 mt-2 mb-2">
-                <option value="0" selected="">Trạng Thái</option>
-                <option value="">A</option>
-                <option value="">B</option>
-                <option value="">C</option>
-            </select>
-
-            <input type="search" name="search" placeholder="Tìm Kiếm..." class="me-3 mt-2 mb-2">
+            </form>
         </div>
 
         <div class="card-body py-3">
@@ -65,8 +87,8 @@
                             <td><span class="text-success">Đã hoàn tất</span></td>
                             <td>
                                 <div class="btn-group">
-                                    <button class="dropdown-toggle" type="button" id="defaultDropdown"
-                                        data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    <button class="" type="button" id="defaultDropdown" data-bs-toggle="dropdown"
+                                        data-bs-auto-close="true" aria-expanded="false">
                                         <i class="fa fa-ellipsis-h me-2"></i>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
@@ -90,8 +112,8 @@
                             <td><span class="text-success">Đã hoàn tất</span></td>
                             <td>
                                 <div class="btn-group">
-                                    <button class="dropdown-toggle" type="button" id="defaultDropdown"
-                                        data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    <button class="" type="button" id="defaultDropdown" data-bs-toggle="dropdown"
+                                        data-bs-auto-close="true" aria-expanded="false">
                                         <i class="fa fa-ellipsis-h me-2"></i>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
@@ -115,8 +137,8 @@
                             <td><span class="text-success">Đã hoàn tất</span></td>
                             <td>
                                 <div class="btn-group">
-                                    <button class="dropdown-toggle" type="button" id="defaultDropdown"
-                                        data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    <button class="" type="button" id="defaultDropdown" data-bs-toggle="dropdown"
+                                        data-bs-auto-close="true" aria-expanded="false">
                                         <i class="fa fa-ellipsis-h me-2"></i>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
@@ -140,8 +162,8 @@
                             <td><span class="text-success">Đã hoàn tất</span></td>
                             <td>
                                 <div class="btn-group">
-                                    <button class="dropdown-toggle" type="button" id="defaultDropdown"
-                                        data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    <button class="" type="button" id="defaultDropdown" data-bs-toggle="dropdown"
+                                        data-bs-auto-close="" aria-expanded="false">
                                         <i class="fa fa-ellipsis-h me-2"></i>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
@@ -165,8 +187,8 @@
                             <td><span class="text-success">Đã hoàn tất</span></td>
                             <td>
                                 <div class="btn-group">
-                                    <button class="dropdown-toggle" type="button" id="defaultDropdown"
-                                        data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+                                    <button class="" type="button" id="defaultDropdown" data-bs-toggle="dropdown"
+                                        data-bs-auto-close="true" aria-expanded="false">
                                         <i class="fa fa-ellipsis-h me-2"></i>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="defaultDropdown">

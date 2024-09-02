@@ -148,12 +148,12 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="product_date" class="form-label mb-2">Ngày sản xuất</label>
                             <input type="date" class="form-control" id="product_date" name="product_date">
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="expiry_date" class="form-label mb-2">Hạn sử dụng</label>
                             <input type="date" class="form-control" id="expiry_date" name="expiry_date">
                         </div>
