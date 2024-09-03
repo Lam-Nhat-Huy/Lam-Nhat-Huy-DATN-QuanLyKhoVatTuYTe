@@ -54,6 +54,12 @@ return [
                     'user_role' => []
                 ],
                 [
+                    'title' => 'Tồn Kho',
+                    'route' => 'warehouse.inventory',
+                    'icon' => 'fa fa-box',
+                    'user_role' => []
+                ],
+                [
                     'title' => 'Kiểm Kho',
                     'route' => 'check_warehouse.index',
                     'icon' => 'fa fa-archive',
