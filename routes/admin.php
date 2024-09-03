@@ -18,6 +18,7 @@ Route::prefix('system')->group(function () {
         'admin/material.php',
         'admin/order_request.php',
         'admin/notification.php',
+        'admin/user.php',
     ];
 
     foreach ($routeFiles as $routeFile) {
