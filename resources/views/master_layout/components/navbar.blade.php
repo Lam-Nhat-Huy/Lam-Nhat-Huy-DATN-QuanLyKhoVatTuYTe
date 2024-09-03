@@ -17,7 +17,7 @@
         </div>
         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
             <a href="{{ route('system.index') }}" class="d-lg-none">
-                <img alt="Logo" src="https://i.pinimg.com/originals/36/b0/a0/36b0a084544360c807d7c778358f762d.png"
+                <img alt="Logo" src="{{ asset('image/logo_yte.png') }}"
                     class="h-30px" />
             </a>
         </div>

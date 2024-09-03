@@ -72,7 +72,7 @@
                             <th class="">Người Tạo</th>
                             <th class="">Nội Dung</th>
                             <th class="">Ngày Tạo</th>
-                            <th class="">Trạng Thái</th>
+                            <th class="" style="width: 120px !important;">Trạng Thái</th>
                             <th>Hành Động</th>
                         </tr>
                     </thead>
@@ -93,9 +93,9 @@
                                 </td>
                                 <td>
                                     @if ($item['status'] == 1)
-                                        <span class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</span>
+                                        <div class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</div>
                                     @else
-                                        <span class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</span>
+                                        <div class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
                                     @endif
                                 </td>
                                 <td>
@@ -107,19 +107,20 @@
                                             @if ($item['status'] == 1)
                                                 <li>
                                                     <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#browse_{{ $item['id'] }}">Duyệt</a>
+                                                        data-bs-target="#browse_{{ $item['id'] }}"><i
+                                                            class="fa fa-clipboard-check me-1"></i>Duyệt</a>
                                                 </li>
                                             @endif
                                             <li>
                                                 <a class="dropdown-item"
                                                     href="{{ route('notification.notification_edit') }}">
-                                                    Sửa
+                                                    <i class="fa fa-edit me-1"></i>Sửa
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="dropdown-item pointer" data-bs-toggle="modal"
                                                     data-bs-target="#deleteModal_{{ $item['id'] }}">
-                                                    Xóa
+                                                    <i class="fa fa-trash me-1"></i>Xóa
                                                 </a>
                                             </li>
                                         </ul>

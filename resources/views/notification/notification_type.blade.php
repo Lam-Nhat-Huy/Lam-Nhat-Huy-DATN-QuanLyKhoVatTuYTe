@@ -167,7 +167,7 @@
                                 <tr class="fw-bolder bg-success">
                                     <th class="ps-4">Mã Loại</th>
                                     <th class="">Tên Loại</th>
-                                    <th class="">Trạng Thái</th>
+                                    <th class="" style="width: 120px !important;">Trạng Thái</th>
                                     <th>Hành Động</th>
                                 </tr>
                             </thead>
@@ -197,13 +197,13 @@
                                                     <li>
                                                         <a class="dropdown-item"
                                                             href="{{ route('notification.notification_type_edit') }}">
-                                                            Sửa
+                                                            <i class="fa fa-edit me-1"></i>Sửa
                                                         </a>
                                                     </li>
                                                     <li>
                                                         <a class="dropdown-item pointer" data-bs-toggle="modal"
                                                             data-bs-target="#deleteModal_{{ $item['id'] }}">
-                                                            Xóa
+                                                            <i class="fa fa-trash me-1"></i>Xóa
                                                         </a>
                                                     </li>
                                                 </ul>

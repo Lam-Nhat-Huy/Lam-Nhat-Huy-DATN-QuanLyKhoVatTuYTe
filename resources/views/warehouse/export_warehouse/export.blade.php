@@ -92,7 +92,7 @@
                             <th class="">Người Tạo</th>
                             <th class="">Ngày Xuất</th>
                             <th class="">Lý Do Xuất</th>
-                            <th class="">Trạng Thái</th>
+                            <th class="" style="width: 120px !important;">Trạng Thái</th>
                             <th class="pe-3">Hành Động</th>
                         </tr>
                     </thead>
@@ -108,9 +108,9 @@
                                 <td>Xuất Bán Lẻ</td>
                                 <td>
                                     @if ($i < 1)
-                                        <span class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</span>
+                                        <div class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</div>
                                     @else
-                                        <span class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</span>
+                                        <div class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
                                     @endif
                                 </td>
                                 <td>

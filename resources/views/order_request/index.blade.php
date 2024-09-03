@@ -74,7 +74,7 @@
                             <th class="">Nhà Cung Cấp</th>
                             <th class="">Người Tạo</th>
                             <th class="">Ngày Tạo</th>
-                            <th class="">Trạng Thái</th>
+                            <th class="" style="width: 120px !important;">Trạng Thái</th>
                             <th>Hành Động</th>
                         </tr>
                     </thead>
@@ -95,9 +95,9 @@
                                 </td>
                                 <td>
                                     @if ($item['status'] == 1)
-                                        <span class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</span>
+                                        <div class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</div>
                                     @else
-                                        <span class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</span>
+                                        <div class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
                                     @endif
                                 </td>
                                 <td>
@@ -177,6 +177,14 @@
                                                 </div>
                                                 <div id="printArea">
                                                     <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                                                        <div class="d-flex mb-5">
+                                                            <img src="https://i.pinimg.com/originals/36/b0/a0/36b0a084544360c807d7c778358f762d.png" width="100" alt="">
+                                                            <div class="text-left mt-3">
+                                                                <h6 class="mb-0 pb-0">PHÒNG KHÁM ĐA KHOA BEESOFT</h6>
+                                                                <div>307C Nguyễn Văn Linh, An Khánh, Ninh Kiều, Cần Thơ</div>
+                                                                <div>Hotline: 0900900999</div>
+                                                            </div>
+                                                        </div>
                                                         <form action="" method="post">
                                                             <div class="text-center mb-13">
                                                                 <h1 class="mb-3 text-uppercase text-primary">Phiếu Yêu Cầu
@@ -187,7 +195,7 @@
                                                                     <span
                                                                         class="link-primary fw-bolder">#MaYeuCauMuaHang</span>.
                                                                 </div>
-                                                                <div class="text-muted fw-bold fs-6">
+                                                                <div class="text-muted fs-30">
                                                                     Ngày Lập 2-9-2024
                                                                 </div>
                                                             </div>
@@ -208,12 +216,9 @@
                                                                         <p><strong>Số Điện Thoại:</strong> <span
                                                                                 id="modalSupplier">0945 567 048</span>
                                                                         </p>
-                                                                        <p><strong>Mã Yêu Cầu:</strong> <span
-                                                                                id="modalInvoiceCode">#HD001</span>
-                                                                        </p>
-                                                                        <h6><span id="modalSupplier">Công Ty BeeSoft Có Nhu
+                                                                        <h6><span id="modalSupplier">Công Ty <span class="text-success">BeeSoft</span> Có Nhu
                                                                                 Cầu Đặt Hàng Tại
-                                                                                <strong>#TenNhaCungCap</strong> theo mẫu yêu
+                                                                                <span class="text-danger">#TenNhaCungCap</span> theo mẫu yêu
                                                                                 cầu như sau:</span>
                                                                         </h6>
                                                                     </div>

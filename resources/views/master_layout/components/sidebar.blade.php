@@ -4,7 +4,7 @@
     data-kt-drawer-toggle="#kt_aside_mobile_toggle">
     <div class="aside-logo flex-column-auto" id="kt_aside_logo">
         <a href="{{ route('system.index') }}">
-            <img alt="Logo" src="https://i.pinimg.com/originals/36/b0/a0/36b0a084544360c807d7c778358f762d.png"
+            <img alt="Logo" src="{{ asset('image/logo_yte.png') }}"
                 class="h-25px logo" />
         </a>
         <div id="kt_aside_toggle" class="btn btn-icon w-auto px-0 btn-active-color-primary aside-toggle"

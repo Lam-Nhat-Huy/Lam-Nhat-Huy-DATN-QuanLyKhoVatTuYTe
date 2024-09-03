@@ -103,7 +103,7 @@
                             <th class="">Nhà Cung Cấp</th>
                             <th class="">Tạo Bởi</th>
                             <th class="">Ngày Nhập</th>
-                            <th class="">Trạng Thái</th>
+                            <th class="" style="width: 120px !important;">Trạng Thái</th>
                             <th class="">Tổng Cộng</th>
                             <th class="pe-3">Hành Động</th>
                         </tr>
@@ -135,9 +135,9 @@
                                 </td>
                                 <td>
                                     @if ($i > 2)
-                                        <span class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</span>
+                                        <div class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</div>
                                     @else
-                                        <span class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</span>
+                                        <div class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
                                     @endif
                                 </td>
                                 <td>

@@ -173,7 +173,7 @@
                                         <th class="ps-4">Mã Nhóm Vật Tư</th>
                                         <th class="">Tên</th>
                                         <th class="">Mô Tả</th>
-                                        <th class="">Trạng Thái</th>
+                                        <th class="" style="width: 120px !important;">Trạng Thái</th>
                                         <th>Hành Động</th>
                                     </tr>
                                 </thead>
@@ -205,20 +205,20 @@
                                                         @if ($item['status'] == 1)
                                                             <li>
                                                                 <a class="dropdown-item" href="#"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#browse">Duyệt</a>
+                                                                    data-bs-toggle="modal" data-bs-target="#browse"><i
+                                                                        class="fa fa-clipboard-check me-1"></i>Duyệt</a>
                                                             </li>
                                                         @endif
                                                         <li>
                                                             <a class="dropdown-item"
                                                                 href="{{ route('material.update_material_group') }}">
-                                                                Sửa
+                                                                <i class="fa fa-edit me-1"></i>Sửa
                                                             </a>
                                                         </li>
                                                         <li>
                                                             <a class="dropdown-item pointer" data-bs-toggle="modal"
                                                                 data-bs-target="#deleteModal_{{ $item['id'] }}">
-                                                                Xóa
+                                                                <i class="fa fa-trash me-1"></i>Xóa
                                                             </a>
                                                         </li>
                                                     </ul>

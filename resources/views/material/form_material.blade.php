@@ -45,7 +45,24 @@
 
                     <div class="row align-items-center mb-8">
 
-                        <div class="col-md-6 fv-row">
+                        <div class="col-12 mb-5">
+                            <label class="fs-5 fw-bold mb-3">Ảnh Vật Tư</label>
+
+                            <img src="https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/rN0W64K4ipau8gxv/videoblocks-ha-ha-ha-word-in-speech-balloon-in-comic-style-animation-4k-retro-cartoon-comics-animation-on-green-screen_bblbcmyoz_thumbnail-1080_01.png"
+                                width="200" alt="imgae">
+                        </div>
+
+                        <div class="col-6 fv-row mb-5">
+
+                            <label class="fs-5 fw-bold mb-3">Hình Ảnh</label>
+
+                            <input type="file"
+                                class="form-control form-control-sm form-control-solid border border-success" name=""
+                                accept="image/*">
+
+                        </div>
+
+                        <div class="col-6 fv-row mb-5">
 
                             <label class="required fs-5 fw-bold mb-3">Tên Vật Tư</label>
 
@@ -55,7 +72,7 @@
 
                         </div>
 
-                        <div class="col-md-6 fv-row">
+                        <div class="col-6 fv-row mb-5">
 
                             <label class="required fs-5 fw-bold mb-3">Nhóm Vật Tư</label>
 
@@ -65,11 +82,8 @@
                             </select>
                         </div>
 
-                    </div>
 
-                    <div class="row align-items-center mb-8">
-
-                        <div class="col-md-6 fv-row">
+                        <div class="col-6 fv-row mb-5">
 
                             <label class="required fs-5 fw-bold mb-3">Đơn Vị Tính</label>
 
@@ -100,21 +114,8 @@
 
                         </div>
 
-                        <div class="col-md-6 fv-row">
 
-                            <label class="required fs-5 fw-bold mb-3">Số Lượng</label>
-
-                            <input type="number"
-                                class="form-control form-control-sm form-control-solid border border-success" name=""
-                                value="0">
-
-                        </div>
-
-                    </div>
-
-                    <div class="row align-items-center mb-8">
-
-                        <div class="col-md-6 fv-row">
+                        <div class="col-6 fv-row mb-5">
 
                             <label class="required fs-5 fw-bold mb-3">Giá</label>
 
@@ -123,21 +124,18 @@
                                 value="0">
                         </div>
 
-                        <div class="col-md-6 fv-row">
+                        <div class="col-6 fv-row mb-5">
 
                             <label class="fs-5 fw-bold mb-3">Hạn Sử Dụng (Nếu Có)</label>
 
-                            <input type="date"
+                            <input type="number"
                                 class="form-control form-control-sm form-control-solid border border-success"
-                                name="">
+                                name="" placeholder="6 Tháng..">
 
                         </div>
 
-                    </div>
 
-                    <div class="row align-items-center mb-8">
-
-                        <div class="col-md-6 fv-row">
+                        <div class="col-6 fv-row mb-5">
 
                             <label class="required fs-5 fw-bold mb-3">Nhà Cung Cấp</label>
 
@@ -147,9 +145,9 @@
                             </select>
                         </div>
 
-                        <div class="col-md-6 fv-row">
+                        <div class="col-6 fv-row mb-5">
 
-                            <label class="required fs-5 fw-bold mb-3">Nước Cung Cấp</label>
+                            <label class="required fs-5 fw-bold mb-3">Nước Sản Xuất</label>
 
                             <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
                                 <option value="Afghanistan">Afghanistan</option>
@@ -385,35 +383,13 @@
 
                         </div>
 
-                    </div>
-
-                    <div class="row align-items-center mb-8">
-
-                        <div class="col-md-6 fv-row">
-
-                            <div class="mb-5">
-                                <label class="fs-5 fw-bold mb-3">Hình Ảnh</label>
-
-                                <input type="file"
-                                    class="form-control form-control-sm form-control-solid border border-success"
-                                    name="" accept="image/*">
-                            </div>
-
-                            <div>
-                                <label class="fs-5 fw-bold mb-3">Ảnh Đã Thêm</label>
-
-                                <img src="https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/rN0W64K4ipau8gxv/videoblocks-ha-ha-ha-word-in-speech-balloon-in-comic-style-animation-4k-retro-cartoon-comics-animation-on-green-screen_bblbcmyoz_thumbnail-1080_01.png"
-                                    width="200" alt="imgae">
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-6 fv-row">
+                        <div class="col-12 fv-row mb-5">
 
                             <label class="required fs-5 fw-bold mb-3">Mô Tả</label>
 
                             <textarea name="" id="" cols="30" rows="10"
-                                class="form-control form-control-sm form-control-solid border border-success" placeholder="Thêm Mô Tả Cho Vật Tư.."></textarea>
+                                class="form-control form-control-sm form-control-solid border border-success"
+                                placeholder="Thêm Mô Tả Cho Vật Tư.."></textarea>
                         </div>
 
                     </div>

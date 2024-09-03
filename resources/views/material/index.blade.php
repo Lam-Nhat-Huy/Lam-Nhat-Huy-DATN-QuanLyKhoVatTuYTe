@@ -68,10 +68,10 @@
                             <th class="">Tên</th>
                             <th class="">Nhóm</th>
                             <th class="">Đơn Vị Tính</th>
-                            <th class="" style="width: 200px;">Mô Tả</th>
+                            <th class="">Mã Vạch</th>
                             <th class="">Hạn Sử Dụng</th>
-                            <th class="">Trạng Thái</th>
-                            <th>Hành Động</th>
+                            <th class="" style="width: 120px !important;">Trạng Thái</th>
+                            <th class="pe-3">Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,7 +84,8 @@
                                     <img src="{{ $item['material_image'] }}" width="100" alt="">
                                 </td>
                                 <td>
-                                    {{ $item['material_name'] }}
+                                    {{ $item['material_name'] }} - <span class="text-blue-500 fw-bold pointer"
+                                        data-bs-toggle="modal" data-bs-target="#detail_vt_{{ $item['id'] }}">Mô Tả</span>
                                 </td>
                                 <td>
                                     {{ $item['material_type_id'] }}
@@ -93,16 +94,17 @@
                                     {{ $item['unit_id'] }}
                                 </td>
                                 <td>
-                                    {{ $item['description'] }}
+                                    <img src="https://png.pngtree.com/png-clipart/20220604/original/pngtree-barcode-image-black-png-image_7947265.png"
+                                        width="125" alt="">
                                 </td>
                                 <td>
                                     {{ $item['expiry'] > 0 ? $item['expiry'] . ' Tháng' : 'Không Có' }}
                                 </td>
                                 <td>
                                     @if ($item['status'] == 1)
-                                        <span class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</span>
+                                        <div class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</div>
                                     @else
-                                        <span class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</span>
+                                        <div class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
                                     @endif
                                 </td>
                                 <td>
@@ -114,28 +116,79 @@
                                             @if ($item['status'] == 1)
                                                 <li>
                                                     <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#browse">Duyệt</a>
+                                                        data-bs-target="#browse_{{ $item['id'] }}"><i
+                                                            class="fa fa-clipboard-check me-1"></i>Duyệt</a>
                                                 </li>
                                             @endif
                                             <li>
-                                                <a class="dropdown-item"
-                                                    href="{{ route('material.update_material') }}">
-                                                    Sửa
+                                                <a class="dropdown-item" href="{{ route('material.update_material') }}">
+                                                    <i class="fa fa-edit me-1"></i>Sửa
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="dropdown-item pointer" data-bs-toggle="modal"
                                                     data-bs-target="#deleteModal_{{ $item['id'] }}">
-                                                    Xóa
+                                                    <i class="fa fa-trash me-1"></i>Xóa
                                                 </a>
                                             </li>
                                         </ul>
                                     </div>
 
-                                    {{-- Modal Xóa --}}
-                                    <div class="modal fade" id="deleteModal_{{ $item['id'] }}" data-bs-backdrop="static"
-                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
+                                    {{-- Mô Tả --}}
+                                    <div class="modal fade" id="detail_vt_{{ $item['id'] }}" data-bs-backdrop="static"
+                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="checkModalLabel"
                                         aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id="checkModalLabel">Mô Tả
+                                                        "{{ $item['material_name'] }}"
+                                                    </h3>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {{ $item['description'] }}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-secondary"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Duyệt --}}
+                                    <div class="modal fade" id="browse_{{ $item['id'] }}" data-bs-backdrop="static"
+                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="checkModalLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id="checkModalLabel">Duyệt Vật Tư
+                                                    </h3>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="" method="">
+                                                        @csrf
+                                                        <h4 class="text-danger">Duyệt Vật Tư Này?</h4>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-secondary"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="button" class="btn btn-sm btn-twitter">Duyệt</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Modal Xóa --}}
+                                    <div class="modal fade" id="deleteModal_{{ $item['id'] }}"
+                                        data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                        aria-labelledby="deleteModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
