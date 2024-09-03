@@ -20,18 +20,44 @@
         }
 
         .collapse-content {
-            padding: 10px;
-            background-color: #f8f9fa;
+            padding: 20px;
+            background-color: #ffffff;
             border: 1px solid #dee2e6;
             border-radius: 0.375rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .detail-box {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f7f7f7;
+            border-radius: 5px;
+        }
+
+        .detail-box h5 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #333;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 5px;
+        }
+
+        .detail-box p {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 8px;
         }
 
         .btn-close-detail {
             margin-top: 10px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 0.375rem;
+            transition: background-color 0.3s ease;
         }
 
-        .btn-close-detail i {
-            margin-right: 5px;
+        .btn-close-detail:hover {
+            background-color: #c82333;
         }
 
         .card-header {
@@ -51,6 +77,26 @@
             height: 2rem;
             padding: 0.25rem 0.5rem;
         }
+
+        .table-search {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .table-search input {
+            width: 100%;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            border: 1px solid #ced4da;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease;
+        }
+
+        .table-search input:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
     </style>
 @endsection
 
@@ -62,32 +108,38 @@
     <div class="card mb-5 mb-xl-8">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Thẻ Kho</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Vật Tư</span>
             </h3>
         </div>
 
         <div class="card-body py-1">
-            <form action="" class="row align-items-center d-flex justify-content-between">
+            <form action="" method="GET" class="row align-items-center d-flex justify-content-between">
                 <div class="col-4 pe-8">
-                    <input type="search" name="kw" placeholder="Tìm kiếm thuốc"
-                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
-                        value="{{ request()->kw }}">
+                    <select name="material_id"
+                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success setupSelect2">
+                        <option value="">Chọn vật tư</option>
+                        <option value="1" {{ request()->material_id == 1 ? 'selected' : '' }}>Vật tư A</option>
+                        <option value="2" {{ request()->material_id == 2 ? 'selected' : '' }}>Vật tư B</option>
+                        <option value="3" {{ request()->material_id == 3 ? 'selected' : '' }}>Vật tư C</option>
+                        <option value="4" {{ request()->material_id == 4 ? 'selected' : '' }}>Vật tư D</option>
+                    </select>
                 </div>
+
 
                 <div class="col-4">
                     <div class="row align-items-center">
                         <div class="col-5 pe-0">
-                            <input type="date"
+                            <input type="date" name="start_date"
                                 class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
-                                value="{{ \Carbon\Carbon::now()->subMonths(3)->format('Y-m-d') }}">
+                                value="{{ request()->start_date ?? \Carbon\Carbon::now()->subMonths(3)->format('Y-m-d') }}">
                         </div>
                         <div class="col-2 text-center">
                             Đến
                         </div>
                         <div class="col-5 ps-0">
-                            <input type="date"
+                            <input type="date" name="end_date"
                                 class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
-                                value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                                value="{{ request()->end_date ?? \Carbon\Carbon::now()->format('Y-m-d') }}">
                         </div>
                     </div>
                 </div>
@@ -95,40 +147,56 @@
         </div>
 
         <div class="card-body py-3">
-            @if (true)
+            @if ($items->isNotEmpty())
                 <div class="table-responsive">
                     <table class="table table-striped align-middle gs-0 gy-4">
                         <thead>
                             <tr class="fw-bolder bg-success text-white">
                                 <th class="ps-4">STT</th>
-                                <th class="">Số lô</th>
-                                <th class="">Tồn đầu kì</th>
-                                <th class="">Nhập</th>
-                                <th class="">Xuất</th>
-                                <th class="">Tồn cuối kỳ</th>
+                                <th>Số lô</th>
+                                <th>Tồn đầu kỳ</th>
+                                <th>Nhập</th>
+                                <th>Xuất</th>
+                                <th>Tồn cuối kỳ</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @for ($i = 0; $i < 3; $i++)
-                                <tr class="text-center hover-table" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseDetails{{ $i }}">
-                                    <td>1</td>
-                                    <td>C123</td>
-                                    <td>0</td>
-                                    <td>10</td>
-                                    <td>5</td>
-                                    <td>10</td>
-                                </tr>
-                                <tr class="collapse" id="collapseDetails{{ $i }}">
-                                    <td colspan="6" class="collapse-content">
-                                        <!-- Thông tin chi tiết ở đây -->
-                                        <p>Thông tin chi tiết về số lô C123.</p>
-                                        <button class="btn btn-light btn-sm float-end btn-close-detail">
-                                            <i class="fa fa-close"></i> Đóng
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endfor
+                            <tr class="text-center hover-table" data-bs-toggle="collapse"
+                                data-bs-target="#collapseDetails1">
+                                <td>1</td>
+                                <td>001</td>
+                                <td>100</td>
+                                <td>20</td>
+                                <td>10</td>
+                                <td>110</td>
+                            </tr>
+                            <tr class="collapse" id="collapseDetails1">
+                                <td colspan="6" class="collapse-content">
+                                    <div class="row">
+                                        <div class="col-md-4 detail-box">
+                                            <h5>Thông tin cơ bản</h5>
+                                            <p><strong>Số lô:</strong> 001</p>
+                                            <p><strong>Ngày sản xuất:</strong> 2024-01-01</p>
+                                            <p><strong>Hạn sử dụng:</strong> 2025-01-01</p>
+                                        </div>
+                                        <div class="col-md-4 detail-box">
+                                            <h5>Trạng thái lô hàng</h5>
+                                            <p><strong>Tồn đầu kỳ:</strong> 100</p>
+                                            <p><strong>Nhập:</strong> 20</p>
+                                            <p><strong>Xuất:</strong> 10</p>
+                                            <p><strong>Tồn cuối kỳ:</strong> 110</p>
+                                        </div>
+                                        <div class="col-md-4 detail-box">
+                                            <h5>Thông tin bổ sung</h5>
+                                            <p><strong>Nhà cung cấp:</strong> Công ty ABC</p>
+                                            <p><strong>Địa chỉ kho:</strong> 123 Đường XYZ</p>
+                                            <p><strong>Ghi chú:</strong> Ghi chú về vật tư.</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+
                         </tbody>
                     </table>
                 </div>
@@ -147,30 +215,14 @@
             var toggleElements = document.querySelectorAll('tr[data-bs-toggle="collapse"]');
 
             toggleElements.forEach(function(element) {
-                element.addEventListener('click', function() {
+                element.addEventListener('click', function(event) {
+                    // Prevent Bootstrap's default collapse behavior
+                    event.preventDefault();
+
                     var target = document.querySelector(this.getAttribute('data-bs-target'));
 
-                    if (target.classList.contains('show')) {
-                        target.classList.remove('show');
-                    } else {
-                        document.querySelectorAll('.collapse').forEach(function(item) {
-                            item.classList.remove('show');
-                        });
-                        target.classList.add('show');
-                    }
-                });
-            });
-
-            // Thêm sự kiện cho nút "Đóng"
-            var closeButtons = document.querySelectorAll('.btn-close-detail');
-
-            closeButtons.forEach(function(button) {
-                button.addEventListener('click', function(event) {
-                    event.stopPropagation(); // Ngăn chặn sự kiện click truyền lên các phần tử cha
-                    var target = this.closest('tr.collapse');
-                    if (target) {
-                        target.classList.remove('show');
-                    }
+                    // Toggle the 'show' class on the target element
+                    target.classList.toggle('show');
                 });
             });
         });

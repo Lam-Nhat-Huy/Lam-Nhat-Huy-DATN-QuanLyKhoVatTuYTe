@@ -5,6 +5,19 @@
         .hover-table:hover {
             background: #ccc;
         }
+
+        .btn-group button {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .selected-row {
+            background: #ddd;
+        }
+
+        .active-row {
+            background: #d1c4e9;
+            /* Màu nền khi hàng được nhấp vào */
+        }
     </style>
 @endsection
 
@@ -24,7 +37,7 @@
                     Phiếu Nhập</a>
             </div>
         </div>
-
+        {{-- Bộ lọc --}}
         <div class="card-body py-1">
             <form action="" class="row  align-items-center">
                 <div class="col-4">
@@ -75,11 +88,16 @@
             </form>
         </div>
 
+        {{-- Danh sách --}}
         <div class="card-body py-3">
             <div class="table-responsive">
-                <table class="table table-striped align-middle gs-0 gy-4">
+                <table class="table align-middle gs-0 gy-4">
+                    <!-- Trong phần <thead> của bảng -->
                     <thead>
                         <tr class="fw-bolder bg-success">
+                            <th class="ps-4">
+                                <input type="checkbox" id="selectAll" />
+                            </th>
                             <th class="ps-4">Mã Hóa Đơn</th>
                             <th class="">Số Hóa Đơn</th>
                             <th class="">Nhà Cung Cấp</th>
@@ -90,9 +108,16 @@
                             <th class="pe-3">Hành Động</th>
                         </tr>
                     </thead>
+
+                    <!-- Trong phần <tbody> của bảng -->
                     <tbody>
                         @for ($i = 0; $i < 6; $i++)
-                            <tr class="text-center hover-table">
+                            <tr class="text-center hover-table" data-bs-toggle="collapse"
+                                data-bs-target="#collapse{{ $i }}" aria-expanded="false"
+                                aria-controls="collapse{{ $i }}">
+                                <td>
+                                    <input type="checkbox" class="row-checkbox" />
+                                </td>
                                 <td>
                                     PD199001
                                 </td>
@@ -126,9 +151,7 @@
                                         <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
                                             <li>
                                                 <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#detailsModal">Chi
-                                                    tiết
-                                                </a>
+                                                    data-bs-target="#detailsModal">Chi tiết</a>
                                             </li>
                                             <li>
                                                 <a class="dropdown-item" href="#" data-bs-toggle="modal"
@@ -139,38 +162,217 @@
                                     </div>
                                 </td>
                             </tr>
+
+
+                            <!-- Collapse content -->
+                            <tr class="collapse multi-collapse" id="collapse{{ $i }}">
+                                <td colspan="12"
+                                    style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
+                                    <div class="flex-lg-row-fluid order-2 order-lg-1">
+                                        <div class="card card-flush p-2 mb-3"
+                                            style="padding-top: 0px !important; padding-bottom: 0px !important;">
+                                            <div class="card-header d-flex justify-content-between align-items-center p-2"
+                                                style="padding-top: 0 !important; padding-bottom: 0px !important;">
+                                                <h4 class="fw-bold m-0">Chi tiết phiếu nhập kho</h4>
+                                                <div class="card-toolbar">
+                                                    <h6><span class="badge bg-success">Đã nhập kho</span></h6>
+                                                </div>
+                                            </div>
+                                            <div class="card-body p-2" style="padding-top: 0px !important">
+                                                <div class="row py-5" style="padding-top: 0px !important">
+                                                    <!-- Begin::Receipt Info (Left column) -->
+                                                    <div class="col-md-4">
+                                                        <table class="table table-flush gy-1">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class=""><strong>Mã hóa đơn</strong>
+                                                                    </td>
+                                                                    <td class="text-gray-800">HD00019</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Số hóa đơn</strong>
+                                                                    </td>
+                                                                    <td class="text-gray-800">025</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Nhà cung cấp</strong>
+                                                                    </td>
+                                                                    <td class="text-gray-800">Trung Sơn</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Ngày nhập</strong>
+                                                                    </td>
+                                                                    <td class="text-gray-800">26/08/2024</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Người tạo</strong>
+                                                                    </td>
+                                                                    <td class="text-gray-800">Nhật Huy</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Ghi chú</td>
+                                                                    <td class="text-gray-800">Hàng dễ vỡ</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- End::Receipt Info -->
+
+                                                    <div class="col-md-4">
+                                                        <table class="table table-flush gy-1">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class=""><strong>Tổng tiền hàng</strong>
+                                                                    </td>
+                                                                    <td class="text-gray-800">1,200,000 VNĐ</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Tổng chiết khấu</strong>
+                                                                    </td>
+                                                                    <td class="text-gray-800">25,000 VNĐ</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Tổng VAT</strong>
+                                                                    </td>
+                                                                    <td class="text-gray-800">12,00 VNĐ</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Tổng cộng</strong>
+                                                                    </td>
+                                                                    <td class="text-gray-800">1,237,000</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- End::Receipt Info -->
+                                                </div>
+
+                                                <!-- Begin::Receipt Items (Right column) -->
+                                                <div class="col-md-12">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped table-sm table-hover">
+                                                            <thead class="fw-bolder bg-danger">
+                                                                <tr>
+                                                                    <th class="ps-4">Mã vật tư</th>
+                                                                    <th>Tên vật tư</th>
+                                                                    <th>Số lượng</th>
+                                                                    <th>Số lô</th>
+                                                                    <th>Chiết khấu (%)</th>
+                                                                    <th>VAT (%)</th>
+                                                                    <th class="pe-3">Thành tiền</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>VT001</td>
+                                                                    <td>Băng gạc</td>
+                                                                    <td>10 Bịch</td>
+                                                                    <td>BG001</td>
+                                                                    <td>1</td>
+                                                                    <td>1.2</td>
+                                                                    <td>55,000 VND</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>VT002</td>
+                                                                    <td>Thuốc đỏ</td>
+                                                                    <td>10 lọ</td>
+                                                                    <td>BG001</td>
+                                                                    <td>1</td>
+                                                                    <td>1.2</td>
+                                                                    <td>55,000 VND</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>VT003</td>
+                                                                    <td>Nước muối</td>
+                                                                    <td>10 chai</td>
+                                                                    <td>BG001</td>
+                                                                    <td>1</td>
+                                                                    <td>1.2</td>
+                                                                    <td>550,000 VND</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- End::Receipt Items -->
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
                         @endfor
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <div class="card-body py-3 text-end">
+            <div class="button-group">
+                <!-- Nút Duyệt đơn -->
+                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#browse"
+                    type="button">Duyệt
+                    đơn</button>
+
+                <!-- Nút Xóa đơn -->
+                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirm"
+                    type="button">Xóa đơn</button>
+            </div>
+        </div>
     </div>
 
-    {{-- Duyệt Phiếu --}}
+
+    {{-- Modal Duyệt Phiếu --}}
     <div class="modal fade" id="browse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="browseLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="browseLabel">Duyệt Phiếu Nhập Kho
-                    </h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title text-white" id="browseLabel">Duyệt Phiếu Xuất Kho</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body text-center" style="padding-bottom: 0px;">
                     <form action="" method="">
                         @csrf
-                        <h4 class="text-danger text-center">Duyệt Phiếu Nhập Kho Này?</h4>
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt phiếu xuất kho này?</p>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-sm btn-twitter">Duyệt</button>
+                <div class="modal-footer justify-content-center border-0">
+                    <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-success btn-sm px-4"><i class="fas fa-check"></i>
+                        Duyệt</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
+    {{-- Modal Xác Nhận Xóa --}}
+    <div class="modal fade" id="deleteConfirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title text-white" id="deleteConfirmLabel">Xác Nhận Xóa Đơn</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" style="padding-bottom: 0px;">
+                    <form action="" method="">
+                        @csrf
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa đơn này?</p>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center border-0">
+                    <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-danger btn-sm px-4"><i class="fas fa-trash"></i> Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Chi tiết phiếu nhập -->
     <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content rounded shadow-sm border-0">
@@ -297,19 +499,67 @@
 
 @section('scripts')
     <script>
+        document.getElementById('selectAll').addEventListener('change', function() {
+            var isChecked = this.checked;
+            var checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = isChecked;
+                var row = checkbox.closest('tr');
+                if (isChecked) {
+                    row.classList.add('selected-row');
+                } else {
+                    row.classList.remove('selected-row');
+                }
+            });
+        });
+
+        document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                var row = this.closest('tr');
+                if (this.checked) {
+                    row.classList.add('selected-row');
+                } else {
+                    row.classList.remove('selected-row');
+                }
+
+                var allChecked = true;
+                document.querySelectorAll('.row-checkbox').forEach(function(cb) {
+                    if (!cb.checked) {
+                        allChecked = false;
+                    }
+                });
+                document.getElementById('selectAll').checked = allChecked;
+            });
+        });
+
+        // Add click event to rows
+        document.querySelectorAll('tbody tr').forEach(function(row) {
+            row.addEventListener('click', function() {
+                var checkbox = this.querySelector('.row-checkbox');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                    if (checkbox.checked) {
+                        this.classList.add('selected-row');
+                    } else {
+                        this.classList.remove('selected-row');
+                    }
+
+                    var allChecked = true;
+                    document.querySelectorAll('.row-checkbox').forEach(function(cb) {
+                        if (!cb.checked) {
+                            allChecked = false;
+                        }
+                    });
+                    document.getElementById('selectAll').checked = allChecked;
+                }
+            });
+        });
+
         document.getElementById('printPdfBtn').addEventListener('click', function() {
-            // Chọn phần tử chứa nội dung phiếu nhập mà bạn muốn in
             var printContents = document.getElementById('printArea').innerHTML;
-
-            // Tạo một cửa sổ mới
             var originalContents = document.body.innerHTML;
-
             document.body.innerHTML = printContents;
-
-            // Thực hiện lệnh in
             window.print();
-
-            // Đặt lại nội dung của trang
             document.body.innerHTML = originalContents;
         });
     </script>

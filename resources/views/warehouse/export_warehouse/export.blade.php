@@ -1,6 +1,24 @@
 @extends('master_layout.layout')
 
 @section('styles')
+    <style>
+        .hover-table:hover {
+            background: #ccc;
+        }
+
+        .btn-group button {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .selected-row {
+            background: #ddd;
+        }
+
+        .active-row {
+            background: #d1c4e9;
+            /* Màu nền khi hàng được nhấp vào */
+        }
+    </style>
 @endsection
 
 @section('title')
@@ -64,9 +82,12 @@
 
         <div class="card-body py-3">
             <div class="table-responsive">
-                <table class="table table-striped align-middle gs-0 gy-4">
+                <table class="table align-middle gs-0 gy-4">
                     <thead>
                         <tr class="fw-bolder bg-success">
+                            <th class="ps-4">
+                                <input type="checkbox" id="selectAll" />
+                            </th>
                             <th class="ps-4">Mã Phiếu Xuất</th>
                             <th class="">Người Tạo</th>
                             <th class="">Ngày Xuất</th>
@@ -77,7 +98,10 @@
                     </thead>
                     <tbody>
                         @for ($i = 0; $i < 6; $i++)
-                            <tr class="text-center">
+                            <tr class="text-center hover-table">
+                                <td>
+                                    <input type="checkbox" class="row-checkbox" data-checkbox />
+                                </td>
                                 <td>PX199001</td>
                                 <td>Nhật Huy</td>
                                 <td>26/08/2024</td>
@@ -109,36 +133,75 @@
                             </tr>
                         @endfor
                     </tbody>
+
                 </table>
             </div>
         </div>
+
+        <div class="card-body py-3 text-end">
+            <div class="button-group">
+                <!-- Nút Duyệt đơn -->
+                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#browse" type="button">Duyệt
+                    đơn</button>
+
+                <!-- Nút Xóa đơn -->
+                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirm"
+                    type="button">Xóa đơn</button>
+            </div>
+        </div>
     </div>
 
-    {{-- Duyệt Phiếu --}}
+
+    {{-- Modal Duyệt Phiếu --}}
     <div class="modal fade" id="browse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="browseLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="browseLabel">Duyệt Phiếu Xuất Kho
-                    </h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title text-white" id="browseLabel">Duyệt Phiếu Xuất Kho</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body text-center" style="padding-bottom: 0px;">
                     <form action="" method="">
                         @csrf
-                        <h4 class="text-danger text-center">Duyệt Phiếu Xuất Kho Này?</h4>
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt phiếu xuất kho này?</p>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-sm btn-twitter">Duyệt</button>
+                <div class="modal-footer justify-content-center border-0">
+                    <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-success btn-sm px-4"><i class="fas fa-check"></i>
+                        Duyệt</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
+    {{-- Modal Xác Nhận Xóa --}}
+    <div class="modal fade" id="deleteConfirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title text-white" id="deleteConfirmLabel">Xác Nhận Xóa Đơn</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" style="padding-bottom: 0px;">
+                    <form action="" method="">
+                        @csrf
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa đơn này?</p>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center border-0">
+                    <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-danger btn-sm px-4"><i class="fas fa-trash"></i> Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chi tiết  -->
     <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content rounded">
@@ -185,6 +248,9 @@
                                         <table class="table table-striped table-sm table-hover">
                                             <thead class="fw-bolder bg-success">
                                                 <tr>
+                                                    <th class="ps-4">
+                                                        <input type="checkbox" id="selectAll" />
+                                                    </th>
                                                     <th class="ps-4">Mã vật tư</th>
                                                     <th>Số lượng</th>
                                                     <th>Đơn giá</th>
@@ -258,8 +324,7 @@
         </div>
     </div>
 
-
-    <!-- Edit Export Receipt Modal -->
+    <!-- Chỉnh sửa -->
     <div class="modal fade" id="editExportReceiptModal" tabindex="-1" aria-labelledby="editExportReceiptModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -390,24 +455,68 @@
 
 @section('scripts')
     <script>
-        document.getElementById('printPdfBtn').addEventListener('click', function() {
-            var printArea = document.getElementById('printArea').innerHTML;
-            var originalContent = document.body.innerHTML;
-            document.body.innerHTML = printArea;
-            window.print();
-            document.body.innerHTML = originalContent;
+        document.getElementById('selectAll').addEventListener('change', function() {
+            var isChecked = this.checked;
+            var checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = isChecked;
+                var row = checkbox.closest('tr');
+                if (isChecked) {
+                    row.classList.add('selected-row');
+                } else {
+                    row.classList.remove('selected-row');
+                }
+            });
         });
 
-        function openEditModal(code, number, customer, date, createdBy, note) {
-            document.getElementById('editExportCode').value = code;
-            document.getElementById('editExportNumber').value = number;
-            document.getElementById('editCustomer').value = customer;
-            document.getElementById('editExportDate').value = date;
-            document.getElementById('editCreatedBy').value = createdBy;
-            document.getElementById('editNote').value = note;
+        document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                var row = this.closest('tr');
+                if (this.checked) {
+                    row.classList.add('selected-row');
+                } else {
+                    row.classList.remove('selected-row');
+                }
 
-            var editExportReceiptModal = new bootstrap.Modal(document.getElementById('editExportReceiptModal'));
-            editExportReceiptModal.show();
-        }
+                var allChecked = true;
+                document.querySelectorAll('.row-checkbox').forEach(function(cb) {
+                    if (!cb.checked) {
+                        allChecked = false;
+                    }
+                });
+                document.getElementById('selectAll').checked = allChecked;
+            });
+        });
+
+        // Add click event to rows
+        document.querySelectorAll('tbody tr').forEach(function(row) {
+            row.addEventListener('click', function() {
+                var checkbox = this.querySelector('.row-checkbox');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                    if (checkbox.checked) {
+                        this.classList.add('selected-row');
+                    } else {
+                        this.classList.remove('selected-row');
+                    }
+
+                    var allChecked = true;
+                    document.querySelectorAll('.row-checkbox').forEach(function(cb) {
+                        if (!cb.checked) {
+                            allChecked = false;
+                        }
+                    });
+                    document.getElementById('selectAll').checked = allChecked;
+                }
+            });
+        });
+
+        document.getElementById('printPdfBtn').addEventListener('click', function() {
+            var printContents = document.getElementById('printArea').innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        });
     </script>
 @endsection
