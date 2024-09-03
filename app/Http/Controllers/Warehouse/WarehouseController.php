@@ -78,4 +78,11 @@ class WarehouseController extends Controller
     {
         dd($request->all());
     }
+
+    public function inventory()
+    {
+        $title = 'Tồn Kho';
+
+        return view("{$this->route}.inventory", compact('title'));
+    }
 }

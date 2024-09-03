@@ -99,7 +99,7 @@
                                     <label class="form-label fw-bolder text-dark fs-6 mb-0">Mật Khẩu</label>
                                     <!--end::Label-->
                                     <!--begin::Link-->
-                                    <a href="../../demo1/dist/authentication/flows/aside/password-reset.html"
+                                    <a href="{{route('forgot.forgot')}}"
                                         class="link-primary fs-6 fw-bolder">Quên Mật Khẩu ?</a>
                                     <!--end::Link-->
                                 </div>
