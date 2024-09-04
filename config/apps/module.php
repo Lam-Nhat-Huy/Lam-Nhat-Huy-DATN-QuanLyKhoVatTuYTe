@@ -39,7 +39,7 @@ return [
             'user_role' => [],
             'title' => 'Kho',
             'icon' => 'fa fa-warehouse',
-            'route' => ['warehouse.import', 'warehouse.export', 'check_warehouse.index', 'card_warehouse.index'],
+            'route' => ['warehouse.import', 'warehouse.export', 'check_warehouse.index', 'inventory.index', 'card_warehouse.index'],
             'subModule' => [
                 [
                     'title' => 'Nhập Kho',
@@ -55,7 +55,7 @@ return [
                 ],
                 [
                     'title' => 'Tồn Kho',
-                    'route' => 'warehouse.inventory',
+                    'route' => 'inventory.index',
                     'icon' => 'fa fa-box',
                     'user_role' => []
                 ],
