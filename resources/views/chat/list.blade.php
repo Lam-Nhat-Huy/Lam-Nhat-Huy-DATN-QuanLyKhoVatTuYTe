@@ -1,6 +1,30 @@
 @extends('master_layout.layout')
 
 @section('styles')
+    <style>
+        /* Style for the custom file upload button */
+        .custom-file-upload {
+            cursor: pointer;
+            display: inline-block;
+            color: #007bff;
+            font-size: 1.2rem;
+        }
+
+        .custom-file-upload:hover {
+            color: #0056b3;
+        }
+
+        /* Hide the actual file input */
+        #file-upload {
+            display: none;
+        }
+
+        /* Style for the file name display */
+        #file-name {
+            font-size: 0.9rem;
+            color: #333;
+        }
+    </style>
 @endsection
 
 @section('title')
@@ -8,6 +32,19 @@
 @endsection
 
 @section('scripts')
+    <script>
+        document.getElementById('file-upload').addEventListener('change', function() {
+            var fileName = this.files[0].name;
+            document.getElementById('modal-file-name').textContent = fileName;
+
+            // Show the modal
+            var myModal = new bootstrap.Modal(document.getElementById('fileModal'), {
+                keyboard: false
+            });
+
+            myModal.show();
+        });
+    </script>
 @endsection
 
 @section('content')
@@ -666,14 +703,38 @@
 
 
                 <div class="card-footer pt-4" id="kt_chat_messenger_footer">
+                    <div class="d-flex align-items-center">
+                        <label for="file-upload" class="custom-file-upload me-3">
+                            <i class="fas fa-upload"></i>
+                        </label>
+                        <input type="file" id="file-upload" class="d-none">
 
-                    <div class="d-flex">
-                        <input class="form-control form-control-flush form-control-sm border me-3 rounded" rows="1"
-                            data-kt-element="input" placeholder="Phản hồi của bạn">
+                        <input class="form-control form-control-flush form-control-sm border me-3 rounded"
+                            placeholder="Phản hồi của bạn">
 
                         <button class="btn btn-twitter btn-sm" type="button">Gửi</button>
                     </div>
+                </div>
 
+                <!-- Modal File -->
+                <div class="modal fade" id="fileModal" tabindex="-1" aria-labelledby="fileModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="fileModalLabel">Gửi File</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <span>"</span><span id="modal-file-name"></span><span>"</span> đến người dùng Lâm Nhật Huy?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="button" class="btn btn-twitter">Gửi</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>

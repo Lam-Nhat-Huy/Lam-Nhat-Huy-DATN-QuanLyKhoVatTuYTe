@@ -22,7 +22,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-    <link rel="shortcut icon" href="{{ asset('image/logo_yte.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('image/logo_warehouse.png') }}" />
 </head>
 
 <body id="kt_body" class="bg-body">
@@ -39,8 +39,8 @@
                         <!--begin::Logo-->
                         <a href="#" class="py-9 mb-5 d-flex justify-content-center">
                             <img alt="Logo"
-                                src="{{ asset('image/logo_yte.png') }}"
-                                class="h-60px" />
+                                src="{{ asset('image/logo_warehouse.png') }}"
+                                class="h-100px" />
                         </a>
                         <!--end::Logo-->
                         <!--begin::Title-->

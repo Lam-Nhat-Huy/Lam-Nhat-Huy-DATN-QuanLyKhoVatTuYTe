@@ -14,30 +14,36 @@
 
 @section('content')
     <div class="card mb-5 mb-xl-8">
-        <div class="card-header border-0 pt-5 d-flex justify-content-between align-items-start">
-            <h3 class="card-title fw-bolder fs-3">Danh Nhà Cung Cấp</h3>
-            <a href="{{ route('supplier.create') }}" class="btn btn-success">Thêm</a>
+        <div class="card-header border-0 pt-5">
+            <h3 class="card-title align-items-start flex-column">
+                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Nhà Cung Cấp</span>
+            </h3>
+            <div class="card-toolbar">
+                <a href="{{ route('supplier.trash') }}" class="btn btn-sm btn-danger me-2">
+                    <span class="align-items-center d-flex">
+                        <i class="fa fa-trash me-1"></i>
+                        Thùng Rác
+                    </span>
+                </a>
+                <a href="{{ route('supplier.create') }}" class="btn btn-sm btn-twitter">
+                    <span class="align-items-center d-flex">
+                        <i class="fa fa-plus me-1"></i>
+                        Thêm Thông Báo
+                    </span>
+                </a>
+            </div>
         </div>
 
-        <div class="card-body py-1">
-            <form class="row align-items-center">
-                <div class="col-3">
-                    <div class="d-flex align-items-center position-relative my-1">
-                        <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                            <i class="fa fa-search"></i>
-                        </span>
-                        <input type="text" data-kt-customer-table-filter="search"
-                            class="form-control form-control-solid w-250px ps-15" placeholder="Tìm kiếm" />
-                    </div>
+
+        <div class="card-body py-1 me-6">
+            <form action="" class="d-flex align-items-center">
+                <div class="me-2 w-100">
+                    <input type="search" name="kw" placeholder="Tìm Kiếm Tên Nhà Cung Cấp, Số Điện Thoại, Địa Chỉ, Email, Mã Số Thuế, Người Liên Hệ.."
+                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                        value="{{ request()->kw }}">
                 </div>
-                <div class="col-4 d-flex">
-                    <select name="ur" id="ur"
-                        class="form-select form-select-sm form-select-solid border border-success me-2">
-                        <option value="" selected>--Người liên hệ--</option>
-                        <option value="1">Bác sỹ Huy</option>
-                        <option value="2">Bác Sỹ Zách</option>
-                    </select>
-                    <button class="btn btn-dark btn-sm" type="submit">Tìm</button>
+                <div>
+                    <button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
                 </div>
             </form>
         </div>
@@ -48,7 +54,7 @@
                     <thead class="fw-bolder bg-success">
                         <tr>
                             <th class="ps-4"><input type="checkbox" id="selectAll" /></th>
-                            <th class="ps-4">Tên Nhà cung cấp</th>
+                            <th>Tên Nhà cung cấp</th>
                             <th>Số điện thoại</th>
                             <th>Địa chỉ</th>
                             <th>Email</th>
@@ -73,7 +79,7 @@
                                             <i class="fa fa-ellipsis-h me-2"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a href="{{ route('supplier.create') }}" class="dropdown-item">Sửa</a></li>
+                                            <li><a href="{{ route('supplier.edit') }}" class="dropdown-item">Sửa</a></li>
                                             <li><a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_delete"
                                                     class="dropdown-item">Xóa</a></li>
                                         </ul>

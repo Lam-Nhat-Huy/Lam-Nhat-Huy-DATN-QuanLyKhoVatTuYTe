@@ -71,6 +71,7 @@
                             <th class="ps-4">Mã Thông Báo</th>
                             <th class="">Người Tạo</th>
                             <th class="">Nội Dung</th>
+                            <th class="">Loại Thông Báo</th>
                             <th class="">Ngày Tạo</th>
                             <th class="" style="width: 120px !important;">Trạng Thái</th>
                             <th>Hành Động</th>
@@ -86,7 +87,12 @@
                                     {{ $item['user_create'] }}
                                 </td>
                                 <td>
-                                    {{ $item['content'] }}
+                                    <span class="text-primary pointer" data-bs-toggle="modal"
+                                        data-bs-target="#detail_{{ $item['id'] }}">Xem Nội Dung
+                                    </span>
+                                </td>
+                                <td>
+                                    Tên Loại
                                 </td>
                                 <td>
                                     {{ $item['date_of_entry'] }}
@@ -126,6 +132,31 @@
                                         </ul>
                                     </div>
 
+                                    {{-- Chi Tiết --}}
+                                    <div class="modal fade" id="detail_{{ $item['id'] }}" data-bs-backdrop="static"
+                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="DetailModal"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id="DetailModal">Nội Dung Thông Báo
+                                                    </h3>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h6>
+                                                        {{ $item['content'] }}
+                                                    </h6>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-secondary"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     {{-- Duyệt --}}
                                     <div class="modal fade" id="browse_{{ $item['id'] }}" data-bs-backdrop="static"
                                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="checkModalLabel"
@@ -154,9 +185,9 @@
                                     </div>
 
                                     {{-- Xóa --}}
-                                    <div class="modal fade" id="deleteModal_{{ $item['id'] }}" data-bs-backdrop="static"
-                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
-                                        aria-hidden="true">
+                                    <div class="modal fade" id="deleteModal_{{ $item['id'] }}"
+                                        data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                        aria-labelledby="deleteModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">

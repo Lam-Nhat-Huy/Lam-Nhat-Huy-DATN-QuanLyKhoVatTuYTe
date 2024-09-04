@@ -22,14 +22,14 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-    <link rel="shortcut icon" href="https://i.pinimg.com/originals/36/b0/a0/36b0a084544360c807d7c778358f762d.png" />
+    <link rel="shortcut icon" href="{{ asset('image/logo_warehouse.png') }}" />
 </head>
 
 <div class="d-flex flex-column flex-root">
     <div class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed w-100" style="background-image: url({{ asset('banner_forgot.png') }}); background-size: cover; background-repeat: no-repeat; background-position: center; height: 100vh; width: 100vw;">
         <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
             <a href="../../demo1/dist/index.html" class="mb-12">
-                <img alt="Logo" src="https://i.pinimg.com/originals/36/b0/a0/36b0a084544360c807d7c778358f762d.png" class="h-40px" />
+                <img alt="Logo" src="{{ asset('image/logo_warehouse.png') }}" class="h-40px" />
             </a>
             <div class="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
                 <form class="form w-100" novalidate="novalidate" id="kt_password_reset_form">

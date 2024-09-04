@@ -76,10 +76,46 @@
 
                             <label class="required fs-5 fw-bold mb-3">Nhóm Vật Tư</label>
 
-                            <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
-                                <option value="0">Chọn Nhóm Vật Tư...</option>
-                                <option value="A">A</option>
-                            </select>
+                            <div class="d-flex align-items-center">
+                                <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
+                                    <option value="0">Chọn Nhóm Vật Tư...</option>
+                                    <option value="A">A</option>
+                                </select>
+
+                                <span class="ms-4 pointer" data-bs-toggle="modal" data-bs-target="#add_modal_nvt_"
+                                    title="Thêm Nhóm Vật Tư"><i
+                                        class="fa fa-plus text-white py-2 px-2 bg-success rounded-circle"></i></span>
+
+                                <div class="modal fade" id="add_modal_nvt_" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title" id="deleteModalLabel">Thêm Nhóm Vật Tư</h3>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="" method="">
+                                                    @csrf
+                                                    <div class="mb-3">
+                                                        <label class="required fs-5 fw-bold mb-2">Tên Nhóm Vật Tư</label>
+                                                        <input type="text"
+                                                            class="form-control form-control-sm form-control-solid border border-success"
+                                                            placeholder="Tên Nhóm Vật Tư.." name="" />
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sm btn-secondary"
+                                                    data-bs-dismiss="modal">Đóng</button>
+                                                <button type="button" class="btn btn-sm btn-twitter">Thêm</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
 
@@ -87,31 +123,66 @@
 
                             <label class="required fs-5 fw-bold mb-3">Đơn Vị Tính</label>
 
-                            <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
-                                <option value="0">Chọn Đơn Vị Tính...</option>
-                                <option value="box">Hộp</option>
-                                <option value="bottle">Chai</option>
-                                <option value="tube">Ống</option>
-                                <option value="pack">Gói</option>
-                                <option value="tablet">Viên</option>
-                                <option value="vial">Lọ</option>
-                                <option value="ampoule">Ống tiêm</option>
-                                <option value="bag">Túi</option>
-                                <option value="set">Bộ</option>
-                                <option value="piece">Cái</option>
-                                <option value="kit">Bộ dụng cụ</option>
-                                <option value="roll">Cuộn</option>
-                                <option value="pair">Đôi</option>
-                                <option value="strip">Vỉ</option>
-                                <option value="sachet">Gói nhỏ</option>
-                                <option value="canister">Bình</option>
-                                <option value="carton">Thùng</option>
-                                <option value="liter">Lít</option>
-                                <option value="milliliter">Millilit</option>
-                                <option value="gram">Gram</option>
-                                <option value="kilogram">Kilogram</option>
-                            </select>
+                            <div class="d-flex align-items-center">
+                                <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
+                                    <option value="0">Chọn Đơn Vị Tính...</option>
+                                    <option value="box">Hộp</option>
+                                    <option value="bottle">Chai</option>
+                                    <option value="tube">Ống</option>
+                                    <option value="pack">Gói</option>
+                                    <option value="tablet">Viên</option>
+                                    <option value="vial">Lọ</option>
+                                    <option value="ampoule">Ống tiêm</option>
+                                    <option value="bag">Túi</option>
+                                    <option value="set">Bộ</option>
+                                    <option value="piece">Cái</option>
+                                    <option value="kit">Bộ dụng cụ</option>
+                                    <option value="roll">Cuộn</option>
+                                    <option value="pair">Đôi</option>
+                                    <option value="strip">Vỉ</option>
+                                    <option value="sachet">Gói nhỏ</option>
+                                    <option value="canister">Bình</option>
+                                    <option value="carton">Thùng</option>
+                                    <option value="liter">Lít</option>
+                                    <option value="milliliter">Millilit</option>
+                                    <option value="gram">Gram</option>
+                                    <option value="kilogram">Kilogram</option>
+                                </select>
 
+                                <span class="ms-4 pointer" data-bs-toggle="modal" data-bs-target="#add_modal_dvt_"
+                                    title="Thêm Đơn Vị Tính"><i
+                                        class="fa fa-plus text-white py-2 px-2 bg-success rounded-circle"></i></span>
+
+                                <div class="modal fade" id="add_modal_dvt_" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title" id="deleteModalLabel">Thêm Đơn Vị Tính</h3>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="" method="">
+                                                    @csrf
+                                                    <div class="mb-3">
+                                                        <label class="required fs-5 fw-bold mb-2">Tên Đơn Vị Tính</label>
+                                                        <input type="text"
+                                                            class="form-control form-control-sm form-control-solid border border-success"
+                                                            placeholder="Tên Đơn Vị Tính.." name="" />
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sm btn-secondary"
+                                                    data-bs-dismiss="modal">Đóng</button>
+                                                <button type="button" class="btn btn-sm btn-twitter">Thêm</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
 
@@ -120,8 +191,8 @@
                             <label class="required fs-5 fw-bold mb-3">Giá</label>
 
                             <input type="number"
-                                class="form-control form-control-sm form-control-solid border border-success" name=""
-                                value="0">
+                                class="form-control form-control-sm form-control-solid border border-success"
+                                name="" value="0">
                         </div>
 
                         <div class="col-6 fv-row mb-5">
@@ -139,10 +210,46 @@
 
                             <label class="required fs-5 fw-bold mb-3">Nhà Cung Cấp</label>
 
-                            <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
-                                <option value="0">Chọn Nhà Cung Cấp...</option>
-                                <option value="A">A</option>
-                            </select>
+                            <div class="d-flex align-items-center">
+                                <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
+                                    <option value="0">Chọn Nhà Cung Cấp...</option>
+                                    <option value="A">A</option>
+                                </select>
+
+                                <span class="ms-4 pointer" data-bs-toggle="modal" data-bs-target="#add_modal_ncc_"
+                                    title="Thêm Nhà Cung Cấp"><i
+                                        class="fa fa-plus text-white py-2 px-2 bg-success rounded-circle"></i></span>
+
+                                <div class="modal fade" id="add_modal_ncc_" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title" id="deleteModalLabel">Thêm Nhà Cung Cấp</h3>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="" method="">
+                                                    @csrf
+                                                    <div class="mb-3">
+                                                        <label class="required fs-5 fw-bold mb-2">Tên Nhà Cung Cấp</label>
+                                                        <input type="text"
+                                                            class="form-control form-control-sm form-control-solid border border-success"
+                                                            placeholder="Tên Nhà Cung Cấp.." name="" />
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-sm btn-secondary"
+                                                    data-bs-dismiss="modal">Đóng</button>
+                                                <button type="button" class="btn btn-sm btn-twitter">Thêm</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-6 fv-row mb-5">
@@ -176,7 +283,8 @@
                                 <option value="Bermuda">Bermuda</option>
                                 <option value="Bhutan">Bhutan</option>
                                 <option value="Bolivia">Bolivia</option>
-                                <option value="Bonaire, Sint Eustatius and Saba">Bonaire, Sint Eustatius và Saba</option>
+                                <option value="Bonaire, Sint Eustatius and Saba">Bonaire, Sint Eustatius và Saba
+                                </option>
                                 <option value="Bosnia and Herzegovina">Bosnia và Herzegovina</option>
                                 <option value="Botswana">Botswana</option>
                                 <option value="Brazil">Brazil</option>

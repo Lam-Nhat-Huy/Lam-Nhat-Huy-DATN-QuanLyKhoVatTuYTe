@@ -32962,7 +32962,7 @@ fieldset:disabled .btn {
 }
 
 .text-primary {
-    color: #000 !important
+    color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;
 }
 
 .text-inverse-primary {

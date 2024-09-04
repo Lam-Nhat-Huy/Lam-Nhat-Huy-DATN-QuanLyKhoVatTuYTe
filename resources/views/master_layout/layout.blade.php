@@ -22,7 +22,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-    <link rel="shortcut icon" href="{{ asset('image/logo_yte.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('image/logo_warehouse.png') }}" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
 
