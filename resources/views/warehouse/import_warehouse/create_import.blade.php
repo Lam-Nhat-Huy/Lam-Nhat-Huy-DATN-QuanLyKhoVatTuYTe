@@ -33,6 +33,8 @@
             color: #ffffff;
         }
     </style>
+
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 @endsection
 
 @section('title')
@@ -48,9 +50,8 @@
                     <span class="card-label fw-bolder fs-3 mb-1">Tạo Phiếu Nhập Kho</span>
                 </h3>
                 <div class="card-toolbar">
-                    <a href="{{ route('warehouse.import') }}" class="btn btn-sm btn-dark">
+                    <a href="{{ route('warehouse.import') }}" class="button-delete">
                         <span class="align-items-center d-flex">
-                            <i class="fa fa-arrow-left me-1"></i>
                             Trở Lại
                         </span>
                     </a>
@@ -177,7 +178,7 @@
                     <div id="materials-hidden-inputs"></div>
 
                     <div class="text-end mb-4">
-                        <button type="button" id="add-material" class="btn btn-success btn-sm me-2">Thêm Sản
+                        <button type="button" id="add-material" class="button me-2">Thêm Sản
                             Phẩm</button>
                     </div>
 
@@ -239,7 +240,7 @@
                     </div>
 
                     <div class="modal-footer flex-right pe-0">
-                        <button type="submit" class="btn btn-twitter btn-sm">
+                        <button type="submit" class="button">
                             Tạo Phiếu Nhập
                         </button>
                     </div>
@@ -386,7 +387,7 @@
                 <td>${totalBeforeVAT}</td>
                 <td>${totalPrice}</td>
                 <td>
-                    <button type="button" class="btn btn-danger btn-sm remove-material">Xóa</button>
+                    <button type="button" class="button-delete remove-material">Xóa</button>
                 </td>
             `;
             materialsList.appendChild(tr);

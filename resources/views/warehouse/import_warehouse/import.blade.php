@@ -19,6 +19,8 @@
             /* Màu nền khi hàng được nhấp vào */
         }
     </style>
+
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 @endsection
 
 @section('title')
@@ -33,8 +35,7 @@
             </h3>
 
             <div class="card-toolbar">
-                <a href="{{ route('warehouse.create_import') }}" class="btn btn-sm btn-twitter"><i class="fa fa-plus"></i>Tạo
-                    Phiếu Nhập</a>
+                <a href="{{ route('warehouse.create_import') }}" class="button">Tạo phiếu nhập</a>
             </div>
         </div>
         {{-- Bộ lọc --}}
@@ -105,7 +106,6 @@
                             <th class="">Ngày Nhập</th>
                             <th class="" style="width: 120px !important;">Trạng Thái</th>
                             <th class="">Tổng Cộng</th>
-                            <th class="pe-3">Hành Động</th>
                         </tr>
                     </thead>
 
@@ -143,26 +143,7 @@
                                 <td>
                                     12.000.000VNĐ
                                 </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" data-bs-toggle="dropdown">
-                                            <i class="fa fa-ellipsis-h me-2"></i>
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
-                                            <li>
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#detailsModal">Chi tiết</a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#browse">Duyệt đơn</a>
-                                            </li>
-                                            <li><a class="dropdown-item" href="#">Chỉnh sửa</a></li>
-                                        </ul>
-                                    </div>
-                                </td>
                             </tr>
-
 
                             <!-- Collapse content -->
                             <tr class="collapse multi-collapse" id="collapse{{ $i }}">
@@ -175,7 +156,7 @@
                                                 style="padding-top: 0 !important; padding-bottom: 0px !important;">
                                                 <h4 class="fw-bold m-0">Chi tiết phiếu nhập kho</h4>
                                                 <div class="card-toolbar">
-                                                    <h6><span class="badge bg-success">Đã nhập kho</span></h6>
+                                                    <h6><span class="badge bg-success">Đã duyệt</span></h6>
                                                 </div>
                                             </div>
                                             <div class="card-body p-2" style="padding-top: 0px !important">
@@ -299,6 +280,26 @@
 
                                         </div>
                                     </div>
+
+                                    <div class="card-body py-3 text-end">
+                                        <div class="button-group">
+                                            <!-- Nút Duyệt đơn -->
+                                            <button class="button me-2" data-bs-toggle="modal" data-bs-target="#browse"
+                                                type="button">Duyệt đơn
+                                            </button>
+
+                                            <!-- Nút In Phiếu -->
+                                            <button class="button me-2" data-bs-toggle="modal"
+                                                data-bs-target="#detailsModal" type="button">In Phiếu
+                                            </button>
+
+                                            <!-- Nút Xóa đơn -->
+                                            <button class="button-delete me-2" data-bs-toggle="modal"
+                                                data-bs-target="#deleteConfirm" type="button">Xóa đơn
+                                            </button>
+
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         @endfor
@@ -310,13 +311,12 @@
         <div class="card-body py-3 text-end">
             <div class="button-group">
                 <!-- Nút Duyệt đơn -->
-                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#browse"
-                    type="button">Duyệt
+                <button class="button" data-bs-toggle="modal" data-bs-target="#browse" type="button">Duyệt
                     đơn</button>
 
                 <!-- Nút Xóa đơn -->
-                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirm"
-                    type="button">Xóa đơn</button>
+                <button class="button-delete" data-bs-toggle="modal" data-bs-target="#deleteConfirm" type="button">Xóa
+                    đơn</button>
             </div>
         </div>
     </div>
@@ -339,8 +339,8 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-success btn-sm px-4"><i class="fas fa-check"></i>
+                    <button type="button" class="button-delete btn-sm px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="button px-4">
                         Duyệt</button>
                 </div>
             </div>
@@ -364,13 +364,12 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4"><i class="fas fa-trash"></i> Xóa</button>
+                    <button type="button" class="button px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="button-delete px-4"> Xóa</button>
                 </div>
             </div>
         </div>
     </div>
-
 
     <!-- Chi tiết phiếu nhập -->
     <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">

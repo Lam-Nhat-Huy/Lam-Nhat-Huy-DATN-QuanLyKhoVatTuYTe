@@ -33,6 +33,8 @@
             color: #ffffff;
         }
     </style>
+
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 @endsection
 
 @section('content')
@@ -44,9 +46,8 @@
                     <span class="card-label fw-bolder fs-3 mb-1">Tạo Phiếu Xuất Kho</span>
                 </h3>
                 <div class="card-toolbar">
-                    <a href="{{ route('warehouse.export') }}" class="btn btn-sm btn-dark">
+                    <a href="{{ route('warehouse.export') }}" class="button">
                         <span class="align-items-center d-flex">
-                            <i class="fa fa-arrow-left me-1"></i>
                             Trở Lại
                         </span>
                     </a>
@@ -109,7 +110,7 @@
                             </div>
                         </div>
                         <div class="text-end mt-3">
-                            <button type="button" id="add-material" class="btn btn-success btn-sm">Thêm Vật Tư</button>
+                            <button type="button" id="add-material" class="button-delete">Thêm Vật Tư</button>
                         </div>
                     </div>
                 </div>
@@ -158,7 +159,7 @@
 
                                         </td>
                                         <td>
-                                            <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>Xóa</button>
+                                            <button class="button-delete">Xóa</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -167,7 +168,7 @@
                     </div>
 
                     <div class="modal-footer flex-right pe-0 me-0">
-                        <button type="submit" class="btn btn-twitter btn-sm">
+                        <button type="submit" class="button">
                             Tạo Phiếu Nhập
                         </button>
                     </div>

@@ -19,6 +19,8 @@
             /* Màu nền khi hàng được nhấp vào */
         }
     </style>
+
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 @endsection
 
 @section('title')
@@ -33,7 +35,7 @@
             </h3>
 
             <div class="card-toolbar">
-                <a href="{{ route('warehouse.create_export') }}" class="btn btn-sm btn-twitter"><i class="fa fa-plus"></i>Tạo
+                <a href="{{ route('warehouse.create_export') }}" class="button">Tạo
                     Phiếu Xuất</a>
             </div>
         </div>
@@ -93,12 +95,13 @@
                             <th class="">Ngày Xuất</th>
                             <th class="">Lý Do Xuất</th>
                             <th class="" style="width: 120px !important;">Trạng Thái</th>
-                            <th class="pe-3">Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
                         @for ($i = 0; $i < 6; $i++)
-                            <tr class="text-center hover-table">
+                            <tr class="text-center hover-table" data-bs-toggle="collapse"
+                                data-bs-target="#collapse{{ $i }}" aria-expanded="false"
+                                aria-controls="collapse{{ $i }}">
                                 <td>
                                     <input type="checkbox" class="row-checkbox" data-checkbox />
                                 </td>
@@ -113,23 +116,159 @@
                                         <div class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
                                     @endif
                                 </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" data-bs-toggle="dropdown">
-                                            <i class="fa fa-ellipsis-h me-2"></i>
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
-                                            <li>
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#detailsModal">Chi tiết</a>
-                                            </li>
-                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#browse">Duyệt đơn</a></li>
-                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#editExportReceiptModal">Chỉnh sửa</a></li>
-                                        </ul>
+
+                            </tr>
+
+                            <!-- Dropdown menu -->
+                            <tr class="collapse multi-collapse" id="collapse{{ $i }}">
+                                <td colspan="12"
+                                    style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
+                                    <div class="flex-lg-row-fluid order-2 order-lg-1">
+                                        <div class="card card-flush p-2 mb-3"
+                                            style="padding-top: 0px !important; padding-bottom: 0px !important;">
+                                            <div class="card-header d-flex justify-content-between align-items-center p-2"
+                                                style="padding-top: 0 !important; padding-bottom: 0px !important;">
+                                                <h4 class="fw-bold m-0">Chi tiết phiếu xuất kho</h4>
+                                                <div class="card-toolbar">
+                                                    <h6><span class="badge bg-success">Đã xuất kho</span></h6>
+                                                </div>
+                                            </div>
+                                            <div class="card-body p-2" style="padding-top: 0px !important">
+                                                <div class="row py-5" style="padding-top: 0px !important">
+                                                    <!-- Begin::Receipt Info (Left column) -->
+                                                    <div class="col-md-4">
+                                                        <table class="table table-flush gy-1">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class=""><strong>Mã phiếu xuất</strong></td>
+                                                                    <td class="text-gray-800">PX00019</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Số phiếu xuất</strong></td>
+                                                                    <td class="text-gray-800">025</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Khách hàng</strong></td>
+                                                                    <td class="text-gray-800">Công ty ABC</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Ngày xuất</strong></td>
+                                                                    <td class="text-gray-800">26/08/2024</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Người tạo</strong></td>
+                                                                    <td class="text-gray-800">Nhật Huy</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Ghi chú</td>
+                                                                    <td class="text-gray-800">Hàng dễ vỡ</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- End::Receipt Info -->
+
+                                                    <div class="col-md-4">
+                                                        <table class="table table-flush gy-1">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class=""><strong>Tổng giá trị hàng</strong>
+                                                                    </td>
+                                                                    <td class="text-gray-800">1,200,000 VNĐ</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Tổng chiết khấu</strong>
+                                                                    </td>
+                                                                    <td class="text-gray-800">25,000 VNĐ</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Tổng VAT</strong></td>
+                                                                    <td class="text-gray-800">12,000 VNĐ</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class=""><strong>Tổng cộng</strong></td>
+                                                                    <td class="text-gray-800">1,237,000 VNĐ</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- End::Receipt Info -->
+                                                </div>
+
+                                                <!-- Begin::Receipt Items (Right column) -->
+                                                <div class="col-md-12">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped table-sm table-hover">
+                                                            <thead class="fw-bolder bg-danger">
+                                                                <tr>
+                                                                    <th class="ps-4">Mã vật tư</th>
+                                                                    <th>Tên vật tư</th>
+                                                                    <th>Số lượng</th>
+                                                                    <th>Số lô</th>
+                                                                    <th>Chiết khấu (%)</th>
+                                                                    <th>VAT (%)</th>
+                                                                    <th class="pe-3">Thành tiền</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>VT001</td>
+                                                                    <td>Băng gạc</td>
+                                                                    <td>10 Bịch</td>
+                                                                    <td>BG001</td>
+                                                                    <td>1</td>
+                                                                    <td>1.2</td>
+                                                                    <td>55,000 VNĐ</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>VT002</td>
+                                                                    <td>Thuốc đỏ</td>
+                                                                    <td>10 lọ</td>
+                                                                    <td>BG001</td>
+                                                                    <td>1</td>
+                                                                    <td>1.2</td>
+                                                                    <td>55,000 VNĐ</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>VT003</td>
+                                                                    <td>Nước muối</td>
+                                                                    <td>10 chai</td>
+                                                                    <td>BG001</td>
+                                                                    <td>1</td>
+                                                                    <td>1.2</td>
+                                                                    <td>550,000 VNĐ</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- End::Receipt Items -->
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <div class="card-body py-3 text-end">
+                                        <div class="button-group">
+                                            <!-- Nút Duyệt đơn -->
+                                            <button class="button me-2" data-bs-toggle="modal" data-bs-target="#browse"
+                                                type="button">Duyệt đơn
+                                            </button>
+
+                                            <!-- Nút In Phiếu -->
+                                            <button class="button me-2" data-bs-toggle="modal"
+                                                data-bs-target="#detailsModal" type="button">In Phiếu
+                                            </button>
+
+                                            <!-- Nút Xóa đơn -->
+                                            <button class="button-delete" me-2" data-bs-toggle="modal"
+                                                data-bs-target="#deleteConfirm" type="button">Xóa đơn
+                                            </button>
+
+                                        </div>
+                                    </div>
+
                                 </td>
+
                             </tr>
                         @endfor
                     </tbody>
@@ -141,12 +280,12 @@
         <div class="card-body py-3 text-end">
             <div class="button-group">
                 <!-- Nút Duyệt đơn -->
-                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#browse" type="button">Duyệt
+                <button class="button" data-bs-toggle="modal" data-bs-target="#browse" type="button">Duyệt
                     đơn</button>
 
                 <!-- Nút Xóa đơn -->
-                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirm"
-                    type="button">Xóa đơn</button>
+                <button class="button-delete" data-bs-toggle="modal" data-bs-target="#deleteConfirm" type="button">Xóa
+                    đơn</button>
             </div>
         </div>
     </div>
@@ -158,19 +297,19 @@
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title text-white" id="browseLabel">Duyệt Phiếu Xuất Kho</h5>
+                    <h5 class="modal-title text-white" id="browseLabel">Duyệt Phiếu nhập Kho</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center" style="padding-bottom: 0px;">
                     <form action="" method="">
                         @csrf
-                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt phiếu xuất kho này?</p>
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt phiếu nhập kho này?</p>
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-success btn-sm px-4"><i class="fas fa-check"></i>
+                    <button type="button" class="button-delete btn-sm px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="button px-4">
                         Duyệt</button>
                 </div>
             </div>
@@ -194,8 +333,8 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-danger btn-sm px-4"><i class="fas fa-trash"></i> Xóa</button>
+                    <button type="button" class="button px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="button-delete px-4"> Xóa</button>
                 </div>
             </div>
         </div>
