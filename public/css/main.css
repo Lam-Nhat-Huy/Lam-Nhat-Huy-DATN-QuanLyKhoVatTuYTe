@@ -1,0 +1,41 @@
+.button {
+    align-items: center;
+    color: #ffffff;
+    font-size: 12px;
+    background: #58cc02;
+    border: none !important;
+    padding: 5px 10px;
+    box-shadow: 0 4px 0 #58a700;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.button:active {
+    box-shadow: none;
+    transform: translate(0, 4px);
+}
+
+.button:hover {
+    color: #ffffff
+}
+
+.button-delete {
+    align-items: center;
+    color: #ffffff;
+    font-size: 12px;
+    background: #cc0202;
+    border: none !important;
+    padding: 5px 10px;
+    box-shadow: 0 4px 0 #a70000;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.button-delete:active {
+    box-shadow: none;
+    transform: translate(0, 4px);
+}
+
+.button-delete:hover {
+    color: #ffffff
+}
