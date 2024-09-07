@@ -39,3 +39,29 @@
 .button-delete:hover {
     color: #ffffff
 }
+
+
+.button:hover {
+    color: #ffffff
+}
+
+.button-primary {
+    align-items: center;
+    color: #ffffff;
+    font-size: 12px;
+    background: #0242cc;
+    border: none !important;
+    padding: 5px 10px;
+    box-shadow: 0 4px 0 #0b3ca5;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.button-primary:active {
+    box-shadow: none;
+    transform: translate(0, 4px);
+}
+
+.button-primary:hover {
+    color: #ffffff
+}

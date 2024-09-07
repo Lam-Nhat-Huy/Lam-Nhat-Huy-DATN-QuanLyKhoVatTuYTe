@@ -255,7 +255,7 @@
                                             </button>
 
                                             <!-- Nút In Phiếu -->
-                                            <button class="button me-2" data-bs-toggle="modal"
+                                            <button class="button-primary me-2" data-bs-toggle="modal"
                                                 data-bs-target="#detailsModal" type="button">In Phiếu
                                             </button>
 
