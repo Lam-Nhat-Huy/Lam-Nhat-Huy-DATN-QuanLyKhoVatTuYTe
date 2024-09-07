@@ -19,8 +19,6 @@
             /* Màu nền khi hàng được nhấp vào */
         }
     </style>
-
-    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 @endsection
 
 @section('title')
@@ -35,7 +33,7 @@
             </h3>
 
             <div class="card-toolbar">
-                <a href="{{ route('warehouse.create_export') }}" class="button">Tạo
+                <a href="{{ route('warehouse.create_export') }}" class="btn btn-sm btn-success">Tạo
                     Phiếu Xuất</a>
             </div>
         </div>
@@ -250,17 +248,18 @@
                                     <div class="card-body py-3 text-end">
                                         <div class="button-group">
                                             <!-- Nút Duyệt đơn -->
-                                            <button class="button me-2" data-bs-toggle="modal" data-bs-target="#browse"
-                                                type="button">Duyệt đơn
+                                            <button class="btn btn-sm btn-success me-2" data-bs-toggle="modal"
+                                                data-bs-target="#browse" type="button">Duyệt đơn
                                             </button>
 
                                             <!-- Nút In Phiếu -->
-                                            <button class="button-primary me-2" data-bs-toggle="modal"
-                                                data-bs-target="#detailsModal" type="button">In Phiếu
+                                            <button class="button-primary btn btn-sm btn-danger me-2"
+                                                data-bs-toggle="modal" data-bs-target="#detailsModal" type="button">In
+                                                Phiếu
                                             </button>
 
                                             <!-- Nút Xóa đơn -->
-                                            <button class="button-delete" me-2" data-bs-toggle="modal"
+                                            <button class="btn btn-sm btn-success" me-2" data-bs-toggle="modal"
                                                 data-bs-target="#deleteConfirm" type="button">Xóa đơn
                                             </button>
 
@@ -280,11 +279,13 @@
         <div class="card-body py-3 text-end">
             <div class="button-group">
                 <!-- Nút Duyệt đơn -->
-                <button class="button" data-bs-toggle="modal" data-bs-target="#browse" type="button">Duyệt
+                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#browse"
+                    type="button">Duyệt
                     đơn</button>
 
                 <!-- Nút Xóa đơn -->
-                <button class="button-delete" data-bs-toggle="modal" data-bs-target="#deleteConfirm" type="button">Xóa
+                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirm"
+                    type="button">Xóa
                     đơn</button>
             </div>
         </div>
