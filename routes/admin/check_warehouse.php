@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('warehouse')->group(function () {
     Route::get('/index', [CheckWarehouseController::class, 'index'])->name('check_warehouse.index');
 
+    Route::get('/trash', [CheckWarehouseController::class, 'trash'])->name('check_warehouse.trash');
+
     Route::get('/create', [CheckWarehouseController::class, 'create'])->name('check_warehouse.create');
 
     Route::post('/store', [CheckWarehouseController::class, 'store'])->name('check_warehouse.store');

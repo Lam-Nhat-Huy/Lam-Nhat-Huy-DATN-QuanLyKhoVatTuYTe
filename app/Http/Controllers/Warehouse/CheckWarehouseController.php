@@ -16,6 +16,13 @@ class CheckWarehouseController extends Controller
         return view("{$this->route}.check", compact('title'));
     }
 
+    public function trash()
+    {
+        $title = 'Kiểm Kho';
+
+        return view("{$this->route}.trash", compact('title'));
+    }
+
     public function create()
     {
         $title = 'Kiểm Kho';
