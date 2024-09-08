@@ -90,7 +90,6 @@
         {{-- Bộ lọc vật tư  --}}
         <div class="card-body py-1 me-6">
             <form action="" class="row align-items-center">
-
                 <div class="col-4">
                     <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
                         <option value="" selected>--Theo Nhóm Vật Tư--</option>
@@ -126,11 +125,10 @@
 
         {{-- Danh sách vật tư   --}}
         <div class="card-body py-3">
-
             @foreach ($AllMaterial as $item)
                 <div class="col-xl-12 mb-2">
                     <!-- Card that serves as the clickable trigger -->
-                    <div class="card mb-1 card-body p-2"> <!-- Reduced padding for closer look -->
+                    <div class="card mb-1 card-body p-2 pointer"> <!-- Reduced padding for closer look -->
                         <div class="row align-items-center g-1" data-bs-toggle="collapse"
                             data-bs-target="#collapse{{ $item['id'] }}">
                             <div class="col-auto">
@@ -166,12 +164,13 @@
                         <div class="card card-body p-2" style="border: 1px solid #dcdcdc; background-color: #f8f9fa;">
                             <div class="row gy-3">
                                 <div class="col-md-4">
-                                    <img src="{{ $item['material_image'] }}" alt="" class="img-fluid rounded">
+                                    <img src="{{ $item['material_image'] }}" alt="" width="100%"
+                                        class="img-fluid rounded">
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card card-body border-0">
-                                        <h4 class="card-title fw-bold mb-3">Chi tiết vật tư</h4>
-                                        <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h4 class="card-title fw-bold">Chi tiết vật tư</h4>
                                             <span class="badge bg-success">Còn hàng</span>
                                         </div>
                                         <div class="row mt-3">
@@ -235,20 +234,18 @@
                                                     width="80" alt="">
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Nút hành động đưa xuống dưới -->
-                                    <div class="text-end mt-4">
-                                        <div class="button-group">
-                                            <!-- Nút Cập nhật -->
-                                            <a href="#" class="btn btn-sm btn-success me-2" data-bs-toggle="modal"
-                                                data-bs-target="#browse">Cập Nhật</a>
-                                            <!-- Nút In Phiếu -->
-                                            <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
-                                                data-bs-target="#detailsModal">In Phiếu</button>
-                                            <!-- Nút Xóa đơn -->
-                                            <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
-                                                data-bs-target="#deleteConfirm">Xóa đơn</button>
+                                        <!-- Nút hành động đưa xuống dưới -->
+                                        <div class="text-end mt-4">
+                                            <div class="button-group">
+                                                <!-- Nút Cập nhật -->
+                                                <a href="#" class="btn btn-sm btn-success me-2"
+                                                    data-bs-toggle="modal" data-bs-target="#browse"><i
+                                                        class="fa fa-edit"></i>Cập Nhật</a>
+                                                <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteConfirm"><i
+                                                        class="fa fa-trash"></i>Xóa</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -279,7 +276,7 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-sm btn-danger px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
                     <button type="button" class="btn btn-sm btn-success px-4"> Xóa</button>
                 </div>
             </div>

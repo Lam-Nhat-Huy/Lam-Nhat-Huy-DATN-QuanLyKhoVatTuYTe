@@ -247,7 +247,7 @@
                                                                 <button type="button" class="btn btn-sm btn-secondary"
                                                                     data-bs-dismiss="modal">Đóng</button>
                                                                 <button type="button"
-                                                                    class="btn btn-sm btn-twitter">Xóa</button>
+                                                                    class="btn btn-sm btn-danger">Xóa</button>
                                                             </div>
                                                         </div>
                                                     </div>

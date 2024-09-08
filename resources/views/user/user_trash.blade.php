@@ -39,7 +39,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for ($i = 0; $i <= 3; $i++)
+                        @for ($i = 0; $i <= 2; $i++)
                             <tr class="text-center">
                                 <td>
                                     #ND007
@@ -58,10 +58,8 @@
                                         <div class="rounded px-2 py-1 text-white bg-danger" title="">Admin</div>
                                     @elseif ($i == 1)
                                         <div class="rounded px-2 py-1 text-white bg-dark" title="">Kho</div>
-                                    @elseif ($i == 2)
-                                        <div class="rounded px-2 py-1 text-white bg-info" title="">Kế Toán</div>
                                     @else
-                                        <div class="rounded px-2 py-1 text-white bg-primary" title="">Mua Hàng</div>
+                                    <div class="rounded px-2 py-1 text-white bg-primary" title="">Mua Hàng</div>
                                     @endif
                                 </td>
                                 <td>
@@ -117,7 +115,7 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-sm btn-secondary"
                                                         data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="button" class="btn btn-sm btn-twitter">Xóa Vĩnh Viễn</button>
+                                                    <button type="button" class="btn btn-sm btn-danger">Xóa Vĩnh Viễn</button>
                                                 </div>
                                             </div>
                                         </div>

@@ -63,7 +63,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="text-center hover-table" aria-expanded="false" data-bs-toggle="collapse"
+                        <tr class="text-center hover-table pointer" aria-expanded="false" data-bs-toggle="collapse"
                             data-bs-target="#show-collapse" aria-controls="show-collapse">
                             <td>
                                 <input type="checkbox" class="row-checkbox" />
@@ -101,7 +101,7 @@
                         </tr>
 
                         <tr class="collapse multi-collapse" id="show-collapse">
-                            <td colspan="12"
+                            <td class="p-0" colspan="12"
                                 style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
                                 <div class="flex-lg-row-fluid order-2 order-lg-1">
                                     <div class="card card-flush p-2 mb-3"

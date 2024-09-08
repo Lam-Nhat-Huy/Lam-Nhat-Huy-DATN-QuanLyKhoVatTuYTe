@@ -28,14 +28,14 @@
 @endsection
 
 @section('content')
-    <div class="card mb-5 mb-xl-8">
+    <div class="card mb-5 pb-5 mb-xl-8">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Nhập Kho</span>
             </h3>
 
             <div class="card-toolbar">
-                <a href="{{ route('warehouse.create_import') }}" class="btn btn-sm btn-success">Tạo phiếu nhập</a>
+                <a href="{{ route('warehouse.create_import') }}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i>Tạo Phiếu Nhập</a>
             </div>
         </div>
         {{-- Bộ lọc --}}
@@ -104,7 +104,6 @@
                             <th class="">Nhà Cung Cấp</th>
                             <th class="">Tạo Bởi</th>
                             <th class="">Ngày Nhập</th>
-                            <th class="" style="width: 120px !important;">Trạng Thái</th>
                             <th class="">Tổng Cộng</th>
                         </tr>
                     </thead>
@@ -112,7 +111,7 @@
                     <!-- Trong phần <tbody> của bảng -->
                     <tbody>
                         @for ($i = 0; $i < 6; $i++)
-                            <tr class="text-center hover-table" data-bs-toggle="collapse"
+                            <tr class="text-center hover-table pointer" data-bs-toggle="collapse"
                                 data-bs-target="#collapse{{ $i }}" aria-expanded="false"
                                 aria-controls="collapse{{ $i }}">
                                 <td>
@@ -134,20 +133,13 @@
                                     26/08/2024
                                 </td>
                                 <td>
-                                    @if ($i > 2)
-                                        <div class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</div>
-                                    @else
-                                        <div class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
-                                    @endif
-                                </td>
-                                <td>
                                     12.000.000VNĐ
                                 </td>
                             </tr>
 
                             <!-- Collapse content -->
                             <tr class="collapse multi-collapse" id="collapse{{ $i }}">
-                                <td colspan="12"
+                                <td class="p-0" colspan="12"
                                     style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
                                     <div class="flex-lg-row-fluid order-2 order-lg-1">
                                         <div class="card card-flush p-2 mb-3"
@@ -156,7 +148,11 @@
                                                 style="padding-top: 0 !important; padding-bottom: 0px !important;">
                                                 <h4 class="fw-bold m-0">Chi tiết phiếu nhập kho</h4>
                                                 <div class="card-toolbar">
-                                                    <h6><span class="badge bg-success">Đã duyệt</span></h6>
+                                                    @if ($i > 2)
+                                                        <div class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</div>
+                                                    @else
+                                                        <div class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class="card-body p-2" style="padding-top: 0px !important">
@@ -285,17 +281,25 @@
                                         <div class="button-group">
                                             <!-- Nút Duyệt đơn -->
                                             <button class="btn btn-sm btn-success me-2" data-bs-toggle="modal"
-                                                data-bs-target="#browse" type="btn btn-sm btn-success">Duyệt đơn
+                                                data-bs-target="#browse" type="btn btn-sm btn-success">
+                                                <i class="fas fa-clipboard-check"></i>Duyệt Phiếu
                                             </button>
 
                                             <!-- Nút In Phiếu -->
-                                            <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
-                                                data-bs-target="#detailsModal" type="button">In Phiếu
+                                            <button class="btn btn-sm btn-twitter me-2" id="printPdfBtn" type="button">
+                                                <i class="fa fa-print"></i>In Phiếu
+                                            </button>
+
+                                            <!-- Nút Sửa đơn -->
+                                            <button class="btn btn-sm btn-dark me-2" data-bs-toggle="modal"
+                                                data-bs-target="#edit" type="button">
+                                                <i class="fa fa-edit"></i>Sửa Phiếu
                                             </button>
 
                                             <!-- Nút Xóa đơn -->
                                             <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
-                                                data-bs-target="#deleteConfirm" type="button">Xóa đơn
+                                                data-bs-target="#deleteConfirm" type="button">
+                                                <i class="fa fa-trash"></i>Xóa Phiếu
                                             </button>
 
                                         </div>
@@ -308,21 +312,73 @@
             </div>
         </div>
 
-        <div class="card-body py-3 text-end">
-            <div class="button-group">
-                <!-- Nút Duyệt đơn -->
-                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#browse"
-                    type="btn btn-sm btn-success">Duyệt
-                    đơn</button>
-
-                <!-- Nút Xóa đơn -->
-                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirm"
-                    type="button">Xóa
-                    đơn</button>
+        <div class="card-body py-3 mb-3">
+            <div class="dropdown">
+                <span class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <span>Chọn Thao Tác</span>
+                </span>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#confirmAll">
+                            <i class="fas fa-clipboard-check me-2 text-success"></i>Duyệt Tất Cả</a>
+                    </li>
+                    <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#deleteAll">
+                            <i class="fas fa-trash me-2 text-danger"></i>Xóa Tất Cả</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 
+    {{-- Modal Duyệt Tất Cả --}}
+    <div class="modal fade" id="confirmAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="confirmAll" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title text-white" id="confirmAll">Duyệt Tất Cả Phiếu</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" style="padding-bottom: 0px;">
+                    <form action="" method="">
+                        @csrf
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt tất cả phiếu đã chọn?</p>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center border-0">
+                    <button type="button" class="btn btn-sm btn-secondary btn-sm px-4"
+                        data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-success px-4">
+                        Duyệt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal Xác Nhận Xóa Tất Cả --}}
+    <div class="modal fade" id="deleteAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="deleteAllLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Xóa Tất Cả Phiếu</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" style="padding-bottom: 0px;">
+                    <form action="" method="">
+                        @csrf
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả phiếu đã chọn?</p>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center border-0">
+                    <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-success px-4"> Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {{-- Modal Duyệt Phiếu --}}
     <div class="modal fade" id="browse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -330,18 +386,18 @@
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title text-white" id="browseLabel">Duyệt Phiếu Xuất Kho</h5>
+                    <h5 class="modal-title text-white" id="browseLabel">Duyệt Phiếu Nhập Kho</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center" style="padding-bottom: 0px;">
                     <form action="" method="">
                         @csrf
-                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt phiếu xuất kho này?</p>
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt phiếu nhập kho này?</p>
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-sm btn-danger btn-sm px-4"
+                    <button type="button" class="btn btn-sm btn-secondary btn-sm px-4"
                         data-bs-dismiss="modal">Đóng</button>
                     <button type="button" class="btn btn-sm btn-success px-4">
                         Duyệt</button>
@@ -356,19 +412,19 @@
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title text-white" id="deleteConfirmLabel">Xác Nhận Xóa Đơn</h5>
+                    <h5 class="modal-title text-white" id="deleteConfirmLabel">Xác Nhận Xóa Phiếu</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center" style="padding-bottom: 0px;">
                     <form action="" method="">
                         @csrf
-                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa đơn này?</p>
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa phiếu này?</p>
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-sm btn-danger px-4" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-sm btn-success px-4"> Xóa</button>
+                    <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-danger px-4"> Xóa</button>
                 </div>
             </div>
         </div>
@@ -479,17 +535,7 @@
                                     <hr>
                                     <p class="fs-4 fw-bold text-danger">Tổng: <span id="modalFinalTotal">12.000.000
                                             VND</span></p>
-
-
                                 </div>
-
-                                <div class="d-flex justify-content-between mt-5">
-                                    <!-- Print Button -->
-                                    <button type="button" id="printPdfBtn" class="btn btn-twitter btn-sm me-2">
-                                        <i class="fa fa-print me-2"></i>In Phiếu
-                                    </button>
-                                </div>
-                                <!-- End::Summary -->
                             </div>
                         </form>
                     </div>
@@ -497,6 +543,7 @@
             </div>
         </div>
     </div>
+    
 @endsection
 
 @section('scripts')

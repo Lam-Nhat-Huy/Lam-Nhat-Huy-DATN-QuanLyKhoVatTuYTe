@@ -262,7 +262,7 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-sm btn-danger px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
                     <button type="button" class="btn btn-sm btn-success px-4"> Xóa</button>
                 </div>
             </div>

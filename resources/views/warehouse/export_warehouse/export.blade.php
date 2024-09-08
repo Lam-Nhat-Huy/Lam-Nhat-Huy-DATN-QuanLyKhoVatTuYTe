@@ -26,14 +26,14 @@
 @endsection
 
 @section('content')
-    <div class="card mb-5 mb-xl-8">
+    <div class="card mb-5 pb-5 mb-xl-8">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Xuất Kho</span>
             </h3>
 
             <div class="card-toolbar">
-                <a href="{{ route('warehouse.create_export') }}" class="btn btn-sm btn-success">Tạo
+                <a href="{{ route('warehouse.create_export') }}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i>Tạo
                     Phiếu Xuất</a>
             </div>
         </div>
@@ -91,13 +91,12 @@
                             <th class="ps-4">Mã Phiếu Xuất</th>
                             <th class="">Người Tạo</th>
                             <th class="">Ngày Xuất</th>
-                            <th class="">Lý Do Xuất</th>
-                            <th class="" style="width: 120px !important;">Trạng Thái</th>
+                            <th class="pe-3">Lý Do Xuất</th>
                         </tr>
                     </thead>
                     <tbody>
                         @for ($i = 0; $i < 6; $i++)
-                            <tr class="text-center hover-table" data-bs-toggle="collapse"
+                            <tr class="text-center hover-table pointer" data-bs-toggle="collapse"
                                 data-bs-target="#collapse{{ $i }}" aria-expanded="false"
                                 aria-controls="collapse{{ $i }}">
                                 <td>
@@ -107,19 +106,11 @@
                                 <td>Nhật Huy</td>
                                 <td>26/08/2024</td>
                                 <td>Xuất Bán Lẻ</td>
-                                <td>
-                                    @if ($i < 1)
-                                        <div class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</div>
-                                    @else
-                                        <div class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
-                                    @endif
-                                </td>
-
                             </tr>
 
                             <!-- Dropdown menu -->
                             <tr class="collapse multi-collapse" id="collapse{{ $i }}">
-                                <td colspan="12"
+                                <td class="p-0" colspan="12"
                                     style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
                                     <div class="flex-lg-row-fluid order-2 order-lg-1">
                                         <div class="card card-flush p-2 mb-3"
@@ -128,7 +119,11 @@
                                                 style="padding-top: 0 !important; padding-bottom: 0px !important;">
                                                 <h4 class="fw-bold m-0">Chi tiết phiếu xuất kho</h4>
                                                 <div class="card-toolbar">
-                                                    <h6><span class="badge bg-success">Đã xuất kho</span></h6>
+                                                    @if ($i < 1)
+                                                        <div class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</div>
+                                                    @else
+                                                        <div class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class="card-body p-2" style="padding-top: 0px !important">
@@ -249,18 +244,25 @@
                                         <div class="button-group">
                                             <!-- Nút Duyệt đơn -->
                                             <button class="btn btn-sm btn-success me-2" data-bs-toggle="modal"
-                                                data-bs-target="#browse" type="button">Duyệt đơn
+                                                data-bs-target="#browse" type="btn btn-sm btn-success">
+                                                <i class="fas fa-clipboard-check"></i>Duyệt Phiếu
                                             </button>
 
                                             <!-- Nút In Phiếu -->
-                                            <button class="button-primary btn btn-sm btn-danger me-2"
-                                                data-bs-toggle="modal" data-bs-target="#detailsModal" type="button">In
-                                                Phiếu
+                                            <button class="btn btn-sm btn-twitter me-2" id="printPdfBtn" type="button">
+                                                <i class="fa fa-print"></i>In Phiếu
+                                            </button>
+
+                                            <!-- Nút Sửa đơn -->
+                                            <button class="btn btn-sm btn-dark me-2" data-bs-toggle="modal"
+                                                data-bs-target="#editExportReceiptModal" type="button">
+                                                <i class="fa fa-edit"></i>Sửa Phiếu
                                             </button>
 
                                             <!-- Nút Xóa đơn -->
-                                            <button class="btn btn-sm btn-success" me-2" data-bs-toggle="modal"
-                                                data-bs-target="#deleteConfirm" type="button">Xóa đơn
+                                            <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
+                                                data-bs-target="#deleteConfirm" type="button">
+                                                <i class="fa fa-trash"></i>Xóa Phiếu
                                             </button>
 
                                         </div>
@@ -276,21 +278,73 @@
             </div>
         </div>
 
-        <div class="card-body py-3 text-end">
-            <div class="button-group">
-                <!-- Nút Duyệt đơn -->
-                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#browse"
-                    type="button">Duyệt
-                    đơn</button>
-
-                <!-- Nút Xóa đơn -->
-                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirm"
-                    type="button">Xóa
-                    đơn</button>
+        <div class="card-body py-3 mb-3">
+            <div class="dropdown">
+                <span class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <span>Chọn Thao Tác</span>
+                </span>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#confirmAll">
+                            <i class="fas fa-clipboard-check me-2 text-success"></i>Duyệt Tất Cả</a>
+                    </li>
+                    <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#deleteAll">
+                            <i class="fas fa-trash me-2 text-danger"></i>Xóa Tất Cả</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 
+    {{-- Modal Duyệt Tất Cả --}}
+    <div class="modal fade" id="confirmAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="confirmAll" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title text-white" id="confirmAll">Duyệt Tất Cả Phiếu</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" style="padding-bottom: 0px;">
+                    <form action="" method="">
+                        @csrf
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt tất cả phiếu đã chọn?</p>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center border-0">
+                    <button type="button" class="btn btn-sm btn-secondary btn-sm px-4"
+                        data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-success px-4">
+                        Duyệt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal Xác Nhận Xóa Tất Cả --}}
+    <div class="modal fade" id="deleteAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="deleteAllLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Xóa Tất Cả Phiếu</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" style="padding-bottom: 0px;">
+                    <form action="" method="">
+                        @csrf
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả phiếu đã chọn?</p>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center border-0">
+                    <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-success px-4"> Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {{-- Modal Duyệt Phiếu --}}
     <div class="modal fade" id="browse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -298,19 +352,20 @@
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title text-white" id="browseLabel">Duyệt Phiếu nhập Kho</h5>
+                    <h5 class="modal-title text-white" id="browseLabel">Duyệt Phiếu</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center" style="padding-bottom: 0px;">
                     <form action="" method="">
                         @csrf
-                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt phiếu nhập kho này?</p>
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt phiếu này?</p>
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="button-delete btn-sm px-4" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="button px-4">
+                    <button type="button" class="btn btn-sm btn-secondary btn-sm px-4"
+                        data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-success px-4">
                         Duyệt</button>
                 </div>
             </div>
@@ -323,19 +378,19 @@
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title text-white" id="deleteConfirmLabel">Xác Nhận Xóa Đơn</h5>
+                    <h5 class="modal-title text-white" id="deleteConfirmLabel">Xác Nhận Xóa Phiếu</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center" style="padding-bottom: 0px;">
                     <form action="" method="">
                         @csrf
-                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa đơn này?</p>
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa phiếu này?</p>
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="button px-4" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="button-delete px-4"> Xóa</button>
+                    <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-danger px-4"> Xóa</button>
                 </div>
             </div>
         </div>
@@ -347,7 +402,7 @@
             <div class="modal-content rounded">
                 <!-- Modal header -->
                 <div class="modal-header pb-0 border-0 justify-content-end">
-                    <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal"
+                    <button type="button" class="btn btn-sm btn-icon btn-active-color-twitter" data-bs-dismiss="modal"
                         aria-label="Close">
                         X
                     </button>
@@ -359,13 +414,13 @@
                             <div class="text-center mb-13">
                                 <h1 class="mb-3">Phiếu Xuất</h1>
                                 <div class="text-muted fw-bold fs-6">Thông Tin Chi Tiết Về Phiếu Xuất Kho
-                                    <span class="link-primary fw-bolder">#MaXuatKho</span>.
+                                    <span class="link-twitter fw-bolder">#MaXuatKho</span>.
                                 </div>
                             </div>
                             <div class="mb-15">
                                 <!-- Begin::Export Info -->
                                 <div class="mb-4">
-                                    <h4 class="text-primary border-bottom border-dark pb-4">Thông tin phiếu xuất</h4>
+                                    <h4 class="text-twitter border-bottom border-dark pb-4">Thông tin phiếu xuất</h4>
                                     <div class="row pt-3">
                                         <div class="col-4">
                                             <p><strong>Mã Phiếu Xuất:</strong> <span id="modalExportCode">PX00019</span>
@@ -383,14 +438,11 @@
 
                                 <!-- Begin::Export Items -->
                                 <div class="mb-4">
-                                    <h4 class="text-primary border-bottom border-dark pb-4 mb-4">Danh sách vật tư</h4>
+                                    <h4 class="text-twitter border-bottom border-dark pb-4 mb-4">Danh sách vật tư</h4>
                                     <div class="table-responsive">
                                         <table class="table table-striped table-sm table-hover">
                                             <thead class="fw-bolder bg-success">
                                                 <tr>
-                                                    <th class="ps-4">
-                                                        <input type="checkbox" id="selectAll" />
-                                                    </th>
                                                     <th class="ps-4">Mã vật tư</th>
                                                     <th>Số lượng</th>
                                                     <th>Đơn giá</th>
@@ -449,13 +501,6 @@
                                         <span id="modalFinalTotal">12.000.000 VND</span>
                                     </p>
                                 </div>
-
-                                <div class="d-flex justify-content-between mt-5">
-                                    <!-- Print Button -->
-                                    <button type="button" id="printPdfBtn" class="btn btn-twitter btn-sm me-2">
-                                        <i class="fa fa-print me-2"></i>In Phiếu
-                                    </button>
-                                </div>
                             </div>
                         </form>
                     </div>
@@ -470,9 +515,9 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content rounded">
                 <!-- Modal Header -->
-                <div class="modal-header pb-0 border-0 justify-content-end">
-                    <h5 class="modal-title" id="editExportReceiptModalLabel">Chỉnh Sửa Phiếu Xuất</h5>
-                    <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal"
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="editExportReceiptModalLabel">Chỉnh Sửa Phiếu</h5>
+                    <button type="button" class="btn btn-sm btn-icon btn-dark" data-bs-dismiss="modal"
                         aria-label="Close">
                         X
                     </button>
@@ -483,36 +528,36 @@
                     <form action="" method="post">
                         <!-- Export Receipt Info -->
                         <div class="mb-5">
-                            <h5 class="text-primary">Thông tin phiếu xuất</h5>
+                            <h5 class="text-twitter mb-3">Thông tin phiếu</h5>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="editExportCode" class="form-label">Mã Phiếu Xuất:</label>
-                                        <input type="text" class="form-control" id="editExportCode" value="PX00019">
+                                        <label for="editExportCode" class="form-label">Mã Phiếu:</label>
+                                        <input type="text" class="form-control form-control-sm" id="editExportCode" value="PX00019">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="editExportNumber" class="form-label">Số Phiếu Xuất:</label>
-                                        <input type="text" class="form-control" id="editExportNumber" value="025">
+                                        <label for="editExportNumber" class="form-label">Số Phiếu:</label>
+                                        <input type="text" class="form-control form-control-sm" id="editExportNumber" value="025">
                                     </div>
                                     <div class="mb-3">
                                         <label for="editCustomer" class="form-label">Khách Hàng:</label>
-                                        <input type="text" class="form-control" id="editCustomer"
+                                        <input type="text" class="form-control form-control-sm" id="editCustomer"
                                             value="Nguyễn Văn A">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="editExportDate" class="form-label">Ngày Xuất:</label>
-                                        <input type="date" class="form-control" id="editExportDate"
+                                        <label for="editExportDate" class="form-label">Ngày:</label>
+                                        <input type="date" class="form-control form-control-sm" id="editExportDate"
                                             value="2024-08-26">
                                     </div>
                                     <div class="mb-3">
                                         <label for="editCreatedBy" class="form-label">Người Tạo:</label>
-                                        <input type="text" class="form-control" id="editCreatedBy" value="Nhật Huy">
+                                        <input type="text" class="form-control form-control-sm" id="editCreatedBy" value="Nhật Huy">
                                     </div>
                                     <div class="mb-3">
                                         <label for="editNote" class="form-label">Ghi Chú:</label>
-                                        <textarea class="form-control" id="editNote" rows="2">Hàng dễ vỡ</textarea>
+                                        <input class="form-control form-control-sm" id="editNote" rows="2" value="Hàng dễ vỡ">
                                     </div>
                                 </div>
                             </div>
@@ -520,30 +565,30 @@
 
                         <!-- Receipt Items -->
                         <div class="mb-5">
-                            <h5 class="text-primary">Danh sách vật tư</h5>
+                            <h5 class="text-twitter">Danh sách vật tư</h5>
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead>
-                                        <tr>
-                                            <th>Mã vật tư</th>
+                                        <tr class="fw-bold bg-success">
+                                            <th class="ps-4">Mã vật tư</th>
                                             <th>Số lượng</th>
                                             <th>Đơn giá</th>
                                             <th>Số lô</th>
                                             <th>Chiết khấu (%)</th>
                                             <th>VAT (%)</th>
                                             <th>Tổng giá</th>
-                                            <th>Hành động</th>
+                                            <th class="pe-3">Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody id="editItemsTableBody">
                                         <tr>
-                                            <td><input type="text" class="form-control" value="VT001"></td>
-                                            <td><input type="number" class="form-control" value="10"></td>
-                                            <td><input type="text" class="form-control" value="50,000 VND"></td>
-                                            <td><input type="text" class="form-control" value="L001"></td>
-                                            <td><input type="number" class="form-control" value="5"></td>
-                                            <td><input type="number" class="form-control" value="10"></td>
-                                            <td><input type="text" class="form-control" value="55,000 VND" readonly>
+                                            <td><input type="text" class="form-control form-control-sm" value="VT001" disabled></td>
+                                            <td><input type="number" class="form-control form-control-sm" value="10"></td>
+                                            <td><input type="text" class="form-control form-control-sm" value="50,000 VND"></td>
+                                            <td><input type="text" class="form-control form-control-sm" value="L001"></td>
+                                            <td><input type="number" class="form-control form-control-sm" value="5"></td>
+                                            <td><input type="number" class="form-control form-control-sm" value="10"></td>
+                                            <td><input type="text" class="form-control form-control-sm" value="55,000 VND" readonly>
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-danger btn-sm">Xóa</button>
@@ -553,7 +598,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <button type="button" class="btn btn-primary btn-sm">Thêm vật tư</button>
+                            <button type="button" class="btn btn-twitter btn-sm">Thêm vật tư</button>
                         </div>
 
                         <!-- Summary -->
@@ -583,8 +628,8 @@
 
                         <!-- Modal Footer -->
                         <div class="modal-footer border-0">
-                            <button type="submit" class="btn btn-success">Lưu Thay Đổi</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-sm btn-success">Lưu Thay Đổi</button>
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Hủy</button>
                         </div>
                     </form>
                 </div>

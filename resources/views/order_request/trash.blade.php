@@ -102,7 +102,7 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-sm btn-secondary"
                                                         data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="button" class="btn btn-sm btn-twitter">Xóa Vĩnh Viễn</button>
+                                                    <button type="button" class="btn btn-sm btn-danger">Xóa Vĩnh Viễn</button>
                                                 </div>
                                             </div>
                                         </div>

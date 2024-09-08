@@ -2,7 +2,6 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Include Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -113,263 +112,268 @@
 @endsection
 
 @section('content')
-    <!-- Phần form để form thêm vật tư -->
-    <form action="{{ route('warehouse.store_import') }}" method="post">
-        @csrf
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control me-3" placeholder="Nhập tên hoặc mã hàng hoá (F2)"
-                            aria-label="Search">
+    <div class="card mb-5 pb-5 mb-xl-8">
+        <div class="card-header border-0 pt-5">
+            <h3 class="card-title align-items-start flex-column">
+                <span class="card-label fw-bolder fs-3 mb-1">Tạo Phiếu Nhập Kho</span>
+            </h3>
 
-                        <button type="button" class="btn btn-sm btn-success me-3" data-bs-toggle="modal"
-                            data-bs-target="#importExcelModal">Nhập Excel</button>
+            <div class="card-toolbar">
+                <a href="{{ route('warehouse.import') }}" class="btn btn-sm btn-dark" style="font-size: 12px;"><i
+                        class="fa fa-arrow-left me-1"></i>Trở Lại</a>
+            </div>
+        </div>
+        <!-- Phần form để form thêm vật tư -->
+        <form action="{{ route('warehouse.store_import') }}" method="post">
+            @csrf
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control form-control-sm me-3"
+                                placeholder="Nhập tên hoặc mã vật tư" aria-label="Search">
+
+                            <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                data-bs-target="#importExcelModal" style="font-size: 12px;">Nhập Excel</button>
+                        </div>
                     </div>
 
-                </div>
-                <div class="col-md-8">
-                    <div class="bg-white p-3 rounded border shadow-sm">
-                        @if (true)
-                            <div class="row mb-3">
+                    <div class="col-8">
+                        <div class="mt-3">
+                            @if (true)
+                                <div class="row mb-3">
 
-                                <div class="col-6 mb-4">
-                                    <label for="unit_price" class="required form-label mb-2">Tên vật tư</label>
-                                    <input type="text"
-                                        class="form-control form-control-sm form-control-solid border border-success"
-                                        id="material_name" name="material_name" placeholder="Nhập tên vật tư">
+                                    <div class="col-6 mb-4">
+                                        <label for="unit_price" class="required form-label mb-2">Tên vật tư</label>
+                                        <input type="text"
+                                            class="form-control form-control-sm form-control-solid border border-success"
+                                            id="material_name" name="material_name" placeholder="Nhập tên vật tư">
+                                    </div>
+
+                                    <div class="col-6 mb-4">
+                                        <label for="unit_price" class="required form-label mb-2">Giá nhập</label>
+                                        <input type="text"
+                                            class="form-control form-control-sm form-control-solid border border-success"
+                                            id="unit_price" name="unit_price" placeholder="Nhập đơn giá">
+                                    </div>
+
+                                    <div class="col-6 mb-4">
+                                        <label for="quantity" class="required form-label mb-2">Số lượng</label>
+                                        <input type="number"
+                                            class="form-control form-control-sm form-control-solid border border-success"
+                                            id="quantity" name="quantity" placeholder="Nhập số lượng">
+                                    </div>
+
+                                    <div class="col-6 mb-4">
+                                        <label for="discount_rate" class="required form-label mb-2">Chiết khấu
+                                            (%)</label>
+                                        <input type="text"
+                                            class="form-control form-control-sm form-control-solid border border-success"
+                                            id="discount_rate" name="discount_rate" placeholder="Nhập chiết khấu (%)">
+                                    </div>
+
+                                    <div class="col-6 mb-4">
+                                        <label for="invoice_number" class="required form-label mb-2">Số hóa đơn</label>
+                                        <input type="number"
+                                            class="form-control form-control-sm form-control-solid border border-success"
+                                            id="invoice_number" name="invoice_number" placeholder="Nhập số hóa đơn">
+                                    </div>
+
+                                    <div class="col-6 mb-4">
+                                        <label for="invoice_symbol" class="required form-label mb-2">Kí hiệu hóa đơn
+                                        </label>
+                                        <input type="text"
+                                            class="form-control form-control-sm form-control-solid border border-success"
+                                            id="invoice_symbol" name="invoice_symbol" placeholder="Nhập kí hiệu hóa đơn">
+                                    </div>
+
+                                    <div class="col-6 mb-4">
+                                        <label for="vat_rate" class="required form-label mb-2">VAT (%)</label>
+                                        <input type="text"
+                                            class="form-control form-control-sm form-control-solid border border-success"
+                                            id="vat_rate" name="vat_rate" placeholder="Nhập VAT (%)">
+                                    </div>
+
+
+                                    <div class="col-6 mb-4">
+                                        <label for="batch_number" class="required form-label mb-2">Số lô</label>
+                                        <input type="text"
+                                            class="form-control form-control-sm form-control-solid border border-success"
+                                            id="batch_number" name="batch_number" placeholder="Nhập số lô">
+                                    </div>
+
+                                    <div class="col-6 mb-4">
+                                        <label for="product_date" class="required form-label mb-2">Ngày sản
+                                            xuất</label>
+                                        <input type="date"
+                                            class="form-control form-control-sm form-control-solid border border-success"
+                                            id="product_date" name="product_date">
+                                    </div>
+
+                                    <div class="col-6 mb-4">
+                                        <label for="expiry_date" class="form-label mb-2">Hạn sử dụng</label>
+                                        <input type="date"
+                                            class="form-control form-control-sm form-control-solid border border-success"
+                                            id="expiry_date" name="expiry_date">
+                                    </div>
                                 </div>
-
-                                <div class="col-6 mb-4">
-                                    <label for="unit_price" class="required form-label mb-2">Giá nhập</label>
-                                    <input type="text"
-                                        class="form-control form-control-sm form-control-solid border border-success"
-                                        id="unit_price" name="unit_price" placeholder="Nhập đơn giá">
+                            @else
+                                <div id="alertMessage" class="alert alert-warning text-center mb-3" role="alert">
+                                    Chưa có vật tư nào! Hãy nhập tên hoặc mã hàng vào ô tìm kiếm để tìm hàng cần nhập
                                 </div>
-
-                                <div class="col-6 mb-4">
-                                    <label for="quantity" class="required form-label mb-2">Số lượng</label>
-                                    <input type="number"
-                                        class="form-control form-control-sm form-control-solid border border-success"
-                                        id="quantity" name="quantity" placeholder="Nhập số lượng">
-                                </div>
-
-                                <div class="col-6 mb-4">
-                                    <label for="discount_rate" class="required form-label mb-2">Chiết khấu
-                                        (%)</label>
-                                    <input type="text"
-                                        class="form-control form-control-sm form-control-solid border border-success"
-                                        id="discount_rate" name="discount_rate" placeholder="Nhập chiết khấu (%)">
-                                </div>
-
-                                <div class="col-6 mb-4">
-                                    <label for="invoice_number" class="required form-label mb-2">Số hóa đơn</label>
-                                    <input type="number"
-                                        class="form-control form-control-sm form-control-solid border border-success"
-                                        id="invoice_number" name="invoice_number" placeholder="Nhập số hóa đơn">
-                                </div>
-
-                                <div class="col-6 mb-4">
-                                    <label for="invoice_symbol" class="required form-label mb-2">Kí hiệu hóa đơn
-                                    </label>
-                                    <input type="text"
-                                        class="form-control form-control-sm form-control-solid border border-success"
-                                        id="invoice_symbol" name="invoice_symbol" placeholder="Nhập kí hiệu hóa đơn">
-                                </div>
-
-                                <div class="col-6 mb-4">
-                                    <label for="vat_rate" class="required form-label mb-2">VAT (%)</label>
-                                    <input type="text"
-                                        class="form-control form-control-sm form-control-solid border border-success"
-                                        id="vat_rate" name="vat_rate" placeholder="Nhập VAT (%)">
-                                </div>
+                            @endif
+                        </div>
 
 
-                                <div class="col-6 mb-4">
-                                    <label for="batch_number" class="required form-label mb-2">Số lô</label>
-                                    <input type="text"
-                                        class="form-control form-control-sm form-control-solid border border-success"
-                                        id="batch_number" name="batch_number" placeholder="Nhập số lô">
-                                </div>
-
-                                <div class="col-6 mb-4">
-                                    <label for="product_date" class="required form-label mb-2">Ngày sản
-                                        xuất</label>
-                                    <input type="date"
-                                        class="form-control form-control-sm form-control-solid border border-success"
-                                        id="product_date" name="product_date">
-                                </div>
-
-                                <div class="col-6 mb-4">
-                                    <label for="expiry_date" class="form-label mb-2">Hạn sử dụng</label>
-                                    <input type="date"
-                                        class="form-control form-control-sm form-control-solid border border-success"
-                                        id="expiry_date" name="expiry_date">
-                                </div>
-                            </div>
-                        @else
-                            <div id="alertMessage" class="alert alert-warning text-center mb-3" role="alert">
-                                Chưa có hàng hoá nào! Hãy nhập tên hoặc mã hàng vào ô tìm kiếm để tìm hàng cần nhập
-                            </div>
-                        @endif
                     </div>
 
+                    <div class="col-4">
+                        <div class="card border-0 shadow p-4 mb-4 bg-white rounded-3 mt-3">
+                            <h6 class="mb-3 fw-bold text-primary">Thông tin phiếu nhập</h6>
 
+                            <div class="mb-3">
+                                <label for="supplierName" class="form-label fw-semibold" style="white-space: nowrap;">Nhà
+                                    cung cấp</label>
+                                <div class="d-flex align-items-center">
+                                    <select id="supplierName" class="form-select setupSelect2" style="max-width: 80%;">
+                                        <option value="">Chọn nhà cung cấp</option>
+                                        <option value="supplier1">Nhà cung cấp 1</option>
+                                        <option value="supplier2">Nhà cung cấp 2</option>
+                                    </select>
+
+                                    <button type="button" class="fa fa-plus btn btn-sm btn-twitter ms-2"
+                                        data-bs-toggle="modal" data-bs-target="#addSupplierModal">
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="date" class="form-label fw-semibold">Ngày nhập</label>
+                                <input type="date" id="date" class="form-control form-control-sm">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="notes" class="form-label fw-semibold">Ghi chú</label>
+                                <textarea id="notes" class="form-control form-control-sm" placeholder="Nhập ghi chú..." rows="3"></textarea>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <button type="submit" class="btn btn-sm btn-danger w-100">Thêm vật tư</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Danh sách vật tư đã thêm -->
+        <form action="/home" method="post" class="mt-2">
+            <div class="row container">
+                <div class="col-9">
+                    <div class="d-flex justify-content-between align-items-center mb-4 header-container">
+                        <h3 class="mb-0 header-text">Danh sách vật tư y tế</h3>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="ps-4">Tên vật tư</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá nhập</th>
+                                    <th>Số lô</th>
+                                    <th>Hạn dùng</th>
+                                    <th>CK(%)</th>
+                                    <th>VAT(%)</th>
+                                    <th>Trước VAT</th>
+                                    <th class="pe-3">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Khẩu trang y tế</td>
+                                    <td>500</td>
+                                    <td>1,000</td>
+                                    <td>KT001</td>
+                                    <td>2025-06-30</td>
+                                    <td>0</td>
+                                    <td>5</td>
+                                    <td>500,000</td>
+                                    <td>525,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Găng tay phẫu thuật</td>
+                                    <td>300</td>
+                                    <td>3,500</td>
+                                    <td>GT123</td>
+                                    <td>2024-08-15</td>
+                                    <td>2</td>
+                                    <td>10</td>
+                                    <td>1,029,000</td>
+                                    <td>1,131,900</td>
+                                </tr>
+                                <tr>
+                                    <td>Bộ dụng cụ phẫu thuật</td>
+                                    <td>50</td>
+                                    <td>20,000</td>
+                                    <td>BD456</td>
+                                    <td>2026-01-20</td>
+                                    <td>1</td>
+                                    <td>8</td>
+                                    <td>990,000</td>
+                                    <td>1,069,200</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-3 pe-0">
                     <div class="card border-0 shadow p-4 mb-4 bg-white rounded-3">
-                        <h6 class="mb-3 fw-bold text-primary">Thông tin phiếu nhập</h6>
-
-                        <div class="mb-3 d-flex align-items-center">
-                            <label for="supplierName" class="form-label fw-semibold me-2 mb-0"
-                                style="white-space: nowrap;">Nhà cung cấp</label>
-                            <select id="supplierName" class="form-select setupSelect2 flex-grow-1"
-                                style="max-width: 70%; height: 40px;">
-                                <option value="">Chọn nhà cung cấp</option>
-                                <option value="supplier1">Nhà cung cấp 1</option>
-                                <option value="supplier2">Nhà cung cấp 2</option>
-                            </select>
-
-                            <button type="button"
-                                class="btn btn-primary ms-2 d-flex justify-content-center align-items-center"
-                                data-bs-toggle="modal" data-bs-target="#addSupplierModal"
-                                style="width: 40px; height: 28px; background-color: #007bff; border-color: #007bff; padding: 0;">
-                                <i class="fa fa-plus"></i>
-                            </button>
+                        <h6 class="mb-3 fw-bold text-primary">Thông tin thanh toán</h6>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="fw-semibold">Tổng chiết khấu</span>
+                            <span class="fw-semibold text-danger">0₫</span>
                         </div>
 
-
-
-                        <div class="mb-3">
-                            <label for="date" class="form-label fw-semibold">Ngày nhập</label>
-                            <input type="date" id="date" class="form-control">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="fw-semibold">Tổng VAT</span>
+                            <span class="fw-semibold text-danger">0₫</span>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="notes" class="form-label fw-semibold">Ghi chú</label>
-                            <textarea id="notes" class="form-control" placeholder="Nhập ghi chú..." rows="3"></textarea>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="fw-semibold">Tổng cộng</span>
+                            <span class="fw-semibold text-danger">0₫</span>
                         </div>
 
                         <hr class="my-4">
 
-                        <button type="submit" class="btn btn-sm btn-danger w-100">Thêm vật tư</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-
-    <!-- Danh sách vật tư đã thêm -->
-    <form action="/home" method="post">
-        <div class="row mt-1">
-            <div class="col-md-8">
-                <div class="d-flex justify-content-between align-items-center mb-4 header-container">
-                    <h3 class="mb-0 header-text">Danh sách vật tư y tế</h3>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Tên vật tư</th>
-                                <th>Số lượng</th>
-                                <th>Giá nhập</th>
-                                <th>Số lô</th>
-                                <th>Hạn dùng</th>
-                                <th>CK(%)</th>
-                                <th>VAT(%)</th>
-                                <th>Trước VAT</th>
-                                <th>Thành tiền</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Khẩu trang y tế</td>
-                                <td>500</td>
-                                <td>1,000</td>
-                                <td>KT001</td>
-                                <td>2025-06-30</td>
-                                <td>0</td>
-                                <td>5</td>
-                                <td>500,000</td>
-                                <td>525,000</td>
-                            </tr>
-                            <tr>
-                                <td>Găng tay phẫu thuật</td>
-                                <td>300</td>
-                                <td>3,500</td>
-                                <td>GT123</td>
-                                <td>2024-08-15</td>
-                                <td>2</td>
-                                <td>10</td>
-                                <td>1,029,000</td>
-                                <td>1,131,900</td>
-                            </tr>
-                            <tr>
-                                <td>Bộ dụng cụ phẫu thuật</td>
-                                <td>50</td>
-                                <td>20,000</td>
-                                <td>BD456</td>
-                                <td>2026-01-20</td>
-                                <td>1</td>
-                                <td>8</td>
-                                <td>990,000</td>
-                                <td>1,069,200</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card border-0 shadow p-4 mb-4 bg-white rounded-3">
-                    <h6 class="mb-3 fw-bold text-primary">Thông tin thanh toán</h6>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="fw-semibold">Tổng chiết khấu</span>
-                        <span class="fw-semibold text-danger">0₫</span>
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="fw-semibold">Tổng VAT</span>
-                        <span class="fw-semibold text-danger">0₫</span>
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="fw-semibold">Tổng cộng</span>
-                        <span class="fw-semibold text-danger">0₫</span>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <div class="mb-3">
-                        <h6 class="mb-2 fw-bold text-primary">Phương thức thanh toán</h6>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="cashPayment"
-                                    value="cash">
+                        <div class="mb-3">
+                            <h6 class="mb-3 fw-bold text-primary">Phương thức thanh toán</h6>
+                            <div class="form-check my-3">
+                                <input class="form-check-input mt-1" type="radio" name="paymentMethod"
+                                    id="cashPayment" value="cash">
                                 <label class="form-check-label" for="cashPayment">
                                     <i class="fas fa-money-bill-wave text-success me-2"></i>Tiền mặt
                                 </label>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer"
-                                    value="transfer">
+                            <div class="form-check">
+                                <input class="form-check-input mt-1" type="radio" name="paymentMethod"
+                                    id="bankTransfer" value="transfer">
                                 <label class="form-check-label" for="bankTransfer">
                                     <i class="fas fa-university text-primary me-2"></i>Chuyển khoản
                                 </label>
                             </div>
                         </div>
+
+                        <hr class="my-4">
+
+                        <button type="submit" class="btn btn-sm btn-success w-100">Tạo phiếu nhập</button>
                     </div>
-
-                    <hr class="my-4">
-
-                    <button type="submit" class="btn btn-sm btn-success w-100">Tạo phiếu nhập</button>
                 </div>
             </div>
-        </div>
-    </form>
-
+        </form>
+    </div>
 
     <!-- Modal nhập excel -->
     <div class="modal fade" id="importExcelModal" tabindex="-1" aria-labelledby="importExcelModalLabel"
@@ -411,9 +415,9 @@
 
                     <!-- File Upload Section -->
                     <div class="border border-2 rounded-3 p-4 text-center bg-light" style="border-style: dashed;">
-                        <label for="excelFile" class="form-label fw-semibold text-secondary">
+                        <label for="excelFile" class="form-label fw-semibold pointer">
                             <i class="fa-solid fa-file-excel fa-2x text-success mb-3"></i><br>
-                            <span>Kéo thả hoặc click vào để chọn file Excel</span>
+                            <span class="text-dark">Kéo thả hoặc click vào để chọn file Excel</span>
                         </label>
                         <input type="file" id="excelFile" class="form-control d-none" accept=".xls,.xlsx">
                     </div>
@@ -439,42 +443,44 @@
                     <!-- Supplier Form -->
                     <form id="supplierForm">
                         <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <label for="supplierNameInput" class="form-label fw-semibold text-secondary">Tên nhà cung
+                            <div class="col-6 mb-4">
+                                <label for="supplierNameInput" class="form-label fw-semibold">Tên nhà cung
                                     cấp*</label>
-                                <input type="text" id="supplierNameInput" class="form-control border rounded-3"
-                                    placeholder="Nhập tên nhà cung cấp" required>
+                                <input type="text" id="supplierNameInput"
+                                    class="form-control form-control-sm border border-success"
+                                    placeholder="Nhập tên nhà cung cấp">
                             </div>
-                            <div class="col-md-6 mb-4">
-                                <label for="supplierPhone" class="form-label fw-semibold text-secondary">Số điện
+                            <div class="col-6 mb-4">
+                                <label for="supplierPhone" class="form-label fw-semibold">Số điện
                                     thoại</label>
-                                <input type="text" id="supplierPhone" class="form-control border rounded-3"
+                                <input type="text" id="supplierPhone"
+                                    class="form-control form-control-sm border border-success"
                                     placeholder="Số điện thoại">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <label for="supplierAddress" class="form-label fw-semibold text-secondary">Địa chỉ</label>
-                                <input type="text" id="supplierAddress" class="form-control border rounded-3"
-                                    placeholder="Địa chỉ">
+                            <div class="col-6 mb-4">
+                                <label for="supplierAddress" class="form-label fw-semibold">Địa chỉ</label>
+                                <input type="text" id="supplierAddress"
+                                    class="form-control form-control-sm border border-success" placeholder="Địa chỉ">
                             </div>
-                            <div class="col-md-6 mb-4">
-                                <label for="contactPerson" class="form-label fw-semibold text-secondary">Người liên
+                            <div class="col-6 mb-4">
+                                <label for="contactPerson" class="form-label fw-semibold">Người liên
                                     hệ</label>
-                                <input type="text" id="contactPerson" class="form-control border rounded-3"
+                                <input type="text" id="contactPerson"
+                                    class="form-control form-control-sm border border-success"
                                     placeholder="Người liên hệ">
                             </div>
                         </div>
                         <div class="mb-4">
-                            <label for="notes" class="form-label fw-semibold text-secondary">Ghi chú</label>
-                            <textarea id="notes" class="form-control border rounded-3" placeholder="Ghi chú"></textarea>
+                            <label for="notes" class="form-label fw-semibold">Ghi chú</label>
+                            <textarea id="notes" class="form-control form-control-sm border border-success" placeholder="Ghi chú"></textarea>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer bg-light border-0">
-                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4"
-                        data-bs-dismiss="modal">Huỷ</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4" form="supplierForm">Lưu</button>
+                    <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Huỷ</button>
+                    <button type="submit" class="btn btn-sm btn-twitter px-4" form="supplierForm">Lưu</button>
                 </div>
             </div>
         </div>

@@ -55137,3 +55137,47 @@ tr th {
 .pointer {
     cursor: pointer;
 }
+
+input[type=date] {
+    text-transform: lowercase !important;
+}
+
+textarea::placeholder {
+    color: #b1b3ba !important;
+}
+
+input::placeholder {
+    color: #b1b3ba !important;
+}
+
+input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #b1b3ba !important;
+}
+
+input::-ms-input-placeholder { /* Microsoft Edge */
+    color: #b1b3ba !important;
+}
+
+.form-control,
+p,
+a,
+span,
+label,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button {
+    text-transform: capitalize !important;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.form-check-input {
+    width: 15px !important;
+    height: 15px !important;
+}

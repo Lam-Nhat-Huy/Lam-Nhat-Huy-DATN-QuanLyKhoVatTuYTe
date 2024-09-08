@@ -1,9 +1,87 @@
 @extends('master_layout.layout')
 
 @section('styles')
+    <style>
+        .hover-table:hover {
+            background: #ccc;
+        }
+
+        .selected-row {
+            background: #ddd;
+        }
+
+        .active-row {
+            background: #d1c4e9;
+            /* Màu nền khi hàng được nhấp vào */
+        }
+    </style>
 @endsection
 
 @section('scripts')
+    <script>
+        document.getElementById('selectAll').addEventListener('change', function() {
+            var isChecked = this.checked;
+            var checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = isChecked;
+                var row = checkbox.closest('tr');
+                if (isChecked) {
+                    row.classList.add('selected-row');
+                } else {
+                    row.classList.remove('selected-row');
+                }
+            });
+        });
+
+        document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                var row = this.closest('tr');
+                if (this.checked) {
+                    row.classList.add('selected-row');
+                } else {
+                    row.classList.remove('selected-row');
+                }
+
+                var allChecked = true;
+                document.querySelectorAll('.row-checkbox').forEach(function(cb) {
+                    if (!cb.checked) {
+                        allChecked = false;
+                    }
+                });
+                document.getElementById('selectAll').checked = allChecked;
+            });
+        });
+
+        document.querySelectorAll('tbody tr').forEach(function(row) {
+            row.addEventListener('click', function() {
+                var checkbox = this.querySelector('.row-checkbox');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                    if (checkbox.checked) {
+                        this.classList.add('selected-row');
+                    } else {
+                        this.classList.remove('selected-row');
+                    }
+
+                    var allChecked = true;
+                    document.querySelectorAll('.row-checkbox').forEach(function(cb) {
+                        if (!cb.checked) {
+                            allChecked = false;
+                        }
+                    });
+                    document.getElementById('selectAll').checked = allChecked;
+                }
+            });
+        });
+
+        document.getElementById('printPdfBtn').addEventListener('click', function() {
+            var printContents = document.getElementById('printArea').innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        });
+    </script>
 @endsection
 
 @section('title')
@@ -75,10 +153,13 @@
         </div>
         <div class="card-body py-3">
             <div class="table-responsive">
-                <table class="table table-striped align-middle gs-0 gy-4">
+                <table class="table align-middle gs-0 gy-4">
                     <thead>
                         <tr class="fw-bolder bg-success">
-                            <th class="ps-4">Mã Báo Cáo</th>
+                            <th class="ps-4">
+                                <input type="checkbox" id="selectAll" />
+                            </th>
+                            <th class="">Mã Báo Cáo</th>
                             <th class="">Người Báo Cáo</th>
                             <th class="">Nội Dung Báo Cáo</th>
                             <th class="">Loại Báo Cáo</th>
@@ -89,7 +170,10 @@
                     </thead>
                     <tbody>
                         @foreach ($AllReport as $item)
-                            <tr class="text-center">
+                            <tr class="text-center hover-table pointer">
+                                <td>
+                                    <input type="checkbox" class="row-checkbox" />
+                                </td>
                                 <td>
                                     #{{ $item['code'] }}
                                 </td>
@@ -103,9 +187,10 @@
                                     {{ $item['report_type_id'] }}
                                 </td>
                                 <td>
-                                    <strong style="cursor: pointer; color: rgb(33, 64, 178);"
-                                        download="{{ $item['file'] }}">Tải
-                                        Xuống</strong>
+                                    <strong class="pointer" style="color: rgb(33, 64, 178);"
+                                        download="{{ $item['file'] }}">
+                                        <i class="fa fa-download me-1"></i>Tải Xuống
+                                    </strong>
                                 </td>
                                 <td>
                                     @if ($item['status'] == 1)
@@ -187,7 +272,7 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-sm btn-secondary"
                                                         data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="button" class="btn btn-sm btn-twitter">Xóa</button>
+                                                    <button type="button" class="btn btn-sm btn-danger">Xóa</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -197,6 +282,73 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        <div class="card-body py-3">
+            <div class="dropdown">
+                <span class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <span>Chọn Thao Tác</span>
+                </span>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#confirmAll">
+                            <i class="fas fa-clipboard-check me-2 text-success"></i>Duyệt Tất Cả</a>
+                    </li>
+                    <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#deleteAll">
+                            <i class="fas fa-trash me-2 text-danger"></i>Xóa Tất Cả</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal Duyệt Tất Cả --}}
+    <div class="modal fade" id="confirmAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="confirmAll" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title text-white" id="confirmAll">Duyệt Tất Cả báo cáo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" style="padding-bottom: 0px;">
+                    <form action="" method="">
+                        @csrf
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt tất cả báo cáo đã chọn?</p>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center border-0">
+                    <button type="button" class="btn btn-sm btn-secondary btn-sm px-4"
+                        data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-success px-4">
+                        Duyệt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal Xác Nhận Xóa Tất Cả --}}
+    <div class="modal fade" id="deleteAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="deleteAllLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Xóa Tất Cả báo cáo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" style="padding-bottom: 0px;">
+                    <form action="" method="">
+                        @csrf
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả báo cáo đã chọn?</p>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center border-0">
+                    <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-success px-4"> Xóa</button>
+                </div>
             </div>
         </div>
     </div>
