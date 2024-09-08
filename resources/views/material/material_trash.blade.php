@@ -32,7 +32,6 @@
                             <th class="">Tên</th>
                             <th class="">Nhóm</th>
                             <th class="">Đơn Vị Tính</th>
-                            <th class="" style="width: 200px;">Mô Tả</th>
                             <th class="">Hạn Sử Dụng</th>
                             <th>Hành Động</th>
                         </tr>
@@ -44,7 +43,7 @@
                                     #{{ $item['material_code'] }}
                                 </td>
                                 <td>
-                                    <img src="{{ $item['material_image'] }}" width="100" alt="">
+                                    <img src="{{ $item['material_image'] }}" width="50" alt="">
                                 </td>
                                 <td>
                                     {{ $item['material_name'] }}
@@ -54,9 +53,6 @@
                                 </td>
                                 <td>
                                     {{ $item['unit_id'] }}
-                                </td>
-                                <td>
-                                    {{ $item['description'] }}
                                 </td>
                                 <td>
                                     {{ $item['expiry'] > 0 ? $item['expiry'] . ' Tháng' : 'Không Có' }}

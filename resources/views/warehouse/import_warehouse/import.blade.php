@@ -341,8 +341,9 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="button-delete btn-sm px-4" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="button px-4">
+                    <button type="button" class="btn btn-sm btn-danger btn-sm px-4"
+                        data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-success px-4">
                         Duyệt</button>
                 </div>
             </div>
@@ -366,8 +367,8 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="button px-4" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="button-delete px-4"> Xóa</button>
+                    <button type="button" class="btn btn-sm btn-danger px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-success px-4"> Xóa</button>
                 </div>
             </div>
         </div>
@@ -533,7 +534,6 @@
             });
         });
 
-        // Add click event to rows
         document.querySelectorAll('tbody tr').forEach(function(row) {
             row.addEventListener('click', function() {
                 var checkbox = this.querySelector('.row-checkbox');

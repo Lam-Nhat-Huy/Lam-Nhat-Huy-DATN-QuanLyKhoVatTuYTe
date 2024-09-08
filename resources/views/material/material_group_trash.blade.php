@@ -78,8 +78,8 @@
                                     </div>
 
                                     <button class="btn btn-sm btn-danger mb-1 mt-1" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal_{{ $item['id'] }}"><i
-                                            class="fa fa-trash"></i>Xóa Vĩnh Viễn</button>
+                                        data-bs-target="#deleteModal_{{ $item['id'] }}"><i class="fa fa-trash"></i>Xóa
+                                        Vĩnh Viễn</button>
 
                                     <div class="modal fade" id="deleteModal_{{ $item['id'] }}" data-bs-backdrop="static"
                                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
