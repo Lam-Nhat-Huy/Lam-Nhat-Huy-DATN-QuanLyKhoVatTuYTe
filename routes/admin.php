@@ -16,7 +16,7 @@ Route::prefix('system')->group(function () {
         'admin/supplier.php',
         'admin/profile.php',
         'admin/material.php',
-        'admin/order_request.php',
+        'admin/material_request.php',
         'admin/notification.php',
         'admin/user.php',
         'admin/inventory.php'

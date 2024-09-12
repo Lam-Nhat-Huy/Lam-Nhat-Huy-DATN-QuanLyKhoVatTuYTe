@@ -9,11 +9,11 @@
 
 @php
     if ($action == 'create') {
-        $action = route('order_request.create');
+        $action = route('material_request.store_import');
 
         $button_text = 'Tạo';
     } else {
-        $action = route('order_request.edit');
+        $action = route('material_request.edit_import');
 
         $button_text = 'Cập Nhật';
     }
@@ -28,7 +28,7 @@
                     <span class="card-label fw-bolder fs-3 mb-1">{{ $title_form }}</span>
                 </h3>
                 <div class="card-toolbar">
-                    <a href="{{ route('order_request.index') }}" class="btn btn-sm btn-dark">
+                    <a href="{{ route('material_request.import') }}" class="btn btn-sm btn-dark">
                         <span class="align-items-center d-flex">
                             <i class="fa fa-arrow-left me-1"></i>
                             Trở Lại
@@ -101,7 +101,7 @@
 
                             <input type="text"
                                 class="form-control form-control-sm form-control-solid border border-success"
-                                placeholder="Nhập Ghi Chú Cho Đơn Đặt Hàng.." name="last-name" />
+                                placeholder="Nhập ghi chú cho phiếu yêu cầu nhập.." name="last-name" />
 
                         </div>
 

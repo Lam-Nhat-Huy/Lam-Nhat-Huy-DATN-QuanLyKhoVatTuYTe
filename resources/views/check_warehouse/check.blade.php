@@ -103,7 +103,7 @@
                         <tr class="collapse multi-collapse" id="show-collapse">
                             <td class="p-0" colspan="12"
                                 style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
-                                <div class="flex-lg-row-fluid order-2 order-lg-1">
+                                <div class="flex-lg-row-fluid border-2 border-lg-1">
                                     <div class="card card-flush p-2 mb-3"
                                         style="padding-top: 0px !important; padding-bottom: 0px !important;">
                                         <div class="card-header d-flex justify-content-between align-items-center p-2"

@@ -76,9 +76,7 @@
                     </thead>
                     <tbody>
                         @for ($i = 0; $i < 6; $i++)
-                            <tr class="text-center hover-table pointer" data-bs-toggle="collapse"
-                                data-bs-target="#collapse{{ $i }}" aria-expanded="false"
-                                aria-controls="collapse{{ $i }}">
+                            <tr class="text-center hover-table pointer" data-bs-toggle="collapse" aria-expanded="false">
                                 <td>Caxium (Hộp 6 vỉ x 30 viên)</td>
                                 <td>Dược phẩm</td>
                                 <td>Vitamin - khoáng chất</td>
@@ -89,7 +87,7 @@
                             <tr class="collapse multi-collapse" id="collapse{{ $i }}">
                                 <td class="p-0" colspan="12"
                                     style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
-                                    <div class="flex-lg-row-fluid order-2 order-lg-1">
+                                    <div class="flex-lg-row-fluid border-2 border-lg-1">
                                         <div class="card card-flush p-2"
                                             style="padding-top: 0px !important; padding-bottom: 0px !important;">
                                             <div class="card-header d-flex justify-content-between align-items-center p-2"

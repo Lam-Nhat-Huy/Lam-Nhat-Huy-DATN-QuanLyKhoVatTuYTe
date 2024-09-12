@@ -123,15 +123,39 @@ return [
         ],
         [
             'user_role' => [],
-            'title' => 'Yêu Cầu Đặt Hàng',
+            'title' => 'Yêu Cầu Nhập Xuất',
             'icon' => 'fa fa-bell-concierge',
-            'route' => ['order_request.index', 'order_request.order_request_trash', 'order_request.insert_order_request', 'order_request.update_order_request'],
+            'route' => [
+                'material_request.import',
+                'material_request.export',
+                'material_request.import_trash',
+                'material_request.create_import',
+                'material_request.update_import',
+                'material_request.export_trash',
+                'material_request.create_export',
+                'material_request.update_export',
+            ],
             'subModule' => [
                 [
-                    'title' => 'Danh Sách Yêu Cầu',
-                    'route' => 'order_request.index',
-                    'route_action' => ['order_request.order_request_trash', 'order_request.insert_order_request', 'order_request.update_order_request'],
-                    'icon' => 'fa fa-rectangle-list',
+                    'title' => 'Yêu Cầu Nhập',
+                    'route' => 'material_request.import',
+                    'route_action' => [
+                        'material_request.import_trash',
+                        'material_request.create_import',
+                        'material_request.update_import',
+                    ],
+                    'icon' => 'fa fa-upload',
+                    'user_role' => []
+                ],
+                [
+                    'title' => 'Yêu Cầu Xuất',
+                    'route' => 'material_request.export',
+                    'route_action' => [
+                        'material_request.export_trash',
+                        'material_request.create_export',
+                        'material_request.update_export',
+                    ],
+                    'icon' => 'fa fa-download',
                     'user_role' => []
                 ],
             ]

@@ -23,6 +23,29 @@
 
 @section('scripts')
     <script>
+        // Đổi biểu tượng khi bấm vào td có chứa chevron
+        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(td) {
+            td.addEventListener('click', function(event) {
+                // Tìm phần tử <i> bên trong <td>
+                var icon = this.querySelector('i');
+
+                // Kiểm tra nếu có <i> thì thực hiện đổi biểu tượng
+                if (icon) {
+                    // Đổi icon khi click
+                    if (icon.classList.contains('fa-chevron-right')) {
+                        icon.classList.remove('fa-chevron-right');
+                        icon.classList.add('fa-chevron-down');
+                    } else {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-right');
+                    }
+                }
+
+                // Ngăn chặn việc click ảnh hưởng đến hàng (row)
+                event.stopPropagation();
+            });
+        });
+
         document.getElementById('selectAll').addEventListener('change', function() {
             var isChecked = this.checked;
             var checkboxes = document.querySelectorAll('.row-checkbox');
@@ -77,14 +100,6 @@
                 }
             });
         });
-
-        document.getElementById('printPdfBtn').addEventListener('click', function() {
-            var printContents = document.getElementById('printArea').innerHTML;
-            var originalContents = document.body.innerHTML;
-            document.body.innerHTML = printContents;
-            window.print();
-            document.body.innerHTML = originalContents;
-        });
     </script>
 @endsection
 
@@ -115,9 +130,7 @@
                     <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
                         <option value="" selected>--Theo Vai Trò--</option>
                         <option value="">Admin</option>
-                        <option value="">Kho</option>
-                        <option value="">Kế Toán</option>
-                        <option value="">Mua Hàng</option>
+                        <option value="">Nhân Viên</option>
                     </select>
                 </div>
                 <div class="col-4">
@@ -150,12 +163,14 @@
                                 <input type="checkbox" id="selectAll" />
                             </th>
                             <th class="">Mã Người Dùng</th>
+                            <th class="">Ảnh Đại Diện</th>
                             <th class="">Tên</th>
                             <th class="">Email</th>
                             <th class="">Số Điện Thoại</th>
                             <th class="" style="width: 120px !important;">Vai Trò</th>
                             <th class="" style="width: 120px !important;">Trạng Thái</th>
-                            <th class="pe-3">Hành Động</th>
+                            <th class="">Hành Động</th>
+                            <th class="pe-3" style="width: 60px !important;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -166,6 +181,10 @@
                                 </td>
                                 <td>
                                     #ND007
+                                </td>
+                                <td>
+                                    <img src="https://i.pinimg.com/736x/64/30/1c/64301c42f058143fbc4a313e05aa0bbe.jpg"
+                                        width="75" alt="">
                                 </td>
                                 <td>
                                     Lữ Phát Huy
@@ -179,10 +198,8 @@
                                 <td>
                                     @if ($i == 0)
                                         <div class="rounded px-2 py-1 text-white bg-danger" title="">Admin</div>
-                                    @elseif ($i == 1)
-                                        <div class="rounded px-2 py-1 text-white bg-dark" title="">Kho</div>
                                     @else
-                                        <div class="rounded px-2 py-1 text-white bg-info" title="">Mua Hàng</div>
+                                        <div class="rounded px-2 py-1 text-white bg-primary" title="">Nhân Viên</div>
                                     @endif
                                 </td>
                                 <td>
@@ -239,7 +256,79 @@
                                         </div>
                                     </div>
                                 </td>
+                                <td class="text-center" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse{{ $i }}" id="toggleIcon{{ $i }}">
+                                    @if ($i !== 0)
+                                        <i class="fa fa-chevron-right pointer">
+                                        </i>
+                                    @endif
+                                </td>
                             </tr>
+
+                            @if ($i > 0)
+                                <tr class="collapse multi-collapse" id="collapse{{ $i }}">
+                                    <td class="p-0" colspan="12"
+                                        style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
+                                        <div class="flex-lg-row-fluid border-2 border-lg-1">
+                                            <div class="card card-flush p-2"
+                                                style="padding-top: 0px !important; padding-bottom: 0px !important;">
+                                                <div class="card-header d-flex justify-content-between align-items-center p-2"
+                                                    style="padding-top: 0 !important; padding-bottom: 0px !important;">
+                                                    <h4 class="fw-bold m-0">Thông Tin Nhân Viên</h4>
+                                                    <div class="card-toolbar">
+                                                        @if ($i > 1)
+                                                            <div class="rounded px-2 py-1 text-white bg-danger">
+                                                                Nhân Viên Kho
+                                                            </div>
+                                                        @else
+                                                            <div class="rounded px-2 py-1 text-white bg-success">
+                                                                Nhân Viên Mua Hàng
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="card-body p-2" style="padding-top: 0px !important">
+                                                    <div class="row py-5" style="padding-top: 0px !important">
+                                                        <!-- Begin::Receipt Info (Left column) -->
+                                                        <div class="col-md-4">
+                                                            <table class="table table-flush gy-1">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class=""><strong>Họ Và Tên</strong>
+                                                                        </td>
+                                                                        <td class="text-gray-800">Lữ Phát Huy</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class=""><strong>Giới Tính</strong>
+                                                                        </td>
+                                                                        <td class="text-gray-800">Nam</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class=""><strong>Năm Sinh</strong>
+                                                                        </td>
+                                                                        <td class="text-gray-800">2004</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class=""><strong>Địa Chỉ</strong>
+                                                                        </td>
+                                                                        <td class="text-gray-800">Kiên Giang</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class=""><strong>Căn Cước Công
+                                                                                Dân</strong>
+                                                                        </td>
+                                                                        <td class="text-gray-800">091204002629</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
                         @endfor
                     </tbody>
                 </table>
