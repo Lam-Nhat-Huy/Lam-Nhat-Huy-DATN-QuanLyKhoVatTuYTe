@@ -162,15 +162,11 @@
                             <th class="ps-4">
                                 <input type="checkbox" id="selectAll" />
                             </th>
-                            <th class="">Mã Người Dùng</th>
-                            <th class="">Ảnh Đại Diện</th>
-                            <th class="">Tên</th>
-                            <th class="">Email</th>
-                            <th class="">Số Điện Thoại</th>
-                            <th class="" style="width: 120px !important;">Vai Trò</th>
-                            <th class="" style="width: 120px !important;">Trạng Thái</th>
-                            <th class="">Hành Động</th>
-                            <th class="pe-3" style="width: 60px !important;"></th>
+                            <th class="" style="width: 20% !important;">Mã Người Dùng</th>
+                            <th class="" style="width: 25% !important;">Email</th>
+                            <th class="" style="width: 25% !important;">Số Điện Thoại</th>
+                            <th class="" style="width: 15% !important;">Trạng Thái</th>
+                            <th class="pe-3" style="width: 15% !important;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -183,24 +179,10 @@
                                     #ND007
                                 </td>
                                 <td>
-                                    <img src="https://i.pinimg.com/736x/64/30/1c/64301c42f058143fbc4a313e05aa0bbe.jpg"
-                                        width="75" alt="">
-                                </td>
-                                <td>
-                                    Lữ Phát Huy
-                                </td>
-                                <td>
                                     lphdev04@gmail.com
                                 </td>
                                 <td>
                                     0945567048
-                                </td>
-                                <td>
-                                    @if ($i == 0)
-                                        <div class="rounded px-2 py-1 text-white bg-danger" title="">Admin</div>
-                                    @else
-                                        <div class="rounded px-2 py-1 text-white bg-primary" title="">Nhân Viên</div>
-                                    @endif
                                 </td>
                                 <td>
                                     @if ($i > 2)
@@ -209,126 +191,116 @@
                                         <div class="rounded px-2 py-1 text-white bg-success">Có</div>
                                     @endif
                                 </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" data-bs-toggle="dropdown">
-                                            <i class="fa fa-ellipsis-h me-2"></i>
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
-                                            <li>
-                                                <a class="dropdown-item" href="{{ route('user.edit') }}">
-                                                    <i class="fa fa-edit me-1"></i>Sửa
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item pointer" data-bs-toggle="modal"
-                                                    data-bs-target="#deleteModal_{{ $i }}">
-                                                    <i class="fa fa-trash me-1"></i>Xóa
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    {{-- Xóa --}}
-                                    <div class="modal fade" id="deleteModal_{{ $i }}" data-bs-backdrop="static"
-                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h3 class="modal-title" id="deleteModalLabel">Xóa Người Dùng
-                                                    </h3>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="" method="">
-                                                        @csrf
-                                                        <h4 class="text-danger">Xóa Người Dùng Này?</h4>
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-sm btn-secondary"
-                                                        data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="button" class="btn btn-sm btn-danger">Xóa</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
                                 <td class="text-center" data-bs-toggle="collapse"
                                     data-bs-target="#collapse{{ $i }}" id="toggleIcon{{ $i }}">
-                                    @if ($i !== 0)
-                                        <i class="fa fa-chevron-right pointer">
-                                        </i>
-                                    @endif
+                                    <i class="fa fa-chevron-right pointer">
+                                    </i>
                                 </td>
                             </tr>
 
-                            @if ($i > 0)
-                                <tr class="collapse multi-collapse" id="collapse{{ $i }}">
-                                    <td class="p-0" colspan="12"
-                                        style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
-                                        <div class="flex-lg-row-fluid border-2 border-lg-1">
-                                            <div class="card card-flush p-2"
-                                                style="padding-top: 0px !important; padding-bottom: 0px !important;">
-                                                <div class="card-header d-flex justify-content-between align-items-center p-2"
-                                                    style="padding-top: 0 !important; padding-bottom: 0px !important;">
-                                                    <h4 class="fw-bold m-0">Thông Tin Nhân Viên</h4>
-                                                    <div class="card-toolbar">
-                                                        @if ($i > 1)
-                                                            <div class="rounded px-2 py-1 text-white bg-danger">
-                                                                Nhân Viên Kho
-                                                            </div>
-                                                        @else
-                                                            <div class="rounded px-2 py-1 text-white bg-success">
-                                                                Nhân Viên Mua Hàng
-                                                            </div>
-                                                        @endif
-                                                    </div>
+                            <tr class="collapse multi-collapse" id="collapse{{ $i }}">
+                                <td class="p-0" colspan="12"
+                                    style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
+                                    <div class="flex-lg-row-fluid border-2 border-lg-1">
+                                        <div class="card card-flush p-2"
+                                            style="padding-top: 0px !important; padding-bottom: 0px !important;">
+                                            <div class="card-header d-flex justify-content-between align-items-center p-2"
+                                                style="padding-top: 0 !important; padding-bottom: 0px !important;">
+                                                <h4 class="fw-bold m-0">Thông Tin Nhân Viên</h4>
+                                                <div class="card-toolbar">
+                                                    @if ($i > 1)
+                                                        <div class="rounded px-2 py-1 text-white bg-danger">
+                                                            Nhân Viên Kho
+                                                        </div>
+                                                    @else
+                                                        <div class="rounded px-2 py-1 text-white bg-success">
+                                                            Nhân Viên Mua Hàng
+                                                        </div>
+                                                    @endif
                                                 </div>
-                                                <div class="card-body p-2" style="padding-top: 0px !important">
-                                                    <div class="row py-5" style="padding-top: 0px !important">
-                                                        <!-- Begin::Receipt Info (Left column) -->
-                                                        <div class="col-md-4">
-                                                            <table class="table table-flush gy-1">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class=""><strong>Họ Và Tên</strong>
-                                                                        </td>
-                                                                        <td class="text-gray-800">Lữ Phát Huy</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class=""><strong>Giới Tính</strong>
-                                                                        </td>
-                                                                        <td class="text-gray-800">Nam</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class=""><strong>Năm Sinh</strong>
-                                                                        </td>
-                                                                        <td class="text-gray-800">2004</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class=""><strong>Địa Chỉ</strong>
-                                                                        </td>
-                                                                        <td class="text-gray-800">Kiên Giang</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class=""><strong>Căn Cước Công
-                                                                                Dân</strong>
-                                                                        </td>
-                                                                        <td class="text-gray-800">091204002629</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
+                                            </div>
+                                            <div class="card-body p-2" style="padding-top: 0px !important">
+                                                <div class="row py-5" style="padding-top: 0px !important">
+                                                    <!-- Begin::Receipt Info (Left column) -->
+                                                    <div class="col-2">
+                                                        <img src="https://i.pinimg.com/736x/64/30/1c/64301c42f058143fbc4a313e05aa0bbe.jpg"
+                                                            width="100%" alt="">
+                                                    </div>
+                                                    <div class="col-10">
+                                                        <div class="row px-3">
+                                                            <div class="col-4">
+                                                                <div class="mb-3">
+                                                                    <strong>Họ:</strong> Lữ
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <div class="mb-3">
+                                                                    <strong>Tên:</strong> Phát Huy
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <div class="mb-3">
+                                                                    <strong>Giới Tính:</strong> Nam
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <div class="mb-3">
+                                                                    <strong>Ngày Sinh:</strong> 12-12-2004
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <div class="mb-3">
+                                                                    <strong>Địa Chỉ:</strong> Lê Bình, Cái Răng, Cần Thơ
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </td>
-                                </tr>
-                            @endif
+                                    </div>
+
+                                    <!-- Nút hành động đưa xuống dưới -->
+                                    <div class="text-end my-4">
+                                        <div class="button-group">
+                                            <!-- Nút Cập nhật -->
+                                            <a class="btn btn-sm btn-success me-2" href="{{ route('user.edit') }}"><i
+                                                    class="fa fa-edit"></i>Sửa</a>
+                                            <!-- Nút Xóa đơn -->
+                                            <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal_{{ $i }}"><i
+                                                    class="fa fa-trash"></i>Xóa</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            {{-- Xóa --}}
+                            <div class="modal fade" id="deleteModal_{{ $i }}" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title" id="deleteModalLabel">Xóa Người Dùng
+                                            </h3>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="" method="">
+                                                @csrf
+                                                <h4 class="text-danger text-center">Xóa Người Dùng Này?</h4>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-sm btn-secondary"
+                                                data-bs-dismiss="modal">Đóng</button>
+                                            <button type="button" class="btn btn-sm btn-danger">Xóa</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         @endfor
                     </tbody>
                 </table>
@@ -355,14 +327,14 @@
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Xóa Tất Cả thông báo</h5>
+                    <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Xóa Tất Cả người dùng</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center" style="padding-bottom: 0px;">
                     <form action="" method="">
                         @csrf
-                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả thông báo đã chọn?</p>
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả người dùng đã chọn?</p>
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">

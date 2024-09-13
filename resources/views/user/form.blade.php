@@ -125,6 +125,31 @@
 
                     <div class="row align-items-center mb-5">
 
+                        <div class="col-12 mb-5">
+                            <img src="https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/rN0W64K4ipau8gxv/videoblocks-ha-ha-ha-word-in-speech-balloon-in-comic-style-animation-4k-retro-cartoon-comics-animation-on-green-screen_bblbcmyoz_thumbnail-1080_01.png"
+                                width="150" alt="imgae">
+                        </div>
+
+                        <div class="col-6 fv-row mb-5">
+
+                            <label class="fs-5 fw-bold mb-3">Ảnh Đại Diện</label>
+
+                            <input type="file"
+                                class="form-control form-control-sm form-control-solid border border-success" name=""
+                                accept="image/*">
+
+                        </div>
+
+                        <div class="col-6 fv-row mb-5">
+
+                            <label class="required fs-5 fw-bold mb-2">Họ</label>
+
+                            <input type="text"
+                                class="form-control form-control-sm form-control-solid border border-success"
+                                placeholder="Họ Người Dùng.." name="name" />
+
+                        </div>
+
                         <div class="col-6 fv-row mb-5">
 
                             <label class="required fs-5 fw-bold mb-2">Tên</label>
@@ -167,15 +192,36 @@
 
                         <div class="col-6 fv-row mb-5">
 
-                            <label class="required fs-5 fw-bold mb-3">Vai Trò</label>
+                            <label class="required fs-5 fw-bold mb-2">Năm Sinh</label>
 
-                            <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
-                                <option value="" name="role_id">Admin</option>
-                                <option value="" name="role_id">Kho</option>
-                                <option value="" name="role_id">Kế Toán</option>
-                                <option value="" name="role_id">Mua Hàng</option>
-                            </select>
+                            <input type="date"
+                                class="form-control form-control-sm form-control-solid border border-success"
+                                name="birth_day" />
 
+                        </div>
+
+                        <div class="col-6 fv-row mb-5">
+
+                            <label class="required fs-5 fw-bold mb-3">Giới Tính</label>
+
+                            <div>
+                                <label for="male" class="me-2" style="font-size: 15px;">
+                                    <input type="radio" id="male" name="gender" value="male">
+                                    Nam
+                                </label>
+                                <label for="female" style="font-size: 15px;">
+                                    <input type="radio" id="female" name="gender" value="female">
+                                    Nữ
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-6 fv-row mb-5">
+                            <label class="required fs-5 fw-bold mb-2">Tài Khoản Admin</label>
+                            <div class="checkbox-wrapper-6">
+                                <input class="tgl tgl-light" id="cb1-7" type="checkbox" value="2" checked />
+                                <label class="tgl-btn" for="cb1-7"></label>
+                            </div>
                         </div>
 
                         <div class="col-6 fv-row mb-5">
@@ -187,10 +233,19 @@
                             </div>
                         </div>
 
-                        <div class="col-12 fv-row mb-5">
-                            <label class="required fs-5 fw-bold mb-2">Địa Chỉ Hiện Tại</label>
+                        <div class="col-6 fv-row mb-5">
+                            <label class="required fs-5 fw-bold mb-2">Chức Vụ</label>
+                            <input type="text" id="chucVuInput"
+                                class="form-control form-control-sm form-control-solid border border-success"
+                                placeholder="VD: Nhân Viên Kho.." name="name" />
+                        </div>
 
-                            <textarea class="form-control form-control-sm form-control-solid border border-success" name="" id="" cols="30" rows="5" placeholder="Địa Chỉ Hiện Tại Của Người Dùng"></textarea>
+                        <div class="col-6 fv-row mb-5">
+                            <label class="required fs-5 fw-bold mb-2">Địa Chỉ</label>
+
+                            <input type="text"
+                                class="form-control form-control-sm form-control-solid border border-success"
+                                placeholder="Địa Chỉ.." name="address" />
                         </div>
 
                     </div>
@@ -206,4 +261,26 @@
 @endsection
 
 @section('scripts')
+    <script>
+        document.getElementById('cb1-7').addEventListener('change', function() {
+            const chucVuInput = document.getElementById('chucVuInput');
+            if (this.checked) {
+                chucVuInput.disabled = true;
+                chucVuInput.value = 'Admin';
+            } else {
+                chucVuInput.disabled = false;
+                chucVuInput.value = '';
+            }
+        });
+
+        // Khi load trang, kiểm tra checkbox đã checked chưa
+        window.onload = function() {
+            const checkbox = document.getElementById('cb1-7');
+            const chucVuInput = document.getElementById('chucVuInput');
+            if (checkbox.checked) {
+                chucVuInput.disabled = true;
+                chucVuInput.value = 'Admin';
+            } 
+        };
+    </script>
 @endsection
