@@ -123,211 +123,178 @@
                         class="fa fa-arrow-left me-1"></i>Trở Lại</a>
             </div>
         </div>
-        <!-- Phần form để form thêm vật tư -->
-        <form action="{{ route('warehouse.store_import') }}" method="post">
+
+        {{-- FORM 1 - Thêm vật tư --}}
+        <form action="" method="post">
             @csrf
             <div class="container mt-4">
                 <div class="row">
                     <div class="col-12">
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control form-control-sm me-3"
-                                placeholder="Nhập tên hoặc mã vật tư" aria-label="Search">
-
-                            <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
-                                data-bs-target="#importExcelModal" style="font-size: 12px;">Nhập Excel</button>
-                        </div>
-                    </div>
-
-                    <div class="col-8">
-                        <div class="mt-3">
-                            @if (true)
-                                <div class="row mb-3">
-
-                                    <div class="col-6 mb-4">
-                                        <label for="unit_price" class="required form-label mb-2">Tên vật tư</label>
-                                        <input type="text"
-                                            class="form-control form-control-sm form-control-solid border border-success"
-                                            id="material_name" name="material_name" placeholder="Nhập tên vật tư">
-                                    </div>
-
-                                    <div class="col-6 mb-4">
-                                        <label for="unit_price" class="required form-label mb-2">Giá nhập</label>
-                                        <input type="text"
-                                            class="form-control form-control-sm form-control-solid border border-success"
-                                            id="unit_price" name="unit_price" placeholder="Nhập đơn giá">
-                                    </div>
-
-                                    <div class="col-6 mb-4">
-                                        <label for="quantity" class="required form-label mb-2">Số lượng</label>
-                                        <input type="number"
-                                            class="form-control form-control-sm form-control-solid border border-success"
-                                            id="quantity" name="quantity" placeholder="Nhập số lượng">
-                                    </div>
-
-                                    <div class="col-6 mb-4">
-                                        <label for="discount_rate" class="required form-label mb-2">Chiết khấu
-                                            (%)</label>
-                                        <input type="text"
-                                            class="form-control form-control-sm form-control-solid border border-success"
-                                            id="discount_rate" name="discount_rate" placeholder="Nhập chiết khấu (%)">
-                                    </div>
-
-                                    <div class="col-6 mb-4">
-                                        <label for="invoice_number" class="required form-label mb-2">Số hóa đơn</label>
-                                        <input type="number"
-                                            class="form-control form-control-sm form-control-solid border border-success"
-                                            id="invoice_number" name="invoice_number" placeholder="Nhập số hóa đơn">
-                                    </div>
-
-                                    <div class="col-6 mb-4">
-                                        <label for="invoice_symbol" class="required form-label mb-2">Kí hiệu hóa đơn
-                                        </label>
-                                        <input type="text"
-                                            class="form-control form-control-sm form-control-solid border border-success"
-                                            id="invoice_symbol" name="invoice_symbol" placeholder="Nhập kí hiệu hóa đơn">
-                                    </div>
-
-                                    <div class="col-6 mb-4">
-                                        <label for="vat_rate" class="required form-label mb-2">VAT (%)</label>
-                                        <input type="text"
-                                            class="form-control form-control-sm form-control-solid border border-success"
-                                            id="vat_rate" name="vat_rate" placeholder="Nhập VAT (%)">
-                                    </div>
-
-
-                                    <div class="col-6 mb-4">
-                                        <label for="batch_number" class="required form-label mb-2">Số lô</label>
-                                        <input type="text"
-                                            class="form-control form-control-sm form-control-solid border border-success"
-                                            id="batch_number" name="batch_number" placeholder="Nhập số lô">
-                                    </div>
-
-                                    <div class="col-6 mb-4">
-                                        <label for="product_date" class="required form-label mb-2">Ngày sản
-                                            xuất</label>
-                                        <input type="date"
-                                            class="form-control form-control-sm form-control-solid border border-success"
-                                            id="product_date" name="product_date">
-                                    </div>
-
-                                    <div class="col-6 mb-4">
-                                        <label for="expiry_date" class="form-label mb-2">Hạn sử dụng</label>
-                                        <input type="date"
-                                            class="form-control form-control-sm form-control-solid border border-success"
-                                            id="expiry_date" name="expiry_date">
-                                    </div>
-                                </div>
-                            @else
-                                <div id="alertMessage" class="alert alert-warning text-center mb-3" role="alert">
-                                    Chưa có vật tư nào! Hãy nhập tên hoặc mã hàng vào ô tìm kiếm để tìm hàng cần nhập
-                                </div>
-                            @endif
-                        </div>
-
-
-                    </div>
-
-                    <div class="col-4">
                         <div class="card border-0 shadow p-4 mb-4 bg-white rounded-3 mt-3">
-                            <h6 class="mb-3 fw-bold text-primary">Thông tin phiếu nhập</h6>
+                            <div class="row">
+                                <div class="mb-3 col-6">
+                                    <label for="supplier_code" class="form-label fw-semibold"
+                                        style="white-space: nowrap;">Nhà
+                                        cung cấp</label>
+                                    <div class="d-flex align-items-center">
+                                        <select id="supplier_code"
+                                            class="form-control form-control-sm form-control-solid border border-success">
+                                            <option value="">Chọn nhà cung cấp</option>
+                                            <option value="1">Nhà cung cấp 1</option>
+                                            <option value="2">Nhà cung cấp 2</option>
+                                        </select>
+                                    </div>
+                                </div>
 
-                            <div class="mb-3">
-                                <label for="supplierName" class="form-label fw-semibold" style="white-space: nowrap;">Nhà
-                                    cung cấp</label>
-                                <div class="d-flex align-items-center">
-                                    <select id="supplierName" class="form-select setupSelect2" style="max-width: 80%;">
-                                        <option value="">Chọn nhà cung cấp</option>
-                                        <option value="supplier1">Nhà cung cấp 1</option>
-                                        <option value="supplier2">Nhà cung cấp 2</option>
-                                    </select>
+                                <div class="mb-3 col-6">
+                                    <label for="date" class="form-label fw-semibold">Ngày nhập</label>
+                                    <input type="date" id="receipt_at"
+                                        class="form-control form-control-sm form-control-solid border border-success">
+                                </div>
 
-                                    <button type="button" class="fa fa-plus btn btn-sm btn-twitter ms-2"
-                                        data-bs-toggle="modal" data-bs-target="#addSupplierModal">
-                                    </button>
+                                <input type="hidden" id="created_by" value="1">
+
+                                <div class="mb-3 col-6">
+                                    <label for="invoice_number" class="required form-label mb-2">Số hóa đơn</label>
+                                    <input type="number"
+                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        id="invoice_number" name="invoice_number" placeholder="Nhập số hóa đơn">
+                                </div>
+
+                                <div class="mb-3 col-6">
+                                    <label for="invoice_symbol" class="required form-label mb-2">Kí hiệu hóa đơn
+                                    </label>
+                                    <input type="text"
+                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        id="invoice_symbol" name="invoice_symbol" placeholder="Nhập kí hiệu hóa đơn">
+                                </div>
+
+                                <div class="mb-3 col-12">
+                                    <label for="note" class="form-label fw-semibold">Ghi chú</label>
+                                    <textarea id="note" class="form-control form-control-sm form-control-solid border border-success"
+                                        placeholder="Nhập ghi chú..." rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card border-0 shadow p-4 mb-4 bg-white rounded-3 ">
+                            <div class="row mb-3">
+                                <div class="mb-4 col-6">
+                                    <label for="material_code" class="form-label fw-semibold"
+                                        style="white-space: nowrap;">Tên
+                                        vật tư</label>
+                                    <div class="d-flex align-items-center">
+                                        <select id="material_code"
+                                            class="form-control form-control-sm form-control-solid border border-success">
+                                            <option value="">Chọn vật tư</option>
+                                            <option value="1">Canxium</option>
+                                            <option value="2">Panadol</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-6 mb-4">
+                                    <label for="batch_code" class="required form-label mb-2">Số lô</label>
+                                    <input type="text"
+                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        id="batch_code" name="batch_code" placeholder="Nhập số lô">
+                                </div>
+
+                                <div class="col-6 mb-4">
+                                    <label for="product_date" class="required form-label mb-2">Ngày sản
+                                        xuất</label>
+                                    <input type="date"
+                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        id="product_date" name="product_date">
+                                </div>
+
+                                <div class="col-6 mb-4">
+                                    <label for="expiry_date" class="form-label mb-2">Hạn sử dụng</label>
+                                    <input type="date"
+                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        id="expiry_date" name="expiry_date">
+                                </div>
+
+                                <div class="col-3 mb-4">
+                                    <label for="price" class="required form-label mb-2">Giá nhập</label>
+                                    <input type="text"
+                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        id="price" name="price" placeholder="Nhập đơn giá">
+                                </div>
+
+                                <div class="col-3 mb-4">
+                                    <label for="quantity" class="required form-label mb-2">Số lượng</label>
+                                    <input type="number"
+                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        id="quantity" name="quantity" placeholder="Nhập số lượng">
+                                </div>
+
+                                <div class="col-3 mb-4">
+                                    <label for="discount_rate" class="required form-label mb-2">Chiết khấu
+                                        (%)</label>
+                                    <input type="text"
+                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        id="discount_rate" name="discount_rate" placeholder="Nhập chiết khấu (%)">
+                                </div>
+
+                                <div class="col-3 mb-4">
+                                    <label for="VAT" class="required form-label mb-2">VAT (%)</label>
+                                    <input type="text"
+                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        id="VAT" name="VAT" placeholder="Nhập VAT (%)">
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="date" class="form-label fw-semibold">Ngày nhập</label>
-                                <input type="date" id="date" class="form-control form-control-sm">
+                            <div class="row ">
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                        data-bs-target="#importExcelModal" style="font-size: 12px;">Nhập Excel</button>
+                                    <button type="button" class="btn btn-sm btn-danger" style="font-size: 12px;"
+                                        onclick="addMaterial()">Thêm vật tư</button>
+                                </div>
                             </div>
-
-                            <div class="mb-3">
-                                <label for="notes" class="form-label fw-semibold">Ghi chú</label>
-                                <textarea id="notes" class="form-control form-control-sm" placeholder="Nhập ghi chú..." rows="3"></textarea>
-                            </div>
-
-                            <hr class="my-4">
-
-                            <button type="submit" class="btn btn-sm btn-danger w-100">Thêm vật tư</button>
                         </div>
                     </div>
                 </div>
+
             </div>
+
         </form>
 
-        <!-- Danh sách vật tư đã thêm -->
-        <form action="/home" method="post" class="mt-2">
+        {{-- FORM 2 - Danh sách vật tư đã thêm --}}
+        <form action="{{ route('warehouse.store_import') }}" method="post" class="mt-2">
+            @csrf
             <div class="row container">
                 <div class="col-9">
-                    <div class="d-flex justify-content-between align-items-center mb-4 header-container">
-                        <h3 class="mb-0 header-text">Danh sách vật tư y tế</h3>
-                    </div>
+                    <div class="card border-0 shadow p-4 mb-4 bg-white rounded-3 ">
+                        <div class="table-responsive">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th class="ps-4">Tên vật tư</th>
+                                            <th>Nhà cung cấp</th>
+                                            <th>Số lượng</th>
+                                            <th>Giá nhập</th>
+                                            <th>Số lô</th>
+                                            <th>Hạn dùng</th>
+                                            <th>CK(%)</th>
+                                            <th>VAT(%)</th>
+                                            <th class="pe-3">Thành tiền</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="materialList">
+                                        {{-- Thông tin sau khi được thêm vật tư từ FORM 1 sẽ được hiển thị ở đây --}}
+                                        <input type="hidden" id="materialData" name="materialData">
 
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th class="ps-4">Tên vật tư</th>
-                                    <th>Số lượng</th>
-                                    <th>Giá nhập</th>
-                                    <th>Số lô</th>
-                                    <th>Hạn dùng</th>
-                                    <th>CK(%)</th>
-                                    <th>VAT(%)</th>
-                                    <th>Trước VAT</th>
-                                    <th class="pe-3">Thành tiền</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Khẩu trang y tế</td>
-                                    <td>500</td>
-                                    <td>1,000</td>
-                                    <td>KT001</td>
-                                    <td>2025-06-30</td>
-                                    <td>0</td>
-                                    <td>5</td>
-                                    <td>500,000</td>
-                                    <td>525,000</td>
-                                </tr>
-                                <tr>
-                                    <td>Găng tay phẫu thuật</td>
-                                    <td>300</td>
-                                    <td>3,500</td>
-                                    <td>GT123</td>
-                                    <td>2024-08-15</td>
-                                    <td>2</td>
-                                    <td>10</td>
-                                    <td>1,029,000</td>
-                                    <td>1,131,900</td>
-                                </tr>
-                                <tr>
-                                    <td>Bộ dụng cụ phẫu thuật</td>
-                                    <td>50</td>
-                                    <td>20,000</td>
-                                    <td>BD456</td>
-                                    <td>2026-01-20</td>
-                                    <td>1</td>
-                                    <td>8</td>
-                                    <td>990,000</td>
-                                    <td>1,069,200</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
                 <div class="col-3 pe-0">
                     <div class="card border-0 shadow p-4 mb-4 bg-white rounded-3">
                         <h6 class="mb-3 fw-bold text-primary">Thông tin thanh toán</h6>
@@ -349,7 +316,7 @@
                         <hr class="my-4">
 
                         <div class="mb-3">
-                            <h6 class="mb-3 fw-bold text-primary">Phương thức thanh toán</h6>
+                            <h6 class="mb-3 fw-bold text-primary">Thanh toán</h6>
                             <div class="form-check my-3">
                                 <input class="form-check-input mt-1" type="radio" name="paymentMethod"
                                     id="cashPayment" value="cash">
@@ -368,7 +335,8 @@
 
                         <hr class="my-4">
 
-                        <button type="submit" class="btn btn-sm btn-success w-100">Tạo phiếu nhập</button>
+                        <button type="submit" class="btn btn-sm btn-success w-100" onclick="submitMaterials()">Tạo phiếu
+                            nhập</button>
                     </div>
                 </div>
             </div>
@@ -440,13 +408,12 @@
                     <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Supplier Form -->
                     <form id="supplierForm">
                         <div class="row">
                             <div class="col-6 mb-4">
-                                <label for="supplierNameInput" class="form-label fw-semibold">Tên nhà cung
+                                <label for="supplier_codeInput" class="form-label fw-semibold">Tên nhà cung
                                     cấp*</label>
-                                <input type="text" id="supplierNameInput"
+                                <input type="text" id="supplier_codeInput"
                                     class="form-control form-control-sm border border-success"
                                     placeholder="Nhập tên nhà cung cấp">
                             </div>
@@ -488,6 +455,83 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+    <script>
+        let materialData = [];
+
+        function addMaterial() {
+            const material_code = document.getElementById('material_code').value;
+            const supplier_code = document.getElementById('supplier_code').value;
+            const note = document.getElementById('note').value; // Sẽ không hiển thị nhưng vẫn lưu
+            const receipt_at = document.getElementById('receipt_at').value; // Sẽ không hiển thị nhưng vẫn lưu
+            const created_by = document.getElementById('created_by').value;
+            const batch_code = document.getElementById('batch_code').value;
+            const product_date = document.getElementById('product_date').value;
+            const expiry_date = document.getElementById('expiry_date').value;
+            const price = document.getElementById('price').value;
+            const quantity = document.getElementById('quantity').value;
+            const discount = document.getElementById('discount_rate').value;
+            const VAT = document.getElementById('VAT').value;
+
+            if (!material_code || !batch_code || !product_date || !price || !quantity) {
+                alert('Vui lòng nhập đầy đủ thông tin.');
+                return;
+            }
+
+            const totalPrice = price * quantity * (1 - discount / 100) * (1 + VAT / 100);
+
+            // Lưu dữ liệu vào mảng
+            materialData.push({
+                material_code,
+                supplier_code,
+                note,
+                receipt_at,
+                created_by,
+                quantity,
+                price,
+                batch_code,
+                expiry_date,
+                quantity,
+                discount,
+                VAT,
+                totalPrice: totalPrice.toFixed(2)
+            });
+
+            // Chỉ hiển thị những trường cần thiết trong bảng
+            const tableBody = document.getElementById('materialList');
+            if (tableBody) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${material_code}</td>
+                    <td>${supplier_code}</td>
+                    <td>${quantity}</td>
+                    <td>${price}</td>
+                    <td>${batch_code}</td>
+                    <td>${expiry_date}</td>
+                    <td>${discount}</td>
+                    <td>${VAT}</td>
+                    <td>${totalPrice.toFixed(2)}₫</td>
+                `;
+                tableBody.appendChild(row);
+            }
+
+            // Reset các trường input sau khi thêm
+            document.getElementById('material_code').value = '';
+            document.getElementById('supplier_code').value = '';
+            document.getElementById('note').value = '';
+            document.getElementById('receipt_at').value = '';
+            document.getElementById('created_by').value = '';
+            document.getElementById('batch_code').value = '';
+            document.getElementById('product_date').value = '';
+            document.getElementById('expiry_date').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('quantity').value = '';
+            document.getElementById('discount_rate').value = '';
+            document.getElementById('VAT').value = '';
+        }
+
+        function submitMaterials() {
+            // Chuyển dữ liệu sang JSON và gán vào input ẩn để submit
+            document.getElementById('materialData').value = JSON.stringify(materialData);
+        }
+    </script>
 @endsection

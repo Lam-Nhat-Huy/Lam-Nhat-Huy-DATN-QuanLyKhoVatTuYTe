@@ -11,7 +11,7 @@
 
 @section('content')
     <div class="card mb-5 pb-5 mb-xl-8">
-        {{-- Tiêu đề --}}
+        {{-- Tiêu đề  --}}
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">Xuất Kho</span>
@@ -24,8 +24,7 @@
             </div>
         </div>
 
-        <!-- Form thêm vật tư -->
-        <form action="{{ route('warehouse.store_export') }}" method="POST">
+        <form action="{{ route('warehouse.store_export') }}" method="POST" id="export-form">
             @csrf
             <div class="container mt-4">
                 <div class="row">
@@ -34,8 +33,8 @@
                             <div class="row mb-3">
                                 <div class="col-12 mb-2">
                                     <label for="material_code" class="required form-label mb-2">Tên vật tư</label>
-                                    <select class="form-select form-select-sm" id="material_code" name="material_code"
-                                        style="width: 100%;">
+                                    <select class="form-select form-select-sm " id="material_code" name="material_code"
+                                        style="width: 100%;" required>
                                         <option value="" selected disabled>Chọn vật tư</option>
                                         @foreach ($materials as $material)
                                             <option value="{{ $material['code'] }}">{{ $material['name'] }}</option>
@@ -48,30 +47,7 @@
                                     <div id="batch_info" class="list-group">
                                     </div>
                                 </div>
-
-                                <div class="col-12 mt-3">
-                                    <button type="button" class="btn btn-sm btn-danger" id="add-to-list">Thêm vào danh
-                                        sách</button>
-                                </div>
                             </div>
-                        </div>
-
-
-                        <!-- Bảng danh sách vật tư đã thêm -->
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped" id="material-list">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Tên Vật Tư</th>
-                                        <th>Số Lô</th>
-                                        <th>Số Lượng</th>
-                                        <th>Hành Động</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
                         </div>
                     </div>
 
@@ -113,27 +89,34 @@
                             </div>
 
                             <hr class="my-4">
-                            <!-- Input ẩn để lưu trữ danh sách vật tư và lô -->
-                            <input type="hidden" name="material_list" id="material_list_input">
 
-
-                            <button type="submit" class="btn btn-sm btn-danger">Xuất Kho</button>
-
+                            <button type="button" id="add-material" class="btn btn-sm btn-primary w-100">Thêm vật
+                                tư</button>
+                            <button type="submit" class="btn btn-sm btn-success w-100 mt-3">Tạo Phiếu Xuất</button>
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </form>
+
+
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-12">
+                    <h6 class="mb-3">Danh sách vật tư đã thêm:</h6>
+                    <div id="added_materials" class="list-group">
+                        <!-- Vật tư đã thêm sẽ được thêm vào đây -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 @endsection
 
 @section('scripts')
     <script>
         const inventories = @json($inventories);
-
-        let materialList = [];
 
         document.getElementById('material_code').addEventListener('change', function() {
             const selectedMaterial = this.value;
@@ -194,68 +177,96 @@
             }
         });
 
-        document.getElementById('add-to-list').addEventListener('click', function() {
-            const selectedMaterial = document.getElementById('material_code').value;
+        document.getElementById('add-material').addEventListener('click', function() {
+            const materialCode = document.getElementById('material_code').value;
             const departmentCode = document.getElementById('department_code').value;
             const createdBy = document.getElementById('created_by').value;
-            const exportDate = document.getElementById('export_at').value;
+            const exportAt = document.getElementById('export_at').value;
             const note = document.getElementById('note').value;
 
-            const batches = Array.from(document.querySelectorAll('#batch_info input[type="number"]'))
-                .filter(input => input.value > 0)
-                .map(input => ({
-                    batch_code: input.name.replace('batches[', '').replace(']', ''),
-                    quantity: parseInt(input.value)
-                }));
+            const batchInputs = Array.from(document.querySelectorAll('[id^="batch_"]'));
+            const batches = batchInputs.map(input => ({
+                batchCode: input.id.split('_')[1],
+                quantity: input.value
+            }));
 
-            if (selectedMaterial && batches.length > 0) {
-                materialList.push({
-                    material_code: selectedMaterial,
-                    batches,
-                    department_code: departmentCode,
-                    created_by: createdBy,
-                    export_at: exportDate,
-                    note
-                });
+            if (materialCode && departmentCode && createdBy && exportAt) {
+                const addedBatches = batches.filter(batch => Number(batch.quantity) > 0);
 
-                // Cập nhật bảng hiển thị danh sách vật tư
-                updateMaterialListTable();
+                if (addedBatches.length > 0) {
+                    const addedMaterialsContainer = document.getElementById('added_materials');
+                    const materialItem = document.createElement('div');
+                    materialItem.classList.add('list-group-item', 'd-flex', 'align-items-center',
+                        'justify-content-between');
+                    materialItem.innerHTML = `
+                <div>
+                    <strong>Vật tư: ${document.querySelector('#material_code option:checked').textContent}</strong>
+                    <br>Mã phòng ban: ${departmentCode}
+                    <br>Người tạo: ${createdBy}
+                    <br>Ngày xuất: ${exportAt}
+                    <br>Ghi chú: ${note}
+                </div>
+                <div>
+                    <strong>Danh sách lô:</strong>
+                    <ul>
+                        ${addedBatches.map(batch => `<li>Số lô: ${batch.batchCode}, Số lượng: ${batch.quantity}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+                    addedMaterialsContainer.appendChild(materialItem);
 
-                // Reset form
-                resetForm();
+                    // Xóa các giá trị nhập vào form sau khi thêm
+                    document.getElementById('batch_info').innerHTML = '';
+                } else {
+                    alert('Vui lòng nhập số lượng cho ít nhất một lô.');
+                }
+            } else {
+                alert('Vui lòng điền đầy đủ thông tin.');
             }
         });
 
-        function updateMaterialListTable() {
-            const tbody = document.querySelector('#material-list tbody');
-            tbody.innerHTML = '';
-            materialList.forEach((item, index) => {
-                item.batches.forEach(batch => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="text-center">${item.material_code}</td>
-                        <td class="text-center">${batch.batch_code}</td>
-                        <td class="text-center">${batch.quantity}</td>
-                        <td class="text-center">
-                            <button type="button" class="btn btn-danger btn-sm" onclick="removeFromList(${index})">Xóa</button>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            });
+        document.querySelector('form').addEventListener('submit', function(event) {
+            // event.preventDefault(); // Ngăn gửi form
 
-            // Cập nhật input ẩn để gửi danh sách vật tư tới server
-            document.getElementById('material_list_input').value = JSON.stringify(materialList);
-        }
+            const materialCode = document.getElementById('material_code').value;
+            const departmentCode = document.getElementById('department_code').value;
+            const createdBy = document.getElementById('created_by').value;
+            const exportAt = document.getElementById('export_at').value;
+            const note = document.getElementById('note').value;
+            const batches = Array.from(document.querySelectorAll('[id^="batch_"]')).map(input => ({
+                batchCode: input.id.split('_')[1],
+                quantity: input.value
+            }));
 
-        function removeFromList(index) {
-            materialList.splice(index, 1);
-            updateMaterialListTable();
-        }
+            if (materialCode && departmentCode && createdBy && exportAt) {
+                // Thêm vào danh sách vật tư đã thêm
+                const addedMaterialsContainer = document.getElementById('added_materials');
+                const materialItem = document.createElement('div');
+                materialItem.classList.add('list-group-item', 'd-flex', 'align-items-center',
+                    'justify-content-between');
+                materialItem.innerHTML = `
+            <div>
+                <strong>Vật tư: ${document.querySelector('#material_code option:checked').textContent}</strong>
+                <br>Mã phòng ban: ${departmentCode}
+                <br>Người tạo: ${createdBy}
+                <br>Ngày xuất: ${exportAt}
+                <br>Ghi chú: ${note}
+            </div>
+            <div>
+                <strong>Danh sách lô:</strong>
+                <ul>
+                    ${batches.map(batch => `<li>Số lô: ${batch.batchCode}, Số lượng: ${batch.quantity}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+                addedMaterialsContainer.appendChild(materialItem);
 
-        function resetForm() {
-            document.getElementById('material_code').value = '';
-            document.getElementById('batch_info').innerHTML = '';
-        }
+                // Xóa các giá trị nhập vào form sau khi thêm
+                document.querySelector('form').reset();
+                document.getElementById('batch_info').innerHTML = '';
+            } else {
+                alert('Vui lòng điền đầy đủ thông tin.');
+            }
+        });
     </script>
 @endsection

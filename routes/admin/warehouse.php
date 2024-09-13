@@ -12,6 +12,8 @@ Route::prefix('warehouse')->group(function () {
     Route::post('/store_export', [WarehouseController::class, 'store_export'])->name('warehouse.store_export');
     Route::post('/store_import', [WarehouseController::class, 'store_import'])->name('warehouse.store_import');
     Route::get('/inventory', [WarehouseController::class, 'inventory'])->name('warehouse.inventory');
+
+    Route::post('/add-material', [WarehouseController::class, 'add_material_to_list'])->name('warehouse.add_material_to_list');
 });
 
 Route::prefix('card_warehouse')->group(function () {
