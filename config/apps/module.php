@@ -162,6 +162,21 @@ return [
         ],
         [
             'user_role' => [],
+            'title' => 'Nhà Cung Cấp',
+            'icon' => 'fa fa-truck',
+            'route' => ['supplier.list', 'supplier.create', 'supplier.edit', 'supplier.trash'],
+            'subModule' => [
+                [
+                    'title' => 'Nhà cung cấp ',
+                    'route' => 'supplier.list',
+                    'route_action' => ['supplier.create', 'supplier.edit', 'supplier.trash'],
+                    'icon' => 'fa fa-address-book',
+                    'user_role' => []
+                ],
+            ]
+        ],
+        [
+            'user_role' => [],
             'title' => 'Thông Báo',
             'icon' => 'fa fa-bell',
             'route' => [
@@ -204,42 +219,5 @@ return [
                 'user_role' => []
             ]
         ],
-        [
-            'user_role' => [],
-            'title' => 'Nhà Cung Cấp',
-            'icon' => 'fa fa-truck',
-            'route' => ['supplier.list', 'supplier.create', 'supplier.edit', 'supplier.trash'],
-            'subModule' => [
-                [
-                    'title' => 'Nhà cung cấp ',
-                    'route' => 'supplier.list',
-                    'route_action' => ['supplier.create', 'supplier.edit', 'supplier.trash'],
-                    'icon' => 'fa fa-address-book',
-                    'user_role' => []
-                ],
-            ]
-        ],
-        [
-            'user_role' => [],
-            'title' => 'Nhắn Tin',
-            'icon' => 'fa fa-inbox',
-            'route' => ['chat.list', 'chat.contact'],
-            'subModule' => [
-                [
-                    'title' => 'Nhắn Tin',
-                    'route' => 'chat.list',
-                    'route_action' => [],
-                    'icon' => 'fa fa-message',
-                    'user_role' => []
-                ],
-                [
-                    'title' => 'Danh Bạ',
-                    'route' => 'chat.contact',
-                    'route_action' => [],
-                    'icon' => 'fa fa-address-book',
-                    'user_role' => []
-                ]
-            ]
-        ]
     ]
 ];
