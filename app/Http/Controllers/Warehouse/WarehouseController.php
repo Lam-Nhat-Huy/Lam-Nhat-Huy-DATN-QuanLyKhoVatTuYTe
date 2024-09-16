@@ -19,7 +19,7 @@ class WarehouseController extends Controller
     {
         // Dữ liệu mẫu cho các bảng tồn kho
         $this->inventories = [
-            ['code' => 'INV001', 'material_code' => 'MAT001', 'batch_code' => 'BATCH001', 'current_quantity' => 100, 'expiry_date' => '2024-12-01'],
+            ['code' => 'INV001', 'material_code' => 'MAT001', 'batch_code' => 'BATCH001', 'current_quantity' => 100, 'expiry_date' => '2021-12-01'],
             ['code' => 'INV002', 'material_code' => 'MAT001', 'batch_code' => 'BATCH002', 'current_quantity' => 60, 'expiry_date' => '2024-11-01'],
             ['code' => 'INV003', 'material_code' => 'MAT002', 'batch_code' => 'BATCH003', 'current_quantity' => 0, 'expiry_date' => '2025-01-01'],
             ['code' => 'INV004', 'material_code' => 'MAT002', 'batch_code' => 'BATCH004', 'current_quantity' => 1, 'expiry_date' => '2024-09-15'],
@@ -73,7 +73,7 @@ class WarehouseController extends Controller
                 'received_quantity' => 100,
                 'received_date' => '2024-08-29',
                 'unit' => 'Hộp',
-                'product_date' => '2023-01-01'
+                'product_date' => '2022-01-01'
             ],
             [
                 'material_id' => 'MAT002',

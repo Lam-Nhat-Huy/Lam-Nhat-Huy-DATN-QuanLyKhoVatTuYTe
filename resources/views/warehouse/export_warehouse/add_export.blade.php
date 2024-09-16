@@ -18,8 +18,8 @@
             </h3>
 
             <div class="card-toolbar">
-                <a href="{{ route('warehouse.export') }}" class="btn btn-sm btn-dark" style="font-size: 12px;">
-                    <i class="fa fa-arrow-left me-1"></i>Trở Lại
+                <a href="{{ route('warehouse.export') }}" class="btn btn-sm btn-dark" style="font-size: 10px;">
+                    <i class="fa fa-arrow-left me-1" style="font-size: 10px;"></i>Trở Lại
                 </a>
             </div>
         </div>
@@ -46,12 +46,18 @@
                                 <div class="col-12 mt-3">
                                     <h6 class="mb-3">Danh sách lô:</h6>
                                     <div id="batch_info" class="list-group">
+                                        <div class="alert alert-danger" role="alert">
+                                            Bạn chưa chọn vật tư.
+                                        </div>
                                     </div>
+
+
                                 </div>
 
-                                <div class="col-12 mt-3">
-                                    <button type="button" class="btn btn-sm btn-danger" id="add-to-list">Thêm vào danh
-                                        sách</button>
+                                <div class="col-12 mt-3 mb-3 text-end">
+                                    <button type="button" class="btn btn-sm"
+                                        style="background-color: #FF0000; color: #fff; font-size: 10px;"
+                                        id="add-to-list">Thêm</button>
                                 </div>
                             </div>
                         </div>
@@ -59,7 +65,7 @@
 
                         <!-- Bảng danh sách vật tư đã thêm -->
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped" id="material-list">
+                            <table class="table table-bordered" id="material-list">
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Tên Vật Tư</th>
@@ -68,21 +74,30 @@
                                         <th>Hành Động</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-
+                                <tbody id="material-list-body">
+                                    <tr id="no-material-alert">
+                                        <td colspan="4" class="text-center pe-0 px-0"
+                                            style="box-shadow: none !important;">
+                                            <div class="alert alert-warning" role="alert">
+                                                Chưa có vật tư nào được thêm vào danh sách.
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </tbody>
+
                             </table>
                         </div>
+
                     </div>
 
                     <div class="col-4">
-                        <div class="card border-0 shadow p-4 mb-4 bg-white rounded-3 mt-3">
-                            <h6 class="mb-3 fw-bold text-primary">Thông tin phiếu xuất</h6>
+                        <div class="card border-0 shadow-sm p-4 mb-4 bg-white rounded-4 mt-3">
+                            <h6 class="mb-4 fw-bold text-primary text-uppercase">Thông tin phiếu xuất</h6>
 
-                            <div class="mb-3">
-                                <label for="department_code" class="form-label fw-semibold">Mã phòng ban</label>
-                                <select name="department_code" class="form-control form-control-sm" id="department_code"
-                                    required>
+                            <div class="mb-4">
+                                <label for="department_code" class="form-label fw-semibold text-muted">Mã phòng ban</label>
+                                <select name="department_code" class="form-select form-select-sm rounded-pill py-2 px-3"
+                                    id="department_code" required>
                                     <option value="">-- Chọn phòng ban --</option>
                                     @foreach ($departments as $department)
                                         <option value="{{ $department['code'] }}">{{ $department['name'] }}</option>
@@ -90,9 +105,10 @@
                                 </select>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="created_by" class="form-label fw-semibold">Người tạo</label>
-                                <select name="created_by" class="form-control form-control-sm" id="created_by" required>
+                            <div class="mb-4">
+                                <label for="created_by" class="form-label fw-semibold text-muted">Người tạo</label>
+                                <select name="created_by" class="form-select form-select-sm rounded-pill py-2 px-3"
+                                    id="created_by" required>
                                     <option value="">-- Chọn người tạo --</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user['id'] }}">{{ $user['name'] }}</option>
@@ -100,30 +116,27 @@
                                 </select>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="export_at" class="form-label fw-semibold">Ngày xuất</label>
-                                <input type="date" name="export_at" class="form-control form-control-sm" id="export_at"
-                                    required>
+                            <div class="mb-4">
+                                <label for="export_at" class="form-label fw-semibold text-muted">Ngày xuất</label>
+                                <input type="date" name="export_at"
+                                    class="form-control form-control-sm rounded-pill py-2 px-3" id="export_at" required>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="note" class="form-label fw-semibold">Ghi chú</label>
-                                <textarea name="note" class="form-control form-control-sm" id="note" rows="3"
+                            <div class="mb-4">
+                                <label for="note" class="form-label fw-semibold text-muted">Ghi chú</label>
+                                <textarea name="note" class="form-control form-control-sm rounded-3 py-2 px-3" id="note" rows="3"
                                     placeholder="Nhập ghi chú..."></textarea>
                             </div>
 
                             <hr class="my-4">
-                            <!-- Input ẩn để lưu trữ danh sách vật tư và lô -->
+
                             <input type="hidden" name="material_list" id="material_list_input">
 
-
-                            <button type="submit" class="btn btn-sm btn-danger">Xuất Kho</button>
-
+                            <button type="submit" class="btn btn-success btn-sm rounded-pill w-100">Xuất Kho</button>
                         </div>
                     </div>
+
                 </div>
-
-
             </div>
         </form>
     </div>
@@ -144,46 +157,66 @@
             const filteredInventories = inventories.filter(inv => inv.material_code === selectedMaterial);
 
             if (filteredInventories.length > 0) {
+                const today = new Date();
+                const alertThreshold = 30; // Days before expiration to trigger alert
+
                 filteredInventories.forEach(inventory => {
                     let inputField = '';
                     let textColor = '';
+                    let alertMessage = '';
+                    let icon = '';
 
                     const quantity = Number(inventory.current_quantity);
+                    const expiryDate = new Date(inventory.expiry_date);
+                    const daysToExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
 
                     if (quantity === 0) {
-                        textColor = 'color: red;';
+                        textColor = 'color: #FF0000;';
                         inputField = `
                             <input type="text" class="form-control form-control-sm"
-                                   value="Hết Hàng" readonly style="max-width: 100px; background-color: #f8d7da;">
+                                value="Hết Hàng" readonly style="max-width: 100px; background-color: #DD0000; color: #fff; text-align: center;">
                         `;
                     } else if (quantity < 10) {
-                        textColor = 'color: orange;';
+                        textColor = 'color: #FFCC00;';
                         inputField = `
                             <input type="number" class="form-control form-control-sm"
-                                   name="batches[${inventory.batch_code}]"
-                                   id="batch_${inventory.batch_code}"
-                                   min="0" max="${quantity}"
-                                   placeholder="Số Lượng" style="max-width: 100px;">
+                                name="batches[${inventory.batch_code}]"
+                                id="batch_${inventory.batch_code}"
+                                min="0" max="${quantity}"
+                                placeholder="Số Lượng" style="max-width: 100px ; text-align: center;">
                         `;
                     } else {
-                        textColor = 'color: green;';
+                        textColor = 'color: #66FF00;';
                         inputField = `
                             <input type="number" class="form-control form-control-sm"
-                                   name="batches[${inventory.batch_code}]"
-                                   id="batch_${inventory.batch_code}"
-                                   min="0" max="${quantity}"
-                                   placeholder="Số Lượng" style="max-width: 100px;">
+                                name="batches[${inventory.batch_code}]"
+                                id="batch_${inventory.batch_code}"
+                                min="0" max="${quantity}"
+                                placeholder="Số Lượng" style="max-width: 100px; text-align: center;">
                         `;
+                    }
+
+                    if (daysToExpiry <= alertThreshold && daysToExpiry > 0) {
+                        icon =
+                            `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThr7qrIazsvZwJuw-uZCtLzIjaAyVW_ZrlEQ&s"
+                    alt="AI Icon" style="width: 20px; height: 20px; display: inline-block; margin-left: 10px;"
+                    title="Gợi ý: Nên xuất vật tư này trước khi hết hạn" data-toggle="tooltip" data-placement="right" >`;
+                    } else if (daysToExpiry <= 0) {
+                        icon =
+                            `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThr7qrIazsvZwJuw-uZCtLzIjaAyVW_ZrlEQ&s"
+                    alt="AI Icon" style="width: 20px; height: 20px; display: inline-block; margin-left: 10px;"
+                    title="Gợi ý: Nên xuất vật tư này trước khi hết hạn">`;
                     }
 
                     const batchElement = document.createElement('div');
                     batchElement.classList.add('list-group-item', 'd-flex', 'align-items-center',
                         'justify-content-between');
                     batchElement.innerHTML = `
-                        <div style="${textColor}">
+                        <div style="${textColor}; display: inline-block;">
                             <strong>Số Lô: ${inventory.batch_code}</strong>
                             <span class="text-muted">(Tồn: ${quantity})</span>
                             <span class="text-muted">(HSD: ${inventory.expiry_date})</span>
+                            ${icon} ${alertMessage}
                         </div>
                         <div class="ms-2" style="width: 100px;">
                             ${inputField}
@@ -218,40 +251,57 @@
                     note
                 });
 
-                // Cập nhật bảng hiển thị danh sách vật tư
                 updateMaterialListTable();
-
-                // Reset form
                 resetForm();
             }
         });
 
         function updateMaterialListTable() {
-            const tbody = document.querySelector('#material-list tbody');
+            const tbody = document.querySelector('#material-list-body');
             tbody.innerHTML = '';
-            materialList.forEach((item, index) => {
-                item.batches.forEach(batch => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="text-center">${item.material_code}</td>
-                        <td class="text-center">${batch.batch_code}</td>
-                        <td class="text-center">${batch.quantity}</td>
-                        <td class="text-center">
-                            <button type="button" class="btn btn-danger btn-sm" onclick="removeFromList(${index})">Xóa</button>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            });
 
-            // Cập nhật input ẩn để gửi danh sách vật tư tới server
+            if (materialList.length === 0) {
+                tbody.innerHTML = `
+                <tr id="no-material-alert">
+                    <td colspan="4" class="text-center pe-0 px-0">
+                        <div class="alert alert-warning" role="alert">
+                            Chưa có vật tư nào được thêm vào danh sách. Vui lòng chọn vật tư
+                        </div>
+                    </td>
+                </tr>
+            `;
+            } else {
+                // Hiển thị danh sách vật tư và lô
+                materialList.forEach((item, materialIndex) => {
+                    item.batches.forEach(batch => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                    <td class="text-center">${item.material_code}</td>
+                    <td class="text-center">${batch.batch_code}</td>
+                    <td class="text-center">${batch.quantity}</td>
+                    <td class="text-center">
+                        <button type="button"
+                            onclick="removeFromList(${materialIndex}, '${batch.batch_code}')"><i class='fa fa-trash'></i></button>
+                    </td>
+                `;
+                        tbody.appendChild(row);
+                    });
+                });
+            }
+
+            // Cập nhật giá trị của input ẩn để gửi danh sách vật tư tới server
             document.getElementById('material_list_input').value = JSON.stringify(materialList);
         }
 
-        function removeFromList(index) {
-            materialList.splice(index, 1);
+        function removeFromList(materialIndex, batchCode) {
+            let material = materialList[materialIndex];
+            material.batches = material.batches.filter(batch => batch.batch_code !== batchCode);
+            if (material.batches.length === 0) {
+                materialList.splice(materialIndex, 1);
+            }
             updateMaterialListTable();
         }
+
 
         function resetForm() {
             document.getElementById('material_code').value = '';

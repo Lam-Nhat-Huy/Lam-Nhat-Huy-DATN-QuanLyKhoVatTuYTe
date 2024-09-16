@@ -119,8 +119,9 @@
             </h3>
 
             <div class="card-toolbar">
-                <a href="{{ route('warehouse.import') }}" class="btn btn-sm btn-dark" style="font-size: 12px;"><i
-                        class="fa fa-arrow-left me-1"></i>Trở Lại</a>
+                <a href="{{ route('warehouse.export') }}" class="btn btn-sm btn-dark" style="font-size: 10px;">
+                    <i class="fa fa-arrow-left me-1" style="font-size: 10px;"></i>Trở Lại
+                </a>
             </div>
         </div>
 

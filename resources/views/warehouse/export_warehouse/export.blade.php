@@ -38,6 +38,7 @@
             </div>
         </div>
 
+        {{-- Filter  --}}
         <div class="card-body py-1">
             <form action="" class="row align-items-center">
                 <div class="col-4">
@@ -80,6 +81,7 @@
             </form>
         </div>
 
+        {{-- Danh sách phiếu  --}}
         <div class="card-body py-3">
             <div class="table-responsive">
                 <table class="table align-middle gs-0 gy-4">
@@ -96,17 +98,19 @@
                     </thead>
                     <tbody>
                         @for ($i = 0; $i < 6; $i++)
+                            <!-- Table structure -->
                             <tr class="text-center hover-table pointer" data-bs-toggle="collapse"
                                 data-bs-target="#collapse{{ $i }}" aria-expanded="false"
                                 aria-controls="collapse{{ $i }}">
                                 <td>
-                                    <input type="checkbox" class="row-checkbox" data-checkbox />
+                                    <input type="checkbox" class="row-checkbox" />
                                 </td>
                                 <td>PX199001</td>
                                 <td>Nhật Huy</td>
                                 <td>26/08/2024</td>
                                 <td>Xuất Bán Lẻ</td>
                             </tr>
+
 
                             <!-- Dropdown menu -->
                             <tr class="collapse multi-collapse" id="collapse{{ $i }}">
@@ -273,11 +277,12 @@
                             </tr>
                         @endfor
                     </tbody>
-
                 </table>
             </div>
         </div>
 
+
+        {{-- Tất cả hành động  --}}
         <div class="card-body py-3 mb-3">
             <div class="dropdown">
                 <span class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
@@ -533,11 +538,13 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="editExportCode" class="form-label">Mã Phiếu:</label>
-                                        <input type="text" class="form-control form-control-sm" id="editExportCode" value="PX00019">
+                                        <input type="text" class="form-control form-control-sm" id="editExportCode"
+                                            value="PX00019">
                                     </div>
                                     <div class="mb-3">
                                         <label for="editExportNumber" class="form-label">Số Phiếu:</label>
-                                        <input type="text" class="form-control form-control-sm" id="editExportNumber" value="025">
+                                        <input type="text" class="form-control form-control-sm" id="editExportNumber"
+                                            value="025">
                                     </div>
                                     <div class="mb-3">
                                         <label for="editCustomer" class="form-label">Khách Hàng:</label>
@@ -553,11 +560,13 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="editCreatedBy" class="form-label">Người Tạo:</label>
-                                        <input type="text" class="form-control form-control-sm" id="editCreatedBy" value="Nhật Huy">
+                                        <input type="text" class="form-control form-control-sm" id="editCreatedBy"
+                                            value="Nhật Huy">
                                     </div>
                                     <div class="mb-3">
                                         <label for="editNote" class="form-label">Ghi Chú:</label>
-                                        <input class="form-control form-control-sm" id="editNote" rows="2" value="Hàng dễ vỡ">
+                                        <input class="form-control form-control-sm" id="editNote" rows="2"
+                                            value="Hàng dễ vỡ">
                                     </div>
                                 </div>
                             </div>
@@ -582,13 +591,20 @@
                                     </thead>
                                     <tbody id="editItemsTableBody">
                                         <tr>
-                                            <td><input type="text" class="form-control form-control-sm" value="VT001" disabled></td>
-                                            <td><input type="number" class="form-control form-control-sm" value="10"></td>
-                                            <td><input type="text" class="form-control form-control-sm" value="50,000 VND"></td>
-                                            <td><input type="text" class="form-control form-control-sm" value="L001"></td>
-                                            <td><input type="number" class="form-control form-control-sm" value="5"></td>
-                                            <td><input type="number" class="form-control form-control-sm" value="10"></td>
-                                            <td><input type="text" class="form-control form-control-sm" value="55,000 VND" readonly>
+                                            <td><input type="text" class="form-control form-control-sm" value="VT001"
+                                                    disabled></td>
+                                            <td><input type="number" class="form-control form-control-sm"
+                                                    value="10"></td>
+                                            <td><input type="text" class="form-control form-control-sm"
+                                                    value="50,000 VND"></td>
+                                            <td><input type="text" class="form-control form-control-sm"
+                                                    value="L001"></td>
+                                            <td><input type="number" class="form-control form-control-sm"
+                                                    value="5"></td>
+                                            <td><input type="number" class="form-control form-control-sm"
+                                                    value="10"></td>
+                                            <td><input type="text" class="form-control form-control-sm"
+                                                    value="55,000 VND" readonly>
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-danger btn-sm">Xóa</button>
@@ -640,61 +656,35 @@
 
 @section('scripts')
     <script>
+        // Sự kiện chọn tất cả checkbox
         document.getElementById('selectAll').addEventListener('change', function() {
             var isChecked = this.checked;
             var checkboxes = document.querySelectorAll('.row-checkbox');
             checkboxes.forEach(function(checkbox) {
                 checkbox.checked = isChecked;
-                var row = checkbox.closest('tr');
-                if (isChecked) {
-                    row.classList.add('selected-row');
-                } else {
-                    row.classList.remove('selected-row');
-                }
             });
         });
 
+        // Ngăn sự kiện click lan rộng khi click vào checkbox
         document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                var row = this.closest('tr');
-                if (this.checked) {
-                    row.classList.add('selected-row');
-                } else {
-                    row.classList.remove('selected-row');
-                }
-
-                var allChecked = true;
-                document.querySelectorAll('.row-checkbox').forEach(function(cb) {
-                    if (!cb.checked) {
-                        allChecked = false;
-                    }
-                });
-                document.getElementById('selectAll').checked = allChecked;
+            checkbox.addEventListener('click', function(event) {
+                event.stopPropagation(); // Ngăn sự kiện click lan đến thẻ tr
             });
         });
 
-        // Add click event to rows
+        // Sự kiện click vào thẻ tr để mở/đóng collapse (nhưng không phải checkbox)
         document.querySelectorAll('tbody tr').forEach(function(row) {
-            row.addEventListener('click', function() {
-                var checkbox = this.querySelector('.row-checkbox');
-                if (checkbox) {
-                    checkbox.checked = !checkbox.checked;
-                    if (checkbox.checked) {
-                        this.classList.add('selected-row');
-                    } else {
-                        this.classList.remove('selected-row');
-                    }
-
-                    var allChecked = true;
-                    document.querySelectorAll('.row-checkbox').forEach(function(cb) {
-                        if (!cb.checked) {
-                            allChecked = false;
-                        }
-                    });
-                    document.getElementById('selectAll').checked = allChecked;
+            row.addEventListener('click', function(event) {
+                // Kiểm tra nếu click không phải là checkbox mới mở collapse
+                if (!event.target.closest('.row-checkbox')) {
+                    var collapseTarget = this.getAttribute('data-bs-target');
+                    var collapseElement = document.querySelector(collapseTarget);
+                    collapseElement.classList.toggle('show');
                 }
             });
         });
+
+
 
         document.getElementById('printPdfBtn').addEventListener('click', function() {
             var printContents = document.getElementById('printArea').innerHTML;
