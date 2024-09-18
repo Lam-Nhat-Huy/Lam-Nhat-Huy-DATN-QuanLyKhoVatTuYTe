@@ -29,65 +29,7 @@
 
 @section('content')
     <div class="card mb-5 pb-5 mb-xl-8">
-        <div class="card-header border-0 pt-5">
-            <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Nhập Kho</span>
-            </h3>
-
-            <div class="card-toolbar">
-                <a href="{{ route('warehouse.create_import') }}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i>Tạo Phiếu Nhập</a>
-            </div>
-        </div>
-        {{-- Bộ lọc --}}
-        <div class="card-body py-1">
-            <form action="" class="row  align-items-center">
-                <div class="col-4">
-                    <div class="row align-items-center">
-                        <div class="col-5 pe-0">
-                            <input type="date"
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
-                                value="{{ \Carbon\Carbon::now()->subMonths(3)->format('Y-m-d') }}">
-                        </div>
-                        <div class="col-2 text-center">
-                            Đến
-                        </div>
-                        <div class="col-5 ps-0">
-                            <input type="date"
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
-                                value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-2">
-                    <select name="stt" id="stt"
-                        class="mt-2 mb-2 form-select form-select-sm form-select-solid border border-success setupSelect2">
-                        <option value="" selected>--Theo NCC--</option>
-                        <option value="1" {{ request()->stt == 1 ? 'selected' : '' }}>Chưa Duyệt</option>
-                        <option value="2" {{ request()->stt == 2 ? 'selected' : '' }}>Đã Duyệt</option>
-                    </select>
-                </div>
-                <div class="col-2">
-                    <select name="ur" id="ur"
-                        class="mt-2 mb-2 form-select form-select-sm form-select-solid border border-success setupSelect2">
-                        <option value="" selected>--Theo Người Tạo--</option>
-                        <option value="a">A</option>
-                        <option value="b">B</option>
-                    </select>
-                </div>
-                <div class="col-4 pe-8">
-                    <div class="row">
-                        <div class="col-10">
-                            <input type="search" name="kw" placeholder="Tìm Kiếm Mã, Số Hóa Đơn.."
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
-                                value="{{ request()->kw }}">
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+        @include('warehouse.import_warehouse.filter')
 
         {{-- Danh sách --}}
         <div class="card-body py-3">
@@ -99,46 +41,50 @@
                             <th class="ps-4">
                                 <input type="checkbox" id="selectAll" />
                             </th>
-                            <th class="ps-4">Mã Hóa Đơn</th>
+                            <th class="ps-4">Mã Phiếu Nhập</th>
                             <th class="">Số Hóa Đơn</th>
                             <th class="">Nhà Cung Cấp</th>
                             <th class="">Tạo Bởi</th>
                             <th class="">Ngày Nhập</th>
-                            <th class="">Tổng Cộng</th>
+                            <th class="">Trạng Thái</th>
                         </tr>
                     </thead>
 
                     <!-- Trong phần <tbody> của bảng -->
                     <tbody>
-                        @for ($i = 0; $i < 6; $i++)
+                        @foreach ($receipts as $item)
                             <tr class="text-center hover-table pointer" data-bs-toggle="collapse"
-                                data-bs-target="#collapse{{ $i }}" aria-expanded="false"
-                                aria-controls="collapse{{ $i }}">
+                                data-bs-target="#collapse{{ $item['code'] }}" aria-expanded="false"
+                                aria-controls="collapse{{ $item['code'] }}">
                                 <td>
                                     <input type="checkbox" class="row-checkbox" />
                                 </td>
                                 <td>
-                                    PD199001
+                                    {{ $item->code }}
                                 </td>
                                 <td>
-                                    245
+                                    {{ $item->receipt_no }}
                                 </td>
                                 <td>
-                                    Trung Sơn
+                                    {{ $item->supplier->name }}
                                 </td>
                                 <td>
-                                    Nhật Huy
+                                    {{ $item->user->last_name . ' ' . $item->user->first_name }}
                                 </td>
                                 <td>
-                                    26/08/2024
+                                    {{ $item->receipt_date }}
                                 </td>
                                 <td>
-                                    12.000.000VNĐ
+                                    @if ($item['status'] == 1)
+                                        Phiếu Tạm
+                                    @else
+                                        Đã nhập
+                                    @endif
                                 </td>
                             </tr>
 
                             <!-- Collapse content -->
-                            <tr class="collapse multi-collapse" id="collapse{{ $i }}">
+                            <tr class="collapse multi-collapse" id="collapse{{ $item['code'] }}">
                                 <td class="p-0" colspan="12"
                                     style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
                                     <div class="flex-lg-row-fluid border-2 border-lg-1">
@@ -148,10 +94,12 @@
                                                 style="padding-top: 0 !important; padding-bottom: 0px !important;">
                                                 <h4 class="fw-bold m-0">Chi tiết phiếu nhập kho</h4>
                                                 <div class="card-toolbar">
-                                                    @if ($i > 2)
-                                                        <div class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</div>
+                                                    @if ($item['status'] == 1)
+                                                        <div style="font-size: 10px;"
+                                                            class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</div>
                                                     @else
-                                                        <div class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
+                                                        <div style="font-size: 10px;"
+                                                            class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
                                                     @endif
                                                 </div>
                                             </div>
@@ -162,65 +110,97 @@
                                                         <table class="table table-flush gy-1">
                                                             <tbody>
                                                                 <tr>
-                                                                    <td class=""><strong>Mã hóa đơn</strong>
+                                                                    <td class=""><strong>Mã phiếu nhập</strong>
                                                                     </td>
-                                                                    <td class="text-gray-800">HD00019</td>
+                                                                    <td class="text-gray-800">{{ $item->code }}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td class=""><strong>Số hóa đơn</strong>
                                                                     </td>
-                                                                    <td class="text-gray-800">025</td>
+                                                                    <td class="text-gray-800">{{ $item->receipt_no }}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td class=""><strong>Nhà cung cấp</strong>
                                                                     </td>
-                                                                    <td class="text-gray-800">Trung Sơn</td>
+                                                                    <td class="text-gray-800">
+                                                                        {{ $item->supplier->name }}
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td class=""><strong>Ngày nhập</strong>
                                                                     </td>
-                                                                    <td class="text-gray-800">26/08/2024</td>
+                                                                    <td class="text-gray-800">
+                                                                        {{ $item->receipt_date }}
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td class=""><strong>Người tạo</strong>
                                                                     </td>
-                                                                    <td class="text-gray-800">Nhật Huy</td>
+                                                                    <td class="text-gray-800">
+                                                                        {{ $item->user->last_name . ' ' . $item->user->first_name }}
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td class=""><strong>Ghi chú</td>
-                                                                    <td class="text-gray-800">Hàng dễ vỡ</td>
+                                                                    <td class="text-gray-800">
+                                                                        {{ $item->note }}
+                                                                    </td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                     <!-- End::Receipt Info -->
 
+                                                    @php
+                                                        $totalPrice = 0;
+                                                        $totalDiscount = 0;
+                                                        $totalVAT = 0;
+
+                                                        foreach ($item->details as $detail) {
+                                                            $price = $detail->price ?? 0;
+                                                            $quantity = $detail->quantity;
+                                                            $discount = $detail->discount ?? 0;
+                                                            $vat = $detail->VAT ?? 0;
+
+                                                            $totalPrice += $quantity * $price;
+
+                                                            $totalDiscount += $quantity * $discount;
+
+                                                            $totalVAT +=
+                                                                $quantity * ($price - $discount) * ($vat / 100);
+                                                        }
+
+                                                        $totalAmount = $totalPrice - $totalDiscount + $totalVAT;
+                                                    @endphp
+
                                                     <div class="col-md-4">
                                                         <table class="table table-flush gy-1">
                                                             <tbody>
                                                                 <tr>
-                                                                    <td class=""><strong>Tổng tiền hàng</strong>
-                                                                    </td>
-                                                                    <td class="text-gray-800">1,200,000 VNĐ</td>
+                                                                    <td class=""><strong>Tổng tiền hàng</strong></td>
+                                                                    <td class="text-gray-800">
+                                                                        {{ number_format($totalPrice, 0) }} VNĐ</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td class=""><strong>Tổng chiết khấu</strong>
                                                                     </td>
-                                                                    <td class="text-gray-800">25,000 VNĐ</td>
+                                                                    <td class="text-gray-800">
+                                                                        {{ number_format($totalDiscount, 0) }} VNĐ</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class=""><strong>Tổng VAT</strong>
-                                                                    </td>
-                                                                    <td class="text-gray-800">12,00 VNĐ</td>
+                                                                    <td class=""><strong>Tổng VAT</strong></td>
+                                                                    <td class="text-gray-800">
+                                                                        {{ number_format($totalVAT, 0) }} VNĐ</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class=""><strong>Tổng cộng</strong>
-                                                                    </td>
-                                                                    <td class="text-gray-800">1,237,000</td>
+                                                                    <td class=""><strong>Tổng cộng</strong></td>
+                                                                    <td class="text-gray-800">
+                                                                        {{ number_format($totalAmount, 0) }} VNĐ</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
+
                                                     <!-- End::Receipt Info -->
                                                 </div>
 
@@ -233,6 +213,7 @@
                                                                     <th class="ps-4">Mã vật tư</th>
                                                                     <th>Tên vật tư</th>
                                                                     <th>Số lượng</th>
+                                                                    <th>Giá nhập</th>
                                                                     <th>Số lô</th>
                                                                     <th>Chiết khấu (%)</th>
                                                                     <th>VAT (%)</th>
@@ -240,33 +221,30 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr>
-                                                                    <td>VT001</td>
-                                                                    <td>Băng gạc</td>
-                                                                    <td>10 Bịch</td>
-                                                                    <td>BG001</td>
-                                                                    <td>1</td>
-                                                                    <td>1.2</td>
-                                                                    <td>55,000 VND</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>VT002</td>
-                                                                    <td>Thuốc đỏ</td>
-                                                                    <td>10 lọ</td>
-                                                                    <td>BG001</td>
-                                                                    <td>1</td>
-                                                                    <td>1.2</td>
-                                                                    <td>55,000 VND</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>VT003</td>
-                                                                    <td>Nước muối</td>
-                                                                    <td>10 chai</td>
-                                                                    <td>BG001</td>
-                                                                    <td>1</td>
-                                                                    <td>1.2</td>
-                                                                    <td>550,000 VND</td>
-                                                                </tr>
+                                                                @foreach ($item->details as $detail)
+                                                                    @php
+                                                                        $price = $detail->price ?? 0;
+                                                                        $quantity = $detail->quantity;
+                                                                        $discount = $detail->discount ?? 0;
+                                                                        $vat = $detail->VAT ?? 0;
+
+                                                                        $totalPrice = $quantity * ($price - $discount);
+                                                                        $totalPriceWithVAT =
+                                                                            $totalPrice * (1 + $vat / 100);
+                                                                    @endphp
+                                                                    <tr class="text-center">
+                                                                        <td>{{ $detail->equipments->code }}</td>
+                                                                        <td>{{ $detail->equipments->name }}</td>
+                                                                        <td>{{ $detail->quantity }}</td>
+                                                                        <td>{{ number_format($detail->price) }} VND</td>
+                                                                        <td>{{ $detail->batch_number }}</td>
+                                                                        <td>{{ $detail->discount }}</td>
+                                                                        <td>{{ $detail->VAT }}%</td>
+                                                                        <td>{{ number_format($totalPriceWithVAT) }} VND
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -280,33 +258,35 @@
                                     <div class="card-body py-3 text-end">
                                         <div class="button-group">
                                             <!-- Nút Duyệt đơn -->
-                                            <button class="btn btn-sm btn-success me-2" data-bs-toggle="modal"
-                                                data-bs-target="#browse" type="btn btn-sm btn-success">
-                                                <i class="fas fa-clipboard-check"></i>Duyệt Phiếu
+                                            <button style="font-size: 10px;" class="btn btn-sm btn-success me-2"
+                                                data-bs-toggle="modal" data-bs-target="#browse"
+                                                type="btn btn-sm btn-success">
+                                                <i style="font-size: 10px;" class="fas fa-clipboard-check"></i>Duyệt Phiếu
                                             </button>
 
                                             <!-- Nút In Phiếu -->
-                                            <button class="btn btn-sm btn-twitter me-2" id="printPdfBtn" type="button">
-                                                <i class="fa fa-print"></i>In Phiếu
+                                            <button style="font-size: 10px;" class="btn btn-sm btn-twitter me-2"
+                                                id="printPdfBtn" type="button">
+                                                <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
                                             </button>
 
                                             <!-- Nút Sửa đơn -->
-                                            <button class="btn btn-sm btn-dark me-2" data-bs-toggle="modal"
-                                                data-bs-target="#edit" type="button">
-                                                <i class="fa fa-edit"></i>Sửa Phiếu
+                                            <button style="font-size: 10px;" class="btn btn-sm btn-dark me-2"
+                                                data-bs-toggle="modal" data-bs-target="#edit" type="button">
+                                                <i style="font-size: 10px;" class="fa fa-edit"></i>Sửa Phiếu
                                             </button>
 
                                             <!-- Nút Xóa đơn -->
-                                            <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
-                                                data-bs-target="#deleteConfirm" type="button">
-                                                <i class="fa fa-trash"></i>Xóa Phiếu
+                                            <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
+                                                data-bs-toggle="modal" data-bs-target="#deleteConfirm" type="button">
+                                                <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
                                             </button>
 
                                         </div>
                                     </div>
                                 </td>
                             </tr>
-                        @endfor
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -330,220 +310,8 @@
         </div>
     </div>
 
-    {{-- Modal Duyệt Tất Cả --}}
-    <div class="modal fade" id="confirmAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="confirmAll" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title text-white" id="confirmAll">Duyệt Tất Cả Phiếu</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center" style="padding-bottom: 0px;">
-                    <form action="" method="">
-                        @csrf
-                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt tất cả phiếu đã chọn?</p>
-                    </form>
-                </div>
-                <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-sm btn-secondary btn-sm px-4"
-                        data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-sm btn-success px-4">
-                        Duyệt</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    {{-- Modal Xác Nhận Xóa Tất Cả --}}
-    <div class="modal fade" id="deleteAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="deleteAllLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Xóa Tất Cả Phiếu</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center" style="padding-bottom: 0px;">
-                    <form action="" method="">
-                        @csrf
-                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả phiếu đã chọn?</p>
-                    </form>
-                </div>
-                <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-sm btn-success px-4"> Xóa</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Modal Duyệt Phiếu --}}
-    <div class="modal fade" id="browse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="browseLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title text-white" id="browseLabel">Duyệt Phiếu Nhập Kho</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center" style="padding-bottom: 0px;">
-                    <form action="" method="">
-                        @csrf
-                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt phiếu nhập kho này?</p>
-                    </form>
-                </div>
-                <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-sm btn-secondary btn-sm px-4"
-                        data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-sm btn-success px-4">
-                        Duyệt</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Modal Xác Nhận Xóa --}}
-    <div class="modal fade" id="deleteConfirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="deleteConfirmLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title text-white" id="deleteConfirmLabel">Xác Nhận Xóa Phiếu</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center" style="padding-bottom: 0px;">
-                    <form action="" method="">
-                        @csrf
-                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa phiếu này?</p>
-                    </form>
-                </div>
-                <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-sm btn-danger px-4"> Xóa</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Chi tiết phiếu nhập -->
-    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content rounded shadow-sm border-0">
-                <!-- Modal header -->
-                <div class="modal-header pb-0 border-0 justify-content-end">
-                    <button type="button" class="btn btn-sm btn-icon btn-light" data-bs-dismiss="modal"
-                        aria-label="Close">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-                <!-- Modal body -->
-                <div id="printArea">
-                    <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
-                        <form action="" method="post">
-                            <div class="text-center mb-13">
-                                <h1 class="mb-3 text-uppercase text-primary">Phiếu Nhập</h1>
-                                <div class="text-muted fw-bold fs-6">Thông Tin Chi Tiết Về Phiếu Nhập Kho
-                                    <span class="link-primary fw-bolder">#MaNhapKho</span>.
-                                </div>
-                            </div>
-                            <div class="mb-15">
-                                <!-- Begin::Receipt Info -->
-                                <div class="mb-4">
-                                    <h4 class="text-primary border-bottom border-dark pb-4">Thông Tin Phiếu Nhập</h4>
-                                    <div class="row pt-3">
-                                        <div class="col-4">
-                                            <p><strong>Mã Hóa Đơn:</strong> <span id="modalInvoiceCode">HD00019</span></p>
-                                            <p><strong>Số Hóa Đơn:</strong> <span id="modalContractNumber">025</span></p>
-                                            <p><strong>Nhà Cung Cấp:</strong> <span id="modalSupplier">Trung Sơn</span></p>
-                                            <p><strong>Ngày Nhập:</strong> <span id="modalReceiptDate">26/08/2024</span>
-                                            </p>
-                                            <p><strong>Người Tạo:</strong> <span id="modalCreatedBy">Nhật Huy</span></p>
-                                            <p><strong>Ghi Chú:</strong> <span id="modalNote">Hàng dễ vỡ</span></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- End::Receipt Info -->
-
-                                <!-- Begin::Receipt Items -->
-                                <div class="mb-4">
-                                    <h4 class="text-primary border-bottom border-dark pb-4 mb-4">Danh sách vật tư</h4>
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-sm table-hover">
-                                            <thead class="fw-bolder bg-success">
-                                                <tr>
-                                                    <th class="ps-4">Mã vật tư</th>
-                                                    <th>Tên vật tư</th>
-                                                    <th>Số lượng</th>
-                                                    <th>Số lô</th>
-                                                    <th>Chiết khấu (%)</th>
-                                                    <th>VAT (%)</th>
-                                                    <th class="pe-3">Thành tiền</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="modalItemsTableBody">
-                                                <tr>
-                                                    <td>VT001</td>
-                                                    <td>Băng gạc</td>
-                                                    <td>10 Bịch</td>
-                                                    <td>BG001</td>
-                                                    <td>1</td>
-                                                    <td>1.2</td>
-                                                    <td>55,000 VND</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>VT002</td>
-                                                    <td>Thuốc đỏ</td>
-                                                    <td>10 lọ</td>
-                                                    <td>BG001</td>
-                                                    <td>1</td>
-                                                    <td>1.2</td>
-                                                    <td>55,000 VND</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>VT003</td>
-                                                    <td>Nước muối</td>
-                                                    <td>10 chai</td>
-                                                    <td>BG001</td>
-                                                    <td>1</td>
-                                                    <td>1.2</td>
-                                                    <td>550,000</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <!-- End::Receipt Items -->
-
-                                <!-- Begin::Summary -->
-                                <div class="card p-4" style="background: #f9f9f9; border: 1px solid #e3e3e3;">
-                                    <h5 class="card-title text-primary">Tổng Cộng</h5>
-                                    <hr>
-                                    <p class="mb-1">Tổng tiền hàng: <span class="fw-bold" id="modalSubtotal">12.000.000
-                                            VND</span></p>
-                                    <p class="mb-1">Tổng chiết khấu: <span class="fw-bold" id="modalTotalDiscount">0
-                                            VND</span></p>
-                                    <p class="mb-1">Tổng VAT: <span class="fw-bold" id="modalTotalVat">0 VND</span></p>
-                                    <p class="mb-1">Chi phí vận chuyển: <span class="fw-bold" id="modalShippingCost">0
-                                            VND</span></p>
-                                    <p class="mb-1">Phí khác: <span class="fw-bold" id="modalOtherFees">0 VND</span>
-                                    </p>
-                                    <hr>
-                                    <p class="fs-4 fw-bold text-danger">Tổng: <span id="modalFinalTotal">12.000.000
-                                            VND</span></p>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
+    @include('warehouse.import_warehouse.modal')
 @endsection
 
 @section('scripts')

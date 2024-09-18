@@ -33,8 +33,8 @@
             </h3>
 
             <div class="card-toolbar">
-                <a href="{{ route('warehouse.create_export') }}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i>Tạo
-                    Phiếu Xuất</a>
+                <a href="{{ route('warehouse.create_export') }}" style="font-size: 10px;" class="btn btn-sm btn-success">
+                    Tạo Phiếu Nhập</a>
             </div>
         </div>
 
@@ -124,9 +124,11 @@
                                                 <h4 class="fw-bold m-0">Chi tiết phiếu xuất kho</h4>
                                                 <div class="card-toolbar">
                                                     @if ($i < 1)
-                                                        <div class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</div>
+                                                        <div style="font-size: 10px;"
+                                                            class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</div>
                                                     @else
-                                                        <div class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
+                                                        <div style="font-size: 10px;"
+                                                            class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
                                                     @endif
                                                 </div>
                                             </div>
@@ -247,26 +249,29 @@
                                     <div class="card-body py-3 text-end">
                                         <div class="button-group">
                                             <!-- Nút Duyệt đơn -->
-                                            <button class="btn btn-sm btn-success me-2" data-bs-toggle="modal"
-                                                data-bs-target="#browse" type="btn btn-sm btn-success">
-                                                <i class="fas fa-clipboard-check"></i>Duyệt Phiếu
+                                            <button style="font-size: 10px;" class="btn btn-sm btn-success me-2"
+                                                data-bs-toggle="modal" data-bs-target="#browse"
+                                                type="btn btn-sm btn-success">
+                                                <i style="font-size: 10px;" class="fas fa-clipboard-check"></i>Duyệt Phiếu
                                             </button>
 
                                             <!-- Nút In Phiếu -->
-                                            <button class="btn btn-sm btn-twitter me-2" id="printPdfBtn" type="button">
-                                                <i class="fa fa-print"></i>In Phiếu
+                                            <button class="btn btn-sm btn-twitter me-2" style="font-size: 10px;"
+                                                id="printPdfBtn" type="button">
+                                                <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
                                             </button>
 
                                             <!-- Nút Sửa đơn -->
-                                            <button class="btn btn-sm btn-dark me-2" data-bs-toggle="modal"
-                                                data-bs-target="#editExportReceiptModal" type="button">
-                                                <i class="fa fa-edit"></i>Sửa Phiếu
+                                            <button style="font-size: 10px;" class="btn btn-sm btn-dark me-2"
+                                                data-bs-toggle="modal" data-bs-target="#editExportReceiptModal"
+                                                type="button">
+                                                <i style="font-size: 10px;" class="fa fa-edit"></i>Sửa Phiếu
                                             </button>
 
                                             <!-- Nút Xóa đơn -->
-                                            <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
-                                                data-bs-target="#deleteConfirm" type="button">
-                                                <i class="fa fa-trash"></i>Xóa Phiếu
+                                            <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
+                                                data-bs-toggle="modal" data-bs-target="#deleteConfirm" type="button">
+                                                <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
                                             </button>
 
                                         </div>
@@ -656,35 +661,61 @@
 
 @section('scripts')
     <script>
-        // Sự kiện chọn tất cả checkbox
         document.getElementById('selectAll').addEventListener('change', function() {
             var isChecked = this.checked;
             var checkboxes = document.querySelectorAll('.row-checkbox');
             checkboxes.forEach(function(checkbox) {
                 checkbox.checked = isChecked;
-            });
-        });
-
-        // Ngăn sự kiện click lan rộng khi click vào checkbox
-        document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
-            checkbox.addEventListener('click', function(event) {
-                event.stopPropagation(); // Ngăn sự kiện click lan đến thẻ tr
-            });
-        });
-
-        // Sự kiện click vào thẻ tr để mở/đóng collapse (nhưng không phải checkbox)
-        document.querySelectorAll('tbody tr').forEach(function(row) {
-            row.addEventListener('click', function(event) {
-                // Kiểm tra nếu click không phải là checkbox mới mở collapse
-                if (!event.target.closest('.row-checkbox')) {
-                    var collapseTarget = this.getAttribute('data-bs-target');
-                    var collapseElement = document.querySelector(collapseTarget);
-                    collapseElement.classList.toggle('show');
+                var row = checkbox.closest('tr');
+                if (isChecked) {
+                    row.classList.add('selected-row');
+                } else {
+                    row.classList.remove('selected-row');
                 }
             });
         });
 
+        document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                var row = this.closest('tr');
+                if (this.checked) {
+                    row.classList.add('selected-row');
+                } else {
+                    row.classList.remove('selected-row');
+                }
 
+                var allChecked = true;
+                document.querySelectorAll('.row-checkbox').forEach(function(cb) {
+                    if (!cb.checked) {
+                        allChecked = false;
+                    }
+                });
+                document.getElementById('selectAll').checked = allChecked;
+            });
+        });
+
+        // Add click event to rows
+        document.querySelectorAll('tbody tr').forEach(function(row) {
+            row.addEventListener('click', function() {
+                var checkbox = this.querySelector('.row-checkbox');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                    if (checkbox.checked) {
+                        this.classList.add('selected-row');
+                    } else {
+                        this.classList.remove('selected-row');
+                    }
+
+                    var allChecked = true;
+                    document.querySelectorAll('.row-checkbox').forEach(function(cb) {
+                        if (!cb.checked) {
+                            allChecked = false;
+                        }
+                    });
+                    document.getElementById('selectAll').checked = allChecked;
+                }
+            });
+        });
 
         document.getElementById('printPdfBtn').addEventListener('click', function() {
             var printContents = document.getElementById('printArea').innerHTML;

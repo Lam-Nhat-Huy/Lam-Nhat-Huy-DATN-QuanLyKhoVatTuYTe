@@ -251,8 +251,8 @@
                             <div class="row ">
                                 <div class="col-6">
                                     <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
-                                        data-bs-target="#importExcelModal" style="font-size: 12px;">Nhập Excel</button>
-                                    <button type="button" class="btn btn-sm btn-danger" style="font-size: 12px;"
+                                        data-bs-target="#importExcelModal" style="font-size: 10px;">Nhập Excel</button>
+                                    <button type="button" class="btn btn-sm btn-danger" style="font-size: 10px;"
                                         onclick="addMaterial()">Thêm vật tư</button>
                                 </div>
                             </div>
@@ -287,9 +287,19 @@
                                         </tr>
                                     </thead>
                                     <tbody id="materialList">
-                                        {{-- Thông tin sau khi được thêm vật tư từ FORM 1 sẽ được hiển thị ở đây --}}
-                                        <input type="hidden" id="materialData" name="materialData">
-
+                                        @if (false)
+                                            {{-- Thông tin sau khi được thêm vật tư từ FORM 1 sẽ được hiển thị ở đây --}}
+                                            <input type="hidden" id="materialData" name="materialData">
+                                        @else
+                                            <tr id="no-material-alert">
+                                                <td colspan="12" class="text-center pe-0 px-0"
+                                                    style="box-shadow: none !important;">
+                                                    <div class="alert alert-warning" role="alert">
+                                                        Chưa có vật tư nào được thêm vào danh sách.
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -298,7 +308,7 @@
                 </div>
                 <div class="col-3 pe-0">
                     <div class="card border-0 shadow p-4 mb-4 bg-white rounded-3">
-                        <h6 class="mb-3 fw-bold text-primary">Thông tin thanh toán</h6>
+                        <h6 class="mb-3 fw-bold text-primary">THÔNG TIN CHI TIẾT</h6>
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fw-semibold">Tổng chiết khấu</span>
                             <span class="fw-semibold text-danger">0₫</span>
@@ -317,7 +327,7 @@
                         <hr class="my-4">
 
                         <div class="mb-3">
-                            <h6 class="mb-3 fw-bold text-primary">Thanh toán</h6>
+                            <h6 class="mb-3 fw-bold text-primary">THANH TOÁN</h6>
                             <div class="form-check my-3">
                                 <input class="form-check-input mt-1" type="radio" name="paymentMethod"
                                     id="cashPayment" value="cash">

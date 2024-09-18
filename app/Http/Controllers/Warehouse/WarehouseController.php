@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Warehouse;
 
 use App\Http\Controllers\Controller;
+use App\Models\Receipts;
 use Illuminate\Http\Request;
 
 class WarehouseController extends Controller
@@ -53,7 +54,12 @@ class WarehouseController extends Controller
     {
         $title = 'Nhập Kho';
 
-        return view("{$this->route}.import_warehouse.import", compact('title'));
+        $receipts = Receipts::with(['supplier', 'user', 'details.equipments'])->get();
+
+        return view("{$this->route}.import_warehouse.import", [
+            'title' => $title,
+            'receipts' => $receipts
+        ]);
     }
 
     public function create_import()
