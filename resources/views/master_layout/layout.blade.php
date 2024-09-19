@@ -26,8 +26,20 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
 
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+
     {{-- Link css riêng cho mỗi view blade --}}
     @yield('styles')
+
+    <style>
+        body,
+        input,
+        select,
+        textarea,
+        button {
+            font-family: 'Noto Sans', sans-serif;
+        }
+    </style>
 </head>
 
 <body id="kt_body"
