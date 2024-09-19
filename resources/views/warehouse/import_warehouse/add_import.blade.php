@@ -281,15 +281,6 @@
                                     <tbody id="materialList">
                                         {{-- Thông tin sau khi được thêm vật tư từ FORM 1 sẽ được hiển thị ở đây --}}
                                         <input type="hidden" id="materialData" name="materialData">
-
-                                        <tr id="no-material-alert">
-                                            <td colspan="12" class="text-center pe-0 px-0"
-                                                style="box-shadow: none !important;">
-                                                <div class="alert alert-warning" role="alert">
-                                                    Chưa có vật tư nào được thêm vào danh sách.
-                                                </div>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -502,29 +493,15 @@
             if (tableBody) {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${material_code}</td>
-                    <td>${supplier_code}</td>
-                    <td>${quantity}</td>
-                    <td>${price}</td>
-                    <td>${batch_code}</td>
-                    <td>${expiry_date}</td>
-                    <td>${discount}</td>
-                    <td>${VAT}</td>
-                    <td>${totalPrice.toFixed(2)}₫</td>
-                `;
-                tableBody.appendChild(row);
-            } else {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${material_code}</td>
-                    <td>${supplier_code}</td>
-                    <td>${quantity}</td>
-                    <td>${price}</td>
-                    <td>${batch_code}</td>
-                    <td>${expiry_date}</td>
-                    <td>${discount}</td>
-                    <td>${VAT}</td>
-                    <td>${totalPrice.toFixed(2)}₫</td>
+                    <td style="font-size: 10px;" class="text-center">${material_code}</td>
+                    <td style="font-size: 10px;" class="text-center">${supplier_code}</td>
+                    <td style="font-size: 10px;" class="text-center">${quantity}</td>
+                    <td style="font-size: 10px;" class="text-center">${price}</td>
+                    <td style="font-size: 10px;" class="text-center">${batch_code}</td>
+                    <td style="font-size: 10px;" class="text-center">${expiry_date}</td>
+                    <td style="font-size: 10px;" class="text-center">${discount}</td>
+                    <td style="font-size: 10px;" class="text-center">${VAT}</td>
+                    <td style="font-size: 10px;" class="text-center">${totalPrice.toFixed(2)}₫</td>
                 `;
                 tableBody.appendChild(row);
             }

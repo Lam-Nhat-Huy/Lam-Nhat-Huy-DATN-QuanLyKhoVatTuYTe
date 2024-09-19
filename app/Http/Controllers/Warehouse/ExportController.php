@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Warehouse;
 
 use App\Http\Controllers\Controller;
-use App\Models\Inventories;
 use App\Models\Receipts;
 use Illuminate\Http\Request;
 
-class WarehouseController extends Controller
+class ExportController extends Controller
 {
     protected $route = 'warehouse';
     protected $inventories = [];
@@ -48,65 +47,6 @@ class WarehouseController extends Controller
             ['id' => 1, 'name' => 'Nguyễn Văn A'],
             ['id' => 2, 'name' => 'Trần Thị B'],
         ];
-    }
-
-
-    public function import()
-    {
-        $title = 'Nhập Kho';
-
-
-
-        $receipts = Receipts::with(['supplier', 'user', 'details.equipments'])->get();
-
-        return view("{$this->route}.import_warehouse.import", [
-            'title' => $title,
-            'receipts' => $receipts
-        ]);
-    }
-
-    public function create_import()
-    {
-        $title = 'Tạo Phiếu Nhập Kho';
-
-        $receiptItems = [
-            [
-                'material_id' => 'MAT001',
-                'name' => 'Vật tư A',
-                'quantity' => 100,
-                'unit_price' => 15000,
-                'batch_number' => 'BATCH001',
-                'expiry_date' => '2024-12-31',
-                'discount_rate' => 5,
-                'vat_rate' => 10,
-                'received_quantity' => 100,
-                'received_date' => '2024-08-29',
-                'unit' => 'Hộp',
-                'product_date' => '2022-01-01'
-            ],
-            [
-                'material_id' => 'MAT002',
-                'name' => 'Vật tư B',
-                'quantity' => 50,
-                'unit_price' => 12000,
-                'batch_number' => 'BATCH002',
-                'expiry_date' => '2025-06-30',
-                'discount_rate' => 0,
-                'vat_rate' => 8,
-                'received_quantity' => 200,
-                'received_date' => '2024-08-29',
-                'unit' => 'Cái',
-                'product_date' => '2023-06-01'
-            ]
-        ];
-
-        return view("{$this->route}.import_warehouse.add_import", compact('title', 'receiptItems'));
-    }
-
-    public function store_import(Request $request)
-    {
-        $materialData = json_decode($request->input('materialData'), true);
-        dd($materialData);
     }
 
     public function export()
@@ -194,13 +134,5 @@ class WarehouseController extends Controller
         ]);
 
         return redirect()->route('warehouse.export')->with('success', 'Xuất kho thành công!');
-    }
-
-
-    public function inventory()
-    {
-        $title = 'Tồn Kho';
-
-        return view("{$this->route}.inventory", compact('title'));
     }
 }
