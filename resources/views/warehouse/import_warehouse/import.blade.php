@@ -251,37 +251,37 @@
                                                 </div>
                                                 <!-- End::Receipt Items -->
                                             </div>
-
                                         </div>
-                                    </div>
 
-                                    <div class="card-body py-3 text-end">
-                                        <div class="button-group">
-                                            <!-- Nút Duyệt đơn -->
-                                            <button style="font-size: 10px;" class="btn btn-sm btn-success me-2"
-                                                data-bs-toggle="modal" data-bs-target="#browse"
-                                                type="btn btn-sm btn-success">
-                                                <i style="font-size: 10px;" class="fas fa-clipboard-check"></i>Duyệt Phiếu
-                                            </button>
+                                        <div class="card-body py-3 text-end">
+                                            <div class="button-group">
+                                                <!-- Nút Duyệt đơn -->
+                                                <button style="font-size: 10px;" class="btn btn-sm btn-success me-2"
+                                                    data-bs-toggle="modal" data-bs-target="#browse"
+                                                    type="btn btn-sm btn-success">
+                                                    <i style="font-size: 10px;" class="fas fa-clipboard-check"></i>Duyệt
+                                                    Phiếu
+                                                </button>
 
-                                            <!-- Nút In Phiếu -->
-                                            <button style="font-size: 10px;" class="btn btn-sm btn-twitter me-2"
-                                                id="printPdfBtn" type="button">
-                                                <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
-                                            </button>
+                                                <!-- Nút In Phiếu -->
+                                                <button style="font-size: 10px;" class="btn btn-sm btn-twitter me-2"
+                                                    id="printPdfBtn" type="button">
+                                                    <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
+                                                </button>
 
-                                            <!-- Nút Sửa đơn -->
-                                            <button style="font-size: 10px;" class="btn btn-sm btn-dark me-2"
-                                                data-bs-toggle="modal" data-bs-target="#edit" type="button">
-                                                <i style="font-size: 10px;" class="fa fa-edit"></i>Sửa Phiếu
-                                            </button>
+                                                <!-- Nút Sửa đơn -->
+                                                <button style="font-size: 10px;" class="btn btn-sm btn-dark me-2"
+                                                    data-bs-toggle="modal" data-bs-target="#edit" type="button">
+                                                    <i style="font-size: 10px;" class="fa fa-edit"></i>Sửa Phiếu
+                                                </button>
 
-                                            <!-- Nút Xóa đơn -->
-                                            <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
-                                                data-bs-toggle="modal" data-bs-target="#deleteConfirm" type="button">
-                                                <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
-                                            </button>
+                                                <!-- Nút Xóa đơn -->
+                                                <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
+                                                    data-bs-toggle="modal" data-bs-target="#deleteConfirm" type="button">
+                                                    <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
+                                                </button>
 
+                                            </div>
                                         </div>
                                     </div>
                                 </td>

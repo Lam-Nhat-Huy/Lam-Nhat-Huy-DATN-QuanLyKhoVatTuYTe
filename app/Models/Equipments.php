@@ -9,6 +9,8 @@ class Equipments extends Model
 {
     use HasFactory;
 
+    protected $table = 'equipments';
+
     protected $fillable = [
         'code',
         'name',
@@ -22,4 +24,9 @@ class Equipments extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function inventories()
+    {
+        return $this->hasMany(Inventories::class, 'equipment_code', 'code');
+    }
 }

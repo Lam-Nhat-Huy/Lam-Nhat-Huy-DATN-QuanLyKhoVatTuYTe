@@ -15,6 +15,7 @@ class UnitsSeeder extends Seeder
                 'code' => 'U001',
                 'name' => 'Piece',
                 'description' => 'Unit of pieces',
+                'created_by' => 'U001',
                 'created_at' => now(),
                 'updated_at' => null,
                 'deleted_at' => null,

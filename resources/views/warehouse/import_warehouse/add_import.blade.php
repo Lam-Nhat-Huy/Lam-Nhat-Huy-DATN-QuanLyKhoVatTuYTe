@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <!-- Include Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <style>
         .d-flex.align-items-center>* {
             flex-shrink: 0;
@@ -135,8 +134,7 @@
                             <div class="row">
                                 <div class="mb-3 col-6">
                                     <label for="supplier_code" class="form-label fw-semibold"
-                                        style="white-space: nowrap;">Nhà
-                                        cung cấp</label>
+                                        style="white-space: nowrap;">Nhà cung cấp</label>
                                     <div class="d-flex align-items-center">
                                         <select id="supplier_code"
                                             class="form-control form-control-sm form-control-solid border border-success">
@@ -163,8 +161,7 @@
                                 </div>
 
                                 <div class="mb-3 col-6">
-                                    <label for="invoice_symbol" class="required form-label mb-2">Kí hiệu hóa đơn
-                                    </label>
+                                    <label for="invoice_symbol" class="required form-label mb-2">Kí hiệu hóa đơn</label>
                                     <input type="text"
                                         class="form-control form-control-sm form-control-solid border border-success"
                                         id="invoice_symbol" name="invoice_symbol" placeholder="Nhập kí hiệu hóa đơn">
@@ -180,12 +177,11 @@
                     </div>
 
                     <div class="col-12">
-                        <div class="card border-0 shadow p-4 mb-4 bg-white rounded-3 ">
+                        <div class="card border-0 shadow p-4 mb-4 bg-white rounded-3">
                             <div class="row mb-3">
                                 <div class="mb-4 col-6">
                                     <label for="material_code" class="form-label fw-semibold"
-                                        style="white-space: nowrap;">Tên
-                                        vật tư</label>
+                                        style="white-space: nowrap;">Tên vật tư</label>
                                     <div class="d-flex align-items-center">
                                         <select id="material_code"
                                             class="form-control form-control-sm form-control-solid border border-success">
@@ -204,8 +200,7 @@
                                 </div>
 
                                 <div class="col-6 mb-4">
-                                    <label for="product_date" class="required form-label mb-2">Ngày sản
-                                        xuất</label>
+                                    <label for="product_date" class="required form-label mb-2">Ngày sản xuất</label>
                                     <input type="date"
                                         class="form-control form-control-sm form-control-solid border border-success"
                                         id="product_date" name="product_date">
@@ -233,8 +228,7 @@
                                 </div>
 
                                 <div class="col-3 mb-4">
-                                    <label for="discount_rate" class="required form-label mb-2">Chiết khấu
-                                        (%)</label>
+                                    <label for="discount_rate" class="required form-label mb-2">Chiết khấu (%)</label>
                                     <input type="text"
                                         class="form-control form-control-sm form-control-solid border border-success"
                                         id="discount_rate" name="discount_rate" placeholder="Nhập chiết khấu (%)">
@@ -248,7 +242,7 @@
                                 </div>
                             </div>
 
-                            <div class="row ">
+                            <div class="row">
                                 <div class="col-6">
                                     <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
                                         data-bs-target="#importExcelModal" style="font-size: 10px;">Nhập Excel</button>
@@ -259,9 +253,7 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </form>
 
         {{-- FORM 2 - Danh sách vật tư đã thêm --}}
@@ -275,31 +267,29 @@
                                 <table class="table table-bordered table-striped">
                                     <thead class="table-dark">
                                         <tr>
-                                            <th class="ps-4">Tên vật tư</th>
-                                            <th>Nhà cung cấp</th>
-                                            <th>Số lượng</th>
-                                            <th>Giá nhập</th>
-                                            <th>Số lô</th>
-                                            <th>Hạn dùng</th>
-                                            <th>CK(%)</th>
-                                            <th>VAT(%)</th>
-                                            <th class="pe-3">Thành tiền</th>
+                                            <th style="font-size: 10px;" class="ps-4">Tên vật tư</th>
+                                            <th style="font-size: 10px;">Nhà cung cấp</th>
+                                            <th style="font-size: 10px;">Số lượng</th>
+                                            <th style="font-size: 10px;">Giá nhập</th>
+                                            <th style="font-size: 10px;">Số lô</th>
+                                            <th style="font-size: 10px;">Hạn dùng</th>
+                                            <th style="font-size: 10px;">CK(%)</th>
+                                            <th style="font-size: 10px;">VAT(%)</th>
+                                            <th style="font-size: 10px;" class="pe-3">Thành tiền</th>
                                         </tr>
                                     </thead>
                                     <tbody id="materialList">
-                                        @if (false)
-                                            {{-- Thông tin sau khi được thêm vật tư từ FORM 1 sẽ được hiển thị ở đây --}}
-                                            <input type="hidden" id="materialData" name="materialData">
-                                        @else
-                                            <tr id="no-material-alert">
-                                                <td colspan="12" class="text-center pe-0 px-0"
-                                                    style="box-shadow: none !important;">
-                                                    <div class="alert alert-warning" role="alert">
-                                                        Chưa có vật tư nào được thêm vào danh sách.
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endif
+                                        {{-- Thông tin sau khi được thêm vật tư từ FORM 1 sẽ được hiển thị ở đây --}}
+                                        <input type="hidden" id="materialData" name="materialData">
+
+                                        <tr id="no-material-alert">
+                                            <td colspan="12" class="text-center pe-0 px-0"
+                                                style="box-shadow: none !important;">
+                                                <div class="alert alert-warning" role="alert">
+                                                    Chưa có vật tư nào được thêm vào danh sách.
+                                                </div>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -510,6 +500,20 @@
             // Chỉ hiển thị những trường cần thiết trong bảng
             const tableBody = document.getElementById('materialList');
             if (tableBody) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${material_code}</td>
+                    <td>${supplier_code}</td>
+                    <td>${quantity}</td>
+                    <td>${price}</td>
+                    <td>${batch_code}</td>
+                    <td>${expiry_date}</td>
+                    <td>${discount}</td>
+                    <td>${VAT}</td>
+                    <td>${totalPrice.toFixed(2)}₫</td>
+                `;
+                tableBody.appendChild(row);
+            } else {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${material_code}</td>

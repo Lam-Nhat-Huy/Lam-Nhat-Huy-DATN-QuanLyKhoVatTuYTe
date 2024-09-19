@@ -12,6 +12,8 @@ class Inventories extends Model
 
     use SoftDeletes;
 
+    protected $table = 'inventories';
+
     protected $fillable = [
         'code',
         'equipment_code',
@@ -23,4 +25,18 @@ class Inventories extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function equipments()
+    {
+        return $this->belongsTo(Equipments::class, 'equipment_code', 'code');
+    }
+
+    // Dùng này để lấy ra vật tư và số lượng bên controller
+    // $inventories = Inventories::with('equipments')->get();
+    // foreach ($inventories as $inventory) {
+    //     echo 'Equipment Name: ' . $inventory->equipments->name . '<br>';
+    //     echo 'Batch Number: ' . $inventory->batch_number . '<br>';
+    //     echo 'Current Quantity: ' . $inventory->current_quantity . '<br>';
+    //     echo "<hr>";
+    // }
 }

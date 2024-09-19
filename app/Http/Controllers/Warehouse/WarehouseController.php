@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Warehouse;
 
 use App\Http\Controllers\Controller;
+use App\Models\Inventories;
 use App\Models\Receipts;
 use Illuminate\Http\Request;
 
@@ -53,6 +54,8 @@ class WarehouseController extends Controller
     public function import()
     {
         $title = 'Nhập Kho';
+
+
 
         $receipts = Receipts::with(['supplier', 'user', 'details.equipments'])->get();
 

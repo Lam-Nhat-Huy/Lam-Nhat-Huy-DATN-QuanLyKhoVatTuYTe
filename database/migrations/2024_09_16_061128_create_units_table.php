@@ -12,6 +12,7 @@ return new class extends Migration
             $table->char('code', 20)->primary();
             $table->string('name', 255);
             $table->text('description')->nullable();
+            $table->char('created_by', 20);
             $table->timestamps();
             $table->softDeletes();
         });
