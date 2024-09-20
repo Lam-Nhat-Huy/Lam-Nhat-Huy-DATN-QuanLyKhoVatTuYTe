@@ -14,6 +14,10 @@ class Inventories extends Model
 
     protected $table = 'inventories';
 
+    protected $primaryKey = 'code';
+
+    protected $keyType = 'string';
+
     protected $fillable = [
         'code',
         'equipment_code',
@@ -30,13 +34,4 @@ class Inventories extends Model
     {
         return $this->belongsTo(Equipments::class, 'equipment_code', 'code');
     }
-
-    // Dùng này để lấy ra vật tư và số lượng bên controller
-    // $inventories = Inventories::with('equipments')->get();
-    // foreach ($inventories as $inventory) {
-    //     echo 'Equipment Name: ' . $inventory->equipments->name . '<br>';
-    //     echo 'Batch Number: ' . $inventory->batch_number . '<br>';
-    //     echo 'Current Quantity: ' . $inventory->current_quantity . '<br>';
-    //     echo "<hr>";
-    // }
 }

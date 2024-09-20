@@ -103,8 +103,42 @@ class ImportController extends Controller
         // Lưu dữ liệu vào bảng receipt_details
         Receipt_details::insert($receiptDetailsData);
 
+        foreach ($materialData as $material) {
+            $this->updateInventoryByBatch($material, $receipt->code, $receipt->receipt_date);
+        }
+
         toastr()->success('Đã lưu phiếu nhập kho thành công với mã ' . $newReceiptCode);
 
         return redirect()->route('warehouse.import');
+    }
+
+    // Hàm cập nhật số lượng tồn kho theo từng lô
+    private function updateInventoryByBatch($material, $receiptCode, $receiptDate)
+    {
+        // Tìm lô hàng trong kho dựa vào mã thiết bị và số lô
+        $inventory = Inventories::where('equipment_code', $material['equipment_code'])
+            ->where('batch_number', $material['batch_number'])
+            ->first();
+
+        // dd($inventory);
+
+        if ($inventory) {
+            // Nếu lô hàng đã tồn tại, cộng thêm số lượng vào lô này
+            $inventory->current_quantity += $material['quantity'];
+            $inventory->save();
+        } else {
+            // Nếu chưa có, tạo mới record trong bảng inventories
+            $newInventoryCode = 'INV' . str_pad(Inventories::count() + 1, 4, '0', STR_PAD_LEFT);
+            // Nếu là lô mới, tạo bản ghi mới trong bảng inventories
+            Inventories::create([
+                'code' => $newInventoryCode,
+                'equipment_code' => $material['equipment_code'],
+                'batch_number' => $material['batch_number'],
+                'current_quantity' => $material['quantity'],
+                'import_code' => $receiptCode,
+                'import_date' => $receiptDate,
+                'expiry_date' => $material['expiry_date'],
+            ]);
+        }
     }
 }
