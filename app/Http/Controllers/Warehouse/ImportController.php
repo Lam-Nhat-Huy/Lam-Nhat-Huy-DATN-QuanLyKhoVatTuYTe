@@ -48,7 +48,8 @@ class ImportController extends Controller
         $materialData = json_decode($request->input('materialData'), true);
 
         if (empty($materialData)) {
-            return redirect()->back()->with('error', 'Không có dữ liệu vật tư được gửi.');
+            toastr()->error('Đã lưu phiếu nhập kho thất bại ');
+            return redirect()->back();
         }
 
         // Lấy thông tin của phiếu nhập từ phần tử đầu tiên của materialData
@@ -85,6 +86,7 @@ class ImportController extends Controller
 
         // Chuẩn bị dữ liệu cho bảng receipt_details
         $receiptDetailsData = [];
+
         foreach ($materialData as $material) {
             $receiptDetailsData[] = [
                 'receipt_code' => $receipt->code,
@@ -98,15 +100,11 @@ class ImportController extends Controller
             ];
         }
 
-        // dd([
-        //     'receipt' => $receiptData,
-        //     'receipt_details' => $receiptDetailsData,
-        // ]);
-
         // Lưu dữ liệu vào bảng receipt_details
         Receipt_details::insert($receiptDetailsData);
 
-        // Sau khi lưu, có thể chuyển hướng hoặc trả về thông báo thành công
-        return redirect()->route('warehouse.import')->with('success', 'Đã lưu phiếu nhập kho thành công với mã ' . $newReceiptCode);
+        toastr()->success('Đã lưu phiếu nhập kho thành công với mã ' . $newReceiptCode);
+
+        return redirect()->route('warehouse.import');
     }
 }
