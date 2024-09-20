@@ -327,10 +327,16 @@
                                     </tr>
                                 </thead>
                                 <tbody id="materialList">
-                                    {{-- Thông tin sau khi được thêm vật tư từ FORM 1 sẽ được hiển thị ở đây --}}
-                                    <input type="hidden" id="materialData" name="materialData">
+                                    <tr id="noMaterialAlert">
+                                        <td colspan="10" class="text-center">
+                                            <div class="alert alert-warning" role="alert">
+                                                Chưa có vật tư nào được thêm vào danh sách.
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
+                            <input type="hidden" id="materialData" name="materialData">
                         </div>
                     </div>
                 </div>
@@ -341,19 +347,15 @@
                             <span class="fw-semibold">Tổng chiết khấu</span>
                             <span id="totalDiscount" class="fw-semibold text-danger">0₫</span>
                         </div>
-
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fw-semibold">Tổng VAT</span>
                             <span id="totalVAT" class="fw-semibold text-danger">0₫</span>
                         </div>
-
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fw-semibold">Tổng cộng</span>
                             <span id="totalAmount" class="fw-semibold text-danger">0₫</span>
                         </div>
-
                         <hr class="my-4">
-
                         <button type="submit" class="btn btn-sm btn-success w-100" onclick="submitMaterials()">Tạo phiếu
                             nhập</button>
                     </div>
