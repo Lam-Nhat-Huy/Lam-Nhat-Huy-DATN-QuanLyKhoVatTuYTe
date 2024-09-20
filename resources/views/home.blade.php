@@ -38,9 +38,7 @@
                     <div class="d-flex flex-row-fluid flex-column text-center p-10 pt-lg-20">
                         <!--begin::Logo-->
                         <a href="#" class="py-9 mb-5 d-flex justify-content-center">
-                            <img alt="Logo"
-                                src="{{ asset('image/logo_warehouse.png') }}"
-                                class="h-100px" />
+                            <img alt="Logo" src="{{ asset('image/logo_warehouse.png') }}" class="h-100px" />
                         </a>
                         <!--end::Logo-->
                         <!--begin::Title-->
@@ -70,8 +68,7 @@
                     <!--begin::Wrapper-->
                     <div class="w-lg-500px p-10 p-lg-15 mx-auto">
                         <!--begin::Form-->
-                        <form method="POST" class="form w-100" novalidate="novalidate" id="kt_sign_in_form"
-                            action="#">
+                        <form method="POST" class="form w-100" action="{{ route('home.handleLogin') }}">
                             @csrf
                             <!--begin::Heading-->
                             <div class="text-center mb-10">
@@ -87,7 +84,10 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input class="form-control form-control-lg form-control-solid" type="text"
-                                    name="phone" autocomplete="off" />
+                                    name="phone" autocomplete="off" value="{{ old('phone') }}" />
+                                @error('phone')
+                                    <div class="message_error">{{ $message }}</div>
+                                @enderror
                                 <!--end::Input-->
                             </div>
                             <!--end::Input group-->
@@ -99,8 +99,8 @@
                                     <label class="form-label fw-bolder text-dark fs-6 mb-0">Mật Khẩu</label>
                                     <!--end::Label-->
                                     <!--begin::Link-->
-                                    <a href="{{route('forgot.forgot')}}"
-                                        class="link-primary fs-6 fw-bolder">Quên Mật Khẩu ?</a>
+                                    <a href="{{ route('forgot.forgot') }}" class="link-primary fs-6 fw-bolder">Quên Mật
+                                        Khẩu ?</a>
                                     <!--end::Link-->
                                 </div>
                                 <!--end::Wrapper-->

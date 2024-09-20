@@ -10,14 +10,15 @@ return new class extends Migration
     {
         Schema::create('receipts', function (Blueprint $table) {
             $table->char('code', 20)->primary();
-            $table->char('supplier_code', 20);
             $table->text('note')->nullable();
             $table->boolean('status')->default(true);
-            $table->bigInteger('receipt_no');
+            $table->string('receipt_no')->nullable();
             $table->date('receipt_date')->nullable();
-            $table->char('created_by', 20);
+            $table->char('created_by', 20)->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('created_by')->references('code')->on('users')->onDelete('set null');
         });
     }
 

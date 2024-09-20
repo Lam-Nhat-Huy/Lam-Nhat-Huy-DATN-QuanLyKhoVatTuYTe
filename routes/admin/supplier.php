@@ -2,10 +2,11 @@
 
 use App\Http\Controllers\Supplier\SupplierController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckLogin;
 
 
-Route::prefix('supplier')->group(function () {
-    
+Route::prefix('supplier')->middleware(CheckLogin::class)->group(function () {
+
     Route::get('/', [SupplierController::class, 'index'])->name('supplier.list');
 
     Route::get('/trash', [SupplierController::class, 'trash'])->name('supplier.trash');
@@ -18,5 +19,5 @@ Route::prefix('supplier')->group(function () {
 
     Route::post('/update', [SupplierController::class, 'update'])->name('supplier.update');
 
-    
+
 });

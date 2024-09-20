@@ -12,17 +12,13 @@ Route::prefix('system')->group(function () {
         'admin/report.php',
         'admin/warehouse.php',
         'admin/check_warehouse.php',
-        'admin/card_warehouse.php',
-        'admin/chat.php',
         'admin/supplier.php',
         'admin/profile.php',
         'admin/material.php',
         'admin/material_request.php',
         'admin/notification.php',
         'admin/user.php',
-        'admin/inventory.php',
-        'admin/import.php',
-        'admin/export.php',
+        'admin/inventory.php'
     ];
 
     foreach ($routeFiles as $routeFile) {

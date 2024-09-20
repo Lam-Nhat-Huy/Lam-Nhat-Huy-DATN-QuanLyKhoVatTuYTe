@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\Material\MaterialController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckLogin;
 
 
-Route::prefix('material')->group(function () {
+Route::prefix('material')->middleware(CheckLogin::class)->group(function () {
     
     Route::get('/', [MaterialController::class, 'index'])->name('material.index');
     

@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\MaterialRequest\MaterialRequestController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckLogin;
 
 
-Route::prefix('material_request')->name('material_request.')->group(function () {
+Route::prefix('material_request')->middleware(CheckLogin::class)->name('material_request.')->group(function () {
 
     // Nhập
     Route::get('/import', [MaterialRequestController::class, 'import_material_request'])->name('import');

@@ -17,8 +17,7 @@
         </div>
         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
             <a href="{{ route('system.index') }}" class="d-lg-none">
-                <img alt="Logo" src="{{ asset('image/logo_warehouse.png') }}"
-                    class="h-50px" />
+                <img alt="Logo" src="{{ asset('image/logo_warehouse.png') }}" class="h-50px" />
             </a>
         </div>
         <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1">
@@ -221,11 +220,11 @@
                             </div>
                             <div class="separator"></div>
                             <div class="menu-item">
-                                <a href="{{ route('profile.index') }}" class="menu-link">Hồ Sơ</a>
+                                <a href="{{ route('profile.index') }}" class="menu-link rounded-0">Hồ Sơ</a>
                             </div>
                             <div class="separator"></div>
                             <div class="menu-item">
-                                <a href="" class="menu-link">Đăng Xuất</a>
+                                <a href="{{ route('home.logout') }}" class="menu-link rounded-0">Đăng Xuất</a>
                             </div>
                         </div>
                     </div>

@@ -2,8 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Middleware\CheckLogin;
 
-Route::prefix('report')->group(function () {
+Route::prefix('report')->middleware(CheckLogin::class)->group(function () {
     Route::get('/', [ReportController::class, 'index'])->name('report.index');
     
     Route::get('/report_trash', [ReportController::class, 'report_trash'])->name('report.report_trash');

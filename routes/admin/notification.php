@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\Notification\NotificationController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckLogin;
 
 
-Route::prefix('notification')->group(function () {
+Route::prefix('notification')->middleware(CheckLogin::class)->group(function () {
 
     Route::get('/', [NotificationController::class, 'index'])->name('notification.index');
 

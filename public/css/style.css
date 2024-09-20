@@ -55150,11 +55150,13 @@ input::placeholder {
     color: #b1b3ba !important;
 }
 
-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+input:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
     color: #b1b3ba !important;
 }
 
-input::-ms-input-placeholder { /* Microsoft Edge */
+input::-ms-input-placeholder {
+    /* Microsoft Edge */
     color: #b1b3ba !important;
 }
 
@@ -55180,4 +55182,12 @@ a {
 .form-check-input {
     width: 15px !important;
     height: 15px !important;
+}
+
+.message_error {
+    color: #ff0000;
+    font-size: 14px;
+    text-align: start;
+    padding-bottom: 12px;
+    margin-top: 5px;
 }
