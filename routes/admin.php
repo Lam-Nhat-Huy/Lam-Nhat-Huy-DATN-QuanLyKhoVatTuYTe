@@ -10,7 +10,6 @@ Route::prefix('system')->group(function () {
 
     $routeFiles = [
         'admin/report.php',
-        'admin/warehouse.php',
         'admin/check_warehouse.php',
         'admin/supplier.php',
         'admin/profile.php',
@@ -18,7 +17,9 @@ Route::prefix('system')->group(function () {
         'admin/material_request.php',
         'admin/notification.php',
         'admin/user.php',
-        'admin/inventory.php'
+        'admin/inventory.php',
+        'admin/import.php',
+        'admin/export.php',
     ];
 
     foreach ($routeFiles as $routeFile) {
