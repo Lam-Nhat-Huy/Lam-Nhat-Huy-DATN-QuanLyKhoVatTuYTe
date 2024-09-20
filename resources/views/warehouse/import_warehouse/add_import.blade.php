@@ -103,6 +103,32 @@
         .btn:hover {
             opacity: 0.7;
         }
+
+        .alert {
+            background-color: #f8d7da;
+            border: 1px solid #f5c2c7;
+            color: #842029;
+        }
+
+        #errorMessages {
+            margin: 0 auto;
+        }
+
+        #errorList li {
+            margin-bottom: 5px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        #errorList li::before {
+            content: "\2022";
+            /* Bullet point */
+            color: #842029;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
     </style>
 @endsection
 
@@ -118,14 +144,14 @@
             </h3>
 
             <div class="card-toolbar">
-                <a href="{{ route('warehouse.export') }}" class="btn btn-sm btn-dark" style="font-size: 10px;">
+                <a href="{{ route('warehouse.import') }}" class="btn btn-sm btn-dark" style="font-size: 10px;">
                     <i class="fa fa-arrow-left me-1" style="font-size: 10px;"></i>Trở Lại
                 </a>
             </div>
         </div>
 
         {{-- FORM 1 - Thêm vật tư --}}
-        <form action="" method="post">
+        <form action="{{ route('warehouse.store_import') }}" method="post">
             @csrf
             <div class="container mt-4">
                 <div class="row">
@@ -139,25 +165,28 @@
                                         <select id="supplier_code"
                                             class="form-control form-control-sm form-control-solid border border-success">
                                             <option value="">Chọn nhà cung cấp</option>
-                                            <option value="1">Nhà cung cấp 1</option>
-                                            <option value="2">Nhà cung cấp 2</option>
+                                            @foreach ($suppliers as $supplier)
+                                                <option value="{{ $supplier->code }}">{{ $supplier->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="mb-3 col-6">
                                     <label for="date" class="form-label fw-semibold">Ngày nhập</label>
-                                    <input type="date" id="receipt_at"
+
+                                    <input type="date" id="receipt_date"
                                         class="form-control form-control-sm form-control-solid border border-success">
                                 </div>
 
-                                <input type="hidden" id="created_by" value="1">
+                                {{-- Để dữ liệu tạm thời như vậy có đăng nhập thì đổi lại auth->id  --}}
+                                <input type="hidden" id="created_by" value="U001">
 
                                 <div class="mb-3 col-6">
-                                    <label for="invoice_number" class="required form-label mb-2">Số hóa đơn</label>
+                                    <label for="receipt_no" class="required form-label mb-2">Số hóa đơn</label>
                                     <input type="number"
                                         class="form-control form-control-sm form-control-solid border border-success"
-                                        id="invoice_number" name="invoice_number" placeholder="Nhập số hóa đơn">
+                                        id="receipt_no" name="receipt_no" placeholder="Nhập số hóa đơn">
                                 </div>
 
                                 <div class="mb-3 col-6">
@@ -177,26 +206,30 @@
                     </div>
 
                     <div class="col-12">
-                        <div class="card border-0 shadow p-4 mb-4 bg-white rounded-3">
+                        <div class="card border-0 shadow p-4 bg-white rounded-3">
                             <div class="row mb-3">
                                 <div class="mb-4 col-6">
-                                    <label for="material_code" class="form-label fw-semibold"
-                                        style="white-space: nowrap;">Tên vật tư</label>
+                                    <label for="equipment_code" class="form-label fw-semibold"
+                                        style="white-space: nowrap;">Tên
+                                        vật tư</label>
                                     <div class="d-flex align-items-center">
-                                        <select id="material_code"
+                                        <select id="equipment_code"
                                             class="form-control form-control-sm form-control-solid border border-success">
                                             <option value="">Chọn vật tư</option>
-                                            <option value="1">Canxium</option>
-                                            <option value="2">Panadol</option>
+                                            @foreach ($inventories as $inventory)
+                                                <option value="{{ $inventory->equipments->code }}">
+                                                    {{ $inventory->equipments->name }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="col-6 mb-4">
-                                    <label for="batch_code" class="required form-label mb-2">Số lô</label>
+                                    <label for="batch_number" class="required form-label mb-2">Số lô</label>
                                     <input type="text"
                                         class="form-control form-control-sm form-control-solid border border-success"
-                                        id="batch_code" name="batch_code" placeholder="Nhập số lô">
+                                        id="batch_number" name="batch_number" placeholder="Nhập số lô">
                                 </div>
 
                                 <div class="col-6 mb-4">
@@ -245,8 +278,8 @@
                             <div class="row">
                                 <div class="col-6">
                                     <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
-                                        data-bs-target="#importExcelModal" style="font-size: 10px;">Nhập Excel</button>
-                                    <button type="button" class="btn btn-sm btn-danger" style="font-size: 10px;"
+                                        data-bs-target="#importExcelModal" style="font-size: 11px;">Nhập Excel</button>
+                                    <button type="button" class="btn btn-sm btn-danger" style="font-size: 11px;"
                                         onclick="addMaterial()">Thêm vật tư</button>
                                 </div>
                             </div>
@@ -256,6 +289,21 @@
             </div>
         </form>
 
+        <div class="container">
+            <div id="errorMessages" class="alert alert-danger alert-dismissible fade show shadow-sm rounded-lg"
+                style="display: none;">
+                <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-triangle-exclamation fs-4 me-2"></i>
+                    <strong class="me-auto">Thông báo lỗi</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <hr>
+                <ul id="errorList" class="list-unstyled ps-3 mb-0">
+                    <!-- Error messages will appear here -->
+                </ul>
+            </div>
+        </div>
+
         {{-- FORM 2 - Danh sách vật tư đã thêm --}}
         <form action="{{ route('warehouse.store_import') }}" method="post" class="mt-2">
             @csrf
@@ -263,27 +311,26 @@
                 <div class="col-9">
                     <div class="card border-0 shadow p-4 mb-4 bg-white rounded-3 ">
                         <div class="table-responsive">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped">
-                                    <thead class="table-dark">
-                                        <tr>
-                                            <th style="font-size: 10px;" class="ps-4">Tên vật tư</th>
-                                            <th style="font-size: 10px;">Nhà cung cấp</th>
-                                            <th style="font-size: 10px;">Số lượng</th>
-                                            <th style="font-size: 10px;">Giá nhập</th>
-                                            <th style="font-size: 10px;">Số lô</th>
-                                            <th style="font-size: 10px;">Hạn dùng</th>
-                                            <th style="font-size: 10px;">CK(%)</th>
-                                            <th style="font-size: 10px;">VAT(%)</th>
-                                            <th style="font-size: 10px;" class="pe-3">Thành tiền</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="materialList">
-                                        {{-- Thông tin sau khi được thêm vật tư từ FORM 1 sẽ được hiển thị ở đây --}}
-                                        <input type="hidden" id="materialData" name="materialData">
-                                    </tbody>
-                                </table>
-                            </div>
+                            <table class="table table-bordered table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th style="font-size: 11px;" class="ps-4">Tên vật tư</th>
+                                        <th style="font-size: 11px;">Nhà cung cấp</th>
+                                        <th style="font-size: 11px;">Số lượng</th>
+                                        <th style="font-size: 11px;">Giá nhập</th>
+                                        <th style="font-size: 11px;">Số lô</th>
+                                        <th style="font-size: 11px;">Hạn dùng</th>
+                                        <th style="font-size: 11px;">CK(%)</th>
+                                        <th style="font-size: 11px;">VAT(%)</th>
+                                        <th style="font-size: 11px;" class="pe-3">Thành tiền</th>
+                                        <th style="font-size: 11px;" class="pe-3"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="materialList">
+                                    {{-- Thông tin sau khi được thêm vật tư từ FORM 1 sẽ được hiển thị ở đây --}}
+                                    <input type="hidden" id="materialData" name="materialData">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -292,37 +339,17 @@
                         <h6 class="mb-3 fw-bold text-primary">THÔNG TIN CHI TIẾT</h6>
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fw-semibold">Tổng chiết khấu</span>
-                            <span class="fw-semibold text-danger">0₫</span>
+                            <span id="totalDiscount" class="fw-semibold text-danger">0₫</span>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fw-semibold">Tổng VAT</span>
-                            <span class="fw-semibold text-danger">0₫</span>
+                            <span id="totalVAT" class="fw-semibold text-danger">0₫</span>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fw-semibold">Tổng cộng</span>
-                            <span class="fw-semibold text-danger">0₫</span>
-                        </div>
-
-                        <hr class="my-4">
-
-                        <div class="mb-3">
-                            <h6 class="mb-3 fw-bold text-primary">THANH TOÁN</h6>
-                            <div class="form-check my-3">
-                                <input class="form-check-input mt-1" type="radio" name="paymentMethod"
-                                    id="cashPayment" value="cash">
-                                <label class="form-check-label" for="cashPayment">
-                                    <i class="fas fa-money-bill-wave text-success me-2"></i>Tiền mặt
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input mt-1" type="radio" name="paymentMethod"
-                                    id="bankTransfer" value="transfer">
-                                <label class="form-check-label" for="bankTransfer">
-                                    <i class="fas fa-university text-primary me-2"></i>Chuyển khoản
-                                </label>
-                            </div>
+                            <span id="totalAmount" class="fw-semibold text-danger">0₫</span>
                         </div>
 
                         <hr class="my-4">
@@ -335,195 +362,9 @@
         </form>
     </div>
 
-    <!-- Modal nhập excel -->
-    <div class="modal fade" id="importExcelModal" tabindex="-1" aria-labelledby="importExcelModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-light">
-                    <h5 class="modal-title fw-bold text-primary" id="importExcelModalLabel">Nhập Excel</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <!-- Notice Section -->
-                    <div class="alert alert-warning rounded-3 p-3 mb-4">
-                        <p class="mb-1">
-                            Tải về file mẫu: <a href="#" class="text-decoration-none text-primary">Excel
-                                2003</a>
-                            hoặc
-                            <a href="#" class="text-decoration-none text-primary">phiên bản khác cao hơn</a>
-                        </p>
-                        <p class="fw-bold text-danger mb-2">Lưu ý:</p>
-                        <ul class="mb-0 text-muted">
-                            <li>Hệ thống chỉ hỗ trợ tối đa <strong>500</strong> hàng hóa cho mỗi lần nhập dữ liệu từ
-                                file
-                                excel.</li>
-                            <li>Trong trường hợp file Excel có hàng hóa chưa hợp lệ, bạn vui lòng chỉnh sửa các dòng bị
-                                lỗi
-                                theo hướng dẫn và thực hiện lại.</li>
-                            <li>Đối với hàng hóa không quản lý Serial, số lượng phải lớn hơn 0. Đối với hàng hóa quản lý
-                                Serial, Serial phải có định dạng cho phép (a-z, 0-9, ",", " ").</li>
-                            <li>Giá nhập, giá bán đều phải lớn hơn hoặc bằng 0.</li>
-                            <li>Mỗi hàng hóa chỉ được liệt kê ở 1 dòng duy nhất và Serial phải là duy nhất, không trùng
-                                lặp
-                                và chưa tồn tại trong hệ thống.</li>
-                            <li>Để nhập kho cho hàng sản xuất định lượng, vui lòng vào menu Sản xuất -> tạo phiếu sản
-                                xuất
-                                để hệ thống ghi nhận tồn kho chính xác hơn.</li>
-                        </ul>
-                    </div>
-
-                    <!-- File Upload Section -->
-                    <div class="border border-2 rounded-3 p-4 text-center bg-light" style="border-style: dashed;">
-                        <label for="excelFile" class="form-label fw-semibold pointer">
-                            <i class="fa-solid fa-file-excel fa-2x text-success mb-3"></i><br>
-                            <span class="text-dark">Kéo thả hoặc click vào để chọn file Excel</span>
-                        </label>
-                        <input type="file" id="excelFile" class="form-control d-none" accept=".xls,.xlsx">
-                    </div>
-                </div>
-                <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary">Tải lên</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal thêm nhà cung cấp -->
-    <div class="modal fade" id="addSupplierModal" tabindex="-1" aria-labelledby="addSupplierModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content rounded-4 shadow-sm border-0">
-                <div class="modal-header bg-light border-0">
-                    <h5 class="modal-title fw-bold text-dark" id="addSupplierModalLabel">Tạo Nhà Cung Cấp</h5>
-                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="supplierForm">
-                        <div class="row">
-                            <div class="col-6 mb-4">
-                                <label for="supplier_codeInput" class="form-label fw-semibold">Tên nhà cung
-                                    cấp*</label>
-                                <input type="text" id="supplier_codeInput"
-                                    class="form-control form-control-sm border border-success"
-                                    placeholder="Nhập tên nhà cung cấp">
-                            </div>
-                            <div class="col-6 mb-4">
-                                <label for="supplierPhone" class="form-label fw-semibold">Số điện
-                                    thoại</label>
-                                <input type="text" id="supplierPhone"
-                                    class="form-control form-control-sm border border-success"
-                                    placeholder="Số điện thoại">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6 mb-4">
-                                <label for="supplierAddress" class="form-label fw-semibold">Địa chỉ</label>
-                                <input type="text" id="supplierAddress"
-                                    class="form-control form-control-sm border border-success" placeholder="Địa chỉ">
-                            </div>
-                            <div class="col-6 mb-4">
-                                <label for="contactPerson" class="form-label fw-semibold">Người liên
-                                    hệ</label>
-                                <input type="text" id="contactPerson"
-                                    class="form-control form-control-sm border border-success"
-                                    placeholder="Người liên hệ">
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label for="notes" class="form-label fw-semibold">Ghi chú</label>
-                            <textarea id="notes" class="form-control form-control-sm border border-success" placeholder="Ghi chú"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer bg-light border-0">
-                    <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Huỷ</button>
-                    <button type="submit" class="btn btn-sm btn-twitter px-4" form="supplierForm">Lưu</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('warehouse.import_warehouse.modal')
 @endsection
 
 @section('scripts')
-    <script>
-        let materialData = [];
-
-        function addMaterial() {
-            const material_code = document.getElementById('material_code').value;
-            const supplier_code = document.getElementById('supplier_code').value;
-            const note = document.getElementById('note').value; // Sẽ không hiển thị nhưng vẫn lưu
-            const receipt_at = document.getElementById('receipt_at').value; // Sẽ không hiển thị nhưng vẫn lưu
-            const created_by = document.getElementById('created_by').value;
-            const batch_code = document.getElementById('batch_code').value;
-            const product_date = document.getElementById('product_date').value;
-            const expiry_date = document.getElementById('expiry_date').value;
-            const price = document.getElementById('price').value;
-            const quantity = document.getElementById('quantity').value;
-            const discount = document.getElementById('discount_rate').value;
-            const VAT = document.getElementById('VAT').value;
-
-            if (!material_code || !batch_code || !product_date || !price || !quantity) {
-                alert('Vui lòng nhập đầy đủ thông tin.');
-                return;
-            }
-
-            const totalPrice = price * quantity * (1 - discount / 100) * (1 + VAT / 100);
-
-            // Lưu dữ liệu vào mảng
-            materialData.push({
-                material_code,
-                supplier_code,
-                note,
-                receipt_at,
-                created_by,
-                quantity,
-                price,
-                batch_code,
-                expiry_date,
-                quantity,
-                discount,
-                VAT,
-                totalPrice: totalPrice.toFixed(2)
-            });
-
-            // Chỉ hiển thị những trường cần thiết trong bảng
-            const tableBody = document.getElementById('materialList');
-            if (tableBody) {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td style="font-size: 10px;" class="text-center">${material_code}</td>
-                    <td style="font-size: 10px;" class="text-center">${supplier_code}</td>
-                    <td style="font-size: 10px;" class="text-center">${quantity}</td>
-                    <td style="font-size: 10px;" class="text-center">${price}</td>
-                    <td style="font-size: 10px;" class="text-center">${batch_code}</td>
-                    <td style="font-size: 10px;" class="text-center">${expiry_date}</td>
-                    <td style="font-size: 10px;" class="text-center">${discount}</td>
-                    <td style="font-size: 10px;" class="text-center">${VAT}</td>
-                    <td style="font-size: 10px;" class="text-center">${totalPrice.toFixed(2)}₫</td>
-                `;
-                tableBody.appendChild(row);
-            }
-
-            // Reset các trường input sau khi thêm
-            document.getElementById('material_code').value = '';
-            document.getElementById('supplier_code').value = '';
-            document.getElementById('note').value = '';
-            document.getElementById('receipt_at').value = '';
-            document.getElementById('created_by').value = '';
-            document.getElementById('batch_code').value = '';
-            document.getElementById('product_date').value = '';
-            document.getElementById('expiry_date').value = '';
-            document.getElementById('price').value = '';
-            document.getElementById('quantity').value = '';
-            document.getElementById('discount_rate').value = '';
-            document.getElementById('VAT').value = '';
-        }
-
-        function submitMaterials() {
-            // Chuyển dữ liệu sang JSON và gán vào input ẩn để submit
-            document.getElementById('materialData').value = JSON.stringify(materialData);
-        }
-    </script>
+    <script src="{{ asset('js/warehouse/add_import.js') }}"></script>
 @endsection

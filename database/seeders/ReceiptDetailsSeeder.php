@@ -40,26 +40,6 @@ class ReceiptDetailsSeeder extends Seeder
                 'equipment_code' => 'E005',
                 'price' => 25400,
             ],
-            [
-                'receipt_code' => 'REC0002',
-                'batch_number' => 'B002',
-                'expiry_date' => now()->addYear(),
-                'quantity' => 51,
-                'VAT' => 1.2,
-                'discount' => 0.00,
-                'equipment_code' => 'E003',
-                'price' => 15000,
-            ],
-            [
-                'receipt_code' => 'REC0002',
-                'batch_number' => 'B003',
-                'expiry_date' => now()->addYear(),
-                'quantity' => 57,
-                'VAT' => 1.2,
-                'discount' => 0.00,
-                'equipment_code' => 'E004',
-                'price' => 21400,
-            ],
         ]);
     }
 }

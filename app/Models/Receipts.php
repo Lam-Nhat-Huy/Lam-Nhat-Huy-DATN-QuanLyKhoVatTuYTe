@@ -15,6 +15,7 @@ class Receipts extends Model
         'note',
         'status',
         'receipt_date',
+        'receipt_no',
         'created_by',
         'created_at',
         'updated_at',

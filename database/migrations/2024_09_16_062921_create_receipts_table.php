@@ -13,7 +13,7 @@ return new class extends Migration
             $table->char('supplier_code', 20);
             $table->text('note')->nullable();
             $table->boolean('status')->default(true);
-            $table->integer('receipt_no');
+            $table->bigInteger('receipt_no');
             $table->date('receipt_date')->nullable();
             $table->char('created_by', 20);
             $table->timestamps();

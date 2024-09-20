@@ -223,3 +223,114 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal nhập excel -->
+    <div class="modal fade" id="importExcelModal" tabindex="-1" aria-labelledby="importExcelModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold text-primary" id="importExcelModalLabel">Nhập Excel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Notice Section -->
+                    <div class="alert alert-warning rounded-3 p-3 mb-4">
+                        <p class="mb-1">
+                            Tải về file mẫu: <a href="#" class="text-decoration-none text-primary">Excel
+                                2003</a>
+                            hoặc
+                            <a href="#" class="text-decoration-none text-primary">phiên bản khác cao hơn</a>
+                        </p>
+                        <p class="fw-bold text-danger mb-2">Lưu ý:</p>
+                        <ul class="mb-0 text-muted">
+                            <li>Hệ thống chỉ hỗ trợ tối đa <strong>500</strong> hàng hóa cho mỗi lần nhập dữ liệu từ
+                                file
+                                excel.</li>
+                            <li>Trong trường hợp file Excel có hàng hóa chưa hợp lệ, bạn vui lòng chỉnh sửa các dòng bị
+                                lỗi
+                                theo hướng dẫn và thực hiện lại.</li>
+                            <li>Đối với hàng hóa không quản lý Serial, số lượng phải lớn hơn 0. Đối với hàng hóa quản lý
+                                Serial, Serial phải có định dạng cho phép (a-z, 0-9, ",", " ").</li>
+                            <li>Giá nhập, giá bán đều phải lớn hơn hoặc bằng 0.</li>
+                            <li>Mỗi hàng hóa chỉ được liệt kê ở 1 dòng duy nhất và Serial phải là duy nhất, không trùng
+                                lặp
+                                và chưa tồn tại trong hệ thống.</li>
+                            <li>Để nhập kho cho hàng sản xuất định lượng, vui lòng vào menu Sản xuất -> tạo phiếu sản
+                                xuất
+                                để hệ thống ghi nhận tồn kho chính xác hơn.</li>
+                        </ul>
+                    </div>
+
+                    <!-- File Upload Section -->
+                    <div class="border border-2 rounded-3 p-4 text-center bg-light" style="border-style: dashed;">
+                        <label for="excelFile" class="form-label fw-semibold pointer">
+                            <i class="fa-solid fa-file-excel fa-2x text-success mb-3"></i><br>
+                            <span class="text-dark">Kéo thả hoặc click vào để chọn file Excel</span>
+                        </label>
+                        <input type="file" id="excelFile" class="form-control d-none" accept=".xls,.xlsx">
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary">Tải lên</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal thêm nhà cung cấp -->
+    <div class="modal fade" id="addSupplierModal" tabindex="-1" aria-labelledby="addSupplierModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content rounded-4 shadow-sm border-0">
+                <div class="modal-header bg-light border-0">
+                    <h5 class="modal-title fw-bold text-dark" id="addSupplierModalLabel">Tạo Nhà Cung Cấp</h5>
+                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="supplierForm">
+                        <div class="row">
+                            <div class="col-6 mb-4">
+                                <label for="supplier_codeInput" class="form-label fw-semibold">Tên nhà cung
+                                    cấp*</label>
+                                <input type="text" id="supplier_codeInput"
+                                    class="form-control form-control-sm border border-success"
+                                    placeholder="Nhập tên nhà cung cấp">
+                            </div>
+                            <div class="col-6 mb-4">
+                                <label for="supplierPhone" class="form-label fw-semibold">Số điện
+                                    thoại</label>
+                                <input type="text" id="supplierPhone"
+                                    class="form-control form-control-sm border border-success"
+                                    placeholder="Số điện thoại">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-4">
+                                <label for="supplierAddress" class="form-label fw-semibold">Địa chỉ</label>
+                                <input type="text" id="supplierAddress"
+                                    class="form-control form-control-sm border border-success" placeholder="Địa chỉ">
+                            </div>
+                            <div class="col-6 mb-4">
+                                <label for="contactPerson" class="form-label fw-semibold">Người liên
+                                    hệ</label>
+                                <input type="text" id="contactPerson"
+                                    class="form-control form-control-sm border border-success"
+                                    placeholder="Người liên hệ">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="notes" class="form-label fw-semibold">Ghi chú</label>
+                            <textarea id="notes" class="form-control form-control-sm border border-success" placeholder="Ghi chú"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Huỷ</button>
+                    <button type="submit" class="btn btn-sm btn-twitter px-4" form="supplierForm">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
