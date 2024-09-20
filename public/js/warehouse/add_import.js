@@ -15,44 +15,76 @@ function addMaterial() {
     const discount = parseFloat(document.getElementById('discount_rate').value);
     const VAT = parseFloat(document.getElementById('VAT').value);
 
-    // Validation
+    // Danh sách lỗi
     let errors = [];
+
+    // Validate ngày nhập hóa đơn
     const today = new Date();
     const receiptDate = new Date(receipt_date);
     const productDate = new Date(product_date);
     const expiryDate = new Date(expiry_date);
 
-    if (!supplier_code) errors.push('Vui lòng chọn nhà cung cấp.');
-    if (!receipt_no) errors.push('Vui lòng nhập số hóa đơn.');
-    if (!equipment_code) errors.push('Vui lòng chọn tên vật tư.');
-    if (!batch_number) errors.push('Vui lòng nhập số lô.');
-    if (!receipt_date || receiptDate > today) errors.push('Ngày nhập phải nhỏ hơn hoặc bằng ngày hôm nay.');
-    if (!product_date || productDate > receiptDate) errors.push('Ngày sản xuất phải nhỏ hơn hoặc bằng ngày nhập.');
-    if (!expiry_date || expiryDate <= productDate) errors.push('Hạn sử dụng phải lớn hơn ngày sản xuất.');
-    if (!price || price <= 0) errors.push('Vui lòng nhập giá nhập hợp lệ.');
-    if (!quantity || quantity <= 0) errors.push('Vui lòng nhập số lượng hợp lệ.');
-    if (!discount || discount < 0 || discount > 100) errors.push('Vui lòng nhập chiết khấu hợp lệ (0-100%).');
-    if (!VAT || VAT < 0 || VAT > 100) errors.push('Vui lòng nhập VAT hợp lệ (0-100%).');
+    if (!supplier_code) {
+        errors.push('Vui lòng chọn nhà cung cấp.');
+    }
+    if (!receipt_no) {
+        errors.push('Vui lòng nhập số hóa đơn.');
+    }
+    if (!equipment_code) {
+        errors.push('Vui lòng chọn tên vật tư.');
+    }
+    if (!batch_number) {
+        errors.push('Vui lòng nhập số lô.');
+    }
+    if (!receipt_date || receiptDate > today) {
+        errors.push('Ngày nhập phải nhỏ hơn hoặc bằng ngày hôm nay.');
+    }
+    if (!product_date || productDate > receiptDate) {
+        errors.push('Ngày sản xuất phải nhỏ hơn hoặc bằng ngày nhập.');
+    }
+    if (!expiry_date || expiryDate <= productDate) {
+        errors.push('Hạn sử dụng phải lớn hơn ngày sản xuất.');
+    }
+    if (!price || price <= 0) {
+        errors.push('Vui lòng nhập giá nhập hợp lệ.');
+    }
+    if (!quantity || quantity <= 0) {
+        errors.push('Vui lòng nhập số lượng hợp lệ.');
+    }
+    if (!discount || discount < 0 || discount > 100) {
+        errors.push('Vui lòng nhập chiết khấu hợp lệ (0-100%).');
+    }
+    if (!VAT || VAT < 0 || VAT > 100) {
+        errors.push('Vui lòng nhập VAT hợp lệ (0-100%).');
+    }
 
+    // Nếu có lỗi, hiển thị danh sách lỗi
     if (errors.length > 0) {
         const errorMessages = document.getElementById('errorMessages');
         const errorList = document.getElementById('errorList');
 
+        // Làm trống danh sách lỗi cũ
         errorList.innerHTML = '';
+
+        // Thêm các lỗi mới
         errors.forEach(error => {
             const li = document.createElement('li');
             li.textContent = error;
             errorList.appendChild(li);
         });
 
+        // Hiển thị thông báo lỗi
         errorMessages.style.display = 'block';
+
         return;
     }
 
+    // Ẩn thông báo lỗi nếu không có lỗi
     document.getElementById('errorMessages').style.display = 'none';
 
-    // Continue adding material if no errors
+    // Tiếp tục thêm vật tư nếu không có lỗi
     const total_price = price * quantity * (1 - discount / 100) * (1 + VAT / 100);
+
     const material = {
         supplier_code,
         note,
@@ -70,52 +102,37 @@ function addMaterial() {
     };
     materialData.push(material);
 
-    updateMaterialTable();
-    calculateTotals();
-}
-
-function updateMaterialTable() {
     const tableBody = document.getElementById('materialList');
-    const noMaterialAlert = document.getElementById('noMaterialAlert');
+    if (tableBody) {
+        const row = document.createElement('tr');
+        const index = materialData.length - 1;
 
-    // Clear existing rows
-    tableBody.innerHTML = '';
-
-    if (materialData.length === 0) {
-        // Show alert if no material added
-        noMaterialAlert.style.display = 'table-row';
-    } else {
-        // Hide the no-material alert
-        noMaterialAlert.style.display = 'none';
-
-        // Add material rows
-        materialData.forEach((material, index) => {
-            const row = document.createElement('tr');
-
-            row.innerHTML = `
-                <td style="font-size: 11px;" class="text-center">${material.equipment_code}</td>
-                <td style="font-size: 11px;" class="text-center">${material.supplier_code}</td>
-                <td style="font-size: 11px;" class="text-center">${material.quantity}</td>
-                <td style="font-size: 11px;" class="text-center">${material.price}</td>
-                <td style="font-size: 11px;" class="text-center">${material.batch_number}</td>
-                <td style="font-size: 11px;" class="text-center">${material.expiry_date}</td>
-                <td style="font-size: 11px;" class="text-center">${material.discount}</td>
-                <td style="font-size: 11px;" class="text-center">${material.VAT}</td>
-                <td style="font-size: 11px;" class="text-center">${material.total_price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace(',00', '')}</td>
-                <td class="text-center">
-                    <button onclick="removeMaterial(${index}, this)">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </td>
-            `;
-            tableBody.appendChild(row);
-        });
+        row.innerHTML = `
+            <td style="font-size: 11px;" class="text-center">${equipment_code}</td>
+            <td style="font-size: 11px;" class="text-center">${supplier_code}</td>
+            <td style="font-size: 11px;" class="text-center">${quantity}</td>
+            <td style="font-size: 11px;" class="text-center">${price}</td>
+            <td style="font-size: 11px;" class="text-center">${batch_number}</td>
+            <td style="font-size: 11px;" class="text-center">${expiry_date}</td>
+            <td style="font-size: 11px;" class="text-center">${discount}</td>
+            <td style="font-size: 11px;" class="text-center">${VAT}</td>
+            <td style="font-size: 11px;" class="text-center">${total_price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace(',00', '')}</td>
+            <td class="text-center">
+                <button onclick="removeMaterial(${index}, this)">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </td>
+        `;
+        tableBody.appendChild(row);
     }
+
+    calculateTotals();
 }
 
 function removeMaterial(index, element) {
     materialData.splice(index, 1);
-    updateMaterialTable();
+    const row = element.closest('tr');
+    row.remove();
     calculateTotals();
 }
 
