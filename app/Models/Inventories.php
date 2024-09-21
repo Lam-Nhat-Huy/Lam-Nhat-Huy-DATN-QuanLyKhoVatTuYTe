@@ -34,4 +34,9 @@ class Inventories extends Model
     {
         return $this->belongsTo(Equipments::class, 'equipment_code', 'code');
     }
+
+    public function units()
+    {
+        return $this->hasOneThrough(Units::class, Equipments::class, 'code', 'code', 'equipment_code', 'unit_code');
+    }
 }

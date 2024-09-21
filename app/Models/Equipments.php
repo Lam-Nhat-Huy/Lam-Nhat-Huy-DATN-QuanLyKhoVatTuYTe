@@ -20,6 +20,7 @@ class Equipments extends Model
         'country',
         'equipment_type_code',
         'supplier_code',
+        'unit_code',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -28,5 +29,10 @@ class Equipments extends Model
     public function inventories()
     {
         return $this->hasMany(Inventories::class, 'equipment_code', 'code');
+    }
+
+    public function units()
+    {
+        return $this->belongsTo(Units::class, 'unit_code', 'code');
     }
 }

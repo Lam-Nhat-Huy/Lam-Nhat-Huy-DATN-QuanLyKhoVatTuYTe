@@ -217,8 +217,9 @@
                                             class="form-control form-control-sm form-control-solid border border-success">
                                             <option value="">Chọn vật tư</option>
                                             @foreach ($inventories as $inventory)
-                                                <option value="{{ $inventory->equipments->code }}">
-                                                    {{ $inventory->equipments->name }}
+                                                <option value="{{ $inventory->code ?? null }}">
+                                                    {{ $inventory->name ?? null }}
+                                                    ({{ $inventory->units->name ?? null }})
                                                 </option>
                                             @endforeach
                                         </select>

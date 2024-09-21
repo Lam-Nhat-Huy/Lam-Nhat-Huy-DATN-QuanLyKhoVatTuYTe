@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Warehouse;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreImportRequest;
+use App\Models\Equipments;
 use App\Models\Inventories;
 use App\Models\Receipt_details;
 use App\Models\Receipts;
@@ -31,7 +32,9 @@ class ImportController extends Controller
     {
         $title = 'Tạo Phiếu Nhập Kho';
 
-        $inventories = Inventories::with('equipments')->get();
+        // $inventories = Inventories::with('equipments', 'units')->get();
+
+        $inventories = Equipments::all();
 
         $suppliers = Suppliers::all();
 
@@ -140,5 +143,21 @@ class ImportController extends Controller
                 'expiry_date' => $material['expiry_date'],
             ]);
         }
+    }
+
+    public function getEquipmentData($code)
+    {
+        $equipment = Equipments::where('code', $code)->first();
+
+        if ($equipment) {
+            return response()->json([
+                'price' => $equipment->price,
+                'batch_number' => $equipment->batch_number,
+                'product_date' => $equipment->product_date,
+                'expiry_date' => $equipment->expiry_date
+            ]);
+        }
+
+        return response()->json(null, 404);
     }
 }

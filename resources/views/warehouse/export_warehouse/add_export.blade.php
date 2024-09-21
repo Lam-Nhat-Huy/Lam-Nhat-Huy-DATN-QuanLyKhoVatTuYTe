@@ -160,7 +160,7 @@
 
             if (filteredInventories.length > 0) {
                 const today = new Date();
-                const alertThreshold = 30; // Days before expiration to trigger alert
+                const alertThreshold = 30;
 
                 filteredInventories.forEach(inventory => {
                     let inputField = '';

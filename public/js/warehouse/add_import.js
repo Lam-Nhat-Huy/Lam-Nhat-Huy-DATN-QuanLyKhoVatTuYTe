@@ -168,3 +168,23 @@ function calculateTotals() {
 function submitMaterials() {
     document.getElementById('materialData').value = JSON.stringify(materialData);
 }
+
+document.getElementById('equipment_code').addEventListener('change', function() {
+    const equipmentCode = this.value;
+
+    if (equipmentCode) {
+        // Gửi yêu cầu AJAX để lấy dữ liệu của vật tư
+        fetch(`/system/warehouse/get_equipment/${equipmentCode}`)
+            .then(response => response.json())
+            .then(data => {
+                // Điền dữ liệu vào các trường liên quan
+                document.getElementById('price').value = data.price || '';
+                document.getElementById('batch_number').value = data.batch_number || '';
+                document.getElementById('product_date').value = data.product_date || '';
+                document.getElementById('expiry_date').value = data.expiry_date || '';
+            })
+            .catch(error => {
+                console.error('Error fetching material data:', error);
+            });
+    }
+});

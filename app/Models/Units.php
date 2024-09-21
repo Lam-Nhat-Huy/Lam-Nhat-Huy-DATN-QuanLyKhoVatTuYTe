@@ -20,4 +20,9 @@ class Units extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function equipments()
+    {
+        return $this->hasMany(Equipments::class, 'unit_code', 'code');
+    }
 }
