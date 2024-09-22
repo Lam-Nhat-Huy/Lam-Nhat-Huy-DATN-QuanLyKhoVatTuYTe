@@ -1,26 +1,7 @@
 @extends('master_layout.layout')
 
 @section('styles')
-    <style>
-        .hover-table:hover {
-            background: #ccc;
-        }
-
-        .btn-group button {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .selected-row {
-            background: #ddd;
-        }
-
-        .active-row {
-            background: #d1c4e9;
-            /* Màu nền khi hàng được nhấp vào */
-        }
-    </style>
-
-    {{-- <link rel="stylesheet" href="{{ asset('css/main.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('css/warehouse/import.css') }}">
 @endsection
 
 @section('title')
@@ -315,68 +296,66 @@
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('js/warehouse/import.js') }}"></script>
+
     <script>
-        document.getElementById('selectAll').addEventListener('change', function() {
-            var isChecked = this.checked;
-            var checkboxes = document.querySelectorAll('.row-checkbox');
-            checkboxes.forEach(function(checkbox) {
-                checkbox.checked = isChecked;
-                var row = checkbox.closest('tr');
-                if (isChecked) {
-                    row.classList.add('selected-row');
-                } else {
-                    row.classList.remove('selected-row');
-                }
-            });
-        });
+        $(document).ready(function() {
+            $('#search').on('keyup', function() {
+                let query = $(this).val();
 
-        document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                var row = this.closest('tr');
-                if (this.checked) {
-                    row.classList.add('selected-row');
-                } else {
-                    row.classList.remove('selected-row');
-                }
+                // Lấy dữ liệu từ các trường bộ lọc
+                let startDate = $('input[name="start_date"]').val();
+                let endDate = $('input[name="end_date"]').val();
+                let supplierCode = $('select[name="supplier_code"]').val();
+                let createdBy = $('select[name="created_by"]').val();
 
-                var allChecked = true;
-                document.querySelectorAll('.row-checkbox').forEach(function(cb) {
-                    if (!cb.checked) {
-                        allChecked = false;
-                    }
-                });
-                document.getElementById('selectAll').checked = allChecked;
-            });
-        });
-
-        document.querySelectorAll('tbody tr').forEach(function(row) {
-            row.addEventListener('click', function() {
-                var checkbox = this.querySelector('.row-checkbox');
-                if (checkbox) {
-                    checkbox.checked = !checkbox.checked;
-                    if (checkbox.checked) {
-                        this.classList.add('selected-row');
-                    } else {
-                        this.classList.remove('selected-row');
-                    }
-
-                    var allChecked = true;
-                    document.querySelectorAll('.row-checkbox').forEach(function(cb) {
-                        if (!cb.checked) {
-                            allChecked = false;
+                if (query.length > 0) {
+                    $.ajax({
+                        url: "{{ route('warehouse.search_import') }}",
+                        type: "GET",
+                        data: {
+                            'search': query,
+                            'start_date': startDate,
+                            'end_date': endDate,
+                            'supplier_code': supplierCode,
+                            'created_by': createdBy
+                        },
+                        success: function(data) {
+                            // Hiển thị kết quả tìm kiếm
+                            $('tbody').html(data);
                         }
                     });
-                    document.getElementById('selectAll').checked = allChecked;
+                } else {
+                    location.reload(); // Tải lại trang khi không có kết quả tìm kiếm
                 }
             });
-        });
 
-        document.getElementById('printPdfBtn').addEventListener('click', function() {
-            var printContents = document.getElementById('printArea').innerHTML;
-            var originalContents = document.body.innerHTML;
-            document.body.innerHTML = printContents;
-            window.print();
-            document.body.innerHTML = originalContents;
+            // Thêm sự kiện cho các trường lọc
+            $('input[name="start_date"], input[name="end_date"], select[name="supplier_code"], select[name="created_by"]')
+                .on('change', function() {
+                    let query = $('#search').val();
+
+                    // Lấy dữ liệu từ các trường bộ lọc
+                    let startDate = $('input[name="start_date"]').val();
+                    let endDate = $('input[name="end_date"]').val();
+                    let supplierCode = $('select[name="supplier_code"]').val();
+                    let createdBy = $('select[name="created_by"]').val();
+
+                    $.ajax({
+                        url: "{{ route('warehouse.search_import') }}",
+                        type: "GET",
+                        data: {
+                            'search': query,
+                            'start_date': startDate,
+                            'end_date': endDate,
+                            'supplier_code': supplierCode,
+                            'created_by': createdBy
+                        },
+                        success: function(data) {
+                            $('tbody').html(data);
+                        }
+                    });
+                });
         });
     </script>
 @endsection

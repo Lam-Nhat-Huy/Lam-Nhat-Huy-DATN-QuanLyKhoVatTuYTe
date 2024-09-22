@@ -188,3 +188,14 @@ document.getElementById('equipment_code').addEventListener('change', function() 
             });
     }
 });
+
+function formatCurrency(input) {
+    // Xóa tất cả ký tự không phải số
+    let value = input.value.replace(/[^0-9]/g, '');
+
+    // Định dạng giá trị với dấu phẩy
+    value = new Intl.NumberFormat('vi-VN').format(value);
+
+    // Cập nhật giá trị trong input
+    input.value = value;
+}

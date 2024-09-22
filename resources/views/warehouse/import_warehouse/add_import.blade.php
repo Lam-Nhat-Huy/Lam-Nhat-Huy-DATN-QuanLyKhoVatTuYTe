@@ -2,132 +2,63 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-    <!-- Include Font Awesome -->
+
+    <link rel="stylesheet" href="{{ asset('css/add_import.css') }}">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+
     <style>
-        .d-flex.align-items-center>* {
-            flex-shrink: 0;
-        }
-
-        .setupSelect2 {
-            max-width: 70%;
-        }
-
-        .btn-outline-primary {
-            min-width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        .material-form-container {
-            padding: 15px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            font-family: 'Arial', sans-serif;
-        }
-
-        .form-title {
-            font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .form-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .form-group {
-            flex: 1;
-            margin-right: 10px;
-        }
-
-        .form-group:last-child {
-            margin-right: 0;
-        }
-
-        .material-input {
+        input[type="text"],
+        select,
+        textarea {
+            height: 35px;
+            line-height: 35px;
             width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f5f5f5;
-            color: #333;
-            transition: border-color 0.3s;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0 10px;
         }
 
-        .material-input:focus {
-            border-color: #007bff;
-            background-color: #fff;
-            outline: none;
+        /* Tùy chỉnh Select2 */
+        .select2-container--default .select2-selection--single {
+            height: 35px;
+            width: 100%;
+            /* Chiều cao của dropdown */
+            line-height: 35px;
+            /* Căn giữa nội dung */
         }
 
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 15px;
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 35px;
+            /* Căn giữa văn bản */
         }
 
-        .btn {
-            padding: 5px 15px;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        /* Adjust the Select2 dropdown arrow */
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 35px;
+            /* Match the height of the select box */
+            top: 50%;
+            /* Vertically center the icon */
+            transform: translateY(-50%);
+            /* Adjust to fully center */
+            right: 10px;
+            /* Adjust the position from the right */
         }
 
-        .cancel-btn {
-            color: #333;
-            background: none;
-            margin-right: 10px;
-        }
-
-        .save-continue-btn {
-            color: #007bff;
-            background: none;
-            margin-right: 10px;
-        }
-
-        .save-btn {
-            color: #007bff;
-            background: none;
-        }
-
-        .btn:hover {
-            opacity: 0.7;
-        }
-
-        .alert {
-            background-color: #f8d7da;
-            border: 1px solid #f5c2c7;
-            color: #842029;
-        }
-
-        #errorMessages {
-            margin: 0 auto;
-        }
-
-        #errorList li {
-            margin-bottom: 5px;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        #errorList li::before {
-            content: "\2022";
-            /* Bullet point */
-            color: #842029;
-            font-weight: bold;
-            position: absolute;
-            left: 0;
-            top: 0;
+        /* Adjust icon inside the arrow if necessary */
+        .select2-container--default .select2-selection--single .select2-selection__arrow b {
+            margin-top: 0px;
+            /* Reset any margin to align properly */
+            border-width: 5px;
+            /* Adjust the size of the dropdown arrow if needed */
         }
     </style>
 @endsection
@@ -162,9 +93,9 @@
                                     <label for="supplier_code" class="form-label fw-semibold"
                                         style="white-space: nowrap;">Nhà cung cấp</label>
                                     <div class="d-flex align-items-center">
-                                        <select id="supplier_code"
-                                            class="form-control form-control-sm form-control-solid border border-success">
-                                            <option value="">Chọn nhà cung cấp</option>
+                                        <select
+                                            class="mySelect form-control form-control-sm form-control-solid border border-success"
+                                            id="supplier_code">
                                             @foreach ($suppliers as $supplier)
                                                 <option value="{{ $supplier->code }}">{{ $supplier->name }}</option>
                                             @endforeach
@@ -176,7 +107,8 @@
                                     <label for="date" class="form-label fw-semibold">Ngày nhập</label>
 
                                     <input type="date" id="receipt_date"
-                                        class="form-control form-control-sm form-control-solid border border-success">
+                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        placeholder="Chọn ngày nhập">
                                 </div>
 
                                 {{-- Để dữ liệu tạm thời như vậy có đăng nhập thì đổi lại auth->id  --}}
@@ -214,8 +146,7 @@
                                         vật tư</label>
                                     <div class="d-flex align-items-center">
                                         <select id="equipment_code"
-                                            class="form-control form-control-sm form-control-solid border border-success">
-                                            <option value="">Chọn vật tư</option>
+                                            class="form-control form-control-sm form-control-solid border border-success mySelect">
                                             @foreach ($inventories as $inventory)
                                                 <option value="{{ $inventory->code ?? null }}">
                                                     {{ $inventory->name ?? null }}
@@ -251,7 +182,8 @@
                                     <label for="price" class="required form-label mb-2">Giá nhập</label>
                                     <input type="text"
                                         class="form-control form-control-sm form-control-solid border border-success"
-                                        id="price" name="price" placeholder="Nhập đơn giá">
+                                        id="price" name="price" placeholder="Nhập đơn giá"
+                                        oninput="formatCurrency(this)">
                                 </div>
 
                                 <div class="col-3 mb-4">
@@ -368,4 +300,10 @@
 
 @section('scripts')
     <script src="{{ asset('js/warehouse/add_import.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.mySelect').select2();
+        });
+    </script>
 @endsection

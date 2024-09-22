@@ -9,6 +9,7 @@ use App\Models\Inventories;
 use App\Models\Receipt_details;
 use App\Models\Receipts;
 use App\Models\Suppliers;
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -22,9 +23,15 @@ class ImportController extends Controller
 
         $receipts = Receipts::with(['supplier', 'user', 'details.equipments'])->paginate(10);
 
+        $suppliers = Suppliers::all();
+
+        $users = Users::all();
+
         return view("{$this->route}.import_warehouse.import", [
             'title' => $title,
-            'receipts' => $receipts
+            'receipts' => $receipts,
+            'suppliers' => $suppliers,
+            'users' => $users
         ]);
     }
 
@@ -32,16 +39,17 @@ class ImportController extends Controller
     {
         $title = 'Tạo Phiếu Nhập Kho';
 
-        // $inventories = Inventories::with('equipments', 'units')->get();
-
         $inventories = Equipments::all();
 
         $suppliers = Suppliers::all();
 
+        $users = Users::all();
+
         return view("{$this->route}.import_warehouse.add_import", [
             'title' => $title,
             'inventories' => $inventories,
-            'suppliers' => $suppliers
+            'suppliers' => $suppliers,
+            'users' => $users
         ]);
     }
 
@@ -121,6 +129,7 @@ class ImportController extends Controller
         // Tìm lô hàng trong kho dựa vào mã thiết bị và số lô
         $inventory = Inventories::where('equipment_code', $material['equipment_code'])
             ->where('batch_number', $material['batch_number'])
+            ->where('current_quantity', '>', 0)
             ->first();
 
         // dd($inventory);
@@ -159,5 +168,41 @@ class ImportController extends Controller
         }
 
         return response()->json(null, 404);
+    }
+
+    public function searchImport(Request $request)
+    {
+        $title = 'Nhập Kho';
+
+        // Lấy thông tin tìm kiếm từ form
+        $query = $request->input('search');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $supplierCode = $request->input('supplier_code');
+        $createdBy = $request->input('created_by');
+
+        // Tạo câu query tìm kiếm
+        $receipts = Receipts::where(function ($q) use ($query) {
+            $q->where('code', 'LIKE', "%{$query}%")
+                ->orWhere('receipt_no', 'LIKE', "%{$query}%");
+        })
+            ->when($startDate, function ($q) use ($startDate) {
+                return $q->whereDate('created_at', '>=', $startDate);
+            })
+            ->when($endDate, function ($q) use ($endDate) {
+                return $q->whereDate('created_at', '<=', $endDate);
+            })
+            ->when($supplierCode, function ($q) use ($supplierCode) {
+                return $q->where('supplier_code', $supplierCode);
+            })
+            ->when($createdBy, function ($q) use ($createdBy) {
+                return $q->where('created_by', $createdBy);
+            })
+            ->get();
+
+        return view("{$this->route}.import_warehouse.search", [
+            'title' => $title,
+            'receipts' => $receipts
+        ]);
     }
 }

@@ -44,16 +44,14 @@
                 <div class="col-4">
                     <div class="row align-items-center">
                         <div class="col-5 pe-0">
-                            <input type="date"
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                            <input type="date" class="mt-2 mb-2 form-control form-control-sm border border-success"
                                 value="{{ \Carbon\Carbon::now()->subMonths(3)->format('Y-m-d') }}">
                         </div>
                         <div class="col-2 text-center">
                             Đến
                         </div>
                         <div class="col-5 ps-0">
-                            <input type="date"
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                            <input type="date" class="mt-2 mb-2 form-control form-control-sm border border-success"
                                 value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                         </div>
                     </div>
@@ -70,7 +68,7 @@
                     <div class="row">
                         <div class="col-10">
                             <input type="search" name="kw" placeholder="Tìm Kiếm Mã Phiếu Xuất.."
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                class="mt-2 mb-2 form-control form-control-sm border border-success"
                                 value="{{ request()->kw }}">
                         </div>
                         <div class="col-2">
