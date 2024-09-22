@@ -58,6 +58,8 @@ class ImportController extends Controller
         // Lấy dữ liệu từ JSON materialData đã gửi từ form
         $materialData = json_decode($request->input('materialData'), true);
 
+        $status = $request->input('status');
+
         if (empty($materialData)) {
             toastr()->error('Đã lưu phiếu nhập kho thất bại ');
             return redirect()->back();
@@ -69,9 +71,9 @@ class ImportController extends Controller
             'receipt_date' => $materialData[0]['receipt_date'],
             'note' => $materialData[0]['note'],
             'created_by' => $materialData[0]['created_by'],
-            'receipt_no' => $materialData[0]['receipt_no'] ?? null
+            'receipt_no' => $materialData[0]['receipt_no'] ?? null,
+            'status' => $status
         ];
-
 
         // Lấy mã phiếu nhập cuối cùng từ cơ sở dữ liệu
         $lastReceipt = Receipts::orderBy('created_at', 'desc')->first();
@@ -95,12 +97,22 @@ class ImportController extends Controller
         // Lưu dữ liệu vào bảng receipts
         $receipt = Receipts::create($receiptData);
 
+        // Kiểm tra nếu việc lưu thành công
+        if (!$receipt) {
+            toastr()->error('Lỗi khi lưu phiếu nhập kho.');
+            return redirect()->back();
+        }
+
+        // Bây giờ lấy được `receipt_code` từ đối tượng phiếu nhập
+        $receiptCode = $receipt->code;
+
+
         // Chuẩn bị dữ liệu cho bảng receipt_details
         $receiptDetailsData = [];
 
         foreach ($materialData as $material) {
             $receiptDetailsData[] = [
-                'receipt_code' => $receipt->code,
+                'receipt_code' => $receiptCode,
                 'equipment_code' => $material['equipment_code'],
                 'batch_number' => $material['batch_number'],
                 'expiry_date' => $material['expiry_date'],
@@ -112,16 +124,28 @@ class ImportController extends Controller
         }
 
         // Lưu dữ liệu vào bảng receipt_details
-        Receipt_details::insert($receiptDetailsData);
-
-        foreach ($materialData as $material) {
-            $this->updateInventoryByBatch($material, $receipt->code, $receipt->receipt_date);
+        try {
+            Receipt_details::insert($receiptDetailsData);
+        } catch (\Exception $e) {
+            toastr()->error('Lỗi khi lưu chi tiết phiếu nhập kho: ' . $e->getMessage());
+            return redirect()->back();
         }
 
-        toastr()->success('Đã lưu phiếu nhập kho thành công với mã ' . $newReceiptCode);
+        // Cập nhật kho theo lô
+        foreach ($materialData as $material) {
+            $this->updateInventoryByBatch($material, $receiptCode, $receipt->receipt_date);
+        }
+
+        // Thông báo thành công
+        if ($status == 1) {
+            toastr()->success('Đã lưu phiếu nhập kho thành công với mã ' . $receiptCode);
+        } else {
+            toastr()->warning('Phiếu tạm đã được lưu với mã ' . $receiptCode);
+        }
 
         return redirect()->route('warehouse.import');
     }
+
 
     // Hàm cập nhật số lượng tồn kho theo từng lô
     private function updateInventoryByBatch($material, $receiptCode, $receiptDate)
@@ -169,6 +193,26 @@ class ImportController extends Controller
 
         return response()->json(null, 404);
     }
+
+    public function approve($code)
+    {
+
+        $receipt = Receipts::where('code', $code)->first();
+
+        if ($receipt->status == 0) {
+            $receipt->status = 1;
+            $receipt->save();
+
+            toastr()->success('Đã duyệt phiếu nhập kho thành công với mã ' . $receipt->code);
+            return redirect()->back();
+        }
+
+
+        toastr()->success('Phiếu đã được duyệt trước đó.');
+
+        return redirect()->back();
+    }
+
 
     public function searchImport(Request $request)
     {

@@ -237,7 +237,6 @@
             </div>
         </div>
 
-        {{-- FORM 2 - Danh sách vật tư đã thêm --}}
         <form action="{{ route('warehouse.store_import') }}" method="post" class="mt-2">
             @csrf
             <div class="row container">
@@ -274,12 +273,10 @@
                             <span class="fw-semibold">Tổng chiết khấu</span>
                             <span id="totalDiscount" class="fw-semibold text-danger">0₫</span>
                         </div>
-
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fw-semibold">Tổng VAT</span>
                             <span id="totalVAT" class="fw-semibold text-danger">0₫</span>
                         </div>
-
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fw-semibold">Tổng cộng</span>
                             <span id="totalAmount" class="fw-semibold text-danger">0₫</span>
@@ -287,12 +284,21 @@
 
                         <hr class="my-4">
 
-                        <button type="submit" class="btn btn-sm btn-success w-100" onclick="submitMaterials()">Tạo phiếu
-                            nhập</button>
+                        <!-- Buttons for saving draft or final receipt -->
+                        <button type="submit" name="status" value="0" class="btn btn-sm btn-warning w-100 mb-2"
+                            onclick="submitMaterials()">
+                            Lưu phiếu tạm
+                        </button>
+
+                        <button type="submit" name="status" value="1" class="btn btn-sm btn-success w-100"
+                            onclick="submitMaterials()">
+                            Tạo phiếu nhập
+                        </button>
                     </div>
                 </div>
             </div>
         </form>
+
     </div>
 
     @include('warehouse.import_warehouse.modal')

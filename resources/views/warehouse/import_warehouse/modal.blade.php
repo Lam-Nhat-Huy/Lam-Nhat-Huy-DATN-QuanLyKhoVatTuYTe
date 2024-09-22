@@ -48,31 +48,8 @@
         </div>
     </div>
 
-    {{-- Modal Duyệt Phiếu --}}
-    <div class="modal fade" id="browse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="browseLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title text-white" id="browseLabel">Duyệt Phiếu Nhập Kho</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center" style="padding-bottom: 0px;">
-                    <form action="" method="">
-                        @csrf
-                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt phiếu nhập kho này?</p>
-                    </form>
-                </div>
-                <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-sm btn-secondary btn-sm px-4"
-                        data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-sm btn-success px-4">
-                        Duyệt</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
+
 
     {{-- Modal Xác Nhận Xóa --}}
     <div class="modal fade" id="deleteConfirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -91,8 +68,7 @@
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-sm btn-secondary px-4"
-                        data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
                     <button type="button" class="btn btn-sm btn-danger px-4"> Xóa</button>
                 </div>
             </div>
@@ -100,8 +76,7 @@
     </div>
 
     <!-- Chi tiết phiếu nhập -->
-    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content rounded shadow-sm border-0">
                 <!-- Modal header -->

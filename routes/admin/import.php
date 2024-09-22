@@ -10,4 +10,5 @@ Route::prefix('warehouse')->group(function () {
     Route::post('/store_import', [ImportController::class, 'store_import'])->name('warehouse.store_import');
     Route::get('/get_equipment/{code}', [ImportController::class, 'getEquipmentData'])->name('warehouse.get_equipment');
     Route::get('/search-import', [ImportController::class, 'searchImport'])->name('warehouse.search_import');
+    Route::post('/receipts/approve/{code}', [ImportController::class, 'approve'])->name('receipts.approve');
 });

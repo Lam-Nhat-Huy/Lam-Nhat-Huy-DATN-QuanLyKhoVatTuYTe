@@ -10,7 +10,6 @@ class Receipt_details extends Model
     use HasFactory;
 
     protected $fillable = [
-        'code',
         'receipt_code',
         'batch_number',
         'expire_date',
