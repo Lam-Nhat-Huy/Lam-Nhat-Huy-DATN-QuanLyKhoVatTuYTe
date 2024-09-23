@@ -55034,7 +55034,7 @@ body {
 .docs-aside-menu .menu .menu-item .menu-content,
 .docs-aside-menu .menu .menu-item .menu-link {
     padding-left: 25px;
-    padding-right: 25px
+    padding-right: 25px;
 }
 
 .docs-aside-menu .menu .menu-sub:not([data-popper-placement])>.menu-item>.menu-content,

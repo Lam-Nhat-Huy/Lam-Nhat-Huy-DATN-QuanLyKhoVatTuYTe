@@ -1,4 +1,4 @@
-@foreach ($receipts as $item)
+@forelse ($receipts as $item)
     <tr class="text-center hover-table pointer" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item['code'] }}"
         aria-expanded="false" aria-controls="collapse{{ $item['code'] }}">
         <td>
@@ -228,4 +228,21 @@
             </div>
         </td>
     </tr>
-@endforeach
+@empty
+    <tr id="noDataAlert">
+        <td colspan="12" class="text-center">
+            <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                role="alert" style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                <div class="mb-3">
+                    <i class="fas fa-search" style="font-size: 36px; color: #6c757d;"></i>
+                </div>
+                <div class="text-center">
+                    <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không có kết quả tìm kiếm</h5>
+                    <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                        Không tìm thấy kết quả phù hợp với yêu cầu tìm kiếm của bạn. Vui lòng thử lại với từ khóa khác.
+                    </p>
+                </div>
+            </div>
+        </td>
+    </tr>
+@endforelse

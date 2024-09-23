@@ -18,7 +18,7 @@
                 <table class="table align-middle gs-0 gy-4">
                     <!-- Trong phần <thead> của bảng -->
                     <thead>
-                        <tr class="fw-bolder bg-success">
+                        <tr class="bg-success">
                             <th class="ps-4">
                                 <input type="checkbox" id="selectAll" />
                             </th>
@@ -339,24 +339,17 @@
         </div>
 
         <div class="card-body py-3 mb-3 d-flex justify-between">
-            <div class="dropdown">
-                <button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    <span class="fw-bold">Chọn Thao Tác</span>
-                </button>
-                <ul class="dropdown-menu rounded-3 shadow-lg" aria-labelledby="dropdownMenuButton1">
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" data-bs-toggle="modal"
-                            data-bs-target="#confirmAll">
-                            <i class="fas fa-clipboard-check me-2 text-success"></i>
-                            <span class="fw-semibold">Duyệt Tất Cả</span>
+
+            <div class="action-bar">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" href="#">
+                            <i class="fas fa-check-circle mr-2"></i> Duyệt Tất Cả
                         </a>
                     </li>
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" data-bs-toggle="modal"
-                            data-bs-target="#deleteAll">
-                            <i class="fas fa-trash me-2 text-danger"></i>
-                            <span class="fw-semibold">Xóa Tất Cả</span>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" href="#">
+                            <i class="fas fa-trash-alt mr-2"></i> Xóa Tất Cả
                         </a>
                     </li>
                 </ul>
@@ -365,16 +358,18 @@
             <div class="filter-bar">
                 <ul class="nav nav-pills">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Tất cả <span
-                                class="badge bg-dark">({{ $allReceiptCount }})</span></a>
+                        <p class="nav-link text-dark">Tất cả <span class="badge bg-dark">({{ $allReceiptCount }})</span>
+                        </p>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Đã duyệt <span
-                                class="badge bg-success">({{ $approvedReceiptsCount }})</span></a>
+                        <p class="nav-link text-dark">Đã duyệt <span
+                                class="badge bg-success">({{ $approvedReceiptsCount }})</span>
+                        </p>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Chưa duyệt <span
-                                class="badge bg-warning">({{ $draftReceiptsCount }})</span></a>
+                        <p class="nav-link text-dark">Chưa duyệt <span
+                                class="badge bg-warning">({{ $draftReceiptsCount }})</span>
+                        </p>
                     </li>
 
                 </ul>

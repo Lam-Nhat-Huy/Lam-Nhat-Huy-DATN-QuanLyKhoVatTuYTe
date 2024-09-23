@@ -38,45 +38,54 @@
             </div>
         </div>
 
-        {{-- Filter  --}}
+        {{-- Bộ lọc --}}
         <div class="card-body py-1">
-            <form action="" class="row align-items-center">
-                <div class="col-4">
+            <form id="filterForm" class="row g-3 align-items-center">
+                <div class="col-md-4">
                     <div class="row align-items-center">
                         <div class="col-5 pe-0">
-                            <input type="date" class="mt-2 mb-2 form-control form-control-sm border border-success"
+                            <input type="date" name="start_date"
+                                class="form-control form-control-sm form-control-solid border-success"
                                 value="{{ \Carbon\Carbon::now()->subMonths(3)->format('Y-m-d') }}">
                         </div>
-                        <div class="col-2 text-center">
-                            Đến
-                        </div>
+                        <div class="col-2 text-center">Đến</div>
                         <div class="col-5 ps-0">
-                            <input type="date" class="mt-2 mb-2 form-control form-control-sm border border-success"
+                            <input type="date" name="end_date"
+                                class="form-control form-control-sm form-control-solid border-success"
                                 value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                         </div>
                     </div>
                 </div>
-                <div class="col-4">
-                    <select name="ur" id="ur"
-                        class="mt-2 mb-2 form-select form-select-sm form-select-solid border border-success setupSelect2">
-                        <option value="" selected>--Theo Người Tạo--</option>
-                        <option value="a">A</option>
-                        <option value="b">B</option>
+
+                <div class="col-md-2">
+                    <select name="supplier_code" id="supplier_code" class="form-select form-select-sm border-success">
+                        <option value="" selected>--Theo NCC--</option>
+                        {{-- @foreach ($suppliers as $supplier)
+                            <option value="{{ $supplier->code }}">{{ $supplier->name }}</option>
+                        @endforeach --}}
                     </select>
                 </div>
-                <div class="col-4 pe-8">
-                    <div class="row">
-                        <div class="col-10">
-                            <input type="search" name="kw" placeholder="Tìm Kiếm Mã Phiếu Xuất.."
-                                class="mt-2 mb-2 form-control form-control-sm border border-success"
-                                value="{{ request()->kw }}">
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
-                        </div>
+
+                <div class="col-md-2">
+                    <select name="created_by" id="created_by" class="form-select form-select-sm border-success">
+                        <option value="" selected>--Theo Người Tạo--</option>
+                        {{-- @foreach ($users as $user)
+                            <option value="{{ $user->code }}">{{ $user->last_name }} {{ $user->first_name }}</option>
+                        @endforeach --}}
+                    </select>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input type="search" id="search" name="search" placeholder="Tìm Kiếm Mã, Số Hóa Đơn.."
+                            class="form-control form-control-sm form-control-solid border-success">
                     </div>
                 </div>
+
+                <div id="searchResults"></div>
             </form>
+
         </div>
 
         {{-- Danh sách phiếu  --}}
@@ -84,7 +93,7 @@
             <div class="table-responsive">
                 <table class="table align-middle gs-0 gy-4">
                     <thead>
-                        <tr class="fw-bolder bg-success">
+                        <tr class="bg-success">
                             <th class="ps-4">
                                 <input type="checkbox" id="selectAll" />
                             </th>
