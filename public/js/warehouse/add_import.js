@@ -98,7 +98,7 @@ function addMaterial() {
         discount,
         equipment_code,
         price,
-        total_price: total_price.toFixed(2)
+        total_price: total_price
     };
     materialData.push(material);
 
@@ -111,7 +111,7 @@ function addMaterial() {
             <td style="font-size: 11px;" class="text-center">${equipment_code}</td>
             <td style="font-size: 11px;" class="text-center">${supplier_code}</td>
             <td style="font-size: 11px;" class="text-center">${quantity}</td>
-            <td style="font-size: 11px;" class="text-center">${price}</td>
+            <td style="font-size: 11px;" class="text-center">${price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace(',00', '')}</td>
             <td style="font-size: 11px;" class="text-center">${batch_number}</td>
             <td style="font-size: 11px;" class="text-center">${expiry_date}</td>
             <td style="font-size: 11px;" class="text-center">${discount}</td>
@@ -144,26 +144,18 @@ function calculateTotals() {
     materialData.forEach(material => {
         const itemDiscount = material.price * material.quantity * material.discount / 100;
         const itemVAT = (material.price * material.quantity - itemDiscount) * material.VAT / 100;
-        const itemTotal = material.total_price;
+        const itemTotal = parseFloat(material.total_price);
 
         totalDiscount += itemDiscount;
         totalVAT += itemVAT;
-        totalAmount += parseFloat(itemTotal);
+        totalAmount += itemTotal;
     });
 
-    document.getElementById('totalDiscount').textContent = totalDiscount.toLocaleString('vi-VN', {
-        style: 'currency',
-        currency: 'VND'
-    }).replace(',00', '');
-    document.getElementById('totalVAT').textContent = totalVAT.toLocaleString('vi-VN', {
-        style: 'currency',
-        currency: 'VND'
-    }).replace(',00', '');
-    document.getElementById('totalAmount').textContent = totalAmount.toLocaleString('vi-VN', {
-        style: 'currency',
-        currency: 'VND'
-    }).replace(',00', '');
+    document.getElementById('totalDiscount').textContent = totalDiscount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    document.getElementById('totalVAT').textContent = totalVAT.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    document.getElementById('totalAmount').textContent = totalAmount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 }
+
 
 function submitMaterials() {
     document.getElementById('materialData').value = JSON.stringify(materialData);
@@ -190,12 +182,17 @@ document.getElementById('equipment_code').addEventListener('change', function() 
 });
 
 function formatCurrency(input) {
-    // Xóa tất cả ký tự không phải số
+    // Xóa tất cả ký tự không phải số và dấu phẩy
     let value = input.value.replace(/[^0-9]/g, '');
 
-    // Định dạng giá trị với dấu phẩy
-    value = new Intl.NumberFormat('vi-VN').format(value);
+    // Chuyển đổi thành số và định dạng với dấu phẩy
+    if (value) {
+        value = parseFloat(value).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    } else {
+        value = '0 VNĐ'; // Giá trị mặc định nếu không có input
+    }
 
     // Cập nhật giá trị trong input
-    input.value = value;
+    input.value = value.replace('VNĐ', '').trim(); // Bỏ ký tự '₫' để chỉ giữ lại số
 }
+

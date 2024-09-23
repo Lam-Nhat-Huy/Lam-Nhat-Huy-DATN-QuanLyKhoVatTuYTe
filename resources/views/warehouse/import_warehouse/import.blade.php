@@ -308,10 +308,22 @@
                             </div>
 
                         @empty
-                            <tr class="text-center">
-                                <td colspan="12">
-                                    <div class="alert alert-warning" role="alert">
-                                        Chưa có dữ liệu. vui lòng tạo phiếu nhập
+                            <tr id="noDataAlert">
+                                <td colspan="12" class="text-center">
+                                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                        role="alert"
+                                        style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                        <div class="mb-3">
+                                            <i class="fas fa-file-invoice" style="font-size: 36px; color: #6c757d;"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin phiếu
+                                                nhập trống</h5>
+                                            <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                Hiện tại chưa có phiếu nhập nào được thêm vào. Vui lòng kiểm tra lại hoặc
+                                                tạo mới phiếu nhập để bắt đầu.
+                                            </p>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -323,20 +335,29 @@
 
         <div class="card-body py-3 mb-3">
             <div class="dropdown">
-                <span class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                <button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    <span>Chọn Thao Tác</span>
-                </span>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#confirmAll">
-                            <i class="fas fa-clipboard-check me-2 text-success"></i>Duyệt Tất Cả</a>
+                    <span class="fw-bold">Chọn Thao Tác</span>
+                </button>
+                <ul class="dropdown-menu rounded-3 shadow-lg" aria-labelledby="dropdownMenuButton1">
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" data-bs-toggle="modal"
+                            data-bs-target="#confirmAll">
+                            <i class="fas fa-clipboard-check me-2 text-success"></i>
+                            <span class="fw-semibold">Duyệt Tất Cả</span>
+                        </a>
                     </li>
-                    <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#deleteAll">
-                            <i class="fas fa-trash me-2 text-danger"></i>Xóa Tất Cả</a>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" data-bs-toggle="modal"
+                            data-bs-target="#deleteAll">
+                            <i class="fas fa-trash me-2 text-danger"></i>
+                            <span class="fw-semibold">Xóa Tất Cả</span>
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
+
     </div>
 @endsection
 

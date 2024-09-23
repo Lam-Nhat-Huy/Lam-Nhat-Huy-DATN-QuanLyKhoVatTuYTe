@@ -3,8 +3,8 @@
         <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Nhập Kho</span>
     </h3>
     <div class="card-toolbar">
-        <a href="{{ route('warehouse.create_import') }}" class="btn btn-sm btn-success" style="font-size: 12px;">
-            <i class="fas fa-plus"></i> Tạo Phiếu Nhập
+        <a href="{{ route('warehouse.create_import') }}" class="btn btn-sm btn-success" style="font-size: 10px;">
+            <i style="font-size: 10px;" class="fas fa-plus"></i> Tạo Phiếu Nhập
         </a>
     </div>
 </div>
