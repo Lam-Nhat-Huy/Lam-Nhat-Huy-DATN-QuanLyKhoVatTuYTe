@@ -183,8 +183,7 @@
                                     <label for="price" class="required form-label mb-2">Giá nhập</label>
                                     <input type="text" tabindex="10"
                                         class="form-control form-control-sm form-control-solid border border-success"
-                                        id="price" name="price" placeholder="Nhập đơn giá"
-                                        oninput="formatCurrency(this)" value="12000">
+                                        id="price" name="price" placeholder="Nhập đơn giá" value="12000">
                                 </div>
 
                                 <div class="col-3 mb-4">

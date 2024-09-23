@@ -23,6 +23,12 @@ class ImportController extends Controller
 
         $receipts = Receipts::with(['supplier', 'user', 'details.equipments'])->paginate(10);
 
+        $allReceiptCount = Receipts::all()->count();
+
+        $draftReceiptsCount = Receipts::where('status', 0)->count();
+
+        $approvedReceiptsCount = Receipts::where('status', 1)->count();
+
         $suppliers = Suppliers::all();
 
         $users = Users::all();
@@ -31,7 +37,10 @@ class ImportController extends Controller
             'title' => $title,
             'receipts' => $receipts,
             'suppliers' => $suppliers,
-            'users' => $users
+            'users' => $users,
+            'draftReceiptsCount' => $draftReceiptsCount,
+            'approvedReceiptsCount' => $approvedReceiptsCount,
+            'allReceiptCount' => $allReceiptCount
         ]);
     }
 
@@ -49,7 +58,7 @@ class ImportController extends Controller
             'title' => $title,
             'inventories' => $inventories,
             'suppliers' => $suppliers,
-            'users' => $users
+            'users' => $users,
         ]);
     }
 
@@ -132,8 +141,11 @@ class ImportController extends Controller
         }
 
         // Cập nhật kho theo lô
-        foreach ($materialData as $material) {
-            $this->updateInventoryByBatch($material, $receiptCode, $receipt->receipt_date);
+
+        if ($status == 1) {
+            foreach ($materialData as $material) {
+                $this->updateInventoryByBatch($material, $receiptCode, $receipt->receipt_date);
+            }
         }
 
         // Thông báo thành công
@@ -145,7 +157,6 @@ class ImportController extends Controller
 
         return redirect()->route('warehouse.import');
     }
-
 
     // Hàm cập nhật số lượng tồn kho theo từng lô
     private function updateInventoryByBatch($material, $receiptCode, $receiptDate)
@@ -196,23 +207,38 @@ class ImportController extends Controller
 
     public function approve($code)
     {
-
+        // Tìm phiếu nhập theo mã code
         $receipt = Receipts::where('code', $code)->first();
 
-        if ($receipt->status == 0) {
+        // Kiểm tra trạng thái phiếu nhập (chỉ duyệt nếu trạng thái là 0)
+        if ($receipt && $receipt->status == 0) {
+            // Thay đổi trạng thái phiếu nhập từ 0 sang 1 (đã duyệt)
             $receipt->status = 1;
             $receipt->save();
+
+            // Lấy tất cả các chi tiết phiếu nhập liên quan
+            $receiptDetails = Receipt_details::where('receipt_code', $code)->get();
+
+            // Cập nhật kho theo lô cho từng chi tiết phiếu nhập
+            foreach ($receiptDetails as $detail) {
+                $material = [
+                    'equipment_code' => $detail->equipment_code,
+                    'batch_number' => $detail->batch_number,
+                    'expiry_date' => $detail->expiry_date,
+                    'quantity' => $detail->quantity,
+                ];
+
+                // Gọi hàm cập nhật kho
+                $this->updateInventoryByBatch($material, $receipt->code, $receipt->receipt_date);
+            }
 
             toastr()->success('Đã duyệt phiếu nhập kho thành công với mã ' . $receipt->code);
             return redirect()->back();
         }
 
-
         toastr()->success('Phiếu đã được duyệt trước đó.');
-
         return redirect()->back();
     }
-
 
     public function searchImport(Request $request)
     {

@@ -160,23 +160,23 @@
                                                                 <tr>
                                                                     <td class=""><strong>Tổng tiền hàng</strong></td>
                                                                     <td class="text-gray-800">
-                                                                        {{ number_format($totalPrice, 0) }} VNĐ</td>
+                                                                        {{ number_format($totalPrice, 0) }}đ</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td class=""><strong>Tổng chiết khấu</strong>
                                                                     </td>
                                                                     <td class="text-gray-800">
-                                                                        {{ number_format($totalDiscount, 0) }} VNĐ</td>
+                                                                        {{ number_format($totalDiscount, 0) }}đ</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td class=""><strong>Tổng VAT</strong></td>
                                                                     <td class="text-gray-800">
-                                                                        {{ number_format($totalVAT, 0) }} VNĐ</td>
+                                                                        {{ number_format($totalVAT, 0) }}đ</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td class=""><strong>Tổng cộng</strong></td>
                                                                     <td class="text-gray-800">
-                                                                        {{ number_format($totalAmount, 0) }} VNĐ</td>
+                                                                        {{ number_format($totalAmount, 0) }}đ</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -217,11 +217,11 @@
                                                                         <td>{{ $detail->equipments->code }}</td>
                                                                         <td>{{ $detail->equipments->name }}</td>
                                                                         <td>{{ $detail->quantity }}</td>
-                                                                        <td>{{ number_format($detail->price) }} VND</td>
+                                                                        <td>{{ number_format($detail->price) }}đ</td>
                                                                         <td>{{ $detail->batch_number }}</td>
                                                                         <td>{{ $detail->discount }}</td>
                                                                         <td>{{ $detail->VAT }}%</td>
-                                                                        <td>{{ number_format($totalPriceWithVAT) }} VND
+                                                                        <td>{{ number_format($totalPriceWithVAT) }}đ
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
@@ -248,10 +248,9 @@
 
                                                 <!-- Nút Sửa đơn -->
                                                 @if ($item->status == 0)
-                                                    <button style="font-size: 10px;" class="btn btn-sm btn-dark me-2"
-                                                        data-bs-toggle="modal" data-bs-target="#edit" type="button">
-                                                        <i style="font-size: 10px;" class="fa fa-edit"></i>Sửa Phiếu
-                                                    </button>
+                                                    <a style="font-size: 10px;" href=""
+                                                        class="btn btn-dark btn-sm me-2"><i style="font-size: 10px;"
+                                                            class="fa fa-edit"></i>Sửa Phiếu</a>
                                                 @endif
 
                                                 <!-- Nút In Phiếu -->
@@ -260,14 +259,14 @@
                                                     <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
                                                 </button>
 
-
-
-                                                <!-- Nút Xóa đơn -->
-                                                <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
-                                                    data-bs-toggle="modal" data-bs-target="#deleteConfirm"
-                                                    type="button">
-                                                    <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
-                                                </button>
+                                                @if ($item->status == 0)
+                                                    <!-- Nút Xóa đơn -->
+                                                    <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
+                                                        data-bs-toggle="modal" data-bs-target="#deleteConfirm"
+                                                        type="button">
+                                                        <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
+                                                    </button>
+                                                @endif
 
                                             </div>
                                         </div>
@@ -330,10 +329,16 @@
                         @endforelse
                     </tbody>
                 </table>
+
+
+                <div class="d-flex justify-content-center mt-3">
+                    {{ $receipts->links('pagination::bootstrap-4') }}
+                </div>
+
             </div>
         </div>
 
-        <div class="card-body py-3 mb-3">
+        <div class="card-body py-3 mb-3 d-flex justify-between">
             <div class="dropdown">
                 <button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                     aria-expanded="false">
@@ -356,7 +361,28 @@
                     </li>
                 </ul>
             </div>
+
+            <div class="filter-bar">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Tất cả <span
+                                class="badge bg-dark">({{ $allReceiptCount }})</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Đã duyệt <span
+                                class="badge bg-success">({{ $approvedReceiptsCount }})</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Chưa duyệt <span
+                                class="badge bg-warning">({{ $draftReceiptsCount }})</span></a>
+                    </li>
+
+                </ul>
+            </div>
+
         </div>
+
+
 
     </div>
 @endsection
