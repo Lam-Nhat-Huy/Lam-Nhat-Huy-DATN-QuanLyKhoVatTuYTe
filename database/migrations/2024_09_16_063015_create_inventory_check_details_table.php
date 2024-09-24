@@ -14,7 +14,8 @@ return new class extends Migration
             $table->char('equipment_code', 20)->nullable();
             $table->integer('current_quantity')->nullable();
             $table->integer('actual_quantity')->nullable();
-            $table->text('note')->nullable();
+            $table->integer('unequal')->nullable();
+            $table->char('batch_number', 20)->nullable();
             $table->timestamps();
             $table->softDeletes();
 

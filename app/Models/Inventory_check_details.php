@@ -18,8 +18,15 @@ class Inventory_check_details extends Model
         'equipment_code',
         'current_quantity',
         'actual_quantity',
+        'unequal',
+        'batch_number',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
+
+    public function equipment()
+    {
+        return $this->belongsTo(Equipments::class, 'equipment_code', 'code');
+    }
 }

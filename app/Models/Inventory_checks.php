@@ -22,4 +22,14 @@ class Inventory_checks extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function details()
+    {
+        return $this->hasMany(Inventory_check_details::class, 'inventory_check_code', 'code');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(Users::class, 'user_code', 'code');
+    }
 }
