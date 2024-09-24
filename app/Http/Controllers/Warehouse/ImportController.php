@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Warehouse;
 
+use App\Exports\ReceiptsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreImportRequest;
+use App\Imports\ReceiptsImport;
 use App\Models\Equipments;
 use App\Models\Inventories;
 use App\Models\Receipt_details;
@@ -12,6 +14,7 @@ use App\Models\Suppliers;
 use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ImportController extends Controller
 {
@@ -274,5 +277,44 @@ class ImportController extends Controller
             'title' => $title,
             'receipts' => $receipts
         ]);
+    }
+
+
+    public function delete($code)
+    {
+        $receipt = Receipts::where('code', $code)->first();
+
+        if (!$receipt) {
+            toastr()->error('Không tìm thấy phiếu nhập kho.');
+            return redirect()->back();
+        }
+
+        if ($receipt->status == 1) {
+            toastr()->error('Không thể xóa phiếu đã được duyệt.');
+            return redirect()->back();
+        }
+
+        Receipt_details::where('receipt_code', $code)->delete();
+
+        $receipt->delete();
+
+        toastr()->success('Đã xóa phiếu nhập kho thành công.');
+        return redirect()->back();
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new ReceiptsExport, 'receipts_sample.xlsx');
+    }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xls,xlsx|max:10240', // tối đa 10MB
+        ]);
+
+        Excel::import(new ReceiptsImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Dữ liệu đã được nhập thành công!');
     }
 }

@@ -252,21 +252,23 @@
                                                         class="btn btn-dark btn-sm me-2"><i style="font-size: 10px;"
                                                             class="fa fa-edit"></i>Sửa Phiếu</a>
                                                 @endif
-
-                                                <!-- Nút In Phiếu -->
-                                                <button style="font-size: 10px;" class="btn btn-sm btn-twitter me-2"
-                                                    id="printPdfBtn" type="button">
-                                                    <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
-                                                </button>
-
-                                                @if ($item->status == 0)
-                                                    <!-- Nút Xóa đơn -->
-                                                    <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
-                                                        data-bs-toggle="modal" data-bs-target="#deleteConfirm"
-                                                        type="button">
-                                                        <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
+                                                @if ($item->status == 1)
+                                                    <!-- Nút In Phiếu -->
+                                                    <button style="font-size: 10px;" class="btn btn-sm btn-twitter me-2"
+                                                        id="printPdfBtn" type="button">
+                                                        <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
                                                     </button>
                                                 @endif
+
+                                                @if ($item->status == 0)
+                                                    <!-- Nút xóa, có thể nằm trong danh sách hoặc bảng -->
+                                                    <button style="font-size: 10px;" class="btn btn-danger btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#delete-{{ $item->code }}">
+                                                        <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa phiếu
+                                                    </button>
+                                                @endif
+
 
                                             </div>
                                         </div>
@@ -305,6 +307,38 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Modal Xóa Phiếu -->
+                            <div class="modal fade" id="delete-{{ $item->code }}" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1"
+                                aria-labelledby="deleteLabel-{{ $item->code }}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-md">
+                                    <div class="modal-content border-0 shadow">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title text-white" id="deleteLabel-{{ $item->code }}">Xác
+                                                Nhận Xóa Phiếu</h5>
+                                            <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center" style="padding-bottom: 0px;">
+                                            <form action="{{ route('receipts.delete', $item->code) }}" method="POST"
+                                                id="deleteForm-{{ $item->code }}">
+                                                @csrf
+                                                <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa phiếu này?</p>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer justify-content-center border-0">
+                                            <button type="button" class="btn btn-sm btn-secondary px-4"
+                                                data-bs-dismiss="modal">Đóng</button>
+                                            <button type="button" class="btn btn-sm btn-danger px-4"
+                                                onclick="event.preventDefault(); document.getElementById('deleteForm-{{ $item->code }}').submit();">
+                                                Xóa
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
                         @empty
                             <tr id="noDataAlert">
