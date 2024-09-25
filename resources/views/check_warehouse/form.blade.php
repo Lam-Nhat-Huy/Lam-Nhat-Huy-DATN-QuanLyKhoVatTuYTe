@@ -157,350 +157,160 @@
 
 @section('content')
     <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-8">
-                {{-- Thanh tìm kiếm sản phẩm  --}}
-                <div class="container mt-4 position-relative">
-                    <!-- Input group for search bar -->
-                    <div class="input-group mb-3">
-                        <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
-                        <input type="text" class="form-control" id="searchProductInput"
-                            placeholder="Nhập tên hoặc mã hàng hoá (F2)" aria-label="Search" onkeyup="filterProducts()">
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#displayCategory"
-                            class="btn btn-sm btn-primary">
-                            <i class="fas fa-list"></i>
-                        </button>
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#importExcelModal"
-                            class="btn btn-sm btn-success">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-
-                    <!-- Dropdown list of products -->
-                    <div class="dropdown-menu w-100 mt-1" id="productDropdown">
-                        <a class="dropdown-item d-flex align-items-center" href="#" onclick="selectProduct(this)">
-                            <img src="placeholder.png" alt="Product Image" class="me-2"
-                                style="width: 40px; height: 40px;">
-                            <div>
-                                <div class="fw-bold">Băng gạc</div>
-                                <small>SP000003 - Giá: 0</small>
-                                <div><small>Tồn: 1 - Khách đặt: 0</small></div>
+        <form action="{{ route('check_warehouse.store') }}" method="POST">
+            @csrf
+            <div class="row">
+                {{-- Lên danh sách kiểm kho  --}}
+                <div class="col-md-8">
+                    <div class="card border-0 shadow-lg p-4 bg-body rounded-4">
+                        {{-- Thanh tìm kiếm sản phẩm  --}}
+                        <div class="container mt-4 position-relative">
+                            <!-- Input group for search bar -->
+                            <div class="input-group mb-3">
+                                <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
+                                <input type="text" class="form-control" id="searchProductInput"
+                                    placeholder="Nhập tên hoặc mã hàng hoá (F2)" aria-label="Search"
+                                    onkeyup="filterProducts()">
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#displayCategory"
+                                    class="btn btn-sm btn-primary">
+                                    <i class="fas fa-list"></i>
+                                </button>
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#importExcelModal"
+                                    class="btn btn-sm btn-success">
+                                    <i class="fas fa-plus"></i>
+                                </button>
                             </div>
-                        </a>
 
-                        <a class="dropdown-item d-flex align-items-center" href="#" onclick="selectProduct(this)">
-                            <img src="placeholder.png" alt="Product Image" class="me-2"
-                                style="width: 40px; height: 40px;">
-                            <div>
-                                <div class="fw-bold">Thuốc đỏ</div>
-                                <small>SP000003 - Giá: 0</small>
-                                <div><small>Tồn: 1 - Khách đặt: 0</small></div>
+                            <!-- Dropdown list of products -->
+                            <div class="dropdown-menu w-100 mt-1" id="productDropdown">
+                                <a class="dropdown-item d-flex align-items-center" href="#"
+                                    onclick="selectProduct(this)">
+                                    <img src="placeholder.png" alt="Product Image" class="me-2"
+                                        style="width: 40px; height: 40px;">
+
+                                </a>
+                                <!-- Thêm nhiều mục sản phẩm khác tương tự -->
                             </div>
-                        </a>
-                        <!-- Thêm nhiều mục sản phẩm khác tương tự -->
-                    </div>
-                </div>
-
-
-
-                {{-- Hiển thị trạng thái  --}}
-                <ul class="d-flex">
-                    <li class="me-5 text-dark">Tất cả (0)</li>
-                    <li class="me-5 text-success">Khớp (0)</li>
-                    <li class="me-5 text-warning">Lệch (0)</li>
-                    <li class="me-5 text-danger">Chưa kiểm (0)</li>
-                </ul>
-
-                {{-- Danh sách vật tư đã thêm --}}
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped text-center align-middle">
-                        <thead class="table-dark">
-                            <tr>
-                                <td></td>
-                                <th>STT</th>
-                                <th>Mã hàng</th>
-                                <th>Tên hàng</th>
-                                <th>Đơn vị tính</th>
-                                <th>Tồn kho</th>
-                                <th>Thực tế</th>
-                                <th>Giá trị lệch</th>
-                            </tr>
-                        </thead>
-                        <tbody id="materialList">
-                            <!-- Các dòng vật tư sẽ được thêm động ở đây -->
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-
-            {{-- Chi tiết kiểm kho  --}}
-            <div class="col-md-4">
-                <div class="card border-0 shadow p-4 mb-4 bg-white rounded-3">
-                    <h5 class="mb-3 fw-bold text-primary">Thông tin kiểm kho</h5>
-
-                    <div class="mb-4">
-                        <div class="d-flex justify-content-between">
-                            <span class="fw-semibold">Tổng SL thực tế:</span>
-                            <span class="text-end">40</span>
                         </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <div class="d-flex justify-content-between">
-                            <span class="fw-semibold">Trạng thái:</span>
-                            <span class="text-end">Phiếu tạm</span>
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="code" class="form-label fw-semibold">Mã kiểm kho</label>
-                        <input type="code" id="code" class="form-control"
-                            placeholder="Mã kiểm kho sẽ được tạo tự động">
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="code" class="form-label fw-semibold">Ngày nhập</label>
-                        <input type="date" id="date" class="form-control">
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="notes" class="form-label fw-semibold">Ghi chú</label>
-                        <textarea id="notes" class="form-control" placeholder="Nhập ghi chú..." rows="3"></textarea>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <div class="mb-4 d-flex">
-                        <div class="col-6 me-3">
-                            <button type="submit" class="btn btn-sm btn-danger w-100">Lưu tạm</button>
-                        </div>
-
-                        <div class="col-6">
-                            <button type="submit" class="btn btn-sm btn-success w-100">Lưu hoàn thành</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal chọn nhóm hàng -->
-    <div class="modal fade" id="displayCategory" tabindex="-1" aria-labelledby="displayCategoryLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content border-0 shadow-sm">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title fw-bold" id="displayCategoryLabel">Chọn nhóm vật tư</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <!-- Search bar -->
-                    <div class="input-group mb-4">
-                        <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
-                        <input type="text" class="form-control" placeholder="Tìm kiếm nhóm hàng">
-                    </div>
-
-                    <!-- Checkbox Group Selection -->
-                    <div class="mb-4">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="checkAllGroups">
-                            <label class="form-check-label" for="checkAllGroups">Tất cả nhóm vật tư</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="checkGroupAA">
-                            <label class="form-check-label" for="checkGroupAA">aa</label>
-                        </div>
-                    </div>
-
-                    <hr class="mb-4">
-
-                    <!-- Option Filters -->
-                    <div class="mb-4">
-                        <h6 class="fw-bold text-secondary mb-3">Tùy chọn</h6>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="checkInStock" checked>
-                            <label class="form-check-label" for="checkInStock">Chỉ kiểm hàng còn tồn kho</label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="checkOnBusiness">
-                            <label class="form-check-label" for="checkOnBusiness">Chỉ kiểm hàng đang kinh doanh</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="checkBasicUnit">
-                            <label class="form-check-label" for="checkBasicUnit">Chỉ kiểm hàng là đơn vị tính cơ
-                                bản</label>
-                        </div>
-                    </div>
-
-                    <!-- Location Input -->
-                    <div class="mb-4">
-                        <h6 class="fw-bold text-secondary mb-3">Vị trí</h6>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="fas fa-map-marker-alt"></i></span>
-                            <input type="text" class="form-control" placeholder="Chọn vị trí">
-                        </div>
-                    </div>
-
-                    <!-- Reset Selection -->
-                    <div class="d-flex justify-content-end">
-                        <a href="#" class="text-decoration-none text-danger fw-bold">Xóa chọn tất cả</a>
-                    </div>
-                </div>
-                <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bỏ qua</button>
-                    <button type="button" class="btn btn-primary">Xong</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Modal nhập excel -->
-    <div class="modal fade" id="importExcelModal" tabindex="-1" aria-labelledby="displayCatagoryLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-light">
-                    <h5 class="modal-title fw-bold text-primary" id="importExcelModalLabel">Nhập Excel</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <!-- Notice Section -->
-                    <div class="alert alert-warning rounded-3 p-3 mb-4">
-                        <p class="mb-1">
-                            Tải về file mẫu: <a href="#" class="text-decoration-none text-primary">Excel
-                                2003</a>
-                            hoặc
-                            <a href="#" class="text-decoration-none text-primary">phiên bản khác cao hơn</a>
-                        </p>
-                        <p class="fw-bold text-danger mb-2">Lưu ý:</p>
-                        <ul class="mb-0 text-muted">
-                            <li>Hệ thống chỉ hỗ trợ tối đa <strong>500</strong> hàng hóa cho mỗi lần nhập dữ liệu từ
-                                file
-                                excel.</li>
-                            <li>Trong trường hợp file Excel có hàng hóa chưa hợp lệ, bạn vui lòng chỉnh sửa các dòng bị
-                                lỗi
-                                theo hướng dẫn và thực hiện lại.</li>
-                            <li>Đối với hàng hóa không quản lý Serial, số lượng phải lớn hơn 0. Đối với hàng hóa quản lý
-                                Serial, Serial phải có định dạng cho phép (a-z, 0-9, ",", " ").</li>
-                            <li>Giá nhập, giá bán đều phải lớn hơn hoặc bằng 0.</li>
-                            <li>Mỗi hàng hóa chỉ được liệt kê ở 1 dòng duy nhất và Serial phải là duy nhất, không trùng
-                                lặp
-                                và chưa tồn tại trong hệ thống.</li>
-                            <li>Để nhập kho cho hàng sản xuất định lượng, vui lòng vào menu Sản xuất -> tạo phiếu sản
-                                xuất
-                                để hệ thống ghi nhận tồn kho chính xác hơn.</li>
+                        {{-- Hiển thị trạng thái  --}}
+                        <ul class="d-flex">
+                            <li class="me-5 text-dark">Tất cả (0)</li>
+                            <li class="me-5 text-success">Khớp (0)</li>
+                            <li class="me-5 text-warning">Lệch (0)</li>
+                            <li class="me-5 text-danger">Chưa kiểm (0)</li>
                         </ul>
-                    </div>
 
-                    <!-- File Upload Section -->
-                    <div class="border border-2 rounded-3 p-4 text-center bg-light" style="border-style: dashed;">
-                        <label for="excelFile" class="form-label fw-semibold text-secondary">
-                            <i class="fa-solid fa-file-excel fa-2x text-success mb-3"></i><br>
-                            <span>Kéo thả hoặc click vào để chọn file Excel</span>
-                        </label>
-                        <input type="file" id="excelFile" class="form-control d-none" accept=".xls,.xlsx">
+                        <div class="table-responsive">
+                            <table class="table text-center align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <td></td>
+                                        <th>STT</th>
+                                        <th>Mã thiết bị</th>
+                                        <th>Tên thiết bị</th>
+                                        <th>Tồn kho</th>
+                                        <th>Thực tế</th>
+                                        <th>Sô lượng lệch</th>
+                                        <th>Giá trị lệch</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="materialList">
+                                    {{-- Thông tin sau khi được thêm vật tư từ FORM 1 sẽ được hiển thị ở đây --}}
+                                    <input type="hidden" id="materialData" name="materialData">
+                                </tbody>
+                            </table>
+                            <tr id="noDataAlert">
+                                <td colspan="12" class="text-center">
+                                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                        role="alert"
+                                        style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                        <div class="mb-3">
+                                            <i class="fas fa-file-invoice" style="font-size: 36px; color: #6c757d;"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin phiếu
+                                                nhập
+                                                trống</h5>
+                                            <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                Hiện tại chưa có phiếu nhập nào được thêm vào. Vui lòng kiểm tra lại hoặc
+                                                tạo
+                                                mới phiếu nhập để bắt đầu.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </div>
+
                     </div>
                 </div>
-                <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary">Tải lên</button>
+
+                {{-- Giao diện kiểm kho mới --}}
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-lg p-4 bg-body rounded-4">
+                        <h3 class="mb-4 text-dark text-uppercase">Chi tiết kiểm kho</h3>
+
+                        <input type="hidden" id="created_by" value="U001">
+
+                        <!-- Tổng SL thực tế -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted">Tổng SL thực tế</span>
+                                <span class="fs-6 fw-bold text-dark">40</span>
+                            </div>
+                        </div>
+
+                        <!-- Trạng thái -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted">Trạng thái</span>
+                                <span class="badge bg-primary py-2 px-4 rounded-pill" style="font-size: 10px">Đang
+                                    kiểm</span>
+                            </div>
+                        </div>
+
+                        <!-- Mã kiểm kho -->
+                        <div class="mb-4">
+                            <label for="code" class="form-label fw-semibold text-dark">Mã kiểm kho</label>
+                            <input type="text" id="code" class="form-control form-control-lg rounded-pill"
+                                placeholder="Tạo tự động" disabled>
+                        </div>
+
+                        <!-- Ngày nhập -->
+                        <div class="mb-4">
+                            <label for="check_date" class="form-label fw-semibold text-dark">Ngày nhập</label>
+                            <input type="date" id="check_date" class="form-control form-control-lg rounded-pill">
+                        </div>
+
+                        <!-- Ghi chú -->
+                        <div class="mb-4">
+                            <label for="note" class="form-label fw-semibold text-dark">Ghi chú</label>
+                            <textarea id="note" class="form-control form-control-lg rounded-3" placeholder="Nhập ghi chú..." rows="3"></textarea>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-grid gap-3">
+                            <button name="status" value="0" onclick="submitMaterials()" type="submit"
+                                class="btn btn-warning btn-lg rounded-pill">Lưu tạm</button>
+                            <button name="status" value="1" onclick="submitMaterials()" type="submit"
+                                class="btn btn-success btn-lg rounded-pill">Hoàn thành</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
+
     </div>
+
+    @include('check_warehouse.modal')
 @endsection
 
 @section('scripts')
+    <script>
+        var products = @json($equipmentsWithStock);
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
-    <script>
-        // Mảng chứa dữ liệu sản phẩm
-        var products = [{
-                name: 'Băng gạc',
-                code: 'SP000003',
-                price: 0,
-                stock: 1,
-                unit: 'Hộp'
-            },
-            {
-                name: 'Thuốc đỏ',
-                code: 'SP000004',
-                price: 0,
-                stock: 2,
-                unit: 'Chai'
-            }
-            // Thêm nhiều sản phẩm khác vào đây
-        ];
-
-        function filterProducts() {
-            var input = document.getElementById('searchProductInput');
-            var filter = input.value.toUpperCase();
-            var dropdown = document.getElementById('productDropdown');
-
-            // Hiển thị dropdown khi nhập liệu
-            dropdown.style.display = filter ? 'block' : 'none';
-
-            // Xóa nội dung dropdown trước khi thêm mới
-            dropdown.innerHTML = '';
-
-            // Lọc sản phẩm theo input
-            var filteredProducts = products.filter(function(product) {
-                return product.name.toUpperCase().indexOf(filter) > -1;
-            });
-
-            // Thêm các sản phẩm vào dropdown
-            filteredProducts.forEach(function(product) {
-                var item = `
-                    <a class="dropdown-item d-flex align-items-center" href="#" onclick="selectProduct(this, '${product.name}', '${product.code}', '${product.unit}', ${product.stock})">
-                        <img src="placeholder.png" alt="Product Image" class="me-2" style="width: 40px; height: 40px;">
-                        <div>
-                            <div class="fw-bold">${product.name}</div>
-                            <small>${product.code} - Giá: ${product.price}</small>
-                            <div><small>Tồn: ${product.stock} - Khách đặt: 0</small></div>
-                        </div>
-                    </a>
-                `;
-                dropdown.insertAdjacentHTML('beforeend', item);
-            });
-        }
-
-        function selectProduct(element, name, code, unit, stock) {
-            // Thêm sản phẩm vào bảng vật tư
-            addProductToTable(name, code, unit, stock);
-
-            // Ẩn danh sách dropdown sau khi chọn sản phẩm
-            document.getElementById('productDropdown').style.display = 'none';
-
-            // Xóa nội dung trong ô tìm kiếm
-            document.getElementById('searchProductInput').value = '';
-        }
-
-        function addProductToTable(name, code, unit, stock) {
-            var tableBody = document.getElementById('materialList');
-            var rowCount = tableBody.rows.length + 1;
-
-            var row = `
-                <tr>
-                    <td>
-                        <a href="#" class="text-dark">
-                            <i class="fa fa-trash"></i>
-                        </a>
-                    </td>
-                    <td>${rowCount}</td>
-                    <td>${code}</td>
-                    <td>${name}</td>
-                    <td>${unit}</td>
-                    <td>${stock}</td>
-                    <td>
-                        <input type="number">
-                    </td>
-                    <td>0</td>
-                </tr>
-            `;
-
-            tableBody.insertAdjacentHTML('beforeend', row);
-        }
-    </script>
+    <script src="{{ asset('js/check_warehouse/check_warehouse.js') }}"></script>
 @endsection

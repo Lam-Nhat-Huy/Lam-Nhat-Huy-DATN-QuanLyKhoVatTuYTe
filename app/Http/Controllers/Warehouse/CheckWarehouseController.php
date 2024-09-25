@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Warehouse;
 
 use App\Http\Controllers\Controller;
+use App\Models\Equipments;
 use App\Models\Inventory_checks;
 use App\Models\Suppliers;
 use App\Models\Users;
@@ -22,7 +23,30 @@ class CheckWarehouseController extends Controller
         // Lấy tất cả nhà cung cấp và người dùng
         $users = Users::all();
 
+
         return view("{$this->route}.check", compact('title', 'inventoryChecks', 'users'));
+    }
+
+    public function create()
+    {
+        $title = 'Kiểm Kho';
+
+        $action = 'create';
+
+        // Lấy danh sách vật tư có tồn kho (current_quantity > 0)
+        $equipmentsWithStock = Equipments::whereHas('inventories', function ($query) {
+            $query->where('current_quantity', '>', 0);
+        })->with(['inventories' => function ($query) {
+            $query->select('equipment_code', 'current_quantity'); // Chọn các cột cần từ inventories
+        }])->get();
+
+        return view("{$this->route}.form", compact('title', 'action', 'equipmentsWithStock'));
+    }
+
+    public function store(Request $request)
+    {
+        $materialData = json_decode($request->input('materialData'), true);
+        dd($materialData);
     }
 
     public function search(Request $request)
@@ -60,25 +84,12 @@ class CheckWarehouseController extends Controller
         ]);
     }
 
-
-
     public function trash()
     {
         $title = 'Kiểm Kho';
 
         return view("{$this->route}.trash", compact('title'));
     }
-
-    public function create()
-    {
-        $title = 'Kiểm Kho';
-
-        $action = 'create';
-
-        return view("{$this->route}.form", compact('title', 'action'));
-    }
-
-    public function store(Request $request) {}
 
     public function edit()
     {
