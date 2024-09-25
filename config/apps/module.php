@@ -2,7 +2,7 @@
 return [
     'module' => [
         [
-            'user_role' => [],
+            'user_role' => [0, 1],
             'title' => 'Báo Cáo Và Thống Kê',
             'icon' => 'fa fa-chart-line',
             'route' => ['system.index', 'report.index', 'report.insert_report', 'report.update_report'],
@@ -12,34 +12,34 @@ return [
                     'route' => 'system.index',
                     'route_action' => [],
                     'icon' => 'fa fa-square-poll-vertical',
-                    'user_role' => []
+                    'user_role' => [0, 1],
                 ],
                 [
                     'title' => 'Báo Cáo',
                     'route' => 'report.index',
                     'route_action' => ['report.insert_report', 'report.update_report'],
                     'icon' => 'fa fa-flag',
-                    'user_role' => []
+                    'user_role' => [0, 1],
                 ]
             ]
         ],
         [
-            'user_role' => [],
+            'user_role' => [1],
             'title' => 'Người Dùng',
             'icon' => 'fa fa-user',
-            'route' => ['user.index', 'user.add', 'user.edit'],
+            'route' => ['user.index', 'user.add', 'user.edit', 'user.user_trash'],
             'subModule' => [
                 [
                     'title' => 'Danh Sách',
                     'route' => 'user.index',
-                    'route_action' => ['user.add', 'user.edit'],
+                    'route_action' => ['user.add', 'user.edit', 'user.user_trash'],
                     'icon' => 'fa fa-list',
-                    'user_role' => []
+                    'user_role' => [1],
                 ],
             ]
         ],
         [
-            'user_role' => [],
+            'user_role' => [0, 1],
             'title' => 'Kho',
             'icon' => 'fa fa-warehouse',
             'route' => [
@@ -59,40 +59,40 @@ return [
                     'route' => 'warehouse.import',
                     'route_action' => ['warehouse.create_import'],
                     'icon' => 'fa fa-download',
-                    'user_role' => []
+                    'user_role' => [0, 1],
                 ],
                 [
                     'title' => 'Xuất Kho',
                     'route' => 'warehouse.export',
                     'route_action' => ['warehouse.create_export'],
                     'icon' => 'fa fa-upload',
-                    'user_role' => []
+                    'user_role' => [0, 1],
                 ],
                 [
                     'title' => 'Tồn Kho',
                     'route' => 'inventory.index',
                     'route_action' => [],
                     'icon' => 'fa fa-box',
-                    'user_role' => []
+                    'user_role' => [0, 1],
                 ],
                 [
                     'title' => 'Kiểm Kho',
                     'route' => 'check_warehouse.index',
                     'route_action' => ['check_warehouse.create', 'check_warehouse.edit'],
                     'icon' => 'fa fa-archive',
-                    'user_role' => []
+                    'user_role' => [0, 1],
                 ],
                 [
                     'title' => 'Thẻ Kho',
                     'route' => 'card_warehouse.index',
                     'route_action' => [],
                     'icon' => 'fa fa-clipboard',
-                    'user_role' => []
+                    'user_role' => [0, 1],
                 ]
             ]
         ],
         [
-            'user_role' => [],
+            'user_role' => [0, 1],
             'title' => 'Vật Tư',
             'icon' => 'fa-solid fa-suitcase-medical',
             'route' => [
@@ -110,19 +110,19 @@ return [
                     'route' => 'material.index',
                     'route_action' => ['material.material_trash', 'material.insert_material', 'material.update_material'],
                     'icon' => 'fa fa-pump-medical',
-                    'user_role' => []
+                    'user_role' => [0, 1],
                 ],
                 [
                     'title' => 'Danh Sách Nhóm Vật Tư',
                     'route' => 'material.material_group',
                     'route_action' => ['material.material_group_trash', 'material.update_material_group'],
                     'icon' => 'fa fa-notes-medical',
-                    'user_role' => []
+                    'user_role' => [0, 1],
                 ]
             ]
         ],
         [
-            'user_role' => [],
+            'user_role' => [0, 1],
             'title' => 'Yêu Cầu Nhập Xuất',
             'icon' => 'fa fa-bell-concierge',
             'route' => [
@@ -145,7 +145,7 @@ return [
                         'material_request.update_import',
                     ],
                     'icon' => 'fa fa-upload',
-                    'user_role' => []
+                    'user_role' => [0, 1],
                 ],
                 [
                     'title' => 'Yêu Cầu Xuất',
@@ -156,12 +156,12 @@ return [
                         'material_request.update_export',
                     ],
                     'icon' => 'fa fa-download',
-                    'user_role' => []
+                    'user_role' => [0, 1],
                 ],
             ]
         ],
         [
-            'user_role' => [],
+            'user_role' => [0, 1],
             'title' => 'Nhà Cung Cấp',
             'icon' => 'fa fa-truck',
             'route' => ['supplier.list', 'supplier.create', 'supplier.edit', 'supplier.trash'],
@@ -171,12 +171,12 @@ return [
                     'route' => 'supplier.list',
                     'route_action' => ['supplier.create', 'supplier.edit', 'supplier.trash'],
                     'icon' => 'fa fa-address-book',
-                    'user_role' => []
+                    'user_role' => [0, 1],
                 ],
             ]
         ],
         [
-            'user_role' => [],
+            'user_role' => [0, 1],
             'title' => 'Thông Báo',
             'icon' => 'fa fa-bell',
             'route' => [
@@ -198,7 +198,7 @@ return [
                         'notification.notification_trash',
                     ],
                     'icon' => 'fa fa-bell',
-                    'user_role' => []
+                    'user_role' => [0, 1],
                 ],
                 [
                     'title' => 'Loại Thông Báo',
@@ -208,7 +208,7 @@ return [
                         'notification.notification_type_trash',
                     ],
                     'icon' => 'fa fa-list',
-                    'user_role' => []
+                    'user_role' => [0, 1],
                 ],
             ],
             [

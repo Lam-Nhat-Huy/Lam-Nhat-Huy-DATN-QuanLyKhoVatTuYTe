@@ -4,8 +4,7 @@
     data-kt-drawer-toggle="#kt_aside_mobile_toggle">
     <div class="aside-logo flex-column-auto" id="kt_aside_logo">
         <a href="{{ route('system.index') }}">
-            <img alt="Logo" src="{{ asset('image/logo_warehouse.png') }}"
-                class="h-50px logo" />
+            <img alt="Logo" src="{{ asset('image/logo_warehouse.png') }}" class="h-50px logo" />
         </a>
         <div id="kt_aside_toggle" class="btn btn-icon w-auto px-0 btn-active-color-primary aside-toggle"
             data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body"
@@ -39,38 +38,39 @@
 
                 @foreach (config('apps.module') as $key => $value)
                     @foreach ($value as $item)
-                        {{-- @if (in_array(session('user_role'), (array) $item['user_role'])) --}}
-                        <div data-kt-menu-trigger="click"
-                            class="menu-item menu-accordion {{ in_array(Route::currentRouteName(), (array) $item['route']) ? 'hover show' : '' }}">
-                            <span class="menu-link">
-                                <i class="{{ $item['icon'] }} me-2"></i>
-                                <span class="menu-title">{{ $item['title'] }}</span>
-                                <span class="menu-arrow"></span>
-                            </span>
-                            <div class="menu-sub menu-sub-accordion menu-active-bg">
-                                @foreach ($item['subModule'] as $sub)
-                                    {{-- @if (in_array(session('user_role'), (array) $sub['user_role'])) --}}
-                                    @if (Route::has($sub['route']))
-                                        <div class="menu-item">
-                                            <a class="menu-link {{ in_array(Route::currentRouteName(), (array) $sub['route']) || in_array(Route::currentRouteName(), (array) $sub['route_action']) ? 'active' : '' }}"
-                                                href="{{ route($sub['route']) }}">
-                                                <i class="{{ $sub['icon'] }} me-2"></i>
-                                                <span class="menu-title">{{ $sub['title'] }}</span>
-                                            </a>
-                                        </div>
-                                    @else
-                                        <div class="menu-item">
-                                            <a class="menu-link" href="">
-                                                <i class="fa fa-x me-2 text-danger"></i><s class="menu-title">Không Tìm
-                                                    Thấy Đường Dẫn</s>
-                                            </a>
-                                        </div>
-                                    @endif
-                                    {{-- @endif --}}
-                                @endforeach
+                        @if (in_array(session('isAdmin'), (array) $item['user_role']))
+                            <div data-kt-menu-trigger="click"
+                                class="menu-item menu-accordion {{ in_array(Route::currentRouteName(), (array) $item['route']) ? 'hover show' : '' }}">
+                                <span class="menu-link">
+                                    <i class="{{ $item['icon'] }} me-2"></i>
+                                    <span class="menu-title">{{ $item['title'] }}</span>
+                                    <span class="menu-arrow"></span>
+                                </span>
+                                <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                    @foreach ($item['subModule'] as $sub)
+                                        @if (in_array(session('isAdmin'), (array) $sub['user_role']))
+                                            @if (Route::has($sub['route']))
+                                                <div class="menu-item">
+                                                    <a class="menu-link {{ in_array(Route::currentRouteName(), (array) $sub['route']) || in_array(Route::currentRouteName(), (array) $sub['route_action']) ? 'active' : '' }}"
+                                                        href="{{ route($sub['route']) }}">
+                                                        <i class="{{ $sub['icon'] }} me-2"></i>
+                                                        <span class="menu-title">{{ $sub['title'] }}</span>
+                                                    </a>
+                                                </div>
+                                            @else
+                                                <div class="menu-item">
+                                                    <a class="menu-link" href="">
+                                                        <i class="fa fa-x me-2 text-danger"></i><s
+                                                            class="menu-title">Không Tìm
+                                                            Thấy Đường Dẫn</s>
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>
-                        {{-- @endif --}}
+                        @endif
                     @endforeach
                 @endforeach
 

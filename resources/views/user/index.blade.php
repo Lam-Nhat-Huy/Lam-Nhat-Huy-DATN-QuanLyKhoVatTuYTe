@@ -14,6 +14,88 @@
             background: #d1c4e9;
             /* Màu nền khi hàng được nhấp vào */
         }
+
+        .checkbox-wrapper-6 .tgl {
+            display: none;
+        }
+
+        .checkbox-wrapper-6 .tgl,
+        .checkbox-wrapper-6 .tgl:after,
+        .checkbox-wrapper-6 .tgl:before,
+        .checkbox-wrapper-6 .tgl *,
+        .checkbox-wrapper-6 .tgl *:after,
+        .checkbox-wrapper-6 .tgl *:before,
+        .checkbox-wrapper-6 .tgl+.tgl-btn {
+            box-sizing: border-box;
+        }
+
+        .checkbox-wrapper-6 .tgl::-moz-selection,
+        .checkbox-wrapper-6 .tgl:after::-moz-selection,
+        .checkbox-wrapper-6 .tgl:before::-moz-selection,
+        .checkbox-wrapper-6 .tgl *::-moz-selection,
+        .checkbox-wrapper-6 .tgl *:after::-moz-selection,
+        .checkbox-wrapper-6 .tgl *:before::-moz-selection,
+        .checkbox-wrapper-6 .tgl+.tgl-btn::-moz-selection,
+        .checkbox-wrapper-6 .tgl::selection,
+        .checkbox-wrapper-6 .tgl:after::selection,
+        .checkbox-wrapper-6 .tgl:before::selection,
+        .checkbox-wrapper-6 .tgl *::selection,
+        .checkbox-wrapper-6 .tgl *:after::selection,
+        .checkbox-wrapper-6 .tgl *:before::selection,
+        .checkbox-wrapper-6 .tgl+.tgl-btn::selection {
+            background: none;
+        }
+
+        .checkbox-wrapper-6 .tgl+.tgl-btn {
+            outline: 0;
+            display: block;
+            width: 40px;
+            height: 22px;
+            position: relative;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .checkbox-wrapper-6 .tgl+.tgl-btn:after,
+        .checkbox-wrapper-6 .tgl+.tgl-btn:before {
+            position: relative;
+            display: block;
+            content: "";
+            width: 50%;
+            height: 100%;
+        }
+
+        .checkbox-wrapper-6 .tgl+.tgl-btn:after {
+            left: 0;
+        }
+
+        .checkbox-wrapper-6 .tgl+.tgl-btn:before {
+            display: none;
+        }
+
+        .checkbox-wrapper-6 .tgl:checked+.tgl-btn:after {
+            left: 50%;
+        }
+
+        .checkbox-wrapper-6 .tgl-light+.tgl-btn {
+            background: #b5b5b5;
+            border-radius: 2em;
+            padding: 2px;
+            transition: all 0.4s ease;
+        }
+
+        .checkbox-wrapper-6 .tgl-light+.tgl-btn:after {
+            border-radius: 50%;
+            background: #fff;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-wrapper-6 .tgl-light:checked+.tgl-btn {
+            background: #1fb948;
+        }
     </style>
 @endsection
 
@@ -23,29 +105,23 @@
 
 @section('scripts')
     <script>
-        // Đổi biểu tượng khi bấm vào td có chứa chevron
-        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(td) {
-            td.addEventListener('click', function(event) {
-                // Tìm phần tử <i> bên trong <td>
-                var icon = this.querySelector('i');
-
-                // Kiểm tra nếu có <i> thì thực hiện đổi biểu tượng
-                if (icon) {
-                    // Đổi icon khi click
-                    if (icon.classList.contains('fa-chevron-right')) {
-                        icon.classList.remove('fa-chevron-right');
-                        icon.classList.add('fa-chevron-down');
-                    } else {
-                        icon.classList.remove('fa-chevron-down');
-                        icon.classList.add('fa-chevron-right');
-                    }
+        // Hàm kiểm tra và ẩn/hiện nút xóa tất cả
+        function toggleDeleteAction() {
+            var anyChecked = false;
+            document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    anyChecked = true;
                 }
-
-                // Ngăn chặn việc click ảnh hưởng đến hàng (row)
-                event.stopPropagation();
             });
-        });
 
+            if (anyChecked) {
+                document.getElementById('action_delete_all').style.display = 'block';
+            } else {
+                document.getElementById('action_delete_all').style.display = 'none';
+            }
+        }
+
+        // Khi click vào checkbox "Select All"
         document.getElementById('selectAll').addEventListener('change', function() {
             var isChecked = this.checked;
             var checkboxes = document.querySelectorAll('.row-checkbox');
@@ -58,8 +134,10 @@
                     row.classList.remove('selected-row');
                 }
             });
+            toggleDeleteAction();
         });
 
+        // Khi checkbox của từng hàng thay đổi
         document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
                 var row = this.closest('tr');
@@ -76,9 +154,11 @@
                     }
                 });
                 document.getElementById('selectAll').checked = allChecked;
+                toggleDeleteAction(); // Gọi hàm kiểm tra nút xóa tất cả
             });
         });
 
+        // Khi người dùng click vào hàng
         document.querySelectorAll('tbody tr').forEach(function(row) {
             row.addEventListener('click', function() {
                 var checkbox = this.querySelector('.row-checkbox');
@@ -97,11 +177,18 @@
                         }
                     });
                     document.getElementById('selectAll').checked = allChecked;
+                    toggleDeleteAction(); // Gọi hàm kiểm tra nút xóa tất cả
                 }
             });
         });
+
+        // Kiểm tra trạng thái ban đầu khi trang được tải
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleDeleteAction();
+        });
     </script>
 @endsection
+
 
 @section('content')
     <div class="card mb-5 pb-5 mb-xl-8">
@@ -110,13 +197,13 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Người Dùng</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('user.user_trash') }}" class="btn btn-sm btn-danger me-2">
+                <a href="{{ route('user.user_trash') }}?{{ request()->getQueryString() }}" class="btn btn-sm btn-danger me-2">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-trash me-1"></i>
                         Thùng Rác
                     </span>
                 </a>
-                <a href="{{ route('user.add') }}" class="btn btn-sm btn-twitter">
+                <a href="{{ route('user.add') }}?{{ request()->getQueryString() }}" class="btn btn-sm btn-twitter">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-plus me-1"></i>
                         Thêm Người Dùng
@@ -124,224 +211,208 @@
                 </a>
             </div>
         </div>
-        <div class="card-body py-1 me-6">
-            <form action="" class="row align-items-center">
-                <div class="col-4">
-                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
-                        <option value="" selected>--Theo Vai Trò--</option>
-                        <option value="">Admin</option>
-                        <option value="">Nhân Viên</option>
+        <div class="card-body py-1">
+            <form action="{{ route('user.index') }}" method="GET" class="row align-items-center">
+                <div class="col-2">
+                    <select name="gd" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                        <option value="" {{ request()->gd == '' ? 'selected' : '' }}>--Theo Giới Tính--</option>
+                        <option value="nam" {{ request()->gd == 'nam' ? 'selected' : '' }}>Nam</option>
+                        <option value="nữ" {{ request()->gd == 'nữ' ? 'selected' : '' }}>Nữ</option>
                     </select>
                 </div>
-                <div class="col-4">
-                    <select name="stt" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
-                        <option value="" selected>--Theo Trạng Thái--</option>
-                        <option value="1" {{ request()->stt == 1 ? 'selected' : '' }}>Không</option>
-                        <option value="2" {{ request()->stt == 2 ? 'selected' : '' }}>Có</option>
+                <div class="col-2">
+                    <select name="ps" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                        <option value="" {{ request()->ps == '' ? 'selected' : '' }}>--Theo Chức Vụ--</option>
+                        <option value="1" {{ request()->ps == '1' ? 'selected' : '' }}>Admin</option>
+                        <option value="0" {{ request()->ps == '0' ? 'selected' : '' }}>Nhân Viên</option>
                     </select>
                 </div>
-                <div class="col-4">
+                <div class="col-2">
+                    <select name="st" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                        <option value="" {{ request()->st == '' ? 'selected' : '' }}>--Theo Trạng Thái--</option>
+                        <option value="0" {{ request()->st == '0' ? 'selected' : '' }}>Không</option>
+                        <option value="1" {{ request()->st == '1' ? 'selected' : '' }}>Có</option>
+                    </select>
+                </div>
+                <div class="col-6">
                     <div class="row">
-                        <div class="col-10">
+                        <div class="col-8">
                             <input type="search" name="kw" placeholder="Tìm Kiếm Mã, Tên, Email Người Dùng.."
                                 class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
                                 value="{{ request()->kw }}">
                         </div>
-                        <div class="col-2">
-                            <button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
+                        <div class="col-4">
+                            <span class="me-2"><a class="btn btn-info btn-sm mt-2 mb-2"
+                                    href="{{ route('user.index') }}">Bỏ Lọc</a></span>
+                            <span><button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button></span>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-        <div class="card-body py-3">
-            <div class="table-responsive">
-                <table class="table align-middle gs-0 gy-4">
-                    <thead>
-                        <tr class="fw-bolder bg-success">
-                            <th class="ps-4">
-                                <input type="checkbox" id="selectAll" />
-                            </th>
-                            <th class="" style="width: 20% !important;">Mã Người Dùng</th>
-                            <th class="" style="width: 25% !important;">Email</th>
-                            <th class="" style="width: 25% !important;">Số Điện Thoại</th>
-                            <th class="" style="width: 15% !important;">Trạng Thái</th>
-                            <th class="pe-3" style="width: 15% !important;"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for ($i = 0; $i <= 2; $i++)
-                            <tr class="text-center hover-table pointer">
-                                <td>
-                                    <input type="checkbox" class="row-checkbox" />
-                                </td>
-                                <td>
-                                    #ND007
-                                </td>
-                                <td>
-                                    lphdev04@gmail.com
-                                </td>
-                                <td>
-                                    0945567048
-                                </td>
-                                <td>
-                                    @if ($i > 2)
-                                        <div class="rounded px-2 py-1 text-white bg-danger">Không</div>
-                                    @else
-                                        <div class="rounded px-2 py-1 text-white bg-success">Có</div>
-                                    @endif
-                                </td>
-                                <td class="text-center" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse{{ $i }}" id="toggleIcon{{ $i }}">
-                                    <i class="fa fa-chevron-right pointer">
-                                    </i>
-                                </td>
+        <form action="{{ route('user.index') }}" method="POST">
+            @csrf
+            <div class="card-body py-3">
+                <div class="table-responsive">
+                    <table class="table align-middle gs-0 gy-4">
+                        <thead>
+                            <tr class="fw-bolder bg-success">
+                                <th class="ps-4">
+                                    <input type="checkbox" id="selectAll" />
+                                </th>
+                                <th class="" style="width: 6% !important;">Mã ND</th>
+                                <th class="" style="width: 11% !important;">Ảnh</th>
+                                <th class="" style="width: 15% !important;">Họ Tên</th>
+                                <th class="" style="width: 14% !important;">Email</th>
+                                <th class="" style="width: 14% !important;">SĐT</th>
+                                <th class="" style="width: 9% !important;">Giới Tính</th>
+                                <th class="" style="width: 14% !important;">Chức Vụ</th>
+                                <th class="" style="width: 13% !important;">Trạng Thái</th>
+                                <th class="pe-3" style="width: 5% !important;"></th>
                             </tr>
-
-                            <tr class="collapse multi-collapse" id="collapse{{ $i }}">
-                                <td class="p-0" colspan="12"
-                                    style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
-                                    <div class="flex-lg-row-fluid border-2 border-lg-1">
-                                        <div class="card card-flush p-2"
-                                            style="padding-top: 0px !important; padding-bottom: 0px !important;">
-                                            <div class="card-header d-flex justify-content-between align-items-center p-2"
-                                                style="padding-top: 0 !important; padding-bottom: 0px !important;">
-                                                <h4 class="fw-bold m-0">Thông Tin Nhân Viên</h4>
-                                                <div class="card-toolbar">
-                                                    @if ($i > 1)
-                                                        <div class="rounded px-2 py-1 text-white bg-danger">
-                                                            Nhân Viên Kho
-                                                        </div>
-                                                    @else
-                                                        <div class="rounded px-2 py-1 text-white bg-success">
-                                                            Nhân Viên Mua Hàng
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="card-body p-2" style="padding-top: 0px !important">
-                                                <div class="row py-5" style="padding-top: 0px !important">
-                                                    <!-- Begin::Receipt Info (Left column) -->
-                                                    <div class="col-2">
-                                                        <img src="https://i.pinimg.com/736x/64/30/1c/64301c42f058143fbc4a313e05aa0bbe.jpg"
-                                                            width="100%" alt="">
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <div class="row px-3">
-                                                            <div class="col-4">
-                                                                <div class="mb-3">
-                                                                    <strong>Họ:</strong> Lữ
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <div class="mb-3">
-                                                                    <strong>Tên:</strong> Phát Huy
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <div class="mb-3">
-                                                                    <strong>Giới Tính:</strong> Nam
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <div class="mb-3">
-                                                                    <strong>Ngày Sinh:</strong> 12-12-2004
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <div class="mb-3">
-                                                                    <strong>Địa Chỉ:</strong> Lê Bình, Cái Răng, Cần Thơ
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                        </thead>
+                        <tbody>
+                            @forelse ($allUser as $item)
+                                <tr class="hover-table pointer">
+                                    <td>
+                                        <input type="checkbox" name="user_codes[]" value="{{ $item->code }}"
+                                            class="row-checkbox" />
+                                    </td>
+                                    <td>
+                                        #{{ $item->code }}
+                                    </td>
+                                    <td>
+                                        <img class="rounded-circle border border-dark"
+                                            src="{{ $item->avatar ? asset('storage/' . $item->avatar) : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png' }}"
+                                            style="width: 70px !important; height: 70px !important;" alt="">
+                                    </td>
+                                    <td>
+                                        {{ $item->last_name . ' ' . $item->first_name }}
+                                    </td>
+                                    <td>
+                                        {{ $item->email }}
+                                    </td>
+                                    <td>
+                                        {{ $item->phone }}
+                                    </td>
+                                    <td>
+                                        {{ $item->gender }}
+                                    </td>
+                                    <td>
+                                        @if ($item->position == 'Nhân Viên')
+                                            <span class="text-primary">{{ $item->position }}</span>
+                                        @else
+                                            <span class="text-danger">{{ $item->position }}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="checkbox-wrapper-6">
+                                            <input class="tgl tgl-light" id="cb1-6" type="checkbox" value="1"
+                                                name="status" {{ !empty($item->status) == 1 ? 'checked' : '' }}
+                                                disabled />
+                                            <label class="tgl-btn" for="cb1-6"></label>
                                         </div>
-                                    </div>
-
-                                    <!-- Nút hành động đưa xuống dưới -->
-                                    <div class="text-end my-4">
-                                        <div class="button-group">
-                                            <!-- Nút Cập nhật -->
-                                            <a class="btn btn-sm btn-success me-2" href="{{ route('user.edit') }}"><i
-                                                    class="fa fa-edit"></i>Sửa</a>
-                                            <!-- Nút Xóa đơn -->
-                                            <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal_{{ $i }}"><i
-                                                    class="fa fa-trash"></i>Xóa</button>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" data-bs-toggle="dropdown">
+                                                <i class="fa fa-ellipsis-h me-2"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li><a href="{{ route('user.edit', $item->code) }}?{{ request()->getQueryString() }}"
+                                                        class="dropdown-item"><i class="fa fa-edit me-1"></i>Sửa</a></li>
+                                                <li><a href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#deleteModal_{{ $item->code }}"
+                                                        class="dropdown-item"><i class="fa fa-trash me-1">
+                                                        </i>Xóa
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
 
-                            {{-- Xóa --}}
-                            <div class="modal fade" id="deleteModal_{{ $i }}" data-bs-backdrop="static"
-                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h3 class="modal-title" id="deleteModalLabel">Xóa Người Dùng
-                                            </h3>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="" method="">
+                                {{-- Xóa --}}
+                                <div class="modal fade" id="deleteModal_{{ $item->code }}" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form action="{{ route('user.index') }}" method="POST">
                                                 @csrf
-                                                <h4 class="text-danger text-center">Xóa Người Dùng Này?</h4>
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id="deleteModalLabel">Xóa Người Dùng
+                                                    </h3>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="user_code_delete"
+                                                        value="{{ $item->code }}">
+                                                    <h4 class="text-danger text-center">Xóa Người Dùng Này?</h4>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-sm btn-secondary"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                    <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                                                </div>
                                             </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-sm btn-secondary"
-                                                data-bs-dismiss="modal">Đóng</button>
-                                            <button type="button" class="btn btn-sm btn-danger">Xóa</button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endfor
-                    </tbody>
-                </table>
+                            @empty
+                                <div>
+                                    <tr>
+                                        <th colspan="10" class="text-danger text-center py-5">Không Có Dữ Liệu</th>
+                                    </tr>
+                                </div>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-        <div class="card-body py-3">
-            <div class="dropdown">
-                <span class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    <span>Chọn Thao Tác</span>
-                </span>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#deleteAll">
-                            <i class="fas fa-trash me-2 text-danger"></i>Xóa Tất Cả</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+            @if ($allUser->count() > 0)
+                <div class="card-body py-3 d-flex justify-content-between align-items-center">
+                    <div class="dropdown" id="action_delete_all">
+                        <span class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span>Chọn Thao Tác</span>
+                        </span>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#deleteAll">
+                                    <i class="fas fa-trash me-2 text-danger"></i>Xóa Tất Cả</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="DayNganCach"></div>
+                    <ul class="pagination">
+                        {{ $allUser->links('pagination::bootstrap-5') }}
+                    </ul>
+                </div>
+            @endif
 
-    {{-- Modal Xác Nhận Xóa Tất Cả --}}
-    <div class="modal fade" id="deleteAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="deleteAllLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Xóa Tất Cả người dùng</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center" style="padding-bottom: 0px;">
-                    <form action="" method="">
-                        @csrf
-                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả người dùng đã chọn?</p>
-                    </form>
-                </div>
-                <div class="modal-footer justify-content-center border-0">
-                    <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-sm btn-success px-4"> Xóa</button>
+
+            {{-- Modal Xác Nhận Xóa Tất Cả --}}
+            <div class="modal fade" id="deleteAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="deleteAllLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-md">
+                    <div class="modal-content border-0 shadow">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Xóa Tất Cả người dùng</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center" style="padding-bottom: 0px;">
+                            <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả người dùng đã chọn?</p>
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-sm btn-danger px-4">Xóa</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 @endsection

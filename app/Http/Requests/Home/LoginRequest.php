@@ -26,4 +26,14 @@ class LoginRequest extends FormRequest
             'password' => 'required',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'phone.required' => 'Số điện thoại không được để trống.',
+            'phone.string' => 'Số điện thoại phải là chuỗi.',
+            'phone.regex' => 'Số điện thoại không hợp lệ.',
+            'password.required' => 'Mật khẩu không được để trống',
+        ];
+    }
 }

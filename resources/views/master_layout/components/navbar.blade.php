@@ -33,37 +33,37 @@
                             @foreach ($value as $key => $item)
                                 <div data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start"
                                     class="menu-item menu-lg-down-accordion me-lg-1">
-                                    {{-- @if (in_array(session('user_role'), (array) $item['user_role'])) --}}
-                                    <span
-                                        class="menu-link py-3 {{ in_array(Route::currentRouteName(), (array) $item['route']) ? 'active_navbar' : '' }}">
-                                        <span class="menu-title">{{ $item['title'] }}</span>
-                                        <span class="menu-arrow d-lg-none"></span>
-                                    </span>
+                                    @if (in_array(session('isAdmin'), (array) $item['user_role']))
+                                        <span
+                                            class="menu-link py-3 {{ in_array(Route::currentRouteName(), (array) $item['route']) ? 'active_navbar' : '' }}">
+                                            <span class="menu-title">{{ $item['title'] }}</span>
+                                            <span class="menu-arrow d-lg-none"></span>
+                                        </span>
 
-                                    <div
-                                        class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-active-bg py-lg-4">
-                                        @foreach ($item['subModule'] as $sub)
-                                            {{-- @if (in_array(session('user_role'), (array) $sub['user_role'])) --}}
-                                            @if (Route::has($sub['route']))
-                                                <div class="menu-item">
-                                                    <a class="menu-link py-3 {{ in_array(Route::currentRouteName(), (array) $sub['route']) || in_array(Route::currentRouteName(), (array) $sub['route_action']) ? 'active' : '' }}"
-                                                        href="{{ route($sub['route']) }}">
-                                                        <i class="{{ $sub['icon'] }} me-2"></i>
-                                                        <span class="menu-title">{{ $sub['title'] }}</span>
-                                                    </a>
-                                                </div>
-                                            @else
-                                                <div class="menu-item">
-                                                    <strong class="menu-link py-3">
-                                                        <i class="fa fa-x me-2 text-danger"></i>
-                                                        <s class="menu-title">Không Tìm Thấy Đường Dẫn</s>
-                                                    </strong>
-                                                </div>
-                                            @endif
-                                            {{-- @endif --}}
-                                        @endforeach
-                                    </div>
-                                    {{-- @endif --}}
+                                        <div
+                                            class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-active-bg py-lg-4">
+                                            @foreach ($item['subModule'] as $sub)
+                                                @if (in_array(session('isAdmin'), (array) $sub['user_role']))
+                                                    @if (Route::has($sub['route']))
+                                                        <div class="menu-item">
+                                                            <a class="menu-link py-3 {{ in_array(Route::currentRouteName(), (array) $sub['route']) || in_array(Route::currentRouteName(), (array) $sub['route_action']) ? 'active' : '' }}"
+                                                                href="{{ route($sub['route']) }}">
+                                                                <i class="{{ $sub['icon'] }} me-2"></i>
+                                                                <span class="menu-title">{{ $sub['title'] }}</span>
+                                                            </a>
+                                                        </div>
+                                                    @else
+                                                        <div class="menu-item">
+                                                            <strong class="menu-link py-3">
+                                                                <i class="fa fa-x me-2 text-danger"></i>
+                                                                <s class="menu-title">Không Tìm Thấy Đường Dẫn</s>
+                                                            </strong>
+                                                        </div>
+                                                    @endif
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </div>
                             @endforeach
                         @endforeach

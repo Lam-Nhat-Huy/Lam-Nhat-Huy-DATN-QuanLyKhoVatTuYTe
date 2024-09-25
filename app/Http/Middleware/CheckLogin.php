@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Users;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,11 +16,26 @@ class CheckLogin
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $userCode = session('user_code');
+
+        $user = Users::where('code', $userCode)
+            ->where(function ($query) {
+                $query->where('status', 0)
+                    ->orWhereNotNull('deleted_at');
+            })
+            ->withTrashed()
+            ->first();
+
+        if ($userCode && $user) {
+            
+            session()->forget(['user_code', 'isAdmin']);
+
+            return redirect()->route('home');
+        }
+
         if (empty(session('user_code'))) {
 
-            toastr()->error('Vui Lòng Đăng Nhập');
-
-            return back();
+            return abort(404);
         }
 
         return $next($request);

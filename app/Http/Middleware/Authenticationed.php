@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Models\Users;
 use Symfony\Component\HttpFoundation\Response;
 
 class Authenticationed
@@ -15,11 +16,26 @@ class Authenticationed
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!empty(session('user_code'))) {
+        $userCode = session('user_code');
 
-            toastr()->error('Vui Lòng Đăng Xuất Trước Khi Sử Dụng Tính Năng Này');
+        $user = Users::where('code', $userCode)
+            ->where(function ($query) {
+                $query->where('status', 0)
+                    ->orWhereNotNull('deleted_at');
+            })
+            ->withTrashed()
+            ->first();
 
-            return back();
+        if ($userCode && $user) {
+            
+            session()->forget(['user_code', 'isAdmin']);
+
+            return redirect()->route('home');
+        }
+
+        if (!empty($userCode)) {
+
+            return abort(404);
         }
 
         return $next($request);

@@ -46,9 +46,9 @@
                         <h1 class="fw-bolder fs-2qx pb-5 pb-md-10" style="color: #128833;">BeeSoft</h1>
                         <!--end::Title-->
                         <!--begin::Description-->
-                        <p class="fw-bold fs-2" style="color: #000000;">BeeSoft luôn nỗ lực sáng tạo sản phẩm ngày một
-                            thông minh hơn và tiện ích hơn nhằm thực hiện khát vọng ứng dụng những thành tựu của CNTT
-                            vào lĩnh vực y tế
+                        <p class="fw-bold fs-2" style="color: #000000;">Kho thiết bị y tế - Nơi lưu trữ và cung cấp các
+                            thiết bị chất lượng, đảm bảo an toàn, chính xác, giúp nâng cao hiệu quả chăm sóc sức khỏe và
+                            sự tin cậy cho mọi bệnh viện.
                         </p>
                         <!--end::Description-->
                     </div>
@@ -73,7 +73,7 @@
                             <!--begin::Heading-->
                             <div class="text-center mb-10">
                                 <!--begin::Title-->
-                                <h1 class="text-dark mb-3">Vui Lòng Đăng Nhập</h1>
+                                <h1 class="text-dark mb-3">Đăng Nhập</h1>
                                 <!--end::Title-->
                             </div>
                             <!--begin::Heading-->
@@ -106,7 +106,15 @@
                                 <!--end::Wrapper-->
                                 <!--begin::Input-->
                                 <input class="form-control form-control-lg form-control-solid" type="password"
-                                    name="password" autocomplete="off" />
+                                    name="password" id="password" autocomplete="off" />
+                                @error('password')
+                                    <div class="message_error">{{ $message }}</div>
+                                @enderror
+
+                                <div class="mt-4 d-flex">
+                                    <input type="checkbox" id="show-pass" class="me-2 border border-dark form-control" style="padding: 7px !important; width: 5px !important; margin-top: 1px;">
+                                    <label for="show-pass" class="fw-bolder pointer">Hiển thị mật khẩu</label>
+                                </div>
                                 <!--end::Input-->
                             </div>
                             <!--end::Input group-->
@@ -138,11 +146,7 @@
                 <!--begin::Footer-->
                 <div class="d-flex flex-center flex-wrap fs-6 p-5 pb-0">
                     <!--begin::Links-->
-                    <div class="d-flex flex-center fw-bold fs-6">
-                        <a href="#" class="text-muted text-hover-primary px-2" target="_blank">Giới Thiệu</a>
-                        <a href="#" class="text-muted text-hover-primary px-2" target="_blank">Hỗ Trợ</a>
-                        <a href="#" class="text-muted text-hover-primary px-2" target="_blank">Điều Khoản</a>
-                    </div>
+                    Một Sản Phẩm Của Nhóm BeeSoft • Hotline: 09455670xx - Phát Huy
                     <!--end::Links-->
                 </div>
                 <!--end::Footer-->
@@ -170,7 +174,16 @@
 
     <script src="{{ asset('js/login/login.js') }}"></script>
 
-
+    <script>
+        document.getElementById('show-pass').addEventListener('change', function() {
+            var passwordField = document.getElementById('password');
+            if (this.checked) {
+                passwordField.type = 'text';
+            } else {
+                passwordField.type = 'password';
+            }
+        });
+    </script>
 </body>
 
 </html>

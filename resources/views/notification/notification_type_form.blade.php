@@ -68,7 +68,7 @@
         }
 
         .checkbox-wrapper-6 .tgl-light+.tgl-btn {
-            background: #f0f0f0;
+            background: #b5b5b5;
             border-radius: 2em;
             padding: 2px;
             transition: all 0.4s ease;

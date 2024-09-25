@@ -55034,7 +55034,7 @@ body {
 .docs-aside-menu .menu .menu-item .menu-content,
 .docs-aside-menu .menu .menu-item .menu-link {
     padding-left: 25px;
-    padding-right: 25px;
+    padding-right: 25px
 }
 
 .docs-aside-menu .menu .menu-sub:not([data-popper-placement])>.menu-item>.menu-content,
@@ -55105,7 +55105,7 @@ tr td {
 }
 
 tr th {
-    text-align: center !important;
+    /* text-align: center !important; */
     color: #fff !important;
 }
 
@@ -55190,4 +55190,16 @@ a {
     text-align: start;
     padding-bottom: 12px;
     margin-top: 5px;
+}
+
+.select2-container .select2-selection--single {
+    height: 34px !important;
+}
+
+.lowercase-text {
+    text-transform: lowercase !important; /* Chuyển đổi tất cả chữ cái thành chữ thường */
+}
+
+.pagination nav div div p {
+    margin: 0px !important;
 }

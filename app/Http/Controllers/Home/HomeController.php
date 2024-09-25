@@ -21,7 +21,9 @@ class HomeController extends Controller
     {
         $request->validated();
 
-        $userFind = Users::where('phone', $request->phone)->first();
+        $userFind = Users::where('phone', $request->phone)
+            ->where('status', 1)
+            ->first();
 
         if ($userFind && Hash::check($request->password, $userFind->password)) {
 
@@ -34,7 +36,7 @@ class HomeController extends Controller
             return redirect()->route('system.index');
         } else {
 
-            toastr()->error('Tài Khoản Không Tồn Tại');
+            toastr()->error('Tài Khoản Không Tồn Tại Hoặc Bị Khóa');
 
             return back();
         }
