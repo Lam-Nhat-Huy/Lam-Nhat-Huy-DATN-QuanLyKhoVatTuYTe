@@ -27,19 +27,19 @@
 
 @section('content')
     <div class="card mb-5 mb-xl-8">
-        {{-- Phần nút thêm vật tư  --}}
+        {{-- Phần nút thêm vật tư --}}
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Vật Tư</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('material.material_trash') }}" class="btn btn-sm btn-danger me-2">
+                <a href="{{ route('equipments.equipments_trash') }}" class="btn btn-sm btn-danger me-2">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-trash me-1"></i>
                         Thùng Rác
                     </span>
                 </a>
-                <a href="{{ route('material.insert_material') }}" class="btn btn-sm btn-success">
+                <a href="{{ route('equipments.insert_equipments') }}" class="btn btn-sm btn-success">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-plus"></i>
                         Thêm Vật Tư
@@ -48,10 +48,9 @@
             </div>
         </div>
 
-        {{-- Bộ lọc vật tư  --}}
+        {{-- Bộ lọc vật tư --}}
         <div class="card-body py-1 me-6">
             <form action="" class="row align-items-center">
-
                 <div class="col-4">
                     <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
                         <option value="" selected>--Theo Nhóm Vật Tư--</option>
@@ -80,63 +79,55 @@
                         </div>
                     </div>
                 </div>
-
             </form>
         </div>
 
-
-
-
-        {{-- Danh sách vật tư   --}}
+        {{-- Danh sách vật tư --}}
         <div class="card-body py-3">
             <div class="table-responsive">
                 <table class="table align-middle gs-0 gy-4">
-                    <!-- Trong phần <thead> của bảng -->
                     <thead>
                         <tr class="fw-bolder bg-success">
                             <th class="ps-4">
                                 <input type="checkbox" id="selectAll" />
                             </th>
                             <th class="ps-4">Mã Vật Tư</th>
-                            <th class="">Hình Ảnh</th>
-                            <th class="">Nhóm Vật Tư</th>
-                            <th class="">Đơn Vị Tính</th>
-                            <th class="">Mã Vạch</th>
-                            <th class="">Hạn sử dụng</th>
-                            <th class="">Trạng Thái</th>
+                            <th>Hình Ảnh</th>
+                            <th>Nhóm Vật Tư</th>
+                            <th>Đơn Vị Tính</th>
+                            <th>Mã Vạch</th>
+                            <th>Hạn sử dụng</th>
+                            <th>Trạng Thái</th>
                         </tr>
                     </thead>
-
-                    <!-- Trong phần <tbody> của bảng -->
                     <tbody>
                         @foreach ($AllMaterial as $item)
                             <tr class="text-center hover-table" data-bs-toggle="collapse"
-                                data-bs-target="#collapse{{ $item['id'] }}" aria-expanded="false"
-                                aria-controls="collapse{{ $item['id'] }}">
+                                data-bs-target="#collapse{{ $item->id }}" aria-expanded="false"
+                                aria-controls="collapse{{ $item->id }}">
                                 <td>
                                     <input type="checkbox" class="row-checkbox" />
                                 </td>
                                 <td>
-                                    PD199001
+                                    {{ $item->code }}
                                 </td>
                                 <td>
-                                    <img src="{{ $item['material_image'] }}" alt="" width="50">
+                                    <img src="{{ $item->material_image }}" alt="" width="50">
                                 </td>
                                 <td>
-                                    {{ $item['material_type_id'] }}
+                                    {{ $item->equipmentType->name ?? 'Không có dữ liệu' }}
                                 </td>
                                 <td>
-                                    {{ $item['unit_id'] }}
+                                    {{ $item->units->name ?? 'Không có dữ liệu' }}
                                 </td>
                                 <td>
-                                    <img src="https://png.pngtree.com/png-clipart/20220604/original/pngtree-barcode-image-black-png-image_7947265.png"
-                                        width="80" alt="">
+                                    {{ $item->barcode }}
                                 </td>
                                 <td>
-                                    {{ $item['expiry'] > 0 ? $item['expiry'] . ' Tháng' : 'Không Có' }}
+                                    {{ $item->expiry > 0 ? $item->expiry . ' Tháng' : 'Không Có' }}
                                 </td>
                                 <td>
-                                    @if ($item['status'] > 2)
+                                    @if ($item->status > 2)
                                         <div class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt</div>
                                     @else
                                         <div class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
@@ -144,12 +135,12 @@
                                 </td>
                             </tr>
 
-                            <tr class="collapse multi-collapse" id="collapse{{ $item['id'] }}">
+                            {{-- Chi tiết vật tư --}}
+                            <tr class="collapse multi-collapse" id="collapse{{ $item->id }}">
                                 <td colspan="12" style="border: 1px solid #dcdcdc; background-color: #f8f9fa;">
                                     <div class="row gy-3">
                                         <div class="col-md-4">
-                                            <img src="{{ $item['material_image'] }}" alt=""
-                                                class="img-fluid rounded">
+                                            <img src="{{ $item->material_image }}" alt="" class="img-fluid rounded">
                                         </div>
                                         <div class="col-md-8">
                                             <div class="card card-body border-0">
@@ -163,15 +154,15 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <td><strong>Mã vật tư:</strong></td>
-                                                                    <td class="text-gray-800">HD00019</td>
+                                                                    <td class="text-gray-800">{{ $item->code }}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Nhóm hàng:</strong></td>
-                                                                    <td class="text-gray-800">Vật Tư Y Tế</td>
+                                                                    <td class="text-gray-800">{{ $item->equipmentType->name ?? 'Không có dữ liệu' }}</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td><strong>Thương hiệu:</strong></td>
-                                                                    <td class="text-gray-800">Pharmacy</td>
+                                                                    <td><strong>Nhà cung cấp:</strong></td>
+                                                                    <td class="text-gray-800">{{ $item->supplier->name ?? 'Không có dữ liệu' }}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Vị trí:</strong></td>
@@ -179,7 +170,7 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Ngày hết hạn:</strong></td>
-                                                                    <td class="text-gray-800">25/12/2024</td>
+                                                                    <td class="text-gray-800">{{ $item->expiry > 0 ? $item->expiry . ' Tháng' : 'Không có' }}</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -189,7 +180,7 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <td><strong>Giá nhập:</strong></td>
-                                                                    <td class="text-gray-800">25,000 VNĐ</td>
+                                                                    <td class="text-gray-800">{{ number_format($item->price) }} VNĐ</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Ghi chú:</strong></td>
@@ -197,7 +188,7 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Tồn kho:</strong></td>
-                                                                    <td class="text-gray-800">100</td>
+                                                                    <td class="text-gray-800">{{ $item->inventories->sum('quantity') }}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Số lượng đã dùng:</strong></td>
@@ -269,62 +260,4 @@
         </div>
     </div>
 @endsection
-
-@section('scripts')
-    <script>
-        document.getElementById('selectAll').addEventListener('change', function() {
-            var isChecked = this.checked;
-            var checkboxes = document.querySelectorAll('.row-checkbox');
-            checkboxes.forEach(function(checkbox) {
-                checkbox.checked = isChecked;
-                var row = checkbox.closest('tr');
-                if (isChecked) {
-                    row.classList.add('selected-row');
-                } else {
-                    row.classList.remove('selected-row');
-                }
-            });
-        });
-
-        document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                var row = this.closest('tr');
-                if (this.checked) {
-                    row.classList.add('selected-row');
-                } else {
-                    row.classList.remove('selected-row');
-                }
-
-                var allChecked = true;
-                document.querySelectorAll('.row-checkbox').forEach(function(cb) {
-                    if (!cb.checked) {
-                        allChecked = false;
-                    }
-                });
-                document.getElementById('selectAll').checked = allChecked;
-            });
-        });
-
-        document.querySelectorAll('tbody tr').forEach(function(row) {
-            row.addEventListener('click', function() {
-                var checkbox = this.querySelector('.row-checkbox');
-                if (checkbox) {
-                    checkbox.checked = !checkbox.checked;
-                    if (checkbox.checked) {
-                        this.classList.add('selected-row');
-                    } else {
-                        this.classList.remove('selected-row');
-                    }
-
-                    var allChecked = true;
-                    document.querySelectorAll('.row-checkbox').forEach(function(cb) {
-                        if (!cb.checked) {
-                            allChecked = false;
-                        }
-                    });
-                    document.getElementById('selectAll').checked = allChecked;
-                }
-            });
-        });
-    </script>
-@endsection
+    

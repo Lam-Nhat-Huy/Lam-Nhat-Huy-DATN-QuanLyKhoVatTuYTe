@@ -19,6 +19,7 @@ return new class extends Migration
             $table->char('equipment_type_code', 20)->nullable();
             $table->char('supplier_code', 20)->nullable();
             $table->char('unit_code', 20)->nullable();
+            $table->date('expiry_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

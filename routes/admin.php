@@ -13,7 +13,7 @@ Route::prefix('system')->group(function () {
         'admin/check_warehouse.php',
         'admin/supplier.php',
         'admin/profile.php',
-        'admin/material.php',
+        'admin/equipments.php',
         'admin/material_request.php',
         'admin/notification.php',
         'admin/user.php',
