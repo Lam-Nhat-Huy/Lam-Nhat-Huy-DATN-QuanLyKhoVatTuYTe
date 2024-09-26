@@ -3,26 +3,43 @@
 
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
     <title>@yield('title', 'BeeSoft')</title>
 
+    <!-- Google Fonts for Vietnamese -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=swap">
+
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
     <link rel="stylesheet" href="{{ asset('css/fullcalendar.bundle.css') }}">
-
     <link rel="stylesheet" href="{{ asset('css/plugins.bundle.css') }}">
-
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
     <link rel="shortcut icon" href="{{ asset('image/logo_warehouse.png') }}" />
+
+    <style>
+        body,
+        input,
+        select,
+        textarea,
+        button {
+            font-family: 'Roboto', 'Montserrat', sans-serif;
+            font-weight: 400;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+    </style>
 </head>
 
 <body id="kt_body" class="bg-body">
@@ -53,125 +70,78 @@
                         <!--end::Description-->
                     </div>
                     <!--end::Content-->
-                    <!--begin::Illustration-->
                     <div class="d-flex flex-row-auto bgi-no-repeat bgi-position-x-center bgi-size-contain bgi-position-y-bottom min-h-100px min-h-lg-350px"
                         style="background-image: url(assets/media/illustrations/sketchy-1/13.png"></div>
-                    <!--end::Illustration-->
                 </div>
-                <!--end::Wrapper-->
             </div>
             <!--end::Aside-->
             <!--begin::Body-->
             <div class="d-flex flex-column flex-lg-row-fluid py-10">
-                <!--begin::Content-->
                 <div class="d-flex flex-center flex-column flex-column-fluid">
-                    <!--begin::Wrapper-->
                     <div class="w-lg-500px p-10 p-lg-15 mx-auto">
-                        <!--begin::Form-->
                         <form method="POST" class="form w-100" action="{{ route('home.handleLogin') }}">
                             @csrf
-                            <!--begin::Heading-->
                             <div class="text-center mb-10">
-                                <!--begin::Title-->
                                 <h1 class="text-dark mb-3">Đăng Nhập</h1>
-                                <!--end::Title-->
                             </div>
-                            <!--begin::Heading-->
-                            <!--begin::Input group-->
+
                             <div class="fv-row mb-10">
-                                <!--begin::Label-->
                                 <label class="form-label fs-6 fw-bolder text-dark">Số Điện Thoại</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
                                 <input class="form-control form-control-lg form-control-solid" type="text"
                                     name="phone" autocomplete="off" value="{{ old('phone') }}" />
                                 @error('phone')
                                     <div class="message_error">{{ $message }}</div>
                                 @enderror
-                                <!--end::Input-->
                             </div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
+
                             <div class="fv-row mb-10">
-                                <!--begin::Wrapper-->
                                 <div class="d-flex flex-stack mb-2">
-                                    <!--begin::Label-->
                                     <label class="form-label fw-bolder text-dark fs-6 mb-0">Mật Khẩu</label>
-                                    <!--end::Label-->
-                                    <!--begin::Link-->
                                     <a href="{{ route('forgot.forgot') }}" class="link-primary fs-6 fw-bolder">Quên Mật
-                                        Khẩu ?</a>
-                                    <!--end::Link-->
+                                        Khẩu?</a>
                                 </div>
-                                <!--end::Wrapper-->
-                                <!--begin::Input-->
                                 <input class="form-control form-control-lg form-control-solid" type="password"
                                     name="password" id="password" autocomplete="off" />
                                 @error('password')
                                     <div class="message_error">{{ $message }}</div>
                                 @enderror
-
                                 <div class="mt-4 d-flex">
-                                    <input type="checkbox" id="show-pass" class="me-2 border border-dark form-control" style="padding: 7px !important; width: 5px !important; margin-top: 1px;">
+                                    <input type="checkbox" id="show-pass" class="me-2 border border-dark form-control"
+                                        style="padding: 7px !important; width: 5px !important; margin-top: 1px;">
                                     <label for="show-pass" class="fw-bolder pointer">Hiển thị mật khẩu</label>
                                 </div>
-                                <!--end::Input-->
                             </div>
-                            <!--end::Input group-->
-                            <!--begin::Actions-->
+
                             <div class="text-center">
-                                <!--begin::Submit button-->
                                 <button type="submit" id="kt_sign_in_submit" class="btn btn-lg btn-twitter w-100 mb-5">
                                     <span class="indicator-label">Đăng Nhập</span>
-                                    <span class="indicator-progress">Đợi Chút...
-                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                    <span class="indicator-progress">Đợi Chút...<span
+                                            class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                                 </button>
-                                <!--end::Submit button-->
-                                <!--begin::Separator-->
+
                                 <div class="text-center text-muted text-uppercase fw-bolder mb-5">Hoặc</div>
-                                <!--end::Separator-->
-                                <!--begin::Google link-->
                                 <a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
                                     <i class="fa-brands fa-google text-danger me-1"></i><span class="text-dark">Đăng
                                         Nhập Bằng Google</span></a>
-                                <!--end::Google link-->
                             </div>
-                            <!--end::Actions-->
                         </form>
-                        <!--end::Form-->
                     </div>
-                    <!--end::Wrapper-->
                 </div>
-                <!--end::Content-->
-                <!--begin::Footer-->
                 <div class="d-flex flex-center flex-wrap fs-6 p-5 pb-0">
-                    <!--begin::Links-->
                     Một Sản Phẩm Của Nhóm BeeSoft • Hotline: 09455670xx - Phát Huy
-                    <!--end::Links-->
                 </div>
-                <!--end::Footer-->
             </div>
-            <!--end::Body-->
         </div>
-        <!--end::Authentication - Sign-in-->
     </div>
 
     <script src="{{ asset('js/app.js') }}"></script>
-
     <script src="{{ asset('js/plugins.bundle.js') }}"></script>
-
     <script src="{{ asset('js/scripts.bundle.js') }}"></script>
-
     <script src="{{ asset('js/fullcalender.bundle.js') }}"></script>
-
     <script src="{{ asset('js/widgets.js') }}"></script>
-
     <script src="{{ asset('js/chat.js') }}"></script>
-
     <script src="{{ asset('js/create-app.js') }}"></script>
-
     <script src="{{ asset('js/upgrade-plan.js') }}"></script>
-
     <script src="{{ asset('js/login/login.js') }}"></script>
 
     <script>

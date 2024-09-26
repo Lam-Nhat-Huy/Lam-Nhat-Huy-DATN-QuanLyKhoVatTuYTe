@@ -16,27 +16,30 @@ function filterProducts() {
     filteredProducts.forEach(function(product) {
         product.inventories.forEach(function(inventory) {
             var item = `
-                <a class="dropdown-item d-flex align-items-center" href="#" onclick="selectProduct(this, '${product.name}', '${inventory.equipment_code}', ${inventory.current_quantity})">
+                <a class="dropdown-item d-flex align-items-center" href="#" onclick="selectProduct(this, '${product.name}', '${inventory.equipment_code}', ${inventory.current_quantity}, '${inventory.batch_number}')">
                     <img src="https://png.pngtree.com/template/20190316/ourlarge/pngtree-medical-health-logo-image_79595.jpg" alt="Product Image" class="me-2" style="width: 40px; height: 40px;">
                     <div>
                         <div class="fw-bold">${product.name}</div>
-                        <small>${inventory.equipment_code} - Tồn kho: ${inventory.current_quantity}</small>
+                        <small>${inventory.equipment_code} - Tồn kho: ${inventory.current_quantity} - Lô: ${inventory.batch_number}</small>
                     </div>
                 </a>
             `;
             dropdown.insertAdjacentHTML('beforeend', item);
         });
     });
+
+
 }
 
 // Hàm thêm vật tư khi search
-function selectProduct(element, name, equipment_code, current_quantity) {
-    addProductToTable(name, equipment_code, current_quantity);
+function selectProduct(element, name, equipment_code, current_quantity, batch_number) {
+    addProductToTable(name, equipment_code, current_quantity, batch_number);
     document.getElementById('productDropdown').style.display = 'none';
     document.getElementById('searchProductInput').value = '';
 }
 
-function addProductToTable(name, equipment_code, current_quantity) {
+
+function addProductToTable(name, equipment_code, current_quantity, batch_number) {
     var tableBody = document.getElementById('materialList');
     var rowCount = tableBody.rows.length + 1;
 
@@ -66,8 +69,10 @@ function addProductToTable(name, equipment_code, current_quantity) {
         current_quantity: current_quantity,
         actual_quantity: null,
         unequal: 0,
+        batch_number: batch_number
     });
 }
+
 
 function updateProduct(index, actualQuantity) {
     actualQuantity = parseInt(actualQuantity);

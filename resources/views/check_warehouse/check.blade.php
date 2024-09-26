@@ -35,7 +35,7 @@
                 <table class="table align-middle gs-0 gy-4">
                     <!-- Trong phần <thead> của bảng -->
                     <thead>
-                        <tr class="bg-success">
+                        <tr class="bg-success text-center">
                             <th class="ps-4">
                                 <input type="checkbox" id="selectAll" />
                             </th>
@@ -51,6 +51,10 @@
                     <!-- Trong phần <tbody> của bảng -->
                     <tbody>
                         @forelse ($inventoryChecks as $item)
+                            @php
+                                $totalUnequal = collect($item['details'])->sum('unequal');
+                            @endphp
+
                             <tr class="text-center hover-table pointer" data-bs-toggle="collapse"
                                 data-bs-target="#collapse{{ $item['code'] }}" aria-expanded="false"
                                 aria-controls="collapse{{ $item['code'] }}">
@@ -64,13 +68,15 @@
                                     {{ $item['check_date'] }}
                                 </td>
                                 <td>
-                                    -8
+                                    {{ $totalUnequal }} <!-- Hiển thị tổng chênh lệch -->
                                 </td>
                                 <td>
-                                    0
+                                    {{ $item['details']->where('unequal', '>', 0)->sum('unequal') }}
+                                    <!-- Số lượng lệch tăng -->
                                 </td>
                                 <td>
-                                    -8
+                                    {{ $item['details']->where('unequal', '<', 0)->sum('unequal') }}
+                                    <!-- Số lượng lệch giảm -->
                                 </td>
                                 <td>
                                     @if ($item['status'] == 0)
@@ -131,7 +137,6 @@
                                                             </tbody>
                                                         </table>
                                                     </div>
-                                                    <!-- End::Receipt Info -->
 
                                                     <div class="col-md-4">
                                                         <table class="table table-flush gy-1">
@@ -156,16 +161,13 @@
                                                             </tbody>
                                                         </table>
                                                     </div>
-
-                                                    <!-- End::Receipt Info -->
                                                 </div>
 
-                                                <!-- Begin::Receipt Items (Right column) -->
                                                 <div class="col-md-12">
                                                     <div class="table-responsive">
                                                         <table class="table table-striped table-sm table-hover">
                                                             <thead class=" bg-danger">
-                                                                <tr>
+                                                                <tr class="text-center">
                                                                     <th class="ps-4">Mã vật tư</th>
                                                                     <th>Tên vật tư</th>
                                                                     <th>Tồn kho</th>
@@ -199,28 +201,28 @@
                                                         </table>
                                                     </div>
                                                 </div>
-                                                <!-- End::Receipt Items -->
                                             </div>
                                         </div>
 
                                         <div class="card-body py-3 text-end">
                                             <div class="button-group">
                                                 <!-- Nút Duyệt đơn, chỉ hiển thị khi là Phiếu Tạm -->
-                                                @if (true)
+                                                @if ($item['status'] == 0)
                                                     <button style="font-size: 10px;" class="btn btn-sm btn-success me-2"
-                                                        data-bs-toggle="modal" data-bs-target="#browse-}" type="button">
+                                                        data-bs-toggle="modal" data-bs-target="#browse-{{ $item->code }}"
+                                                        type="button">
                                                         <i style="font-size: 10px;" class="fas fa-clipboard-check"></i>Duyệt
                                                         Phiếu
                                                     </button>
                                                 @endif
 
                                                 <!-- Nút Sửa đơn -->
-                                                @if (true)
+                                                @if ($item['status'] == 0)
                                                     <a style="font-size: 10px;" href=""
                                                         class="btn btn-dark btn-sm me-2"><i style="font-size: 10px;"
                                                             class="fa fa-edit"></i>Sửa Phiếu</a>
                                                 @endif
-                                                @if (true)
+                                                @if ($item['status'] == 1)
                                                     <!-- Nút In Phiếu -->
                                                     <button style="font-size: 10px;" class="btn btn-sm btn-twitter me-2"
                                                         id="printPdfBtn" type="button">
@@ -228,7 +230,7 @@
                                                     </button>
                                                 @endif
 
-                                                @if (true)
+                                                @if ($item['status'] == 0)
                                                     <!-- Nút xóa, có thể nằm trong danh sách hoặc bảng -->
                                                     <button style="font-size: 10px;" class="btn btn-danger btn-sm"
                                                         data-bs-toggle="modal" data-bs-target="#delete-">
@@ -237,6 +239,42 @@
                                                 @endif
 
 
+                                                <!-- Modal Duyệt Phiếu -->
+                                                <div class="modal fade" id="browse-{{ $item['code'] }}"
+                                                    data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                                    aria-labelledby="browseLabel-{{ $item['code'] }}" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-md">
+                                                        <div class="modal-content border-0 shadow">
+                                                            <div class="modal-header bg-success text-white">
+                                                                <h5 class="modal-title text-white"
+                                                                    id="browseLabel-{{ $item['code'] }}">Duyệt
+                                                                    Phiếu Kiểm Kho</h5>
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body text-center"
+                                                                style="padding-bottom: 0px;">
+                                                                <form
+                                                                    action="{{ route('check_warehouse.approve', $item['code']) }}"
+                                                                    method="POST" id="approveForm-{{ $item['code'] }}">
+                                                                    @csrf
+                                                                    <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt
+                                                                        phiếu kiểm kho này?
+                                                                    </p>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer justify-content-center border-0">
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-secondary px-4"
+                                                                    data-bs-dismiss="modal">Đóng</button>
+                                                                <button type="button" class="btn btn-sm btn-success px-4"
+                                                                    onclick="event.preventDefault(); document.getElementById('approveForm-{{ $item->code }}').submit();">
+                                                                    Duyệt
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -249,7 +287,8 @@
                                         role="alert"
                                         style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                         <div class="mb-3">
-                                            <i class="fas fa-clipboard-check" style="font-size: 36px; color: #6c757d;"></i>
+                                            <i class="fas fa-clipboard-check"
+                                                style="font-size: 36px; color: #6c757d;"></i>
                                         </div>
                                         <div class="text-center">
                                             <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin phiếu
@@ -265,9 +304,6 @@
                         @endforelse
                     </tbody>
                 </table>
-                <div class="d-flex justify-content-center mt-3">
-
-                </div>
             </div>
         </div>
     </div>

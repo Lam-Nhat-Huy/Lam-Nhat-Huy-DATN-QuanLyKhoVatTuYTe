@@ -18,4 +18,6 @@ Route::prefix('check_warehouse')->middleware(CheckLogin::class)->group(function 
     Route::post('/update', [CheckWarehouseController::class, 'update'])->name('check_warehouse.update');
 
     Route::get('/search-import', [CheckWarehouseController::class, 'search'])->name('check_warehouse.search');
+
+    Route::post('/approve/{code}', [CheckWarehouseController::class, 'approveCheck'])->name('check_warehouse.approve');
 });

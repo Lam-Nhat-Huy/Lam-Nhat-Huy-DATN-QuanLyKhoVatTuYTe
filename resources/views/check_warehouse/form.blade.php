@@ -252,14 +252,6 @@
 
                         <input type="hidden" id="created_by" value="U001">
 
-                        <!-- Tổng SL thực tế -->
-                        <div class="mb-4">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-muted">Tổng SL thực tế</span>
-                                <span class="fs-6 fw-bold text-dark">40</span>
-                            </div>
-                        </div>
-
                         <!-- Trạng thái -->
                         <div class="mb-4">
                             <div class="d-flex justify-content-between align-items-center">
@@ -272,14 +264,14 @@
                         <!-- Mã kiểm kho -->
                         <div class="mb-4">
                             <label for="code" class="form-label fw-semibold text-dark">Mã kiểm kho</label>
-                            <input type="text" id="code" class="form-control form-control-lg rounded-pill"
+                            <input type="text" id="code" class="form-control form-control-sm rounded-pill"
                                 placeholder="Tạo tự động" disabled>
                         </div>
 
                         <!-- Ngày nhập -->
                         <div class="mb-4">
                             <label for="check_date" class="form-label fw-semibold text-dark">Ngày nhập</label>
-                            <input type="date" id="check_date" class="form-control form-control-lg rounded-pill">
+                            <input type="date" id="check_date" class="form-control form-control-sm rounded-pill">
                         </div>
 
                         <!-- Ghi chú -->

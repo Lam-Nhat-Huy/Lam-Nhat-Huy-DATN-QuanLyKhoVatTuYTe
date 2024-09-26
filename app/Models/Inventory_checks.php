@@ -12,6 +12,12 @@ class Inventory_checks extends Model
 
     use SoftDeletes;
 
+    protected $primaryKey = 'code';
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
     protected $fillable = [
         'code',
         'user_code',
