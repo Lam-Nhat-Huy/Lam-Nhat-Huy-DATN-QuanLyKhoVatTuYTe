@@ -21,7 +21,10 @@ class CheckWarehouseController extends Controller
         $title = 'Kiểm Kho';
 
         // Lấy danh sách kiểm kho cùng với chi tiết và thiết bị
-        $inventoryChecks = Inventory_checks::with(['details.equipment', 'user'])->get();
+        $inventoryChecks = Inventory_checks::with(['details.equipment', 'user'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
 
         // Lấy tất cả nhà cung cấp và người dùng
         $users = Users::all();
@@ -201,7 +204,6 @@ class CheckWarehouseController extends Controller
         return redirect()->back();
     }
 
-
     public function search(Request $request)
     {
         $title = 'Kiểm Kho';
@@ -236,22 +238,4 @@ class CheckWarehouseController extends Controller
             'inventoryChecks' => $inventoryChecks,
         ]);
     }
-
-    public function trash()
-    {
-        $title = 'Kiểm Kho';
-
-        return view("{$this->route}.trash", compact('title'));
-    }
-
-    public function edit()
-    {
-        $title = 'Kiểm Kho';
-
-        $action = 'edit';
-
-        return view("{$this->route}.form", compact('title', 'action'));
-    }
-
-    public function update(Request $request) {}
 }

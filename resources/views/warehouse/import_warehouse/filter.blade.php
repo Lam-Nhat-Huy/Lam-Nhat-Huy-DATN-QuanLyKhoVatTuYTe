@@ -30,7 +30,7 @@
 
         <div class="col-md-2">
             <select name="supplier_code" id="supplier_code" class="form-select form-select-sm border-success">
-                <option value="" selected>--Theo NCC--</option>
+                <option value="" selected>--Theo Nhà Cung Cấp--</option>
                 @foreach ($suppliers as $supplier)
                     <option value="{{ $supplier->code }}">{{ $supplier->name }}</option>
                 @endforeach

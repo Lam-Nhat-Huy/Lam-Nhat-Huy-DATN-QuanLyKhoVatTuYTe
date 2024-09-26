@@ -18,7 +18,7 @@
                 <table class="table align-middle gs-0 gy-4">
                     <!-- Trong phần <thead> của bảng -->
                     <thead>
-                        <tr class="bg-success">
+                        <tr class="bg-success text-center">
                             <th class="ps-4">
                                 <input type="checkbox" id="selectAll" />
                             </th>
@@ -190,7 +190,7 @@
                                                     <div class="table-responsive">
                                                         <table class="table table-striped table-sm table-hover">
                                                             <thead class="fw-bolder bg-danger">
-                                                                <tr>
+                                                                <tr class="text-center">
                                                                     <th class="ps-4">Mã vật tư</th>
                                                                     <th>Tên vật tư</th>
                                                                     <th>Số lượng</th>
@@ -219,7 +219,7 @@
                                                                         <td>{{ $detail->quantity }}</td>
                                                                         <td>{{ number_format($detail->price) }}đ</td>
                                                                         <td>{{ $detail->batch_number }}</td>
-                                                                        <td>{{ $detail->discount }}</td>
+                                                                        <td>{{ $detail->discount }}%</td>
                                                                         <td>{{ $detail->VAT }}%</td>
                                                                         <td>{{ number_format($totalPriceWithVAT) }}đ
                                                                         </td>
