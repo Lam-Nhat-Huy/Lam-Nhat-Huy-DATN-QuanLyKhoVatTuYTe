@@ -8,6 +8,7 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -102,7 +103,17 @@ class UserController extends Controller
                 return redirect()->back();
             } elseif ($request->action_type === 'delete') {
 
-                $this->callModel::whereIn('code', $request->user_codes)->forceDelete();
+                $users = $this->callModel::withTrashed()->whereIn('code', $request->user_codes)->get();
+
+                foreach ($users as $user) {
+
+                    if ($user->avatar) {
+
+                        Storage::disk('public')->delete($user->avatar);
+                    }
+
+                    $user->forceDelete();
+                }
 
                 toastr()->success('Xóa thành công');
 
@@ -121,7 +132,14 @@ class UserController extends Controller
 
         if (isset($request->user_code_delete)) {
 
-            $this->callModel::where('code', $request->user_code_delete)->forceDelete();
+            $user = $this->callModel::withTrashed()->where('code', $request->user_code_delete)->first();
+
+            if ($user->avatar) {
+
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            $user->forceDelete();
 
             toastr()->success('Xóa vĩnh viễn thành công');
 
@@ -197,6 +215,8 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
+        $record = $this->callModel::where('code', session('user_code_request'));
+
         if (!empty($request->password)) {
 
             $data['password'] = Hash::make($data['password']);
@@ -206,6 +226,13 @@ class UserController extends Controller
         }
 
         if (!empty($request->file('avatar'))) {
+
+            $user = $record->first();
+
+            if ($user->avatar) {
+
+                Storage::disk('public')->delete($user->avatar);
+            }
 
             $data['avatar'] = $request->file('avatar')->store('uploads', 'public');
         }
@@ -217,8 +244,6 @@ class UserController extends Controller
         $data['status'] = $request->status == 1 ? 1 : 0;
 
         $data['updated_at'] = now();
-
-        $record = $this->callModel::where('code', session('user_code_request'));
 
         if ($record) {
 

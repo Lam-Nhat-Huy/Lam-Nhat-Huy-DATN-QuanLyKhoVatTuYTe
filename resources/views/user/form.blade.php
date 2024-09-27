@@ -267,12 +267,12 @@
                                             <div>
                                                 <label for="male" class="me-2" style="font-size: 15px;">
                                                     <input type="radio" id="male" name="gender" value="Nam"
-                                                        {{ !empty($firstUser->gender) || old('gender') == 'Nam' ? 'checked' : '' }}>
+                                                        {{ (!empty($firstUser->gender) && $firstUser->gender == 'Nam') || old('gender') == 'Nam' ? 'checked' : '' }}>
                                                     Nam
                                                 </label>
                                                 <label for="female" style="font-size: 15px;">
                                                     <input type="radio" id="female" name="gender" value="Nữ"
-                                                        {{ !empty($firstUser->gender) || old('gender') == 'Nữ' ? 'checked' : '' }}>
+                                                        {{ (!empty($firstUser->gender) && $firstUser->gender == 'Nữ') || old('gender') == 'Nữ' ? 'checked' : '' }}>
                                                     Nữ
                                                 </label>
                                             </div>
@@ -287,7 +287,7 @@
                                             <div class="checkbox-wrapper-6">
                                                 <input class="tgl tgl-light" id="cb1-7" type="checkbox"
                                                     value="1" name="isAdmin"
-                                                    {{ !empty($firstUser->isAdmin) || old('isAdmin') == 1 ? 'checked' : '' }} />
+                                                    {{ (!empty($firstUser->isAdmin) && $firstUser->isAdmin == 1) || old('isAdmin') == 1 ? 'checked' : '' }} />
                                                 <label class="tgl-btn" for="cb1-7"></label>
                                             </div>
                                         </div>
@@ -298,7 +298,7 @@
                                             <div class="checkbox-wrapper-6">
                                                 <input class="tgl tgl-light" id="cb1-6" type="checkbox"
                                                     value="1" name="status"
-                                                    {{ !empty($firstUser->status) || old('status') == 1 ? 'checked' : '' }} />
+                                                    {{ (!empty($firstUser->status) && $firstUser->status == 1) || old('status') == 1 ? 'checked' : '' }} />
                                                 <label class="tgl-btn" for="cb1-6"></label>
                                             </div>
                                         </div>

@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Inventory_check_details extends Model
 {
+    protected $primaryKey = 'code';
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
     use HasFactory;
 
     use SoftDeletes;

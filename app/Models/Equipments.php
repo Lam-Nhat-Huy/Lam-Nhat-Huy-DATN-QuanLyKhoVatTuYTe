@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Equipments extends Model
 {
+    protected $primaryKey = 'code';
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
     use HasFactory;
 
     protected $table = 'equipments';

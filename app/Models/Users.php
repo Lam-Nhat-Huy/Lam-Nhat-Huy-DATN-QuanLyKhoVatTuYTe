@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Users extends Model
 {
+    protected $primaryKey = 'code';
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
     use HasFactory, SoftDeletes;
 
     protected $fillable = [

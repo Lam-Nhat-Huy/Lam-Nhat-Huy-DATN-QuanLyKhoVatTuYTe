@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Suppliers extends Model
 {
+    protected $primaryKey = 'code';
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
     use HasFactory;
 
     protected $fillable = [
