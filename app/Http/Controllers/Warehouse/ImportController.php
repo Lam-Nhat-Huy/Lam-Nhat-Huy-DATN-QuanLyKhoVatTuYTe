@@ -69,8 +69,6 @@ class ImportController extends Controller
     {
         $materialData = json_decode($request->input('materialData'), true);
 
-        // dd($materialData);
-
         $status = $request->input('status');
 
         if (empty($materialData)) {
@@ -87,16 +85,7 @@ class ImportController extends Controller
             'status' => $status
         ];
 
-        $lastReceipt = Receipts::orderBy('created_at', 'desc')->first();
-
-        if ($lastReceipt) {
-            $lastReceiptNumber = intval(substr($lastReceipt->code, 3));
-            $newReceiptNumber = $lastReceiptNumber + 1;
-        } else {
-            $newReceiptNumber = 1;
-        }
-
-        $newReceiptCode = 'REC' . str_pad($newReceiptNumber, 4, '0', STR_PAD_LEFT);
+        $newReceiptCode = 'PN' . $this->generateRandomString();
 
         $receiptData['code'] = $newReceiptCode;
 
@@ -160,7 +149,7 @@ class ImportController extends Controller
             $inventory->current_quantity += $material['quantity'];
             $inventory->save();
         } else {
-            $newInventoryCode = 'INV' . str_pad(Inventories::count() + 1, 4, '0', STR_PAD_LEFT);
+            $newInventoryCode = 'TK' . $this->generateRandomString();
             Inventories::create([
                 'code' => $newInventoryCode,
                 'equipment_code' => $material['equipment_code'],
@@ -290,5 +279,21 @@ class ImportController extends Controller
         Excel::import(new ReceiptsImport, $request->file('file'));
 
         return redirect()->back()->with('success', 'Dữ liệu đã được nhập thành công!');
+    }
+
+    function generateRandomString($length = 9)
+    {
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+        $charactersLength = strlen($characters);
+
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        return $randomString;
     }
 }

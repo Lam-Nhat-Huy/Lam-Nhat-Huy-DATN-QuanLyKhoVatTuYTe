@@ -7,12 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Equipments extends Model
 {
-    protected $primaryKey = 'code';
-
-    public $incrementing = false;
-
-    protected $keyType = 'string';
-
     use HasFactory;
 
     protected $table = 'equipments';
@@ -62,4 +56,3 @@ class Equipments extends Model
         return $this->belongsTo(Equipment_types::class, 'equipment_type_code', 'code');
     }
 }
-

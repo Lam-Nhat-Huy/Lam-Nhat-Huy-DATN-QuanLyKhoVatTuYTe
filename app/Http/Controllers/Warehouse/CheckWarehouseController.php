@@ -72,29 +72,8 @@ class CheckWarehouseController extends Controller
             'status' => $materialData[0]['status']
         ];
 
-        // Lấy phiếu kiểm kho cuối cùng dựa trên thời gian tạo
-        $lastInventoryCheck = Inventory_checks::orderBy('created_at', 'desc')->first();
-
-        if ($lastInventoryCheck) {
-            // Lấy phần số từ chuỗi mã cuối cùng, ví dụ: 'INC0001' -> '0001' và chuyển thành số nguyên
-            $lastInventoryNumber = (int)substr($lastInventoryCheck->code, 3);
-            $newInventoryNumber = $lastInventoryNumber + 1;
-        } else {
-            // Nếu chưa có phiếu kiểm kho nào, bắt đầu từ 1
-            $newInventoryNumber = 1;
-        }
-
-        // Tạo mã phiếu kiểm kho mới với tiền tố 'INC' và điền số thứ tự 4 chữ số
-        $newInventoryCheckCode = 'INC' . str_pad($newInventoryNumber, 4, '0', STR_PAD_LEFT);
-
-        // Kiểm tra xem mã vừa tạo đã tồn tại chưa, nếu có, tăng giá trị số thứ tự
-        while (Inventory_checks::where('code', $newInventoryCheckCode)->exists()) {
-            $newInventoryNumber++;
-            $newInventoryCheckCode = 'INC' . str_pad($newInventoryNumber, 4, '0', STR_PAD_LEFT);
-        }
-
         // Gán mã mới cho dữ liệu phiếu kiểm kho
-        $inventoryCheckData['code'] = $newInventoryCheckCode;
+        $inventoryCheckData['code'] = "KK" . $this->generateRandomString();
 
         // Tạo phiếu kiểm kho mới
         $inventoryCheck = Inventory_checks::create($inventoryCheckData);
@@ -158,7 +137,7 @@ class CheckWarehouseController extends Controller
             $inventory->save();
         } else {
             // Nếu không tìm thấy lô hàng, tạo mới record trong bảng inventories
-            $newInventoryCode = 'INV' . str_pad(Inventories::count() + 1, 4, '0', STR_PAD_LEFT);
+            $newInventoryCode = 'TK' . $this->generateRandomString();
             Inventories::create([
                 'code' => $newInventoryCode,
                 'equipment_code' => $material['equipment_code'],
@@ -239,5 +218,21 @@ class CheckWarehouseController extends Controller
             'title' => $title,
             'inventoryChecks' => $inventoryChecks,
         ]);
+    }
+
+    function generateRandomString($length = 9)
+    {
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+        $charactersLength = strlen($characters);
+
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        return $randomString;
     }
 }
