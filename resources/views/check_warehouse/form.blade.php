@@ -148,6 +148,10 @@
         .table input[type="number"] {
             width: 50px;
         }
+
+        #noDataAlert {
+            display: table-row;
+        }
     </style>
 @endsection
 
@@ -205,42 +209,42 @@
                                 <thead class="table-dark">
                                     <tr>
                                         <td></td>
-                                        <th>STT</th>
-                                        <th>Mã thiết bị</th>
+                                        <th style="width: 40px;">STT</th>
+                                        <th style="width: 100px;">Mã thiết bị</th>
                                         <th>Tên thiết bị</th>
                                         <th>Tồn kho</th>
                                         <th>Thực tế</th>
                                         <th>Sô lượng lệch</th>
-                                        <th>Giá trị lệch</th>
                                     </tr>
                                 </thead>
                                 <tbody id="materialList">
                                     {{-- Thông tin sau khi được thêm vật tư từ FORM 1 sẽ được hiển thị ở đây --}}
-                                    <input type="hidden" id="materialData" name="materialData">
+                                    <tr id="noDataAlert">
+                                        <td colspan="12" class="text-center">
+                                            <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                                role="alert"
+                                                style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                                <div class="mb-3">
+                                                    <i class="fas fa-file-invoice"
+                                                        style="font-size: 36px; color: #6c757d;"></i>
+                                                </div>
+                                                <div class="text-center">
+                                                    <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin
+                                                        phiếu nhập trống</h5>
+                                                    <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                        Hiện tại chưa có phiếu nhập nào được thêm vào. Vui lòng kiểm tra lại
+                                                        hoặc tạo mới phiếu nhập để bắt đầu.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
-                            <tr id="noDataAlert">
-                                <td colspan="12" class="text-center">
-                                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
-                                        role="alert"
-                                        style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
-                                        <div class="mb-3">
-                                            <i class="fas fa-file-invoice" style="font-size: 36px; color: #6c757d;"></i>
-                                        </div>
-                                        <div class="text-center">
-                                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin phiếu
-                                                nhập
-                                                trống</h5>
-                                            <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                                Hiện tại chưa có phiếu nhập nào được thêm vào. Vui lòng kiểm tra lại hoặc
-                                                tạo
-                                                mới phiếu nhập để bắt đầu.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                            <!-- Input ẩn để lưu trữ dữ liệu vật tư -->
+                            <input type="hidden" id="materialData" name="materialData">
                         </div>
+
 
                     </div>
                 </div>

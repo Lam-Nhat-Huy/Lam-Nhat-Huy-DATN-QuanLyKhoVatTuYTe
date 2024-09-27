@@ -41,22 +41,21 @@ function selectProduct(element, name, equipment_code, current_quantity, batch_nu
 
 function addProductToTable(name, equipment_code, current_quantity, batch_number) {
     var tableBody = document.getElementById('materialList');
-    var rowCount = tableBody.rows.length + 1;
+    var rowCount = materialData.length; // Dùng chiều dài của mảng materialData
 
     var row = `
-        <tr>
+        <tr data-index="${rowCount}">
             <td>
-                <a href="#" class="text-dark" onclick="removeProduct(${rowCount - 1})">
+                <a href="#" class="text-dark" onclick="removeProduct(${rowCount})">
                     <i class="fa fa-trash"></i>
                 </a>
             </td>
-            <td>${rowCount}</td>
+            <td>${rowCount + 1}</td>
             <td>${equipment_code}</td>
-            <td>${name}</td>
+            <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</td>
             <td>${current_quantity}</td>
             <td>
-                <input type="number" min="0"
-                       onchange="updateProduct(${rowCount - 1}, this.value)">
+                <input type="number" style="width: 70px; height: 40px; border-radius: 8px;" onchange="updateProduct(${rowCount}, this.value)">
             </td>
             <td>0</td>
         </tr>
@@ -64,6 +63,7 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
 
     tableBody.insertAdjacentHTML('beforeend', row);
 
+    // Thêm vào mảng materialData
     materialData.push({
         equipment_code: equipment_code,
         current_quantity: current_quantity,
@@ -71,20 +71,65 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
         unequal: 0,
         batch_number: batch_number
     });
+
+    if (tableBody.rows.length > 0) {
+        var noDataAlert = document.getElementById('noDataAlert');
+        if (noDataAlert) {
+            noDataAlert.style.display = 'none';
+        }
+    }
 }
+
 
 
 function updateProduct(index, actualQuantity) {
     actualQuantity = parseInt(actualQuantity);
 
-    var current_quantity = materialData[index].current_quantity;
-    var unequal = actualQuantity - current_quantity;
+    // Kiểm tra xem index có hợp lệ không
+    if (materialData[index]) {
+        var current_quantity = materialData[index].current_quantity;
+        var unequal = actualQuantity - current_quantity;
 
-    materialData[index].actual_quantity = actualQuantity;
-    materialData[index].unequal = unequal;
+        // Cập nhật dữ liệu vào mảng materialData
+        materialData[index].actual_quantity = actualQuantity;
+        materialData[index].unequal = unequal;
 
-    document.querySelectorAll('#materialList tr')[index].querySelector('td:nth-child(7)').innerText = unequal;
+        // Cập nhật lại giá trị lệch trong bảng
+        document.querySelector(`#materialList tr[data-index="${index}"] td:nth-child(7)`).innerText = unequal;
+    } else {
+        console.error('Invalid index:', index);
+    }
 }
+
+function removeProduct(index) {
+    // Xóa dòng trong bảng
+    var row = document.querySelector(`#materialList tr[data-index="${index}"]`);
+    if (row) {
+        row.remove();
+    }
+
+    // Xóa sản phẩm khỏi mảng materialData
+    materialData.splice(index, 1);
+
+    // Cập nhật lại chỉ số trong bảng sau khi xóa
+    var rows = document.querySelectorAll('#materialList tr');
+    rows.forEach((row, i) => {
+        row.setAttribute('data-index', i);
+        row.querySelector('td:nth-child(2)').innerText = i + 1; // Cập nhật lại số thứ tự
+        row.querySelector('a').setAttribute('onclick', `removeProduct(${i})`); // Cập nhật lại sự kiện onclick
+        row.querySelector('input').setAttribute('onchange', `updateProduct(${i}, this.value)`); // Cập nhật lại sự kiện onchange
+    });
+
+    // Kiểm tra nếu không còn dữ liệu để hiển thị thông báo "Không có dữ liệu"
+    if (materialData.length === 0) {
+        var noDataAlert = document.getElementById('noDataAlert');
+        if (noDataAlert) {
+            noDataAlert.style.display = 'block'; // Hiển thị lại alert nếu danh sách trống
+        }
+    }
+}
+
+
 
 function submitMaterials() {
     var checkDate = document.getElementById('check_date').value;

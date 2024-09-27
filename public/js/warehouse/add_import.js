@@ -126,13 +126,28 @@ function addMaterial() {
         tableBody.appendChild(row);
     }
 
+    // Kiểm tra và ẩn noDataAlert nếu có dữ liệu
+    if (materialData.length > 0) {
+        noDataAlert.style.display = 'none';
+    } else {
+        noDataAlert.style.display = 'table-row';
+    }
+
+
     calculateTotals();
 }
+
 
 function removeMaterial(index, element) {
     materialData.splice(index, 1);
     const row = element.closest('tr');
     row.remove();
+
+    // Kiểm tra và hiển thị noDataAlert nếu không còn dữ liệu
+    if (materialData.length === 0) {
+        document.getElementById('noDataAlert').style.display = 'table-row'; // Hiển thị lại hàng trống
+    }
+
     calculateTotals();
 }
 

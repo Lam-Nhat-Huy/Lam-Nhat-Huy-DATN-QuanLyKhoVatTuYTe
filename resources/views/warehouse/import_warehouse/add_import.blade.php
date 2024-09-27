@@ -16,6 +16,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
 
     <style>
+        #noDataAlert {
+            display: table-row;
+        }
+
         input[type="text"],
         select,
         textarea {
@@ -250,8 +254,29 @@
                                 </thead>
                                 <tbody id="materialList">
                                     {{-- Thông tin sau khi được thêm vật tư từ FORM 1 sẽ được hiển thị ở đây --}}
-                                    <input type="hidden" id="materialData" name="materialData">
+                                    <tr id="noDataAlert">
+                                        <td colspan="12" class="text-center">
+                                            <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                                role="alert"
+                                                style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                                <div class="mb-3">
+                                                    <i class="fas fa-file-invoice"
+                                                        style="font-size: 36px; color: #6c757d;"></i>
+                                                </div>
+                                                <div class="text-center">
+                                                    <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông
+                                                        tin
+                                                        phiếu nhập trống</h5>
+                                                    <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                        Hiện tại chưa có phiếu nhập nào được thêm vào. Vui lòng kiểm tra lại
+                                                        hoặc tạo mới phiếu nhập để bắt đầu.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </tbody>
+                                <input type="hidden" id="materialData" name="materialData">
                             </table>
                         </div>
                     </div>

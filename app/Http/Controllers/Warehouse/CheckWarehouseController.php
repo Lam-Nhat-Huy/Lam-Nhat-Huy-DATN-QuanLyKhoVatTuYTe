@@ -55,6 +55,8 @@ class CheckWarehouseController extends Controller
         // Lấy dữ liệu từ form (JSON) và chuyển đổi thành mảng
         $materialData = json_decode($request->input('materialData'), true);
 
+        // dd($materialData);
+
         // Kiểm tra nếu dữ liệu rỗng
         if (empty($materialData)) {
             toastr()->error('Đã lưu phiếu kiểm kho thất bại.');

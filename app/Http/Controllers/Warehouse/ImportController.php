@@ -67,8 +67,9 @@ class ImportController extends Controller
 
     public function store_import(Request $request)
     {
-        // Lấy dữ liệu từ JSON materialData đã gửi từ form
         $materialData = json_decode($request->input('materialData'), true);
+
+        // dd($materialData);
 
         $status = $request->input('status');
 
@@ -77,7 +78,6 @@ class ImportController extends Controller
             return redirect()->back();
         }
 
-        // Lấy thông tin của phiếu nhập từ phần tử đầu tiên của materialData
         $receiptData = [
             'supplier_code' => $materialData[0]['supplier_code'],
             'receipt_date' => $materialData[0]['receipt_date'],
@@ -87,39 +87,29 @@ class ImportController extends Controller
             'status' => $status
         ];
 
-        // Lấy mã phiếu nhập cuối cùng từ cơ sở dữ liệu
         $lastReceipt = Receipts::orderBy('created_at', 'desc')->first();
 
-        // Kiểm tra nếu có phiếu nhập trước đó
         if ($lastReceipt) {
-            // Lấy số phía sau mã "REC" và tăng lên 1
             $lastReceiptNumber = intval(substr($lastReceipt->code, 3));
             $newReceiptNumber = $lastReceiptNumber + 1;
         } else {
-            // Nếu không có phiếu nhập trước, bắt đầu với số 1
             $newReceiptNumber = 1;
         }
 
-        // Tạo mã phiếu nhập mới với tiền tố "REC" và số mới (đảm bảo đủ 4 chữ số)
         $newReceiptCode = 'REC' . str_pad($newReceiptNumber, 4, '0', STR_PAD_LEFT);
 
-        // Thêm mã phiếu nhập vào dữ liệu phiếu nhập (khóa chính là 'code')
         $receiptData['code'] = $newReceiptCode;
 
-        // Lưu dữ liệu vào bảng receipts
         $receipt = Receipts::create($receiptData);
 
-        // Kiểm tra nếu việc lưu thành công
         if (!$receipt) {
             toastr()->error('Lỗi khi lưu phiếu nhập kho.');
             return redirect()->back();
         }
 
-        // Bây giờ lấy được `receipt_code` từ đối tượng phiếu nhập
         $receiptCode = $receipt->code;
 
 
-        // Chuẩn bị dữ liệu cho bảng receipt_details
         $receiptDetailsData = [];
 
         foreach ($materialData as $material) {
@@ -135,7 +125,6 @@ class ImportController extends Controller
             ];
         }
 
-        // Lưu dữ liệu vào bảng receipt_details
         try {
             Receipt_details::insert($receiptDetailsData);
         } catch (\Exception $e) {
@@ -143,15 +132,12 @@ class ImportController extends Controller
             return redirect()->back();
         }
 
-        // Cập nhật kho theo lô
-
         if ($status == 1) {
             foreach ($materialData as $material) {
                 $this->updateInventoryByBatch($material, $receiptCode, $receipt->receipt_date);
             }
         }
 
-        // Thông báo thành công
         if ($status == 1) {
             toastr()->success('Đã lưu phiếu nhập kho thành công với mã ' . $receiptCode);
         } else {
@@ -161,10 +147,8 @@ class ImportController extends Controller
         return redirect()->route('warehouse.import');
     }
 
-    // Hàm cập nhật số lượng tồn kho theo từng lô
     private function updateInventoryByBatch($material, $receiptCode, $receiptDate)
     {
-        // Tìm lô hàng trong kho dựa vào mã thiết bị và số lô
         $inventory = Inventories::where('equipment_code', $material['equipment_code'])
             ->where('batch_number', $material['batch_number'])
             ->where('current_quantity', '>', 0)
@@ -173,13 +157,10 @@ class ImportController extends Controller
         // dd($inventory);
 
         if ($inventory) {
-            // Nếu lô hàng đã tồn tại, cộng thêm số lượng vào lô này
             $inventory->current_quantity += $material['quantity'];
             $inventory->save();
         } else {
-            // Nếu chưa có, tạo mới record trong bảng inventories
             $newInventoryCode = 'INV' . str_pad(Inventories::count() + 1, 4, '0', STR_PAD_LEFT);
-            // Nếu là lô mới, tạo bản ghi mới trong bảng inventories
             Inventories::create([
                 'code' => $newInventoryCode,
                 'equipment_code' => $material['equipment_code'],
@@ -213,16 +194,12 @@ class ImportController extends Controller
         // Tìm phiếu nhập theo mã code
         $receipt = Receipts::where('code', $code)->first();
 
-        // Kiểm tra trạng thái phiếu nhập (chỉ duyệt nếu trạng thái là 0)
         if ($receipt && $receipt->status == 0) {
-            // Thay đổi trạng thái phiếu nhập từ 0 sang 1 (đã duyệt)
             $receipt->status = 1;
             $receipt->save();
 
-            // Lấy tất cả các chi tiết phiếu nhập liên quan
             $receiptDetails = Receipt_details::where('receipt_code', $code)->get();
 
-            // Cập nhật kho theo lô cho từng chi tiết phiếu nhập
             foreach ($receiptDetails as $detail) {
                 $material = [
                     'equipment_code' => $detail->equipment_code,
@@ -231,7 +208,6 @@ class ImportController extends Controller
                     'quantity' => $detail->quantity,
                 ];
 
-                // Gọi hàm cập nhật kho
                 $this->updateInventoryByBatch($material, $receipt->code, $receipt->receipt_date);
             }
 
@@ -247,14 +223,12 @@ class ImportController extends Controller
     {
         $title = 'Nhập Kho';
 
-        // Lấy thông tin tìm kiếm từ form
         $query = $request->input('search');
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
         $supplierCode = $request->input('supplier_code');
         $createdBy = $request->input('created_by');
 
-        // Tạo câu query tìm kiếm
         $receipts = Receipts::where(function ($q) use ($query) {
             $q->where('code', 'LIKE', "%{$query}%")
                 ->orWhere('receipt_no', 'LIKE', "%{$query}%");
