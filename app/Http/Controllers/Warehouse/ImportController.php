@@ -57,18 +57,20 @@ class ImportController extends Controller
 
         $users = Users::all();
 
-        return view("{$this->route}.import_warehouse.add_import", [
+        $equipmentsWithStock = Equipments::all();
+
+        return view("{$this->route}.import_warehouse.create_import", [
             'title' => $title,
             'inventories' => $inventories,
             'suppliers' => $suppliers,
             'users' => $users,
+            'equipmentsWithStock' => $equipmentsWithStock
         ]);
     }
 
     public function store_import(Request $request)
     {
         $materialData = json_decode($request->input('materialData'), true);
-
         $status = $request->input('status');
 
         if (empty($materialData)) {
@@ -86,7 +88,6 @@ class ImportController extends Controller
         ];
 
         $newReceiptCode = 'PN' . $this->generateRandomString();
-
         $receiptData['code'] = $newReceiptCode;
 
         $receipt = Receipts::create($receiptData);
@@ -97,8 +98,6 @@ class ImportController extends Controller
         }
 
         $receiptCode = $receipt->code;
-
-
         $receiptDetailsData = [];
 
         foreach ($materialData as $material) {
@@ -127,14 +126,10 @@ class ImportController extends Controller
             }
         }
 
-        if ($status == 1) {
-            toastr()->success('Đã lưu phiếu nhập kho thành công với mã ' . $receiptCode);
-        } else {
-            toastr()->warning('Phiếu tạm đã được lưu với mã ' . $receiptCode);
-        }
-
+        toastr()->success('Đã lưu phiếu nhập kho thành công với mã ' . $receiptCode);
         return redirect()->route('warehouse.import');
     }
+
 
     private function updateInventoryByBatch($material, $receiptCode, $receiptDate)
     {
@@ -283,7 +278,7 @@ class ImportController extends Controller
 
     function generateRandomString($length = 9)
     {
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
         $charactersLength = strlen($characters);
 

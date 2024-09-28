@@ -2,6 +2,16 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/warehouse/import.css') }}">
+
+
+    <style>
+        .custom-w {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 350px;
+        }
+    </style>
 @endsection
 
 @section('title')
@@ -22,12 +32,12 @@
                             <th class="ps-4">
                                 <input type="checkbox" id="selectAll" />
                             </th>
-                            <th class="ps-4">Mã Phiếu Nhập</th>
-                            <th class="">Số Hóa Đơn</th>
+                            <th class="ps-4" style="width: 150px;">Mã Phiếu Nhập</th>
+                            <th class="" style="width: 150px;">Số Hóa Đơn</th>
                             <th class="">Nhà Cung Cấp</th>
                             <th class="">Tạo Bởi</th>
                             <th class="">Ngày Nhập</th>
-                            <th class="">Trạng Thái</th>
+                            <th class="" style="width: 150px;">Trạng Thái</th>
                         </tr>
                     </thead>
 
@@ -46,7 +56,7 @@
                                 <td>
                                     {{ $item->receipt_no }}
                                 </td>
-                                <td>
+                                <td class="custom-w">
                                     {{ $item->supplier->name }}
                                 </td>
                                 <td>

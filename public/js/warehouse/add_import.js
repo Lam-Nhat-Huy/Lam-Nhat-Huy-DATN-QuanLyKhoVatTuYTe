@@ -15,10 +15,8 @@ function addMaterial() {
     const discount = parseFloat(document.getElementById('discount_rate').value);
     const VAT = parseFloat(document.getElementById('VAT').value);
 
-    // Danh sách lỗi
     let errors = [];
 
-    // Validate ngày nhập hóa đơn
     const today = new Date();
     const receiptDate = new Date(receipt_date);
     const productDate = new Date(product_date);
@@ -58,31 +56,25 @@ function addMaterial() {
         errors.push('Vui lòng nhập VAT hợp lệ (0-100%).');
     }
 
-    // Nếu có lỗi, hiển thị danh sách lỗi
     if (errors.length > 0) {
         const errorMessages = document.getElementById('errorMessages');
         const errorList = document.getElementById('errorList');
 
-        // Làm trống danh sách lỗi cũ
         errorList.innerHTML = '';
 
-        // Thêm các lỗi mới
         errors.forEach(error => {
             const li = document.createElement('li');
             li.textContent = error;
             errorList.appendChild(li);
         });
 
-        // Hiển thị thông báo lỗi
         errorMessages.style.display = 'block';
 
         return;
     }
 
-    // Ẩn thông báo lỗi nếu không có lỗi
     document.getElementById('errorMessages').style.display = 'none';
 
-    // Tiếp tục thêm vật tư nếu không có lỗi
     const total_price = price * quantity * (1 - discount / 100) * (1 + VAT / 100);
 
     const material = {
@@ -143,9 +135,8 @@ function removeMaterial(index, element) {
     const row = element.closest('tr');
     row.remove();
 
-    // Kiểm tra và hiển thị noDataAlert nếu không còn dữ liệu
     if (materialData.length === 0) {
-        document.getElementById('noDataAlert').style.display = 'table-row'; // Hiển thị lại hàng trống
+        document.getElementById('noDataAlert').style.display = 'table-row';
     }
 
     calculateTotals();
@@ -195,19 +186,49 @@ document.getElementById('equipment_code').addEventListener('change', function() 
             });
     }
 });
-
 function formatCurrency(input) {
-    // Xóa tất cả ký tự không phải số và dấu phẩy
     let value = input.value.replace(/[^0-9]/g, '');
 
-    // Chuyển đổi thành số và định dạng với dấu phẩy
     if (value) {
         value = parseFloat(value).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
     } else {
-        value = '0 VNĐ'; // Giá trị mặc định nếu không có input
+        value = '0 VNĐ';
     }
 
-    // Cập nhật giá trị trong input
-    input.value = value.replace('VNĐ', '').trim(); // Bỏ ký tự '₫' để chỉ giữ lại số
+    input.value = value.replace('VNĐ', '').trim();
 }
+
+
+function filterProducts() {
+    var input = document.getElementById('equipment_name'); // Lấy tên vật tư để tìm kiếm
+    var filter = input.value.toUpperCase();
+    var dropdown = document.getElementById('productDropdown');
+
+    dropdown.style.display = filter ? 'block' : 'none';
+    dropdown.innerHTML = ''; // Xóa nội dung trước đó
+
+    var filteredProducts = products.filter(function(product) {
+        return product.name.toUpperCase().indexOf(filter) > -1;
+    });
+
+    filteredProducts.forEach(function(product) {
+        var item = `
+            <a class="dropdown-item d-flex align-items-center" style="background-color: white !important; color: #000;" onclick="selectProduct('${product.code}', '${product.name}')">
+                <img src="https://png.pngtree.com/template/20190316/ourlarge/pngtree-medical-health-logo-image_79595.jpg" alt="Product Image" class="me-2" style="width: 40px; height: 40px;">
+                <div>
+                    <div class="fw-bold">${product.name}</div>
+                    <small>Mã vật tư: ${product.code}</small>
+                </div>
+            </a>
+        `;
+        dropdown.insertAdjacentHTML('beforeend', item);
+    });
+}
+
+function selectProduct(productCode, productName) {
+    document.getElementById('equipment_name').value = productName; // Hiển thị tên vật tư
+    document.getElementById('equipment_code').value = productCode; // Lưu mã vật tư trong input ẩn
+    document.getElementById('productDropdown').style.display = 'none';
+}
+
 
