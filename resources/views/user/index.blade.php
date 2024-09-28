@@ -362,7 +362,7 @@
                                 </div>
                             @empty
                                 <tr id="noDataAlert">
-                                    <td colspan="12" class="text-center">
+                                    <td colspan="10" class="text-center">
                                         <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
                                             role="alert"
                                             style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
@@ -394,7 +394,7 @@
                         </span>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#deleteAll">
-                                    <i class="fas fa-trash me-2 text-danger"></i>Xóa Tất Cả</a>
+                                    <i class="fas fa-trash me-2 text-danger"></i>Xóa</a>
                             </li>
                         </ul>
                     </div>
@@ -404,7 +404,6 @@
                     </ul>
                 </div>
             @endif
-
 
             {{-- Modal Xác Nhận Xóa Tất Cả --}}
             <div class="modal fade" id="deleteAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

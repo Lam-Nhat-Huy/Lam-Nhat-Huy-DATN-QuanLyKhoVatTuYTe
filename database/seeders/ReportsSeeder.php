@@ -6,16 +6,17 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class NotificationsSeeder extends Seeder
+class ReportsSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('notifications')->insert([
+        DB::table('reports')->insert([
             [
-                'code' => 'N001',
+                'code' => 'RP59JF423K',
                 'user_code' => 'U001',
-                'notification_type' => 1,
+                'report_type' => 1,
                 'content' => 'Welcome to the system!',
+                'file' => 'abc.com',
                 'created_at' => now(),
                 'updated_at' => null,
                 'deleted_at' => null,

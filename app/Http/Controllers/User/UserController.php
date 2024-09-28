@@ -263,7 +263,7 @@ class UserController extends Controller
 
     function generateRandomString($length = 9)
     {
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
         $charactersLength = strlen($characters);
 
