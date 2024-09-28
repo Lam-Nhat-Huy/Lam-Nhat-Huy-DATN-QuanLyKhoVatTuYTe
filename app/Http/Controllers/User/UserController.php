@@ -14,7 +14,7 @@ class UserController extends Controller
 {
     protected $route = 'user';
 
-    protected $callModel = 'user';
+    protected $callModel;
 
     public function __construct()
     {
@@ -34,9 +34,16 @@ class UserController extends Controller
                 return redirect()->back();
             } else {
 
-                $this->callModel::whereIn('code', $request->user_codes)->delete();
+                $rs = $this->callModel::whereIn('code', $request->user_codes)->delete();
 
-                toastr()->success('Xóa người dùng đã chọn thành công');
+                if ($rs) {
+
+                    toastr()->success('Xóa người dùng thành công');
+
+                    return redirect()->back();
+                }
+
+                toastr()->success('Đã xảy ra lỗi, hãy thử lại');
 
                 return redirect()->back();
             }
@@ -51,9 +58,16 @@ class UserController extends Controller
                 return redirect()->back();
             } else {
 
-                $this->callModel::where('code', $request->user_code_delete)->delete();
+                $rs = $this->callModel::where('code', $request->user_code_delete)->delete();
 
-                toastr()->success('Xóa người dùng thành công');
+                if ($rs) {
+
+                    toastr()->success('Xóa người dùng thành công');
+
+                    return redirect()->back();
+                }
+
+                toastr()->success('Đã xảy ra lỗi, hãy thử lại');
 
                 return redirect()->back();
             }
@@ -96,9 +110,16 @@ class UserController extends Controller
 
             if ($request->action_type === 'restore') {
 
-                $this->callModel::whereIn('code', $request->user_codes)->restore();
+                $rs = $this->callModel::whereIn('code', $request->user_codes)->restore();
 
-                toastr()->success('Khôi phục thành công');
+                if ($rs) {
+
+                    toastr()->success('Khôi phục thành công');
+
+                    return redirect()->back();
+                }
+
+                toastr()->success('Đã xảy ra lỗi, hãy thử lại');
 
                 return redirect()->back();
             } elseif ($request->action_type === 'delete') {
@@ -113,6 +134,7 @@ class UserController extends Controller
                     }
 
                     $user->forceDelete();
+                    
                 }
 
                 toastr()->success('Xóa thành công');
@@ -123,9 +145,16 @@ class UserController extends Controller
 
         if (isset($request->user_code_restore)) {
 
-            $this->callModel::where('code', $request->user_code_restore)->restore();
+            $rs = $this->callModel::where('code', $request->user_code_restore)->restore();
 
-            toastr()->success('Khôi phục thành công');
+            if ($rs) {
+
+                toastr()->success('Khôi phục thành công');
+
+                return redirect()->back();
+            }
+
+            toastr()->success('Đã xảy ra lỗi, hãy thử lại');
 
             return redirect()->back();
         }
@@ -198,6 +227,13 @@ class UserController extends Controller
     {
         $firstUser = $this->callModel::where('code', $code)->first();
 
+        if (!$firstUser) {
+
+            toastr()->error('Đã xảy ra lỗi, hãy thử lại');
+
+            return redirect()->back();
+        }
+
         session()->put('user_code_request', $firstUser->code);
 
         $title = 'Người Dùng';
@@ -245,18 +281,22 @@ class UserController extends Controller
 
         $data['updated_at'] = now();
 
-        if ($record) {
+        $rs = $record->update($data);
 
-            $record->update($data);
+        if ($rs) {
+
+            $nameUser = $this->callModel::where('code', session('user_code_request'))->first();
+
+            $nameUser = $nameUser->last_name . ' ' . $nameUser->first_name;
+
+            toastr()->success("Cập nhật người dùng " . $nameUser . " thành công");
+
+            session()->forget(['user_code_request']);
+
+            return redirect()->route('user.index');
         }
 
-        $nameUser = $this->callModel::where('code', session('user_code_request'))->first();
-
-        $nameUser = $nameUser->last_name . ' ' . $nameUser->first_name;
-
-        toastr()->success("Cập nhật người dùng " . $nameUser . " thành công");
-
-        session()->forget(['user_code_request']);
+        toastr()->error('Không thể cập nhật, thử lại sau');
 
         return redirect()->route('user.index');
     }

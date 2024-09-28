@@ -227,14 +227,15 @@
                                 <th class="ps-4">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 6% !important;">Mã ND</th>
-                                <th class="" style="width: 11% !important;">Ảnh</th>
-                                <th class="" style="width: 15% !important;">Họ Tên</th>
-                                <th class="" style="width: 14% !important;">Email</th>
-                                <th class="" style="width: 14% !important;">SĐT</th>
-                                <th class="" style="width: 9% !important;">Giới Tính</th>
-                                <th class="" style="width: 14% !important;">Chức Vụ</th>
-                                <th class="" style="width: 13% !important;">Trạng Thái</th>
+                                <th class="" style="width: 5% !important;">Mã ND</th>
+                                <th class="" style="width: 10% !important;">Ảnh</th>
+                                <th class="" style="width: 10% !important;">Họ Tên</th>
+                                <th class="" style="width: 15% !important;">Email</th>
+                                <th class="" style="width: 10% !important;">SĐT</th>
+                                <th class="" style="width: 10% !important;">Giới Tính</th>
+                                <th class="" style="width: 10% !important;">Chức Vụ</th>
+                                <th class="" style="width: 10% !important;">Trạng Thái</th>
+                                <th class="" style="width: 10% !important;">Ngày Xóa</th>
                                 <th class="pe-3" style="width: 5% !important;"></th>
                             </tr>
                         </thead>
@@ -279,6 +280,9 @@
                                                 disabled />
                                             <label class="tgl-btn" for="cb1-6"></label>
                                         </div>
+                                    </td>
+                                    <td>
+                                        {{ ($item->deleted_at)->format('d-m-Y') }}
                                     </td>
                                     <td>
                                         <div class="btn-group">
@@ -365,7 +369,7 @@
                                 </div>
                             @empty
                                 <tr id="noDataAlert">
-                                    <td colspan="10" class="text-center">
+                                    <td colspan="11" class="text-center">
                                         <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
                                             role="alert"
                                             style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">

@@ -13,8 +13,6 @@
 
         $button_text = 'Thêm';
 
-        $hidden = '';
-
         $required = 'required';
 
         $title_filed = 'File Đã Tải Lên';
@@ -22,8 +20,6 @@
         $action = route('report.edit', request('code'));
 
         $button_text = 'Cập Nhật';
-
-        $hidden = 'd-none';
 
         $required = '';
 

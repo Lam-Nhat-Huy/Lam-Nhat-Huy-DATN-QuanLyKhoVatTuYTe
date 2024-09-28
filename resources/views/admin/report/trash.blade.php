@@ -146,9 +146,10 @@
                                 </th>
                                 <th class="" style="width: 10%;">Mã Báo Cáo</th>
                                 <th class="" style="width: 15%;">Người Báo Cáo</th>
-                                <th class="" style="width: 30%;">Nội Dung Báo Cáo</th>
+                                <th class="" style="width: 25%;">Nội Dung Báo Cáo</th>
                                 <th class="" style="width: 15%;">Loại Báo Cáo</th>
-                                <th class="" style="width: 20%;">File Báo Cáo</th>
+                                <th class="" style="width: 15%;">File Báo Cáo</th>
+                                <th class="" style="width: 10%;">Ngày Xóa</th>
                                 <th class="pe-3" style="width: 10%;">Hành Động</th>
                             </tr>
                         </thead>
@@ -180,6 +181,9 @@
                                         @else
                                             <span class="text-danger">File không khả dụng.</span>
                                         @endif
+                                    </td>
+                                    <td>
+                                        {{ $item->deleted_at->format('d-m-Y') }}
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group">
@@ -237,7 +241,8 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h3 class="modal-title" id="deleteModalLabel">Xóa Vĩnh Viễn Báo Cáo
+                                                        <h3 class="modal-title" id="deleteModalLabel">Xóa Vĩnh Viễn Báo
+                                                            Cáo
                                                         </h3>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>

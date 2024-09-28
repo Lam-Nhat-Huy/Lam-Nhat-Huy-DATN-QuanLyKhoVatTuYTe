@@ -27,4 +27,14 @@ class Notifications extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function notification_types()
+    {
+        return $this->belongsTo(Notification_types::class, 'notification_type', 'id');
+    }
+
+    public function users()
+    {
+        return $this->belongsTo(Users::class, 'user_code', 'code');
+    }
 }

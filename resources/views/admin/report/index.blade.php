@@ -101,9 +101,9 @@
                                 <th class="ps-4">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 10%;">Mã Báo Cáo</th>
+                                <th class="" style="width: 15%;">Mã Báo Cáo</th>
                                 <th class="" style="width: 15%;">Người Báo Cáo</th>
-                                <th class="" style="width: 25%;">Nội Dung Báo Cáo</th>
+                                <th class="" style="width: 20%;">Nội Dung Báo Cáo</th>
                                 <th class="" style="width: 15%;">Loại Báo Cáo</th>
                                 <th class="" style="width: 15%;">File Báo Cáo</th>
                                 <th class="" style="width: 10%;">Trạng Thái</th>
@@ -124,7 +124,9 @@
                                         {{ !empty($item->users->last_name && $item->users->first_name) ? $item->users->last_name . ' ' . $item->users->first_name : 'N/A' }}
                                     </td>
                                     <td>
-                                        {{ $item->content }}
+                                        <span class="text-primary pointer" data-bs-toggle="modal"
+                                            data-bs-target="#detail_{{ $item->code }}">Xem Nội Dung
+                                        </span>
                                     </td>
                                     <td>
                                         {{ $item->report_types->name ?? 'N/A' }}
@@ -174,6 +176,32 @@
                                                     </a>
                                                 </li>
                                             </ul>
+                                        </div>
+
+                                        {{-- Chi Tiết --}}
+                                        <div class="modal fade" id="detail_{{ $item->code }}"
+                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                            aria-labelledby="DetailModal" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h3 class="modal-title" id="DetailModal">Nội Dung Báo Cáo
+                                                            #{{ $item->code }}
+                                                        </h3>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <strong>
+                                                            {!! $item->content !!}
+                                                        </strong>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-sm btn-secondary"
+                                                            data-bs-dismiss="modal">Đóng</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         {{-- Duyệt --}}
@@ -414,18 +442,15 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Khi nhấn nút "Khôi Phục Tất Cả"
             document.querySelector('#browseAll').addEventListener('show.bs.modal', function() {
                 document.getElementById('action_type').value = 'browse';
             });
 
-            // Khi nhấn nút "Xóa Tất Cả"
             document.querySelector('#deleteAll').addEventListener('show.bs.modal', function() {
                 document.getElementById('action_type').value = 'delete';
             });
         });
 
-        // Kiểm tra trạng thái ban đầu khi trang được tải
         document.addEventListener('DOMContentLoaded', function() {
             toggleDeleteAction();
         });

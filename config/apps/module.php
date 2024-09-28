@@ -33,7 +33,7 @@ return [
                     'title' => 'Danh Sách',
                     'route' => 'user.index',
                     'route_action' => ['user.add', 'user.edit', 'user.user_trash'],
-                    'icon' => 'fa fa-list',
+                    'icon' => 'fa fa-bars',
                     'user_role' => [1],
                 ],
             ]
@@ -190,34 +190,17 @@ return [
             ],
             'subModule' => [
                 [
-                    'title' => 'Danh Sách Thông Báo',
+                    'title' => 'Danh Sách',
                     'route' => 'notification.index',
                     'route_action' => [
                         'notification.notification_add',
                         'notification.notification_edit',
                         'notification.notification_trash',
                     ],
-                    'icon' => 'fa fa-bell',
-                    'user_role' => [0, 1],
-                ],
-                [
-                    'title' => 'Loại Thông Báo',
-                    'route' => 'notification.notification_type',
-                    'route_action' => [
-                        'notification.notification_type_edit',
-                        'notification.notification_type_trash',
-                    ],
-                    'icon' => 'fa fa-list',
+                    'icon' => 'fa fa-bars',
                     'user_role' => [0, 1],
                 ],
             ],
-            [
-                'title' => 'Tồn Kho',
-                'route' => 'warehouse.inventory',
-                'route_action' => [],
-                'icon' => 'fas fa-clipboard-list',
-                'user_role' => []
-            ]
         ],
     ]
 ];

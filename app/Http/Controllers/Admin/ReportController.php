@@ -15,7 +15,7 @@ class ReportController extends Controller
 {
     protected $route = 'report';
 
-    protected $callModel = 'user';
+    protected $callModel;
 
     public function __construct()
     {
@@ -240,33 +240,40 @@ class ReportController extends Controller
 
         if ($data) {
 
-            if (!empty($request->file)) {
+            if ($record) {
 
-                $report = $record->first();
+                if (!empty($request->file)) {
 
-                if ($report->file) {
+                    if ($record->file) {
 
-                    Storage::disk('public')->delete('reports/' . $report->file);
+                        Storage::disk('public')->delete('reports/' . $record->file);
+                    }
+
+                    $fileName = time() . '.pdf';
+
+                    $request->file->storeAs('public/reports', $fileName);
+
+                    $data['file'] = $fileName;
+                } else {
+
+                    unset($data['file']);
                 }
 
-                $fileName = time() . '.pdf';
+                $data['updated_at'] = now();
 
-                $request->file->storeAs('public/reports', $fileName);
+                $record->update($data);
 
-                $data['file'] = $fileName;
-            } else {
 
-                unset($data['file']);
+                toastr()->success('Đã cập nhật báo cáo');
+
+                return redirect()->route('report.index');
             }
 
-            $data['updated_at'] = now();
 
-            $record->update($data);
+            toastr()->error('Không thể cập nhật, thử lại sau');
+
+            return redirect()->route('report.index');
         }
-
-        toastr()->success('Đã cập nhật báo cáo');
-
-        return redirect()->route('report.index');
     }
 
     function generateRandomString($length = 9)

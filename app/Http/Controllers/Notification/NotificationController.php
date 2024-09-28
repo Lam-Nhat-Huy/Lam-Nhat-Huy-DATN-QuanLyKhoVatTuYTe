@@ -3,58 +3,142 @@
 namespace App\Http\Controllers\Notification;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Notification\CreateNotificationRequest;
+use App\Http\Requests\Notification\UpdateNotificationRequest;
+use App\Models\Notification_types;
+use App\Models\Notifications;
+use App\Models\Users;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
     protected $route = 'notification';
 
-    public function index()
+    protected $callModel;
+
+    public function __construct()
     {
-        $title = 'Thông Báo';
-
-        $AllNotification = [
-            [
-                'id' => 1,
-                'notification_code' => 'HD001',
-                'user_create' => 'Lữ Phát Huy - KT - BS231',
-                'content' => 'ABCB UGU ISIFD',
-                'date_of_entry' => '30/08/2024',
-                'status' => 1
-            ],
-            [
-                'id' => 2,
-                'notification_code' => 'HD002',
-                'user_create' => 'Lữ Phát Huy - KT - BS2334',
-                'content' => 'AB123CB U23GU ISI123FD',
-                'date_of_entry' => '10/09/2024',
-                'status' => 2
-            ],
-        ];
-
-        return view("{$this->route}.notification", compact('title', 'AllNotification'));
+        $this->callModel = new Notifications();
     }
 
-    public function notification_trash()
+    public function index(Request $request)
     {
         $title = 'Thông Báo';
 
-        $AllNotificationTrash = [
-            [
-                'id' => 1,
-                'notification_code' => 'HD001',
-                'user_create' => 'Lữ Phát Huy - KT - BS231',
-                'content' => 'ABCB UGU ISIFD',
-                'date_of_entry' => '30/08/2024',
-            ],
-            [
-                'id' => 2,
-                'notification_code' => 'HD002',
-                'user_create' => 'Lữ Phát Huy - KT - BS2334',
-                'content' => 'AB123CB U23GU ISI123FD',
-                'date_of_entry' => '10/09/2024',
-            ],
-        ];
+        $AllNotificationType = Notification_types::all();
+
+        $AllUser = Users::all();
+
+        $AllNotification = $this->callModel::with(['notification_types', 'users'])
+            ->orderBy('created_at', 'DESC')
+            ->where('deleted_at', null);
+
+        if (isset($request->ur)) {
+            $AllNotification = $AllNotification->where("user_code", $request->ur);
+        }
+
+        if (isset($request->rt)) {
+            $AllNotification = $AllNotification->where("notification_type", $request->rt);
+        }
+
+        if (isset($request->st)) {
+            $AllNotification = $AllNotification->where("status", $request->st);
+        }
+
+        if (isset($request->kw)) {
+            $AllNotification = $AllNotification->where(function ($query) use ($request) {
+                $query->where('content', 'like', '%' . $request->kw . '%')
+                    ->orWhere('code', 'like', '%' . $request->kw . '%');
+            });
+        }
+
+        $AllNotification = $AllNotification->paginate(10);
+
+        if (isset($request->notification_codes)) {
+
+            if ($request->action_type === 'browse') {
+
+                $this->callModel::whereIn('code', $request->notification_codes)->update(['status' => 1]);
+
+                toastr()->success('Duyệt thành công');
+
+                return redirect()->back();
+            } elseif ($request->action_type === 'delete') {
+
+                $this->callModel::whereIn('code', $request->notification_codes)->delete();
+
+                toastr()->success('Xóa thành công');
+
+                return redirect()->back();
+            }
+        }
+
+        if (!empty($request->browse_notification)) {
+
+            $this->callModel::where('code', $request->browse_notification)->update(['status' => 1]);
+
+            toastr()->success('Đã duyệt');
+
+            return redirect()->route('notification.index');
+        }
+
+        if (!empty($request->delete_notification)) {
+
+            $this->callModel::where('code', $request->delete_notification)->delete();
+
+            toastr()->success('Đã xóa');
+
+            return redirect()->route('notification.index');
+        }
+
+        return view("{$this->route}.notification", compact('title', 'AllNotification', 'AllUser', 'AllNotificationType'));
+    }
+
+    public function notification_trash(Request $request)
+    {
+        $title = 'Thông Báo';
+
+        $AllNotificationTrash = $this->callModel::with(['notification_types', 'users'])
+            ->orderBy('deleted_at', 'DESC')
+            ->onlyTrashed()
+            ->paginate(10);
+
+        if (isset($request->notification_codes)) {
+
+            if ($request->action_type === 'restore') {
+
+                $this->callModel::whereIn('code', $request->notification_codes)->restore();
+
+                toastr()->success('Khôi phục thành công');
+
+                return redirect()->back();
+            } elseif ($request->action_type === 'delete') {
+
+                $this->callModel::withTrashed()->whereIn('code', $request->notification_codes)->forceDelete();
+
+                toastr()->success('Xóa thành công');
+
+                return redirect()->back();
+            }
+        }
+
+        if (isset($request->restore_notification)) {
+
+            $this->callModel::where('code', $request->restore_notification)->restore();
+
+            toastr()->success('Khôi phục thành công');
+
+            return redirect()->back();
+        }
+
+        if (isset($request->delete_notification)) {
+
+            $notification = $this->callModel::withTrashed()->where('code', $request->delete_notification)->forceDelete();
+
+            toastr()->success('Xóa vĩnh viễn thành công');
+
+            return redirect()->back();
+        }
 
         return view("{$this->route}.notification_trash", compact('title', 'AllNotificationTrash'));
     }
@@ -67,12 +151,34 @@ class NotificationController extends Controller
 
         $action = 'create';
 
-        return view("{$this->route}.notification_form", compact('title', 'action', 'title_form'));
+        $allNotificationType = Notification_types::all();
+
+        return view("{$this->route}.notification_form", compact('title', 'action', 'title_form', 'allNotificationType'));
     }
 
-    public function notification_create() {}
+    public function notification_create(CreateNotificationRequest $request)
+    {
+        $data = $request->validated();
 
-    public function notification_edit()
+        if ($data) {
+
+            $data['code'] = 'TB' . $this->generateRandomString(8);
+
+            $data['user_code'] = session('user_code');
+
+            $data['created_at'] = now();
+
+            $data['updated_at'] = null;
+
+            $this->callModel::create($data);
+
+            toastr()->success('Đã thêm thông báo');
+
+            return redirect()->route('notification.index');
+        }
+    }
+
+    public function notification_edit($code)
     {
         $title = 'Thông Báo';
 
@@ -80,69 +186,75 @@ class NotificationController extends Controller
 
         $action = 'edit';
 
-        return view("{$this->route}.notification_form", compact('title', 'action', 'title_form'));
+        $allNotificationType = Notification_types::all();
+
+        $firstNotification = $this->callModel::where('code', $code)->first();
+
+        return view("{$this->route}.notification_form", compact('title', 'action', 'title_form', 'allNotificationType', 'firstNotification'));
     }
 
-    public function notification_update() {}
-
-    public function notification_type()
+    public function notification_update(UpdateNotificationRequest $request, $code)
     {
-        $title = 'Loại Thông Báo';
+        $data = $request->validated();
 
-        $AllNotificationType = [
-            [
-                'id' => 1,
-                'notification_type_code' => 'HD001',
-                'notification_type_name' => 'Thông báo về mức tồn kho',
-                'status' => 1
-            ],
-            [
-                'id' => 2,
-                'notification_type_code' => 'HD002',
-                'notification_type_name' => 'Thông báo về hạn sử dụng',
-                'status' => 2
-            ],
-            [
-                'id' => 3,
-                'notification_type_code' => 'HD003',
-                'notification_type_name' => 'Thông báo về đơn đặt hàng',
-                'status' => 2
-            ],
-        ];
+        if ($data) {
 
-        return view("{$this->route}.notification_type", compact('title', 'AllNotificationType'));
+            $data['updated_at'] = now();
+
+            $rs = $this->callModel::where('code', $code)->update($data);
+
+            if ($rs) {
+
+                toastr()->success('Đã cập nhật thông báo');
+
+                return redirect()->route('notification.index');
+            }
+
+            toastr()->error('Không thể cập nhật, thử lại sau');
+
+            return redirect()->route('notification.index');
+        }
     }
 
-    public function notification_type_trash()
+    public function create_notification_type(Request $request)
     {
-        $title = 'Loại Thông Báo';
+        if (!empty($request->notification_type_name)) {
 
-        $AllNotificationTypeTrash = [
-            [
-                'id' => 1,
-                'notification_type_code' => 'HD001',
-                'notification_type_name' => 'ABCB UGU ISIFD',
-            ],
-            [
-                'id' => 2,
-                'notification_type_code' => 'HD002',
-                'notification_type_name' => 'AB123CB U23GU ISI123FD',
-            ],
-        ];
+            Notification_types::create([
+                'name' => $request->notification_type_name,
+            ]);
 
-        return view("{$this->route}.notification_type_trash", compact('title', 'AllNotificationTypeTrash'));
+            toastr()->success('Đã thêm loại thông báo');
+
+            return redirect()->back();
+        }
     }
 
-    public function notification_type_create() {}
-
-    public function notification_type_edit()
+    public function delete_notification_type($id)
     {
-        $title = 'Loại Thông Báo';
+        if (!empty($id)) {
 
-        $title_form = 'Cập Nhật Loại Thông Báo';
+            Notification_types::find($id)->delete();
 
-        return view("{$this->route}.notification_type_form", compact('title', 'title_form'));
+            toastr()->success('Đã xóa loại thông báo');
+
+            return redirect()->route('notification.notification_add');
+        }
     }
 
-    public function notification_type_update() {}
+    function generateRandomString($length = 9)
+    {
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        $charactersLength = strlen($characters);
+
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        return $randomString;
+    }
 }
