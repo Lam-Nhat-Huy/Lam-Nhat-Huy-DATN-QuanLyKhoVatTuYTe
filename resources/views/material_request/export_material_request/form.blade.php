@@ -86,10 +86,10 @@
 
                             <div class="col-md-6 fv-row">
 
-                                <label class="required fs-5 fw-bold mb-3">Vật Tư</label>
+                                <label class="required fs-5 fw-bold mb-3">Thiết Bị</label>
 
                                 <select name="material" class="form-select form-select-sm form-select-solid setupSelect2">
-                                    <option value="">Chọn Vật Tư...</option>
+                                    <option value="">Chọn Thiết Bị...</option>
                                     {{-- @foreach ($AllMaterial as $item)
                                         <option value="{{ $item['id'] }}"
                                             class="{{ $item['quantity'] <= 10 || \Carbon\Carbon::parse($item['expiry'])->diffInDays(now(), true) < 10 ? 'text-danger' : '' }}">
@@ -119,7 +119,7 @@
 
                     <div class="modal-footer flex-right border-0 pe-0">
                         <button type="submit" class="btn btn-success btn-sm">
-                            Thêm Vật Tư
+                            Thêm Thiết Bị
                         </button>
                     </div>
                 </div>
@@ -132,7 +132,7 @@
                     <table class="table table-striped align-middle gs-0 gy-4">
                         <thead>
                             <tr class="fw-bolder bg-success">
-                                <th class="">Vật Tư</th>
+                                <th class="">Thiết Bị</th>
                                 <th class="">Đơn Vị</th>
                                 <th class="">Số Lượng</th>
                                 <th>Hành Động</th>

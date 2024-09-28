@@ -30,7 +30,7 @@
         {{-- Phần nút thêm vật tư --}}
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Vật Tư</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Thiết Bị</span>
             </h3>
             <div class="card-toolbar">
                 <a href="{{ route('equipments.equipments_trash') }}" class="btn btn-sm btn-danger me-2">
@@ -42,7 +42,7 @@
                 <a href="{{ route('equipments.insert_equipments') }}" class="btn btn-sm btn-success">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-plus"></i>
-                        Thêm Vật Tư
+                        Thêm Thiết Bị
                     </span>
                 </a>
             </div>
@@ -53,7 +53,7 @@
             <form action="" class="row align-items-center">
                 <div class="col-4">
                     <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
-                        <option value="" selected>--Theo Nhóm Vật Tư--</option>
+                        <option value="" selected>--Theo Nhóm Thiết Bị--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
@@ -91,9 +91,9 @@
                             <th class="ps-4">
                                 <input type="checkbox" id="selectAll" />
                             </th>
-                            <th class="ps-4">Mã Vật Tư</th>
+                            <th class="ps-4">Mã Thiết Bị</th>
                             <th>Hình Ảnh</th>
-                            <th>Nhóm Vật Tư</th>
+                            <th>Nhóm Thiết Bị</th>
                             <th>Đơn Vị Tính</th>
                             <th>Mã Vạch</th>
                             <th>Hạn sử dụng</th>

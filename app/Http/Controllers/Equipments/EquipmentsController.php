@@ -16,7 +16,7 @@ class EquipmentsController extends Controller
 
     public function index(Request $request)
     {
-        $title = 'Danh Sách Vật Tư';
+        $title = 'Danh Sách Thiết Bị';
 
         $searchKeyword = $request->input('kw');
         $equipmentType = $request->input('equipment_type_code');
@@ -72,7 +72,7 @@ class EquipmentsController extends Controller
 
     public function material_trash()
     {
-        $title = 'Vật Tư';
+        $title = 'Thiết Bị';
 
         $AllMaterialTrash = [
             [
@@ -104,8 +104,8 @@ class EquipmentsController extends Controller
 
     public function insert_material()
     {
-        $title = 'Vật Tư';
-        $title_form = 'Thêm Vật Tư';
+        $title = 'Thiết Bị';
+        $title_form = 'Thêm Thiết Bị';
         $action = 'create';
 
         // Lấy danh sách các nhóm vật tư có trạng thái "Có"
@@ -164,8 +164,8 @@ class EquipmentsController extends Controller
 
     public function update_material($code)
     {
-        $title = 'Cập Nhật Vật Tư';
-        $title_form = 'Cập Nhật Vật Tư';
+        $title = 'Cập Nhật Thiết Bị';
+        $title_form = 'Cập Nhật Thiết Bị';
         $action = 'edit';
 
         // Tìm vật tư bằng code thay vì id
@@ -248,7 +248,7 @@ class EquipmentsController extends Controller
 
     public function material_group()
     {
-        $title = 'Nhóm Vật Tư';
+        $title = 'Nhóm Thiết Bị';
 
         // Lấy danh sách tất cả các nhóm vật tư từ cơ sở dữ liệu
         $AllMaterialGroup = Equipment_types::all();
@@ -259,7 +259,7 @@ class EquipmentsController extends Controller
 
     public function material_group_trash()
     {
-        $title = 'Nhóm Vật Tư';
+        $title = 'Nhóm Thiết Bị';
 
         $AllMaterialGroupTrash = [
             [
@@ -282,7 +282,7 @@ class EquipmentsController extends Controller
     }
     public function showCreateForm()
     {
-        $title = 'Thêm Nhóm Vật Tư';
+        $title = 'Thêm Nhóm Thiết Bị';
         $action = 'create'; // Hành động tạo mới
         return view('equipments.form_group', compact('title', 'action'));
     }
@@ -313,7 +313,7 @@ class EquipmentsController extends Controller
 
     public function update_material_group($code)
     {
-        $title = 'Chỉnh Sửa Nhóm Vật Tư';
+        $title = 'Chỉnh Sửa Nhóm Thiết Bị';
         $materialGroup = Equipment_types::where('code', $code)->firstOrFail();
         $action = 'edit'; // Hành động chỉnh sửa
         return view('equipments.form_group', compact('title', 'action', 'materialGroup'));

@@ -94,7 +94,7 @@
     <div class="card mb-5 mb-xl-8">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Nhóm Vật Tư</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Nhóm Thiết Bị</span>
             </h3>
             <div class="card-toolbar">
                 <a href="{{ route('material.material_group_trash') }}" class="btn btn-sm btn-danger me-2">
@@ -111,11 +111,11 @@
                     <form class="form" action="" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-5">
-                            <label class="required fs-5 fw-bold mb-3">Tên Nhóm Vật Tư</label>
+                            <label class="required fs-5 fw-bold mb-3">Tên Nhóm Thiết Bị</label>
 
                             <input type="text"
                                 class="form-control form-control-sm form-control-solid border border-success"
-                                placeholder="Tên Nhóm Vật Tư.." name="material_type_name" />
+                                placeholder="Tên Nhóm Thiết Bị.." name="material_type_name" />
                         </div>
 
                         <div class="mb-5">
@@ -170,7 +170,7 @@
                             <table class="table table-striped align-middle gs-0 gy-4">
                                 <thead>
                                     <tr class="fw-bolder bg-success">
-                                        <th class="ps-4">Mã Nhóm Vật Tư</th>
+                                        <th class="ps-4">Mã Nhóm Thiết Bị</th>
                                         <th class="">Tên</th>
                                         <th class="">Mô Tả</th>
                                         <th class="" style="width: 120px !important;">Trạng Thái</th>
@@ -240,7 +240,7 @@
                                                             <div class="modal-body">
                                                                 <form action="" method="">
                                                                     @csrf
-                                                                    <h4 class="text-danger">Xóa Nhóm Vật Tư Này?</h4>
+                                                                    <h4 class="text-danger">Xóa Nhóm Thiết Bị Này?</h4>
                                                                 </form>
                                                             </div>
                                                             <div class="modal-footer">

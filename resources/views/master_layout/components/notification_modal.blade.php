@@ -25,28 +25,40 @@
                 data-kt-scroll-height="auto" data-kt-scroll-wrappers="#kt_activities_body"
                 data-kt-scroll-dependencies="#kt_activities_header, #kt_activities_footer" data-kt-scroll-offset="5px">
                 <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-line w-40px"></div>
-                        <div class="timeline-icon symbol symbol-circle symbol-40px">
-                            <div class="symbol-label bg-light">
-                                <span class="svg-icon svg-icon-2 svg-icon-gray-500">
-                                    <i class="fa fa-bell"></i>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="timeline-content mt-n1">
-                            <div class="pe-3 mb-5">
-                                <div class="fs-5 fw-bold mb-2">
-                                    Nội Dung Thông Báo
-                                </div>
-                                <div class="d-flex align-items-center mt-1 fs-6">
-                                    <div class="text-muted me-2 fs-7">Tạo lúc 23-08-2024 16:55 Bởi Phát Huy - Admin</div>
+                    @foreach ($getNotification as $item)
+                        <div class="timeline-item">
+                            <div class="timeline-line w-40px"></div>
+                            <div class="timeline-icon symbol symbol-circle symbol-40px">
+                                <div class="symbol-label bg-light">
+                                    <span class="svg-icon svg-icon-2 svg-icon-gray-500">
+                                        <i class="fa fa-bell"></i>
+                                    </span>
                                 </div>
                             </div>
+                            <div class="timeline-content mt-n1">
+                                <div class="pe-3 mb-5">
+                                    <div class="fs-5 fw-bold" id="content-notifications">
+                                        {!! $item->content !!}
+                                    </div>
+                                    <div class="d-flex align-items-center mt-1 fs-6">
+                                        <div class="text-muted me-2 fs-7">Tạo lúc
+                                            <strong> {{ $item->created_at->format('d-m-Y') }}</strong> Bởi
+                                            <strong>{{ $item->users->last_name . ' ' . $item->users->first_name . ' - ' . $item->users->position }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    #content-notifications p {
+        padding: 0;
+        margin: 0;
+    }
+</style>

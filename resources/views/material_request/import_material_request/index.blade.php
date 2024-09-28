@@ -381,12 +381,12 @@
                                                     <!-- Begin::Receipt Items -->
                                                     <div class="mb-4">
                                                         <h4 class="text-primary border-bottom border-dark pb-4 mb-4">
-                                                            Danh Sách Vật Tư</h4>
+                                                            Danh Sách Thiết Bị</h4>
                                                         <div class="table-responsive">
                                                             <table class="table table-striped align-middle gs-0 gy-4">
                                                                 <thead>
                                                                     <tr class="fw-bolder bg-success">
-                                                                        <th style="width: 33%;">Vật Tư</th>
+                                                                        <th style="width: 33%;">Thiết Bị</th>
                                                                         <th style="width: 33%;">Đơn Vị</th>
                                                                         <th style="width: 33%;">Số Lượng
                                                                         </th>

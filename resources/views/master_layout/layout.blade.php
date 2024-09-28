@@ -103,7 +103,15 @@
 
     </div>
 
+    <div id="loading-spinner" class="loading-spinner" style="display:none;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 40px;"></i>
+    </div>
+
+    <div id="loading-overlay" class="loading-overlay"></div>
+
     {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
+
+    <script src="{{ asset('js/main.js') }}"></script>
 
     <script src="{{ asset('js/plugins.bundle.js') }}"></script>
 

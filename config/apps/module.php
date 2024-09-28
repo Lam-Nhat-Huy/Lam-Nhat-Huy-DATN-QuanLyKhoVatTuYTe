@@ -93,7 +93,7 @@ return [
         ],
         [
             'user_role' => [0, 1],
-            'title' => 'Vật Tư',
+            'title' => 'Thiết Bị',
             'icon' => 'fa-solid fa-suitcase-medical',
             'route' => [
                 'equipments.index',
@@ -106,14 +106,14 @@ return [
             ],
             'subModule' => [
                 [
-                    'title' => 'Danh Sách Vật Tư',
+                    'title' => 'Danh Sách Thiết Bị',
                     'route' => 'equipments.index',
                     'route_action' => ['equipments.equipments_trash', 'equipments.insert_equipments', 'equipments.update_equipments'],
                     'icon' => 'fa fa-pump-medical',
                     'user_role' => [0, 1],
                 ],
                 [
-                    'title' => 'Danh Sách Nhóm Vật Tư',
+                    'title' => 'Danh Sách Nhóm Thiết Bị',
                     'route' => 'equipments.equipments_group',
                     'route_action' => ['equipments.equipments_group_trash', 'equipments.update_equipments_group'],
                     'icon' => 'fa fa-notes-medical',

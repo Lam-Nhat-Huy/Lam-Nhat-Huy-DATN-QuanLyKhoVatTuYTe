@@ -70,7 +70,7 @@
                             <table class="table table-bordered" id="material-list">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th>Tên Vật Tư</th>
+                                        <th>Tên Thiết Bị</th>
                                         <th>Số Lô</th>
                                         <th>Số Lượng</th>
                                         <th>Hành Động</th>

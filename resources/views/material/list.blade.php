@@ -69,7 +69,7 @@
         {{-- Phần nút thêm vật tư  --}}
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Vật Tư</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Thiết Bị</span>
             </h3>
             <div class="card-toolbar">
                 <a href="{{ route('material.material_trash') }}" class="btn btn-sm btn-danger me-2">
@@ -81,7 +81,7 @@
                 <a href="{{ route('material.insert_material') }}" class="btn btn-sm btn-success">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-plus"></i>
-                        Thêm Vật Tư
+                        Thêm Thiết Bị
                     </span>
                 </a>
             </div>
@@ -92,7 +92,7 @@
             <form action="" class="row align-items-center">
                 <div class="col-4">
                     <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
-                        <option value="" selected>--Theo Nhóm Vật Tư--</option>
+                        <option value="" selected>--Theo Nhóm Thiết Bị--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
@@ -183,7 +183,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Nhóm hàng:</strong></td>
-                                                            <td class="text-gray-800">Vật Tư Y Tế</td>
+                                                            <td class="text-gray-800">Thiết Bị Y Tế</td>
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Thương hiệu:</strong></td>

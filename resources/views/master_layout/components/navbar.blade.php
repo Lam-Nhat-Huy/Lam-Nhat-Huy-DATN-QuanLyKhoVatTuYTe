@@ -95,82 +95,50 @@
                             <div data-kt-search-element="content"
                                 class="menu menu-sub menu-sub-dropdown p-7 w-325px w-md-375px">
                                 <div data-kt-search-element="wrapper">
-                                    <form data-kt-search-element="form" class="w-100 position-relative mb-3"
-                                        autocomplete="off">
-                                        <span
-                                            class="svg-icon svg-icon-2 svg-icon-lg-1 svg-icon-gray-500 position-absolute top-50 translate-middle-y ms-0">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none">
-                                                <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546"
-                                                    height="2" rx="1"
-                                                    transform="rotate(45 17.0365 15.1223)" fill="black" />
-                                                <path
-                                                    d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                                    fill="black" />
-                                            </svg>
-                                        </span>
-                                        <input type="text" class="form-control form-control-flush ps-10"
-                                            name="search" value="" placeholder="Tìm Kiếm..."
+                                    <div class="" style="position: relative;">
+                                        <i class="fa fa-search position-absolute start-0 top-50 translate-middle-y"></i>
+                                        <input type="text" class="form-control ps-8 border-0" id="searchInput"
+                                            name="search" placeholder="Tìm kiếm chức năng..."
                                             data-kt-search-element="input" />
-                                        <span
-                                            class="position-absolute top-50 end-0 translate-middle-y lh-0 d-none me-1"
+                                        <span class="position-absolute top-50 end-0 translate-middle-y lh-0 d-none me-1"
                                             data-kt-search-element="spinner">
                                             <span
                                                 class="spinner-border h-15px w-15px align-middle text-gray-400"></span>
                                         </span>
-                                        <span
-                                            class="btn btn-flush btn-active-color-primary position-absolute top-50 end-0 translate-middle-y lh-0 d-none"
-                                            data-kt-search-element="clear">
-                                            <span class="svg-icon svg-icon-2 svg-icon-lg-1 me-0">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24" fill="none">
-                                                    <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                                        height="2" rx="1"
-                                                        transform="rotate(-45 6 17.3137)" fill="black" />
-                                                    <rect x="7.41422" y="6" width="16" height="2"
-                                                        rx="1" transform="rotate(45 7.41422 6)"
-                                                        fill="black" />
-                                                </svg>
-                                            </span>
+                                    </div>
+                                    <span
+                                        class="btn btn-flush btn-active-color-primary position-absolute top-50 end-0 translate-middle-y lh-0 d-none"
+                                        data-kt-search-element="clear">
+                                        <span class="svg-icon svg-icon-2 svg-icon-lg-1 me-0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none">
+                                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                                    rx="1" transform="rotate(-45 6 17.3137)"
+                                                    fill="black" />
+                                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                                    transform="rotate(45 7.41422 6)" fill="black" />
+                                            </svg>
                                         </span>
-                                    </form>
-                                    <div class="separator border-gray-200 mb-6"></div>
-                                    <div class="mb-4" data-kt-search-element="main">
-                                        <div class="d-flex flex-stack fw-bold mb-4">
-                                            <span class="text-muted fs-6 me-2">Kết Quả:</span>
-                                        </div>
+                                    </span>
+                                    <div class="" data-kt-search-element="main">
                                         <div class="scroll-y mh-200px mh-lg-325px">
-                                            <div class="d-flex align-items-center mb-5">
-                                                <div class="symbol symbol-40px me-4">
-                                                    <span class="symbol-label bg-light">
-                                                        <span class="svg-icon svg-icon-2 svg-icon-primary">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                height="24" viewBox="0 0 24 24" fill="none">
-                                                                <path
-                                                                    d="M2 16C2 16.6 2.4 17 3 17H21C21.6 17 22 16.6 22 16V15H2V16Z"
-                                                                    fill="black" />
-                                                                <path opacity="0.3"
-                                                                    d="M21 3H3C2.4 3 2 3.4 2 4V15H22V4C22 3.4 21.6 3 21 3Z"
-                                                                    fill="black" />
-                                                                <path opacity="0.3" d="M15 17H9V20H15V17Z"
-                                                                    fill="black" />
-                                                            </svg>
-                                                        </span>
-                                                    </span>
-                                                </div>
+                                            <div class="d-flex align-items-center">
                                                 <div class="d-flex flex-column">
-                                                    <a href="#"
-                                                        class="fs-6 text-gray-800 text-hover-primary fw-bold">BoomApp
-                                                        by Keenthemes</a>
-                                                    <span class="fs-7 text-muted fw-bold">#45789</span>
+                                                    <div id="functionList" style="display: none;">
+                                                        @foreach (config('apps.function_list') as $value)
+                                                            @foreach ($value as $key => $item)
+                                                                <a href="{{ route($item['route']) }}">
+                                                                    <div class="mt-3 text-dark">{{ $item['name'] }}
+                                                                    </div>
+                                                                </a>
+                                                            @endforeach
+                                                        @endforeach
+                                                    </div>
+                                                    <div id="noResults" class="mt-3 text-danger"
+                                                        style="display: none;">Không tìm thấy chức năng
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div data-kt-search-element="empty" class="text-center d-none">
-                                        <div class="pb-15 fw-bold">
-                                            <h3 class="text-gray-600 fs-5 mb-2">Không Tìm Thấy</h3>
-                                            <div class="text-muted fs-7">Vui Lòng Tìm Lại Với Từ Khóa Khác</div>
                                         </div>
                                     </div>
                                 </div>
@@ -249,3 +217,29 @@
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        var input = this.value.toLowerCase();
+        var items = document.querySelectorAll('#functionList a div');
+        var functionList = document.getElementById('functionList');
+        var noResults = document.getElementById('noResults');
+        var hasResults = false;
+
+        if (input === '') {
+            functionList.style.display = 'none';
+            noResults.style.display = 'none';
+        } else {
+            functionList.style.display = 'block';
+            items.forEach(function(item) {
+                if (item.textContent.toLowerCase().includes(input)) {
+                    item.style.display = '';
+                    hasResults = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            noResults.style.display = hasResults ? 'none' : 'block';
+        }
+    });
+</script>

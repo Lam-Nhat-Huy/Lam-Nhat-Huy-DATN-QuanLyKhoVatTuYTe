@@ -24,7 +24,7 @@ class SuppliersSeeder extends Seeder
             ],
             [
                 'code' => 'SUP002',
-                'name' => 'Vật Tư Y Tế An Phú Khang - Công Ty TNHH Thương Mại An Phú Khang',
+                'name' => 'Thiết Bị Y Tế An Phú Khang - Công Ty TNHH Thương Mại An Phú Khang',
                 'contact_name' => 'Lê Văn Vương',
                 'email' => 'ac.hailevan@gmail.com <ac.hailevan@gmail.com>;',
                 'phone' => '0974427022',
@@ -57,7 +57,7 @@ class SuppliersSeeder extends Seeder
             ],
             [
                 'code' => 'SUP005',
-                'name' => 'Công ty TNHH Vật Tư Y Tế Phúc Tín',
+                'name' => 'Công ty TNHH Thiết Bị Y Tế Phúc Tín',
                 'contact_name' => 'Lê Nhựt Thái',
                 'email' => 'contact@phuctin.com',
                 'phone' => '0912345678',

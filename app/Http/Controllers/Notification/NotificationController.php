@@ -220,11 +220,18 @@ class NotificationController extends Controller
     {
         if (!empty($request->notification_type_name)) {
 
-            Notification_types::create([
+            $rs = Notification_types::create([
                 'name' => $request->notification_type_name,
             ]);
 
-            toastr()->success('Đã thêm loại thông báo');
+            if ($rs) {
+
+                toastr()->success('Đã thêm loại thông báo');
+
+                return redirect()->back();
+            }
+
+            toastr()->error('Xảy ra lỗi, thử lại sau');
 
             return redirect()->back();
         }
@@ -234,11 +241,18 @@ class NotificationController extends Controller
     {
         if (!empty($id)) {
 
-            Notification_types::find($id)->delete();
+            $rs = Notification_types::find($id)->delete();
 
-            toastr()->success('Đã xóa loại thông báo');
+            if ($rs) {
 
-            return redirect()->route('notification.notification_add');
+                toastr()->success('Đã xóa loại thông báo');
+
+                return redirect()->back();
+            }
+
+            toastr()->error('Xảy ra lỗi, thử lại sau');
+
+            return redirect()->back();
         }
     }
 

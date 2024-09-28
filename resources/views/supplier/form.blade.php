@@ -46,7 +46,7 @@
 
                             <input type="text"
                                 class="form-control form-control-sm form-control-solid border border-success"
-                                placeholder="Tên Nhóm Vật Tư.." name="" />
+                                placeholder="Tên Nhóm Thiết Bị.." name="" />
 
                         </div>
 
@@ -56,7 +56,7 @@
 
                             <input type="text"
                                 class="form-control form-control-sm form-control-solid border border-success"
-                                placeholder="Tên Nhóm Vật Tư.." name="" />
+                                placeholder="Tên Nhóm Thiết Bị.." name="" />
 
                         </div>
 
@@ -66,7 +66,7 @@
 
                             <input type="text"
                                 class="form-control form-control-sm form-control-solid border border-success"
-                                placeholder="Tên Nhóm Vật Tư.." name="" />
+                                placeholder="Tên Nhóm Thiết Bị.." name="" />
 
                         </div>
 
@@ -76,7 +76,7 @@
 
                             <input type="text"
                                 class="form-control form-control-sm form-control-solid border border-success"
-                                placeholder="Tên Nhóm Vật Tư.." name="" />
+                                placeholder="Tên Nhóm Thiết Bị.." name="" />
 
                         </div>
 
@@ -86,7 +86,7 @@
 
                             <input type="text"
                                 class="form-control form-control-sm form-control-solid border border-success"
-                                placeholder="Tên Nhóm Vật Tư.." name="" />
+                                placeholder="Tên Nhóm Thiết Bị.." name="" />
 
                         </div>
 
@@ -96,7 +96,7 @@
 
                             <input type="text"
                                 class="form-control form-control-sm form-control-solid border border-success"
-                                placeholder="Tên Nhóm Vật Tư.." name="" />
+                                placeholder="Tên Nhóm Thiết Bị.." name="" />
 
                         </div>
                     </div>

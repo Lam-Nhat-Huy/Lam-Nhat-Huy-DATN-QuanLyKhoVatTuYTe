@@ -80,7 +80,7 @@
     <div class="card shadow-sm mb-5">
         <div class="card-header d-flex justify-content-between align-items-center pt-4 pb-4">
             <h3 class="card-title fw-bolder fs-3 mb-0">
-                {{ $action == 'edit' ? 'Chỉnh Sửa Nhóm Vật Tư' : 'Thêm Nhóm Vật Tư' }}
+                {{ $action == 'edit' ? 'Chỉnh Sửa Nhóm Thiết Bị' : 'Thêm Nhóm Thiết Bị' }}
             </h3>
             <a href="{{ $backToListUrl }}" class="btn btn-sm btn-secondary">
                 <i class="fa fa-arrow-left me-1"></i> Trở Về Danh Sách
@@ -94,14 +94,14 @@
                 @endif
 
                 <div class="form-group mb-4">
-                    <label class="required fs-5 fw-bold mb-2">Mã Nhóm Vật Tư</label>
+                    <label class="required fs-5 fw-bold mb-2">Mã Nhóm Thiết Bị</label>
                     <input type="text" class="form-control form-control-solid border-success"
                         value="{{ $action == 'edit' ? $materialGroup->code : old('code') }}" name="code"
                         {{ $action == 'edit' ? 'disabled' : '' }} /> {{-- Không cho sửa code khi chỉnh sửa --}}
                 </div>
 
                 <div class="form-group mb-4">
-                    <label class="required fs-5 fw-bold mb-2">Tên Nhóm Vật Tư</label>
+                    <label class="required fs-5 fw-bold mb-2">Tên Nhóm Thiết Bị</label>
                     <input type="text" class="form-control form-control-solid border-success"
                         value="{{ $action == 'edit' ? $materialGroup->name : old('name') }}" name="name" />
                 </div>

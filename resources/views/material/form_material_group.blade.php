@@ -115,10 +115,10 @@
                 <div class="me-n7 pe-7">
 
                     <div class="mb-5">
-                        <label class="required fs-5 fw-bold mb-3">Tên Nhóm Vật Tư</label>
+                        <label class="required fs-5 fw-bold mb-3">Tên Nhóm Thiết Bị</label>
 
                         <input type="text" class="form-control form-control-sm form-control-solid border border-success"
-                            placeholder="Tên Nhóm Vật Tư.." name="material_type_name" />
+                            placeholder="Tên Nhóm Thiết Bị.." name="material_type_name" />
                     </div>
 
                     <div class="mb-5">

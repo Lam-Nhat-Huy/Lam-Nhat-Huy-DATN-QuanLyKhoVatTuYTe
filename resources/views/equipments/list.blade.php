@@ -64,7 +64,7 @@
         {{-- Phần nút thêm vật tư --}}
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Vật Tư</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Thiết Bị</span>
             </h3>
             <div class="card-toolbar">
                 <a href="{{ route('equipments.equipments_trash') }}" class="btn btn-sm btn-danger me-2">
@@ -76,7 +76,7 @@
                 <a href="{{ route('equipments.insert_equipments') }}" class="btn btn-sm btn-success">
                     <span class="align-items-center d-flex" style="font-size: 10px">
                         <i style="font-size: 10px" class="fa fa-plus"></i>
-                        Thêm Vật Tư
+                        Thêm Thiết Bị
                     </span>
                 </a>
             </div>
@@ -88,7 +88,7 @@
             <form action="{{ route('equipments.index') }}" method="GET" class="row align-items-center">
                 <div class="col-4">
                     <select name="equipment_type_code" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
-                        <option value="" selected>--Theo Nhóm Vật Tư--</option>
+                        <option value="" selected>--Theo Nhóm Thiết Bị--</option>
                         @foreach ($equipmentTypes as $type)
                             <option value="{{ $type->code }}"
                                 {{ request()->equipment_type_code == $type->code ? 'selected' : '' }}>
@@ -271,7 +271,7 @@
             <div class="modal-dialog modal-dialog-centered modal-md">
                 <div class="modal-content border-0 shadow">
                     <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title text-white" id="deleteConfirmLabel">Xác Nhận Xóa Vật Tư</h5>
+                        <h5 class="modal-title text-white" id="deleteConfirmLabel">Xác Nhận Xóa Thiết Bị</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>

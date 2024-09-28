@@ -14,7 +14,7 @@
     <div class="card mb-5 mb-xl-8">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Nhóm Vật Tư</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Nhóm Thiết Bị</span>
             </h3>
             <div class="card-toolbar">
                 <a href="{{ route('equipments.equipments_group_trash') }}" class="btn btn-sm btn-danger me-2">
@@ -24,11 +24,11 @@
                     </span>
                 </a>
 
-                <!-- Nút Thêm Nhóm Vật Tư -->
+                <!-- Nút Thêm Nhóm Thiết Bị -->
                 <a href="{{ route('equipments.add_equipments_group') }}" class="btn btn-sm btn-success">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-plus"></i>
-                        Thêm Nhóm Vật Tư
+                        Thêm Nhóm Thiết Bị
                     </span>
                 </a>
             </div>
@@ -63,7 +63,7 @@
                             <table class="table table-striped align-middle gs-0 gy-4">
                                 <thead>
                                     <tr class="fw-bolder bg-success">
-                                        <th class="ps-4">Mã Nhóm Vật Tư</th>
+                                        <th class="ps-4">Mã Nhóm Thiết Bị</th>
                                         <th class="">Tên</th>
                                         <th class="">Mô Tả</th>
                                         <th class="" style="width: 120px !important;">Trạng Thái</th>

@@ -39,7 +39,7 @@
                 <div class="me-n7 pe-7">
                     <div class="row align-items-center mb-8">
                         <div class="col-12 mb-5">
-                            <label class="fs-5 fw-bold mb-3">Ảnh Vật Tư</label>
+                            <label class="fs-5 fw-bold mb-3">Ảnh Thiết Bị</label>
                             <!-- If there's a current image, display it, otherwise leave the src empty -->
                             <img id="preview-image"
                                 src="{{ isset($currentEquipment->image) ? asset('images/equipments/' . $currentEquipment->image) : '' }}"
@@ -53,17 +53,17 @@
                                 name="material_image" accept="image/*">
                         </div>
                         <div class="col-6 fv-row mb-5">
-                            <label class="required fs-5 fw-bold mb-3">Tên Vật Tư</label>
+                            <label class="required fs-5 fw-bold mb-3">Tên Thiết Bị</label>
                             <input type="text" class="form-control form-control-sm border border-success rounded-pill"
-                                name="name" placeholder="Tên Vật Tư.."
+                                name="name" placeholder="Tên Thiết Bị.."
                                 value="{{ isset($currentEquipment) ? $currentEquipment->name : old('name') }}">
                         </div>
                         <div class="col-6 fv-row mb-5">
-                            <label class="required fs-5 fw-bold mb-3">Nhóm Vật Tư</label>
+                            <label class="required fs-5 fw-bold mb-3">Nhóm Thiết Bị</label>
                             <div class="d-flex align-items-center">
                                 <select name="equipment_type_code"
                                     class="form-select form-select-sm border border-success rounded-pill">
-                                    <option value="">Chọn Nhóm Vật Tư...</option>
+                                    <option value="">Chọn Nhóm Thiết Bị...</option>
                                     @foreach ($equipmentTypes as $type)
                                         <option value="{{ $type->code }}"
                                             {{ isset($currentEquipment) && $currentEquipment->equipment_type_code == $type->code ? 'selected' : '' }}>
@@ -72,7 +72,7 @@
                                     @endforeach
                                 </select>
                                 <span class="ms-4 pointer" data-bs-toggle="modal" data-bs-target="#add_modal_nvt_"
-                                    title="Thêm Nhóm Vật Tư">
+                                    title="Thêm Nhóm Thiết Bị">
                                     <i class="fa fa-plus text-white py-2 px-2 bg-success rounded-circle"></i>
                                 </span>
                             </div>
@@ -148,7 +148,7 @@
                         <div class="col-12 fv-row mb-5">
                             <label class="required fs-5 fw-bold mb-3">Mô Tả</label>
                             <textarea name="description" cols="30" rows="10" class="form-control border border-success form-control-sm "
-                                placeholder="Thêm Mô Tả Cho Vật Tư.."></textarea>
+                                placeholder="Thêm Mô Tả Cho Thiết Bị.."></textarea>
                         </div>
                     </div>
                 </div>

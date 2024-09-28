@@ -27,7 +27,7 @@
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
                         <tr class="fw-bolder bg-success">
-                            <th class="ps-4">Mã Nhóm Vật Tư</th>
+                            <th class="ps-4">Mã Nhóm Thiết Bị</th>
                             <th class="">Tên</th>
                             <th class="">Mô Tả</th>
                             <th>Hành Động</th>
@@ -65,7 +65,7 @@
                                                 <div class="modal-body">
                                                     <form action="" method="">
                                                         @csrf
-                                                        <h4 class="text-success">Khôi Phục Nhóm Vật Tư Này?</h4>
+                                                        <h4 class="text-success">Khôi Phục Nhóm Thiết Bị Này?</h4>
                                                     </form>
                                                 </div>
                                                 <div class="modal-footer">
@@ -96,7 +96,7 @@
                                                 <div class="modal-body">
                                                     <form action="" method="">
                                                         @csrf
-                                                        <h4 class="text-danger">Xóa Vĩnh Viễn Nhóm Vật Tư Này?</h4>
+                                                        <h4 class="text-danger">Xóa Vĩnh Viễn Nhóm Thiết Bị Này?</h4>
                                                     </form>
                                                 </div>
                                                 <div class="modal-footer">
