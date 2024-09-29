@@ -246,7 +246,7 @@
                     <div class="card border-0 shadow-lg p-4 bg-body rounded-4">
                         <h3 class="mb-4 text-dark text-uppercase">Chi tiết kiểm kho</h3>
 
-                        <input type="hidden" id="created_by" value="U001">
+                        <input type="hidden" id="created_by" value="{{ session('user_code') }}">
 
                         <!-- Trạng thái -->
                         <div class="mb-4">

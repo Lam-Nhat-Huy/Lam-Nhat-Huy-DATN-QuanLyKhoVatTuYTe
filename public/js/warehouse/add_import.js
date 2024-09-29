@@ -56,6 +56,12 @@ function addMaterial() {
         errors.push('Vui lòng nhập VAT hợp lệ (0-100%).');
     }
 
+    // Kiểm tra số lô trùng
+    const isDuplicateBatch = materialData.some(material => material.batch_number === batch_number && material.equipment_code === equipment_code);
+    if (isDuplicateBatch) {
+        errors.push('Số lô này đã tồn tại cho vật tư ' + equipment_code);
+    }
+
     if (errors.length > 0) {
         const errorMessages = document.getElementById('errorMessages');
         const errorList = document.getElementById('errorList');
@@ -125,10 +131,8 @@ function addMaterial() {
         noDataAlert.style.display = 'table-row';
     }
 
-
     calculateTotals();
 }
-
 
 function removeMaterial(index, element) {
     materialData.splice(index, 1);

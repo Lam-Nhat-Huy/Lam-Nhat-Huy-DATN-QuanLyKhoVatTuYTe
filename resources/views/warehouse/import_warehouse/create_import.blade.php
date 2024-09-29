@@ -110,7 +110,7 @@
                                         value="2024-09-23">
                                 </div>
 
-                                <input type="hidden" id="created_by" value="U001">
+                                <input type="hidden" id="created_by" value="{{ session('user_code') }}">
 
                                 <div class="mb-3 col-6">
                                     <label for="receipt_no" class="form-label fw-semibold">Số hóa đơn</label>
@@ -120,14 +120,6 @@
                                 </div>
 
                                 <div class="mb-3 col-6">
-                                    <label for="invoice_symbol" class="form-label fw-semibold">Kí hiệu hóa đơn</label>
-                                    <input type="text" tabindex="4"
-                                        class="form-control form-control-sm border border-success rounded-pill"
-                                        id="invoice_symbol" name="invoice_symbol" placeholder="Nhập kí hiệu hóa đơn"
-                                        value="24AT/12">
-                                </div>
-
-                                <div class="mb-3 col-12">
                                     <label for="note" class="form-label fw-semibold">Ghi chú</label>
                                     <textarea tabindex="5" id="note" class="form-control form-control-sm border border-success rounded-3"
                                         placeholder="Nhập ghi chú..." rows="3">Hàng nhập bổ sung</textarea>
@@ -150,8 +142,6 @@
                                     </div>
                                 </div>
 
-
-
                                 <div class="col-6 mb-4">
                                     <label for="price" class="form-label fw-semibold">Giá nhập</label>
                                     <input type="text" tabindex="10"
@@ -167,7 +157,7 @@
                                 </div>
 
                                 <div class="col-6 mb-4">
-                                    <label for="expiry_date" class="form-label fw-semibold">Hạn sử dụng</label>
+                                    <label for="expiry_date" class="form-label fw-semibold">Ngày hết hạn</label>
                                     <input type="date" tabindex="9"
                                         class="form-control form-control-sm border border-success rounded-pill"
                                         id="expiry_date" name="expiry_date" value="2025-09-23">
@@ -342,6 +332,14 @@
     <script>
         $(document).ready(function() {
             $('.mySelect').select2();
+        });
+    </script>
+
+    <script>
+        const input = document.getElementById('equipment_name');
+
+        input.addEventListener('click', function() {
+            this.select();
         });
     </script>
 @endsection

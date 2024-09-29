@@ -50,7 +50,7 @@ function selectProduct(element, name, equipment_code, current_quantity, batch_nu
 
 function addProductToTable(name, equipment_code, current_quantity, batch_number) {
     var tableBody = document.getElementById('materialList');
-    var rowCount = materialData.length; // Dùng chiều dài của mảng materialData
+    var rowCount = materialData.length;
 
     var row = `
         <tr data-index="${rowCount}">
@@ -64,7 +64,7 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
             <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</td>
             <td>${current_quantity}</td>
             <td>
-                <input type="number" style="width: 70px; height: 40px; border-radius: 8px;" onchange="updateProduct(${rowCount}, this.value)">
+                <input type="number" style="width: 70px; height: 40px; border-radius: 8px;" oninput="updateProduct(${rowCount}, this.value)">
             </td>
             <td>0</td>
         </tr>
@@ -72,7 +72,6 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
 
     tableBody.insertAdjacentHTML('beforeend', row);
 
-    // Thêm vào mảng materialData
     materialData.push({
         equipment_code: equipment_code,
         current_quantity: current_quantity,
@@ -90,25 +89,22 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
 }
 
 
-
 function updateProduct(index, actualQuantity) {
     actualQuantity = parseInt(actualQuantity);
 
-    // Kiểm tra xem index có hợp lệ không
     if (materialData[index]) {
         var current_quantity = materialData[index].current_quantity;
         var unequal = actualQuantity - current_quantity;
 
-        // Cập nhật dữ liệu vào mảng materialData
         materialData[index].actual_quantity = actualQuantity;
         materialData[index].unequal = unequal;
 
-        // Cập nhật lại giá trị lệch trong bảng
         document.querySelector(`#materialList tr[data-index="${index}"] td:nth-child(7)`).innerText = unequal;
     } else {
         console.error('Invalid index:', index);
     }
 }
+
 
 function removeProduct(index) {
     // Xóa dòng trong bảng

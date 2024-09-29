@@ -69,7 +69,7 @@
                                     @if ($item['status'] == 0)
                                         <span class="label label-temp text-warning">Phiếu Tạm</span>
                                     @else
-                                        <span class="label label-final text-success">Đã nhập</span>
+                                        <span class="label label-final text-success">Đã duyệt</span>
                                     @endif
                                 </td>
                             </tr>
@@ -264,7 +264,7 @@
                                                 @endif
                                                 @if ($item->status == 1)
                                                     <!-- Nút In Phiếu -->
-                                                    <button style="font-size: 10px;" class="btn btn-sm btn-twitter me-2"
+                                                    <button style="font-size: 10px;" class="btn btn-sm btn-dark me-2"
                                                         id="printPdfBtn" type="button">
                                                         <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
                                                     </button>
@@ -373,36 +373,19 @@
                         @endforelse
                     </tbody>
                 </table>
-
-
-                <div class="d-flex justify-content-center mt-3">
-                    {{ $receipts->links('pagination::bootstrap-4') }}
-                </div>
-
             </div>
         </div>
 
-        <div class="card-body py-3 mb-3 d-flex justify-between">
+        <div class="card-body py-3 mb-3 d-flex justify-between flex-row-reverse">
 
             <div class="action-bar">
-                <ul class="nav nav-pills">
-                    <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center" href="#">
-                            <i class="fas fa-check-circle mr-2"></i> Duyệt Tất Cả
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center" href="#">
-                            <i class="fas fa-trash-alt mr-2"></i> Xóa Tất Cả
-                        </a>
-                    </li>
-                </ul>
+                {{ $receipts->links('pagination::bootstrap-4') }}
             </div>
 
             <div class="filter-bar">
                 <ul class="nav nav-pills">
                     <li class="nav-item">
-                        <p class="nav-link text-dark">Tất cả <span class="badge bg-dark">({{ $allReceiptCount }})</span>
+                        <p class="nav-link text-dark">Tất cả <span class="badge bg-info">({{ $allReceiptCount }})</span>
                         </p>
                     </li>
                     <li class="nav-item">
@@ -412,7 +395,7 @@
                     </li>
                     <li class="nav-item">
                         <p class="nav-link text-dark">Chưa duyệt <span
-                                class="badge bg-warning">({{ $draftReceiptsCount }})</span>
+                                class="badge bg-danger">({{ $draftReceiptsCount }})</span>
                         </p>
                     </li>
 

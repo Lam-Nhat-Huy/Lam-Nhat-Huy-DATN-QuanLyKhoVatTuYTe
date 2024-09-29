@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('receipt_details', function (Blueprint $table) {
             $table->id();
             $table->char('receipt_code', 20)->nullable();
-            $table->char('batch_number', 20)->nullable();
+            $table->char('batch_number', 20)->unique();
             $table->date('expiry_date')->nullable();
             $table->integer('quantity');
             $table->decimal('VAT', 10, 2)->nullable();

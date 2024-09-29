@@ -24,7 +24,7 @@ class ImportController extends Controller
     {
         $title = 'Nhập Kho';
 
-        $receipts = Receipts::with(['supplier', 'user', 'details.equipments'])->paginate(10);
+        $receipts = Receipts::with(['supplier', 'user', 'details.equipments'])->paginate(5);
 
         $allReceiptCount = Receipts::all()->count();
 
@@ -76,6 +76,17 @@ class ImportController extends Controller
         if (empty($materialData)) {
             toastr()->error('Đã lưu phiếu nhập kho thất bại ');
             return redirect()->back();
+        }
+
+        foreach ($materialData as $material) {
+            $existingInventory = Inventories::where('batch_number', $material['batch_number'])
+                ->where('equipment_code', $material['equipment_code'])
+                ->first();
+
+            if ($existingInventory) {
+                toastr()->error('Số lô ' . $material['batch_number'] . ' đã tồn tại cho vật tư ' . $material['equipment_code']);
+                return redirect()->back();
+            }
         }
 
         $receiptData = [
@@ -130,7 +141,6 @@ class ImportController extends Controller
         return redirect()->route('warehouse.import');
     }
 
-
     private function updateInventoryByBatch($material, $receiptCode, $receiptDate)
     {
         $inventory = Inventories::where('equipment_code', $material['equipment_code'])
@@ -138,14 +148,13 @@ class ImportController extends Controller
             ->where('current_quantity', '>', 0)
             ->first();
 
-        // dd($inventory);
-
         if ($inventory) {
             $inventory->current_quantity += $material['quantity'];
             $inventory->save();
         } else {
             $newInventoryCode = 'TK' . $this->generateRandomString();
-            Inventories::create([
+
+            $payload = [
                 'code' => $newInventoryCode,
                 'equipment_code' => $material['equipment_code'],
                 'batch_number' => $material['batch_number'],
@@ -153,7 +162,9 @@ class ImportController extends Controller
                 'import_code' => $receiptCode,
                 'import_date' => $receiptDate,
                 'expiry_date' => $material['expiry_date'],
-            ]);
+            ];
+
+            Inventories::create($payload);
         }
     }
 
@@ -175,7 +186,6 @@ class ImportController extends Controller
 
     public function approve($code)
     {
-        // Tìm phiếu nhập theo mã code
         $receipt = Receipts::where('code', $code)->first();
 
         if ($receipt && $receipt->status == 0) {
@@ -236,7 +246,6 @@ class ImportController extends Controller
             'receipts' => $receipts
         ]);
     }
-
 
     public function delete($code)
     {

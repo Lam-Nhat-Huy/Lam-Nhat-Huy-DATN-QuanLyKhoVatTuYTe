@@ -21,6 +21,7 @@ class Inventories extends Model
     protected $fillable = [
         'code',
         'equipment_code',
+        'expiry_date',
         'batch_number',
         'current_quantity',
         'import_code',
