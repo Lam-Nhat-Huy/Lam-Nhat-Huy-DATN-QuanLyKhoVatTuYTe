@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Users;
 use Symfony\Component\HttpFoundation\Response;
 
-class Authenticationed
+class Authentication
 {
     /**
      * Handle an incoming request.
@@ -35,7 +35,7 @@ class Authenticationed
 
         if (!empty($userCode)) {
 
-            return abort(404);
+            return redirect()->route('system.index');
         }
 
         return $next($request);

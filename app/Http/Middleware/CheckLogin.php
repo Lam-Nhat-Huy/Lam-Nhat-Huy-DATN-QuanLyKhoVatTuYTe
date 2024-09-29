@@ -35,7 +35,7 @@ class CheckLogin
 
         if (empty(session('user_code'))) {
 
-            return abort(404);
+            return redirect()->route('home');
         }
 
         return $next($request);

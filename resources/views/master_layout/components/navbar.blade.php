@@ -106,37 +106,21 @@
                                                 class="spinner-border h-15px w-15px align-middle text-gray-400"></span>
                                         </span>
                                     </div>
-                                    <span
-                                        class="btn btn-flush btn-active-color-primary position-absolute top-50 end-0 translate-middle-y lh-0 d-none"
-                                        data-kt-search-element="clear">
-                                        <span class="svg-icon svg-icon-2 svg-icon-lg-1 me-0">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none">
-                                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                                                    rx="1" transform="rotate(-45 6 17.3137)"
-                                                    fill="black" />
-                                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                                                    transform="rotate(45 7.41422 6)" fill="black" />
-                                            </svg>
-                                        </span>
-                                    </span>
-                                    <div class="" data-kt-search-element="main">
-                                        <div class="scroll-y mh-200px mh-lg-325px">
-                                            <div class="d-flex align-items-center">
-                                                <div class="d-flex flex-column">
-                                                    <div id="functionList" style="display: none;">
-                                                        @foreach (config('apps.function_list') as $value)
-                                                            @foreach ($value as $key => $item)
-                                                                <a href="{{ route($item['route']) }}">
-                                                                    <div class="mt-3 text-dark">{{ $item['name'] }}
-                                                                    </div>
-                                                                </a>
-                                                            @endforeach
+                                    <div class="scroll-y mh-200px mh-lg-325px">
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex flex-column">
+                                                <div id="functionList" style="display: none;">
+                                                    @foreach (config('apps.function_list') as $value)
+                                                        @foreach ($value as $key => $item)
+                                                            <a href="{{ route($item['route']) }}">
+                                                                <div class="mt-3 text-dark">{{ $item['name'] }}
+                                                                </div>
+                                                            </a>
                                                         @endforeach
-                                                    </div>
-                                                    <div id="noResults" class="mt-3 text-danger"
-                                                        style="display: none;">Không tìm thấy chức năng
-                                                    </div>
+                                                    @endforeach
+                                                </div>
+                                                <div id="noResults" class="mt-3 text-danger" style="display: none;">
+                                                    Không tìm thấy chức năng
                                                 </div>
                                             </div>
                                         </div>

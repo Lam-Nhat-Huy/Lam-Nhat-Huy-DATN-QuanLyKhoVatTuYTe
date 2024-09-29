@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\Home\HomeController;
-use App\Http\Middleware\Authenticationed;
+use App\Http\Middleware\Authentication;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('/')->middleware(Authenticationed::class)->group(function () {
+Route::prefix('/')->middleware(Authentication::class)->group(function () {
     
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
