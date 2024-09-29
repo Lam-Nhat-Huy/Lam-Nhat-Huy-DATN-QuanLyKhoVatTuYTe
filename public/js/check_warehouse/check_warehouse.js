@@ -7,28 +7,37 @@ function filterProducts() {
 
     // Hiển thị dropdown khi nhập liệu
     dropdown.style.display = filter ? 'block' : 'none';
-    dropdown.innerHTML = '';
+    dropdown.innerHTML = ''; // Reset lại nội dung dropdown
 
     var filteredProducts = products.filter(function(product) {
         return product.name.toUpperCase().indexOf(filter) > -1;
     });
 
-    filteredProducts.forEach(function(product) {
-        product.inventories.forEach(function(inventory) {
-            var item = `
-                <a class="dropdown-item d-flex align-items-center" href="#" onclick="selectProduct(this, '${product.name}', '${inventory.equipment_code}', ${inventory.current_quantity}, '${inventory.batch_number}')">
-                    <img src="https://png.pngtree.com/template/20190316/ourlarge/pngtree-medical-health-logo-image_79595.jpg" alt="Product Image" class="me-2" style="width: 40px; height: 40px;">
-                    <div>
-                        <div class="fw-bold">${product.name}</div>
-                        <small>${inventory.equipment_code} - Tồn kho: ${inventory.current_quantity} - Lô: ${inventory.batch_number}</small>
-                    </div>
-                </a>
-            `;
-            dropdown.insertAdjacentHTML('beforeend', item);
+    if (filteredProducts.length === 0) {
+        // Nếu không có kết quả, hiển thị thông báo
+        var noResultItem = `
+            <div class="dropdown-item text-center">
+                Không tìm thấy kết quả
+            </div>
+        `;
+        dropdown.insertAdjacentHTML('beforeend', noResultItem);
+    } else {
+        filteredProducts.forEach(function(product) {
+            product.inventories.forEach(function(inventory) {
+                var item = `
+                    <a class="dropdown-item d-flex align-items-center" href="#"
+                        onclick="selectProduct(this, '${product.name}', '${inventory.equipment_code}', ${inventory.current_quantity}, '${inventory.batch_number}')">
+                        <img src="https://png.pngtree.com/template/20190316/ourlarge/pngtree-medical-health-logo-image_79595.jpg" alt="Product Image" class="me-2" style="width: 40px; height: 40px;">
+                        <div>
+                            <div class="fw-bold">${product.name}</div>
+                            <small>${inventory.equipment_code} - Tồn kho: ${inventory.current_quantity} - Lô: ${inventory.batch_number}</small>
+                        </div>
+                    </a>
+                `;
+                dropdown.insertAdjacentHTML('beforeend', item);
+            });
         });
-    });
-
-
+    }
 }
 
 // Hàm thêm vật tư khi search

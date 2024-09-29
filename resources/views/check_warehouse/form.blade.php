@@ -167,7 +167,7 @@
                 {{-- Lên danh sách kiểm kho  --}}
                 <div class="col-md-8">
                     <div class="card border-0 shadow-lg p-4 bg-body rounded-4">
-                        {{-- Thanh tìm kiếm sản phẩm  --}}
+                        <!-- Thanh tìm kiếm sản phẩm -->
                         <div class="container mt-4 position-relative">
                             <!-- Input group for search bar -->
                             <div class="input-group mb-3">
@@ -186,15 +186,7 @@
                             </div>
 
                             <!-- Dropdown list of products -->
-                            <div class="dropdown-menu w-100 mt-1" id="productDropdown">
-                                <a class="dropdown-item d-flex align-items-center" href="#"
-                                    onclick="selectProduct(this)">
-                                    <img src="placeholder.png" alt="Product Image" class="me-2"
-                                        style="width: 40px; height: 40px;">
-
-                                </a>
-                                <!-- Thêm nhiều mục sản phẩm khác tương tự -->
-                            </div>
+                            <div class="dropdown-menu w-600px" id="productDropdown"></div>
                         </div>
                         {{-- Hiển thị trạng thái  --}}
                         <ul class="d-flex">
