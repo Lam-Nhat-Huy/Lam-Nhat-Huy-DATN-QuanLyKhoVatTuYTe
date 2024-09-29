@@ -16,7 +16,7 @@
             });
 
         function setDeleteForm(actionUrl) {
-            document.getElementById('deleteNotificationTypeForm').action = actionUrl;
+            document.getElementById('form-3').action = actionUrl;
         }
 
         document.getElementById('submit_notification_type').addEventListener('click', function(event) {
@@ -38,6 +38,18 @@
             }
 
             document.getElementById('show-err-notification-type').innerText = '';
+        });
+
+        document.getElementById('form-1').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-2').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-3').addEventListener('submit', function(event) {
+            submitAnimation(event);
         });
     </script>
 @endsection
@@ -73,7 +85,7 @@
                 </a>
             </div>
         </div>
-        <form class="form" action="{{ $action }}" method="POST" enctype="multipart/form-data">
+        <form class="form" action="{{ $action }}" id="form-1" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="py-5 px-lg-17">
 
@@ -133,7 +145,7 @@
     </div>
 
     {{-- Form thêm loại thông báo --}}
-    <form action="{{ route('notification.create_notification_type') }}" method="POST">
+    <form action="{{ route('notification.create_notification_type') }}" id="form-2" method="POST">
         @csrf
         <div class="modal fade" id="add_modal_notification_type" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -202,7 +214,7 @@
             tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form id="deleteNotificationTypeForm" method="POST">
+                    <form id="form-3" action="{{ route('notification.notification_add') }}" method="POST">
                         @csrf
                         <div class="modal-header">
                             <h3 class="modal-title" id="deleteModalLabel">Xóa Loại thông báo</h3>

@@ -17,103 +17,6 @@
     </style>
 @endsection
 
-@section('scripts')
-    <script>
-        function toggleDeleteAction() {
-            var anyChecked = false;
-            document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
-                if (checkbox.checked) {
-                    anyChecked = true;
-                }
-            });
-
-            if (anyChecked) {
-                document.getElementById('action_delete_all').style.display = 'block';
-            } else {
-                document.getElementById('action_delete_all').style.display = 'none';
-            }
-        }
-
-        // Khi click vào checkbox "Select All"
-        document.getElementById('selectAll').addEventListener('change', function() {
-            var isChecked = this.checked;
-            var checkboxes = document.querySelectorAll('.row-checkbox');
-            checkboxes.forEach(function(checkbox) {
-                checkbox.checked = isChecked;
-                var row = checkbox.closest('tr');
-                if (isChecked) {
-                    row.classList.add('selected-row');
-                } else {
-                    row.classList.remove('selected-row');
-                }
-            });
-            toggleDeleteAction();
-        });
-
-        // Khi checkbox của từng hàng thay đổi
-        document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                var row = this.closest('tr');
-                if (this.checked) {
-                    row.classList.add('selected-row');
-                } else {
-                    row.classList.remove('selected-row');
-                }
-
-                var allChecked = true;
-                document.querySelectorAll('.row-checkbox').forEach(function(cb) {
-                    if (!cb.checked) {
-                        allChecked = false;
-                    }
-                });
-                document.getElementById('selectAll').checked = allChecked;
-                toggleDeleteAction(); // Gọi hàm kiểm tra nút xóa tất cả
-            });
-        });
-
-        // Khi người dùng click vào hàng
-        document.querySelectorAll('tbody tr').forEach(function(row) {
-            row.addEventListener('click', function() {
-                var checkbox = this.querySelector('.row-checkbox');
-                if (checkbox) {
-                    checkbox.checked = !checkbox.checked;
-                    if (checkbox.checked) {
-                        this.classList.add('selected-row');
-                    } else {
-                        this.classList.remove('selected-row');
-                    }
-
-                    var allChecked = true;
-                    document.querySelectorAll('.row-checkbox').forEach(function(cb) {
-                        if (!cb.checked) {
-                            allChecked = false;
-                        }
-                    });
-                    document.getElementById('selectAll').checked = allChecked;
-                    toggleDeleteAction(); // Gọi hàm kiểm tra nút xóa tất cả
-                }
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Khi nhấn nút "Khôi Phục Tất Cả"
-            document.querySelector('#restoreAll').addEventListener('show.bs.modal', function() {
-                document.getElementById('action_type').value = 'restore';
-            });
-
-            // Khi nhấn nút "Xóa Tất Cả"
-            document.querySelector('#deleteAll').addEventListener('show.bs.modal', function() {
-                document.getElementById('action_type').value = 'delete';
-            });
-        });
-
-        // Kiểm tra trạng thái ban đầu khi trang được tải
-        document.addEventListener('DOMContentLoaded', function() {
-            toggleDeleteAction();
-        });
-    </script>
-@endsection
-
 @section('title')
     {{ $title }}
 @endsection
@@ -133,7 +36,7 @@
                 </a>
             </div>
         </div>
-        <form action="{{ route('report.report_trash') }}" method="POST">
+        <form action="{{ route('report.report_trash') }}" id="form-1" method="POST">
             @csrf
             <input type="hidden" name="action_type" id="action_type" value="">
             <div class="card-body py-3">
@@ -217,7 +120,8 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
-                                                    <form action="{{ route('report.report_trash') }}" method="POST">
+                                                    <form action="{{ route('report.report_trash') }}" id="form-2"
+                                                        method="POST">
                                                         @csrf
                                                         <input type="hidden" name="restore_report"
                                                             value="{{ $item->code }}">
@@ -247,7 +151,8 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
-                                                    <form action="{{ route('report.report_trash') }}" method="">
+                                                    <form action="{{ route('report.report_trash') }}" id="form-3"
+                                                        method="POST">
                                                         @csrf
                                                         <input type="hidden" name="delete_report"
                                                             value="{{ $item->code }}">
@@ -266,7 +171,6 @@
                                         </div>
                                     </td>
                                 </tr>
-
                             @empty
                                 <tr id="noDataAlert">
                                     <td colspan="10" class="text-center">
@@ -362,4 +266,114 @@
             </div>
         </form>
     </div>
+@endsection
+
+
+@section('scripts')
+    <script>
+        function toggleDeleteAction() {
+            var anyChecked = false;
+            document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    anyChecked = true;
+                }
+            });
+
+            if (anyChecked) {
+                document.getElementById('action_delete_all').style.display = 'block';
+            } else {
+                document.getElementById('action_delete_all').style.display = 'none';
+            }
+        }
+
+        // Khi click vào checkbox "Select All"
+        document.getElementById('selectAll').addEventListener('change', function() {
+            var isChecked = this.checked;
+            var checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = isChecked;
+                var row = checkbox.closest('tr');
+                if (isChecked) {
+                    row.classList.add('selected-row');
+                } else {
+                    row.classList.remove('selected-row');
+                }
+            });
+            toggleDeleteAction();
+        });
+
+        // Khi checkbox của từng hàng thay đổi
+        document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                var row = this.closest('tr');
+                if (this.checked) {
+                    row.classList.add('selected-row');
+                } else {
+                    row.classList.remove('selected-row');
+                }
+
+                var allChecked = true;
+                document.querySelectorAll('.row-checkbox').forEach(function(cb) {
+                    if (!cb.checked) {
+                        allChecked = false;
+                    }
+                });
+                document.getElementById('selectAll').checked = allChecked;
+                toggleDeleteAction(); // Gọi hàm kiểm tra nút xóa tất cả
+            });
+        });
+
+        // Khi người dùng click vào hàng
+        document.querySelectorAll('tbody tr').forEach(function(row) {
+            row.addEventListener('click', function() {
+                var checkbox = this.querySelector('.row-checkbox');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                    if (checkbox.checked) {
+                        this.classList.add('selected-row');
+                    } else {
+                        this.classList.remove('selected-row');
+                    }
+
+                    var allChecked = true;
+                    document.querySelectorAll('.row-checkbox').forEach(function(cb) {
+                        if (!cb.checked) {
+                            allChecked = false;
+                        }
+                    });
+                    document.getElementById('selectAll').checked = allChecked;
+                    toggleDeleteAction(); // Gọi hàm kiểm tra nút xóa tất cả
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Khi nhấn nút "Khôi Phục Tất Cả"
+            document.querySelector('#restoreAll').addEventListener('show.bs.modal', function() {
+                document.getElementById('action_type').value = 'restore';
+            });
+
+            // Khi nhấn nút "Xóa Tất Cả"
+            document.querySelector('#deleteAll').addEventListener('show.bs.modal', function() {
+                document.getElementById('action_type').value = 'delete';
+            });
+        });
+
+        // Kiểm tra trạng thái ban đầu khi trang được tải
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleDeleteAction();
+        });
+
+        document.getElementById('form-1').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-2').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-3').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+    </script>
 @endsection

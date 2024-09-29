@@ -42,7 +42,7 @@
                 </a>
             </div>
         </div>
-        <form class="form" action="{{ $action }}" method="POST" enctype="multipart/form-data">
+        <form class="form" id="form-1" action="{{ $action }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="py-5 px-lg-17 row">
@@ -126,7 +126,7 @@
     </div>
 
     <!-- Form thêm loại báo cáo -->
-    <form action="{{ route('report.create_report_type') }}" method="POST" id="reportTypeForm">
+    <form action="{{ route('report.create_report_type') }}" method="POST" id="form-2">
         @csrf
         <div class="modal fade" id="add_modal_report_type" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -192,7 +192,7 @@
             tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form id="deleteReportTypeForm" method="POST">
+                    <form id="form-3" action="{{ route('report.insert_report') }}" method="POST">
                         @csrf
                         <div class="modal-header">
                             <h3 class="modal-title" id="deleteModalLabel">Xóa Loại Báo Cáo</h3>
@@ -216,10 +216,6 @@
 
 @section('scripts')
     <script>
-        function setDeleteForm(actionUrl) {
-            document.getElementById('deleteReportTypeForm').action = actionUrl;
-        }
-
         document.getElementById('submit_report_type').addEventListener('click', function(event) {
             var reportTypeName = document.getElementById('report_type_name').value.trim();
             var existingReportTypes = @json($AllReportType->pluck('name')->toArray());
@@ -247,6 +243,22 @@
                 const preview = document.getElementById('preview-pdf');
                 preview.src = URL.createObjectURL(file);
             }
+        });
+
+        function setDeleteForm(actionUrl) {
+            document.getElementById('form-3').action = actionUrl;
+        }
+
+        document.getElementById('form-1').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-2').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-3').addEventListener('submit', function(event) {
+            submitAnimation(event);
         });
     </script>
 @endsection

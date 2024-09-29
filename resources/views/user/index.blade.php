@@ -186,6 +186,18 @@
         document.addEventListener('DOMContentLoaded', function() {
             toggleDeleteAction();
         });
+
+        document.getElementById('form-1').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-2').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-3').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
     </script>
 @endsection
 
@@ -212,7 +224,7 @@
             </div>
         </div>
         <div class="card-body py-1">
-            <form action="{{ route('user.index') }}" method="GET" class="row align-items-center">
+            <form action="{{ route('user.index') }}" id="form-1" method="GET" class="row align-items-center">
                 <div class="col-2">
                     <select name="gd" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
                         <option value="" {{ request()->gd == '' ? 'selected' : '' }}>--Theo Giới Tính--</option>
@@ -250,7 +262,7 @@
                 </div>
             </form>
         </div>
-        <form action="{{ route('user.index') }}" method="POST">
+        <form id="form-2" action="{{ route('user.index') }}" method="POST">
             @csrf
             <div class="card-body py-3">
                 <div class="table-responsive">
@@ -338,7 +350,7 @@
                                     aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                            <form action="{{ route('user.index') }}" method="POST">
+                                            <form id="form-3" action="{{ route('user.index') }}" method="POST">
                                                 @csrf
                                                 <div class="modal-header">
                                                     <h3 class="modal-title" id="deleteModalLabel">Xóa Người Dùng

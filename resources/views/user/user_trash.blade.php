@@ -198,6 +198,18 @@
         document.addEventListener('DOMContentLoaded', function() {
             toggleDeleteAction();
         });
+
+        document.getElementById('form-1').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-2').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-3').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
     </script>
 @endsection
 
@@ -216,7 +228,7 @@
                 </a>
             </div>
         </div>
-        <form action="{{ route('user.user_trash') }}" method="POST">
+        <form id="form-1" action="{{ route('user.user_trash') }}" method="POST">
             @csrf
             <input type="hidden" name="action_type" id="action_type" value="">
             <div class="card-body py-3">
@@ -282,7 +294,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        {{ ($item->deleted_at)->format('d-m-Y') }}
+                                        {{ $item->deleted_at->format('d-m-Y') }}
                                     </td>
                                     <td>
                                         <div class="btn-group">
@@ -315,7 +327,7 @@
                                     aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                            <form action="{{ route('user.user_trash') }}" method="POST">
+                                            <form id="form-2" action="{{ route('user.user_trash') }}" method="POST">
                                                 @csrf
                                                 <div class="modal-header">
                                                     <h3 class="modal-title" id="restoreModalLabel">Khôi Phục Người Dùng
@@ -345,7 +357,7 @@
                                     aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                            <form action="{{ route('user.user_trash') }}" method="POST">
+                                            <form id="form-3" action="{{ route('user.user_trash') }}" method="POST">
                                                 @csrf
                                                 <div class="modal-header">
                                                     <h3 class="modal-title" id="deleteModalLabel">Xóa Vĩnh Viễn Người Dùng
@@ -377,7 +389,8 @@
                                                 <i class="fas fa-ban" style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
                                             <div class="text-center">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không có dữ liệu</h5>
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không có dữ
+                                                    liệu</h5>
                                             </div>
                                         </div>
                                     </td>

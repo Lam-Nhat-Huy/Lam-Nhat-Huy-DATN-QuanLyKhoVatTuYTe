@@ -43,7 +43,7 @@
             </div>
         </div>
         <div class="card-body py-1">
-            <form action="{{ route('report.index') }}" method="GET" class="row align-items-center">
+            <form action="{{ route('report.index') }}" id="form-1" method="GET" class="row align-items-center">
                 <div class="col-3">
                     <select name="ur" id="ur"
                         class="mt-2 mb-2 form-select form-select-sm form-select-solid border border-success setupSelect2">
@@ -90,7 +90,7 @@
                 </div>
             </form>
         </div>
-        <form action="{{ route('report.index') }}" method="POST">
+        <form action="{{ route('report.index') }}" id="form-2" method="POST">
             @csrf
             <input type="hidden" name="action_type" id="action_type" value="">
             <div class="card-body py-3">
@@ -215,7 +215,8 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
-                                                    <form action="{{ route('report.index') }}" method="POST">
+                                                    <form action="{{ route('report.index') }}" id="form-3"
+                                                        method="POST">
                                                         @csrf
                                                         <input type="hidden" name="browse_report"
                                                             value="{{ $item->code }}">
@@ -243,7 +244,8 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
-                                                    <form action="{{ route('report.index') }}" method="">
+                                                    <form action="{{ route('report.index') }}" id="form-4"
+                                                        method="POST">
                                                         @csrf
                                                         <input type="hidden" name="delete_report"
                                                             value="{{ $item->code }}">
@@ -262,7 +264,6 @@
                                         </div>
                                     </td>
                                 </tr>
-
                             @empty
                                 <tr id="noDataAlert">
                                     <td colspan="10" class="text-center">
@@ -270,14 +271,11 @@
                                             role="alert"
                                             style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                             <div class="mb-3">
-                                                <i class="fas fa-search" style="font-size: 36px; color: #6c757d;"></i>
+                                                <i class="fas fa-ban" style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
                                             <div class="text-center">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không có kết
-                                                    quả tìm kiếm</h5>
-                                                <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                                    Không tìm thấy kết quả phù hợp với yêu cầu tìm kiếm của bạn. Vui lòng
-                                                    thử lại với từ khóa khác.
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
+                                                    Liệu</h5>
                                                 </p>
                                             </div>
                                         </div>
@@ -453,6 +451,22 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             toggleDeleteAction();
+        });
+
+        document.getElementById('form-1').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-2').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-3').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-4').addEventListener('submit', function(event) {
+            submitAnimation(event);
         });
     </script>
 @endsection

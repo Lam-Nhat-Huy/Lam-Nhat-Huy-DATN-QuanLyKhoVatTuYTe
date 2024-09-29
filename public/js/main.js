@@ -1,14 +1,20 @@
-document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', function (event) {
+function submitAnimation(event) {
+    event.preventDefault();
 
-        document.getElementById('loading-spinner').style.display = 'block';
-        document.getElementById('loading-overlay').style.display = 'block';
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('loading-overlay').style.display = 'block';
 
-        const submitButtons = this.querySelectorAll('button[type="submit"]');
+    const form = event.target;
+    const submitButton = form.querySelector('button[type="submit"]');
 
-        submitButtons.forEach(button => {
-            button.disabled = true;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-        });
-    });
-});
+    submitButton.disabled = true;
+
+    // setTimeout(() => {
+    //     document.getElementById('loading').style.display = 'none';
+    //     document.getElementById('loading-overlay').style.display = 'none';
+
+    //     submitButton.disabled = false;
+
+    // }, 2000);
+    form.submit();
+}

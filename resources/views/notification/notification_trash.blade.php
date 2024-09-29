@@ -21,101 +21,6 @@
     {{ $title }}
 @endsection
 
-@section('scripts')
-    <script>
-        function toggleDeleteAction() {
-            var anyChecked = false;
-            document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
-                if (checkbox.checked) {
-                    anyChecked = true;
-                }
-            });
-
-            if (anyChecked) {
-                document.getElementById('action_delete_all').style.display = 'block';
-            } else {
-                document.getElementById('action_delete_all').style.display = 'none';
-            }
-        }
-
-        // Khi click vào checkbox "Select All"
-        document.getElementById('selectAll').addEventListener('change', function() {
-            var isChecked = this.checked;
-            var checkboxes = document.querySelectorAll('.row-checkbox');
-            checkboxes.forEach(function(checkbox) {
-                checkbox.checked = isChecked;
-                var row = checkbox.closest('tr');
-                if (isChecked) {
-                    row.classList.add('selected-row');
-                } else {
-                    row.classList.remove('selected-row');
-                }
-            });
-            toggleDeleteAction();
-        });
-
-        // Khi checkbox của từng hàng thay đổi
-        document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                var row = this.closest('tr');
-                if (this.checked) {
-                    row.classList.add('selected-row');
-                } else {
-                    row.classList.remove('selected-row');
-                }
-
-                var allChecked = true;
-                document.querySelectorAll('.row-checkbox').forEach(function(cb) {
-                    if (!cb.checked) {
-                        allChecked = false;
-                    }
-                });
-                document.getElementById('selectAll').checked = allChecked;
-                toggleDeleteAction(); // Gọi hàm kiểm tra nút xóa tất cả
-            });
-        });
-
-        // Khi người dùng click vào hàng
-        document.querySelectorAll('tbody tr').forEach(function(row) {
-            row.addEventListener('click', function() {
-                var checkbox = this.querySelector('.row-checkbox');
-                if (checkbox) {
-                    checkbox.checked = !checkbox.checked;
-                    if (checkbox.checked) {
-                        this.classList.add('selected-row');
-                    } else {
-                        this.classList.remove('selected-row');
-                    }
-
-                    var allChecked = true;
-                    document.querySelectorAll('.row-checkbox').forEach(function(cb) {
-                        if (!cb.checked) {
-                            allChecked = false;
-                        }
-                    });
-                    document.getElementById('selectAll').checked = allChecked;
-                    toggleDeleteAction(); // Gọi hàm kiểm tra nút xóa tất cả
-                }
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('#restoreAll').addEventListener('show.bs.modal', function() {
-                document.getElementById('action_type').value = 'restore';
-            });
-
-            document.querySelector('#deleteAll').addEventListener('show.bs.modal', function() {
-                document.getElementById('action_type').value = 'delete';
-            });
-        });
-
-        // Kiểm tra trạng thái ban đầu khi trang được tải
-        document.addEventListener('DOMContentLoaded', function() {
-            toggleDeleteAction();
-        });
-    </script>
-@endsection
-
 @section('content')
     <div class="card mb-5 pb-5 mb-xl-8">
         <div class="card-header border-0 pt-5">
@@ -132,7 +37,7 @@
             </div>
         </div>
 
-        <form action="{{ route('notification.notification_trash') }}" method="POST">
+        <form action="{{ route('notification.notification_trash') }}" id="form-1" method="POST">
             @csrf
             <input type="hidden" name="action_type" id="action_type" value="">
             <div class="card-body py-3">
@@ -234,7 +139,8 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
-                                                    <form action="{{ route('notification.notification_trash') }}" method="POST">
+                                                    <form action="{{ route('notification.notification_trash') }}"
+                                                        id="form-2" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="restore_notification"
                                                             value="{{ $item->code }}">
@@ -264,7 +170,8 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
-                                                    <form action="{{ route('notification.notification_trash') }}" method="">
+                                                    <form action="{{ route('notification.notification_trash') }}"
+                                                        id="form-3" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="delete_notification"
                                                             value="{{ $item->code }}">
@@ -290,14 +197,11 @@
                                             role="alert"
                                             style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                             <div class="mb-3">
-                                                <i class="fas fa-search" style="font-size: 36px; color: #6c757d;"></i>
+                                                <i class="fas fa-ban" style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
                                             <div class="text-center">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không có kết
-                                                    quả tìm kiếm</h5>
-                                                <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                                    Không tìm thấy kết quả phù hợp với yêu cầu tìm kiếm của bạn. Vui lòng
-                                                    thử lại với từ khóa khác.
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
+                                                    Liệu</h5>
                                                 </p>
                                             </div>
                                         </div>
@@ -381,4 +285,112 @@
             </div>
         </form>
     </div>
+@endsection
+
+
+@section('scripts')
+    <script>
+        function toggleDeleteAction() {
+            var anyChecked = false;
+            document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    anyChecked = true;
+                }
+            });
+
+            if (anyChecked) {
+                document.getElementById('action_delete_all').style.display = 'block';
+            } else {
+                document.getElementById('action_delete_all').style.display = 'none';
+            }
+        }
+
+        // Khi click vào checkbox "Select All"
+        document.getElementById('selectAll').addEventListener('change', function() {
+            var isChecked = this.checked;
+            var checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = isChecked;
+                var row = checkbox.closest('tr');
+                if (isChecked) {
+                    row.classList.add('selected-row');
+                } else {
+                    row.classList.remove('selected-row');
+                }
+            });
+            toggleDeleteAction();
+        });
+
+        // Khi checkbox của từng hàng thay đổi
+        document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                var row = this.closest('tr');
+                if (this.checked) {
+                    row.classList.add('selected-row');
+                } else {
+                    row.classList.remove('selected-row');
+                }
+
+                var allChecked = true;
+                document.querySelectorAll('.row-checkbox').forEach(function(cb) {
+                    if (!cb.checked) {
+                        allChecked = false;
+                    }
+                });
+                document.getElementById('selectAll').checked = allChecked;
+                toggleDeleteAction(); // Gọi hàm kiểm tra nút xóa tất cả
+            });
+        });
+
+        // Khi người dùng click vào hàng
+        document.querySelectorAll('tbody tr').forEach(function(row) {
+            row.addEventListener('click', function() {
+                var checkbox = this.querySelector('.row-checkbox');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                    if (checkbox.checked) {
+                        this.classList.add('selected-row');
+                    } else {
+                        this.classList.remove('selected-row');
+                    }
+
+                    var allChecked = true;
+                    document.querySelectorAll('.row-checkbox').forEach(function(cb) {
+                        if (!cb.checked) {
+                            allChecked = false;
+                        }
+                    });
+                    document.getElementById('selectAll').checked = allChecked;
+                    toggleDeleteAction(); // Gọi hàm kiểm tra nút xóa tất cả
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('#restoreAll').addEventListener('show.bs.modal', function() {
+                document.getElementById('action_type').value = 'restore';
+            });
+
+            document.querySelector('#deleteAll').addEventListener('show.bs.modal', function() {
+                document.getElementById('action_type').value = 'delete';
+            });
+        });
+
+        // Kiểm tra trạng thái ban đầu khi trang được tải
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleDeleteAction();
+        });
+
+        document.getElementById('form-1').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-2').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+
+        document.getElementById('form-3').addEventListener('submit', function(event) {
+            submitAnimation(event);
+        });
+    </script>
 @endsection

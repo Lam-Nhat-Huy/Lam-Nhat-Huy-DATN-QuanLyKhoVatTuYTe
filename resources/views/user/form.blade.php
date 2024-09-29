@@ -111,7 +111,7 @@
 @endphp
 
 @section('content')
-    <form class="form" method="post" action="{{ $action }}" enctype="multipart/form-data">
+    <form class="form" method="post" id="form-1" action="{{ $action }}" enctype="multipart/form-data">
         @csrf
         <div class="card mb-5 mb-xl-8 pb-5">
             <div class="card-header border-0 pt-5">
@@ -544,6 +544,10 @@
             if (input.files && input.files[0]) {
                 reader.readAsDataURL(input.files[0]);
             }
+        });
+
+        document.getElementById('form-1').addEventListener('submit', function(event) {
+            submitAnimation(event);
         });
     </script>
 @endsection
