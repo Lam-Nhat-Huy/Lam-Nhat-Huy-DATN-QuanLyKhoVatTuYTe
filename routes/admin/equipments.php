@@ -20,6 +20,10 @@
         Route::post('/edit_equipments/{code}', [EquipmentsController::class, 'edit_material'])->name('equipments.edit_equipments');
 
         Route::delete('/delete_equipments/{code}', [EquipmentsController::class, 'delete_material'])->name('equipments.delete_equipments');
+        // Route để khôi phục thiết bị từ thùng rác
+        Route::post('/restore/{code}', [EquipmentsController::class, 'restore_material'])->name('equipments.restore_material');
+        // Route để xóa vĩnh viễn thiết bị
+        Route::delete('/delete_permanently/{code}', [EquipmentsController::class, 'delete_permanently'])->name('equipments.delete_permanently');
 
         Route::get('/equipments_group', [EquipmentsController::class, 'material_group'])->name('equipments.equipments_group');
 
@@ -36,4 +40,16 @@
         Route::put('/edit_equipments_group/{code}', [EquipmentsController::class, 'edit_material_group'])->name('equipments.edit_equipments_group');
 
         Route::delete('/delete_equipments_group/{code}', [EquipmentsController::class, 'delete_material_group'])->name('equipments.delete_equipments_group');
+        // Route để xử lý việc thêm nhóm vật tư từ modal
+        Route::post('/create-material-group-modal', [EquipmentsController::class, 'create_material_group_modal'])
+            ->name('equipments.create_material_group_modal');
+        // Route để xử lý việc thêm đơn vị tính từ modal
+        Route::post('/create-unit-modal', [EquipmentsController::class, 'create_unit_modal'])
+            ->name('equipments.create_unit_modal');
+        // Route để xử lý việc thêm nhà cung cấp từ modal
+        Route::post('/create-supplier-modal', [EquipmentsController::class, 'create_supplier_modal'])
+            ->name('equipments.create_supplier_modal');
+
+        Route::post('/restore_material_group/{code}', [EquipmentsController::class, 'restore_material_group'])->name('equipments.restore_material_group');
+        Route::delete('/delete_permanently_group/{code}', [EquipmentsController::class, 'delete_permanently_group'])->name('equipments.delete_permanently_group');
     });

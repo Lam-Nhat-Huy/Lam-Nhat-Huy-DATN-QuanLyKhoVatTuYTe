@@ -8,22 +8,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Equipment_types extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes; // Sử dụng SoftDeletes một lần
 
-    use SoftDeletes;
     protected $table = 'equipment_types';
 
-    protected $primaryKey = 'code'; // Chỉ định 'code' là khóa chính
-    public $incrementing = false; // Nếu 'code' không phải là auto-increment
-    protected $keyType = 'string'; // Nếu 'code' là kiểu chuỗi
+    // Chỉ định 'code' là khóa chính
+    protected $primaryKey = 'code';
+    public $incrementing = false; // Khóa chính không tự động tăng
+    protected $keyType = 'string'; // Định nghĩa kiểu dữ liệu của khóa chính là chuỗi
 
+    // Các cột có thể được gán tự động
     protected $fillable = [
         'code',
         'name',
-        'description', // Thêm cột mô tả
-        'status', // Thêm cột trạng thái
+        'description', // Cột mô tả
+        'status', // Cột trạng thái
         'created_at',
         'updated_at',
         'deleted_at',
     ];
+
+    // Các cột cần được xử lý ngày tháng
+    protected $dates = ['deleted_at'];
 }

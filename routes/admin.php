@@ -20,6 +20,8 @@ Route::prefix('system')->group(function () {
         'admin/inventory.php',
         'admin/import.php',
         'admin/export.php',
+        'admin/unit.php',
+
     ];
 
     foreach ($routeFiles as $routeFile) {

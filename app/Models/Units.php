@@ -17,11 +17,16 @@ class Units extends Model
     use HasFactory;
 
     use SoftDeletes;
+    protected $table = 'units';
 
+    protected $primaryKey = 'code'; // Chỉ định 'code' là khóa chính
+    public $incrementing = false; // Nếu 'code' không phải là auto-increment
+    protected $keyType = 'string'; // Nếu 'code' là kiểu chuỗi
     protected $fillable = [
         'code',
         'name',
         'description',
+        'created_by',
         'created_at',
         'updated_at',
         'deleted_at',
