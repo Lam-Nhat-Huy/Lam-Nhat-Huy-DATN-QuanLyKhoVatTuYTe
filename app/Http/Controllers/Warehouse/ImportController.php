@@ -162,6 +162,7 @@ class ImportController extends Controller
                 'import_code' => $receiptCode,
                 'import_date' => $receiptDate,
                 'expiry_date' => $material['expiry_date'],
+                'manufacture_date' => $material['product_date'],
             ];
 
             Inventories::create($payload);

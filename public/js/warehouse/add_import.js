@@ -91,6 +91,7 @@ function addMaterial() {
         created_by,
         batch_number,
         expiry_date,
+        product_date,
         quantity,
         VAT,
         discount,
