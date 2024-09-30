@@ -29,6 +29,16 @@ class HomeController extends Controller
 
             session()->put('user_code', $userFind->code);
 
+            session()->put('fullname', $userFind->last_name . ' ' . $userFind->first_name);
+
+            session()->put('email', $userFind->email);
+
+            session()->put('avatar', $userFind->avatar);
+
+            session()->put('address', $userFind->address);
+
+            session()->put('dob', $userFind->birth_day);
+
             session()->put('isAdmin', $userFind->isAdmin);
 
             toastr()->success('Đăng Nhập Thành Công');

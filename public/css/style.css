@@ -37846,7 +37846,7 @@ a:hover {
 .menu-state-primary .menu-item .menu-link:hover:not(.disabled):not(.active),
 .menu-state-primary .menu-item.hover>.menu-link:not(.disabled):not(.active) {
     transition: color .2s ease, background-color .2s ease;
-    color: #000
+    color: #fff;
 }
 
 .menu-state-primary .menu-item .menu-link:hover:not(.disabled):not(.active) .menu-title,
@@ -38514,12 +38514,12 @@ a:hover {
 .menu-state-title-primary .menu-item .menu-link:hover:not(.disabled):not(.active),
 .menu-state-title-primary .menu-item.hover>.menu-link:not(.disabled):not(.active) {
     transition: color .2s ease, background-color .2s ease;
-    color: #000
+    color: #fff;
 }
 
 .menu-state-title-primary .menu-item .menu-link:hover:not(.disabled):not(.active) .menu-title,
 .menu-state-title-primary .menu-item.hover>.menu-link:not(.disabled):not(.active) .menu-title {
-    color: #000
+    color: #fff;
 }
 
 .menu-state-title-primary .menu-item.here>.menu-link,

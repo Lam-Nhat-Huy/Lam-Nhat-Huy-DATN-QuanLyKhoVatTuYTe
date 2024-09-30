@@ -161,12 +161,14 @@
                                             src="https://1.bp.blogspot.com/-CsImmR4DBCI/Xh_fvrHfMrI/AAAAAAAAU2U/OSVSFbuvLDoAKadvyAkRhl4Y2aDGjzqIgCLcBGAsYHQ/s1600/hinh-anh-trai-dep%253Ddau-nam-hot-boy-2k-Wap102%2B%252825%2529.jpg" />
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <div class="fw-bolder d-flex align-items-center fs-5">Max Smith
+                                        <div class="fw-bolder d-flex align-items-center fs-5">
+                                            {{ session('fullname') }}
+
                                             <span
-                                                class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">Admin</span>
+                                                class="badge {{ session('isAdmin') == 1 ? 'bg-success' : 'bg-primary' }} text-white fs-8 py-1 px-3 mx-2">
+                                                {{ session('isAdmin') == 1 ? 'Admin' : 'Nhân viên' }}
+                                            </span>
                                         </div>
-                                        <a href="#"
-                                            class="fw-bold text-muted text-hover-primary fs-7">max@kt.com</a>
                                     </div>
                                 </div>
                             </div>
