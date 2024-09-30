@@ -38514,12 +38514,12 @@ a:hover {
 .menu-state-title-primary .menu-item .menu-link:hover:not(.disabled):not(.active),
 .menu-state-title-primary .menu-item.hover>.menu-link:not(.disabled):not(.active) {
     transition: color .2s ease, background-color .2s ease;
-    color: #fff;
+    color: #000;
 }
 
 .menu-state-title-primary .menu-item .menu-link:hover:not(.disabled):not(.active) .menu-title,
 .menu-state-title-primary .menu-item.hover>.menu-link:not(.disabled):not(.active) .menu-title {
-    color: #fff;
+    color: #000;
 }
 
 .menu-state-title-primary .menu-item.here>.menu-link,
