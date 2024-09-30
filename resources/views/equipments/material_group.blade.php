@@ -9,7 +9,9 @@
         }
 
         /* Style for the action buttons */
-        .btn-success, .btn-info, .btn-danger {
+        .btn-success,
+        .btn-info,
+        .btn-danger {
             border-radius: 20px;
             padding: 8px 16px;
             font-size: 14px;
@@ -64,7 +66,8 @@
         }
 
         /* Style for status labels */
-        .bg-success, .bg-danger {
+        .bg-success,
+        .bg-danger {
             padding: 5px 10px;
             font-size: 13px;
             border-radius: 15px;
@@ -123,11 +126,13 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h3 class="card-title">Danh Sách Nhóm Vật Tư</h3>
             <div class="card-toolbar">
-                <a href="{{ route('equipments.equipments_group_trash') }}" class="btn btn-sm btn-danger me-2">
-                    <i class="fa fa-trash me-1"></i> Thùng Rác
+                <a href="{{ route('equipments.equipments_group_trash') }}" style="font-size: 10px;"
+                    class="btn btn-sm btn-danger me-2">
+                    <i style="font-size: 10px;" class="fa fa-trash me-1"></i> Thùng Rác
                 </a>
-                <a href="{{ route('equipments.add_equipments_group') }}" class="btn btn-sm btn-success">
-                    <i class="fa fa-plus"></i> Thêm Nhóm Vật Tư
+                <a href="{{ route('equipments.add_equipments_group') }}" style="font-size: 10px;"
+                    class="btn btn-sm btn-success">
+                    <i style="font-size: 10px;" class="fa fa-plus"></i> Thêm Nhóm Vật Tư
                 </a>
             </div>
         </div>
@@ -136,7 +141,8 @@
         <div class="card-body py-4">
             <form action="{{ route('equipments.equipments_group') }}" method="GET" class="row align-items-center">
                 <div class="col-md-4 mb-2">
-                    <input type="text" name="kw" placeholder="Tìm theo mã, tên..." class="form-control form-control-sm form-control-solid" value="{{ request()->kw }}">
+                    <input type="text" name="kw" placeholder="Tìm theo mã, tên..."
+                        class="form-control form-control-sm form-control-solid" value="{{ request()->kw }}">
                 </div>
                 <div class="col-md-4 mb-2">
                     <select name="status" class="form-select form-select-sm form-control-solid">
@@ -154,9 +160,9 @@
         {{-- Table content --}}
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-striped table-hover align-middle gs-0 gy-4">
+                <table class="table  table-hover align-middle gs-0 gy-4">
                     <thead>
-                        <tr>
+                        <tr class="text-center">
                             <th class="ps-4">Mã Nhóm Vật Tư</th>
                             <th class="">Tên</th>
                             <th class="">Mô Tả</th>
@@ -177,17 +183,22 @@
                                     <td>{{ $item->description ?? 'Không có mô tả' }}</td>
                                     <td>
                                         @if ($item->status)
-                                            <span class="rounded bg-success text-white">Có</span>
+                                            <span style="font-size: 10px;" class="rounded bg-success text-white">Hoạt
+                                                động</span>
                                         @else
-                                            <span class="rounded bg-danger text-white">Không</span>
+                                            <span style="font-size: 10px;" class="rounded bg-danger text-white">Không hoạt
+                                                động</span>
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('equipments.update_equipments_group', $item->code) }}" class="btn btn-sm btn-info me-2">
-                                            <i class="fa fa-edit"></i> Sửa
+                                        <a href="{{ route('equipments.update_equipments_group', $item->code) }}"
+                                            style="font-size: 10px;" class="btn btn-sm btn-info me-2">
+                                            <i style="font-size: 10px;" class="fa fa-edit"></i> Sửa
                                         </a>
-                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" onclick="setDeleteAction('{{ route('equipments.delete_equipments_group', $item->code) }}')">
-                                            <i class="fa fa-trash"></i> Xóa
+                                        <button style="font-size: 10px;" class="btn btn-sm btn-danger"
+                                            data-bs-toggle="modal" data-bs-target="#deleteConfirmModal"
+                                            onclick="setDeleteAction('{{ route('equipments.delete_equipments_group', $item->code) }}')">
+                                            <i style="font-size: 10px;" class="fa fa-trash"></i> Xóa
                                         </button>
                                     </td>
                                 </tr>
@@ -216,7 +227,8 @@
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="document.getElementById('deleteForm').submit();">Xóa</button>
+                    <button type="button" class="btn btn-sm btn-danger"
+                        onclick="document.getElementById('deleteForm').submit();">Xóa</button>
                 </div>
             </div>
         </div>

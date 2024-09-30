@@ -8,12 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Units extends Model
 {
-    protected $primaryKey = 'code';
-
-    public $incrementing = false;
-
-    protected $keyType = 'string';
-
     use HasFactory;
 
     use SoftDeletes;

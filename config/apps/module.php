@@ -118,6 +118,13 @@ return [
                     'route_action' => ['equipments.equipments_group_trash', 'equipments.update_equipments_group'],
                     'icon' => 'fa fa-notes-medical',
                     'user_role' => [0, 1],
+                ],
+                [
+                    'title' => 'Danh Sách Đơn Vị',
+                    'route' => 'units.index',
+                    'route_action' => ['units.create', 'units.edit'],
+                    'icon' => 'fa fa-pencil-alt',
+                    'user_role' => [0, 1]
                 ]
             ]
         ],
