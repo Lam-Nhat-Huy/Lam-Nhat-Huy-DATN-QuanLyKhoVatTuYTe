@@ -120,6 +120,7 @@ class ImportController extends Controller
                 'equipment_code' => $material['equipment_code'],
                 'batch_number' => $material['batch_number'],
                 'expiry_date' => $material['expiry_date'],
+                'manufacture_date' => $material['product_date'],
                 'price' => $material['price'],
                 'quantity' => $material['quantity'],
                 'discount' => $material['discount'],
@@ -204,7 +205,7 @@ class ImportController extends Controller
                     'batch_number' => $detail->batch_number,
                     'expiry_date' => $detail->expiry_date,
                     'quantity' => $detail->quantity,
-                    'product_date' => $detail->manufacture_date,
+                    'product_date' => $detail->product_date,
                 ];
 
                 $this->updateInventoryByBatch($material, $receipt->code, $receipt->receipt_date);
