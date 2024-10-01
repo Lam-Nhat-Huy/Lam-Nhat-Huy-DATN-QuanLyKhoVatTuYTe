@@ -19,6 +19,7 @@ class Receipt_details extends Model
         'receipt_code',
         'batch_number',
         'expire_date',
+        'manufacture_date',
         'quantity',
         'price',
         'discount',

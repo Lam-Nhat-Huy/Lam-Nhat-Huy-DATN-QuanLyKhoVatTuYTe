@@ -13,6 +13,7 @@ return new class extends Migration
             $table->char('receipt_code', 20)->nullable();
             $table->char('batch_number', 20)->unique();
             $table->date('expiry_date')->nullable();
+            $table->date('manufacture_date')->nullable();
             $table->integer('quantity');
             $table->decimal('VAT', 10, 2)->nullable();
             $table->decimal('discount', 10, 2)->nullable();

@@ -306,7 +306,7 @@
                                                 </p>
                                             </form>
                                         </div>
-                                        <div class="modal-footer justify-content-center border-0">
+                                        <div class="modal-footer justify-content-center border-0 pt-0">
                                             <button type="button" class="btn btn-sm btn-secondary px-4"
                                                 data-bs-dismiss="modal">Đóng</button>
                                             <button type="button" class="btn btn-sm btn-success px-4"

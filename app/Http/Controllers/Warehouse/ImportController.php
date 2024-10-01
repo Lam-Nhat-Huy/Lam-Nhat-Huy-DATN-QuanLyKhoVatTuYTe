@@ -120,11 +120,11 @@ class ImportController extends Controller
                 'equipment_code' => $material['equipment_code'],
                 'batch_number' => $material['batch_number'],
                 'expiry_date' => $material['expiry_date'],
-                'manufacture_date' => $material['product_date'],
                 'price' => $material['price'],
                 'quantity' => $material['quantity'],
                 'discount' => $material['discount'],
                 'VAT' => $material['VAT'],
+                'manufacture_date' => $material['product_date'],
             ];
         }
 
@@ -173,22 +173,6 @@ class ImportController extends Controller
         }
     }
 
-    public function getEquipmentData($code)
-    {
-        $equipment = Equipments::where('code', $code)->first();
-
-        if ($equipment) {
-            return response()->json([
-                'price' => $equipment->price,
-                'batch_number' => $equipment->batch_number,
-                'product_date' => $equipment->product_date,
-                'expiry_date' => $equipment->expiry_date
-            ]);
-        }
-
-        return response()->json(null, 404);
-    }
-
     public function approve($code)
     {
         $receipt = Receipts::where('code', $code)->first();
@@ -205,7 +189,7 @@ class ImportController extends Controller
                     'batch_number' => $detail->batch_number,
                     'expiry_date' => $detail->expiry_date,
                     'quantity' => $detail->quantity,
-                    'product_date' => $detail->product_date,
+                    'product_date' => $detail->manufacture_date,
                 ];
 
                 $this->updateInventoryByBatch($material, $receipt->code, $receipt->receipt_date);
@@ -217,6 +201,22 @@ class ImportController extends Controller
 
         toastr()->success('Phiếu đã được duyệt trước đó.');
         return redirect()->back();
+    }
+
+    public function getEquipmentData($code)
+    {
+        $equipment = Equipments::where('code', $code)->first();
+
+        if ($equipment) {
+            return response()->json([
+                'price' => $equipment->price,
+                'batch_number' => $equipment->batch_number,
+                'product_date' => $equipment->product_date,
+                'expiry_date' => $equipment->expiry_date
+            ]);
+        }
+
+        return response()->json(null, 404);
     }
 
     public function searchImport(Request $request)
