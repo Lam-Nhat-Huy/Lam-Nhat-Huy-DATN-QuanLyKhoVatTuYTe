@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Suppliers extends Model
 {
@@ -12,9 +13,7 @@ class Suppliers extends Model
     public $incrementing = false;
 
     protected $keyType = 'string';
-
-    use HasFactory;
-
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'code',
         'name',
