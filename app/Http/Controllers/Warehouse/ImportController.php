@@ -24,7 +24,10 @@ class ImportController extends Controller
     {
         $title = 'Nhập Kho';
 
-        $receipts = Receipts::with(['supplier', 'user', 'details.equipments'])->paginate(5);
+        $receipts = Receipts::with(['supplier', 'user', 'details.equipments'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
+
 
         $allReceiptCount = Receipts::all()->count();
 
@@ -201,6 +204,7 @@ class ImportController extends Controller
                     'batch_number' => $detail->batch_number,
                     'expiry_date' => $detail->expiry_date,
                     'quantity' => $detail->quantity,
+                    'product_date' => $detail->manufacture_date,
                 ];
 
                 $this->updateInventoryByBatch($material, $receipt->code, $receipt->receipt_date);

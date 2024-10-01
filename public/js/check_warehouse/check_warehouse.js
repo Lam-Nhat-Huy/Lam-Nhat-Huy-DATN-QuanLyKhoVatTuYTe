@@ -1,20 +1,23 @@
 let materialData = [];
+let totalCount = 0;
+let matchedCount = 0;
+let mismatchedCount = 0;
+let uncheckedCount = 0;
 
+// Filter products based on user input
 function filterProducts() {
     var input = document.getElementById('searchProductInput');
     var filter = input.value.toUpperCase();
     var dropdown = document.getElementById('productDropdown');
 
-    // Hiển thị dropdown khi nhập liệu
     dropdown.style.display = filter ? 'block' : 'none';
-    dropdown.innerHTML = ''; // Reset lại nội dung dropdown
+    dropdown.innerHTML = '';
 
-    var filteredProducts = products.filter(function(product) {
+    var filteredProducts = products.filter(function (product) {
         return product.name.toUpperCase().indexOf(filter) > -1;
     });
 
     if (filteredProducts.length === 0) {
-        // Nếu không có kết quả, hiển thị thông báo
         var noResultItem = `
             <div class="dropdown-item text-center">
                 Không tìm thấy kết quả
@@ -22,8 +25,8 @@ function filterProducts() {
         `;
         dropdown.insertAdjacentHTML('beforeend', noResultItem);
     } else {
-        filteredProducts.forEach(function(product) {
-            product.inventories.forEach(function(inventory) {
+        filteredProducts.forEach(function (product) {
+            product.inventories.forEach(function (inventory) {
                 var item = `
                     <a class="dropdown-item d-flex align-items-center" href="#"
                         onclick="selectProduct(this, '${product.name}', '${inventory.equipment_code}', ${inventory.current_quantity}, '${inventory.batch_number}')">
@@ -40,15 +43,18 @@ function filterProducts() {
     }
 }
 
-// Hàm thêm vật tư khi search
+// Select product from dropdown
 function selectProduct(element, name, equipment_code, current_quantity, batch_number) {
     addProductToTable(name, equipment_code, current_quantity, batch_number);
     document.getElementById('productDropdown').style.display = 'none';
     document.getElementById('searchProductInput').value = '';
 }
 
-
+// Add product to table and initialize counts
 function addProductToTable(name, equipment_code, current_quantity, batch_number) {
+    totalCount++;
+    uncheckedCount++;
+
     var tableBody = document.getElementById('materialList');
     var rowCount = materialData.length;
 
@@ -66,7 +72,7 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
             <td>
                 <input type="number" style="width: 70px; height: 40px; border-radius: 8px;" oninput="updateProduct(${rowCount}, this.value)">
             </td>
-            <td>0</td>
+            <td class="unequal-count" id="unequal-count-${rowCount}">0</td>
         </tr>
     `;
 
@@ -80,69 +86,101 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
         batch_number: batch_number
     });
 
+    updateCounts(); // Update counts display
+
     if (tableBody.rows.length > 0) {
-        var noDataAlert = document.getElementById('noDataAlert');
-        if (noDataAlert) {
-            noDataAlert.style.display = 'none';
+        document.getElementById('noDataAlert').style.display = 'none';
+    }
+}
+
+// Remove product from table and update counts
+function removeProduct(index) {
+    var tableBody = document.getElementById('materialList');
+    var row = tableBody.querySelector(`tr[data-index="${index}"]`);
+    if (row) {
+        tableBody.removeChild(row);
+        materialData.splice(index, 1);
+        totalCount--;
+        uncheckedCount--;
+        updateRowIndices();
+        updateCounts(); // Update counts display
+        if (tableBody.rows.length === 0) {
+            document.getElementById('noDataAlert').style.display = 'table-row';
         }
     }
 }
 
+// Update row indices after removal
+function updateRowIndices() {
+    var tableBody = document.getElementById('materialList');
+    Array.from(tableBody.rows).forEach((row, index) => {
+        row.setAttribute('data-index', index);
+        row.cells[1].textContent = index + 1; // Update STT column
+    });
+}
 
-function updateProduct(index, actualQuantity) {
-    actualQuantity = parseInt(actualQuantity);
-
+// Update product quantity and calculate differences
+function updateProduct(index, value) {
     if (materialData[index]) {
-        var current_quantity = materialData[index].current_quantity;
-        var unequal = actualQuantity - current_quantity;
+        materialData[index].actual_quantity = value;
 
-        materialData[index].actual_quantity = actualQuantity;
+        // Calculate the unequal count
+        const current_quantity = materialData[index].current_quantity;
+        const unequal = value - current_quantity;
         materialData[index].unequal = unequal;
 
-        document.querySelector(`#materialList tr[data-index="${index}"] td:nth-child(7)`).innerText = unequal;
-    } else {
-        console.error('Invalid index:', index);
-    }
-}
+        // Update the UI to show the unequal count
+        const unequalCountCell = document.getElementById(`unequal-count-${index}`);
+        unequalCountCell.textContent = unequal; // Display the unequal quantity
 
-
-function removeProduct(index) {
-    // Xóa dòng trong bảng
-    var row = document.querySelector(`#materialList tr[data-index="${index}"]`);
-    if (row) {
-        row.remove();
-    }
-
-    // Xóa sản phẩm khỏi mảng materialData
-    materialData.splice(index, 1);
-
-    // Cập nhật lại chỉ số trong bảng sau khi xóa
-    var rows = document.querySelectorAll('#materialList tr');
-    rows.forEach((row, i) => {
-        row.setAttribute('data-index', i);
-        row.querySelector('td:nth-child(2)').innerText = i + 1; // Cập nhật lại số thứ tự
-        row.querySelector('a').setAttribute('onclick', `removeProduct(${i})`); // Cập nhật lại sự kiện onclick
-        row.querySelector('input').setAttribute('onchange', `updateProduct(${i}, this.value)`); // Cập nhật lại sự kiện onchange
-    });
-
-    // Kiểm tra nếu không còn dữ liệu để hiển thị thông báo "Không có dữ liệu"
-    if (materialData.length === 0) {
-        var noDataAlert = document.getElementById('noDataAlert');
-        if (noDataAlert) {
-            noDataAlert.style.display = 'block'; // Hiển thị lại alert nếu danh sách trống
+        // Update matched and mismatched counts
+        if (value > 0) {
+            if (unequal === 0) {
+                matchedCount++;
+                mismatchedCount = Math.max(0, mismatchedCount - 1);
+            } else {
+                mismatchedCount++;
+                matchedCount = Math.max(0, matchedCount - 1);
+            }
         }
+
+        updateCounts(); // Update counts display
     }
 }
 
+// Update displayed counts
+function updateCounts() {
+    document.getElementById('totalCount').textContent = totalCount;
+    document.getElementById('matchedCount').textContent = matchedCount;
+    document.getElementById('mismatchedCount').textContent = mismatchedCount;
+    document.getElementById('uncheckedCount').textContent = uncheckedCount;
 
+    // Show or hide noDataAlert based on the number of products
+    const noDataAlert = document.getElementById('noDataAlert');
+    noDataAlert.style.display = materialData.length === 0 ? 'table-row' : 'none';
+}
 
+// Add all products to the table
+function addAllProducts() {
+    var tableBody = document.getElementById('materialList');
+
+    products.forEach(product => {
+        product.inventories.forEach(inventory => {
+            if (!materialData.some(item => item.equipment_code === inventory.equipment_code)) {
+                addProductToTable(product.name, inventory.equipment_code, inventory.current_quantity, inventory.batch_number);
+            }
+        });
+    });
+}
+
+// Submit materials data
 function submitMaterials() {
     var checkDate = document.getElementById('check_date').value;
     var note = document.getElementById('note').value;
     var created_by = document.getElementById('created_by').value;
-    var status = document.querySelector('button[name="status"]:focus').value
+    var status = document.querySelector('button[name="status"]:focus').value;
 
-    materialData = materialData.map(function(material) {
+    materialData = materialData.map(function (material) {
         return {
             ...material,
             check_date: checkDate,
@@ -152,7 +190,5 @@ function submitMaterials() {
         };
     });
 
-    // Update the hidden input with the JSON stringified materialData
     document.getElementById('materialData').value = JSON.stringify(materialData);
 }
-

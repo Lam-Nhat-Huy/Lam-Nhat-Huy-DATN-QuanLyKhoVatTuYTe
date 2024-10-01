@@ -168,32 +168,27 @@
                 <div class="col-md-8">
                     <div class="card border-0 shadow-lg p-4 bg-body rounded-4">
                         <!-- Thanh tìm kiếm sản phẩm -->
-                        <div class="container mt-4 position-relative">
+                        <div class="container mt-4 position-relative px-0 pe-0">
                             <!-- Input group for search bar -->
                             <div class="input-group mb-3">
                                 <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
                                 <input type="text" class="form-control" id="searchProductInput"
                                     placeholder="Nhập tên hoặc mã hàng hoá (F2)" aria-label="Search"
                                     onkeyup="filterProducts()">
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#displayCategory"
-                                    class="btn btn-sm btn-primary">
+                                <button type="button" class="btn btn-danger" onclick="addAllProducts()">
                                     <i class="fas fa-list"></i>
-                                </button>
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#importExcelModal"
-                                    class="btn btn-sm btn-success">
-                                    <i class="fas fa-plus"></i>
                                 </button>
                             </div>
 
                             <!-- Dropdown list of products -->
-                            <div class="dropdown-menu w-600px" id="productDropdown"></div>
+                            <div class="dropdown-menu w-750px" id="productDropdown"></div>
                         </div>
                         {{-- Hiển thị trạng thái  --}}
                         <ul class="d-flex">
-                            <li class="me-5 text-dark">Tất cả (0)</li>
-                            <li class="me-5 text-success">Khớp (0)</li>
-                            <li class="me-5 text-warning">Lệch (0)</li>
-                            <li class="me-5 text-danger">Chưa kiểm (0)</li>
+                            <li class="me-5 text-dark">Tất cả (<span id="totalCount">0</span>)</li>
+                            <li class="me-5 text-success">Khớp (<span id="matchedCount">0</span>)</li>
+                            <li class="me-5 text-warning">Lệch (<span id="mismatchedCount">0</span>)</li>
+                            <li class="me-5 text-danger">Chưa kiểm (<span id="uncheckedCount">0</span>)</li>
                         </ul>
 
                         <div class="table-responsive">
@@ -267,7 +262,8 @@
                         <!-- Ngày nhập -->
                         <div class="mb-4">
                             <label for="check_date" class="form-label fw-semibold text-dark">Ngày nhập</label>
-                            <input type="date" id="check_date" class="form-control form-control-sm rounded-pill">
+                            <input type="date" id="check_date" class="form-control form-control-sm rounded-pill"
+                                value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                         </div>
 
                         <!-- Ghi chú -->
