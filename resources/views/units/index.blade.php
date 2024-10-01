@@ -38,7 +38,9 @@
         }
 
         /* Styling for action buttons */
-        .btn-success, .btn-primary, .btn-danger {
+        .btn-success,
+        .btn-primary,
+        .btn-danger {
             border-radius: 25px;
             padding: 6px 12px;
             font-size: 14px;
@@ -81,7 +83,7 @@
             </h3>
             <div class="card-toolbar">
                 <a href="{{ route('units.create') }}" class="btn btn-sm btn-success" style="font-size: 10px;">
-                    <i class="fa fa-plus"></i> Thêm Đơn Vị
+                    <i style="font-size: 10px;" class="fa fa-plus"></i> Thêm Đơn Vị
                 </a>
             </div>
         </div>
@@ -90,7 +92,8 @@
         <div class="card-body py-1 me-6">
             <form action="{{ route('units.index') }}" class="row align-items-center">
                 <div class="col-4">
-                    <input type="search" name="kw" placeholder="Tìm Kiếm Theo Mã, Tên.." class="form-control form-control-sm form-control-solid border-success" value="{{ request()->kw }}">
+                    <input type="search" name="kw" placeholder="Tìm Kiếm Theo Mã, Tên.."
+                        class="form-control form-control-sm form-control-solid border-success" value="{{ request()->kw }}">
                 </div>
                 <div class="col-4">
                     <button class="btn btn-dark btn-sm" type="submit">Tìm</button>
@@ -116,12 +119,15 @@
                                 {{-- Thông báo khi không tìm thấy kết quả tìm kiếm --}}
                                 <tr>
                                     <td colspan="4" class="text-center">
-                                        <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4" role="alert" style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                        <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                            role="alert"
+                                            style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                             <div class="mb-3">
                                                 <i class="fas fa-search" style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
                                             <div class="text-center">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không tìm thấy kết quả phù hợp</h5>
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không tìm
+                                                    thấy kết quả phù hợp</h5>
                                                 <p style="font-size: 14px; color: #6c757d; margin: 0;">
                                                     Vui lòng thử lại với từ khóa khác hoặc thay đổi bộ lọc tìm kiếm.
                                                 </p>
@@ -133,14 +139,19 @@
                                 {{-- Thông báo khi không có dữ liệu --}}
                                 <tr>
                                     <td colspan="4" class="text-center">
-                                        <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4" role="alert" style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                        <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                            role="alert"
+                                            style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                             <div class="mb-3">
-                                                <i class="fas fa-clipboard-check" style="font-size: 36px; color: #6c757d;"></i>
+                                                <i class="fas fa-clipboard-check"
+                                                    style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
                                             <div class="text-center">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin đơn vị trống</h5>
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin đơn
+                                                    vị trống</h5>
                                                 <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                                    Hiện tại chưa có đơn vị nào được tạo. Vui lòng kiểm tra lại hoặc tạo mới đơn vị để bắt đầu.
+                                                    Hiện tại chưa có đơn vị nào được tạo. Vui lòng kiểm tra lại hoặc tạo mới
+                                                    đơn vị để bắt đầu.
                                                 </p>
                                             </div>
                                         </div>
@@ -155,10 +166,13 @@
                                     <td>{{ $unit->description ?? 'Không có mô tả' }}</td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{ route('units.edit', $unit->code) }}" class="btn btn-sm btn-info" style="font-size: 10px;">
+                                            <a href="{{ route('units.edit', $unit->code) }}" class="btn btn-sm btn-info"
+                                                style="font-size: 10px;">
                                                 <i class="fa fa-edit"></i> Sửa
                                             </a>
-                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal{{ $unit->code }}" style="font-size: 10px;">
+                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                                data-bs-target="#deleteConfirmModal{{ $unit->code }}"
+                                                style="font-size: 10px;">
                                                 <i class="fa fa-trash"></i> Xóa
                                             </button>
                                         </div>
@@ -179,17 +193,20 @@
 
     {{-- Modal for delete confirmation --}}
     @foreach ($allUnits as $unit)
-        <div class="modal fade" id="deleteConfirmModal{{ $unit->code }}" tabindex="-1" aria-labelledby="deleteConfirmLabel{{ $unit->code }}" aria-hidden="true">
+        <div class="modal fade" id="deleteConfirmModal{{ $unit->code }}" tabindex="-1"
+            aria-labelledby="deleteConfirmLabel{{ $unit->code }}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-md">
                 <div class="modal-content border-0 shadow">
                     <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title" id="deleteConfirmLabel{{ $unit->code }}">Xác Nhận Xóa Đơn Vị</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title text-white" id="deleteConfirmLabel{{ $unit->code }}">Xác Nhận Xóa Đơn Vị
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
-                    <div class="modal-body text-center">
+                    <div class="modal-body text-center pb-0">
                         <p class="text-danger">Bạn có chắc chắn muốn xóa đơn vị này?</p>
                     </div>
-                    <div class="modal-footer justify-content-center">
+                    <div class="modal-footer justify-content-center pt-0">
                         <form action="{{ route('units.destroy', $unit->code) }}" method="POST">
                             @csrf
                             @method('DELETE')

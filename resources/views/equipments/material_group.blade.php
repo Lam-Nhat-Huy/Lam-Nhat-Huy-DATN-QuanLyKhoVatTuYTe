@@ -79,11 +79,13 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Nhóm Thiết Bị</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('equipments.equipments_group_trash') }}" class="btn btn-sm btn-danger" style="font-size: 10px;">
-                    <i class="fa fa-trash me-1"></i> Thùng Rác
+                <a href="{{ route('equipments.equipments_group_trash') }}" class="btn btn-sm btn-danger me-2"
+                    style="font-size: 10px;">
+                    <i style="font-size: 10px;" class="fa fa-trash me-1"></i> Thùng Rác
                 </a>
-                <a href="{{ route('equipments.add_equipments_group') }}" class="btn btn-sm btn-success" style="font-size: 10px;">
-                    <i class="fa fa-plus"></i> Thêm Nhóm Thiết Bị
+                <a href="{{ route('equipments.add_equipments_group') }}" class="btn btn-sm btn-success"
+                    style="font-size: 10px;">
+                    <i style="font-size: 10px;" class="fa fa-plus"></i> Thêm Nhóm Thiết Bị
                 </a>
             </div>
         </div>
@@ -91,19 +93,19 @@
         {{-- Search and filter form --}}
         <div class="card-body py-1">
             <form action="{{ route('equipments.equipments_group') }}" method="GET" class="row align-items-center g-3">
-                <div class="col-md-4">
-                    <input type="text" name="kw" placeholder="Tìm theo mã, tên..." 
+                <div class="col-md-5">
+                    <input type="text" name="kw" placeholder="Tìm theo mã, tên..."
                         class="form-control form-control-sm form-control-solid border border-success"
                         value="{{ request()->kw }}">
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <select name="status" class="form-select form-select-sm form-control-solid border border-success">
                         <option value="">--Chọn Trạng Thái--</option>
                         <option value="1" {{ request()->status == '1' ? 'selected' : '' }}>Hoạt động</option>
                         <option value="0" {{ request()->status == '0' ? 'selected' : '' }}>Không hoạt động</option>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <button class="btn btn-dark btn-sm" type="submit">Tìm</button>
                 </div>
             </form>
@@ -124,16 +126,19 @@
                     </thead>
                     <tbody>
                         @if ($AllMaterialGroup->isEmpty())
-                            @if(request()->has('kw') || request()->has('status'))
+                            @if (request()->has('kw') || request()->has('status'))
                                 {{-- Thông báo không tìm thấy kết quả phù hợp --}}
                                 <tr>
                                     <td colspan="5" class="text-center">
-                                        <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4" role="alert" style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                        <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                            role="alert"
+                                            style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                             <div class="mb-3">
                                                 <i class="fas fa-search" style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
                                             <div class="text-center">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không tìm thấy kết quả phù hợp</h5>
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không tìm
+                                                    thấy kết quả phù hợp</h5>
                                                 <p style="font-size: 14px; color: #6c757d; margin: 0;">
                                                     Vui lòng thử lại với từ khóa khác hoặc thay đổi bộ lọc tìm kiếm.
                                                 </p>
@@ -145,14 +150,19 @@
                                 {{-- Thông báo khi không có dữ liệu --}}
                                 <tr>
                                     <td colspan="5" class="text-center">
-                                        <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4" role="alert" style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                        <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                            role="alert"
+                                            style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                             <div class="mb-3">
-                                                <i class="fas fa-clipboard-check" style="font-size: 36px; color: #6c757d;"></i>
+                                                <i class="fas fa-clipboard-check"
+                                                    style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
                                             <div class="text-center">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin nhóm thiết bị trống</h5>
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin
+                                                    nhóm thiết bị trống</h5>
                                                 <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                                    Hiện tại chưa có nhóm thiết bị nào được tạo. Vui lòng kiểm tra lại hoặc tạo mới nhóm thiết bị để bắt đầu.
+                                                    Hiện tại chưa có nhóm thiết bị nào được tạo. Vui lòng kiểm tra lại hoặc
+                                                    tạo mới nhóm thiết bị để bắt đầu.
                                                 </p>
                                             </div>
                                         </div>
@@ -167,17 +177,24 @@
                                     <td>{{ $item->description ?? 'Không có mô tả' }}</td>
                                     <td>
                                         @if ($item->status)
-                                            <span class="bg-success text-white rounded" style="padding: 5px 12px; display: inline-block; min-width: 110px;">Hoạt động</span>
+                                            <span class="bg-success text-white rounded"
+                                                style="padding: 5px 2px; display: inline-block; min-width: 80px; font-size: 10px;">Hoạt
+                                                động</span>
                                         @else
-                                            <span class="bg-danger text-white rounded" style="padding: 5px 12px; display: inline-block; min-width: 110px;">Không hoạt động</span>
+                                            <span class="bg-danger text-white rounded"
+                                                style="padding: 5px 2px; display: inline-block; min-width: 80px; font-size: 10px">Không
+                                                hoạt động</span>
                                         @endif
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{ route('equipments.update_equipments_group', $item->code) }}" class="btn btn-sm btn-info" style="font-size: 10px;">
+                                            <a href="{{ route('equipments.update_equipments_group', $item->code) }}"
+                                                class="btn btn-sm btn-info" style="font-size: 10px;">
                                                 <i class="fa fa-edit"></i> Sửa
                                             </a>
-                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal{{ $item->code }}" style="font-size: 10px;">
+                                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                                data-bs-target="#deleteConfirmModal{{ $item->code }}"
+                                                style="font-size: 10px;">
                                                 <i class="fa fa-trash"></i> Xóa
                                             </button>
                                         </div>
@@ -189,16 +206,19 @@
                 </table>
             </div>
         </div>
-        
+
 
         {{-- Modal for delete confirmation --}}
         @foreach ($AllMaterialGroup as $item)
-            <div class="modal fade" id="deleteConfirmModal{{ $item->code }}" tabindex="-1" aria-labelledby="deleteConfirmLabel{{ $item->code }}" aria-hidden="true">
+            <div class="modal fade" id="deleteConfirmModal{{ $item->code }}" tabindex="-1"
+                aria-labelledby="deleteConfirmLabel{{ $item->code }}" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-md">
                     <div class="modal-content border-0 shadow">
                         <div class="modal-header bg-danger text-white">
-                            <h5 class="modal-title" id="deleteConfirmLabel{{ $item->code }}">Xác Nhận Xóa Nhóm Vật Tư</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h5 class="modal-title" id="deleteConfirmLabel{{ $item->code }}">Xác Nhận Xóa Nhóm Vật Tư
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-center">
                             <p class="text-danger">Bạn có chắc chắn muốn xóa nhóm vật tư này?</p>
@@ -207,7 +227,8 @@
                             <form action="{{ route('equipments.delete_equipments_group', $item->code) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="button" class="btn btn-sm btn-secondary"
+                                    data-bs-dismiss="modal">Hủy</button>
                                 <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
                             </form>
                         </div>
