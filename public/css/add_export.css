@@ -118,4 +118,6 @@ input[type=number]::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
-
+.select2-selection{
+    max-width: 100% !important;
+}

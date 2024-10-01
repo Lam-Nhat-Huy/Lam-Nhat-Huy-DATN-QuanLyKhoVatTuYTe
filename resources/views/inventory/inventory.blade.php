@@ -41,17 +41,18 @@
                 </div>
                 <div class="col-4">
                     <select name="ur" id="ur"
-                        class="mt-2 mb-2 form-select form-select-sm form-select-solid border border-success setupSelect2">
+                        class="mt-2 mb-2 form-select form-select-sm border border-success setupSelect2">
                         <option value="" selected>--Theo Nhóm Sản Phẩm--</option>
-                        <option value="a">A</option>
-                        <option value="b">B</option>
+                        @forelse ($equipments as $equipment)
+                        <option value="{{$equipment->equipmentType->code}}">{{$equipment->equipmentType->name}}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-4 pe-8">
                     <div class="row">
                         <div class="col-10">
                             <input type="search" name="kw" placeholder="Tìm Kiếm Mã Phiếu Xuất.."
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                class="mt-2 mb-2 form-control bg-white form-control-sm form-control-solid border border-success"
                                 value="{{ request()->kw }}">
                         </div>
                         <div class="col-2">
@@ -64,76 +65,70 @@
 
         <div class="card-body py-3">
             <div class="table-responsive">
-                <table class="table align-middle gs-0 gy-4">
+                <table class="table table-hover table-bordered align-middle text-center"
+                    style="width: 100%; border-collapse: collapse;">
                     <thead>
-                        <tr class="fw-bolder bg-success">
+                        <tr class="fw-bolder bg-success text-white" style="background-color: #28a745;">
+                            <th class="ps-4" style="width: 5%;">
+                                <input type="checkbox" id="selectAll" />
+                            </th>
                             <th class="ps-4">Tên sản phẩm</th>
-                            <th class="">Nhóm sản phẩm</th>
-                            <th class="">Nhóm thuốc</th>
-                            <th class="">Tổng tồn</th>
+                            <th>Nhóm sản phẩm</th>
+                            <th>Tổng tồn</th>
                             <th class="pe-3">Đơn vị tính</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @for ($i = 0; $i < 6; $i++)
-                            <tr class="text-center hover-table pointer" data-bs-toggle="collapse" aria-expanded="false">
-                                <td>Caxium (Hộp 6 vỉ x 30 viên)</td>
-                                <td>Dược phẩm</td>
-                                <td>Vitamin - khoáng chất</td>
-                                <td>2</td>
-                                <td>Hộp</td>
+                        @forelse ($equipments as $equipment)
+                            <tr class="hover-table" style="cursor: pointer;" data-bs-toggle="collapse"
+                                data-bs-target="#collapse{{ $equipment->code }}" aria-expanded="false">
+                                <td>
+                                    <input type="checkbox" class="row-checkbox" />
+                                </td>
+                                <td>{{ $equipment->name }}</td>
+                                <td>{{ $equipment->equipmentType->name }}</td>
+                                <td>{{ $inventories[$equipment->code]['total_quantity'] ?? 0 }}</td>
+                                <td>{{ $equipment->units->name }}</td>
                             </tr>
-                            <!-- Dropdown menu -->
-                            <tr class="collapse multi-collapse" id="collapse{{ $i }}">
-                                <td class="p-0" colspan="12"
-                                    style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
-                                    <div class="flex-lg-row-fluid border-2 border-lg-1">
-                                        <div class="card card-flush p-2"
-                                            style="padding-top: 0px !important; padding-bottom: 0px !important;">
-                                            <div class="card-header d-flex justify-content-between align-items-center p-2"
-                                                style="padding-top: 0 !important; padding-bottom: 0px !important;">
-                                                <h5 class="fw-bold m-0">Danh sách vật tư</h5>
-                                            </div>
-                                            <div class="card-body p-2" style="padding-top: 0px !important">
-                                                <!-- Begin::Receipt Items (Right column) -->
-                                                <div class="col-md-12">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-striped table-sm table-hover">
-                                                            <thead class="fw-bolder bg-success">
-                                                                <tr>
-                                                                    <th class="ps-4">STT</th>
-                                                                    <th>Số lô</th>
-                                                                    <th>Số lượng</th>
-                                                                    <th>Ngày sản xuất</th>
-                                                                    <th>Hạn sử dụng</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="modalItemsTableBody">
-                                                                <tr class="text-center">
-                                                                    <td>1</td>
-                                                                    <td>C1</td>
-                                                                    <td>50</td>
-                                                                    <td>20-08-2024</td>
-                                                                    <td>20-08-2027</td>
-                                                                </tr>
-                                                                <tr class="text-center">
-                                                                    <td>2</td>
-                                                                    <td>C2</td>
-                                                                    <td>30</td>
-                                                                    <td>20-08-2024</td>
-                                                                    <td>20-08-2027</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                                <!-- End::Receipt Items -->
+                            <tr class="collapse multi-collapse" id="collapse{{ $equipment->code }}">
+                                <td colspan="6" class="p-0"
+                                    style="border: 1px solid #dcdcdc; background-color: #fafafa;">
+                                    <div class="card card-flush p-2" style="border: none; margin: 0;">
+                                        <div class="card-body p-2">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-sm table-hover">
+                                                    <thead class="fw-bolder bg-danger text-white">
+                                                        <tr>
+                                                            <th class="ps-4">STT</th>
+                                                            <th>Số lô</th>
+                                                            <th>Số lượng</th>
+                                                            <th>Ngày sản xuất</th>
+                                                            <th>Hạn sử dụng</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="modalItemsTableBody">
+                                                        @foreach ($inventories[$equipment->code]['inventories'] as $index => $inventory)
+                                                            <tr class="text-center">
+                                                                <td>{{ $index + 1 }}</td>
+                                                                <td>{{ $inventory->batch_number }}</td>
+                                                                <td>{{ $inventory->current_quantity }}</td>
+                                                                <td>{{ $inventory->manufacture_date }}</td>
+                                                                <td>{{ $inventory->expiry_date }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
-                        @endfor
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center">Không có thiết bị nào.</td>
+                            </tr>
+                        @endforelse
+
                     </tbody>
                 </table>
             </div>
@@ -142,45 +137,5 @@
 @endsection
 
 @section('scripts')
-    <script>
-        document.getElementById('selectAll').addEventListener('change', function() {
-            var isChecked = this.checked;
-            var checkboxes = document.querySelectorAll('.row-checkbox');
-            checkboxes.forEach(function(checkbox) {
-                checkbox.checked = isChecked;
-            });
-        });
-
-        document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                var allChecked = true;
-                document.querySelectorAll('.row-checkbox').forEach(function(cb) {
-                    if (!cb.checked) {
-                        allChecked = false;
-                    }
-                });
-                document.getElementById('selectAll').checked = allChecked;
-            });
-        });
-
-        document.getElementById('printPdfBtn').addEventListener('click', function() {
-            var printArea = document.getElementById('printArea').innerHTML;
-            var originalContent = document.body.innerHTML;
-            document.body.innerHTML = printArea;
-            window.print();
-            document.body.innerHTML = originalContent;
-        });
-
-        function openEditModal(code, number, customer, date, createdBy, note) {
-            document.getElementById('editExportCode').value = code;
-            document.getElementById('editExportNumber').value = number;
-            document.getElementById('editCustomer').value = customer;
-            document.getElementById('editExportDate').value = date;
-            document.getElementById('editCreatedBy').value = createdBy;
-            document.getElementById('editNote').value = note;
-
-            var editExportReceiptModal = new bootstrap.Modal(document.getElementById('editExportReceiptModal'));
-            editExportReceiptModal.show();
-        }
-    </script>
+    <script src="{{ asset('js/warehouse/export.js') }}"></script>
 @endsection

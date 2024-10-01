@@ -18,6 +18,10 @@
             background: #d1c4e9;
             /* Màu nền khi hàng được nhấp vào */
         }
+
+        .select2-selection__rendered {
+            color: #000 !important;
+        }
     </style>
 @endsection
 
@@ -34,7 +38,7 @@
 
             <div class="card-toolbar">
                 <a href="{{ route('warehouse.create_export') }}" style="font-size: 10px;" class="btn btn-sm btn-success">
-                    Tạo Phiếu Nhập</a>
+                    Tạo Phiếu Xuất</a>
             </div>
         </div>
 
@@ -58,7 +62,8 @@
                 </div>
 
                 <div class="col-md-2">
-                    <select name="supplier_code" id="supplier_code" class="form-select form-select-sm border-success">
+                    <select name="supplier_code" id="supplier_code"
+                        class="form-select setupSelect2 form-select-sm border-success">
                         <option value="" selected>--Theo NCC--</option>
                         {{-- @foreach ($suppliers as $supplier)
                             <option value="{{ $supplier->code }}">{{ $supplier->name }}</option>
@@ -67,7 +72,8 @@
                 </div>
 
                 <div class="col-md-2">
-                    <select name="created_by" id="created_by" class="form-select form-select-sm border-success">
+                    <select name="created_by" id="created_by"
+                        class="form-select setupSelect2 form-select-sm border-success">
                         <option value="" selected>--Theo Người Tạo--</option>
                         {{-- @foreach ($users as $user)
                             <option value="{{ $user->code }}">{{ $user->last_name }} {{ $user->first_name }}</option>
@@ -735,5 +741,6 @@
             window.print();
             document.body.innerHTML = originalContents;
         });
+        
     </script>
 @endsection

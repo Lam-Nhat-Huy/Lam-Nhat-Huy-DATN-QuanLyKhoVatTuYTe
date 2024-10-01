@@ -36,11 +36,11 @@
                             <div class="row mb-3">
                                 <div class="col-12 mb-2">
                                     <label for="material_code" class="required form-label mb-2">Tên vật tư</label>
-                                    <select class="form-select form-select-sm" id="material_code" name="material_code"
-                                        style="width: 100%;">
+                                    <select class="form-select setupSelect2 form-select-sm" id="material_code"
+                                        name="material_code" style="width: 100%;">
                                         <option value="" selected disabled>Chọn vật tư</option>
-                                        @foreach ($materials as $material)
-                                            <option value="{{ $material['code'] }}">{{ $material['name'] }}</option>
+                                        @foreach ($equipments as $equipment)
+                                            <option value="{{ $equipment['code'] }}">{{ $equipment['name'] }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -109,13 +109,8 @@
 
                             <div class="mb-4">
                                 <label for="created_by" class="form-label fw-semibold text-muted">Người tạo</label>
-                                <select name="created_by" class="form-select form-select-sm rounded-pill py-2 px-3"
-                                    id="created_by" required>
-                                    <option value="">-- Chọn người tạo --</option>
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user['id'] }}">{{ $user['name'] }}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" name="created_by" value="{{$users->first_name}}"
+                                    class="form-control form-control-sm rounded-pill py-2 px-3" id="export_at" disabled>
                             </div>
 
                             <div class="mb-4">
@@ -146,15 +141,30 @@
 
 @section('scripts')
     <script>
+        // Khởi tạo Select2 sau khi DOM đã tải xong
+        $(document).ready(function() {
+            $('#material_code').select2({
+                placeholder: "Chọn vật tư",
+                allowClear: true
+            });
+
+            $('#department_code').select2({
+                placeholder: "-- Chọn phòng ban --",
+                allowClear: true
+            });
+
+        });
+
+        // Dữ liệu từ server cho tồn kho
         const inventories = @json($inventories);
 
         let materialList = [];
 
-        document.getElementById('material_code').addEventListener('change', function() {
-            const selectedMaterial = this.value;
-            const batchDetailsContainer = document.getElementById('batch_info');
-
-            batchDetailsContainer.innerHTML = '';
+        // Khi chọn vật tư trong Select2, tải thông tin lô
+        $('#material_code').on('change', function() {
+            const selectedMaterial = $(this).val();
+            const batchDetailsContainer = $('#batch_info');
+            batchDetailsContainer.html('');
 
             const filteredInventories = inventories.filter(inv => inv.material_code === selectedMaterial);
 
@@ -201,13 +211,13 @@
                     if (daysToExpiry <= alertThreshold && daysToExpiry > 0) {
                         icon =
                             `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThr7qrIazsvZwJuw-uZCtLzIjaAyVW_ZrlEQ&s"
-                    alt="AI Icon" style="width: 20px; height: 20px; display: inline-block; margin-left: 10px;"
-                    title="Gợi ý: Nên xuất vật tư này trước khi hết hạn" data-toggle="tooltip" data-placement="right" >`;
+                            alt="AI Icon" style="width: 20px; height: 20px; display: inline-block; margin-left: 10px;"
+                            title="Gợi ý: Nên xuất vật tư này trước khi hết hạn">`;
                     } else if (daysToExpiry <= 0) {
                         icon =
                             `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThr7qrIazsvZwJuw-uZCtLzIjaAyVW_ZrlEQ&s"
-                    alt="AI Icon" style="width: 20px; height: 20px; display: inline-block; margin-left: 10px;"
-                    title="Gợi ý: Nên xuất vật tư này trước khi hết hạn">`;
+                            alt="AI Icon" style="width: 20px; height: 20px; display: inline-block; margin-left: 10px;"
+                            title="Vật tư này đã hết hạn">`;
                     }
 
                     const batchElement = document.createElement('div');
@@ -224,19 +234,19 @@
                             ${inputField}
                         </div>
                     `;
-                    batchDetailsContainer.appendChild(batchElement);
+                    batchDetailsContainer.append(batchElement);
                 });
             }
         });
 
-        document.getElementById('add-to-list').addEventListener('click', function() {
-            const selectedMaterial = document.getElementById('material_code').value;
-            const departmentCode = document.getElementById('department_code').value;
-            const createdBy = document.getElementById('created_by').value;
-            const exportDate = document.getElementById('export_at').value;
-            const note = document.getElementById('note').value;
+        $('#add-to-list').on('click', function() {
+            const selectedMaterial = $('#material_code').val();
+            const departmentCode = $('#department_code').val();
+            const createdBy = $('#created_by').val();
+            const exportDate = $('#export_at').val();
+            const note = $('#note').val();
 
-            const batches = Array.from(document.querySelectorAll('#batch_info input[type="number"]'))
+            const batches = Array.from($('#batch_info input[type="number"]'))
                 .filter(input => input.value > 0)
                 .map(input => ({
                     batch_code: input.name.replace('batches[', '').replace(']', ''),
@@ -259,11 +269,11 @@
         });
 
         function updateMaterialListTable() {
-            const tbody = document.querySelector('#material-list-body');
-            tbody.innerHTML = '';
+            const tbody = $('#material-list-body');
+            tbody.html('');
 
             if (materialList.length === 0) {
-                tbody.innerHTML = `
+                tbody.html(`
                 <tr id="no-material-alert">
                     <td colspan="4" class="text-center pe-0 px-0">
                         <div class="alert alert-warning" role="alert">
@@ -271,28 +281,26 @@
                         </div>
                     </td>
                 </tr>
-            `;
+            `);
             } else {
-                // Hiển thị danh sách vật tư và lô
                 materialList.forEach((item, materialIndex) => {
                     item.batches.forEach(batch => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                    <td class="text-center">${item.material_code}</td>
-                    <td class="text-center">${batch.batch_code}</td>
-                    <td class="text-center">${batch.quantity}</td>
-                    <td class="text-center">
-                        <button type="button"
-                            onclick="removeFromList(${materialIndex}, '${batch.batch_code}')"><i class='fa fa-trash'></i></button>
-                    </td>
-                `;
-                        tbody.appendChild(row);
+                        const row = $('<tr>');
+                        row.html(`
+                            <td class="text-center">${item.material_code}</td>
+                            <td class="text-center">${batch.batch_code}</td>
+                            <td class="text-center">${batch.quantity}</td>
+                            <td class="text-center">
+                                <button type="button"
+                                    onclick="removeFromList(${materialIndex}, '${batch.batch_code}')"><i class='fa fa-trash'></i></button>
+                            </td>
+                        `);
+                        tbody.append(row);
                     });
                 });
             }
 
-            // Cập nhật giá trị của input ẩn để gửi danh sách vật tư tới server
-            document.getElementById('material_list_input').value = JSON.stringify(materialList);
+            $('#material_list_input').val(JSON.stringify(materialList));
         }
 
         function removeFromList(materialIndex, batchCode) {
@@ -304,10 +312,9 @@
             updateMaterialListTable();
         }
 
-
         function resetForm() {
-            document.getElementById('material_code').value = '';
-            document.getElementById('batch_info').innerHTML = '';
+            $('#material_code').val('').trigger('change');
+            $('#batch_info').html('');
         }
     </script>
 @endsection
