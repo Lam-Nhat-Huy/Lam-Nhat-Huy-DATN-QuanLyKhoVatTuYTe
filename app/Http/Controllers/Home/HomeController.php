@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Home\LoginRequest;
+use App\Models\Notifications;
 use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -41,7 +42,16 @@ class HomeController extends Controller
 
             session()->put('isAdmin', $userFind->isAdmin);
 
+            $importantNotification = Notifications::where('important', 1)
+                ->where('status', 1)
+                ->latest()
+                ->first();
+
             toastr()->success('Đăng Nhập Thành Công');
+
+            if ($importantNotification) {
+                session()->flash('important_notification', $importantNotification->content);
+            }
 
             return redirect()->route('system.index');
         } else {

@@ -276,8 +276,38 @@
                         <div class="d-grid gap-3">
                             <button name="status" value="0" onclick="submitMaterials()" type="submit"
                                 class="btn btn-warning btn-lg rounded-pill">Lưu tạm</button>
-                            <button name="status" value="1" onclick="submitMaterials()" type="submit"
-                                class="btn btn-success btn-lg rounded-pill">Hoàn thành</button>
+
+                            <!-- Hoàn thành Button -->
+                            <button type="button" class="btn btn-success btn-lg rounded-pill" data-bs-toggle="modal"
+                                data-bs-target="#completeModal">
+                                Hoàn thành
+                            </button>
+
+                            <!-- Modal Hoàn thành -->
+                            <div class="modal fade" id="completeModal" data-bs-backdrop="static" data-bs-keyboard="false"
+                                tabindex="-1" aria-labelledby="completeModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-md">
+                                    <div class="modal-content border-0 shadow">
+                                        <div class="modal-header bg-success text-white">
+                                            <h5 class="modal-title text-white" id="completeModalLabel">Duyệt phiếu kiểm
+                                                kho</h5>
+                                            <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center pb-0">
+                                            <p>Bạn chắc chắn muốn cân bằng kho?</p>
+                                        </div>
+                                        <div class="modal-footer justify-content-center border-0 pt-0">
+                                            <button type="button" class="btn btn-sm btn-secondary px-4"
+                                                data-bs-dismiss="modal">Đóng</button>
+                                            <button type="submit" name="status" value="1"
+                                                class="btn btn-sm btn-success px-4" onclick="submitMaterials()">Duyệt
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->integer('current_quantity')->nullable();
             $table->integer('actual_quantity')->nullable();
             $table->integer('unequal')->nullable();
-            $table->char('batch_number', 20)->unique();
+            $table->char('batch_number', 20);
             $table->timestamps();
             $table->softDeletes();
 

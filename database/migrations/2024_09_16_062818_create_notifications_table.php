@@ -13,6 +13,7 @@ return new class extends Migration
             $table->char('user_code', 20)->nullable();
             $table->bigInteger('notification_type')->unsigned()->nullable();
             $table->text('content');
+            $table->boolean('important')->default(0)->nullable();
             $table->boolean('status')->default(0);
             $table->timestamps();
             $table->softDeletes();

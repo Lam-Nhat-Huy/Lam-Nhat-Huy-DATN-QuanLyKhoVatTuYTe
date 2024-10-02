@@ -83,7 +83,8 @@
                                             style="padding-top: 0px !important; padding-bottom: 0px !important;">
                                             <div class="card-header d-flex justify-content-between align-items-center p-2"
                                                 style="padding-top: 0 !important; padding-bottom: 0px !important;">
-                                                <h4 class="fw-bold m-0">Chi tiết phiếu nhập kho</h4>
+                                                <h4 class="fw-bold m-0 text-uppercase fw-bolder">Chi tiết phiếu nhập kho
+                                                </h4>
                                                 <div class="card-toolbar">
                                                     @if ($item['status'] == 0)
                                                         <div style="font-size: 10px;"
@@ -96,14 +97,14 @@
                                             </div>
                                             <div class="card-body p-2" style="padding-top: 0px !important">
                                                 <div class="row py-5" style="padding-top: 0px !important">
-                                                    <!-- Begin::Receipt Info (Left column) -->
                                                     <div class="col-md-4">
                                                         <table class="table table-flush gy-1">
                                                             <tbody>
                                                                 <tr>
-                                                                    <td class=""><strong>Mã phiếu nhập</strong>
+                                                                    <td style="width: 450px;"><strong>Mã phiếu nhập</strong>
                                                                     </td>
-                                                                    <td class="text-gray-800">{{ $item->code }}</td>
+                                                                    <td style="" class="text-gray-800">
+                                                                        {{ $item->code }}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td class=""><strong>Số hóa đơn</strong>
@@ -111,17 +112,16 @@
                                                                     <td class="text-gray-800">{{ $item->receipt_no }}</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class=""><strong>Nhà cung cấp</strong>
+                                                                    <td style="width: 250px;"><strong>Nhà cung cấp</strong>
                                                                     </td>
-                                                                    <td class="text-gray-800">
+                                                                    <td class="text-gray-800" style="width: 550px;">
                                                                         {{ $item->supplier->name }}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class=""><strong>Ngày nhập</strong>
-                                                                    </td>
+                                                                    <td class=""><strong>Ngày nhập</strong></td>
                                                                     <td class="text-gray-800">
-                                                                        {{ $item->receipt_date }}
+                                                                        {{ \Carbon\Carbon::parse($item->receipt_date)->format('d/m/Y') }}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -140,8 +140,6 @@
                                                             </tbody>
                                                         </table>
                                                     </div>
-                                                    <!-- End::Receipt Info -->
-
                                                     @php
                                                         $totalPrice = 0;
                                                         $totalDiscount = 0;
@@ -164,7 +162,7 @@
                                                         $totalAmount = $totalPrice - $totalDiscount + $totalVAT;
                                                     @endphp
 
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-4" style="margin-left: 200px">
                                                         <table class="table table-flush gy-1">
                                                             <tbody>
                                                                 <tr>

@@ -154,11 +154,10 @@
             </div>
         </div>
         <div class="card-body py-1">
-            <form action="{{ route('notification.index') }}" id="form-1" method="GET"
-                class="row align-items-center">
+            <form action="{{ route('notification.index') }}" id="form-1" method="GET" class="row align-items-center">
                 <div class="col-3">
                     <select name="ur" id="ur"
-                        class="mt-2 mb-2 form-select form-select-sm form-select-solid border border-success setupSelect2">
+                        class="mt-2 mb-2 form-select form-select-sm border border-success setupSelect2">
                         <option value="" selected>--Theo Người Báo Cáo--</option>
                         @foreach ($AllUser as $item)
                             <option value={{ $item->code }} {{ request()->rt == $item->code ? 'selected' : '' }}>
@@ -168,7 +167,7 @@
                 </div>
                 <div class="col-2">
                     <select name="rt" id="rt"
-                        class="mt-2 mb-2 form-select form-select-sm form-select-solid border border-success setupSelect2">
+                        class="mt-2 mb-2 form-select form-select-sm border border-success setupSelect2">
                         <option value="" selected>--Theo Loại Báo Cáo--</option>
                         @foreach ($AllNotificationType as $item)
                             <option value={{ $item->id }} {{ request()->rt == $item->id ? 'selected' : '' }}>
@@ -177,7 +176,7 @@
                     </select>
                 </div>
                 <div class="col-2">
-                    <select name="st" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                    <select name="st" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
                         <option value="" {{ request()->st == '' ? 'selected' : '' }}>--Theo Trạng Thái--</option>
                         <option value="0" {{ request()->st == '0' ? 'selected' : '' }}>Chưa Duyệt</option>
                         <option value="1" {{ request()->st == '1' ? 'selected' : '' }}>Đã Duyệt</option>
@@ -210,22 +209,23 @@
                 <div class="table-responsive">
                     <table class="table align-middle gs-0 gy-4">
                         <thead>
-                            <tr class="fw-bolder bg-success">
-                                <th class="ps-4">
+                            <tr class="fw-bolder bg-success text-center">
+                                <th class="ps-4" style="width: 5%">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 16%">Mã Thông Báo</th>
-                                <th class="" style="width: 16%">Người Tạo</th>
+                                <th class="" style="width: 10%">Mã Thông Báo</th>
+                                <th class="" style="width: 10%">Người Tạo</th>
                                 <th class="" style="width: 16%">Nội Dung</th>
                                 <th class="" style="width: 16%">Loại Thông Báo</th>
-                                <th class="" style="width: 16%">Ngày Tạo</th>
+                                <th class="" style="width: 10%">Ngày Tạo</th>
                                 <th class="" style="width: 10%">Trạng Thái</th>
+                                <th class="" style="width: 10%">Hiển thị</th>
                                 <th class="pe-3 text-center" style="width: 10%">Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($AllNotification as $item)
-                                <tr class="hover-table pointer">
+                                <tr class="hover-table pointer text-center">
                                     <td>
                                         <input type="checkbox" name="notification_codes[]" value="{{ $item->code }}"
                                             class="row-checkbox" />
@@ -249,11 +249,23 @@
                                     </td>
                                     <td>
                                         @if ($item->status == 0)
-                                            <div class="rounded px-2 py-1 text-white bg-danger text-center">Chưa Duyệt</div>
+                                            <span class="rounded px-2 py-1 text-white bg-danger text-center"
+                                                style="font-size: 10px;">Chưa duyệt</span>
                                         @else
-                                            <div class="rounded px-2 py-1 text-white bg-success text-center">Đã Duyệt</div>
+                                            <span class="rounded px-2 py-1 text-white bg-success text-center"
+                                                style="font-size: 10px;">Đã duyệt</span>
                                         @endif
                                     </td>
+                                    <td>
+                                        @if ($item->important == 1)
+                                            <span class="rounded px-2 py-1 text-white bg-warning text-center"
+                                                style="font-size: 10px;">Quan trọng</span>
+                                        @else
+                                            <span class="rounded px-2 py-1 text-white bg-danger text-center"
+                                                style="font-size: 10px;"> Không hiển thị</span>
+                                        @endif
+                                    </td>
+
                                     <td class="text-center">
                                         <div class="btn-group">
                                             <button type="button" data-bs-toggle="dropdown">
@@ -308,36 +320,39 @@
                                             </div>
                                         </div>
 
-                                        {{-- Duyệt --}}
+                                        <!-- Modal Duyệt Thông Báo -->
                                         <div class="modal fade" id="browse_{{ $item->code }}"
                                             data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                                             aria-labelledby="checkModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title" id="checkModalLabel">Duyệt Thông Báo
-                                                        </h3>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content border-0 shadow">
+                                                    <div class="modal-header bg-success text-white">
+                                                        <h3 class="modal-title text-white" id="checkModalLabel">Duyệt
+                                                            Thông Báo</h3>
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
-                                                    <form action="{{ route('notification.index') }}"
-                                                        id="form-3" method="POST">
+                                                    <form action="{{ route('notification.index') }}" id="form-3"
+                                                        method="POST">
                                                         @csrf
                                                         <input type="hidden" name="browse_notification"
                                                             value="{{ $item->code }}">
-                                                        <div class="modal-body">
-                                                            <h4 class="text-primary">Duyệt Thông Báo Này?</h4>
+                                                        <div class="modal-body text-center pb-0">
+                                                            <p class="text-dark mb-4">Bạn có chắc chắn muốn duyệt phiếu
+                                                                nhập kho này?
+                                                            </p>
                                                         </div>
-                                                        <div class="modal-footer">
+                                                        <div class="modal-footer justify-content-center border-0 pt-0">
                                                             <button type="button" class="btn btn-sm btn-secondary"
                                                                 data-bs-dismiss="modal">Đóng</button>
                                                             <button type="submit"
-                                                                class="btn btn-sm btn-twitter">Duyệt</button>
+                                                                class="btn btn-sm btn-success">Duyệt</button>
                                                         </div>
                                                     </form>
                                                 </div>
                                             </div>
                                         </div>
+
 
                                         {{-- Xóa --}}
                                         <div class="modal fade" id="deleteModal_{{ $item->code }}"
@@ -351,8 +366,8 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
-                                                    <form action="{{ route('notification.index') }}"
-                                                        id="form-4" method="POST">
+                                                    <form action="{{ route('notification.index') }}" id="form-4"
+                                                        method="POST">
                                                         @csrf
                                                         <input type="hidden" name="delete_notification"
                                                             value="{{ $item->code }}">

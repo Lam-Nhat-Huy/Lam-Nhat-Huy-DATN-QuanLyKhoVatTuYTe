@@ -170,6 +170,8 @@ class NotificationController extends Controller
 
             $data['updated_at'] = null;
 
+            $data['important'] = $request->input('important');
+
             $this->callModel::create($data);
 
             toastr()->success('Đã thêm thông báo');

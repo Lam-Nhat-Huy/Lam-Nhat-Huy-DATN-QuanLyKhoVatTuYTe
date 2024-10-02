@@ -1,6 +1,56 @@
 @extends('master_layout.layout')
 
 @section('styles')
+    <style>
+        .checkbox-wrapper-6 .tgl {
+            display: none;
+        }
+
+        .checkbox-wrapper-6 .tgl,
+        .checkbox-wrapper-6 .tgl:after,
+        .checkbox-wrapper-6 .tgl:before,
+        .checkbox-wrapper-6 .tgl *:after,
+        .checkbox-wrapper-6 .tgl *:before,
+        .checkbox-wrapper-6 .tgl+.tgl-btn {
+            box-sizing: border-box;
+        }
+
+        .checkbox-wrapper-6 .tgl+.tgl-btn {
+            outline: 0;
+            display: block;
+            width: 50px;
+            height: 26px;
+            position: relative;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-color: #ddd;
+            border-radius: 26px;
+            transition: background-color 0.3s;
+        }
+
+        .checkbox-wrapper-6 .tgl+.tgl-btn:after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border-radius: 50%;
+            left: 2px;
+            top: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-wrapper-6 .tgl-light:checked+.tgl-btn {
+            background: #1fb948;
+        }
+
+        .checkbox-wrapper-6 .tgl:checked+.tgl-btn:after {
+            transform: translateX(24px);
+        }
+    </style>
 @endsection
 
 @section('title')
@@ -97,8 +147,7 @@
 
                         <div class="d-flex align-items-center">
 
-                            <select name="notification_type"
-                                class="form-select form-select-sm form-select-solid setupSelect2">
+                            <select name="notification_type" class="form-select form-select-sm setupSelect2">
                                 <option value="0">Chọn Loại Thông Báo...</option>
                                 @foreach ($allNotificationType as $item)
                                     <option value="{{ $item->id }}"
@@ -130,6 +179,15 @@
                             <div class="message_error">{{ $message }}</div>
                         @enderror
 
+                    </div>
+
+                    <div class="form-group">
+                        <label class="fs-5 fw-bold mb-2">Trạng Thái</label>
+                        <div class="checkbox-wrapper-6">
+                            <input type="hidden" name="important" value="0">
+                            <input class="tgl tgl-light" id="important" type="checkbox" name="important" value="1" />
+                            <label class="tgl-btn" for="important"></label>
+                        </div>
                     </div>
 
                 </div>

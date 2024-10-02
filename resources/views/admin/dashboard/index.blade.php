@@ -1,6 +1,11 @@
 @extends('master_layout.layout')
 
 @section('styles')
+    <!-- Tải jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Tải Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 @endsection
 
 @section('title')
@@ -8,6 +13,38 @@
 @endsection
 
 @section('content')
+    @if (session('important_notification'))
+        {{-- Modal Thông Báo Quan Trọng --}}
+        <div class="modal fade" id="importantNotificationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="DetailModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="DetailModal">Thông Báo Quan Trọng</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body pb-0">
+                        {{-- Hiển thị nội dung thông báo từ session --}}
+                        {!! session('important_notification') !!}
+                    </div>
+                    <div class="modal-footer pt-0">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                $('#importantNotificationModal').modal('show');
+            });
+        </script>
+    @endif
+
+
+
+
+
     <div class="card mb-5 mb-xl-8">
         <div class="row gy-5 g-xl-8">
             <!--begin::Col-->

@@ -95,7 +95,7 @@
                                 <div class="mb-3 col-6">
                                     <label for="supplier_code" class="form-label fw-semibold">Nhà cung cấp</label>
                                     <select tabindex="1"
-                                        class="form-control form-control-sm border border-success rounded-pill"
+                                        class="form-control form-control-sm border border-success rounded-pill setupSelect2"
                                         id="supplier_code">
                                         @foreach ($suppliers as $supplier)
                                             <option value="{{ $supplier->code }}">{{ $supplier->name }}</option>
@@ -306,11 +306,37 @@
                             <i class="fas fa-file-invoice-dollar me-2"></i> Lưu phiếu tạm
                         </button>
 
-                        <button type="submit" name="status" value="1"
+                        <button type="button"
                             class="btn btn-sm btn-success w-100 d-flex align-items-center justify-content-center"
-                            onclick="submitMaterials()">
-                            <i class="fas fa-file-import me-2"></i> Tạo phiếu nhập
+                            data-bs-toggle="modal" data-bs-target="#browse_1">
+                            <i class="fas fa-file-import me-2"></i> Duyệt Phiếu Nhập
                         </button>
+
+                        <!-- Modal Duyệt Phiếu -->
+                        <div class="modal fade" id="browse_1" data-bs-backdrop="static" data-bs-keyboard="false"
+                            tabindex="-1" aria-labelledby="browse_label_1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-md">
+                                <div class="modal-content border-0 shadow">
+                                    <div class="modal-header bg-success text-white">
+                                        <h5 class="modal-title text-white" id="browse_label_1">Duyệt
+                                            Phiếu Nhập Kho</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center pb-0">
+                                        <p>Bạn chắc chắn muốn duyệt phiếu kiểm kho này?</p>
+                                    </div>
+                                    <div class="modal-footer justify-content-center border-0 pt-0">
+                                        <button type="button" class="btn btn-sm btn-secondary px-4"
+                                            data-bs-dismiss="modal">Đóng</button>
+                                        <!-- Gọi hàm submitMaterials() khi bấm nút Duyệt -->
+                                        <button type="submit" name="status" value="1"
+                                            class="btn btn-sm btn-success px-4" onclick="submitMaterials()">Duyệt</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 

@@ -123,7 +123,7 @@
                                                                     <td class=""><strong>Ngày cân bằng</strong>
                                                                     </td>
                                                                     <td class="text-gray-800">
-                                                                        {{ $item['check_date'] }}
+                                                                        {{ \Carbon\Carbon::parse($item['check_date'])->format('d/m/Y') }}
                                                                     </td>
                                                                 </tr>
 
@@ -166,14 +166,13 @@
                                                 <div class="col-md-12">
                                                     <div class="table-responsive">
                                                         <table class="table table-striped table-sm table-hover">
-                                                            <thead class=" bg-danger">
+                                                            <thead class="bg-danger">
                                                                 <tr class="text-center">
                                                                     <th class="ps-4">Mã vật tư</th>
                                                                     <th>Tên vật tư</th>
                                                                     <th>Tồn kho</th>
                                                                     <th>Số lượng thực tế</th>
                                                                     <th>Số lượng lệch</th>
-                                                                    <th class="pe-3">Giá trị lệch</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -191,9 +190,6 @@
                                                                         </td>
                                                                         <td>
                                                                             {{ $detail['unequal'] }}
-                                                                        </td>
-                                                                        <td>
-                                                                            190.000 đ
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach

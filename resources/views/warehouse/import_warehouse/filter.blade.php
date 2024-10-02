@@ -29,7 +29,8 @@
         </div>
 
         <div class="col-md-2">
-            <select name="supplier_code" id="supplier_code" class="form-select form-select-sm border-success">
+            <select name="supplier_code" id="supplier_code"
+                class="form-select form-select-sm border-success setupSelect2">
                 <option value="" selected>--Theo Nhà Cung Cấp--</option>
                 @foreach ($suppliers as $supplier)
                     <option value="{{ $supplier->code }}">{{ $supplier->name }}</option>
@@ -38,7 +39,7 @@
         </div>
 
         <div class="col-md-2">
-            <select name="created_by" id="created_by" class="form-select form-select-sm border-success">
+            <select name="created_by" id="created_by" class="form-select form-select-sm border-success setupSelect2">
                 <option value="" selected>--Theo Người Tạo--</option>
                 @foreach ($users as $user)
                     <option value="{{ $user->code }}">{{ $user->last_name }} {{ $user->first_name }}</option>

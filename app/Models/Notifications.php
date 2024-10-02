@@ -22,6 +22,8 @@ class Notifications extends Model
         'code',
         'user_code',
         'notification_type',
+        'important',
+        'status',
         'content',
         'created_at',
         'updated_at',
