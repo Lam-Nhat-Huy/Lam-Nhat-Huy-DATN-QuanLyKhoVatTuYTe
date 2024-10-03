@@ -220,7 +220,7 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Thùng Rác</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('user.index') }}" class="btn btn-sm btn-dark me-2">
+                <a href="{{ route('user.index') }}" class="btn rounded-pill btn-sm btn-dark me-2">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-arrow-left me-1"></i>
                         Trở Lại
@@ -341,9 +341,9 @@
                                                     <h4 class="text-primary text-center">Khôi Phục Người Dùng Này?</h4>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-sm btn-secondary"
+                                                    <button type="button" class="btn rounded-pill btn-sm btn-secondary"
                                                         data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="submit" class="btn btn-sm btn-twitter">Khôi
+                                                    <button type="submit" class="btn rounded-pill btn-sm btn-twitter">Khôi
                                                         Phục</button>
                                                 </div>
                                             </form>
@@ -371,9 +371,9 @@
                                                     <h4 class="text-danger text-center">Xóa Vĩnh Viễn Người Dùng Này?</h4>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-sm btn-secondary"
+                                                    <button type="button" class="btn rounded-pill btn-sm btn-secondary"
                                                         data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                                                    <button type="submit" class="btn rounded-pill btn-sm btn-danger">Xóa</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -403,7 +403,7 @@
             @if ($allUserTrash->count() > 0)
                 <div class="card-body py-3 d-flex justify-content-between align-items-center">
                     <div class="dropdown" id="action_delete_all">
-                        <span class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1"
+                        <span class="btn rounded-pill btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <span>Chọn Thao Tác</span>
                         </span>
@@ -441,9 +441,9 @@
                             <p class="text-primary mb-4">Bạn có chắc chắn muốn khôi phục người dùng đã chọn?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
-                            <button type="button" class="btn btn-sm btn-secondary px-4"
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-sm btn-twitter px-4">Xóa</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4">Xóa</button>
                         </div>
                     </div>
                 </div>
@@ -463,9 +463,9 @@
                             <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả người dùng đã chọn?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
-                            <button type="button" class="btn btn-sm btn-secondary px-4"
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-sm btn-danger px-4">Xóa</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4">Xóa</button>
                         </div>
                     </div>
                 </div>

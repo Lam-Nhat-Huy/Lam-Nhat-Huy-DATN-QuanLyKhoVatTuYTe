@@ -139,13 +139,13 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Thông Báo</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('notification.notification_trash') }}" class="btn btn-sm btn-danger me-2">
+                <a href="{{ route('notification.notification_trash') }}" class="btn rounded-pill btn-sm btn-danger me-2">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-trash me-1"></i>
                         Thùng Rác
                     </span>
                 </a>
-                <a href="{{ route('notification.notification_add') }}" class="btn btn-sm btn-twitter">
+                <a href="{{ route('notification.notification_add') }}" class="btn rounded-pill btn-sm btn-twitter">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-plus me-1"></i>
                         Thêm Thông Báo
@@ -157,7 +157,7 @@
             <form action="{{ route('notification.index') }}" id="form-1" method="GET" class="row align-items-center">
                 <div class="col-3">
                     <select name="ur" id="ur"
-                        class="mt-2 mb-2 form-select form-select-sm border border-success setupSelect2">
+                        class="mt-2 mb-2 form-select form-select-sm rounded-pill border border-success setupSelect2">
                         <option value="" selected>--Theo Người Báo Cáo--</option>
                         @foreach ($AllUser as $item)
                             <option value={{ $item->code }} {{ request()->rt == $item->code ? 'selected' : '' }}>
@@ -167,7 +167,7 @@
                 </div>
                 <div class="col-2">
                     <select name="rt" id="rt"
-                        class="mt-2 mb-2 form-select form-select-sm border border-success setupSelect2">
+                        class="mt-2 mb-2 form-select form-select-sm rounded-pill border border-success setupSelect2">
                         <option value="" selected>--Theo Loại Báo Cáo--</option>
                         @foreach ($AllNotificationType as $item)
                             <option value={{ $item->id }} {{ request()->rt == $item->id ? 'selected' : '' }}>
@@ -176,7 +176,7 @@
                     </select>
                 </div>
                 <div class="col-2">
-                    <select name="st" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
+                    <select name="st" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" {{ request()->st == '' ? 'selected' : '' }}>--Theo Trạng Thái--</option>
                         <option value="0" {{ request()->st == '0' ? 'selected' : '' }}>Chưa Duyệt</option>
                         <option value="1" {{ request()->st == '1' ? 'selected' : '' }}>Đã Duyệt</option>
@@ -186,16 +186,16 @@
                     <div class="row">
                         <div class="col-8">
                             <input type="search" name="kw" placeholder="Tìm Kiếm Mã, Tên, Email Người Dùng.."
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success"
                                 value="{{ request()->kw }}">
                         </div>
                         <div class="col-4">
                             <span class="me-2">
-                                <a class="btn btn-info btn-sm mt-2 mb-2" href="{{ route('notification.index') }}">Bỏ
+                                <a class="btn rounded-pill btn-info btn-sm mt-2 mb-2" href="{{ route('notification.index') }}">Bỏ
                                     Lọc</a>
                             </span>
                             <span>
-                                <button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
+                                <button class="btn rounded-pill btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
                             </span>
                         </div>
                     </div>
@@ -313,7 +313,7 @@
                                                         </strong>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-sm btn-secondary"
+                                                        <button type="button" class="btn rounded-pill btn-sm btn-secondary"
                                                             data-bs-dismiss="modal">Đóng</button>
                                                     </div>
                                                 </div>
@@ -343,10 +343,10 @@
                                                             </p>
                                                         </div>
                                                         <div class="modal-footer justify-content-center border-0 pt-0">
-                                                            <button type="button" class="btn btn-sm btn-secondary"
+                                                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
                                                                 data-bs-dismiss="modal">Đóng</button>
                                                             <button type="submit"
-                                                                class="btn btn-sm btn-success">Duyệt</button>
+                                                                class="btn rounded-pill btn-sm btn-success">Duyệt</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -375,10 +375,10 @@
                                                             <h4 class="text-danger">Xóa Thông Báo Này?</h4>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-sm btn-secondary"
+                                                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
                                                                 data-bs-dismiss="modal">Đóng</button>
                                                             <button type="submit"
-                                                                class="btn btn-sm btn-danger">Xóa</button>
+                                                                class="btn rounded-pill btn-sm btn-danger">Xóa</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -412,7 +412,7 @@
             @if ($AllNotification->count() > 0)
                 <div class="card-body py-3 d-flex justify-content-between align-items-center">
                     <div class="dropdown" id="action_delete_all">
-                        <span class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1"
+                        <span class="btn rounded-pill btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <span>Chọn Thao Tác</span>
                         </span>
@@ -449,9 +449,9 @@
                             <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt tất cả thông báo đã chọn?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
-                            <button type="button" class="btn btn-sm btn-secondary btn-sm px-4"
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary btn-sm px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-sm btn-success px-4">
+                            <button type="submit" class="btn rounded-pill btn-sm btn-success px-4">
                                 Duyệt</button>
                         </div>
                     </div>
@@ -472,9 +472,9 @@
                             <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả thông báo đã chọn?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
-                            <button type="button" class="btn btn-sm btn-secondary px-4"
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-sm btn-success px-4"> Xóa</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-success px-4"> Xóa</button>
                         </div>
                     </div>
                 </div>

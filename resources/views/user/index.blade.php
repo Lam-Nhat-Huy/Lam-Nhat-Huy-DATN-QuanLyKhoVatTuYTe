@@ -209,13 +209,13 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Người Dùng</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('user.user_trash') }}?{{ request()->getQueryString() }}" class="btn btn-sm btn-danger me-2">
+                <a href="{{ route('user.user_trash') }}?{{ request()->getQueryString() }}" class="btn rounded-pill btn-sm btn-danger me-2">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-trash me-1"></i>
                         Thùng Rác
                     </span>
                 </a>
-                <a href="{{ route('user.add') }}?{{ request()->getQueryString() }}" class="btn btn-sm btn-twitter">
+                <a href="{{ route('user.add') }}?{{ request()->getQueryString() }}" class="btn rounded-pill btn-sm btn-twitter">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-plus me-1"></i>
                         Thêm Người Dùng
@@ -226,21 +226,21 @@
         <div class="card-body py-1">
             <form action="{{ route('user.index') }}" id="form-1" method="GET" class="row align-items-center">
                 <div class="col-2">
-                    <select name="gd" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                    <select name="gd" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" {{ request()->gd == '' ? 'selected' : '' }}>--Theo Giới Tính--</option>
                         <option value="nam" {{ request()->gd == 'nam' ? 'selected' : '' }}>Nam</option>
                         <option value="nữ" {{ request()->gd == 'nữ' ? 'selected' : '' }}>Nữ</option>
                     </select>
                 </div>
                 <div class="col-2">
-                    <select name="ps" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                    <select name="ps" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" {{ request()->ps == '' ? 'selected' : '' }}>--Theo Chức Vụ--</option>
                         <option value="1" {{ request()->ps == '1' ? 'selected' : '' }}>Admin</option>
                         <option value="0" {{ request()->ps == '0' ? 'selected' : '' }}>Nhân Viên</option>
                     </select>
                 </div>
                 <div class="col-2">
-                    <select name="st" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                    <select name="st" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" {{ request()->st == '' ? 'selected' : '' }}>--Theo Trạng Thái--</option>
                         <option value="0" {{ request()->st == '0' ? 'selected' : '' }}>Không</option>
                         <option value="1" {{ request()->st == '1' ? 'selected' : '' }}>Có</option>
@@ -250,13 +250,13 @@
                     <div class="row">
                         <div class="col-8">
                             <input type="search" name="kw" placeholder="Tìm Kiếm Mã, Tên, Email Người Dùng.."
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success"
                                 value="{{ request()->kw }}">
                         </div>
                         <div class="col-4">
-                            <span class="me-2"><a class="btn btn-info btn-sm mt-2 mb-2"
+                            <span class="me-2"><a class="btn rounded-pill btn-info btn-sm mt-2 mb-2"
                                     href="{{ route('user.index') }}">Bỏ Lọc</a></span>
-                            <span><button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button></span>
+                            <span><button class="btn rounded-pill btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button></span>
                         </div>
                     </div>
                 </div>
@@ -364,9 +364,9 @@
                                                     <h4 class="text-danger text-center">Xóa Người Dùng Này?</h4>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-sm btn-secondary"
+                                                    <button type="button" class="btn rounded-pill btn-sm btn-secondary"
                                                         data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                                                    <button type="submit" class="btn rounded-pill btn-sm btn-danger">Xóa</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -400,7 +400,7 @@
             @if ($allUser->count() > 0)
                 <div class="card-body py-3 d-flex justify-content-between align-items-center">
                     <div class="dropdown" id="action_delete_all">
-                        <span class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1"
+                        <span class="btn rounded-pill btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <span>Chọn Thao Tác</span>
                         </span>
@@ -431,9 +431,9 @@
                             <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả người dùng đã chọn?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
-                            <button type="button" class="btn btn-sm btn-secondary px-4"
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-sm btn-danger px-4">Xóa</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4">Xóa</button>
                         </div>
                     </div>
                 </div>

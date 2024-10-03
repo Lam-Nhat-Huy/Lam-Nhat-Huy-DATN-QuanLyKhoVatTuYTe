@@ -55122,7 +55122,7 @@ tr th {
 
 .active_navbar {
     background-color: rgb(80 205 137) !important;
-    border-radius: .475rem;
+    border-radius: 50rem !important;
 }
 
 .active_navbar span {

@@ -34,7 +34,7 @@
                 <span class="card-label fw-bolder fs-3 mb-1">{{ $title_form }}</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('report.index') }}" class="btn btn-sm btn-dark">
+                <a href="{{ route('report.index') }}" class="btn rounded-pill btn-sm btn-dark">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-arrow-left me-1"></i>
                         Trở Lại
@@ -63,7 +63,7 @@
                             <label class="{{ $required }} fs-5 fw-bold mb-2">File Báo Cáo (PDF)</label>
 
                             <input type="file"
-                                class="form-control form-control-sm form-control-solid border border-success" id="pdf-input"
+                                class="form-control form-control-sm rounded-pill border border-success" id="pdf-input"
                                 name="file" accept="application/pdf" />
 
                             @error('file')
@@ -78,7 +78,7 @@
 
                             <div class="d-flex align-items-center">
                                 <select name="report_type"
-                                    class="form-select form-select-sm form-select-solid setupSelect2">
+                                    class="form-select form-select-sm rounded-pill setupSelect2">
                                     <option value="0">Chọn Loại Báo Cáo...</option>
                                     @foreach ($AllReportType as $item)
                                         <option value="{{ $item['id'] }}"
@@ -106,7 +106,7 @@
                     <div class="d-flex flex-column mb-5 fv-row">
                         <label class="{{ $required }} fs-5 fw-bold mb-2">Nội Dung Báo Cáo</label>
 
-                        <textarea name="content" class="form-control form-control-sm form-control-solid border border-success" cols="30"
+                        <textarea name="content" class="form-control form-control-sm border border-success" cols="30"
                             rows="5" placeholder="Nhập Nội Dung Báo Cáo..">{{ !empty($FirstReport['content']) ? $FirstReport['content'] : old('content') }}</textarea>
 
                         @error('content')
@@ -118,7 +118,7 @@
             </div>
 
             <div class="modal-footer flex-right">
-                <button type="submit" id="kt_modal_new_address_submit" class="btn btn-twitter btn-sm">
+                <button type="submit" id="kt_modal_new_address_submit" class="btn rounded-pill btn-twitter btn-sm">
                     {{ $button_text }}
                 </button>
             </div>
@@ -140,7 +140,7 @@
                         <div class="mb-3">
                             <label class="required fs-5 fw-bold mb-2">Tên Loại</label>
                             <input type="text"
-                                class="form-control form-control-sm form-control-solid border border-success"
+                                class="form-control form-control-sm rounded-pill border border-success"
                                 placeholder="Tên Loại Báo Cáo.." name="name" id="report_type_name" />
                             <div class="message_error" id="show-err-report-type"></div>
                         </div>
@@ -165,7 +165,7 @@
                                                 {{ $item->name }}
                                             </td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                <button type="button" class="btn rounded-pill btn-danger btn-sm" data-bs-toggle="modal"
                                                     data-bs-target="#delete_modal_report_type"
                                                     onclick="setDeleteForm('{{ route('report.delete_report_type', $item->id) }}')">
                                                     <i class="fa fa-trash p-0"></i>
@@ -178,8 +178,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn btn-sm btn-twitter" id="submit_report_type">Thêm</button>
+                        <button type="button" class="btn rounded-pill btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn rounded-pill btn-sm btn-twitter" id="submit_report_type">Thêm</button>
                     </div>
                 </div>
             </div>
@@ -203,9 +203,9 @@
                             <h6 class="text-danger">Bạn có chắc chắn muốn xóa loại báo cáo này?</h6>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal"
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary" data-bs-toggle="modal"
                                 data-bs-target="#add_modal_report_type">Trở Lại</button>
-                            <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger">Xóa</button>
                         </div>
                     </form>
                 </div>

@@ -18,6 +18,7 @@
 
         .image-overlay .darken {
             position: absolute;
+            border-radius: 50rem !important;
             top: 0;
             left: 0;
             width: 100%;
@@ -32,8 +33,8 @@
 
         .change-avatar {
             position: absolute;
-            bottom: 5%;
-            right: 10%;
+            bottom: 7.5%;
+            right: 40%;
             border-radius: 50%;
             cursor: pointer;
             transition: background-color 0.3s;
@@ -172,10 +173,10 @@
     <div class="card mb-5 pb-15 mb-xl-10" id="kt_profile_details_view">
         <div class="px-10 py-5 border-bottom d-flex justify-content-between align-items-center cursor-pointer">
             <h4 class="fw-bolder m-0">Thông Tin Cá Nhân</h4>
-            <span class="btn btn-dark btn-sm pointer" id="edit_form">
+            <span class="btn rounded-pill btn-dark btn-sm pointer" id="edit_form">
                 <i class="fas fa-edit mb-1"></i> <span>Chỉnh sửa</span>
             </span>
-            <span class="btn btn-secondary btn-sm pointer d-none" id="cancel_edit_form">
+            <span class="btn rounded-pill btn-secondary btn-sm pointer d-none" id="cancel_edit_form">
                 <i class="fas fa-arrow-left mb-1"></i> <span>Trở lại</span>
             </span>
         </div>
@@ -185,7 +186,7 @@
             <div class="row ms-5 mt-5">
                 <div class="col-2">
                     <div class="mt-7 ms-7 position-relative image-overlay">
-                        <img class="border border-dark rounded-3 shadow"
+                        <img class="border border-dark rounded-pill shadow"
                             src="{{ !empty($getUserProfile->avatar) ? asset('storage/' . $getUserProfile->avatar) : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png' }}"
                             alt="Image">
                         <div class="darken rounded-3 d-none"></div>
@@ -193,6 +194,9 @@
                             <input type="file" name="avatar" accept="image/*" style="display: none;" id="avatar-input">
                             <i class="fas fa-camera-rotate text-white" id="change-avatar-icon"></i>
                         </div>
+                    </div>
+                    <div class="ms-7 text-center mt-3 d-none input-edit">
+                        <strong class="text-danger">Ảnh Phải Là NxN Pixel</strong>
                     </div>
                 </div>
                 <div class="col-10">
@@ -208,7 +212,7 @@
                                         <div class="row">
                                             <div class="col-6">
                                                 <input type="text"
-                                                    class="form-control form-control-sm form-control-solid border border-success d-none input-edit"
+                                                    class="form-control form-control-sm rounded-pill border border-success d-none input-edit"
                                                     placeholder="Họ người dùng" name="last_name"
                                                     value="{{ old('last_name', $getUserProfile->last_name) }}" />
 
@@ -217,7 +221,7 @@
 
                                             <div class="col-6">
                                                 <input type="text"
-                                                    class="form-control form-control-sm form-control-solid border border-success d-none input-edit"
+                                                    class="form-control form-control-sm rounded-pill border border-success d-none input-edit"
                                                     placeholder="Tên người dùng" name="first_name"
                                                     value="{{ old('first_name', $getUserProfile->first_name) }}" />
 
@@ -237,7 +241,7 @@
                                         </span>
 
                                         <input type="text"
-                                            class="form-control form-control-sm form-control-solid border border-success bg-secondary d-none input-edit"
+                                            class="form-control form-control-sm rounded-pill border border-success bg-secondary d-none input-edit"
                                             value="{{ $getUserProfile->position }}" disabled />
                                     </div>
                                 </div>
@@ -252,7 +256,7 @@
                                         </span>
 
                                         <input type="text"
-                                            class="form-control form-control-sm form-control-solid border border-success bg-secondary d-none input-edit"
+                                            class="form-control form-control-sm rounded-pill border border-success bg-secondary d-none input-edit"
                                             style="text-transform: lowercase !important;"
                                             value="{{ $getUserProfile->email }}" disabled />
                                     </div>
@@ -269,7 +273,7 @@
                                         </span>
 
                                         <input type="text"
-                                            class="form-control form-control-sm form-control-solid border border-success bg-secondary d-none input-edit"
+                                            class="form-control form-control-sm rounded-pill border border-success bg-secondary d-none input-edit"
                                             value="{{ $getUserProfile->phone }}" disabled />
                                     </div>
                                 </div>
@@ -286,7 +290,7 @@
                                         </span>
 
                                         <input type="date"
-                                            class="form-control form-control-sm form-control-solid border border-success d-none input-edit"
+                                            class="form-control form-control-sm rounded-pill border border-success d-none input-edit"
                                             name="birth_day" placeholder="Ngày sinh"
                                             value="{{ old('birth_day', $getUserProfile->birth_day) }}" />
 
@@ -303,7 +307,7 @@
                                             class="fw-bolder fs-6 text-gray-800 span-show">{{ !empty($getUserProfile->address) ? $getUserProfile->address : 'N/A' }}</span>
 
                                         <input type="text"
-                                            class="form-control form-control-sm form-control-solid border border-success d-none input-edit"
+                                            class="form-control form-control-sm rounded-pill border border-success d-none input-edit"
                                             placeholder="Địa chỉ" name="address"
                                             value="{{ old('address', $getUserProfile->address) }}" />
 
@@ -314,7 +318,7 @@
 
                             <div class="col-12 d-none input-edit mt-3">
                                 <div class="text-end">
-                                    <button type="submit" class="btn btn-dark btn-sm">Cập Nhật</button>
+                                    <button type="submit" class="btn rounded-pill btn-dark btn-sm">Cập Nhật</button>
                                 </div>
                             </div>
                         </div>

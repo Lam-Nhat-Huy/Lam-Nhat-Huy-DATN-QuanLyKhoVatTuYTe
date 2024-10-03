@@ -127,7 +127,7 @@
                 <span class="card-label fw-bolder fs-3 mb-1">{{ $title_form }}</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('notification.index') }}" class="btn btn-sm btn-dark">
+                <a href="{{ route('notification.index') }}" class="btn rounded-pill btn-sm btn-dark">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-arrow-left me-1"></i>
                         Trở Lại
@@ -147,7 +147,7 @@
 
                         <div class="d-flex align-items-center">
 
-                            <select name="notification_type" class="form-select form-select-sm setupSelect2">
+                            <select name="notification_type" class="form-select form-select-sm rounded-pill setupSelect2">
                                 <option value="0">Chọn Loại Thông Báo...</option>
                                 @foreach ($allNotificationType as $item)
                                     <option value="{{ $item->id }}"
@@ -195,7 +195,7 @@
 
 
             <div class="modal-footer flex-right">
-                <button type="submit" id="kt_modal_new_address_submit" class="btn btn-twitter btn-sm">
+                <button type="submit" id="kt_modal_new_address_submit" class="btn rounded-pill btn-twitter btn-sm">
                     {{ $button_text }}
                 </button>
             </div>
@@ -245,7 +245,7 @@
                                                 {{ $item->name }}
                                             </td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                <button type="button" class="btn rounded-pill btn-danger btn-sm" data-bs-toggle="modal"
                                                     data-bs-target="#delete_modal_notification_type"
                                                     onclick="setDeleteForm('{{ route('notification.delete_notification_type', $item->id) }}')">
                                                     <i class="fa fa-trash p-0"></i>
@@ -258,8 +258,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn btn-sm btn-twitter" id="submit_notification_type">Thêm</button>
+                        <button type="button" class="btn rounded-pill btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn rounded-pill btn-sm btn-twitter" id="submit_notification_type">Thêm</button>
                     </div>
                 </div>
             </div>
@@ -283,9 +283,9 @@
                             <h6 class="text-danger">Bạn có chắc chắn muốn xóa loại thông báo này?</h6>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal"
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary" data-bs-toggle="modal"
                                 data-bs-target="#add_modal_notification_type">Trở Lại</button>
-                            <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger">Xóa</button>
                         </div>
                     </form>
                 </div>

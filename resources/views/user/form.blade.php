@@ -119,13 +119,13 @@
                     <span class="card-label fw-bolder fs-3 mb-1">{{ $title_form }}</span>
                 </h3>
                 <div class="card-toolbar">
-                    <button type="button" id="random-btn" class="btn btn-sm btn-info me-2 {{ $hidden }}">
+                    <button type="button" id="random-btn" class="btn rounded-pill btn-sm btn-info me-2 {{ $hidden }}">
                         <span class="align-items-center d-flex">
                             <i class="fa fa-random me-1"></i>
                             Dữ Liệu Mẫu
                         </span>
                     </button>
-                    <a href="{{ route('user.index') }}?{{ request()->getQueryString() }}" class="btn btn-sm btn-dark">
+                    <a href="{{ route('user.index') }}?{{ request()->getQueryString() }}" class="btn rounded-pill btn-sm btn-dark">
                         <span class="align-items-center d-flex">
                             <i class="fa fa-arrow-left me-1"></i>
                             Trở Lại
@@ -151,7 +151,7 @@
                                 <label for="avatar-input" class="pointer"><i class="fa fa-upload"></i> Tải Ảnh Lên</label>
 
                                 <input type="file"
-                                    class="form-control form-control-sm form-control-solid border border-success"
+                                    class="form-control form-control-sm rounded-pill border border-success"
                                     name="avatar" accept="image/*" id="avatar-input" style="display: none;">
 
                                 @error('avatar')
@@ -168,7 +168,7 @@
                                     <label class="{{ $required }} fs-5 fw-bold mb-2">Họ</label>
 
                                     <input type="text"
-                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        class="form-control form-control-sm rounded-pill border border-success"
                                         placeholder="Họ Người Dùng.." name="last_name"
                                         value="{{ !empty($firstUser->last_name) ? $firstUser->last_name : old('last_name') }}" />
                                     @error('last_name')
@@ -182,7 +182,7 @@
                                     <label class="{{ $required }} fs-5 fw-bold mb-2">Tên</label>
 
                                     <input type="text"
-                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        class="form-control form-control-sm rounded-pill border border-success"
                                         placeholder="Tên Người Dùng.." name="first_name"
                                         value="{{ !empty($firstUser->first_name) ? $firstUser->first_name : old('first_name') }}" />
                                     @error('first_name')
@@ -196,7 +196,7 @@
                                     <label class="{{ $required }} fs-5 fw-bold mb-2">Email</label>
 
                                     <input type="text"
-                                        class="form-control form-control-sm form-control-solid border border-success lowercase-text"
+                                        class="form-control form-control-sm rounded-pill border border-success lowercase-text"
                                         placeholder="Email người dùng.." name="email"
                                         value="{{ !empty($firstUser->email) ? $firstUser->email : old('email') }}" />
 
@@ -211,7 +211,7 @@
                                     <label class="{{ $required }} fs-5 fw-bold mb-2">Số Điện Thoại</label>
 
                                     <input type="text"
-                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        class="form-control form-control-sm rounded-pill border border-success"
                                         placeholder="Số Điện Thoại.." name="phone"
                                         value="{{ !empty($firstUser->phone) ? $firstUser->phone : old('phone') }}" />
                                     @error('phone')
@@ -225,7 +225,7 @@
                                     <label class="{{ $required }} fs-5 fw-bold mb-2">Mật Khẩu</label>
 
                                     <input type="password"
-                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        class="form-control form-control-sm rounded-pill border border-success"
                                         placeholder="Mật Khẩu.." name="password" />
                                     @error('password')
                                         <div class="message_error">{{ $message }}</div>
@@ -238,7 +238,7 @@
                                     <label class="{{ $required }} fs-5 fw-bold mb-2">Năm Sinh</label>
 
                                     <input type="date"
-                                        class="form-control form-control-sm form-control-solid border border-success"
+                                        class="form-control form-control-sm rounded-pill border border-success"
                                         name="birth_day"
                                         value="{{ !empty($firstUser->birth_day) ? $firstUser->birth_day : old('birth_day') }}" />
 
@@ -251,7 +251,7 @@
                                 <div class="col-12 fv-row mb-5">
                                     <label class="{{ $required }} fs-5 fw-bold mb-2">Địa Chỉ</label>
 
-                                    <textarea type="text" class="form-control form-control-sm form-control-solid border border-success"
+                                    <textarea type="text" class="form-control form-control-sm border border-success"
                                         placeholder="Địa Chỉ.." name="address" rows="5">{{ !empty($firstUser->address) ? $firstUser->address : old('address') }}</textarea>
                                     @error('address')
                                         <div class="message_error">{{ $message }}</div>
@@ -310,7 +310,7 @@
 
                     </div>
                     <div class="modal-footer flex-right pe-0">
-                        <button type="submit" class="btn btn-twitter btn-sm">
+                        <button type="submit" class="btn rounded-pill btn-twitter btn-sm">
                             {{ $button_text }}
                         </button>
                     </div>
