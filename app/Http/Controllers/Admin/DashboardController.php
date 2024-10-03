@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notifications;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -14,10 +15,15 @@ class DashboardController extends Controller
     {
         $title = 'Thống Kê';
 
+        $importantNotification = Notifications::where('important', 1)
+            ->where('status', 1)
+            ->whereNull('deleted_at')
+            ->first();
+
         // Example forecast data (replace with actual logic)
         $forecastData = $this->calculateForecast();
 
-        return view("admin.{$this->route}.index", compact('title', 'forecastData'));
+        return view("admin.{$this->route}.index", compact('title', 'forecastData', 'importantNotification'));
     }
 
     private function calculateForecast()

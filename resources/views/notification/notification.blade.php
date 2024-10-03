@@ -219,7 +219,7 @@
                                 <th class="" style="width: 16%">Loại Thông Báo</th>
                                 <th class="" style="width: 10%">Ngày Tạo</th>
                                 <th class="" style="width: 10%">Trạng Thái</th>
-                                <th class="" style="width: 10%">Hiển thị</th>
+                                <th class="" style="width: 10%">Quan Trọng</th>
                                 <th class="pe-3 text-center" style="width: 10%">Hành Động</th>
                             </tr>
                         </thead>
@@ -259,10 +259,10 @@
                                     <td>
                                         @if ($item->important == 1)
                                             <span class="rounded px-2 py-1 text-white bg-warning text-center"
-                                                style="font-size: 10px;">Quan trọng</span>
+                                                style="font-size: 10px;"> Có</span>
                                         @else
                                             <span class="rounded px-2 py-1 text-white bg-danger text-center"
-                                                style="font-size: 10px;"> Không hiển thị</span>
+                                                style="font-size: 10px;"> Không</span>
                                         @endif
                                     </td>
 
@@ -298,7 +298,7 @@
                                         <div class="modal fade" id="detail_{{ $item->code }}"
                                             data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                                             aria-labelledby="DetailModal" aria-hidden="true">
-                                            <div class="modal-dialog">
+                                            <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h3 class="modal-title" id="DetailModal">Nội Dung Thông Báo
@@ -358,7 +358,7 @@
                                         <div class="modal fade" id="deleteModal_{{ $item->code }}"
                                             data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                                             aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
+                                            <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h3 class="modal-title" id="deleteModalLabel">Xóa Thông Báo

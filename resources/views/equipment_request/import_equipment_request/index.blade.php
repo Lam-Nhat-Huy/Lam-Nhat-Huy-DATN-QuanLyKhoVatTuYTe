@@ -457,39 +457,7 @@
                                                         <i class="fa fa-trash"></i>Xóa Phiếu
                                                     </button>
                                                 @endif
-                                            </div>
-                                        </div>
 
-                                        {{-- Duyệt --}}
-                                        <div class="modal fade" id="browse_{{ $item->code }}"
-                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                            aria-labelledby="checkModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title" id="checkModalLabel">Duyệt Yêu Cầu Mua
-                                                            Hàng
-                                                        </h3>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <form action="{{ route('equipment_request.import') }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        <div class="modal-body">
-                                                            <h4 class="text-primary text-center">Duyệt Yêu Cầu Mua Hàng
-                                                                Này?
-                                                            </h4>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-sm btn-secondary"
-                                                                data-bs-dismiss="modal">Đóng</button>
-                                                            <button type="submit" name="browse_request"
-                                                                value="{{ $item->code }}"
-                                                                class="btn btn-sm btn-twitter">Duyệt</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
                                             </div>
                                         </div>
 
@@ -633,71 +601,6 @@
                                                 </form>
                                             </div>
                                         </div>
-
-                                        {{-- Xóa --}}
-                                        <div class="modal fade" id="deleteModal_{{ $item->code }}"
-                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                            aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title" id="deleteModalLabel">Xóa Yêu Cầu Mua Hàng
-                                                        </h3>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <form action="{{ route('equipment_request.import') }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        <div class="modal-body">
-                                                            <h4 class="text-danger text-center">Xóa Yêu Cầu Mua Hàng Này?
-                                                            </h4>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-sm btn-secondary"
-                                                                data-bs-dismiss="modal">Đóng</button>
-                                                            <button type="submit" name="delete_request"
-                                                                value="{{ $item->code }}"
-                                                                class="btn btn-sm btn-danger">Xóa</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {{-- Lưu phiếu --}}
-                                        <div class="modal fade" id="save_{{ $item->code }}" data-bs-backdrop="static"
-                                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
-                                            aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title" id="deleteModalLabel">Tạo Phiếu Yêu Cầu
-                                                            Mua
-                                                            Hàng
-                                                        </h3>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <form action="{{ route('equipment_request.import') }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        <div class="modal-body">
-                                                            <h4 class="text-success text-center">Tạo Phiếu Yêu Cầu Mua Hàng
-                                                                Này?
-                                                            </h4>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-sm btn-secondary"
-                                                                data-bs-dismiss="modal">Đóng</button>
-                                                            <button type="submit" name="save_status"
-                                                                value="{{ $item->code }}"
-                                                                class="btn btn-sm btn-success">Tạo</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </td>
                                 </tr>
                             @empty
@@ -793,4 +696,89 @@
             </div>
         </form>
     </div>
+
+    @foreach ($AllEquipmentRequest as $item)
+        {{-- Duyệt --}}
+        <div class="modal fade" id="browse_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="checkModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="checkModalLabel">Duyệt Yêu Cầu Mua
+                            Hàng
+                        </h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('equipment_request.import') }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <h4 class="text-primary text-center">Duyệt Yêu Cầu Mua Hàng
+                                Này?
+                            </h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" name="browse_request" value="{{ $item->code }}"
+                                class="btn btn-sm btn-twitter">Duyệt</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- Xóa --}}
+        <div class="modal fade" id="deleteModal_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="deleteModalLabel">Xóa Yêu Cầu Mua Hàng
+                        </h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('equipment_request.import') }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <h4 class="text-danger text-center">Xóa Yêu Cầu Mua Hàng Này?
+                            </h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" name="delete_request" value="{{ $item->code }}"
+                                class="btn btn-sm btn-danger">Xóa</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- Lưu phiếu --}}
+        <div class="modal fade" id="save_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="deleteModalLabel">Tạo Phiếu Yêu Cầu
+                            Mua
+                            Hàng
+                        </h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('equipment_request.import') }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <h4 class="text-success text-center">Tạo Phiếu Yêu Cầu Mua Hàng
+                                Này?
+                            </h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" name="save_status" value="{{ $item->code }}"
+                                class="btn btn-sm btn-success">Tạo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
 @endsection

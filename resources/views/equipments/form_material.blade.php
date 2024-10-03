@@ -310,7 +310,7 @@
 
     <!-- Modal Thêm Nhóm Vật Tư -->
     <div class="modal fade" id="add_modal_nvt_" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addModalLabel">Thêm Nhóm Vật Tư</h5>
@@ -353,7 +353,7 @@
 
     <!-- Modal Thêm Đơn Vị Tính -->
     <div class="modal fade" id="add_modal_dvt_" tabindex="-1" aria-labelledby="addModalDVTLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addModalDVTLabel">Thêm Đơn Vị Tính</h5>
@@ -389,7 +389,7 @@
     <!-- Modal Thêm Nhà Cung Cấp -->
     <div class="modal fade" id="add_modal_supplier_" tabindex="-1" aria-labelledby="addModalSupplierLabel"
          aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addModalSupplierLabel">Thêm Nhà Cung Cấp</h5>

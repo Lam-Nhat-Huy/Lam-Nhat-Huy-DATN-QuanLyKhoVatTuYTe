@@ -1,6 +1,11 @@
 @extends('master_layout.layout')
 
 @section('styles')
+    <style>
+        #notification_content p {
+            font-size: 14px;
+        }
+    </style>
     <!-- Tải jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -13,21 +18,19 @@
 @endsection
 
 @section('content')
-    @if (session('important_notification'))
+    @if (!empty($importantNotification))
         {{-- Modal Thông Báo Quan Trọng --}}
         <div class="modal fade" id="importantNotificationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="DetailModal" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="DetailModal">Thông Báo Quan Trọng</h3>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-header justify-content-center">
+                        <h3 class="modal-title text-danger" id="DetailModal">BEESOFT THÔNG BÁO</h3>
                     </div>
-                    <div class="modal-body pb-0">
-                        {{-- Hiển thị nội dung thông báo từ session --}}
-                        {!! session('important_notification') !!}
+                    <div class="modal-body" id="notification_content">
+                        {!! $importantNotification->content !!}
                     </div>
-                    <div class="modal-footer pt-0">
+                    <div class="modal-footer">
                         <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
                     </div>
                 </div>
@@ -40,10 +43,6 @@
             });
         </script>
     @endif
-
-
-
-
 
     <div class="card mb-5 mb-xl-8">
         <div class="row gy-5 g-xl-8">

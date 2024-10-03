@@ -172,6 +172,14 @@ class NotificationController extends Controller
 
             $data['important'] = $request->input('important');
 
+            if ($request->input('important') == 1) {
+
+                $this->callModel::where('important', 1)
+                    ->update([
+                        'important' => 0
+                    ]);
+            }
+
             $this->callModel::create($data);
 
             toastr()->success('Đã thêm thông báo');
@@ -202,6 +210,8 @@ class NotificationController extends Controller
         if ($data) {
 
             $data['updated_at'] = now();
+
+            $data['important'] = $request->input('important') ?? 0;
 
             $rs = $this->callModel::where('code', $code)->update($data);
 

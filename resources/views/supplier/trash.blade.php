@@ -176,7 +176,7 @@
                                 <div class="modal fade" id="restoreModal_{{ $item->code }}" data-bs-backdrop="static"
                                     data-bs-keyboard="false" tabindex="-1" aria-labelledby="restoreModalLabel"
                                     aria-hidden="true">
-                                    <div class="modal-dialog">
+                                    <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <form action="{{ route('supplier.trash') }}" method="POST">
                                                 @csrf
@@ -206,7 +206,7 @@
                                 <div class="modal fade" id="deleteModal_{{ $item->code }}" data-bs-backdrop="static"
                                     data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
                                     aria-hidden="true">
-                                    <div class="modal-dialog">
+                                    <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <form action="{{ route('supplier.trash') }}" method="POST">
                                                 @csrf

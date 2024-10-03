@@ -13,7 +13,7 @@ class ExportEquipmentRequestsSeeder extends Seeder
         DB::table('export_equipment_requests')->insert([
             [
                 'code' => 'EXREQ001',
-                'user_code' => 'ULA9SHD45P',
+                'user_code' => 'U001',
                 'department_code' => 'DEP001',
                 'reason_export' => 'Office relocation',
                 'note' => 'Urgent export required for new office setup',

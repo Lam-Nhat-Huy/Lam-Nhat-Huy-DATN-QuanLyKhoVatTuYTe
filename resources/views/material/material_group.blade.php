@@ -228,7 +228,7 @@
                                                 <div class="modal fade" id="deleteModal_{{ $item['id'] }}"
                                                     data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                                                     aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
+                                                    <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h3 class="modal-title" id="deleteModalLabel">Xóa Nhóm Vật

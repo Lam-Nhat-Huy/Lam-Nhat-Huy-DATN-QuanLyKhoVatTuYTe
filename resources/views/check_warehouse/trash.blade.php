@@ -48,7 +48,7 @@
                                     <div class="modal fade" id="restoreModal" data-bs-backdrop="static"
                                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="restoreModalLabel"
                                         aria-hidden="true">
-                                        <div class="modal-dialog">
+                                        <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h3 class="modal-title" id="restoreModalLabel">Khôi Phục Phiếu Kiểm Kho
@@ -77,7 +77,7 @@
                                     <div class="modal fade" id="deleteModal_" data-bs-backdrop="static"
                                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
                                         aria-hidden="true">
-                                        <div class="modal-dialog">
+                                        <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h3 class="modal-title" id="deleteModalLabel">Xóa Vĩnh Viễn Phiếu Kiểm Kho

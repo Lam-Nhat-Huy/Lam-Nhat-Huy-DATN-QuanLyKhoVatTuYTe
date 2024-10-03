@@ -6,5 +6,5 @@ use App\Http\Middleware\CheckLogin;
 
 Route::prefix('profile')->middleware(CheckLogin::class)->group(function () {
     Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
-    
+    Route::post('/update', [ProfileController::class, 'update'])->name('profile.update');
 });

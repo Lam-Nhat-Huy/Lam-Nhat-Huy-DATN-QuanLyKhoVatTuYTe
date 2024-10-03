@@ -182,11 +182,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="fs-5 fw-bold mb-2">Trạng Thái</label>
+                        <label class="fs-5 fw-bold mb-2">Thông Báo Quan Trọng</label>
                         <div class="checkbox-wrapper-6">
-                            <input type="hidden" name="important" value="0">
-                            <input class="tgl tgl-light" id="important" type="checkbox" name="important" value="1" />
-                            <label class="tgl-btn" for="important"></label>
+                            <input class="tgl tgl-light" id="cb1-6" type="checkbox" value="1" name="important"
+                                {{ (!empty($firstNotification->important) && $firstNotification->important == 1) || old('important') == 1 ? 'checked' : '' }} />
+                            <label class="tgl-btn" for="cb1-6"></label>
                         </div>
                     </div>
 
