@@ -164,44 +164,81 @@
         <form action="{{ route('check_warehouse.store') }}" method="POST">
             @csrf
             <div class="row">
-                {{-- Lên danh sách kiểm kho  --}}
                 <div class="col-md-8">
                     <div class="card border-0 shadow-lg p-4 bg-body rounded-4">
-                        <!-- Thanh tìm kiếm sản phẩm -->
                         <div class="container mt-4 position-relative px-0 pe-0">
-                            <!-- Input group for search bar -->
                             <div class="input-group mb-3">
                                 <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
                                 <input type="text" class="form-control" id="searchProductInput"
-                                    placeholder="Nhập tên hoặc mã hàng hoá (F2)" aria-label="Search"
+                                    placeholder="Nhập tên hoặc mã hàng hoá (Nhấn F2)" aria-label="Search"
                                     onkeyup="filterProducts()">
                                 <button type="button" class="btn btn-danger" onclick="addAllProducts()">
                                     <i class="fas fa-list"></i>
                                 </button>
                             </div>
 
-                            <!-- Dropdown list of products -->
+                            <div class="modal fade" id="importantNotificationModal" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="DetailModal" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-danger">
+                                            <h3 class="modal-title text-white" id="DetailModal">Thông báo</h3>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" id="importantNotificationContent">
+                                        </div>
+                                        <div class="modal-footer pt-1 pb-1">
+                                            <button type="button" class="btn btn-sm btn-danger" style="font-size: 10px"
+                                                data-bs-dismiss="modal">Đóng</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="dropdown-menu w-750px" id="productDropdown"></div>
                         </div>
-                        {{-- Hiển thị trạng thái  --}}
-                        <ul class="d-flex">
-                            <li class="me-5 text-dark">Tất cả (<span id="totalCount">0</span>)</li>
-                            <li class="me-5 text-success">Khớp (<span id="matchedCount">0</span>)</li>
-                            <li class="me-5 text-warning">Lệch (<span id="mismatchedCount">0</span>)</li>
-                            <li class="me-5 text-danger">Chưa kiểm (<span id="uncheckedCount">0</span>)</li>
-                        </ul>
 
-                        <div class="table-responsive">
+                        {{-- Hiển thị trạng thái --}}
+                        <div class="d-flex justify-content-between mt-4">
+                            <ul class="d-flex list-unstyled">
+                                <li class="me-5 text-dark">Tất cả (<span id="totalCount">0</span>)</li>
+                                <li class="me-5 text-success">Khớp (<span id="matchedCount">0</span>)</li>
+                                <li class="me-5 text-warning">Lệch (<span id="mismatchedCount">0</span>)</li>
+                                <li class="me-5 text-danger">Chưa kiểm (<span id="uncheckedCount">0</span>)</li>
+                            </ul>
+                        </div>
+
+                        {{-- Hướng dẫn tổ hợp phím --}}
+                        <div class="d-flex justify-content-start mb-2">
+                            <ul class="list-unstyled">
+                                <li class="mb-1 text-dark">
+                                    <strong>Hướng dẫn tổ hợp phím:</strong>
+                                </li>
+                                <li class="mb-1 text-dark">
+                                    - <strong>F2:</strong> Tìm kiếm thiết bị
+                                </li>
+                                <li class="mb-1 text-dark">
+                                    - <strong>ALT + A:</strong> Thêm tất cả sản phẩm vào danh sách
+                                </li>
+                                <li class="mb-1 text-dark">
+                                    - <strong>ALT + F:</strong> Tự động điền tất cả số lượng thực tế
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="table-responsive mt-4">
                             <table class="table text-center align-middle">
                                 <thead class="table-dark">
                                     <tr>
-                                        <td></td>
-                                        <th style="width: 40px;">STT</th>
+                                        <th style="width: 50px;">STT</th>
                                         <th style="width: 100px;">Mã thiết bị</th>
                                         <th>Tên thiết bị</th>
+                                        <th>Số lô</th>
                                         <th>Tồn kho</th>
                                         <th>Thực tế</th>
-                                        <th>Sô lượng lệch</th>
+                                        <th>Số lượng lệch</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody id="materialList">
@@ -228,13 +265,13 @@
                                     </tr>
                                 </tbody>
                             </table>
+
                             <!-- Input ẩn để lưu trữ dữ liệu vật tư -->
                             <input type="hidden" id="materialData" name="materialData">
                         </div>
-
-
                     </div>
                 </div>
+
 
                 {{-- Giao diện kiểm kho mới --}}
                 <div class="col-md-4">
@@ -269,7 +306,8 @@
                         <!-- Ghi chú -->
                         <div class="mb-4">
                             <label for="note" class="form-label fw-semibold text-dark">Ghi chú</label>
-                            <textarea id="note" class="form-control form-control-lg rounded-3" placeholder="Nhập ghi chú..." rows="3"></textarea>
+                            <textarea id="note" class="form-control form-control-lg rounded-3" placeholder="Nhập ghi chú..."
+                                rows="3"></textarea>
                         </div>
 
                         <!-- Buttons -->
@@ -284,8 +322,9 @@
                             </button>
 
                             <!-- Modal Hoàn thành -->
-                            <div class="modal fade" id="completeModal" data-bs-backdrop="static" data-bs-keyboard="false"
-                                tabindex="-1" aria-labelledby="completeModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="completeModal" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="completeModalLabel"
+                                aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered modal-md">
                                     <div class="modal-content border-0 shadow">
                                         <div class="modal-header bg-success text-white">
@@ -322,6 +361,25 @@
 @section('scripts')
     <script>
         var products = @json($equipmentsWithStock);
+    </script>
+
+    <script>
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'F2') {
+                event.preventDefault();
+                document.getElementById('searchProductInput').focus();
+            }
+
+            if (event.altKey && event.key.toLowerCase() === 'a') {
+                event.preventDefault();
+                addAllProducts();
+            }
+
+            if (event.altKey && event.key === 'f') {
+                event.preventDefault();
+                autoFillAllQuantities();
+            }
+        });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

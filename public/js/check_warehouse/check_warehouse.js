@@ -4,7 +4,6 @@ let matchedCount = 0;
 let mismatchedCount = 0;
 let uncheckedCount = 0;
 
-// Filter products based on user input
 function filterProducts() {
     var input = document.getElementById('searchProductInput');
     var filter = input.value.toUpperCase();
@@ -43,15 +42,21 @@ function filterProducts() {
     }
 }
 
-// Select product from dropdown
 function selectProduct(element, name, equipment_code, current_quantity, batch_number) {
     addProductToTable(name, equipment_code, current_quantity, batch_number);
     document.getElementById('productDropdown').style.display = 'none';
     document.getElementById('searchProductInput').value = '';
 }
 
-// Add product to table and initialize counts
 function addProductToTable(name, equipment_code, current_quantity, batch_number) {
+    var existingMaterial = materialData.find(material => material.equipment_code === equipment_code && material.batch_number === batch_number);
+
+    if (existingMaterial) {
+        document.getElementById('importantNotificationContent').innerHTML = `Thiết bị <strong>${name}</strong> với mã <strong>${equipment_code}</strong> và lô <strong>${batch_number}</strong> đã tồn tại.`;
+        $('#importantNotificationModal').modal('show');
+        return;
+    }
+
     totalCount++;
     uncheckedCount++;
 
@@ -60,19 +65,24 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
 
     var row = `
         <tr data-index="${rowCount}">
-            <td>
-                <a href="#" class="text-dark" onclick="removeProduct(${rowCount})">
-                    <i class="fa fa-trash"></i>
-                </a>
-            </td>
-            <td>${rowCount + 1}</td>
+            <td>${rowCount + 1}</td>    
             <td>${equipment_code}</td>
             <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</td>
+            <td>${batch_number}</td>
             <td>${current_quantity}</td>
             <td>
                 <input type="number" style="width: 70px; height: 40px; border-radius: 8px;" oninput="updateProduct(${rowCount}, this.value)">
             </td>
             <td class="unequal-count" id="unequal-count-${rowCount}">0</td>
+            <td>
+                <button class="btn btn-primary" type="button" onclick="autoFillQuantity(${rowCount}, ${current_quantity})">
+                    <i class="fa fa-random"></i>
+                </button>
+
+                <a href="#" class="text-dark" onclick="removeProduct(${rowCount})">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </td>
         </tr>
     `;
 
@@ -86,14 +96,14 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
         batch_number: batch_number
     });
 
-    updateCounts(); // Update counts display
+    updateCounts();
 
     if (tableBody.rows.length > 0) {
         document.getElementById('noDataAlert').style.display = 'none';
     }
 }
 
-// Remove product from table and update counts
+
 function removeProduct(index) {
     var tableBody = document.getElementById('materialList');
     var row = tableBody.querySelector(`tr[data-index="${index}"]`);
@@ -103,37 +113,31 @@ function removeProduct(index) {
         totalCount--;
         uncheckedCount--;
         updateRowIndices();
-        updateCounts(); // Update counts display
+        updateCounts();
         if (tableBody.rows.length === 0) {
             document.getElementById('noDataAlert').style.display = 'table-row';
         }
     }
 }
 
-// Update row indices after removal
 function updateRowIndices() {
     var tableBody = document.getElementById('materialList');
     Array.from(tableBody.rows).forEach((row, index) => {
         row.setAttribute('data-index', index);
-        row.cells[1].textContent = index + 1; // Update STT column
+        row.cells[1].textContent = index + 1;
     });
 }
 
-// Update product quantity and calculate differences
 function updateProduct(index, value) {
     if (materialData[index]) {
         materialData[index].actual_quantity = value;
 
-        // Calculate the unequal count
         const current_quantity = materialData[index].current_quantity;
         const unequal = value - current_quantity;
         materialData[index].unequal = unequal;
 
-        // Update the UI to show the unequal count
         const unequalCountCell = document.getElementById(`unequal-count-${index}`);
-        unequalCountCell.textContent = unequal; // Display the unequal quantity
-
-        // Update matched and mismatched counts
+        unequalCountCell.textContent = unequal;
         if (value > 0) {
             if (unequal === 0) {
                 matchedCount++;
@@ -144,36 +148,32 @@ function updateProduct(index, value) {
             }
         }
 
-        updateCounts(); // Update counts display
+        updateCounts();
     }
 }
 
-// Update displayed counts
 function updateCounts() {
     document.getElementById('totalCount').textContent = totalCount;
     document.getElementById('matchedCount').textContent = matchedCount;
     document.getElementById('mismatchedCount').textContent = mismatchedCount;
     document.getElementById('uncheckedCount').textContent = uncheckedCount;
 
-    // Show or hide noDataAlert based on the number of products
     const noDataAlert = document.getElementById('noDataAlert');
     noDataAlert.style.display = materialData.length === 0 ? 'table-row' : 'none';
 }
 
-// Add all products to the table
 function addAllProducts() {
     var tableBody = document.getElementById('materialList');
 
     products.forEach(product => {
         product.inventories.forEach(inventory => {
-            if (!materialData.some(item => item.equipment_code === inventory.equipment_code)) {
-                addProductToTable(product.name, inventory.equipment_code, inventory.current_quantity, inventory.batch_number);
-            }
+            // Bỏ điều kiện kiểm tra trùng lặp, để luôn thêm tất cả sản phẩm và lô hàng
+            addProductToTable(product.name, inventory.equipment_code, inventory.current_quantity, inventory.batch_number);
         });
     });
 }
 
-// Submit materials data
+
 function submitMaterials() {
     var checkDate = document.getElementById('check_date').value;
     var note = document.getElementById('note').value;
@@ -191,4 +191,25 @@ function submitMaterials() {
     });
 
     document.getElementById('materialData').value = JSON.stringify(materialData);
+}
+
+
+function autoFillQuantity(index, current_quantity) {
+    var inputField = document.querySelector(`tr[data-index="${index}"] input[type="number"]`);
+    inputField.value = current_quantity;
+    updateProduct(index, current_quantity);
+}
+
+function autoFillAllQuantities() {
+    materialData.forEach((material, index) => {
+        var current_quantity = material.current_quantity;
+
+        var inputField = document.querySelector(`tr[data-index="${index}"] input[type="number"]`);
+
+        if (inputField) {
+            inputField.value = current_quantity;
+
+            updateProduct(index, current_quantity);
+        }
+    });
 }

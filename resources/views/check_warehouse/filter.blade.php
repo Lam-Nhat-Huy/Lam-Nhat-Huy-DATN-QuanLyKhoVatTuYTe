@@ -15,21 +15,19 @@
         <div class="col-md-4">
             <div class="row align-items-center">
                 <div class="col-5 pe-0">
-                    <input type="date" name="start_date"
-                        class="form-control form-control-sm form-control-solid border-success"
+                    <input type="date" name="start_date" class="form-control form-control-sm border-success"
                         value="{{ \Carbon\Carbon::now()->subMonths(3)->format('Y-m-d') }}">
                 </div>
                 <div class="col-2 text-center">Đến</div>
                 <div class="col-5 ps-0">
-                    <input type="date" name="end_date"
-                        class="form-control form-control-sm form-control-solid border-success"
+                    <input type="date" name="end_date" class="form-control form-control-sm border-success"
                         value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                 </div>
             </div>
         </div>
 
         <div class="col-md-2">
-            <select name="status" id="status" class="form-select form-select-sm border-success">
+            <select name="status" id="status" class="form-select form-select-sm border-success setupSelect2">
                 <option value="" selected>--Theo Trạng Thái--</option>
                 <option value="0">Phiếu Tạm</option>
                 <option value="1">Đã Duyệt</option>
@@ -38,7 +36,7 @@
 
 
         <div class="col-md-2">
-            <select name="user_code" id="user_code" class="form-select form-select-sm border-success">
+            <select name="user_code" id="user_code" class="form-select form-select-sm border-success setupSelect2">
                 <option value="" selected>--Theo Người Tạo--</option>
                 @foreach ($users as $user)
                     <option value="{{ $user->code }}">{{ $user->last_name }} {{ $user->first_name }}</option>
@@ -50,7 +48,7 @@
         <div class="col-md-4">
             <div class="input-group">
                 <input type="search" id="search" name="search" placeholder="Tìm Kiếm Mã Kiểm Kho"
-                    class="form-control form-control-sm form-control-solid border-success">
+                    class="form-control form-control-sm border-success">
             </div>
         </div>
 
