@@ -204,7 +204,8 @@
                                             <div class="button-group">
                                                 <!-- Nút Duyệt đơn, chỉ hiển thị khi là Phiếu Tạm -->
                                                 @if ($item['status'] == 0)
-                                                    <button style="font-size: 10px;" class="btn btn-sm btn-success me-2"
+                                                    <button style="font-size: 10px;"
+                                                        class="btn btn-sm btn-success me-2 rounded-pill"
                                                         data-bs-toggle="modal" data-bs-target="#browse-{{ $item->code }}"
                                                         type="button">
                                                         <i style="font-size: 10px;" class="fas fa-clipboard-check"></i>Duyệt
@@ -215,21 +216,23 @@
                                                 <!-- Nút Sửa đơn -->
                                                 @if ($item['status'] == 0)
                                                     <a style="font-size: 10px;" href=""
-                                                        class="btn btn-dark btn-sm me-2"><i style="font-size: 10px;"
-                                                            class="fa fa-edit"></i>Sửa Phiếu</a>
+                                                        class="btn btn-dark btn-sm me-2 rounded-pill"><i
+                                                            style="font-size: 10px;" class="fa fa-edit"></i>Sửa Phiếu</a>
                                                 @endif
                                                 @if ($item['status'] == 1)
                                                     <!-- Nút In Phiếu -->
-                                                    <button style="font-size: 10px;" class="btn btn-sm btn-twitter me-2"
-                                                        id="printPdfBtn" type="button">
+                                                    <button style="font-size: 10px;"
+                                                        class="btn btn-sm btn-twitter me-2 rounded-pill" id="printPdfBtn"
+                                                        type="button">
                                                         <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
                                                     </button>
                                                 @endif
 
                                                 @if ($item['status'] == 0)
                                                     <!-- Nút xóa, có thể nằm trong danh sách hoặc bảng -->
-                                                    <button style="font-size: 10px;" class="btn btn-danger btn-sm"
-                                                        data-bs-toggle="modal" data-bs-target="#delete-">
+                                                    <button style="font-size: 10px;"
+                                                        class="btn btn-danger btn-sm rounded-pill" data-bs-toggle="modal"
+                                                        data-bs-target="#delete-">
                                                         <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa phiếu
                                                     </button>
                                                 @endif
@@ -261,9 +264,10 @@
                                                             </div>
                                                             <div class="modal-footer justify-content-center border-0">
                                                                 <button type="button"
-                                                                    class="btn btn-sm btn-secondary px-4"
+                                                                    class="btn btn-sm btn-secondary px-4 rounded-pill"
                                                                     data-bs-dismiss="modal">Đóng</button>
-                                                                <button type="button" class="btn btn-sm btn-success px-4"
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-success px-4 rounded-pill"
                                                                     onclick="event.preventDefault(); document.getElementById('approveForm-{{ $item->code }}').submit();">
                                                                     Duyệt
                                                                 </button>

@@ -46,7 +46,7 @@
                 <span class="card-label fw-bolder fs-3 mb-1">{{ $title_form }}</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('equipment_request.import') }}" class="btn btn-sm btn-dark">
+                <a href="{{ route('equipment_request.import') }}" class="btn btn-sm btn-dark rounded-pill">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-arrow-left me-1"></i>
                         Trở Lại
@@ -61,7 +61,7 @@
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Nhà Cung Cấp</label>
                         <div class="d-flex align-items-center">
                             <select name="supplier_code" id="supplier_code" onchange="changeSupplier()"
-                                class="form-select form-select-sm form-select-solid border border-success ps-5">
+                                class="form-select form-select-sm form-select-solid border border-success rounded-pill ps-5">
                                 <option value="0">Chọn Nhà Cung Cấp...</option>
                                 @foreach ($AllSuppiler as $item)
                                     <option value="{{ $item->code }}" id="option_supplier_{{ $item->code }}"
@@ -80,7 +80,7 @@
 
                     <div class="col-md-6 fv-row">
                         <label class="fs-5 fw-bold mb-3">Ghi Chú</label>
-                        <input type="text" class="form-control form-control-sm border border-success"
+                        <input type="text" class="form-control form-control-sm border border-success rounded-pill"
                             placeholder="Nhập ghi chú cho phiếu yêu cầu nhập.." name="note" id="note"
                             value="{{ old('note', $editForm->note ?? '') }}" />
                         <div class="message_error" id="supplier_code_error"></div>
@@ -98,7 +98,7 @@
                     <div class="col-md-6 fv-row">
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Thiết Bị</label>
                         <select name="equipment" id="equipment" onchange="changeEquipment()"
-                            class="form-select form-select-sm form-select-solid border border-success ps-5">
+                            class="form-select form-select-sm form-select-solid border border-success rounded-pill ps-5">
                             <option value="" selected>Chọn Thiết Bị...</option>
                             @foreach ($AllEquipment as $item)
                                 <option value="{{ $item->code }}"
@@ -114,15 +114,16 @@
 
                     <div class="col-md-6 fv-row">
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Số Lượng</label>
-                        <input type="number" id="quantity" class="form-control form-control-sm border border-success"
-                            value="0" name="quantity" min="0" />
+                        <input type="number" id="quantity"
+                            class="form-control form-control-sm border border-success rounded-pill" value="0"
+                            name="quantity" min="0" />
                         <div class="message_error" id="quantity_error"></div>
                     </div>
                 </div>
             </div>
 
             <div class="modal-footer flex-right pe-0 pb-0">
-                <button type="butotn" class="btn btn-success btn-sm" id="btn_add_equipment">
+                <button type="butotn" class="btn btn-success btn-sm rounded-pill" id="btn_add_equipment">
                     Thêm Thiết Bị
                 </button>
             </div>
@@ -152,7 +153,7 @@
                                     <td>{{ $item->equipments->units->name }}</td>
                                     <td><input type="number" id="quantity_change_{{ $item->equipment_code }}"
                                             value="{{ $item->quantity }}"
-                                            class="form-control form-control-sm border border-success w-50">
+                                            class="form-control form-control-sm border border-success rounded-pill w-50">
                                     </td>
                                     <td class="text-center">
                                         <span class="btn btn-sm btn-danger pointer"
@@ -192,15 +193,15 @@
                     đã tồn tại trong lịch sử yêu cầu (3 Ngày gần đây). Xin hãy kiểm tra và thử lại.</div>
 
             <div class="modal-footer flex-right pe-0">
-                <button type="button" class="btn btn-info btn-sm {{ $d_none_temp }}"
+                <button type="button" class="btn btn-info btn-sm {{ $d_none_temp }} rounded-pill"
                     id="import_equipment_request_temp">
                     <i class="fa fa-cloud-arrow-down me-1"></i>Lưu Tạm
                 </button>
-                <button type="button" class="btn btn-twitter btn-sm {{ $d_none_save }}"
+                <button type="button" class="btn btn-twitter btn-sm {{ $d_none_save }} rounded-pill"
                     id="import_equipment_request_save">
                     <i class="fa fa-save me-1"></i>{{ $button_text }}
                 </button>
-                <button type="button" class="btn btn-twitter btn-sm {{ $d_none_update }}"
+                <button type="button" class="btn btn-twitter btn-sm {{ $d_none_update }} rounded-pill"
                     id="import_equipment_request_update">
                     <i class="fa fa-save me-1"></i>{{ $button_text }}
                 </button>
@@ -220,7 +221,7 @@
                 <div class="modal-body pb-0">
                     <div class="mb-3">
                         <label class="required fs-5 er mb-2">Tên Nhà Cung Cấp</label>
-                        <input type="text" class="form-control form-control-sm border border-success"
+                        <input type="text" class="form-control form-control-sm border border-success rounded-pill"
                             placeholder="Tên nhà cung cấp.." name="name" id="supplier_type_name" />
                         <div class="message_error" id="show-err-supplier-type"></div>
                     </div>
@@ -475,7 +476,7 @@
                             newRow.innerHTML = `
                                 <td>${data.equipment_name}</td>
                                 <td>${data.unit}</td>
-                                <td><input type="number" id="quantity_change_${data.equipment_code}" value="${parseInt(data.quantity, 10)}" class="form-control form-control-sm border border-success w-50"></td>
+                                <td><input type="number" id="quantity_change_${data.equipment_code}" value="${parseInt(data.quantity, 10)}" class="form-control form-control-sm border border-success rounded-pill w-50"></td>
                                 <td class="text-center">
                                     <span class="btn btn-sm btn-danger pointer" onclick="removeEquipment('${data.equipment_code}')">
                                         <i class="fa fa-trash p-0"></i>

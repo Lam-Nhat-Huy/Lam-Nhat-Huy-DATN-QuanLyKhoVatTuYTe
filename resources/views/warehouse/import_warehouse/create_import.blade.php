@@ -79,7 +79,7 @@
             </h3>
 
             <div class="card-toolbar">
-                <a href="{{ route('warehouse.import') }}" class="btn btn-sm btn-dark" style="font-size: 10px;">
+                <a href="{{ route('warehouse.import') }}" class="btn btn-sm btn-dark rounded-pill" style="font-size: 10px;">
                     <i class="fa fa-arrow-left me-1" style="font-size: 10px;"></i>Trở Lại
                 </a>
             </div>
@@ -198,10 +198,12 @@
 
                             <div class="row">
                                 <div class="col-6">
-                                    <button type="button" class="btn btn-sm btn-success shadow-sm rounded-pill"
-                                        data-bs-toggle="modal" data-bs-target="#importExcelModal">Nhập Excel</button>
-                                    <button type="button" class="btn btn-sm btn-danger shadow-sm rounded-pill"
-                                        onclick="addMaterial()">Thêm vật tư</button>
+                                    <button style="font-size: 10px;" type="button"
+                                        class="btn btn-sm btn-success shadow-sm rounded-pill" data-bs-toggle="modal"
+                                        data-bs-target="#importExcelModal">Nhập Excel</button>
+                                    <button style="font-size: 10px;" type="button"
+                                        class="btn btn-sm btn-danger shadow-sm rounded-pill" onclick="addMaterial()">Thêm
+                                        vật tư</button>
                                 </div>
                             </div>
                         </div>
@@ -298,21 +300,16 @@
 
                         <hr class="my-4">
 
-                        {{-- <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="fw-semibold">Số lượng vật tư</span>
-                            <span id="totalItems" class="fw-semibold text-primary">0</span>
-                        </div> --}}
-
                         <button type="submit" name="status" value="0"
-                            class="btn btn-sm btn-warning w-100 mb-2 d-flex align-items-center justify-content-center"
+                            class="btn btn-sm btn-warning w-100 mb-2 d-flex align-items-center justify-content-center rounded-pill"
                             onclick="submitMaterials()">
-                            <i class="fas fa-file-invoice-dollar me-2"></i> Lưu phiếu tạm
+                            <i class="fas fa-file-invoice-dollar me-1"></i>Lưu phiếu tạm
                         </button>
 
                         <button type="button"
-                            class="btn btn-sm btn-success w-100 d-flex align-items-center justify-content-center"
+                            class="btn btn-sm btn-success w-100 d-flex align-items-center justify-content-center rounded-pill"
                             data-bs-toggle="modal" data-bs-target="#browse_1">
-                            <i class="fas fa-file-import me-2"></i> Duyệt Phiếu Nhập
+                            <i class="fas fa-file-import me-1"></i>Duyệt Phiếu Nhập
                         </button>
 
                         <!-- Modal Duyệt Phiếu -->
@@ -330,11 +327,12 @@
                                         <p>Bạn chắc chắn muốn duyệt phiếu kiểm kho này?</p>
                                     </div>
                                     <div class="modal-footer justify-content-center border-0 pt-0">
-                                        <button type="button" class="btn btn-sm btn-secondary px-4"
+                                        <button type="button" class="btn btn-sm btn-secondary px-4 rounded-pill"
                                             data-bs-dismiss="modal">Đóng</button>
                                         <!-- Gọi hàm submitMaterials() khi bấm nút Duyệt -->
                                         <button type="submit" name="status" value="1"
-                                            class="btn btn-sm btn-success px-4" onclick="submitMaterials()">Duyệt</button>
+                                            class="btn btn-sm btn-success px-4 rounded-pill"
+                                            onclick="submitMaterials()">Duyệt</button>
                                     </div>
                                 </div>
                             </div>

@@ -168,7 +168,7 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Thùng Rác</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('equipment_request.import') }}" class="btn rounded-pill btn-sm btn-dark me-2">
+                <a href="{{ route('equipment_request.import') }}" class="btn rounded-pill btn-sm btn-dark me-2 rounded-pill">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-arrow-left me-1"></i>
                         Trở Lại
@@ -231,15 +231,19 @@
                                                     <h4 class="fw-bold m-0">Thiết Bị Yêu Cầu Mua</h4>
                                                     <div class="card-toolbar">
                                                         @if (($item->status == 0 || $item->status == 3) && \Carbon\Carbon::parse($item->request_date)->diffInDays(now()) > 3)
-                                                            <div class="rounded-pill px-2 py-1 text-white bg-warning">Hết Hạn
+                                                            <div class="rounded-pill px-2 py-1 text-white bg-warning">Hết
+                                                                Hạn
                                                             </div>
                                                         @elseif ($item->status == 3)
-                                                            <div class="rounded-pill px-2 py-1 text-white bg-info">Lưu Tạm</div>
+                                                            <div class="rounded-pill px-2 py-1 text-white bg-info">Lưu Tạm
+                                                            </div>
                                                         @elseif ($item->status == 0)
-                                                            <div class="rounded-pill px-2 py-1 text-white bg-danger">Chờ Duyệt
+                                                            <div class="rounded-pill px-2 py-1 text-white bg-danger">Chờ
+                                                                Duyệt
                                                             </div>
                                                         @elseif ($item->status == 1)
-                                                            <div class="rounded-pill px-2 py-1 text-white bg-success">Đã Duyệt
+                                                            <div class="rounded-pill px-2 py-1 text-white bg-success">Đã
+                                                                Duyệt
                                                             </div>
                                                         @endif
                                                     </div>
@@ -277,13 +281,15 @@
                                         <div class="card-body py-5 text-end bg-white">
                                             <div class="button-group">
                                                 <!-- Nút khôi phục đơn -->
-                                                <button class="btn rounded-pill btn-sm btn-success me-2" data-bs-toggle="modal"
-                                                    data-bs-target="#restore_{{ $item->code }}" type="button">
+                                                <button class="btn rounded-pill btn-sm btn-success me-2 rounded-pill"
+                                                    data-bs-toggle="modal" data-bs-target="#restore_{{ $item->code }}"
+                                                    type="button">
                                                     <i class="fas fa-clipboard-check"></i>Khôi Phục
                                                 </button>
 
                                                 <!-- Nút xóa vv đơn -->
-                                                <button class="btn rounded-pill btn-sm btn-danger me-2" data-bs-toggle="modal"
+                                                <button class="btn rounded-pill btn-sm btn-danger me-2 rounded-pill"
+                                                    data-bs-toggle="modal"
                                                     data-bs-target="#deleteModal_{{ $item->code }}" type="button">
                                                     <i class="fa fa-trash"></i>Xóa
                                                 </button>
@@ -312,11 +318,13 @@
                                                             </h4>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
+                                                            <button type="button"
+                                                                class="btn rounded-pill btn-sm btn-secondary"
                                                                 data-bs-dismiss="modal">Đóng</button>
                                                             <button type="submit" name="restore_request"
                                                                 value="{{ $item->code }}"
-                                                                class="btn rounded-pill btn-sm btn-twitter">Khôi Phục</button>
+                                                                class="btn rounded-pill btn-sm btn-twitter">Khôi
+                                                                Phục</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -345,11 +353,13 @@
                                                             </h4>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
+                                                            <button type="button"
+                                                                class="btn rounded-pill btn-sm btn-secondary"
                                                                 data-bs-dismiss="modal">Đóng</button>
                                                             <button type="submit" name="delete_request"
                                                                 value="{{ $item->code }}"
-                                                                class="btn rounded-pill btn-sm btn-danger">Xóa Vĩnh Viễn</button>
+                                                                class="btn rounded-pill btn-sm btn-danger">Xóa Vĩnh
+                                                                Viễn</button>
                                                         </div>
                                                     </form>
                                                 </div>

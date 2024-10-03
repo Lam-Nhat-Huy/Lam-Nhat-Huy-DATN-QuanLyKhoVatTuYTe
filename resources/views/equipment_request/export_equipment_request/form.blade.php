@@ -28,7 +28,7 @@
                     <span class="card-label fw-bolder fs-3 mb-1">{{ $title_form }}</span>
                 </h3>
                 <div class="card-toolbar">
-                    <a href="{{ route('equipment_request.export') }}" class="btn btn-sm btn-dark">
+                    <a href="{{ route('equipment_request.export') }}" class="btn btn-sm btn-dark rounded-pill">
                         <span class="align-items-center d-flex">
                             <i class="fa fa-arrow-left me-1"></i>
                             Trở Lại
@@ -63,7 +63,7 @@
                             <label class="fs-5 fw-bold mb-2">Ghi Chú</label>
 
 
-                            <input type="text" class="form-control form-control-sm border border-success"
+                            <input type="text" class="form-control form-control-sm border border-success rounded-pill"
                                 placeholder="Nhập ghi chú cho phiếu xuất.." name="last-name" />
 
                         </div>
@@ -106,8 +106,9 @@
                                 <label class="fs-5 fw-bold mb-2">Số Lượng</label>
 
 
-                                <input type="number" class="form-control form-control-sm border border-success"
-                                    value="0" name="quantity" />
+                                <input type="number"
+                                    class="form-control form-control-sm border border-success rounded-pill" value="0"
+                                    name="quantity" />
 
                             </div>
 
@@ -116,7 +117,7 @@
                     </div>
 
                     <div class="modal-footer flex-right border-0 pe-0">
-                        <button type="submit" class="btn btn-success btn-sm">
+                        <button type="submit" class="btn btn-success btn-sm rounded-pill">
                             Thêm Thiết Bị
                         </button>
                     </div>
@@ -148,7 +149,8 @@
                                     100
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>Xóa</button>
+                                    <button class="btn btn-sm btn-danger rounded-pill"><i
+                                            class="fa fa-trash"></i>Xóa</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -156,7 +158,7 @@
                 </div>
 
                 <div class="modal-footer flex-right pe-0">
-                    <button type="submit" class="btn btn-twitter btn-sm">
+                    <button type="submit" class="btn btn-twitter btn-sm rounded-pill">
                         {{ $button_text }}
                     </button>
                 </div>

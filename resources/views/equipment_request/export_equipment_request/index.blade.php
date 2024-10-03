@@ -122,13 +122,13 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Yêu Cầu Xuất Kho</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('equipment_request.export_trash') }}" class="btn btn-sm btn-danger me-2">
+                <a href="{{ route('equipment_request.export_trash') }}" class="btn btn-sm btn-danger me-2 rounded-pill">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-trash me-1"></i>
                         Thùng Rác
                     </span>
                 </a>
-                <a href="{{ route('equipment_request.create_export') }}" class="btn btn-success btn-sm">
+                <a href="{{ route('equipment_request.create_export') }}" class="btn btn-success btn-sm rounded-pill">
                     <i class="fa fa-plus me-1"></i>Tạo Phiếu
                 </a>
             </div>
@@ -136,21 +136,21 @@
         <div class="card-body py-1 me-9">
             <form action="" class="row align-items-center">
                 <div class="col-3">
-                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
+                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" selected>--Theo Phòng Ban--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
                 </div>
                 <div class="col-3">
-                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
+                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" selected>--Theo Người Tạo--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
                 </div>
                 <div class="col-3">
-                    <select name="stt" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
+                    <select name="stt" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" selected>--Theo Trạng Thái--</option>
                         <option value="1" {{ request()->stt == 1 ? 'selected' : '' }}>Chưa Duyệt</option>
                         <option value="2" {{ request()->stt == 2 ? 'selected' : '' }}>Đã Duyệt</option>
@@ -160,11 +160,11 @@
                     <div class="row">
                         <div class="col-10">
                             <input type="search" name="kw" placeholder="Tìm Kiếm Mã Yêu Cầu.."
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success rounded-pill"
                                 value="{{ request()->kw }}">
                         </div>
                         <div class="col-2">
-                            <button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
+                            <button class="btn btn-dark btn-sm mt-2 mb-2 rounded-pill" type="submit">Tìm</button>
                         </div>
                     </div>
                 </div>
@@ -265,21 +265,23 @@
                                     <div class="button-group">
                                         @if (1 == 1)
                                             <!-- Nút Duyệt đơn -->
-                                            <button style="font-size: 10px;" class="btn btn-sm btn-success me-2"
-                                                data-bs-toggle="modal" data-bs-target="#browse_" type="button">
+                                            <button style="font-size: 10px;"
+                                                class="btn btn-sm btn-success me-2 rounded-pill" data-bs-toggle="modal"
+                                                data-bs-target="#browse_" type="button">
                                                 <i style="font-size: 10px;" class="fas fa-clipboard-check"></i>Duyệt Phiếu
                                             </button>
 
                                             <!-- Nút Sửa đơn -->
                                             <a style="font-size: 10px;"
                                                 href="{{ route('equipment_request.update_export') }}"
-                                                class="btn btn-sm btn-dark me-2">
+                                                class="btn btn-sm btn-dark me-2 rounded-pill">
                                                 <i style="font-size: 10px;" class="fa fa-edit"></i>Sửa Phiếu
                                             </a>
 
                                             <!-- Nút Xóa đơn -->
-                                            <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
-                                                data-bs-toggle="modal" data-bs-target="#deleteModal_" type="button">
+                                            <button style="font-size: 10px;"
+                                                class="btn btn-sm btn-danger me-2 rounded-pill" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal_" type="button">
                                                 <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
                                             </button>
                                         @else
@@ -292,13 +294,15 @@
 
                                             <!-- Nút In Phiếu -->
                                             <button style="font-size: 10px;"
-                                                class="btn btn-sm btn-twitter me-2 printPdfBtn" type="button">
+                                                class="btn btn-sm btn-twitter me-2 printPdfBtn rounded-pill"
+                                                type="button">
                                                 <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
                                             </button>
 
                                             <!-- Nút Xóa đơn -->
-                                            <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
-                                                data-bs-toggle="modal" data-bs-target="#deleteModal_" type="button">
+                                            <button style="font-size: 10px;"
+                                                class="btn btn-sm btn-danger me-2 rounded-pill" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal_" type="button">
                                                 <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
                                             </button>
                                         @endif
@@ -469,8 +473,8 @@
 
         <div class="card-body py-3">
             <div class="dropdown" id="action_delete_all">
-                <button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                    aria-expanded="false">
+                <button class="btn btn-info btn-sm dropdown-toggle rounded-pill" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     <span>Chọn Thao Tác</span>
                 </button>
                 <ul class="dropdown-menu shadow" aria-labelledby="dropdownMenuButton1">

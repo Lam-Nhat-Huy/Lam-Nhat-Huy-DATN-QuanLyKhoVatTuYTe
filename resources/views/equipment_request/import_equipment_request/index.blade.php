@@ -280,13 +280,14 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Yêu Cầu Nhập Kho</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('equipment_request.import_trash') }}" class="btn btn-sm btn-danger me-2">
+                <a href="{{ route('equipment_request.import_trash') }}"
+                    class="btn btn-sm rounded-pill btn-danger me-2 rounded-pill">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-trash me-1"></i>
                         Thùng Rác
                     </span>
                 </a>
-                <a href="{{ route('equipment_request.create_import') }}" class="btn btn-success btn-sm">
+                <a href="{{ route('equipment_request.create_import') }}" class="btn btn-success btn-sm rounded-pill">
                     <i class="fa fa-plus me-1"></i>Tạo Phiếu
                 </a>
             </div>
@@ -294,7 +295,7 @@
         <div class="card-body py-1 me-9">
             <form action="{{ route('equipment_request.import') }}" class="row align-items-center" id="form-1">
                 <div class="col-3">
-                    <select name="spr" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
+                    <select name="spr" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" selected>--Theo Nhà Cung Cấp--</option>
                         @foreach ($AllSuppiler as $item)
                             <option value="{{ $item->code }}" {{ request()->spr == $item->code ? 'selected' : '' }}>
@@ -303,7 +304,7 @@
                     </select>
                 </div>
                 <div class="col-2">
-                    <select name="us" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
+                    <select name="us" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" selected>--Theo Người Tạo--</option>
                         @foreach ($AllUser as $item)
                             <option value="{{ $item->code }}" {{ request()->us == $item->code ? 'selected' : '' }}>
@@ -312,7 +313,7 @@
                     </select>
                 </div>
                 <div class="col-3">
-                    <select name="stt" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
+                    <select name="stt" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" {{ request()->stt == '' ? 'selected' : '' }}>--Theo Trạng Thái--</option>
                         <option value="0" {{ request()->stt == '0' ? 'selected' : '' }}>Chờ Duyệt</option>
                         <option value="1" {{ request()->stt == '1' ? 'selected' : '' }}>Đã Duyệt</option>
@@ -324,13 +325,14 @@
                     <div class="row">
                         <div class="col-7">
                             <input type="search" name="kw" placeholder="Tìm kiếm mã yêu cầu.."
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                class="mt-2 mb-2 form-control form-control-sm form-control-solid rounded-pill border border-success"
                                 value="{{ request()->kw }}">
                         </div>
                         <div class="col-5">
-                            <span class="me-2"><a class="btn btn-info btn-sm mt-2 mb-2"
+                            <span class="me-2"><a class="btn btn-info btn-sm mt-2 mb-2 rounded-pill"
                                     href="{{ route('equipment_request.import') }}">Bỏ Lọc</a></span>
-                            <span><button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button></span>
+                            <span><button class="btn btn-dark btn-sm mt-2 mb-2 rounded-pill"
+                                    type="submit">Tìm</button></span>
                         </div>
                     </div>
                 </div>
@@ -445,7 +447,8 @@
                                                     {{-- Chưa duyệt và ngày yêu cầu trong 3 ngày gần đây --}}
 
                                                     <!-- Nút Duyệt đơn -->
-                                                    <button style="font-size: 10px;" class="btn btn-sm btn-success me-2"
+                                                    <button style="font-size: 10px;"
+                                                        class="btn btn-sm rounded-pill btn-success me-2"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#browse_{{ $item->code }}" type="button">
                                                         <i class="fas fa-clipboard-check"></i>Duyệt Phiếu
@@ -454,12 +457,13 @@
                                                     <!-- Nút Sửa đơn -->
                                                     <a style="font-size: 10px;"
                                                         href="{{ route('equipment_request.update_import', $item->code) }}"
-                                                        class="btn btn-sm btn-dark me-2">
+                                                        class="btn btn-sm rounded-pill btn-dark me-2">
                                                         <i style="font-size: 10px;" class="fa fa-edit"></i>Sửa Phiếu
                                                     </a>
 
                                                     <!-- Nút Xóa đơn -->
-                                                    <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
+                                                    <button style="font-size: 10px;"
+                                                        class="btn btn-sm rounded-pill btn-danger me-2"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#deleteModal_{{ $item->code }}" type="button">
                                                         <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
@@ -468,7 +472,8 @@
                                                     {{-- Quá hạn yêu cầu 3 ngày --}}
 
                                                     <!-- Nút Xóa đơn -->
-                                                    <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
+                                                    <button style="font-size: 10px;"
+                                                        class="btn btn-sm rounded-pill btn-danger me-2"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#deleteModal_{{ $item->code }}" type="button">
                                                         <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
@@ -480,7 +485,8 @@
                                                     {{-- Lưu tạm và ngày yêu cầu trong 3 ngày gần nhất --}}
 
                                                     <!-- Nút lưu phiếu -->
-                                                    <button style="font-size: 10px;" class="btn btn-sm btn-twitter me-2"
+                                                    <button style="font-size: 10px;"
+                                                        class="btn btn-sm rounded-pill btn-twitter me-2"
                                                         data-bs-toggle="modal" data-bs-target="#save_{{ $item->code }}"
                                                         type="button">
                                                         <i style="font-size: 10px;" class="fa fa-save"></i>Tạo Phiếu
@@ -489,12 +495,13 @@
                                                     <!-- Nút Sửa đơn -->
                                                     <a style="font-size: 10px;"
                                                         href="{{ route('equipment_request.update_import', $item->code) }}"
-                                                        class="btn btn-sm btn-dark me-2">
+                                                        class="btn btn-sm rounded-pill btn-dark me-2">
                                                         <i style="font-size: 10px;" class="fa fa-edit"></i>Sửa Phiếu
                                                     </a>
 
                                                     <!-- Nút Xóa đơn -->
-                                                    <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
+                                                    <button style="font-size: 10px;"
+                                                        class="btn btn-sm rounded-pill btn-danger me-2"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#deleteModal_{{ $item->code }}" type="button">
                                                         <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
@@ -505,19 +512,21 @@
                                                     <!-- Nút Tạo Phiếu Nhập Nhanh -->
                                                     <a style="font-size: 10px;"
                                                         href="{{ route('warehouse.create_import') }}?cd={{ $item->code }}"
-                                                        class="btn btn-sm btn-dark me-2">
+                                                        class="btn btn-sm rounded-pill btn-dark me-2">
                                                         <i style="font-size: 10px;" class="fas fa-file-import"></i>Tạo
                                                         Phiếu Nhập Nhanh
                                                     </a>
 
                                                     <!-- Nút In Phiếu -->
-                                                    <button style="font-size: 10px;" class="btn btn-sm btn-twitter me-2"
+                                                    <button style="font-size: 10px;"
+                                                        class="btn btn-sm rounded-pill btn-twitter me-2"
                                                         onclick="setCodePrint('{{ $item->code }}')" type="button">
                                                         <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
                                                     </button>
 
                                                     <!-- Nút Xóa đơn -->
-                                                    <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
+                                                    <button style="font-size: 10px;"
+                                                        class="btn btn-sm rounded-pill btn-danger me-2"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#deleteModal_{{ $item->code }}" type="button">
                                                         <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
@@ -697,7 +706,7 @@
             @if ($AllEquipmentRequest->count() > 0)
                 <div class="card-body py-3 d-flex justify-content-between align-items-center">
                     <div class="dropdown" id="action_delete_all">
-                        <button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1"
+                        <button class="btn btn-info btn-sm dropdown-toggle rounded-pill" id="dropdownMenuButton1"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <span>Chọn Thao Tác</span>
                         </button>

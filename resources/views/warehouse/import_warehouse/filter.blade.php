@@ -3,7 +3,8 @@
         <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Nhập Kho</span>
     </h3>
     <div class="card-toolbar">
-        <a href="{{ route('warehouse.create_import') }}" class="btn btn-sm btn-success" style="font-size: 10px;">
+        <a href="{{ route('warehouse.create_import') }}" class="btn btn-sm btn-success rounded-pill"
+            style="font-size: 10px;">
             <i style="font-size: 10px;" class="fas fa-plus"></i> Tạo Phiếu Nhập
         </a>
     </div>
@@ -16,13 +17,13 @@
             <div class="row align-items-center">
                 <div class="col-5 pe-0">
                     <input type="date" name="start_date"
-                        class="form-control form-control-sm form-control-solid border-success"
+                        class="form-control form-control-sm form-control-solid border-success rounded-pill"
                         value="{{ \Carbon\Carbon::now()->subMonths(3)->format('Y-m-d') }}">
                 </div>
                 <div class="col-2 text-center">Đến</div>
                 <div class="col-5 ps-0">
                     <input type="date" name="end_date"
-                        class="form-control form-control-sm form-control-solid border-success"
+                        class="form-control form-control-sm form-control-solid border-success rounded-pill"
                         value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                 </div>
             </div>
@@ -30,7 +31,7 @@
 
         <div class="col-md-2">
             <select name="supplier_code" id="supplier_code"
-                class="form-select form-select-sm border-success setupSelect2">
+                class="form-select form-select-sm border-success rounded-pill setupSelect2">
                 <option value="" selected>--Theo Nhà Cung Cấp--</option>
                 @foreach ($suppliers as $supplier)
                     <option value="{{ $supplier->code }}">{{ $supplier->name }}</option>
@@ -39,7 +40,8 @@
         </div>
 
         <div class="col-md-2">
-            <select name="created_by" id="created_by" class="form-select form-select-sm border-success setupSelect2">
+            <select name="created_by" id="created_by"
+                class="form-select form-select-sm border-success rounded-pill setupSelect2">
                 <option value="" selected>--Theo Người Tạo--</option>
                 @foreach ($users as $user)
                     <option value="{{ $user->code }}">{{ $user->last_name }} {{ $user->first_name }}</option>
@@ -51,7 +53,7 @@
         <div class="col-md-4">
             <div class="input-group">
                 <input type="search" id="search" name="search" placeholder="Tìm Kiếm Mã, Số Hóa Đơn.."
-                    class="form-control form-control-sm form-control-solid border-success">
+                    class="form-control form-control-sm form-control-solid border-success rounded-pill">
             </div>
         </div>
 

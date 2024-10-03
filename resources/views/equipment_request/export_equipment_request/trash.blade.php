@@ -121,7 +121,7 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Thùng Rác</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('equipment_request.export') }}" class="btn btn-sm btn-dark me-2">
+                <a href="{{ route('equipment_request.export') }}" class="btn btn-sm btn-dark me-2 rounded-pill">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-arrow-left me-1"></i>
                         Trở Lại
@@ -219,13 +219,12 @@
 
                                 <div class="card-body py-3 text-end">
                                     <div class="button-group">
-                                        <button class="btn btn-sm btn-success" data-bs-toggle="modal"
-                                            data-bs-target="#restoreModal_"><i
-                                                class="fa fa-rotate-left"></i>Khôi Phục</button>
+                                        <button class="btn btn-sm btn-success rounded-pill" data-bs-toggle="modal"
+                                            data-bs-target="#restoreModal_"><i class="fa fa-rotate-left"></i>Khôi
+                                            Phục</button>
 
-                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal_"><i
-                                                class="fa fa-trash"></i>Xóa
+                                        <button class="btn btn-sm btn-danger rounded-pill" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal_"><i class="fa fa-trash"></i>Xóa
                                             Vĩnh Viễn</button>
                                     </div>
                                 </div>
@@ -261,9 +260,8 @@
                                 </div>
 
                                 {{-- Xóa vĩnh viễn --}}
-                                <div class="modal fade" id="deleteModal_" data-bs-backdrop="static"
-                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
-                                    aria-hidden="true">
+                                <div class="modal fade" id="deleteModal_" data-bs-backdrop="static" data-bs-keyboard="false"
+                                    tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -298,8 +296,8 @@
 
         <div class="card-body py-3">
             <div class="dropdown">
-                <span class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                    aria-expanded="false">
+                <span class="btn btn-info btn-sm dropdown-toggle rounded-pill" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     <span>Chọn Thao Tác</span>
                 </span>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">

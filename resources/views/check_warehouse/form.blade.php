@@ -343,7 +343,7 @@
                                         <div class="modal-header bg-success text-white">
                                             <h5 class="modal-title text-white" id="completeModalLabel">Duyệt phiếu kiểm
                                                 kho</h5>
-                                            <button type="button" class="btn-close btn-close-white"
+                                            <button type="button" class="btn-close btn-close-white rounded-pill"
                                                 data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body text-center pb-0">
