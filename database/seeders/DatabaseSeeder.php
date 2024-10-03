@@ -25,10 +25,10 @@ class DatabaseSeeder extends Seeder
             ReceiptDetailsSeeder::class,
             ExportsSeeder::class,
             ExportDetailsSeeder::class,
-            ImportEquipmentRequestsSeeder::class,
-            ImportEquipmentRequestDetailsSeeder::class,
-            ExportEquipmentRequestsSeeder::class,
-            ExportEquipmentRequestDetailsSeeder::class,
+            // ImportEquipmentRequestsSeeder::class,
+            // ImportEquipmentRequestDetailsSeeder::class,
+            // ExportEquipmentRequestsSeeder::class,
+            // ExportEquipmentRequestDetailsSeeder::class,
             InventoriesSeeder::class
         ]);
     }
