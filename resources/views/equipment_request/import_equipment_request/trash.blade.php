@@ -364,11 +364,14 @@
                                             role="alert"
                                             style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                             <div class="mb-3">
-                                                <i class="fas fa-ban" style="font-size: 36px; color: #6c757d;"></i>
+                                                <i class="fas fa-trash-alt" style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
                                             <div class="text-center">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
-                                                    Liệu</h5>
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thùng rác
+                                                    trống</h5>
+                                                <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                    Hiện tại không có mục nào trong thùng rác. Vui lòng kiểm tra lại hoặc
+                                                    xóa dữ liệu để thêm vào thùng rác.
                                                 </p>
                                             </div>
                                         </div>

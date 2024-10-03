@@ -14,6 +14,57 @@
             background: #d1c4e9;
             /* Màu nền khi hàng được nhấp vào */
         }
+
+        #action_delete_all .dropdown-toggle {
+            background: linear-gradient(45deg, #007bff, #00d4ff);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        #action_delete_all .dropdown-toggle:hover {
+            background: linear-gradient(45deg, #0056b3, #00a2cc);
+        }
+
+        .dropdown-menu {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .dropdown-item {
+            padding: 10px 15px;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f1f1f1;
+        }
+
+        .pagination {
+            margin: 0;
+            padding: 0;
+        }
+
+        .pagination .page-link {
+            color: #007bff;
+            border: none;
+            margin: 0 2px;
+            padding: 10px 15px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #007bff;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .pagination .active .page-link {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+        }
     </style>
 @endsection
 
@@ -226,16 +277,16 @@
     <div class="card mb-5 pb-5 mb-xl-8">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Yêu Cầu Mua Hàng</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Yêu Cầu Nhập Kho</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('equipment_request.import_trash') }}" class="btn rounded-pill btn-sm btn-danger me-2">
+                <a href="{{ route('equipment_request.import_trash') }}" class="btn btn-sm btn-danger me-2">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-trash me-1"></i>
                         Thùng Rác
                     </span>
                 </a>
-                <a href="{{ route('equipment_request.create_import') }}" class="btn rounded-pill btn-success btn-sm">
+                <a href="{{ route('equipment_request.create_import') }}" class="btn btn-success btn-sm">
                     <i class="fa fa-plus me-1"></i>Tạo Phiếu
                 </a>
             </div>
@@ -243,7 +294,7 @@
         <div class="card-body py-1 me-9">
             <form action="{{ route('equipment_request.import') }}" class="row align-items-center" id="form-1">
                 <div class="col-3">
-                    <select name="spr" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
+                    <select name="spr" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
                         <option value="" selected>--Theo Nhà Cung Cấp--</option>
                         @foreach ($AllSuppiler as $item)
                             <option value="{{ $item->code }}" {{ request()->spr == $item->code ? 'selected' : '' }}>
@@ -251,8 +302,8 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-3">
-                    <select name="us" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
+                <div class="col-2">
+                    <select name="us" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
                         <option value="" selected>--Theo Người Tạo--</option>
                         @foreach ($AllUser as $item)
                             <option value="{{ $item->code }}" {{ request()->us == $item->code ? 'selected' : '' }}>
@@ -260,8 +311,8 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-2">
-                    <select name="stt" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
+                <div class="col-3">
+                    <select name="stt" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
                         <option value="" {{ request()->stt == '' ? 'selected' : '' }}>--Theo Trạng Thái--</option>
                         <option value="0" {{ request()->stt == '0' ? 'selected' : '' }}>Chờ Duyệt</option>
                         <option value="1" {{ request()->stt == '1' ? 'selected' : '' }}>Đã Duyệt</option>
@@ -273,13 +324,13 @@
                     <div class="row">
                         <div class="col-7">
                             <input type="search" name="kw" placeholder="Tìm kiếm mã yêu cầu.."
-                                class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success"
+                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
                                 value="{{ request()->kw }}">
                         </div>
                         <div class="col-5">
-                            <span class="me-2"><a class="btn rounded-pill btn-info btn-sm mt-2 mb-2"
+                            <span class="me-2"><a class="btn btn-info btn-sm mt-2 mb-2"
                                     href="{{ route('equipment_request.import') }}">Bỏ Lọc</a></span>
-                            <span><button class="btn rounded-pill btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button></span>
+                            <span><button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button></span>
                         </div>
                     </div>
                 </div>
@@ -292,7 +343,7 @@
                 <div class="table-responsive">
                     <table class="table align-middle gs-0 gy-4">
                         <thead>
-                            <tr class="fw-bolder bg-success">
+                            <tr class=" bg-success">
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
@@ -337,18 +388,23 @@
                                             <div class="card card-flush px-5" style="padding-top: 0px !important;">
                                                 <div class="card-header d-flex justify-content-between align-items-center px-2"
                                                     style="padding-top: 0 !important; padding-bottom: 0px !important;">
-                                                    <h4 class="fw-bold m-0">Thiết Bị Yêu Cầu Mua</h4>
+                                                    <h4 class="fw-bold m-0 text-uppercase fw-bolder">Chi tiết phiếu nhập kho
+                                                    </h4>
                                                     <div class="card-toolbar">
                                                         @if (($item->status == 0 || $item->status == 3) && \Carbon\Carbon::parse($item->request_date)->diffInDays(now()) > 3)
-                                                            <div class="rounded-pill px-2 py-1 text-white bg-warning">Hết Hạn
+                                                            <div style="font-size: 10px;"
+                                                                class="rounded px-2 py-1 text-white bg-warning">Hết Hạn
                                                             </div>
                                                         @elseif ($item->status == 3)
-                                                            <div class="rounded-pill px-2 py-1 text-white bg-info">Lưu Tạm</div>
+                                                            <div style="font-size: 10px;"
+                                                                class="rounded px-2 py-1 text-white bg-info">Lưu Tạm</div>
                                                         @elseif ($item->status == 0)
-                                                            <div class="rounded-pill px-2 py-1 text-white bg-danger">Chờ Duyệt
+                                                            <div style="font-size: 10px;"
+                                                                class="rounded px-2 py-1 text-white bg-danger">Chờ Duyệt
                                                             </div>
                                                         @elseif ($item->status == 1)
-                                                            <div class="rounded-pill px-2 py-1 text-white bg-success">Đã Duyệt
+                                                            <div style="font-size: 10px;"
+                                                                class="rounded px-2 py-1 text-white bg-success">Đã Duyệt
                                                             </div>
                                                         @endif
                                                     </div>
@@ -358,8 +414,8 @@
                                                     <div class="col-md-12">
                                                         <div class="table-responsive">
                                                             <table class="table table-striped table-sm table-hover mb-0">
-                                                                <thead class="fw-bolder bg-danger">
-                                                                    <tr>
+                                                                <thead class=" bg-danger">
+                                                                    <tr class="text-center">
                                                                         <th class="ps-3">STT</th>
                                                                         <th class="ps-3">Tên thiết bị</th>
                                                                         <th>Đơn Vị Tính</th>
@@ -368,7 +424,7 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     @foreach ($item->import_equipment_request_details as $key => $detail)
-                                                                        <tr class="">
+                                                                        <tr class="text-center">
                                                                             <td>{{ $key + 1 }}</td>
                                                                             <td>{{ $detail->equipments->name }}</td>
                                                                             <td>{{ $detail->equipments->units->name }}</td>
@@ -389,29 +445,33 @@
                                                     {{-- Chưa duyệt và ngày yêu cầu trong 3 ngày gần đây --}}
 
                                                     <!-- Nút Duyệt đơn -->
-                                                    <button class="btn rounded-pill btn-sm btn-success me-2" data-bs-toggle="modal"
+                                                    <button style="font-size: 10px;" class="btn btn-sm btn-success me-2"
+                                                        data-bs-toggle="modal"
                                                         data-bs-target="#browse_{{ $item->code }}" type="button">
                                                         <i class="fas fa-clipboard-check"></i>Duyệt Phiếu
                                                     </button>
 
                                                     <!-- Nút Sửa đơn -->
-                                                    <a href="{{ route('equipment_request.update_import', $item->code) }}"
-                                                        class="btn rounded-pill btn-sm btn-dark me-2">
-                                                        <i class="fa fa-edit"></i>Sửa Phiếu
+                                                    <a style="font-size: 10px;"
+                                                        href="{{ route('equipment_request.update_import', $item->code) }}"
+                                                        class="btn btn-sm btn-dark me-2">
+                                                        <i style="font-size: 10px;" class="fa fa-edit"></i>Sửa Phiếu
                                                     </a>
 
                                                     <!-- Nút Xóa đơn -->
-                                                    <button class="btn rounded-pill btn-sm btn-danger me-2" data-bs-toggle="modal"
+                                                    <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
+                                                        data-bs-toggle="modal"
                                                         data-bs-target="#deleteModal_{{ $item->code }}" type="button">
-                                                        <i class="fa fa-trash"></i>Xóa Phiếu
+                                                        <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
                                                     </button>
                                                 @elseif ($item->status == 0 && \Carbon\Carbon::parse($item->request_date)->diffInDays(now()) > 3)
                                                     {{-- Quá hạn yêu cầu 3 ngày --}}
 
                                                     <!-- Nút Xóa đơn -->
-                                                    <button class="btn rounded-pill btn-sm btn-danger me-2" data-bs-toggle="modal"
+                                                    <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
+                                                        data-bs-toggle="modal"
                                                         data-bs-target="#deleteModal_{{ $item->code }}" type="button">
-                                                        <i class="fa fa-trash"></i>Xóa Phiếu
+                                                        <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
                                                     </button>
                                                 @elseif (
                                                     $item->status == 3 &&
@@ -420,41 +480,47 @@
                                                     {{-- Lưu tạm và ngày yêu cầu trong 3 ngày gần nhất --}}
 
                                                     <!-- Nút lưu phiếu -->
-                                                    <button class="btn rounded-pill btn-sm btn-twitter me-2" data-bs-toggle="modal"
-                                                        data-bs-target="#save_{{ $item->code }}" type="button">
-                                                        <i class="fa fa-save"></i>Tạo Phiếu
+                                                    <button style="font-size: 10px;" class="btn btn-sm btn-twitter me-2"
+                                                        data-bs-toggle="modal" data-bs-target="#save_{{ $item->code }}"
+                                                        type="button">
+                                                        <i style="font-size: 10px;" class="fa fa-save"></i>Tạo Phiếu
                                                     </button>
 
                                                     <!-- Nút Sửa đơn -->
-                                                    <a href="{{ route('equipment_request.update_import', $item->code) }}"
-                                                        class="btn rounded-pill btn-sm btn-dark me-2">
-                                                        <i class="fa fa-edit"></i>Sửa Phiếu
+                                                    <a style="font-size: 10px;"
+                                                        href="{{ route('equipment_request.update_import', $item->code) }}"
+                                                        class="btn btn-sm btn-dark me-2">
+                                                        <i style="font-size: 10px;" class="fa fa-edit"></i>Sửa Phiếu
                                                     </a>
 
                                                     <!-- Nút Xóa đơn -->
-                                                    <button class="btn rounded-pill btn-sm btn-danger me-2" data-bs-toggle="modal"
+                                                    <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
+                                                        data-bs-toggle="modal"
                                                         data-bs-target="#deleteModal_{{ $item->code }}" type="button">
-                                                        <i class="fa fa-trash"></i>Xóa Phiếu
+                                                        <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
                                                     </button>
                                                 @else
                                                     {{-- Đã duyệt --}}
 
                                                     <!-- Nút Tạo Phiếu Nhập Nhanh -->
-                                                    <a href="{{ route('warehouse.create_import') }}?cd={{ $item->code }}"
-                                                        class="btn rounded-pill btn-sm btn-dark me-2">
-                                                        <i class="fas fa-file-import"></i>Tạo Phiếu Nhập Nhanh
+                                                    <a style="font-size: 10px;"
+                                                        href="{{ route('warehouse.create_import') }}?cd={{ $item->code }}"
+                                                        class="btn btn-sm btn-dark me-2">
+                                                        <i style="font-size: 10px;" class="fas fa-file-import"></i>Tạo
+                                                        Phiếu Nhập Nhanh
                                                     </a>
 
                                                     <!-- Nút In Phiếu -->
-                                                    <button class="btn rounded-pill btn-sm btn-twitter me-2"
+                                                    <button style="font-size: 10px;" class="btn btn-sm btn-twitter me-2"
                                                         onclick="setCodePrint('{{ $item->code }}')" type="button">
-                                                        <i class="fa fa-print"></i>In Phiếu
+                                                        <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
                                                     </button>
 
                                                     <!-- Nút Xóa đơn -->
-                                                    <button class="btn rounded-pill btn-sm btn-danger me-2" data-bs-toggle="modal"
+                                                    <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
+                                                        data-bs-toggle="modal"
                                                         data-bs-target="#deleteModal_{{ $item->code }}" type="button">
-                                                        <i class="fa fa-trash"></i>Xóa Phiếu
+                                                        <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
                                                     </button>
                                                 @endif
 
@@ -481,8 +547,7 @@
                                                         </h1>
                                                         <div class="text-muted fw-bold fs-6">Thông Tin Chi Tiết Về
                                                             Phiếu Yêu Cầu Đặt Mua Thiết Bị
-                                                            <span
-                                                                class="link-primary fw-bolder">#{{ $item->code }}</span>.
+                                                            <span class="link-primary ">#{{ $item->code }}</span>.
                                                         </div>
                                                         <div class="text-muted fs-30">
                                                             Ngày Lập
@@ -523,7 +588,7 @@
                                                                     class="table border border-dark align-middle gs-0 gy-4">
                                                                     <thead>
                                                                         <tr
-                                                                            class="fw-bolder bg-success border border-dark text-center">
+                                                                            class=" bg-success border border-dark text-center">
                                                                             <th style="width: 5%;" class="ps-3 text-dark">
                                                                                 STT
                                                                             </th>
@@ -610,11 +675,14 @@
                                             role="alert"
                                             style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                             <div class="mb-3">
-                                                <i class="fas fa-ban" style="font-size: 36px; color: #6c757d;"></i>
+                                                <i class="fas fa-search" style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
                                             <div class="text-center">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
-                                                    Liệu</h5>
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không có kết
+                                                    quả tìm kiếm</h5>
+                                                <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                    Không tìm thấy kết quả phù hợp với yêu cầu tìm kiếm của bạn. Vui lòng
+                                                    thử lại với từ khóa khác.
                                                 </p>
                                             </div>
                                         </div>
@@ -629,16 +697,24 @@
             @if ($AllEquipmentRequest->count() > 0)
                 <div class="card-body py-3 d-flex justify-content-between align-items-center">
                     <div class="dropdown" id="action_delete_all">
-                        <span class="btn rounded-pill btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1"
+                        <button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <span>Chọn Thao Tác</span>
-                        </span>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#browseAll">
-                                    <i class="fas fa-clipboard-check me-2 text-twitter"></i>Duyệt</a>
+                        </button>
+                        <ul class="dropdown-menu shadow" aria-labelledby="dropdownMenuButton1">
+                            <li>
+                                <a class="dropdown-item pointer d-flex align-items-center" data-bs-toggle="modal"
+                                    data-bs-target="#browseAll">
+                                    <i class="fas fa-clipboard-check me-2 text-twitter"></i>
+                                    <span>Duyệt phiếu</span>
+                                </a>
                             </li>
-                            <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#deleteAll">
-                                    <i class="fas fa-trash me-2 text-danger"></i>Xóa</a>
+                            <li>
+                                <a class="dropdown-item pointer d-flex align-items-center" data-bs-toggle="modal"
+                                    data-bs-target="#deleteAll">
+                                    <i class="fas fa-trash me-2 text-danger"></i>
+                                    <span class="text-danger">Xóa phiếu</span>
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -664,9 +740,9 @@
                             </p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
-                            <button type="button" class="btn rounded-pill btn-sm btn-secondary btn-sm px-4"
+                            <button type="button" class="btn btn-sm btn-secondary btn-sm px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-success px-4">
+                            <button type="submit" class="btn btn-sm btn-success px-4">
                                 Duyệt</button>
                         </div>
                     </div>
@@ -687,9 +763,9 @@
                             <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả yêu cầu mua hàng đã chọn?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
-                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                            <button type="button" class="btn btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-success px-4"> Xóa</button>
+                            <button type="submit" class="btn btn-sm btn-success px-4"> Xóa</button>
                         </div>
                     </div>
                 </div>
@@ -717,9 +793,9 @@
                             </h4>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn rounded-pill btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" name="browse_request" value="{{ $item->code }}"
-                                class="btn rounded-pill btn-sm btn-twitter">Duyệt</button>
+                                class="btn btn-sm btn-twitter">Duyệt</button>
                         </div>
                     </form>
                 </div>
@@ -743,9 +819,9 @@
                             </h4>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn rounded-pill btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" name="delete_request" value="{{ $item->code }}"
-                                class="btn rounded-pill btn-sm btn-danger">Xóa</button>
+                                class="btn btn-sm btn-danger">Xóa</button>
                         </div>
                     </form>
                 </div>
@@ -772,9 +848,9 @@
                             </h4>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn rounded-pill btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" name="save_status" value="{{ $item->code }}"
-                                class="btn rounded-pill btn-sm btn-success">Tạo</button>
+                                class="btn btn-sm btn-success">Tạo</button>
                         </div>
                     </form>
                 </div>

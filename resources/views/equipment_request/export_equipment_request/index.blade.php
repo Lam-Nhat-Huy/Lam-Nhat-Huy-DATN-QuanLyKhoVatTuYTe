@@ -1,6 +1,7 @@
 @extends('master_layout.layout')
 
 @section('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
         .hover-table:hover {
             background: #ccc;
@@ -135,21 +136,21 @@
         <div class="card-body py-1 me-9">
             <form action="" class="row align-items-center">
                 <div class="col-3">
-                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
                         <option value="" selected>--Theo Phòng Ban--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
                 </div>
                 <div class="col-3">
-                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
                         <option value="" selected>--Theo Người Tạo--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
                     </select>
                 </div>
                 <div class="col-3">
-                    <select name="stt" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                    <select name="stt" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
                         <option value="" selected>--Theo Trạng Thái--</option>
                         <option value="1" {{ request()->stt == 1 ? 'selected' : '' }}>Chưa Duyệt</option>
                         <option value="2" {{ request()->stt == 2 ? 'selected' : '' }}>Đã Duyệt</option>
@@ -173,7 +174,7 @@
             <div class="table-responsive">
                 <table class="table align-middle gs-0 gy-4">
                     <thead>
-                        <tr class="fw-bolder bg-success">
+                        <tr class="text-center bg-success">
                             <th class="ps-3">
                                 <input type="checkbox" id="selectAll" />
                             </th>
@@ -220,13 +221,16 @@
                                         style="padding-top: 0px !important; padding-bottom: 0px !important;">
                                         <div class="card-header d-flex justify-content-between align-items-center p-2"
                                             style="padding-top: 0 !important; padding-bottom: 0px !important;">
-                                            <h4 class="fw-bold m-0">Danh Sách Thiết Bị</h4>
+                                            <h4 class="fw-bold m-0 text-uppercase fw-bolder">Chi tiết phiếu nhập kho
+                                            </h4>
                                             <div class="card-toolbar">
                                                 @if (1 == 1)
-                                                    <div class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt
+                                                    <div style="font-size: 10px;"
+                                                        class="rounded px-2 py-1 text-white bg-danger">Chưa Duyệt
                                                     </div>
                                                 @else
-                                                    <div class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
+                                                    <div style="font-size: 10px;"
+                                                        class="rounded px-2 py-1 text-white bg-success">Đã Duyệt</div>
                                                 @endif
                                             </div>
                                         </div>
@@ -235,7 +239,7 @@
                                             <div class="col-md-12">
                                                 <div class="table-responsive">
                                                     <table class="table table-striped table-sm table-hover">
-                                                        <thead class="fw-bolder bg-danger">
+                                                        <thead class="text-center bg-danger">
                                                             <tr>
                                                                 <th class="ps-3">Tên vật tư</th>
                                                                 <th>Đơn Vị Tính</th>
@@ -261,38 +265,41 @@
                                     <div class="button-group">
                                         @if (1 == 1)
                                             <!-- Nút Duyệt đơn -->
-                                            <button class="btn btn-sm btn-success me-2" data-bs-toggle="modal"
-                                                data-bs-target="#browse_"
-                                                type="button">
-                                                <i class="fas fa-clipboard-check"></i>Duyệt Phiếu
+                                            <button style="font-size: 10px;" class="btn btn-sm btn-success me-2"
+                                                data-bs-toggle="modal" data-bs-target="#browse_" type="button">
+                                                <i style="font-size: 10px;" class="fas fa-clipboard-check"></i>Duyệt Phiếu
                                             </button>
 
                                             <!-- Nút Sửa đơn -->
-                                            <a href="{{ route('equipment_request.update_export') }}"
+                                            <a style="font-size: 10px;"
+                                                href="{{ route('equipment_request.update_export') }}"
                                                 class="btn btn-sm btn-dark me-2">
-                                                <i class="fa fa-edit"></i>Sửa Phiếu
+                                                <i style="font-size: 10px;" class="fa fa-edit"></i>Sửa Phiếu
                                             </a>
 
                                             <!-- Nút Xóa đơn -->
-                                            <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal_" type="button">
-                                                <i class="fa fa-trash"></i>Xóa Phiếu
+                                            <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
+                                                data-bs-toggle="modal" data-bs-target="#deleteModal_" type="button">
+                                                <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
                                             </button>
                                         @else
                                             <!-- Nút In Phiếu -->
-                                            <button class="btn btn-sm btn-dark me-2" type="button">
-                                                <i class="fas fa-file-import"></i>Tạo Phiếu Xuất Nhanh
+                                            <button style="font-size: 10px;" class="btn btn-sm btn-dark me-2"
+                                                type="button">
+                                                <i style="font-size: 10px;" class="fas fa-file-import"></i>Tạo Phiếu Xuất
+                                                Nhanh
                                             </button>
 
                                             <!-- Nút In Phiếu -->
-                                            <button class="btn btn-sm btn-twitter me-2 printPdfBtn" type="button">
-                                                <i class="fa fa-print"></i>In Phiếu
+                                            <button style="font-size: 10px;"
+                                                class="btn btn-sm btn-twitter me-2 printPdfBtn" type="button">
+                                                <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
                                             </button>
 
                                             <!-- Nút Xóa đơn -->
-                                            <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal_" type="button">
-                                                <i class="fa fa-trash"></i>Xóa Phiếu
+                                            <button style="font-size: 10px;" class="btn btn-sm btn-danger me-2"
+                                                data-bs-toggle="modal" data-bs-target="#deleteModal_" type="button">
+                                                <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa Phiếu
                                             </button>
                                         @endif
                                     </div>
@@ -345,7 +352,7 @@
                                                 </h1>
                                                 <div class="text-muted fw-bold fs-6">Thông Tin Chi Tiết Về
                                                     Phiếu Yêu Cầu Xuất Kho
-                                                    <span class="link-primary fw-bolder">#MaYeuCauMuaHang</span>.
+                                                    <span class="link-primary text-center">#MaYeuCauMuaHang</span>.
                                                 </div>
                                                 <div class="text-muted fs-30">
                                                     Ngày Lập 2-9-2024
@@ -381,7 +388,7 @@
                                                     <div class="table-responsive">
                                                         <table class="table table-striped align-middle gs-0 gy-4">
                                                             <thead>
-                                                                <tr class="fw-bolder bg-success">
+                                                                <tr class="text-center bg-success">
                                                                     <th style="width: 33%;">Thiết Bị</th>
                                                                     <th style="width: 33%;">Đơn Vị</th>
                                                                     <th style="width: 33%;">Số Lượng
@@ -461,17 +468,25 @@
         </div>
 
         <div class="card-body py-3">
-            <div class="dropdown">
-                <span class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+            <div class="dropdown" id="action_delete_all">
+                <button class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     <span>Chọn Thao Tác</span>
-                </span>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#confirmAll">
-                            <i class="fas fa-clipboard-check me-2 text-success"></i>Duyệt Tất Cả</a>
+                </button>
+                <ul class="dropdown-menu shadow" aria-labelledby="dropdownMenuButton1">
+                    <li>
+                        <a class="dropdown-item pointer d-flex align-items-center" data-bs-toggle="modal"
+                            data-bs-target="#browseAll">
+                            <i class="fas fa-clipboard-check me-2 text-twitter"></i>
+                            <span>Duyệt phiếu</span>
+                        </a>
                     </li>
-                    <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#deleteAll">
-                            <i class="fas fa-trash me-2 text-danger"></i>Xóa Tất Cả</a>
+                    <li>
+                        <a class="dropdown-item pointer d-flex align-items-center" data-bs-toggle="modal"
+                            data-bs-target="#deleteAll">
+                            <i class="fas fa-trash me-2 text-danger"></i>
+                            <span class="text-danger">Xóa phiếu</span>
+                        </a>
                     </li>
                 </ul>
             </div>

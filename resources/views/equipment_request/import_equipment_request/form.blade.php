@@ -46,7 +46,7 @@
                 <span class="card-label fw-bolder fs-3 mb-1">{{ $title_form }}</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('equipment_request.import') }}" class="btn rounded-pill btn-sm btn-dark">
+                <a href="{{ route('equipment_request.import') }}" class="btn btn-sm btn-dark">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-arrow-left me-1"></i>
                         Trở Lại
@@ -56,12 +56,12 @@
         </div>
         <div class="py-5 px-lg-17">
             <div class="me-n7 pe-7">
-                <div class="row align-items-center mb-5">
+                <div class="row align-items-center">
                     <div class="col-md-6 fv-row">
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Nhà Cung Cấp</label>
                         <div class="d-flex align-items-center">
                             <select name="supplier_code" id="supplier_code" onchange="changeSupplier()"
-                                class="form-select form-select-sm rounded-pill border border-success ps-5">
+                                class="form-select form-select-sm form-select-solid border border-success ps-5">
                                 <option value="0">Chọn Nhà Cung Cấp...</option>
                                 @foreach ($AllSuppiler as $item)
                                     <option value="{{ $item->code }}" id="option_supplier_{{ $item->code }}"
@@ -80,7 +80,7 @@
 
                     <div class="col-md-6 fv-row">
                         <label class="fs-5 fw-bold mb-3">Ghi Chú</label>
-                        <input type="text" class="form-control form-control-sm rounded-pill border border-success"
+                        <input type="text" class="form-control form-control-sm border border-success"
                             placeholder="Nhập ghi chú cho phiếu yêu cầu nhập.." name="note" id="note"
                             value="{{ old('note', $editForm->note ?? '') }}" />
                         <div class="message_error" id="supplier_code_error"></div>
@@ -90,15 +90,15 @@
         </div>
     </div>
 
-    <div class="card mb-5 mb-xl-8 pt-5">
+    <div class="card mb-xl-8 pt-5">
         <div class="py-5 px-lg-17">
             <h3 class="mb-7">Chọn Thiết Bị Yêu Cầu</h3>
             <div class="me-n7 pe-7">
-                <div class="row align-items-center mb-5">
+                <div class="row align-items-center">
                     <div class="col-md-6 fv-row">
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Thiết Bị</label>
                         <select name="equipment" id="equipment" onchange="changeEquipment()"
-                            class="form-select form-select-sm rounded-pill border border-success ps-5">
+                            class="form-select form-select-sm form-select-solid border border-success ps-5">
                             <option value="" selected>Chọn Thiết Bị...</option>
                             @foreach ($AllEquipment as $item)
                                 <option value="{{ $item->code }}"
@@ -114,16 +114,15 @@
 
                     <div class="col-md-6 fv-row">
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Số Lượng</label>
-                        <input type="number" id="quantity"
-                            class="form-control form-control-sm rounded-pill border border-success" value="0"
-                            name="quantity" min="0" />
+                        <input type="number" id="quantity" class="form-control form-control-sm border border-success"
+                            value="0" name="quantity" min="0" />
                         <div class="message_error" id="quantity_error"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="modal-footer flex-right pe-0">
-                <button type="butotn" class="btn rounded-pill btn-success btn-sm" id="btn_add_equipment">
+            <div class="modal-footer flex-right pe-0 pb-0">
+                <button type="butotn" class="btn btn-success btn-sm" id="btn_add_equipment">
                     Thêm Thiết Bị
                 </button>
             </div>
@@ -131,9 +130,10 @@
     </div>
 
     {{-- Danh sách thiết bị yêu cầu --}}
-    <div class="card mb-5 mb-xl-8 pt-10">
+    <div class="card mb-5 mb-xl-8 pt-0">
         <div class="card-body py-3 px-17">
-            <h3 class="mb-7">Danh Sách Thiết Bị Yêu Cầu</h3>
+            <h4 class="fw-bold m-0 text-uppercase fw-bolder mb-4">Danh sách thiết bị yêu cầu
+            </h4>
             <div class="table-responsive">
                 <table class="table table-striped align-middle gs-0 gy-4" id="table_list_equipment">
                     <thead>
@@ -152,10 +152,10 @@
                                     <td>{{ $item->equipments->units->name }}</td>
                                     <td><input type="number" id="quantity_change_{{ $item->equipment_code }}"
                                             value="{{ $item->quantity }}"
-                                            class="form-control form-control-sm rounded-pill border border-success w-50">
+                                            class="form-control form-control-sm border border-success w-50">
                                     </td>
                                     <td class="text-center">
-                                        <span class="btn rounded-pill btn-sm btn-danger pointer"
+                                        <span class="btn btn-sm btn-danger pointer"
                                             onclick="removeEquipment('{{ $item->equipment_code }}')">
                                             <i class="fa fa-trash p-0"></i>
                                         </span>
@@ -165,20 +165,23 @@
                         @endif
                         <tr id="noDataAlert" class="{{ !empty($getList) ? 'd-none' : '' }} ">
                             <td colspan="12" class="text-center">
-                                <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center mb-0"
+                                <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
                                     role="alert"
                                     style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                     <div class="mb-3">
-                                        <i class="fas fa-ban" style="font-size: 36px; color: #6c757d;"></i>
+                                        <i class="fas fa-box-open" style="font-size: 36px; color: #6c757d;"></i>
                                     </div>
                                     <div class="text-center">
-                                        <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
-                                            Liệu</h5>
+                                        <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Danh sách thiết bị
+                                            trống</h5>
+                                        <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                            Hiện chưa có thiết bị nào được thêm vào hệ thống. Vui lòng thêm thiết bị mới.
                                         </p>
                                     </div>
                                 </div>
                             </td>
                         </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -189,15 +192,15 @@
                     đã tồn tại trong lịch sử yêu cầu (3 Ngày gần đây). Xin hãy kiểm tra và thử lại.</div>
 
             <div class="modal-footer flex-right pe-0">
-                <button type="button" class="btn rounded-pill btn-info btn-sm {{ $d_none_temp }}"
+                <button type="button" class="btn btn-info btn-sm {{ $d_none_temp }}"
                     id="import_equipment_request_temp">
                     <i class="fa fa-cloud-arrow-down me-1"></i>Lưu Tạm
                 </button>
-                <button type="button" class="btn rounded-pill btn-twitter btn-sm {{ $d_none_save }}"
+                <button type="button" class="btn btn-twitter btn-sm {{ $d_none_save }}"
                     id="import_equipment_request_save">
                     <i class="fa fa-save me-1"></i>{{ $button_text }}
                 </button>
-                <button type="button" class="btn rounded-pill btn-twitter btn-sm {{ $d_none_update }}"
+                <button type="button" class="btn btn-twitter btn-sm {{ $d_none_update }}"
                     id="import_equipment_request_update">
                     <i class="fa fa-save me-1"></i>{{ $button_text }}
                 </button>
@@ -217,8 +220,7 @@
                 <div class="modal-body pb-0">
                     <div class="mb-3">
                         <label class="required fs-5 er mb-2">Tên Nhà Cung Cấp</label>
-                        <input type="text"
-                            class="form-control form-control-sm rounded-pill border border-success"
+                        <input type="text" class="form-control form-control-sm border border-success"
                             placeholder="Tên nhà cung cấp.." name="name" id="supplier_type_name" />
                         <div class="message_error" id="show-err-supplier-type"></div>
                     </div>
@@ -237,7 +239,7 @@
                                     <tr class="hover-table pointer" id="supplier-{{ $item->code }}">
                                         <td>{{ $item->name }}</td>
                                         <td class="text-center">
-                                            <button type="button" class="btn rounded-pill btn-danger btn-sm" data-bs-toggle="modal"
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#delete_modal_supplier_type"
                                                 onclick="setDeleteForm('{{ route('equipment_request.delete_supplier', $item->code) }}', '{{ $item->name }}')">
                                                 <i class="fa fa-trash p-0"></i>
@@ -250,8 +252,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn rounded-pill btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn rounded-pill btn-sm btn-twitter" id="submit_supplier_type">Thêm</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-twitter" id="submit_supplier_type">Thêm</button>
                 </div>
             </div>
         </div>
@@ -270,9 +272,9 @@
                     <h6 class="text-danger" id="delete-supplier-message"></h6>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn rounded-pill btn-sm btn-secondary" data-bs-toggle="modal"
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal"
                         data-bs-target="#add_modal_ncc">Trở Lại</button>
-                    <button type="button" class="btn rounded-pill btn-sm btn-danger" id="confirm-delete-supplier">Xóa</button>
+                    <button type="button" class="btn btn-sm btn-danger" id="confirm-delete-supplier">Xóa</button>
                 </div>
             </div>
         </div>
@@ -443,7 +445,7 @@
                     this.disabled = false;
                     return;
                 }
-                
+
                 let formData = new
                 FormData();
                 formData.append('equipment', equipment);
@@ -473,9 +475,9 @@
                             newRow.innerHTML = `
                                 <td>${data.equipment_name}</td>
                                 <td>${data.unit}</td>
-                                <td><input type="number" id="quantity_change_${data.equipment_code}" value="${parseInt(data.quantity, 10)}" class="form-control form-control-sm rounded-pill border border-success w-50"></td>
+                                <td><input type="number" id="quantity_change_${data.equipment_code}" value="${parseInt(data.quantity, 10)}" class="form-control form-control-sm border border-success w-50"></td>
                                 <td class="text-center">
-                                    <span class="btn rounded-pill btn-sm btn-danger pointer" onclick="removeEquipment('${data.equipment_code}')">
+                                    <span class="btn btn-sm btn-danger pointer" onclick="removeEquipment('${data.equipment_code}')">
                                         <i class="fa fa-trash p-0"></i>
                                     </span>
                                 </td>
@@ -602,7 +604,7 @@
                                 `
                             <td>${data.name}</td>
                             <td class="text-center">
-                                <button type="button" class="btn rounded-pill btn-danger btn-sm" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#delete_modal_supplier_type"
                                     onclick="setDeleteForm('{{ route('equipment_request.delete_supplier', '') }}/` +
                                 data.code + `', '` + data.name + `')">

@@ -293,31 +293,34 @@
                         <!-- Trạng thái -->
                         <div class="mb-4">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-muted">Trạng thái</span>
-                                <span class="badge bg-primary py-2 px-4 rounded-pill" style="font-size: 10px">Đang
+                                <span class="text-muted" style="font-size: 13px;">Trạng thái</span>
+                                <span class="badge bg-primary py-2 px-4 rounded-pill" style="font-size: 9px">Đang
                                     kiểm</span>
                             </div>
                         </div>
 
                         <!-- Mã kiểm kho -->
                         <div class="mb-4">
-                            <label for="code" class="form-label fw-semibold text-dark">Mã kiểm kho</label>
+                            <label for="code" class="form-label fw-semibold text-dark" style="font-size: 13px;">Mã
+                                kiểm kho</label>
                             <input type="text" id="code" class="form-control form-control-sm rounded-pill"
-                                placeholder="Tạo tự động" disabled>
+                                placeholder="Tạo tự động" disabled style="font-size: 12px;">
                         </div>
 
                         <!-- Ngày nhập -->
                         <div class="mb-4">
-                            <label for="check_date" class="form-label fw-semibold text-dark">Ngày nhập</label>
+                            <label for="check_date" class="form-label fw-semibold text-dark"
+                                style="font-size: 13px;">Ngày nhập</label>
                             <input type="date" id="check_date" class="form-control form-control-sm rounded-pill"
                                 value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
                         </div>
 
                         <!-- Ghi chú -->
                         <div class="mb-4">
-                            <label for="note" class="form-label fw-semibold text-dark">Ghi chú</label>
+                            <label for="note" class="form-label fw-semibold text-dark" style="font-size: 13px;">Ghi
+                                chú</label>
                             <textarea id="note" class="form-control form-control-lg rounded-3" placeholder="Nhập ghi chú..."
-                                rows="3"></textarea>
+                                style="font-size: 12px;" rows="3"></textarea>
                         </div>
 
                         <!-- Buttons -->

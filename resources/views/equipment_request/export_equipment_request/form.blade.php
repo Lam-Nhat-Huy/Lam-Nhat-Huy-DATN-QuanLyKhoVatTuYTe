@@ -48,12 +48,12 @@
 
                             <select name="" class="form-select form-select-sm form-select-solid setupSelect2">
                                 <option value="0">Chọn Phòng Ban...</option>
-                                    <option value="">
-                                        Khoa Cấp Cứu
-                                    </option>
-                                    <option value="">
-                                        Phòng Khám
-                                    </option>
+                                <option value="">
+                                    Khoa Cấp Cứu
+                                </option>
+                                <option value="">
+                                    Phòng Khám
+                                </option>
                             </select>
                         </div>
 
@@ -63,8 +63,7 @@
                             <label class="fs-5 fw-bold mb-2">Ghi Chú</label>
 
 
-                            <input type="text"
-                                class="form-control form-control-sm form-control-solid border border-success"
+                            <input type="text" class="form-control form-control-sm border border-success"
                                 placeholder="Nhập ghi chú cho phiếu xuất.." name="last-name" />
 
                         </div>
@@ -107,8 +106,7 @@
                                 <label class="fs-5 fw-bold mb-2">Số Lượng</label>
 
 
-                                <input type="number"
-                                    class="form-control form-control-sm form-control-solid border border-success"
+                                <input type="number" class="form-control form-control-sm border border-success"
                                     value="0" name="quantity" />
 
                             </div>
