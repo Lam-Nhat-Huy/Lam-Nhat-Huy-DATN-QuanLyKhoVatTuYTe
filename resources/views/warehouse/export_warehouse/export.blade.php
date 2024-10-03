@@ -100,10 +100,10 @@
                 <table class="table align-middle gs-0 gy-4">
                     <thead>
                         <tr class="bg-success">
-                            <th class="ps-4">
+                            <th class="ps-3">
                                 <input type="checkbox" id="selectAll" />
                             </th>
-                            <th class="ps-4">Mã Phiếu Xuất</th>
+                            <th class="ps-3">Mã Phiếu Xuất</th>
                             <th class="">Người Tạo</th>
                             <th class="">Ngày Xuất</th>
                             <th class="pe-3">Lý Do Xuất</th>
@@ -213,7 +213,7 @@
                                                         <table class="table table-striped table-sm table-hover">
                                                             <thead class="fw-bolder bg-danger">
                                                                 <tr>
-                                                                    <th class="ps-4">Mã vật tư</th>
+                                                                    <th class="ps-3">Mã vật tư</th>
                                                                     <th>Tên vật tư</th>
                                                                     <th>Số lượng</th>
                                                                     <th>Số lô</th>
@@ -264,7 +264,7 @@
                                                 <!-- Nút Duyệt đơn -->
                                                 <button style="font-size: 10px;" class="btn btn-sm btn-success me-2"
                                                     data-bs-toggle="modal" data-bs-target="#browse"
-                                                    type="btn btn-sm btn-success">
+                                                    type="button">
                                                     <i style="font-size: 10px;" class="fas fa-clipboard-check"></i>Duyệt
                                                     Phiếu
                                                 </button>
@@ -470,7 +470,7 @@
                                         <table class="table table-striped table-sm table-hover">
                                             <thead class="fw-bolder bg-success">
                                                 <tr>
-                                                    <th class="ps-4">Mã vật tư</th>
+                                                    <th class="ps-3">Mã vật tư</th>
                                                     <th>Số lượng</th>
                                                     <th>Đơn giá</th>
                                                     <th>Số lô</th>
@@ -601,7 +601,7 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr class="fw-bold bg-success">
-                                            <th class="ps-4">Mã vật tư</th>
+                                            <th class="ps-3">Mã vật tư</th>
                                             <th>Số lượng</th>
                                             <th>Đơn giá</th>
                                             <th>Số lô</th>

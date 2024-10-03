@@ -27,7 +27,8 @@ class AppServiceProvider extends ServiceProvider
         if (Schema::hasTable('notifications')) {
             $getNotifications = Notifications::with('users')
                 ->orderBy('created_at', 'DESC')
-                ->limit(10)
+                ->where('created_at', '>', now()->subDays(7))
+                ->where('status', 1)
                 ->get();
 
             $data['getNotification'] = $getNotifications;

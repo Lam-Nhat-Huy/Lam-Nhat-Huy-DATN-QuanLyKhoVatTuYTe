@@ -10,14 +10,16 @@ return new class extends Migration
     {
         Schema::create('export_equipment_requests', function (Blueprint $table) {
             $table->char('code', 20)->primary();
+            $table->char('user_code', 20)->nullable();
             $table->char('department_code', 20)->nullable();
             $table->text('reason_export')->nullable();
             $table->text('note')->nullable();
-            $table->date('request_date')->nullable();
             $table->boolean('status')->default(false);
+            $table->timestamp('request_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
+            $table->foreign('user_code')->references('code')->on('users')->onDelete('set null');
             $table->foreign('department_code')->references('code')->on('departments')->onDelete('set null');
         });
     }

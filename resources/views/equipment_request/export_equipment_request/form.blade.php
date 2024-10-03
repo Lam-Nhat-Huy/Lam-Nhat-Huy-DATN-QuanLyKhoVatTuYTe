@@ -9,11 +9,11 @@
 
 @php
     if ($action == 'create') {
-        $action = route('material_request.store_export');
+        $action = route('equipment_request.store_export');
 
         $button_text = 'Tạo';
     } else {
-        $action = route('material_request.edit_export');
+        $action = route('equipment_request.edit_export');
 
         $button_text = 'Cập Nhật';
     }
@@ -28,7 +28,7 @@
                     <span class="card-label fw-bolder fs-3 mb-1">{{ $title_form }}</span>
                 </h3>
                 <div class="card-toolbar">
-                    <a href="{{ route('material_request.export') }}" class="btn btn-sm btn-dark">
+                    <a href="{{ route('equipment_request.export') }}" class="btn btn-sm btn-dark">
                         <span class="align-items-center d-flex">
                             <i class="fa fa-arrow-left me-1"></i>
                             Trở Lại
@@ -88,12 +88,12 @@
 
                                 <label class="required fs-5 fw-bold mb-3">Thiết Bị</label>
 
-                                <select name="material" class="form-select form-select-sm form-select-solid setupSelect2">
+                                <select name="equipment" class="form-select form-select-sm form-select-solid setupSelect2">
                                     <option value="">Chọn Thiết Bị...</option>
-                                    {{-- @foreach ($AllMaterial as $item)
+                                    {{-- @foreach ($AllEquipment as $item)
                                         <option value="{{ $item['id'] }}"
                                             class="{{ $item['quantity'] <= 10 || \Carbon\Carbon::parse($item['expiry'])->diffInDays(now(), true) < 10 ? 'text-danger' : '' }}">
-                                            {{ $item['material_name'] }} - ({{ $item['description'] }}) - (Tổng Tồn:
+                                            {{ $item['equipment_name'] }} - ({{ $item['description'] }}) - (Tổng Tồn:
                                             {{ $item['quantity'] }})
                                         </option>
                                     @endforeach --}}

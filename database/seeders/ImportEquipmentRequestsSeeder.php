@@ -13,9 +13,10 @@ class ImportEquipmentRequestsSeeder extends Seeder
         DB::table('import_equipment_requests')->insert([
             [
                 'code' => 'IMREQ001',
+                'user_code' => 'ULA9SHD45P',
                 'supplier_code' => 'SUP001',
                 'note' => 'Initial order of laptops',
-                'status' => true,
+                'status' => false,
                 'request_date' => now(),
                 'created_at' => now(),
                 'updated_at' => null,

@@ -272,7 +272,7 @@
             tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form id="form-3" action="{{ route('notification.notification_add') }}" method="POST">
+                    <form id="form-3" method="POST">
                         @csrf
                         <div class="modal-header">
                             <h3 class="modal-title" id="deleteModalLabel">Xóa Loại thông báo</h3>

@@ -152,7 +152,7 @@
                     <table class="table table-striped align-middle gs-0 gy-4">
                         <thead>
                             <tr class="fw-bolder bg-success text-white">
-                                <th class="ps-4">STT</th>
+                                <th class="ps-3">STT</th>
                                 <th>Số lô</th>
                                 <th>Tồn đầu kỳ</th>
                                 <th>Nhập</th>

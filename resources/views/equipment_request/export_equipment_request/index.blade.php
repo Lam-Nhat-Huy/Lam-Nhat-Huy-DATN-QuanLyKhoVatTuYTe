@@ -118,23 +118,63 @@
     <div class="card mb-5 pb-5 mb-xl-8">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Thùng Rác</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Yêu Cầu Xuất Kho</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('material_request.export') }}" class="btn btn-sm btn-dark me-2">
+                <a href="{{ route('equipment_request.export_trash') }}" class="btn btn-sm btn-danger me-2">
                     <span class="align-items-center d-flex">
-                        <i class="fa fa-arrow-left me-1"></i>
-                        Trở Lại
+                        <i class="fa fa-trash me-1"></i>
+                        Thùng Rác
                     </span>
                 </a>
+                <a href="{{ route('equipment_request.create_export') }}" class="btn btn-success btn-sm">
+                    <i class="fa fa-plus me-1"></i>Tạo Phiếu
+                </a>
             </div>
+        </div>
+        <div class="card-body py-1 me-9">
+            <form action="" class="row align-items-center">
+                <div class="col-3">
+                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                        <option value="" selected>--Theo Phòng Ban--</option>
+                        <option value="a">A</option>
+                        <option value="b">B</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                        <option value="" selected>--Theo Người Tạo--</option>
+                        <option value="a">A</option>
+                        <option value="b">B</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select name="stt" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                        <option value="" selected>--Theo Trạng Thái--</option>
+                        <option value="1" {{ request()->stt == 1 ? 'selected' : '' }}>Chưa Duyệt</option>
+                        <option value="2" {{ request()->stt == 2 ? 'selected' : '' }}>Đã Duyệt</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <div class="row">
+                        <div class="col-10">
+                            <input type="search" name="kw" placeholder="Tìm Kiếm Mã Yêu Cầu.."
+                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                value="{{ request()->kw }}">
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="card-body py-3">
             <div class="table-responsive">
                 <table class="table align-middle gs-0 gy-4">
                     <thead>
                         <tr class="fw-bolder bg-success">
-                            <th class="ps-4">
+                            <th class="ps-3">
                                 <input type="checkbox" id="selectAll" />
                             </th>
                             <th class="">Mã Yêu Cầu</th>
@@ -197,7 +237,7 @@
                                                     <table class="table table-striped table-sm table-hover">
                                                         <thead class="fw-bolder bg-danger">
                                                             <tr>
-                                                                <th class="ps-4">Tên vật tư</th>
+                                                                <th class="ps-3">Tên vật tư</th>
                                                                 <th>Đơn Vị Tính</th>
                                                                 <th class="pe-3">Số lượng</th>
                                                             </tr>
@@ -219,26 +259,53 @@
 
                                 <div class="card-body py-3 text-end">
                                     <div class="button-group">
-                                        <button class="btn btn-sm btn-success" data-bs-toggle="modal"
-                                            data-bs-target="#restoreModal_"><i
-                                                class="fa fa-rotate-left"></i>Khôi Phục</button>
+                                        @if (1 == 1)
+                                            <!-- Nút Duyệt đơn -->
+                                            <button class="btn btn-sm btn-success me-2" data-bs-toggle="modal"
+                                                data-bs-target="#browse_"
+                                                type="button">
+                                                <i class="fas fa-clipboard-check"></i>Duyệt Phiếu
+                                            </button>
 
-                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal_"><i
-                                                class="fa fa-trash"></i>Xóa
-                                            Vĩnh Viễn</button>
+                                            <!-- Nút Sửa đơn -->
+                                            <a href="{{ route('equipment_request.update_export') }}"
+                                                class="btn btn-sm btn-dark me-2">
+                                                <i class="fa fa-edit"></i>Sửa Phiếu
+                                            </a>
+
+                                            <!-- Nút Xóa đơn -->
+                                            <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal_" type="button">
+                                                <i class="fa fa-trash"></i>Xóa Phiếu
+                                            </button>
+                                        @else
+                                            <!-- Nút In Phiếu -->
+                                            <button class="btn btn-sm btn-dark me-2" type="button">
+                                                <i class="fas fa-file-import"></i>Tạo Phiếu Xuất Nhanh
+                                            </button>
+
+                                            <!-- Nút In Phiếu -->
+                                            <button class="btn btn-sm btn-twitter me-2 printPdfBtn" type="button">
+                                                <i class="fa fa-print"></i>In Phiếu
+                                            </button>
+
+                                            <!-- Nút Xóa đơn -->
+                                            <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal_" type="button">
+                                                <i class="fa fa-trash"></i>Xóa Phiếu
+                                            </button>
+                                        @endif
                                     </div>
                                 </div>
 
-                                {{-- Khôi phục --}}
-                                <div class="modal fade" id="restoreModal_" data-bs-backdrop="static"
-                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="restoreModalLabel"
+                                {{-- Duyệt --}}
+                                <div class="modal fade" id="browse_" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="checkModalLabel"
                                     aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h3 class="modal-title" id="restoreModalLabel">Khôi Phục Yêu Cầu Xuất
-                                                    Kho
+                                                <h3 class="modal-title" id="checkModalLabel">Duyệt Yêu Cầu Xuất Kho
                                                 </h3>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
@@ -246,29 +313,128 @@
                                             <div class="modal-body">
                                                 <form action="" method="">
                                                     @csrf
-                                                    <h4 class="text-success text-center">Khôi Phục Yêu Cầu Xuất Kho Này?
+                                                    <h4 class="text-danger text-center">Duyệt Yêu Cầu Xuất Kho Này?
                                                     </h4>
                                                 </form>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-sm btn-secondary"
                                                     data-bs-dismiss="modal">Đóng</button>
-                                                <button type="button" class="btn btn-sm btn-success">Khôi
-                                                    Phục</button>
+                                                <button type="button" class="btn btn-sm btn-success">Duyệt</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                {{-- Xóa vĩnh viễn --}}
+                                {{-- In --}}
+                                <div class="fade modal printArea">
+                                    <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
+                                        <div class="d-flex mb-5">
+                                            <img src="https://i.pinimg.com/originals/36/b0/a0/36b0a084544360c807d7c778358f762d.png"
+                                                width="100" alt="">
+                                            <div class="text-left mt-3">
+                                                <h6 class="mb-0 pb-0">BỆNH VIỆN ĐA KHOA BEESOFT</h6>
+                                                <div>307C Nguyễn Văn Linh, An Khánh, Ninh Kiều, Cần Thơ
+                                                </div>
+                                                <div>Hotline: 0900900999</div>
+                                            </div>
+                                        </div>
+                                        <form action="" method="post">
+                                            <div class="text-center mb-13">
+                                                <h1 class="mb-3 text-uppercase text-primary">Phiếu Yêu Cầu Xuất Kho
+                                                </h1>
+                                                <div class="text-muted fw-bold fs-6">Thông Tin Chi Tiết Về
+                                                    Phiếu Yêu Cầu Xuất Kho
+                                                    <span class="link-primary fw-bolder">#MaYeuCauMuaHang</span>.
+                                                </div>
+                                                <div class="text-muted fs-30">
+                                                    Ngày Lập 2-9-2024
+                                                </div>
+                                            </div>
+                                            <div class="mb-15 text-left">
+                                                <!-- Begin::Receipt Info -->
+                                                <div class="mb-4">
+                                                    <h4 class="text-primary border-bottom border-dark pb-4">
+                                                        Thông Tin Xuất Kho</h4>
+                                                    <div class="pt-2">
+                                                        <p><strong>Phòng Ban:</strong> <span id="modalSupplier">
+                                                                Khoa xét nghiệm
+                                                            </span>
+                                                        </p>
+                                                        <p><strong>Lý Do Xuất Kho:</strong> <span id="modalSupplier">
+                                                                Cấp phát cho các phòng ban
+                                                            </span>
+                                                        </p>
+                                                        <p><strong>Ghi Chú:</strong> <span id="modalSupplier">
+                                                                ABCDEF
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <!-- End::Receipt Info -->
+
+                                                <!-- Begin::Receipt Items -->
+                                                <div class="mb-4">
+                                                    <h4 class="text-primary border-bottom border-dark pb-4 mb-4">
+                                                        Danh Sách Thiết Bị
+                                                    </h4>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped align-middle gs-0 gy-4">
+                                                            <thead>
+                                                                <tr class="fw-bolder bg-success">
+                                                                    <th style="width: 33%;">Thiết Bị</th>
+                                                                    <th style="width: 33%;">Đơn Vị</th>
+                                                                    <th style="width: 33%;">Số Lượng
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr class="text-center">
+                                                                    <td>
+                                                                        Băng gạc
+                                                                    </td>
+                                                                    <td>
+                                                                        Bình
+                                                                    </td>
+                                                                    <td>
+                                                                        100
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-7"></div>
+                                                        <div class="col-5 text-center">
+                                                            <p class="m-0 p-0">
+                                                                Cần Thơ, ngày
+                                                                {{ \Carbon\Carbon::now()->day }}
+                                                                tháng
+                                                                {{ \Carbon\Carbon::now()->month }} năm
+                                                                {{ \Carbon\Carbon::now()->year }}
+                                                            </p>
+                                                            <p class="m-0 p-0">
+                                                                <strong>Người Lập</strong>
+                                                            </p>
+                                                            <p style="margin-top: 70px !important;">
+                                                                Lữ Phát Huy
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                {{-- Xóa --}}
                                 <div class="modal fade" id="deleteModal_" data-bs-backdrop="static"
                                     data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
                                     aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h3 class="modal-title" id="deleteModalLabel">Xóa Vĩnh Viễn Yêu Cầu Xuất
-                                                    Kho
+                                                <h3 class="modal-title" id="deleteModalLabel">Xóa Yêu Cầu Xuất Kho
                                                 </h3>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
@@ -276,15 +442,13 @@
                                             <div class="modal-body">
                                                 <form action="" method="">
                                                     @csrf
-                                                    <h4 class="text-danger text-center">Xóa Vĩnh Viễn Yêu Cầu Xuất Kho
-                                                        Này?</h4>
+                                                    <h4 class="text-danger text-center">Xóa Yêu Cầu Xuất Kho Này?</h4>
                                                 </form>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-sm btn-secondary"
                                                     data-bs-dismiss="modal">Đóng</button>
-                                                <button type="button" class="btn btn-sm btn-danger">Xóa Vĩnh
-                                                    Viễn</button>
+                                                <button type="button" class="btn btn-sm btn-danger">Xóa</button>
                                             </div>
                                         </div>
                                     </div>
@@ -304,39 +468,37 @@
                 </span>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#confirmAll">
-                            <i class="fas fa-clipboard-check me-2 text-success"></i>Khôi Phục Tất Cả
-                        </a>
+                            <i class="fas fa-clipboard-check me-2 text-success"></i>Duyệt Tất Cả</a>
                     </li>
                     <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#deleteAll">
-                            <i class="fas fa-trash me-2 text-danger"></i>Xóa Vĩnh Viễn Tất Cả
-                        </a>
+                            <i class="fas fa-trash me-2 text-danger"></i>Xóa Tất Cả</a>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
 
-    {{-- Modal Khôi Phục Tất Cả --}}
+    {{-- Modal Duyệt Tất Cả --}}
     <div class="modal fade" id="confirmAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="confirmAll" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title text-white" id="confirmAll">Khôi Phục Tất Cả Yêu Cầu Xuất Kho</h5>
+                    <h5 class="modal-title text-white" id="confirmAll">Duyệt Tất Cả phiếu xuất kho</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center" style="padding-bottom: 0px;">
                     <form action="" method="">
                         @csrf
-                        <p class="text-danger mb-4">Bạn có chắc chắn muốn khôi phục tất cả Yêu Cầu Xuất Kho đã chọn?</p>
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt tất cả phiếu xuất kho đã chọn?</p>
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
                     <button type="button" class="btn btn-sm btn-secondary btn-sm px-4"
                         data-bs-dismiss="modal">Đóng</button>
                     <button type="button" class="btn btn-sm btn-success px-4">
-                        Khôi Phục</button>
+                        Duyệt</button>
                 </div>
             </div>
         </div>
@@ -348,19 +510,19 @@
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Xóa Tất Cả Yêu Cầu Xuất kho</h5>
+                    <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Xóa Tất Cả phiếu xuất kho</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center" style="padding-bottom: 0px;">
                     <form action="" method="">
                         @csrf
-                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả Yêu Cầu Xuất kho đã chọn?</p>
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả phiếu xuất kho đã chọn?</p>
                     </form>
                 </div>
                 <div class="modal-footer justify-content-center border-0">
                     <button type="button" class="btn btn-sm btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-sm btn-danger px-4"> Xóa</button>
+                    <button type="button" class="btn btn-sm btn-success px-4"> Xóa</button>
                 </div>
             </div>
         </div>

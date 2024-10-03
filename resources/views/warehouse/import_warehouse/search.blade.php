@@ -154,7 +154,7 @@
                                 <table class="table table-striped table-sm table-hover">
                                     <thead class="fw-bolder bg-danger">
                                         <tr>
-                                            <th class="ps-4">Mã vật tư</th>
+                                            <th class="ps-3">Mã vật tư</th>
                                             <th>Tên vật tư</th>
                                             <th>Số lượng</th>
                                             <th>Giá nhập</th>
@@ -200,7 +200,7 @@
                     <div class="button-group">
                         <!-- Nút Duyệt đơn -->
                         <button style="font-size: 10px;" class="btn btn-sm btn-success me-2" data-bs-toggle="modal"
-                            data-bs-target="#browse" type="btn btn-sm btn-success">
+                            data-bs-target="#browse" type="button">
                             <i style="font-size: 10px;" class="fas fa-clipboard-check"></i>Duyệt
                             Phiếu
                         </button>

@@ -29,7 +29,7 @@
                     <!-- Trong phần <thead> của bảng -->
                     <thead>
                         <tr class="bg-success text-center">
-                            <th class="ps-4">
+                            <th class="ps-3">
                                 <input type="checkbox" id="selectAll" />
                             </th>
                             <th class="ps-4" style="width: 150px;">Mã Phiếu Nhập</th>
@@ -199,7 +199,7 @@
                                                         <table class="table table-striped table-sm table-hover">
                                                             <thead class="fw-bolder bg-danger">
                                                                 <tr class="text-center">
-                                                                    <th class="ps-4">Mã vật tư</th>
+                                                                    <th class="ps-3">Mã vật tư</th>
                                                                     <th>Tên vật tư</th>
                                                                     <th>Số lượng</th>
                                                                     <th>Giá nhập</th>

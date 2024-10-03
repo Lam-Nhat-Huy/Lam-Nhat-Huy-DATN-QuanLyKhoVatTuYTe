@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('import_request_code')->references('code')->on('import_equipment_requests')->onDelete('set null');
+            $table->foreign('import_request_code')->references('code')->on('import_equipment_requests')->onDelete('cascade');
             $table->foreign('equipment_code')->references('code')->on('equipments')->onDelete('set null');
         });
     }

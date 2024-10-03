@@ -133,16 +133,7 @@
                         <div class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px"
                             id="kt_activities_toggle">
                             <span class="svg-icon svg-icon-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none">
-                                    <rect x="8" y="9" width="3" height="10" rx="1.5" fill="black" />
-                                    <rect opacity="0.5" x="13" y="5" width="3" height="14" rx="1.5"
-                                        fill="black" />
-                                    <rect x="18" y="11" width="3" height="8" rx="1.5"
-                                        fill="black" />
-                                    <rect x="3" y="13" width="3" height="6" rx="1.5"
-                                        fill="black" />
-                                </svg>
+                                <i class="fa fa-bell" style="font-size: 17px;"></i>
                             </span>
                         </div>
                     </div>
@@ -152,7 +143,7 @@
                             <img src="https://1.bp.blogspot.com/-CsImmR4DBCI/Xh_fvrHfMrI/AAAAAAAAU2U/OSVSFbuvLDoAKadvyAkRhl4Y2aDGjzqIgCLcBGAsYHQ/s1600/hinh-anh-trai-dep%253Ddau-nam-hot-boy-2k-Wap102%2B%252825%2529.jpg"
                                 alt="user" />
                         </div>
-                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-primary fw-bold fs-6 w-275px"
+                        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-primary fw-bold fs-6 w-300px"
                             data-kt-menu="true">
                             <div class="menu-item">
                                 <div class="menu-content d-flex align-items-center px-3">

@@ -98,7 +98,7 @@
                     <table class="table align-middle gs-0 gy-4">
                         <thead>
                             <tr class="fw-bolder bg-success">
-                                <th class="ps-4">
+                                <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
                                 <th class="" style="width: 15%;">Mã Báo Cáo</th>

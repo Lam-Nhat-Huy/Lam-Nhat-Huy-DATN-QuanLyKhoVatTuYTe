@@ -36,10 +36,10 @@
                     <!-- Trong phần <thead> của bảng -->
                     <thead>
                         <tr class="bg-success text-center">
-                            <th class="ps-4">
+                            <th class="ps-3">
                                 <input type="checkbox" id="selectAll" />
                             </th>
-                            <th class="ps-4">Mã kiểm kho</th>
+                            <th class="ps-3">Mã kiểm kho</th>
                             <th class="">Thời gian</th>
                             <th class="">Tổng chênh lệch</th>
                             <th class="">Số lượng lệch tăng</th>
@@ -168,7 +168,7 @@
                                                         <table class="table table-striped table-sm table-hover">
                                                             <thead class="bg-danger">
                                                                 <tr class="text-center">
-                                                                    <th class="ps-4">Mã vật tư</th>
+                                                                    <th class="ps-3">Mã vật tư</th>
                                                                     <th>Tên vật tư</th>
                                                                     <th>Tồn kho</th>
                                                                     <th>Số lượng thực tế</th>

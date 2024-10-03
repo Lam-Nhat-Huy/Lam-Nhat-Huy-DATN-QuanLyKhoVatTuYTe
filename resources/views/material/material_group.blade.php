@@ -170,7 +170,7 @@
                             <table class="table table-striped align-middle gs-0 gy-4">
                                 <thead>
                                     <tr class="fw-bolder bg-success">
-                                        <th class="ps-4">Mã Nhóm Thiết Bị</th>
+                                        <th class="ps-3">Mã Nhóm Thiết Bị</th>
                                         <th class="">Tên</th>
                                         <th class="">Mô Tả</th>
                                         <th class="" style="width: 120px !important;">Trạng Thái</th>

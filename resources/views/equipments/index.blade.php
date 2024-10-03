@@ -88,10 +88,10 @@
                 <table class="table align-middle gs-0 gy-4">
                     <thead>
                         <tr class="fw-bolder bg-success">
-                            <th class="ps-4">
+                            <th class="ps-3">
                                 <input type="checkbox" id="selectAll" />
                             </th>
-                            <th class="ps-4">Mã Thiết Bị</th>
+                            <th class="ps-3">Mã Thiết Bị</th>
                             <th>Hình Ảnh</th>
                             <th>Nhóm Thiết Bị</th>
                             <th>Đơn Vị Tính</th>

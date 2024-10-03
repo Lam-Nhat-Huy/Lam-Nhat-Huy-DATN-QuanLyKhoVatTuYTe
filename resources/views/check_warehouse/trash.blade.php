@@ -27,7 +27,7 @@
                 <table class="table table-striped align-middle gs-0 gy-4">
                     <thead>
                         <tr class="fw-bolder bg-success">
-                            <th class="ps-4">Mã Phiếu Kiểm</th>
+                            <th class="ps-3">Mã Phiếu Kiểm</th>
                             <th>Người Kiểm</th>
                             <th>Ngày Kiểm</th>
                             <th>Ghi Chú</th>

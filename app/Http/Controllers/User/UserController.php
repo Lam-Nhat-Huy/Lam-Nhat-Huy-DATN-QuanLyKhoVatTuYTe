@@ -74,7 +74,7 @@ class UserController extends Controller
         }
 
         $allUser = $this->callModel::orderBy('created_at', 'DESC')
-            ->where('deleted_at', null);
+            ->whereNull('deleted_at');
 
         if (isset($request->gd)) {
             $allUser = $allUser->where("gender", $request->gd);
@@ -91,6 +91,7 @@ class UserController extends Controller
         if (isset($request->kw)) {
             $allUser = $allUser->where(function ($query) use ($request) {
                 $query->where('first_name', 'like', '%' . $request->kw . '%')
+                    ->orWhere('last_name', 'like', '%' . $request->kw . '%')
                     ->orWhere('email', 'like', '%' . $request->kw . '%')
                     ->orWhere('phone', 'like', '%' . $request->kw . '%')
                     ->orWhere('code', 'like', '%' . $request->kw . '%');
@@ -134,7 +135,6 @@ class UserController extends Controller
                     }
 
                     $user->forceDelete();
-                    
                 }
 
                 toastr()->success('Xóa thành công');

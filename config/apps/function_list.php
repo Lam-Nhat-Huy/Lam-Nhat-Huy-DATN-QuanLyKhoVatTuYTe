@@ -67,19 +67,19 @@ return [
         ],
         [
             'name' => 'Quản Lý Yêu Cầu Mua Hàng',
-            'route' => 'material_request.import',
+            'route' => 'equipment_request.import',
         ],
         [
             'name' => 'Tạo Phiếu Yêu Cầu Mua Hàng',
-            'route' => 'material_request.create_import',
+            'route' => 'equipment_request.create_import',
         ],
         [
             'name' => 'Quản Lý Yêu Cầu Xuất Kho',
-            'route' => 'material_request.export',
+            'route' => 'equipment_request.export',
         ],
         [
             'name' => 'Tạo Phiếu Yêu Cầu Xuất Kho',
-            'route' => 'material_request.create_export',
+            'route' => 'equipment_request.create_export',
         ],
         [
             'name' => 'Quản Lý Nhà Cung Cấp',

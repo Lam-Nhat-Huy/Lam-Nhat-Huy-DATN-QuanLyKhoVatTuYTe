@@ -8,18 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Import_equipment_request_details extends Model
 {
-    protected $primaryKey = 'code';
-
-    public $incrementing = false;
-
-    protected $keyType = 'string';
-
     use HasFactory;
 
     use SoftDeletes;
 
     protected $fillable = [
-        'code',
+        'id',
         'import_request_code',
         'equipment_code',
         'quantity',
@@ -27,4 +21,14 @@ class Import_equipment_request_details extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function equipments()
+    {
+        return $this->belongsTo(Equipments::class, 'equipment_code', 'code');
+    }
+
+    public function importEquipmentRequests()
+    {
+        return $this->belongsTo(Import_equipment_requests::class, 'import_request_code', 'code');
+    }
 }

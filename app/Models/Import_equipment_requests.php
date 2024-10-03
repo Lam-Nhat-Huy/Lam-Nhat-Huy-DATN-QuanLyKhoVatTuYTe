@@ -20,6 +20,7 @@ class Import_equipment_requests extends Model
 
     protected $fillable = [
         'code',
+        'user_code',
         'supplier_code',
         'note',
         'status',
@@ -28,4 +29,19 @@ class Import_equipment_requests extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function users()
+    {
+        return $this->belongsTo(Users::class, 'user_code', 'code');
+    }
+
+    public function suppliers()
+    {
+        return $this->belongsTo(Suppliers::class, 'supplier_code', 'code');
+    }
+
+    public function import_equipment_request_details()
+    {
+        return $this->hasMany(Import_equipment_request_details::class, 'import_request_code', 'code');
+    }
 }

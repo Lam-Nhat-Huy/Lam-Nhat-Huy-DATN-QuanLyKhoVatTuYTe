@@ -20,6 +20,7 @@ class Export_equipment_requests extends Model
 
     protected $fillable = [
         'code',
+        'user_code',
         'department_code',
         'note',
         'status',

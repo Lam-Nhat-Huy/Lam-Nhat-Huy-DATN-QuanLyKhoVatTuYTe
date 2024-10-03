@@ -109,7 +109,7 @@
     </div>
 
     <div id="loading-overlay" class="loading-overlay"></div>
-
+    
     {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
 
     <script src="{{ asset('js/main.js') }}"></script>

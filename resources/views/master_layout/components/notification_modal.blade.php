@@ -25,7 +25,7 @@
                 data-kt-scroll-height="auto" data-kt-scroll-wrappers="#kt_activities_body"
                 data-kt-scroll-dependencies="#kt_activities_header, #kt_activities_footer" data-kt-scroll-offset="5px">
                 <div class="timeline">
-                    @foreach ($getNotification as $item)
+                    @forelse ($getNotification as $item)
                         <div class="timeline-item">
                             <div class="timeline-line w-40px"></div>
                             <div class="timeline-icon symbol symbol-circle symbol-40px">
@@ -49,7 +49,11 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="d-flex justify-content-center">
+                            <h6 class="text-danger">Không Có Thông Báo</h6>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </div>

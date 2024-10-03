@@ -61,6 +61,7 @@
             const darkenElement = document.querySelector('.darken'); // Lớp tối
             const avatarInput = document.getElementById('avatar-input'); // Input file
             const imgElement = document.querySelector('.image-overlay img'); // Phần tử img
+            const message_error = document.querySelectorAll('.message_error');
             const defaultAvatar =
                 "{{ !empty($getUserProfile->avatar) ? asset('storage/' . $getUserProfile->avatar) : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png' }}"; // Avatar mặc định
 
@@ -89,6 +90,9 @@
                 // Reset ảnh về mặc định khi quay lại
                 imgElement.src = defaultAvatar;
                 avatarInput.value = ""; // Xóa giá trị của input file
+                message_error.forEach(function(element) {
+                    element.innerText = "";
+                });
             }
 
             // Sự kiện khi bấm vào nút "Chỉnh sửa"
@@ -120,6 +124,7 @@
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault(); // Prevent form submission first
+
                 let isValid = true; // Flag to check if the form is valid
 
                 // Clear previous error messages
@@ -131,9 +136,7 @@
                 const errorMessages = { // Object to hold error messages for each field
                     first_name: '',
                     last_name: '',
-                    phone: '',
                     address: '',
-                    email: '',
                     birth_day: '',
                 };
 
@@ -158,13 +161,9 @@
 
                 // Check if form is valid
                 if (isValid) {
-                    form.submit(); // Submit the form if all fields are valid
+                    submitAnimation(event);
                 }
             });
-        });
-
-        document.getElementById('profile-form').addEventListener('submit', function(event) {
-            submitAnimation(event);
         });
     </script>
 @endsection
@@ -253,7 +252,8 @@
                                         </span>
 
                                         <input type="text"
-                                            class="form-control form-control-sm form-control-solid border border-success bg-secondary d-none input-edit" style="text-transform: lowercase !important;"
+                                            class="form-control form-control-sm form-control-solid border border-success bg-secondary d-none input-edit"
+                                            style="text-transform: lowercase !important;"
                                             value="{{ $getUserProfile->email }}" disabled />
                                     </div>
                                 </div>
