@@ -90,15 +90,15 @@ class InventoryController extends Controller
         if (!empty($quantity)) {
             if ($quantity === 'enough') {
                 $equipments->whereHas('inventories', function ($subQuery) {
-                    $subQuery->where('current_quantity', '>=', 10);
+                    $subQuery->where('current_quantity', '>=', 25);
                 });
             } elseif ($quantity === 'low') {
                 $equipments->whereHas('inventories', function ($subQuery) {
-                    $subQuery->where('current_quantity', '<', 10);
+                    $subQuery->where('current_quantity', '<', 25);
                 });
             } elseif ($quantity === 'out_stock') {
-                $equipments->whereHas('inventories', function ($subQuery) {
-                    $subQuery->where('current_quantity', '=', 0);
+                $equipments->whereDoesntHave('inventories', function ($subQuery) {
+                    $subQuery->where('current_quantity', '>', 0);
                 });
             }
         }
