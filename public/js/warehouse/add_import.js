@@ -1,6 +1,18 @@
 let materialData = [];
 
-function addMaterial() {
+// Kiểm tra trùng số lô trước khi thêm vào danh sách vật tư
+async function checkBatchNumber(batch_number, equipment_code) {
+    try {
+        const response = await fetch(`/system/warehouse/check-batch-number/${batch_number}/${equipment_code}`);
+        const data = await response.json();
+        return data.exists;
+    } catch (error) {
+        console.error('Error checking batch number:', error);
+        return false;
+    }
+}
+
+async function addMaterial() {
     const supplier_code = document.getElementById('supplier_code').value;
     const note = document.getElementById('note').value;
     const equipment_code = document.getElementById('equipment_code').value;
@@ -56,8 +68,14 @@ function addMaterial() {
         errors.push('Vui lòng nhập VAT hợp lệ (0-100%).');
     }
 
-    // Kiểm tra số lô trùng
-    const isDuplicateBatch = materialData.some(material => material.batch_number === batch_number && material.equipment_code === equipment_code);
+    // Kiểm tra trùng số lô trong danh sách hiện tại
+    const isBatchDuplicateInList = materialData.some(material => material.batch_number === batch_number && material.equipment_code === equipment_code);
+    if (isBatchDuplicateInList) {
+        errors.push('Số lô ' + batch_number +  ' đã tồn tại trong danh sách của vật tư ' + equipment_code);
+    }
+
+    // Kiểm tra trùng số lô qua AJAX
+    const isDuplicateBatch = await checkBatchNumber(batch_number, equipment_code);
     if (isDuplicateBatch) {
         errors.push('Số lô này đã tồn tại cho vật tư ' + equipment_code);
     }
@@ -125,7 +143,6 @@ function addMaterial() {
         tableBody.appendChild(row);
     }
 
-    // Kiểm tra và ẩn noDataAlert nếu có dữ liệu
     if (materialData.length > 0) {
         noDataAlert.style.display = 'none';
     } else {
@@ -134,6 +151,8 @@ function addMaterial() {
 
     calculateTotals();
 }
+
+
 
 function removeMaterial(index, element) {
     materialData.splice(index, 1);
@@ -177,7 +196,7 @@ document.getElementById('equipment_code').addEventListener('change', function() 
 
     if (equipmentCode) {
         // Gửi yêu cầu AJAX để lấy dữ liệu của vật tư
-        fetch(`/system/warehouse/get_equipment/${equipmentCode}`)
+        fetch(`/system/system/warehouse/get_equipment/${equipmentCode}`)
             .then(response => response.json())
             .then(data => {
                 // Điền dữ liệu vào các trường liên quan

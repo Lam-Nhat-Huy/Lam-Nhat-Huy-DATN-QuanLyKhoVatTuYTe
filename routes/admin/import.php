@@ -14,4 +14,5 @@ Route::prefix('warehouse')->group(function () {
     Route::post('receipts/delete/{code}', [ImportController::class, 'delete'])->name('receipts.delete');
     Route::get('/export-excel', [ImportController::class, 'exportExcel'])->name('warehouse.exportExcel');
     Route::post('/import-excel', [ImportController::class, 'importExcel'])->name('warehouse.importExcel');
+    Route::get('/check-batch-number/{batch_number}/{equipment_code}', [ImportController::class, 'checkBatchNumber'])->name('warehouse.check_batch_number');
 });

@@ -116,7 +116,8 @@
                                     <label for="receipt_no" class="form-label fw-semibold">Số hóa đơn</label>
                                     <input type="number" tabindex="3"
                                         class="form-control form-control-sm border border-success rounded-pill"
-                                        id="receipt_no" name="receipt_no" placeholder="Nhập số hóa đơn" value="1000012121">
+                                        id="receipt_no" name="receipt_no" placeholder="Nhập số hóa đơn"
+                                        value="{{ rand(100000000, 900000000) }}">
                                 </div>
 
                                 <div class="mb-3 col-6">
@@ -146,7 +147,7 @@
                                     <label for="price" class="form-label fw-semibold">Giá nhập</label>
                                     <input type="text" tabindex="10"
                                         class="form-control form-control-sm border border-success rounded-pill"
-                                        id="price" name="price" placeholder="Nhập đơn giá" value="12000">
+                                        id="price" name="price" placeholder="Nhập đơn giá">
                                 </div>
 
                                 <div class="col-6 mb-4">
@@ -174,7 +175,8 @@
                                     <label for="quantity" class="form-label fw-semibold">Số lượng</label>
                                     <input type="number" tabindex="11"
                                         class="form-control form-control-sm border border-success rounded-pill"
-                                        id="quantity" name="quantity" placeholder="Nhập số lượng" value="78">
+                                        id="quantity" name="quantity" placeholder="Nhập số lượng"
+                                        value="{{ rand(50, 999) }}">
                                 </div>
 
                                 <div class="col-3 mb-4">
@@ -182,14 +184,15 @@
                                     <input type="text" tabindex="12"
                                         class="form-control form-control-sm border border-success rounded-pill"
                                         id="discount_rate" name="discount_rate" placeholder="Nhập chiết khấu (%)"
-                                        value="1">
+                                        value="{{ rand(1, 5) }}">
                                 </div>
 
                                 <div class="col-3 mb-4">
                                     <label for="VAT" class="form-label fw-semibold">VAT (%)</label>
                                     <input type="text" tabindex="13"
                                         class="form-control form-control-sm border border-success rounded-pill"
-                                        id="VAT" name="VAT" placeholder="Nhập VAT (%)" value="1">
+                                        id="VAT" name="VAT" placeholder="Nhập VAT (%)"
+                                        value="{{ rand(1, 10) }}">
                                 </div>
                             </div>
 

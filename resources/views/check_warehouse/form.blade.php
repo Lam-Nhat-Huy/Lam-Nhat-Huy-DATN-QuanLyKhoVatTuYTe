@@ -209,27 +209,36 @@
                             </ul>
                         </div>
 
-                        {{-- Hướng dẫn tổ hợp phím --}}
-                        <div class="d-flex justify-content-start mb-2">
-                            <ul class="list-unstyled">
-                                <li class="mb-1 text-dark">
-                                    <strong>Hướng dẫn tổ hợp phím:</strong>
-                                </li>
-                                <li class="mb-1 text-dark">
-                                    - <strong>F2:</strong> Tìm kiếm thiết bị
-                                </li>
-                                <li class="mb-1 text-dark">
-                                    - <strong>ALT + A:</strong> Thêm tất cả sản phẩm vào danh sách
-                                </li>
-                                <li class="mb-1 text-dark">
-                                    - <strong>ALT + F:</strong> Tự động điền tất cả số lượng thực tế
-                                </li>
-                            </ul>
+                        <div class="mb-2">
+                            <strong class="d-block text-dark mb-2">Hướng dẫn tổ hợp phím:</strong>
+                            <div class="d-flex justify-content-between">
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-1 text-dark">
+                                        - <strong>F2:</strong> Tìm kiếm thiết bị
+                                    </li>
+                                    <li class="mb-1 text-dark">
+                                        - <strong>ALT + A:</strong> Thêm tất cả sản phẩm vào danh sách
+                                    </li>
+                                    <li class="mb-1 text-dark">
+                                        - <strong>ALT + F:</strong> Tự động điền tất cả số lượng thực tế
+                                    </li>
+                                </ul>
+
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-1 text-dark">
+                                        - <strong>ENTER:</strong> Di chuyển xuống ô Số lượng của thiết bị tiếp theo
+                                    </li>
+                                    <li class="mb-1 text-dark">
+                                        - <strong>SHIFT:</strong> Di chuyển lên ô Số lượng của thiết bị phía trên
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
 
+
                         <div class="table-responsive mt-4">
-                            <table class="table text-center align-middle">
-                                <thead class="table-dark">
+                            <table class="table text-center align-middle" style="background-color: #f4f6f9;">
+                                <thead style="background-color: #0080ff;">
                                     <tr>
                                         <th style="width: 50px;">STT</th>
                                         <th style="width: 100px;">Mã thiết bị</th>
@@ -269,6 +278,7 @@
                             <!-- Input ẩn để lưu trữ dữ liệu vật tư -->
                             <input type="hidden" id="materialData" name="materialData">
                         </div>
+
                     </div>
                 </div>
 

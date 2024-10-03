@@ -65,21 +65,21 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
 
     var row = `
         <tr data-index="${rowCount}">
-            <td>${rowCount + 1}</td>    
+            <td>${rowCount + 1}</td>
             <td>${equipment_code}</td>
             <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</td>
             <td>${batch_number}</td>
             <td>${current_quantity}</td>
             <td>
-                <input type="number" style="width: 70px; height: 40px; border-radius: 8px;" oninput="updateProduct(${rowCount}, this.value)">
+                <input type="number" class="actual-quantity-input" style="width: 70px; height: 40px; border-radius: 8px;" oninput="updateProduct(${rowCount}, this.value)">
             </td>
             <td class="unequal-count" id="unequal-count-${rowCount}">0</td>
             <td>
-                <button class="btn btn-primary" type="button" onclick="autoFillQuantity(${rowCount}, ${current_quantity})">
+                <button class="btn btn-primary" title="Khi số lượng thực tế không bị lệch, điền số lượng tồn kho vào." type="button" onclick="autoFillQuantity(${rowCount}, ${current_quantity})">
                     <i class="fa fa-random"></i>
                 </button>
 
-                <a href="#" class="text-dark" onclick="removeProduct(${rowCount})">
+                <a href="#" class="text-dark" title="Xóa thiết bị ra khỏi danh sách" onclick="removeProduct(${rowCount})">
                     <i class="fa fa-trash"></i>
                 </a>
             </td>
@@ -101,7 +101,30 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
     if (tableBody.rows.length > 0) {
         document.getElementById('noDataAlert').style.display = 'none';
     }
+
+    const actualQuantityInputs = document.querySelectorAll('.actual-quantity-input');
+    actualQuantityInputs.forEach((input, index) => {
+        input.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                // Move downwards (Enter)
+                const nextInput = actualQuantityInputs[index + 1];
+                if (nextInput) {
+                    nextInput.focus();
+                }
+            } else if (event.key === 'Shift') {
+                event.preventDefault();
+                const prevInput = actualQuantityInputs[index - 1];
+                if (prevInput) {
+                    prevInput.focus();
+                }
+            }
+        });
+    });
 }
+
+
+
 
 
 function removeProduct(index) {

@@ -155,7 +155,7 @@
                                                                     <td class=""><strong>Tài khoản tạo</strong>
                                                                     </td>
                                                                     <td class="text-gray-800">
-                                                                        {{ $item['user_code'] }}
+                                                                        {{ $item->user->last_name . ' ' . $item->user->first_name }}
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
