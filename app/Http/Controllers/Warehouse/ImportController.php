@@ -145,6 +145,21 @@ class ImportController extends Controller
         return redirect()->route('warehouse.import');
     }
 
+    public function checkBatchNumber($batch_number, $equipment_code)
+    {
+        // Kiểm tra xem số lô đã tồn tại chưa
+        $existingInventory = Inventories::where('batch_number', $batch_number)
+            ->where('equipment_code', $equipment_code)
+            ->first();
+
+        // Trả về phản hồi dưới dạng JSON
+        if ($existingInventory) {
+            return response()->json(['exists' => true], 200);
+        }
+
+        return response()->json(['exists' => false], 200);
+    }
+
     private function updateInventoryByBatch($material, $receiptCode, $receiptDate)
     {
         $inventory = Inventories::where('equipment_code', $material['equipment_code'])
@@ -305,20 +320,5 @@ class ImportController extends Controller
         }
 
         return $randomString;
-    }
-
-    public function checkBatchNumber($batch_number, $equipment_code)
-    {
-        // Kiểm tra xem số lô đã tồn tại chưa
-        $existingInventory = Inventories::where('batch_number', $batch_number)
-            ->where('equipment_code', $equipment_code)
-            ->first();
-
-        // Trả về phản hồi dưới dạng JSON
-        if ($existingInventory) {
-            return response()->json(['exists' => true], 200);
-        }
-
-        return response()->json(['exists' => false], 200);
     }
 }

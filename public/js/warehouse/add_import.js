@@ -68,10 +68,16 @@ async function addMaterial() {
         errors.push('Vui lòng nhập VAT hợp lệ (0-100%).');
     }
 
-    // Kiểm tra trùng số lô trong danh sách hiện tại
-    const isBatchDuplicateInList = materialData.some(material => material.batch_number === batch_number && material.equipment_code === equipment_code);
-    if (isBatchDuplicateInList) {
-        errors.push('Số lô ' + batch_number +  ' đã tồn tại trong danh sách của vật tư ' + equipment_code);
+    // Kiểm tra trùng mã vật tư và số lô trong danh sách hiện tại
+    const isDuplicateInList = materialData.some(material => material.batch_number === batch_number && material.equipment_code === equipment_code);
+    if (isDuplicateInList) {
+        errors.push('Vật tư ' + equipment_code + ' với số lô ' + batch_number + ' đã được thêm vào danh sách.');
+    }
+
+    // Kiểm tra trùng số lô nhưng khác mã vật tư trong danh sách hiện tại
+    const isBatchDuplicateForDifferentMaterial = materialData.some(material => material.batch_number === batch_number && material.equipment_code !== equipment_code);
+    if (isBatchDuplicateForDifferentMaterial) {
+        errors.push('Số lô ' + batch_number + ' đã được chỉ định cho vật tư khác.');
     }
 
     // Kiểm tra trùng số lô qua AJAX
@@ -151,6 +157,7 @@ async function addMaterial() {
 
     calculateTotals();
 }
+
 
 
 
