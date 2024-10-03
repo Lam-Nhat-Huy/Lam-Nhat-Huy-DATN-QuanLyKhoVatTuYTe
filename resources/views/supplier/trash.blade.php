@@ -14,6 +14,29 @@
 
 @section('scripts')
     <script>
+        // Đổi biểu tượng khi bấm vào td có chứa chevron
+        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(td) {
+            td.addEventListener('click', function(event) {
+                // Tìm phần tử <i> bên trong <td>
+                var icon = this.querySelector('i');
+
+                // Kiểm tra nếu có <i> thì thực hiện đổi biểu tượng
+                if (icon) {
+                    // Đổi icon khi click
+                    if (icon.classList.contains('fa-chevron-right')) {
+                        icon.classList.remove('fa-chevron-right');
+                        icon.classList.add('fa-chevron-down');
+                    } else {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-right');
+                    }
+                }
+
+                // Ngăn chặn việc click ảnh hưởng đến hàng (row)
+                event.stopPropagation();
+            });
+        });
+
         function toggleDeleteAction() {
             var anyChecked = false;
             document.querySelectorAll('.row-checkbox').forEach(function(checkbox) {
@@ -119,55 +142,34 @@
             <div class="card-body py-3">
                 <div class="table-responsive">
                     <table class="table align-middle gs-0 gy-4">
-                        <thead>
-                            <tr class="fw-bolder bg-success">
-                                <th class="ps-4">
-                                    <input type="checkbox" id="selectAll" />
-                                </th>
-                                <th>Tên Nhà cung cấp</th>
-                                <th>Số điện thoại</th>
-                                <th>Địa chỉ</th>
-                                <th>Email</th>
-                                <th>Mã số thuế</th>
-                                <th>Người liên hệ</th>
-                                <th class="pe-3">Hành Động</th>
+                        <thead class="fw-bolder bg-success">
+                            <tr>
+                                <th class="ps-4"><input type="checkbox" id="selectAll" /></th>
+                                <th style="width: 30% !important;">Tên Nhà cung cấp</th>
+                                <th style="width: 15% !important;">Số điện thoại</th>
+                                <th style="width: 25% !important;">Email</th>
+                                <th style="width: 20% !important;">Người liên hệ</th>
+                                <th style="width: 10% !important;" class="pe-3">Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($allSupplierTrash as $item)
-                                <tr class="hover-table pointer">
-                                    <td>
-                                        <input type="checkbox" name="supplier_codes[]" value="{{ $item->code }}"
-                                            class="row-checkbox" />
+                                <tr class="text-center hover-table pointer">
+                                    <td class="text-xl-start"><input type="checkbox" class="row-checkbox"
+                                            name="supplier_codes[]" value="{{ $item->code }}" /></td>
+                                    <td class="text-xl-start text-truncate" style="max-width: 150px;">
+                                        {{ $item->name }}
                                     </td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->phone }}</td>
-                                    <td>{{ $item->address }}</td>
-                                    <td>{{ $item->email }}</td>
-                                    <td>{{ $item->tax_code }}</td>
-                                    <td>{{ $item->contact_name }}</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button type="button" data-bs-toggle="dropdown">
-                                                <i class="fa fa-ellipsis-h me-2"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li>
-                                                    <a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#restoreModal_{{ $item->code }}"
-                                                        class="dropdown-item"><i class="fa fa-rotate-right me-1">
-                                                        </i>Khôi Phục
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteModal_{{ $item->code }}"
-                                                        class="dropdown-item"><i class="fa fa-trash me-1">
-                                                        </i>Xóa Vĩnh Viễn
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                    <td class="text-xl-start text-truncate" style="max-width: 150px;">{{ $item->phone }}
+                                    </td>
+                                    <td class="text-xl-start text-truncate" style="max-width: 150px;">{{ $item->email }}
+                                    </td>
+                                    <td class="text-xl-start text-truncate" style="max-width: 150px;">
+                                        {{ $item->contact_name }}</td>
+                                    <td class="text-center" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse{{ $item['code'] }}" id="toggleIcon{{ $item['code'] }}">
+                                        <i class="fa fa-chevron-right pointer">
+                                        </i>
                                     </td>
                                 </tr>
                                 {{-- Khôi Phục --}}
@@ -217,7 +219,8 @@
                                                 <div class="modal-body">
                                                     <input type="hidden" name="supplier_code_delete"
                                                         value="{{ $item->code }}">
-                                                    <h4 class="text-danger text-center">Xóa Vĩnh Viễn Nhà cung cấp Này?</h4>
+                                                    <h4 class="text-danger text-center">Xóa Vĩnh Viễn Nhà cung cấp Này?
+                                                    </h4>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-sm btn-secondary"
@@ -228,6 +231,76 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Collapse content -->
+                                <tr class="collapse multi-collapse" id="collapse{{ $item['code'] }}">
+                                    <td class="p-0" colspan="12"
+                                        style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
+                                        <div class="flex-lg-row-fluid border-2 border-lg-1">
+                                            <div class="card card-flush p-2"
+                                                style="padding-top: 0px !important; padding-bottom: 0px !important;">
+                                                <div class="card-header d-flex justify-content-between align-items-center p-2"
+                                                    style="padding-top: 0 !important; padding-bottom: 0px !important;">
+                                                    <div class="row py-5" style="padding-top: 0px !important">
+                                                        <h4 class="fw-bold m-3">Chi tiết nhà cung cấp</h4>
+                                                        <!-- Begin::Receipt Info (Left column) -->
+                                                        <div class="col-md-6">
+                                                            <table class="table table-flush gy-1">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class=""><strong>Tên nhà cung
+                                                                                cấp</strong></td>
+                                                                        <td class="text-gray-800">{{ $item->name }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class=""><strong>Số điện thoại</strong>
+                                                                        </td>
+                                                                        <td class="text-gray-800">{{ $item->phone }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class=""><strong>Địa chỉ</strong></td>
+                                                                        <td class="text-gray-800">{{ $item->address }}
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <table class="table table-flush gy-1">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class=""><strong>Email</strong></td>
+                                                                        <td class="text-gray-800">{{ $item->email }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class=""><strong>Mã số thuế</strong></td>
+                                                                        <td class="text-gray-800">{{ $item->tax_code }}
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body py-3 text-end">
+                                            <div class="button-group">
+                                                <!-- Khôi phục -->
+                                                <a href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#restoreModal_{{ $item->code }}"
+                                                    class="btn btn-sm btn-twitter me-2 printPdfBtn" type="button"><i
+                                                        class="fa fa-rotate-right me-1">
+                                                    </i>Khôi Phục
+                                                </a>
+                                                <!-- Xóa vĩnh viễn -->
+                                                <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal_{{ $item['code'] }}" type="button">
+                                                    <i class="fa fa-trash"></i>Xóa
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
                             @empty
                                 <div>
                                     <tr>
@@ -282,7 +355,7 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-sm btn-twitter px-4">Xóa</button>
+                            <button type="submit" class="btn btn-sm btn-twitter px-4">Khôi Phục</button>
                         </div>
                     </div>
                 </div>
@@ -304,7 +377,7 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-sm btn-danger px-4">Khôi phục</button>
+                            <button type="submit" class="btn btn-sm btn-danger px-4">Xóa</button>
                         </div>
                     </div>
                 </div>

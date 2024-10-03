@@ -21,4 +21,7 @@ Route::prefix('supplier')->middleware(CheckLogin::class)->group(function () {
     Route::get('/edit/{code}', [SupplierController::class, 'edit'])->name('supplier.edit');
 
     Route::post('/update', [SupplierController::class, 'update'])->name('supplier.update');
+
+    Route::get('/suppliers/search', [SupplierController::class, 'search'])->name('supplier.search');
+
 });

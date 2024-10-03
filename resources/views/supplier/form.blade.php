@@ -32,7 +32,7 @@
             </h3>
             <div class="card-toolbar">
                 <a href="{{ route('supplier.list') }}" class="btn btn-sm btn-dark">
-                    <span class="align-items-center d-flex">
+                    <span class="align-items-center d-flex" style="font-size: 10px;">
                         <i class="fa fa-arrow-left me-1"></i>
                         Trở Lại
                     </span>
@@ -51,7 +51,7 @@
                             <label class="required fs-5 fw-bold mb-3">Tên Nhà Cung Cấp</label>
 
                             <input type="text"
-                                class="form-control form-control-sm form-control-solid border border-success"
+                                class="form-control form-control-sm form-control-solid border border-success rounded-pill"
                                 placeholder="Tên nhà cung cấp.." name="name"
                                 value="{{ !empty($firstSupplier->name) ? $firstSupplier->name : old('name') }}" />
                             @error('name')
@@ -65,7 +65,7 @@
                             <label class="required fs-5 fw-bold mb-3">Người Đại Diện</label>
 
                             <input type="text"
-                                class="form-control form-control-sm form-control-solid border border-success"
+                                class="form-control form-control-sm form-control-solid border border-success rounded-pill"
                                 placeholder="Tên người đại diện.." name="contact_name"
                                 value="{{ !empty($firstSupplier->contact_name) ? $firstSupplier->contact_name : old('contact_name') }}" />
                             @error('contact_name')
@@ -78,7 +78,7 @@
                             <label class="required fs-5 fw-bold mb-3">Mã Số Thuế</label>
 
                             <input type="text"
-                                class="form-control form-control-sm form-control-solid border border-success"
+                                class="form-control form-control-sm form-control-solid border border-success rounded-pill"
                                 placeholder="Mã số thuế.." name="tax_code" 
                                 value="{{ !empty($firstSupplier->tax_code) ? $firstSupplier->tax_code : old('tax_code') }}"
                                 />
@@ -92,7 +92,7 @@
                             <label class="required fs-5 fw-bold mb-3">Số Điện Thoại</label>
 
                             <input type="number"
-                                class="form-control form-control-sm form-control-solid border border-success"
+                                class="form-control form-control-sm form-control-solid border border-success rounded-pill"
                                 placeholder="Số điện thoại.." name="phone" value="{{ !empty($firstSupplier->phone) ? $firstSupplier->phone : old('phone') }}"/>
                             @error('phone')
                                 <div class="message_error">{{ $message }}</div>
@@ -104,7 +104,7 @@
                             <label class="required fs-5 fw-bold mb-3">Email</label>
 
                             <input type="email"
-                                class="form-control form-control-sm form-control-solid border border-success"
+                                class="form-control form-control-sm form-control-solid border border-success rounded-pill"
                                 placeholder="Email.." name="email" value="{{ !empty($firstSupplier->email) ? $firstSupplier->email : old('email') }}"/>
                             @error('email')
                                 <div class="message_error">{{ $message }}</div>
@@ -116,7 +116,7 @@
                             <label class="required fs-5 fw-bold mb-3">Địa Chỉ</label>
 
                             <input type="text"
-                                class="form-control form-control-sm form-control-solid border border-success"
+                                class="form-control form-control-sm form-control-solid border border-success rounded-pill"
                                 placeholder="Địa chỉ.." name="address" value="{{ !empty($firstSupplier->address ) ? $firstSupplier->address   : old('address   ') }}"/>
                             @error('address')
                                 <div class="message_error">{{ $message }}</div>
@@ -127,7 +127,7 @@
                 </div>
             </div>
             <div class="modal-footer flex-right pe-0">
-                <button type="submit" class="btn btn-twitter btn-sm">
+                <button type="submit" class="btn btn-twitter btn-sm" style="font-size: 10px;">
                     {{ $button_text }}
                 </button>
             </div>
