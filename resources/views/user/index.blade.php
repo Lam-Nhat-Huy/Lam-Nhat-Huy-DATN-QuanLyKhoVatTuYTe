@@ -1,102 +1,6 @@
 @extends('master_layout.layout')
 
 @section('styles')
-    <style>
-        .hover-table:hover {
-            background: #ccc;
-        }
-
-        .selected-row {
-            background: #ddd;
-        }
-
-        .active-row {
-            background: #d1c4e9;
-            /* Màu nền khi hàng được nhấp vào */
-        }
-
-        .checkbox-wrapper-6 .tgl {
-            display: none;
-        }
-
-        .checkbox-wrapper-6 .tgl,
-        .checkbox-wrapper-6 .tgl:after,
-        .checkbox-wrapper-6 .tgl:before,
-        .checkbox-wrapper-6 .tgl *,
-        .checkbox-wrapper-6 .tgl *:after,
-        .checkbox-wrapper-6 .tgl *:before,
-        .checkbox-wrapper-6 .tgl+.tgl-btn {
-            box-sizing: border-box;
-        }
-
-        .checkbox-wrapper-6 .tgl::-moz-selection,
-        .checkbox-wrapper-6 .tgl:after::-moz-selection,
-        .checkbox-wrapper-6 .tgl:before::-moz-selection,
-        .checkbox-wrapper-6 .tgl *::-moz-selection,
-        .checkbox-wrapper-6 .tgl *:after::-moz-selection,
-        .checkbox-wrapper-6 .tgl *:before::-moz-selection,
-        .checkbox-wrapper-6 .tgl+.tgl-btn::-moz-selection,
-        .checkbox-wrapper-6 .tgl::selection,
-        .checkbox-wrapper-6 .tgl:after::selection,
-        .checkbox-wrapper-6 .tgl:before::selection,
-        .checkbox-wrapper-6 .tgl *::selection,
-        .checkbox-wrapper-6 .tgl *:after::selection,
-        .checkbox-wrapper-6 .tgl *:before::selection,
-        .checkbox-wrapper-6 .tgl+.tgl-btn::selection {
-            background: none;
-        }
-
-        .checkbox-wrapper-6 .tgl+.tgl-btn {
-            outline: 0;
-            display: block;
-            width: 40px;
-            height: 22px;
-            position: relative;
-            cursor: pointer;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        .checkbox-wrapper-6 .tgl+.tgl-btn:after,
-        .checkbox-wrapper-6 .tgl+.tgl-btn:before {
-            position: relative;
-            display: block;
-            content: "";
-            width: 50%;
-            height: 100%;
-        }
-
-        .checkbox-wrapper-6 .tgl+.tgl-btn:after {
-            left: 0;
-        }
-
-        .checkbox-wrapper-6 .tgl+.tgl-btn:before {
-            display: none;
-        }
-
-        .checkbox-wrapper-6 .tgl:checked+.tgl-btn:after {
-            left: 50%;
-        }
-
-        .checkbox-wrapper-6 .tgl-light+.tgl-btn {
-            background: #b5b5b5;
-            border-radius: 2em;
-            padding: 2px;
-            transition: all 0.4s ease;
-        }
-
-        .checkbox-wrapper-6 .tgl-light+.tgl-btn:after {
-            border-radius: 50%;
-            background: #fff;
-            transition: all 0.2s ease;
-        }
-
-        .checkbox-wrapper-6 .tgl-light:checked+.tgl-btn {
-            background: #1fb948;
-        }
-    </style>
 @endsection
 
 @section('title')
@@ -186,18 +90,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             toggleDeleteAction();
         });
-
-        document.getElementById('form-1').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-2').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-3').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
     </script>
 @endsection
 
@@ -209,13 +101,15 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Người Dùng</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('user.user_trash') }}?{{ request()->getQueryString() }}" class="btn rounded-pill btn-sm btn-danger me-2">
+                <a href="{{ route('user.user_trash') }}?{{ request()->getQueryString() }}"
+                    class="btn rounded-pill btn-sm btn-danger me-2">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-trash me-1"></i>
                         Thùng Rác
                     </span>
                 </a>
-                <a href="{{ route('user.add') }}?{{ request()->getQueryString() }}" class="btn rounded-pill btn-sm btn-twitter">
+                <a href="{{ route('user.add') }}?{{ request()->getQueryString() }}"
+                    class="btn rounded-pill btn-sm btn-twitter">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-plus me-1"></i>
                         Thêm Người Dùng
@@ -224,45 +118,47 @@
             </div>
         </div>
         <div class="card-body py-1">
-            <form action="{{ route('user.index') }}" id="form-1" method="GET" class="row align-items-center">
-                <div class="col-2">
+            <form action="{{ route('user.index') }}" method="GET" class="row align-items-center">
+                <div class="col-lg-2 col-md-3 col-sm-12">
                     <select name="gd" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" {{ request()->gd == '' ? 'selected' : '' }}>--Theo Giới Tính--</option>
                         <option value="nam" {{ request()->gd == 'nam' ? 'selected' : '' }}>Nam</option>
                         <option value="nữ" {{ request()->gd == 'nữ' ? 'selected' : '' }}>Nữ</option>
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col-lg-2 col-md-3 col-sm-12">
                     <select name="ps" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" {{ request()->ps == '' ? 'selected' : '' }}>--Theo Chức Vụ--</option>
                         <option value="1" {{ request()->ps == '1' ? 'selected' : '' }}>Admin</option>
                         <option value="0" {{ request()->ps == '0' ? 'selected' : '' }}>Nhân Viên</option>
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col-lg-2 col-md-3 col-sm-12">
                     <select name="st" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" {{ request()->st == '' ? 'selected' : '' }}>--Theo Trạng Thái--</option>
                         <option value="0" {{ request()->st == '0' ? 'selected' : '' }}>Không</option>
                         <option value="1" {{ request()->st == '1' ? 'selected' : '' }}>Có</option>
                     </select>
                 </div>
-                <div class="col-6">
-                    <div class="row">
-                        <div class="col-8">
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div class="row align-items-center">
+                        <div class="col-7">
                             <input type="search" name="kw" placeholder="Tìm Kiếm Mã, Tên, Email Người Dùng.."
-                                class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success"
+                                class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success w-100"
                                 value="{{ request()->kw }}">
                         </div>
-                        <div class="col-4">
-                            <span class="me-2"><a class="btn rounded-pill btn-info btn-sm mt-2 mb-2"
-                                    href="{{ route('user.index') }}">Bỏ Lọc</a></span>
-                            <span><button class="btn rounded-pill btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button></span>
+                        <div class="col-5 d-flex justify-content-between">
+                            <a class="btn rounded-pill btn-info btn-sm mt-2 mb-2 w-100 me-2"
+                                href="{{ route('user.index') }}"><i class="fas fa-times-circle"
+                                    style="margin-bottom: 2px;"></i>Bỏ Lọc</a>
+                            <button class="btn rounded-pill btn-dark btn-sm mt-2 mb-2 w-100 load_animation"
+                                type="submit"><i class="fa fa-search" style="margin-bottom: 2px;"></i>Tìm</button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-        <form id="form-2" action="{{ route('user.index') }}" method="POST">
+        <form action="{{ route('user.index') }}" method="POST">
             @csrf
             <div class="card-body py-3">
                 <div class="table-responsive">
@@ -274,13 +170,13 @@
                                 </th>
                                 <th class="" style="width: 6% !important;">Mã ND</th>
                                 <th class="" style="width: 11% !important;">Ảnh</th>
-                                <th class="" style="width: 15% !important;">Họ Tên</th>
+                                <th class="" style="width: 13% !important;">Họ Tên</th>
                                 <th class="" style="width: 14% !important;">Email</th>
                                 <th class="" style="width: 14% !important;">SĐT</th>
-                                <th class="" style="width: 9% !important;">Giới Tính</th>
-                                <th class="" style="width: 14% !important;">Chức Vụ</th>
-                                <th class="" style="width: 13% !important;">Trạng Thái</th>
-                                <th class="pe-3" style="width: 5% !important;"></th>
+                                <th class="" style="width: 11% !important;">Giới Tính</th>
+                                <th class="" style="width: 11% !important;">Chức Vụ</th>
+                                <th class="" style="width: 11% !important;">Trạng Thái</th>
+                                <th class="pe-3" style="width: 10% !important;">Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -319,13 +215,12 @@
                                     </td>
                                     <td>
                                         <div class="checkbox-wrapper-6">
-                                            <input class="tgl tgl-light" id="cb1-6" type="checkbox" value="1"
-                                                name="status" {{ !empty($item->status) == 1 ? 'checked' : '' }}
-                                                disabled />
+                                            <input class="tgl tgl-light" id="cb1-6" type="checkbox"
+                                                {{ !empty($item->status) == 1 ? 'checked' : '' }} disabled />
                                             <label class="tgl-btn" for="cb1-6"></label>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <div class="btn-group">
                                             <button type="button" data-bs-toggle="dropdown">
                                                 <i class="fa fa-ellipsis-h me-2"></i>
@@ -343,35 +238,6 @@
                                         </div>
                                     </td>
                                 </tr>
-
-                                {{-- Xóa --}}
-                                <div class="modal fade" id="deleteModal_{{ $item->code }}" data-bs-backdrop="static"
-                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <form id="form-3" action="{{ route('user.index') }}" method="POST">
-                                                @csrf
-                                                <div class="modal-header">
-                                                    <h3 class="modal-title" id="deleteModalLabel">Xóa Người Dùng
-                                                    </h3>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <input type="hidden" name="user_code_delete"
-                                                        value="{{ $item->code }}">
-                                                    <h4 class="text-danger text-center">Xóa Người Dùng Này?</h4>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn rounded-pill btn-sm btn-secondary"
-                                                        data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="submit" class="btn rounded-pill btn-sm btn-danger">Xóa</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
                             @empty
                                 <tr id="noDataAlert">
                                     <td colspan="10" class="text-center">
@@ -433,11 +299,41 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4">Xóa</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
     </div>
+
+    @foreach ($allUser as $item)
+        {{-- Xóa --}}
+        <div class="modal fade" id="deleteModal_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form action="{{ route('user.index') }}" method="POST">
+                        @csrf
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="deleteModalLabel">Xóa Người Dùng
+                            </h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="user_code_delete" value="{{ $item->code }}">
+                            <h4 class="text-danger text-center">Xóa Người Dùng Này?</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit"
+                                class="btn rounded-pill btn-sm btn-danger load_animation">Xóa</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
 @endsection

@@ -1,11 +1,6 @@
 @extends('master_layout.layout')
 
 @section('styles')
-    <style>
-        .hover-table:hover {
-            background: #ccc;
-        }
-    </style>
 @endsection
 
 @section('title')
@@ -115,6 +110,7 @@
                 document.getElementById('action_type').value = 'delete';
             });
         });
+        
         document.addEventListener('DOMContentLoaded', function() {
             toggleDeleteAction();
         });
@@ -128,7 +124,7 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Thùng Rác</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('supplier.list') }}" class="btn btn-sm btn-dark me-2">
+                <a href="{{ route('supplier.list') }}" class="btn rounded-pill btn-sm btn-dark me-2">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-arrow-left me-1"></i>
                         Trở Lại
@@ -172,29 +168,32 @@
                                         </i>
                                     </td>
                                 </tr>
-                                {{-- Khôi Phục --}}
+
+                                {{-- Khôi phục --}}
                                 <div class="modal fade" id="restoreModal_{{ $item->code }}" data-bs-backdrop="static"
-                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="restoreModalLabel"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
                                     aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
+                                        <div class="modal-content border-0 shadow">
+                                            <div class="modal-header bg-primary">
+                                                <h5 class="modal-title text-white" id="deleteModalLabel">Khôi Phục Nhà cung cấp
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
                                             <form action="{{ route('supplier.trash') }}" method="POST">
                                                 @csrf
-                                                <div class="modal-header">
-                                                    <h3 class="modal-title" id="restoreModalLabel">Khôi Phục Nhà cung cấp
-                                                    </h3>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
+                                                <input type="hidden" name="supplier_code_restore"
+                                                    value="{{ $item->code }}">
+                                                <div class="modal-body pb-0 text-center">
+                                                    <p class="text-primary mb-4">Khôi Phục Nhà cung cấp Này?</p>
                                                 </div>
-                                                <div class="modal-body">
-                                                    <input type="hidden" name="supplier_code_restore"
-                                                        value="{{ $item->code }}">
-                                                    <h4 class="text-primary text-center">Khôi Phục Nhà cung cấp Này?</h4>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-sm btn-secondary"
+                                                <div class="modal-footer justify-content-center border-0">
+                                                    <button type="button"
+                                                        class="btn rounded-pill btn-sm btn-secondary px-4"
                                                         data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="submit" class="btn btn-sm btn-twitter">Khôi
+                                                    <button type="submit"
+                                                        class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Khôi
                                                         Phục</button>
                                                 </div>
                                             </form>
@@ -207,74 +206,83 @@
                                     data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
                                     aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
+                                        <div class="modal-content border-0 shadow">
+                                            <div class="modal-header bg-danger">
+                                                <h5 class="modal-title text-white" id="deleteModalLabel">Xóa Vĩnh Viễn Nhà Cung Cấp
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
                                             <form action="{{ route('supplier.trash') }}" method="POST">
                                                 @csrf
-                                                <div class="modal-header">
-                                                    <h3 class="modal-title" id="deleteModalLabel">Xóa Vĩnh Viễn Nhà cung cấp
-                                                    </h3>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
+                                                <input type="hidden" name="supplier_code_delete"
+                                                    value="{{ $item->code }}">
+                                                <div class="modal-body pb-0 text-center">
+                                                    <p class="text-danger mb-4">Xóa Vĩnh Viễn Nhà Cung Cấp Này?</p>
                                                 </div>
-                                                <div class="modal-body">
-                                                    <input type="hidden" name="supplier_code_delete"
-                                                        value="{{ $item->code }}">
-                                                    <h4 class="text-danger text-center">Xóa Vĩnh Viễn Nhà cung cấp Này?
-                                                    </h4>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-sm btn-secondary"
+                                                <div class="modal-footer justify-content-center border-0">
+                                                    <button type="button"
+                                                        class="btn rounded-pill btn-sm btn-secondary px-4"
                                                         data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                                                    <button type="submit"
+                                                        class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa Vĩnh Viễn</button>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
+
                                 <!-- Collapse content -->
                                 <tr class="collapse multi-collapse" id="collapse{{ $item['code'] }}">
-                                    <td class="p-0" colspan="12"
-                                        style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
-                                        <div class="flex-lg-row-fluid border-2 border-lg-1">
+                                    <td class="p-0" colspan="12">
+                                        <div class="flex-lg-row-fluid border-2">
                                             <div class="card card-flush p-2"
                                                 style="padding-top: 0px !important; padding-bottom: 0px !important;">
                                                 <div class="card-header d-flex justify-content-between align-items-center p-2"
                                                     style="padding-top: 0 !important; padding-bottom: 0px !important;">
-                                                    <div class="row py-5" style="padding-top: 0px !important">
-                                                        <h4 class="fw-bold m-3">Chi tiết nhà cung cấp</h4>
-                                                        <!-- Begin::Receipt Info (Left column) -->
-                                                        <div class="col-md-6">
-                                                            <table class="table table-flush gy-1">
+                                                    <div class="row px-5">
+                                                        <div class="col-12 mt-3">
+                                                            <h4 class="fw-bold mt-3">Chi tiết</h4>
+                                                        </div>
+
+                                                        <!-- Left column: Supplier Info -->
+                                                        <div class="col-7">
+                                                            <table class="table table-borderless">
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td class=""><strong>Tên nhà cung
-                                                                                cấp</strong></td>
-                                                                        <td class="text-gray-800">{{ $item->name }}</td>
+                                                                        <td class="fw-semibold">Nhà cung cấp:</td>
+                                                                        <td class="text-dark">{{ $item->name }}</td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td class=""><strong>Số điện thoại</strong>
+                                                                        <td class="fw-semibold">Địa chỉ:</td>
+                                                                        <td class="text-dark">{{ $item->address }}
                                                                         </td>
-                                                                        <td class="text-gray-800">{{ $item->phone }}</td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td class=""><strong>Địa chỉ</strong></td>
-                                                                        <td class="text-gray-800">{{ $item->address }}
+                                                                        <td class="fw-semibold">Mã số thuế:</td>
+                                                                        <td class="text-dark">{{ $item->tax_code }}
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <table class="table table-flush gy-1">
+
+                                                        <!-- Right column: Additional Supplier Info -->
+                                                        <div class="col-5">
+                                                            <table class="table table-borderless">
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td class=""><strong>Email</strong></td>
-                                                                        <td class="text-gray-800">{{ $item->email }}</td>
+                                                                        <td class="fw-semibold">Đại diện:</td>
+                                                                        <td class="text-dark">
+                                                                            {{ $item->contact_name }}</td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td class=""><strong>Mã số thuế</strong></td>
-                                                                        <td class="text-gray-800">{{ $item->tax_code }}
-                                                                        </td>
+                                                                        <td class="fw-semibold">Email:</td>
+                                                                        <td class="text-dark">{{ $item->email }}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="fw-semibold">Số điện thoại:</td>
+                                                                        <td class="text-dark">{{ $item->phone }}</td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -283,30 +291,41 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card-body py-3 text-end">
+                                        <div class="card-body py-3 border-top-0 border-2 text-end">
                                             <div class="button-group">
                                                 <!-- Khôi phục -->
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#restoreModal_{{ $item->code }}"
-                                                    class="btn btn-sm btn-twitter me-2 printPdfBtn" type="button"><i
-                                                        class="fa fa-rotate-right me-1">
+                                                    class="btn rounded-pill btn-sm btn-twitter me-2 printPdfBtn"
+                                                    type="button"><i class="fa fa-rotate-right me-1">
                                                     </i>Khôi Phục
                                                 </a>
                                                 <!-- Xóa vĩnh viễn -->
-                                                <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
+                                                <button class="btn rounded-pill btn-sm btn-danger me-2"
+                                                    data-bs-toggle="modal"
                                                     data-bs-target="#deleteModal_{{ $item['code'] }}" type="button">
-                                                    <i class="fa fa-trash"></i>Xóa
+                                                    <i class="fa fa-trash"></i>Xóa Vĩnh Viễn
                                                 </button>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
                             @empty
-                                <div>
-                                    <tr>
-                                        <th colspan="10" class="text-danger text-center py-5">Không Có Dữ Liệu</th>
-                                    </tr>
-                                </div>
+                                <tr id="noDataAlert">
+                                    <td colspan="12" class="text-center">
+                                        <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                            role="alert"
+                                            style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                            <div class="mb-3">
+                                                <i class="fas fa-truck" style="font-size: 36px; color: #6c757d;"></i>
+                                            </div>
+                                            <div class="text-center mt-1">
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
+                                                    Liệu </h5>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -315,7 +334,7 @@
             @if ($allSupplierTrash->count() > 0)
                 <div class="card-body py-3 d-flex justify-content-between align-items-center">
                     <div class="dropdown" id="action_delete_all">
-                        <span class="btn btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1"
+                        <span class="btn rounded-pill btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <span>Chọn Thao Tác</span>
                         </span>
@@ -353,9 +372,9 @@
                             <p class="text-primary mb-4">Bạn có chắc chắn muốn khôi phục Nhà cung cấp đã chọn?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
-                            <button type="button" class="btn btn-sm btn-secondary px-4"
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-sm btn-twitter px-4">Khôi Phục</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Khôi Phục</button>
                         </div>
                     </div>
                 </div>
@@ -375,9 +394,9 @@
                             <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả Nhà cung cấp đã chọn?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
-                            <button type="button" class="btn btn-sm btn-secondary px-4"
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-sm btn-danger px-4">Xóa</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa Vĩnh Viễn</button>
                         </div>
                     </div>
                 </div>

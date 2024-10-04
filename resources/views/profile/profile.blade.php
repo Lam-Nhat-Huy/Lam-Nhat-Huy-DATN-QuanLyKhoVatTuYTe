@@ -162,7 +162,13 @@
 
                 // Check if form is valid
                 if (isValid) {
-                    submitAnimation(event);
+                    document.getElementById('loading').style.display = 'block';
+                    document.getElementById('loading-overlay').style.display = 'block';
+
+                    const submitButton = form.querySelector('button[type="submit"]');
+                    submitButton.disabled = true;
+
+                    form.submit();
                 }
             });
         });

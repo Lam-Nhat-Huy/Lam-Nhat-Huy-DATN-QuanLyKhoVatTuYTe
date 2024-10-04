@@ -1,20 +1,6 @@
 @extends('master_layout.layout')
 
 @section('styles')
-    <style>
-        .hover-table:hover {
-            background: #ccc;
-        }
-
-        .selected-row {
-            background: #ddd;
-        }
-
-        .active-row {
-            background: #d1c4e9;
-            /* Màu nền khi hàng được nhấp vào */
-        }
-    </style>
 @endsection
 
 @section('title')
@@ -43,18 +29,18 @@
             </div>
         </div>
         <div class="card-body py-1">
-            <form action="{{ route('report.index') }}" id="form-1" method="GET" class="row align-items-center">
-                <div class="col-3">
+            <form action="{{ route('report.index') }}" method="GET" class="row align-items-center">
+                <div class="col-lg-2 col-md-4 col-sm-12">
                     <select name="ur" id="ur"
                         class="mt-2 mb-2 form-select form-select-sm rounded-pill border border-success setupSelect2">
-                        <option value="" selected>--Theo Người Báo Cáo--</option>
+                        <option value="" selected>--Theo Người Tạo--</option>
                         @foreach ($AllUser as $item)
                             <option value={{ $item->code }} {{ request()->rt == $item->code ? 'selected' : '' }}>
                                 {{ $item->last_name }} {{ $item->first_name }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col-lg-2 col-md-3 col-sm-12">
                     <select name="rt" id="rt"
                         class="mt-2 mb-2 form-select form-select-sm rounded-pill border border-success setupSelect2">
                         <option value="" selected>--Theo Loại Báo Cáo--</option>
@@ -64,33 +50,32 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col-lg-2 col-md-3 col-sm-12">
                     <select name="st" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" {{ request()->st == '' ? 'selected' : '' }}>--Theo Trạng Thái--</option>
                         <option value="0" {{ request()->st == '0' ? 'selected' : '' }}>Chưa Duyệt</option>
                         <option value="1" {{ request()->st == '1' ? 'selected' : '' }}>Đã Duyệt</option>
                     </select>
                 </div>
-                <div class="col-5">
-                    <div class="row">
-                        <div class="col-8">
-                            <input type="search" name="kw" placeholder="Tìm Kiếm Mã, Tên, Email Người Dùng.."
-                                class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success"
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div class="row align-items-center">
+                        <div class="col-7">
+                            <input type="search" name="kw" placeholder="Tìm Kiếm Mã Báo Cáo.."
+                                class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success w-100"
                                 value="{{ request()->kw }}">
                         </div>
-                        <div class="col-4">
-                            <span class="me-2">
-                                <a class="btn rounded-pill btn-info btn-sm mt-2 mb-2" href="{{ route('report.index') }}">Bỏ Lọc</a>
-                            </span>
-                            <span>
-                                <button class="btn rounded-pill btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
-                            </span>
+                        <div class="col-5 d-flex justify-content-between">
+                            <a class="btn rounded-pill btn-info btn-sm mt-2 mb-2 w-100 me-2"
+                                href="{{ route('report.index') }}"><i class="fas fa-times-circle"
+                                    style="margin-bottom: 2px;"></i>Bỏ Lọc</a>
+                            <button class="btn rounded-pill btn-dark btn-sm mt-2 mb-2 w-100 load_animation"
+                                type="submit"><i class="fa fa-search" style="margin-bottom: 2px;"></i>Tìm</button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-        <form action="{{ route('report.index') }}" id="form-2" method="POST">
+        <form action="{{ route('report.index') }}" method="POST">
             @csrf
             <input type="hidden" name="action_type" id="action_type" value="">
             <div class="card-body py-3">
@@ -144,9 +129,11 @@
                                     </td>
                                     <td>
                                         @if ($item['status'] == 0)
-                                            <div class="rounded-pill px-2 py-1 text-white bg-danger text-center">Chưa Duyệt</div>
+                                            <div class="rounded-pill px-2 py-1 text-white bg-danger text-center">Chưa Duyệt
+                                            </div>
                                         @else
-                                            <div class="rounded-pill px-2 py-1 text-white bg-success  text-center">Đã Duyệt</div>
+                                            <div class="rounded-pill px-2 py-1 text-white bg-success  text-center">Đã Duyệt
+                                            </div>
                                         @endif
                                     </td>
                                     <td class="text-center">
@@ -197,68 +184,10 @@
                                                         </strong>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn rounded-pill btn-sm btn-secondary"
+                                                        <button type="button"
+                                                            class="btn rounded-pill btn-sm btn-secondary"
                                                             data-bs-dismiss="modal">Đóng</button>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {{-- Duyệt --}}
-                                        <div class="modal fade" id="browse_{{ $item->code }}"
-                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                            aria-labelledby="checkModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title" id="checkModalLabel">Duyệt Báo Cáo</h3>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <form action="{{ route('report.index') }}" id="form-3"
-                                                        method="POST">
-                                                        @csrf
-                                                        <input type="hidden" name="browse_report"
-                                                            value="{{ $item->code }}">
-                                                        <div class="modal-body">
-                                                            <h4 class="text-danger">Duyệt Báo Cáo Này?</h4>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
-                                                                data-bs-dismiss="modal">Đóng</button>
-                                                            <button type="submit"
-                                                                class="btn rounded-pill btn-sm btn-twitter">Duyệt</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="modal fade" id="deleteModal_{{ $item->code }}"
-                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                            aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title" id="deleteModalLabel">Xóa Báo Cáo</h3>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <form action="{{ route('report.index') }}" id="form-4"
-                                                        method="POST">
-                                                        @csrf
-                                                        <input type="hidden" name="delete_report"
-                                                            value="{{ $item->code }}">
-                                                        <div class="modal-body">
-                                                            <h4 class="text-danger">Xóa Báo Cáo Này?</h4>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
-                                                                data-bs-dismiss="modal">Đóng</button>
-                                                            <button type="submit"
-                                                                class="btn rounded-pill btn-sm btn-danger">Xóa</button>
-                                                        </div>
-                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -329,7 +258,7 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary btn-sm px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-success px-4">
+                            <button type="submit" class="btn rounded-pill btn-sm btn-success px-4 load_animation">
                                 Duyệt</button>
                         </div>
                     </div>
@@ -352,13 +281,70 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-success px-4"> Xóa</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-success px-4 load_animation">
+                                Xóa</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
     </div>
+
+    @foreach ($AllReport as $item)
+        {{-- Duyệt --}}
+        <div class="modal fade" id="browse_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title text-whitee" id="checkModalLabel">Duyệt Báo
+                            Cáo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('report.index') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="browse_report" value="{{ $item->code }}">
+                        <div class="modal-body pb-0 text-center">
+                            <p class="text-primary mb-4">Duyệt Báo Cáo Này?</p>
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit"
+                                class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Duyệt</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- Xóa --}}
+        <div class="modal fade" id="deleteModal_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title text-white" id="deleteModalLabel">Xóa Báo
+                            Cáo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('report.index') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="delete_report" value="{{ $item->code }}">
+                        <div class="modal-body pb-0 text-center">
+                            <p class="text-danger">Xóa Báo Cáo Này?</p>
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit"
+                                class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
 @endsection
 
 @section('scripts')

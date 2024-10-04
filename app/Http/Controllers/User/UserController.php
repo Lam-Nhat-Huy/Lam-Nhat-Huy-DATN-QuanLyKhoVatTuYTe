@@ -5,6 +5,12 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Models\Import_equipment_requests;
+use App\Models\Inventory_checks;
+use App\Models\Notifications;
+use App\Models\Receipts;
+use App\Models\Reports;
+use App\Models\Units;
 use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -27,23 +33,21 @@ class UserController extends Controller
 
         if (isset($request->user_codes)) {
 
-            if (in_array(session('user_code'), $request->user_codes)) {
+            $checkDeleteMe = Users::whereIn('code', $request->user_codes)
+                ->pluck('code')
+                ->toArray();
 
-                toastr()->error('Bạn không thể tự xóa chính mình');
+            $nonExistingUsers = array_diff($checkDeleteMe, [session('user_code')]);
 
-                return redirect()->back();
-            } else {
+            if (!empty($nonExistingUsers)) {
 
-                $rs = $this->callModel::whereIn('code', $request->user_codes)->delete();
+                $usersWithRelatedData = $this->checkRelatedTables($nonExistingUsers);
 
-                if ($rs) {
+                $nonExistingUsers_2 = array_diff($nonExistingUsers, $usersWithRelatedData);
 
-                    toastr()->success('Xóa người dùng thành công');
+                Users::whereIn('code', $nonExistingUsers_2)->delete();
 
-                    return redirect()->back();
-                }
-
-                toastr()->success('Đã xảy ra lỗi, hãy thử lại');
+                toastr()->success('Đã xóa người dùng');
 
                 return redirect()->back();
             }
@@ -53,10 +57,18 @@ class UserController extends Controller
 
             if (session('user_code') == $request->user_code_delete) {
 
-                toastr()->error('Bạn không thể tự xóa chính mình');
+                toastr()->error('Không thể tự xóa chính mình');
 
                 return redirect()->back();
             } else {
+                $usersWithRelatedData = $this->checkRelatedTables([$request->user_code_delete]);
+
+                if ($usersWithRelatedData) {
+
+                    toastr()->error('Không thể xóa người dùng này');
+
+                    return redirect()->back();
+                }
 
                 $rs = $this->callModel::where('code', $request->user_code_delete)->delete();
 
@@ -315,5 +327,36 @@ class UserController extends Controller
         }
 
         return $randomString;
+    }
+
+    private function checkRelatedTables($userCodes)
+    {
+        $usersWithRelatedData = [];
+
+        $reportUsers = Reports::whereIn('user_code', $userCodes)->pluck('user_code')->toArray();
+
+        $notificationUsers = Notifications::whereIn('user_code', $userCodes)->pluck('user_code')->toArray();
+
+        $inventoryCheckUsers = Inventory_checks::whereIn('user_code', $userCodes)->pluck('user_code')->toArray();
+
+        $importEquipmentRequestUsers = Import_equipment_requests::whereIn('user_code', $userCodes)->pluck('user_code')->toArray();
+
+        $receiptUsers = Receipts::whereIn('created_by', $userCodes)->pluck('created_by')->toArray();
+
+        // $exportUsers = Exports::whereIn('user_code', $userCodes)->pluck('user_code')->toArray();
+
+        $unitUsers = Units::whereIn('created_by', $userCodes)->pluck('created_by')->toArray();
+
+        $usersWithRelatedData = array_unique(array_merge(
+            $reportUsers,
+            $notificationUsers,
+            $inventoryCheckUsers,
+            $importEquipmentRequestUsers,
+            $receiptUsers,
+            // $exportUsers,
+            $unitUsers
+        ));
+
+        return $usersWithRelatedData;
     }
 }

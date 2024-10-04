@@ -72,8 +72,9 @@
                             </select>
 
                             <span class="ms-4 pointer" data-bs-toggle="modal" data-bs-target="#add_modal_ncc"
-                                title="Thêm Nhà Cung Cấp"><i
-                                    class="fa fa-plus text-white py-2 px-2 bg-success rounded-circle"></i></span>
+                                title="Thêm Nhà Cung Cấp">
+                                <i class="fa fa-plus bg-primary rounded-circle p-2 text-white" style="width: 25px; height: 25px;"></i>
+                            </span>
                         </div>
                         <div class="message_error" id="supplier_code_error"></div>
                     </div>
@@ -92,7 +93,7 @@
 
     <div class="card mb-xl-8 pt-5">
         <div class="py-5 px-lg-17">
-            <h3 class="mb-7">Chọn Thiết Bị Yêu Cầu</h3>
+            <h3 class="mb-7">Chọn Thiết Bị Cần Mua</h3>
             <div class="me-n7 pe-7">
                 <div class="row align-items-center">
                     <div class="col-md-6 fv-row">
@@ -114,7 +115,7 @@
 
                     <div class="col-md-6 fv-row">
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Số Lượng</label>
-                        <input type="number" id="quantity"
+                        <input type="number" id="quantity" onchange="changeEquipmentQuantity()"
                             class="form-control form-control-sm border border-success rounded-pill" value="0"
                             name="quantity" min="0" />
                         <div class="message_error" id="quantity_error"></div>
@@ -124,7 +125,7 @@
 
             <div class="modal-footer flex-right pe-0 pb-0">
                 <button type="butotn" class="btn btn-success btn-sm rounded-pill" id="btn_add_equipment">
-                    Thêm Thiết Bị
+                    <i class="fa fa-plus" style="margin-bottom: 2px;"></i>Thêm
                 </button>
             </div>
         </div>
@@ -133,7 +134,7 @@
     {{-- Danh sách thiết bị yêu cầu --}}
     <div class="card mb-5 mb-xl-8 pt-0">
         <div class="card-body py-3 px-17">
-            <h4 class="fw-bold m-0 text-uppercase fw-bolder mb-4">Danh sách thiết bị yêu cầu
+            <h4 class="fw-bold m-0 fw-bolder mb-5 mt-5">Danh Sách Thiết Bị Yêu Cầu
             </h4>
             <div class="table-responsive">
                 <table class="table table-striped align-middle gs-0 gy-4" id="table_list_equipment">
@@ -195,15 +196,15 @@
             <div class="modal-footer flex-right pe-0">
                 <button type="button" class="btn btn-info btn-sm {{ $d_none_temp }} rounded-pill"
                     id="import_equipment_request_temp">
-                    <i class="fa fa-cloud-arrow-down me-1"></i>Lưu Tạm
+                    <i class="fa fa-cloud-arrow-down me-1" style="margin-bottom: 2px;"></i>Lưu Tạm
                 </button>
                 <button type="button" class="btn btn-twitter btn-sm {{ $d_none_save }} rounded-pill"
                     id="import_equipment_request_save">
-                    <i class="fa fa-save me-1"></i>{{ $button_text }}
+                    <i class="fa fa-save me-1" style="margin-bottom: 2px;"></i>{{ $button_text }}
                 </button>
                 <button type="button" class="btn btn-twitter btn-sm {{ $d_none_update }} rounded-pill"
                     id="import_equipment_request_update">
-                    <i class="fa fa-save me-1"></i>{{ $button_text }}
+                    <i class="fa fa-save me-1" style="margin-bottom: 2px;"></i>{{ $button_text }}
                 </button>
             </div>
         </div>
@@ -697,6 +698,15 @@
 
             if (selectedValue !== "") {
                 errorMessage.innerText = '';
+            }
+        }
+
+        function changeEquipmentQuantity() {
+            const quantityValue = document.getElementById('quantity').value;
+            const errorMessageQuantity = document.getElementById('quantity_error');
+
+            if (quantityValue > 0) {
+                errorMessageQuantity.innerText = '';
             }
         }
 

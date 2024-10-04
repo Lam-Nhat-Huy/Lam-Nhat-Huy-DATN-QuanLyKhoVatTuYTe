@@ -1,20 +1,6 @@
 @extends('master_layout.layout')
 
 @section('styles')
-    <style>
-        .hover-table:hover {
-            background: #ccc;
-        }
-
-        .selected-row {
-            background: #ddd;
-        }
-
-        .active-row {
-            background: #d1c4e9;
-            /* Màu nền khi hàng được nhấp vào */
-        }
-    </style>
 @endsection
 
 @section('title')
@@ -113,22 +99,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             toggleDeleteAction();
         });
-
-        document.getElementById('form-1').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-2').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-3').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-4').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
     </script>
 @endsection
 
@@ -154,20 +124,20 @@
             </div>
         </div>
         <div class="card-body py-1">
-            <form action="{{ route('notification.index') }}" id="form-1" method="GET" class="row align-items-center">
-                <div class="col-3">
+            <form action="{{ route('notification.index') }}" method="GET" class="row align-items-center">
+                <div class="col-lg-2 col-md-4 col-sm-12">
                     <select name="ur" id="ur"
-                        class="mt-2 mb-2 form-select form-select-sm rounded-pill border border-success setupSelect2">
-                        <option value="" selected>--Theo Người Báo Cáo--</option>
+                        class="mt-2 mb-2 form-select form-select-sm rounded-pill border border-success setupSelect2 w-100">
+                        <option value="" selected>--Theo Người Tạo--</option>
                         @foreach ($AllUser as $item)
-                            <option value={{ $item->code }} {{ request()->rt == $item->code ? 'selected' : '' }}>
+                            <option value={{ $item->code }} {{ request()->ur == $item->code ? 'selected' : '' }}>
                                 {{ $item->last_name }} {{ $item->first_name }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col-lg-2 col-md-4 col-sm-12">
                     <select name="rt" id="rt"
-                        class="mt-2 mb-2 form-select form-select-sm rounded-pill border border-success setupSelect2">
+                        class="mt-2 mb-2 form-select form-select-sm rounded-pill border border-success setupSelect2 w-100">
                         <option value="" selected>--Theo Loại Báo Cáo--</option>
                         @foreach ($AllNotificationType as $item)
                             <option value={{ $item->id }} {{ request()->rt == $item->id ? 'selected' : '' }}>
@@ -175,28 +145,26 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-2">
-                    <select name="st" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
+                <div class="col-lg-2 col-md-4 col-sm-12">
+                    <select name="st" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2 w-100">
                         <option value="" {{ request()->st == '' ? 'selected' : '' }}>--Theo Trạng Thái--</option>
                         <option value="0" {{ request()->st == '0' ? 'selected' : '' }}>Chưa Duyệt</option>
                         <option value="1" {{ request()->st == '1' ? 'selected' : '' }}>Đã Duyệt</option>
                     </select>
                 </div>
-                <div class="col-5">
-                    <div class="row">
-                        <div class="col-8">
-                            <input type="search" name="kw" placeholder="Tìm Kiếm Mã, Tên, Email Người Dùng.."
-                                class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success"
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div class="row align-items-center">
+                        <div class="col-7">
+                            <input type="search" name="kw" placeholder="Tìm kiếm mã thông báo.."
+                                class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success w-100"
                                 value="{{ request()->kw }}">
                         </div>
-                        <div class="col-4">
-                            <span class="me-2">
-                                <a class="btn rounded-pill btn-info btn-sm mt-2 mb-2" href="{{ route('notification.index') }}">Bỏ
-                                    Lọc</a>
-                            </span>
-                            <span>
-                                <button class="btn rounded-pill btn-dark btn-sm mt-2 mb-2" type="submit">Tìm</button>
-                            </span>
+                        <div class="col-5 d-flex justify-content-between">
+                            <a class="btn rounded-pill btn-info btn-sm mt-2 mb-2 w-100 me-2"
+                                href="{{ route('notification.index') }}"><i class="fas fa-times-circle"
+                                    style="margin-bottom: 2px;"></i>Bỏ Lọc</a>
+                            <button class="btn rounded-pill btn-dark btn-sm mt-2 mb-2 w-100 load_animation"
+                                type="submit"><i class="fa fa-search" style="margin-bottom: 2px;"></i>Tìm</button>
                         </div>
                     </div>
                 </div>
@@ -209,23 +177,23 @@
                 <div class="table-responsive">
                     <table class="table align-middle gs-0 gy-4">
                         <thead>
-                            <tr class="fw-bolder bg-success text-center">
-                                <th class="ps-4" style="width: 5%">
+                            <tr class="fw-bolder bg-success">
+                                <th class="ps-4">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
                                 <th class="" style="width: 10%">Mã Thông Báo</th>
-                                <th class="" style="width: 10%">Người Tạo</th>
-                                <th class="" style="width: 16%">Nội Dung</th>
-                                <th class="" style="width: 16%">Loại Thông Báo</th>
-                                <th class="" style="width: 10%">Ngày Tạo</th>
+                                <th class="" style="width: 15%">Người Tạo</th>
+                                <th class="" style="width: 17%">Nội Dung</th>
+                                <th class="" style="width: 15%">Loại Thông Báo</th>
+                                <th class="" style="width: 13%">Ngày Tạo</th>
                                 <th class="" style="width: 10%">Trạng Thái</th>
-                                <th class="" style="width: 10%">Quan Trọng</th>
+                                <th class="text-center" style="width: 10%">Quan Trọng</th>
                                 <th class="pe-3 text-center" style="width: 10%">Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($AllNotification as $item)
-                                <tr class="hover-table pointer text-center">
+                                <tr class="hover-table pointer">
                                     <td>
                                         <input type="checkbox" name="notification_codes[]" value="{{ $item->code }}"
                                             class="row-checkbox" />
@@ -248,15 +216,13 @@
                                         {{ $item->created_at->format('d-m-Y') }}
                                     </td>
                                     <td>
-                                        @if ($item->status == 0)
-                                            <span class="rounded px-2 py-1 text-white bg-danger text-center"
-                                                style="font-size: 10px;">Chưa duyệt</span>
-                                        @else
-                                            <span class="rounded px-2 py-1 text-white bg-success text-center"
-                                                style="font-size: 10px;">Đã duyệt</span>
-                                        @endif
+                                        <div class="checkbox-wrapper-6">
+                                            <input class="tgl tgl-light" id="cb1-6" type="checkbox"
+                                                {{ $item->status == 1 ? 'checked' : '' }} disabled />
+                                            <label class="tgl-btn" for="cb1-6"></label>
+                                        </div>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         @if ($item->important == 1)
                                             <span class="rounded px-2 py-1 text-white bg-warning text-center"
                                                 style="font-size: 10px;"> Có</span>
@@ -313,7 +279,8 @@
                                                         </strong>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn rounded-pill btn-sm btn-secondary"
+                                                        <button type="button"
+                                                            class="btn rounded-pill btn-sm btn-secondary"
                                                             data-bs-dismiss="modal">Đóng</button>
                                                     </div>
                                                 </div>
@@ -326,27 +293,27 @@
                                             aria-labelledby="checkModalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content border-0 shadow">
-                                                    <div class="modal-header bg-success text-white">
-                                                        <h3 class="modal-title text-white" id="checkModalLabel">Duyệt
-                                                            Thông Báo</h3>
+                                                    <div class="modal-header bg-primary">
+                                                        <h5 class="modal-title text-white" id="checkModalLabel">Duyệt
+                                                            Thông Báo</h5>
                                                         <button type="button" class="btn-close btn-close-white"
                                                             data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
-                                                    <form action="{{ route('notification.index') }}" id="form-3"
-                                                        method="POST">
+                                                    <form action="{{ route('notification.index') }}" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="browse_notification"
                                                             value="{{ $item->code }}">
                                                         <div class="modal-body text-center pb-0">
-                                                            <p class="text-dark mb-4">Bạn có chắc chắn muốn duyệt phiếu
-                                                                nhập kho này?
+                                                            <p class="text-dark mb-4">Bạn có chắc chắn muốn duyệt thông báo
+                                                                này?
                                                             </p>
                                                         </div>
-                                                        <div class="modal-footer justify-content-center border-0 pt-0">
-                                                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
+                                                        <div class="modal-footer justify-content-center border-0">
+                                                            <button type="button"
+                                                                class="btn rounded-pill btn-sm btn-secondary px-4"
                                                                 data-bs-dismiss="modal">Đóng</button>
                                                             <button type="submit"
-                                                                class="btn rounded-pill btn-sm btn-success">Duyệt</button>
+                                                                class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Duyệt</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -359,26 +326,27 @@
                                             data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                                             aria-labelledby="deleteModalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title" id="deleteModalLabel">Xóa Thông Báo
-                                                        </h3>
+                                                <div class="modal-content border-0 shadow">
+                                                    <div class="modal-header bg-danger">
+                                                        <h5 class="modal-title text-white" id="deleteModalLabel">Xóa Thông
+                                                            Báo
+                                                        </h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
-                                                    <form action="{{ route('notification.index') }}" id="form-4"
-                                                        method="POST">
+                                                    <form action="{{ route('notification.index') }}" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="delete_notification"
                                                             value="{{ $item->code }}">
-                                                        <div class="modal-body">
-                                                            <h4 class="text-danger">Xóa Thông Báo Này?</h4>
+                                                        <div class="modal-body pb-0 text-center">
+                                                            <p class="text-danger mb-4">Xóa Thông Báo Này?</p>
                                                         </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
+                                                        <div class="modal-footer justify-content-center border-0">
+                                                            <button type="button"
+                                                                class="btn rounded-pill btn-sm btn-secondary px-4"
                                                                 data-bs-dismiss="modal">Đóng</button>
                                                             <button type="submit"
-                                                                class="btn rounded-pill btn-sm btn-danger">Xóa</button>
+                                                                class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -440,18 +408,18 @@
                 aria-labelledby="browseAllLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-md">
                     <div class="modal-content border-0 shadow">
-                        <div class="modal-header bg-success text-white">
-                            <h5 class="modal-title text-white" id="browseAllLabel">Duyệt Tất Cả thông báo</h5>
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title text-white" id="browseAllLabel">Duyệt Thông Báo</h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-center" style="padding-bottom: 0px;">
-                            <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt tất cả thông báo đã chọn?</p>
+                            <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt thông báo đã chọn?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary btn-sm px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-success px-4">
+                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">
                                 Duyệt</button>
                         </div>
                     </div>
@@ -464,17 +432,18 @@
                 <div class="modal-dialog modal-dialog-centered modal-md">
                     <div class="modal-content border-0 shadow">
                         <div class="modal-header bg-danger text-white">
-                            <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Xóa Tất Cả thông báo</h5>
+                            <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Xóa Thông Báo</h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-center" style="padding-bottom: 0px;">
-                            <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả thông báo đã chọn?</p>
+                            <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa thông báo đã chọn?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-success px-4"> Xóa</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4 load_animation">
+                                Xóa</button>
                         </div>
                     </div>
                 </div>

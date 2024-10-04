@@ -27,7 +27,7 @@ class SuppliersSeeder extends Seeder
                 'code' => 'SUP002',
                 'name' => 'Thiết Bị Y Tế An Phú Khang - Công Ty TNHH Thương Mại An Phú Khang',
                 'contact_name' => 'Lê Văn Vương',
-                'email' => 'ac.hailevan@gmail.com',
+                'email' => 'ac2.hailevan@gmail.com',
                 'phone' => '0974427022',
                 'address' => 'Số 2 Quách Đình Bảo, P. Tiền Phong, TP. Thái Bình, Thái Bình, Việt Nam',
                 'tax_code'=> '9045392332',

@@ -1,89 +1,6 @@
 @extends('master_layout.layout')
 
 @section('styles')
-    <style>
-        .checkbox-wrapper-6 .tgl {
-            display: none;
-        }
-
-        .checkbox-wrapper-6 .tgl,
-        .checkbox-wrapper-6 .tgl:after,
-        .checkbox-wrapper-6 .tgl:before,
-        .checkbox-wrapper-6 .tgl *,
-        .checkbox-wrapper-6 .tgl *:after,
-        .checkbox-wrapper-6 .tgl *:before,
-        .checkbox-wrapper-6 .tgl+.tgl-btn {
-            box-sizing: border-box;
-        }
-
-        .checkbox-wrapper-6 .tgl::-moz-selection,
-        .checkbox-wrapper-6 .tgl:after::-moz-selection,
-        .checkbox-wrapper-6 .tgl:before::-moz-selection,
-        .checkbox-wrapper-6 .tgl *::-moz-selection,
-        .checkbox-wrapper-6 .tgl *:after::-moz-selection,
-        .checkbox-wrapper-6 .tgl *:before::-moz-selection,
-        .checkbox-wrapper-6 .tgl+.tgl-btn::-moz-selection,
-        .checkbox-wrapper-6 .tgl::selection,
-        .checkbox-wrapper-6 .tgl:after::selection,
-        .checkbox-wrapper-6 .tgl:before::selection,
-        .checkbox-wrapper-6 .tgl *::selection,
-        .checkbox-wrapper-6 .tgl *:after::selection,
-        .checkbox-wrapper-6 .tgl *:before::selection,
-        .checkbox-wrapper-6 .tgl+.tgl-btn::selection {
-            background: none;
-        }
-
-        .checkbox-wrapper-6 .tgl+.tgl-btn {
-            outline: 0;
-            display: block;
-            width: 40px;
-            height: 22px;
-            position: relative;
-            cursor: pointer;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        .checkbox-wrapper-6 .tgl+.tgl-btn:after,
-        .checkbox-wrapper-6 .tgl+.tgl-btn:before {
-            position: relative;
-            display: block;
-            content: "";
-            width: 50%;
-            height: 100%;
-        }
-
-        .checkbox-wrapper-6 .tgl+.tgl-btn:after {
-            left: 0;
-        }
-
-        .checkbox-wrapper-6 .tgl+.tgl-btn:before {
-            display: none;
-        }
-
-        .checkbox-wrapper-6 .tgl:checked+.tgl-btn:after {
-            left: 50%;
-        }
-
-        .checkbox-wrapper-6 .tgl-light+.tgl-btn {
-            background: #b5b5b5;
-            border-radius: 2em;
-            padding: 2px;
-            transition: all 0.4s ease;
-        }
-
-        .checkbox-wrapper-6 .tgl-light+.tgl-btn:after {
-            border-radius: 50%;
-            background: #fff;
-            transition: all 0.2s ease;
-        }
-
-        .checkbox-wrapper-6 .tgl-light:checked+.tgl-btn {
-            background: #1fb948;
-        }
-    </style>
 @endsection
 
 @section('title')
@@ -111,7 +28,7 @@
 @endphp
 
 @section('content')
-    <form class="form" method="post" id="form-1" action="{{ $action }}" enctype="multipart/form-data">
+    <form class="form" method="post" action="{{ $action }}" enctype="multipart/form-data">
         @csrf
         <div class="card mb-5 mb-xl-8 pb-5">
             <div class="card-header border-0 pt-5">
@@ -310,7 +227,7 @@
 
                     </div>
                     <div class="modal-footer flex-right pe-0">
-                        <button type="submit" class="btn rounded-pill btn-twitter btn-sm">
+                        <button type="submit" class="btn rounded-pill btn-twitter btn-sm load_animation">
                             {{ $button_text }}
                         </button>
                     </div>
@@ -544,10 +461,6 @@
             if (input.files && input.files[0]) {
                 reader.readAsDataURL(input.files[0]);
             }
-        });
-
-        document.getElementById('form-1').addEventListener('submit', function(event) {
-            submitAnimation(event);
         });
     </script>
 @endsection

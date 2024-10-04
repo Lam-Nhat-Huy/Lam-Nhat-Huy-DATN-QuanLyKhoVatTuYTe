@@ -1,56 +1,6 @@
 @extends('master_layout.layout')
 
 @section('styles')
-    <style>
-        .checkbox-wrapper-6 .tgl {
-            display: none;
-        }
-
-        .checkbox-wrapper-6 .tgl,
-        .checkbox-wrapper-6 .tgl:after,
-        .checkbox-wrapper-6 .tgl:before,
-        .checkbox-wrapper-6 .tgl *:after,
-        .checkbox-wrapper-6 .tgl *:before,
-        .checkbox-wrapper-6 .tgl+.tgl-btn {
-            box-sizing: border-box;
-        }
-
-        .checkbox-wrapper-6 .tgl+.tgl-btn {
-            outline: 0;
-            display: block;
-            width: 50px;
-            height: 26px;
-            position: relative;
-            cursor: pointer;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            background-color: #ddd;
-            border-radius: 26px;
-            transition: background-color 0.3s;
-        }
-
-        .checkbox-wrapper-6 .tgl+.tgl-btn:after {
-            content: '';
-            position: absolute;
-            width: 22px;
-            height: 22px;
-            background: #fff;
-            border-radius: 50%;
-            left: 2px;
-            top: 2px;
-            transition: all 0.3s ease;
-        }
-
-        .checkbox-wrapper-6 .tgl-light:checked+.tgl-btn {
-            background: #1fb948;
-        }
-
-        .checkbox-wrapper-6 .tgl:checked+.tgl-btn:after {
-            transform: translateX(24px);
-        }
-    </style>
 @endsection
 
 @section('title')
@@ -70,6 +20,7 @@
         }
 
         document.getElementById('submit_notification_type').addEventListener('click', function(event) {
+
             var notificationTypeName = document.getElementById('notification_type_name').value.trim();
             var existingNotificationTypes = @json($allNotificationType->pluck('name')->toArray());
 
@@ -87,19 +38,15 @@
                 return;
             }
 
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loading-overlay').style.display = 'block';
+            this.disabled = true;
+
             document.getElementById('show-err-notification-type').innerText = '';
-        });
 
-        document.getElementById('form-1').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
+            const form = this.closest('form');
 
-        document.getElementById('form-2').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-3').addEventListener('submit', function(event) {
-            submitAnimation(event);
+            form.submit();
         });
     </script>
 @endsection
@@ -135,7 +82,7 @@
                 </a>
             </div>
         </div>
-        <form class="form" action="{{ $action }}" id="form-1" method="POST" enctype="multipart/form-data">
+        <form class="form" action="{{ $action }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="py-5 px-lg-17">
 
@@ -156,10 +103,11 @@
                                     </option>
                                 @endforeach
                             </select>
-
                             <span class="ms-4 pointer" data-bs-toggle="modal" data-bs-target="#add_modal_notification_type"
-                                title="Thêm Loại Thông Báo"><i
-                                    class="fa fa-plus text-white py-2 px-2 bg-success rounded-circle"></i></span>
+                                title="Thêm Nhà Cung Cấp">
+                                <i class="fa fa-plus bg-primary rounded-circle p-2 text-white"
+                                    style="width: 25px; height: 25px;"></i>
+                            </span>
                         </div>
 
                         @error('notification_type')
@@ -195,7 +143,7 @@
 
 
             <div class="modal-footer flex-right">
-                <button type="submit" id="kt_modal_new_address_submit" class="btn rounded-pill btn-twitter btn-sm">
+                <button type="submit" class="btn rounded-pill btn-twitter btn-sm load_animation">
                     {{ $button_text }}
                 </button>
             </div>
@@ -203,7 +151,7 @@
     </div>
 
     {{-- Form thêm loại thông báo --}}
-    <form action="{{ route('notification.create_notification_type') }}" id="form-2" method="POST">
+    <form action="{{ route('notification.create_notification_type') }}" method="POST">
         @csrf
         <div class="modal fade" id="add_modal_notification_type" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -236,7 +184,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($allNotificationType as $key => $item)
+                                    @forelse ($allNotificationType as $key => $item)
                                         <tr class="hover-table pointer">
                                             <td>
                                                 {{ $key + 1 }}
@@ -245,21 +193,41 @@
                                                 {{ $item->name }}
                                             </td>
                                             <td class="text-center">
-                                                <button type="button" class="btn rounded-pill btn-danger btn-sm" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal_notification_type"
+                                                <button type="button" class="btn rounded-pill btn-danger btn-sm"
+                                                    data-bs-toggle="modal" data-bs-target="#delete_modal_notification_type"
                                                     onclick="setDeleteForm('{{ route('notification.delete_notification_type', $item->id) }}')">
                                                     <i class="fa fa-trash p-0"></i>
                                                 </button>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr id="noDataAlert">
+                                            <td colspan="10" class="text-center">
+                                                <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4 mb-0"
+                                                    role="alert"
+                                                    style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                                    <div class="mb-3">
+                                                        <i class="fas fa-ban"
+                                                            style="font-size: 36px; color: #6c757d;"></i>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <h5 style="font-size: 16px; font-weight: 600; color: #495057;">
+                                                            Không Có Dữ Liệu</h5>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn rounded-pill btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn rounded-pill btn-sm btn-twitter" id="submit_notification_type">Thêm</button>
+                        <button type="button" class="btn rounded-pill btn-sm btn-secondary"
+                            data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn rounded-pill btn-sm btn-twitter"
+                            id="submit_notification_type">Thêm</button>
                     </div>
                 </div>
             </div>
@@ -271,21 +239,24 @@
         <div class="modal fade" id="delete_modal_notification_type" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title text-white" id="deleteModalLabel">Xóa Loại Thông
+                            Báo
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
                     <form id="form-3" method="POST">
                         @csrf
-                        <div class="modal-header">
-                            <h3 class="modal-title" id="deleteModalLabel">Xóa Loại thông báo</h3>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                        <input type="hidden" name="delete_notification" value="{{ $item->code }}">
+                        <div class="modal-body pb-0 text-center">
+                            <p class="text-danger mb-4">Xóa Loại Thông Báo Này?</p>
                         </div>
-                        <div class="modal-body text-center">
-                            <h6 class="text-danger">Bạn có chắc chắn muốn xóa loại thông báo này?</h6>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn rounded-pill btn-sm btn-secondary" data-bs-toggle="modal"
-                                data-bs-target="#add_modal_notification_type">Trở Lại</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-danger">Xóa</button>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit"
+                                class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
                         </div>
                     </form>
                 </div>

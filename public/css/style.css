@@ -37509,7 +37509,8 @@ a:hover {
 }
 
 .menu-title-gray-700 .menu-item .menu-link .menu-title {
-    color: #000
+    color: #000;
+    font-weight: bold;
 }
 
 .menu-icon-gray-700 .menu-item .menu-link .menu-icon i {
@@ -37581,7 +37582,8 @@ a:hover {
 }
 
 .menu-title-gray-800 .menu-item .menu-link .menu-title {
-    color: #000
+    color: #000;
+    font-weight: bold;
 }
 
 .menu-icon-gray-800 .menu-item .menu-link .menu-icon i {
@@ -37698,24 +37700,24 @@ a:hover {
 
 .menu-active-bg .menu-item .menu-link.active {
     transition: color .2s ease, background-color .2s ease;
-    background-color: rgb(198 198 198 / 80%)
 }
 
 .menu-state-bg .menu-item .menu-link:hover:not(.disabled):not(.active),
 .menu-state-bg .menu-item.hover>.menu-link:not(.disabled):not(.active) {
     transition: color .2s ease, background-color .2s ease;
-    background-color: rgb(80 205 137);
 }
 
 .menu-state-bg .menu-item.here>.menu-link,
 .menu-state-bg .menu-item.show>.menu-link {
-    transition: color .2s ease, background-color .2s ease;
-    background-color: rgb(198 198 198 / 80%)
+    color: green;
+    font-weight: bold;
 }
 
 .menu-state-bg .menu-item .menu-link.active {
     transition: color .2s ease, background-color .2s ease;
-    background-color: rgb(198 198 198 / 80%)
+    background-color: rgb(255 255 255 / 80%);
+    border-radius: 0;
+    color: red !important;
 }
 
 .menu-hover-primary .menu-item .menu-link:hover:not(.disabled):not(.active),
@@ -38519,7 +38521,8 @@ a:hover {
 
 .menu-state-title-primary .menu-item .menu-link:hover:not(.disabled):not(.active) .menu-title,
 .menu-state-title-primary .menu-item.hover>.menu-link:not(.disabled):not(.active) .menu-title {
-    color: #000;
+    color: green;
+    font-weight: bold;
 }
 
 .menu-state-title-primary .menu-item.here>.menu-link,
@@ -38530,7 +38533,7 @@ a:hover {
 
 .menu-state-title-primary .menu-item.here>.menu-link .menu-title,
 .menu-state-title-primary .menu-item.show>.menu-link .menu-title {
-    color: #000
+    color: green;
 }
 
 .menu-state-title-primary .menu-item .menu-link.active {
@@ -38539,7 +38542,8 @@ a:hover {
 }
 
 .menu-state-title-primary .menu-item .menu-link.active .menu-title {
-    color: #000
+    color: green;
+    font-weight: bold;
 }
 
 .menu-hover-icon-primary .menu-item .menu-link:hover:not(.disabled):not(.active),
@@ -54753,7 +54757,7 @@ body {
 .aside-dark .menu .menu-item.hover>.menu-link:not(.disabled):not(.active) {
     transition: color .2s ease, background-color .2s ease;
     background-color: #1b1b28;
-    color: #fff
+    color: #fff;
 }
 
 .aside-dark .menu .menu-item .menu-link:hover:not(.disabled):not(.active) .menu-title,
@@ -55120,22 +55124,20 @@ tr th {
     padding-right: 10px !important;
 }
 
-.active_navbar {
-    background-color: rgb(80 205 137) !important;
-    border-radius: 50rem !important;
-}
-
 .active_navbar span {
-    color: #fff !important;
+    color: green !important;
+    font-weight: bold;
 }
 
 .select2-selection {
     border: solid 1px #50cd89 !important;
     background-color: #ffffff !important;
 }
-.select2-selection__rendered{
+
+.select2-selection__rendered {
     color: #000 !important;
 }
+
 .pointer {
     cursor: pointer;
 }
@@ -55297,4 +55299,156 @@ a {
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 9998;
     display: none;
+}
+
+
+
+#action_delete_all .dropdown-toggle {
+    background: linear-gradient(45deg, #007bff, #00d4ff);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+#action_delete_all .dropdown-toggle:hover {
+    background: linear-gradient(45deg, #0056b3, #00a2cc);
+}
+
+.dropdown-menu {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.dropdown-item {
+    padding: 10px 15px;
+    transition: background 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+.pagination {
+    margin: 0;
+    padding: 0;
+}
+
+.pagination .page-link {
+    color: #007bff;
+    border: none;
+    margin: 0 2px;
+    padding: 10px 15px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.pagination .page-link:hover {
+    background-color: #007bff;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.pagination .active .page-link {
+    background-color: #0056b3;
+    color: white;
+    border: none;
+}
+
+.hover-table:hover {
+    background: #ccc;
+}
+
+.selected-row {
+    background: #ddd;
+}
+
+.active-row {
+    background: #d1c4e9;
+    /* Màu nền khi hàng được nhấp vào */
+}
+
+.checkbox-wrapper-6 .tgl {
+    display: none;
+}
+
+.checkbox-wrapper-6 .tgl,
+.checkbox-wrapper-6 .tgl:after,
+.checkbox-wrapper-6 .tgl:before,
+.checkbox-wrapper-6 .tgl *,
+.checkbox-wrapper-6 .tgl *:after,
+.checkbox-wrapper-6 .tgl *:before,
+.checkbox-wrapper-6 .tgl+.tgl-btn {
+    box-sizing: border-box;
+}
+
+.checkbox-wrapper-6 .tgl::-moz-selection,
+.checkbox-wrapper-6 .tgl:after::-moz-selection,
+.checkbox-wrapper-6 .tgl:before::-moz-selection,
+.checkbox-wrapper-6 .tgl *::-moz-selection,
+.checkbox-wrapper-6 .tgl *:after::-moz-selection,
+.checkbox-wrapper-6 .tgl *:before::-moz-selection,
+.checkbox-wrapper-6 .tgl+.tgl-btn::-moz-selection,
+.checkbox-wrapper-6 .tgl::selection,
+.checkbox-wrapper-6 .tgl:after::selection,
+.checkbox-wrapper-6 .tgl:before::selection,
+.checkbox-wrapper-6 .tgl *::selection,
+.checkbox-wrapper-6 .tgl *:after::selection,
+.checkbox-wrapper-6 .tgl *:before::selection,
+.checkbox-wrapper-6 .tgl+.tgl-btn::selection {
+    background: none;
+}
+
+.checkbox-wrapper-6 .tgl+.tgl-btn {
+    outline: 0;
+    display: block;
+    width: 40px;
+    height: 22px;
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.checkbox-wrapper-6 .tgl+.tgl-btn:after,
+.checkbox-wrapper-6 .tgl+.tgl-btn:before {
+    position: relative;
+    display: block;
+    content: "";
+    width: 50%;
+    height: 100%;
+}
+
+.checkbox-wrapper-6 .tgl+.tgl-btn:after {
+    left: 0;
+}
+
+.checkbox-wrapper-6 .tgl+.tgl-btn:before {
+    display: none;
+}
+
+.checkbox-wrapper-6 .tgl:checked+.tgl-btn:after {
+    left: 50%;
+}
+
+.checkbox-wrapper-6 .tgl-light+.tgl-btn {
+    background: #b5b5b5;
+    border-radius: 2em;
+    padding: 2px;
+    transition: all 0.4s ease;
+}
+
+.checkbox-wrapper-6 .tgl-light+.tgl-btn:after {
+    border-radius: 50%;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+.checkbox-wrapper-6 .tgl-light:checked+.tgl-btn {
+    background: #1fb948;
+}
+
+.menu-gray-800 .menu-item .menu-link:hover {
+    color: green !important;
 }

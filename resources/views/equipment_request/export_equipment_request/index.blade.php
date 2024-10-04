@@ -2,20 +2,6 @@
 
 @section('styles')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-    <style>
-        .hover-table:hover {
-            background: #ccc;
-        }
-
-        .selected-row {
-            background: #ddd;
-        }
-
-        .active-row {
-            background: #d1c4e9;
-            /* Màu nền khi hàng được nhấp vào */
-        }
-    </style>
 @endsection
 
 @section('title')

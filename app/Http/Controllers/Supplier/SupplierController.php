@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Supplier;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Supplier\CreateSupplierRequest;
 use App\Http\Requests\Supplier\UpdateSupplierRequest;
+use App\Models\Import_equipment_requests;
 use App\Models\Suppliers;
 use Illuminate\Http\Request;
 
@@ -24,15 +25,39 @@ class SupplierController extends Controller
         $title = 'Nhà Cung Cấp';
 
         if ($request->has('supplier_codes')) {
+            // Lấy danh sách các mã nhà cung cấp trùng với supplier_code trong Import_equipment_requests
+            $existingSuppliers = Import_equipment_requests::whereIn('supplier_code', $request->supplier_codes)
+                ->pluck('supplier_code')
+                ->toArray();
 
-            $this->SupplierModel::whereIn('code', $request->supplier_codes)->delete();
+            // Tìm mã nhà cung cấp trong $request->supplier_codes không có trong danh sách $existingSuppliers
+            $nonExistingSuppliers = array_diff($request->supplier_codes, $existingSuppliers);
 
-            toastr()->success('Xóa nhà cung cấp thành công');
+            // Nếu có mã nhà cung cấp không tồn tại trong Import_equipment_requests, thì xóa chúng
+            if (!empty($nonExistingSuppliers)) {
+                // Xóa các nhà cung cấp không trùng
+                $this->SupplierModel::whereIn('code', $nonExistingSuppliers)->delete();
+
+                toastr()->success('Đã xóa nhà cung cấp không tồn tại trong giao dịch của hệ thống.');
+
+                return redirect()->back();
+            }
+
+            toastr()->error('Không thể xóa, nhà cung cấp này đã tồn tại trong giao dịch của hệ thống');
 
             return redirect()->back();
         }
 
         if ($request->has('supplier_code_delete')) {
+
+            $checkExists = Import_equipment_requests::where('supplier_code', $request->supplier_code_delete)->first();
+
+            if ($checkExists) {
+
+                toastr()->error('Không thể xóa, nhà cung cấp này đã tồn tại trong giao dịch của hệ thống');
+
+                return redirect()->back();
+            }
 
             $this->SupplierModel::where('code', $request->supplier_code_delete)->delete();
 
@@ -44,42 +69,42 @@ class SupplierController extends Controller
         $allSupplier = $this->SupplierModel::orderBy('created_at', 'DESC')
             ->whereNull('deleted_at');
 
-            if (isset($request->name)) {
-                $allSupplier = $allSupplier->where("name", $request->name);
-            }
-    
-            if (isset($request->contact_name)) {
-                $allSupplier = $allSupplier->where("contact_name", $request->contact_name);
-            }
+        if (isset($request->name)) {
+            $allSupplier = $allSupplier->where("name", $request->name);
+        }
 
-            if (isset($request->tax_code)) {
-                $allSupplier = $allSupplier->where("tax_code", $request->tax_code);
-            }
+        if (isset($request->contact_name)) {
+            $allSupplier = $allSupplier->where("contact_name", $request->contact_name);
+        }
 
-            if (isset($request->email)) {
-                $allSupplier = $allSupplier->where("email", $request->email);
-            }
+        if (isset($request->tax_code)) {
+            $allSupplier = $allSupplier->where("tax_code", $request->tax_code);
+        }
 
-            if (isset($request->phone)) {
-                $allSupplier = $allSupplier->where("phone", $request->phone);
-            }
+        if (isset($request->email)) {
+            $allSupplier = $allSupplier->where("email", $request->email);
+        }
 
-            if (isset($request->address)) {
-                $allSupplier = $allSupplier->where("address", $request->address);
-            }
-    
-            if (isset($request->keyword)) {
-                $allSupplier = $allSupplier->where(function ($query) use ($request) {
-                    $query->where('name', 'like', '%' . $request->keyword . '%')
-                        ->orWhere('contact_name', 'like', '%' . $request->keyword . '%')
-                        ->orWhere('tax_code', 'like', '%' . $request->keyword . '%')
-                        ->orWhere('email', 'like', '%' . $request->keyword . '%')
-                        ->orWhere('phone', 'like', '%' . $request->keyword . '%')
-                        ->orWhere('address', 'like', '%' . $request->keyword . '%');
-                });
-            }
+        if (isset($request->phone)) {
+            $allSupplier = $allSupplier->where("phone", $request->phone);
+        }
 
-            $allSupplier = $allSupplier->paginate(10);
+        if (isset($request->address)) {
+            $allSupplier = $allSupplier->where("address", $request->address);
+        }
+
+        if (isset($request->keyword)) {
+            $allSupplier = $allSupplier->where(function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->keyword . '%')
+                    ->orWhere('contact_name', 'like', '%' . $request->keyword . '%')
+                    ->orWhere('tax_code', 'like', '%' . $request->keyword . '%')
+                    ->orWhere('email', 'like', '%' . $request->keyword . '%')
+                    ->orWhere('phone', 'like', '%' . $request->keyword . '%')
+                    ->orWhere('address', 'like', '%' . $request->keyword . '%');
+            });
+        }
+
+        $allSupplier = $allSupplier->paginate(10);
 
         return view("{$this->route}.list", compact('title', 'allSupplier'));
     }
@@ -116,7 +141,6 @@ class SupplierController extends Controller
 
         return view("{$this->route}.trash", compact('title', 'allSupplierTrash'));
     }
-
 
     public function add()
     {
@@ -155,27 +179,26 @@ class SupplierController extends Controller
         toastr()->success('Thêm thành công');
 
         return redirect()->route('supplier.list');
-
     }
     public function edit(Request $request, $code)
-{
-    $firstSupplier = $this->SupplierModel::where('code', $code)->first();
-    if (!$firstSupplier) {
-        toastr()->error('Không tìm thấy nhà cung cấp với mã ' . $code);
-        return redirect()->route('supplier.list');
+    {
+        $firstSupplier = $this->SupplierModel::where('code', $code)->first();
+        if (!$firstSupplier) {
+            toastr()->error('Không tìm thấy nhà cung cấp với mã ' . $code);
+            return redirect()->route('supplier.list');
+        }
+        session()->put('supplier_code', $firstSupplier->code);
+
+        $title = 'Nhà Cung Cấp';
+
+        $title_form = "Sửa Nhà Cung Cấp \"{$firstSupplier->name}\"";
+
+        $config = 'edit';
+
+        $display_none = 'display_none';
+
+        return view("{$this->route}.form", compact('title', 'title_form', 'config', 'display_none', 'firstSupplier'));
     }
-    session()->put('supplier_code', $firstSupplier->code);
-
-    $title = 'Nhà Cung Cấp';
-
-    $title_form = "Sửa Nhà Cung Cấp \"{$firstSupplier->name}\"";
-
-    $config = 'edit';
-
-    $display_none = 'display_none';
-
-    return view("{$this->route}.form", compact('title', 'title_form', 'config', 'display_none', 'firstSupplier'));
-}
 
     public function update(UpdateSupplierRequest $request)
     {

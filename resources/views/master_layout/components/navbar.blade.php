@@ -39,7 +39,6 @@
                                             <span class="menu-title">{{ $item['title'] }}</span>
                                             <span class="menu-arrow d-lg-none"></span>
                                         </span>
-
                                         <div
                                             class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-active-bg py-lg-4">
                                             @foreach ($item['subModule'] as $sub)

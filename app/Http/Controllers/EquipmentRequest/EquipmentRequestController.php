@@ -340,6 +340,19 @@ class EquipmentRequestController extends Controller
                 ]);
             }
 
+            // Kiểm tra nếu trong mảng cập nhật không có thiết bị này trước đó của mã phiếu yêu cầu thì xóa luôn, nếu có thì cập nhật số lượng
+            // Tìm các bản ghi không có mã trong $equipmentList và thuộc về import_request_code
+            $equipmentToDelete = Import_equipment_request_details::whereNotIn('equipment_code', array_column($equipmentList, 'equipment_code'))
+                ->where('import_request_code', $code)
+                ->get();
+
+            // Xóa các bản ghi tìm thấy
+            if ($equipmentToDelete->isNotEmpty()) {
+                $equipmentToDelete->each(function ($item) {
+                    $item->forceDelete();
+                });
+            }
+
             $existingRequest = $this->callModel::where('code', $code);
 
             $record = $existingRequest->first();

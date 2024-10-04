@@ -1,20 +1,6 @@
 @extends('master_layout.layout')
 
 @section('styles')
-    <style>
-        .hover-table:hover {
-            background: #ccc;
-        }
-
-        .selected-row {
-            background: #ddd;
-        }
-
-        .active-row {
-            background: #d1c4e9;
-            /* Màu nền khi hàng được nhấp vào */
-        }
-    </style>
 @endsection
 
 @section('title')
@@ -108,9 +94,9 @@
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h3 class="modal-title" id="DetailModal">Nội Dung Thông Báo
+                                                        <h5 class="modal-title" id="DetailModal">Nội Dung Thông Báo
                                                             #{{ $item->code }}
-                                                        </h3>
+                                                        </h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
@@ -127,30 +113,34 @@
                                             </div>
                                         </div>
 
-                                        {{-- Khôi Phục --}}
+                                        <!-- Modal Khôi Phục Thông Báo -->
                                         <div class="modal fade" id="restore_{{ $item->code }}" data-bs-backdrop="static"
                                             data-bs-keyboard="false" tabindex="-1" aria-labelledby="checkModalLabel"
                                             aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title" id="checkModalLabel">Khôi Phục Thông Báo
-                                                        </h3>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
+                                                <div class="modal-content border-0 shadow">
+                                                    <div class="modal-header bg-primary">
+                                                        <h5 class="modal-title text-white" id="checkModalLabel">Khôi Phục
+                                                            Thông Báo</h5>
+                                                        <button type="button" class="btn-close btn-close-white"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <form action="{{ route('notification.notification_trash') }}"
-                                                        id="form-2" method="POST">
+                                                        method="POST">
                                                         @csrf
                                                         <input type="hidden" name="restore_notification"
                                                             value="{{ $item->code }}">
-                                                        <div class="modal-body">
-                                                            <h4 class="text-primary">Khôi Phục Thông Báo Này?</h4>
+                                                        <div class="modal-body text-center pb-0">
+                                                            <p class="text-dark mb-4">Bạn có chắc chắn muốn khôi phục thông
+                                                                báo này?
+                                                            </p>
                                                         </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
+                                                        <div class="modal-footer justify-content-center border-0">
+                                                            <button type="button"
+                                                                class="btn rounded-pill btn-sm btn-secondary px-4"
                                                                 data-bs-dismiss="modal">Đóng</button>
-                                                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter">Khôi
+                                                            <button type="submit"
+                                                                class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Khôi
                                                                 Phục</button>
                                                         </div>
                                                     </form>
@@ -158,31 +148,36 @@
                                             </div>
                                         </div>
 
+
+                                        {{-- Xóa --}}
                                         <div class="modal fade" id="deleteModal_{{ $item->code }}"
                                             data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                                             aria-labelledby="deleteModalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title" id="deleteModalLabel">Xóa Vĩnh Viễn Thông
+                                                <div class="modal-content border-0 shadow">
+                                                    <div class="modal-header bg-danger">
+                                                        <h5 class="modal-title text-white" id="deleteModalLabel">Xóa Vĩnh
+                                                            Viễn Thông
                                                             Báo
-                                                        </h3>
+                                                        </h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <form action="{{ route('notification.notification_trash') }}"
-                                                        id="form-3" method="POST">
+                                                        method="POST">
                                                         @csrf
                                                         <input type="hidden" name="delete_notification"
                                                             value="{{ $item->code }}">
-                                                        <div class="modal-body">
-                                                            <h4 class="text-danger">Xóa Vĩnh Viễn Thông Báo Này?</h4>
+                                                        <div class="modal-body pb-0 text-center">
+                                                            <p class="text-danger mb-4">Xóa Vĩnh Viễn Thông Báo Này?</p>
                                                         </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
+                                                        <div class="modal-footer justify-content-center border-0">
+                                                            <button type="button"
+                                                                class="btn rounded-pill btn-sm btn-secondary px-4"
                                                                 data-bs-dismiss="modal">Đóng</button>
                                                             <button type="submit"
-                                                                class="btn rounded-pill btn-sm btn-danger">Xóa</button>
+                                                                class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa
+                                                                Vĩnh Viễn</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -256,7 +251,8 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4">Khôi phục</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Khôi
+                                phục</button>
                         </div>
                     </div>
                 </div>
@@ -278,7 +274,8 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4">Xóa</button>
+                            <button type="submit"
+                                class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
                         </div>
                     </div>
                 </div>
@@ -379,18 +376,6 @@
         // Kiểm tra trạng thái ban đầu khi trang được tải
         document.addEventListener('DOMContentLoaded', function() {
             toggleDeleteAction();
-        });
-
-        document.getElementById('form-1').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-2').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-3').addEventListener('submit', function(event) {
-            submitAnimation(event);
         });
     </script>
 @endsection

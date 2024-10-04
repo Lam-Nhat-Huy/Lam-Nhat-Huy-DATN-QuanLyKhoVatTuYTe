@@ -1,20 +1,20 @@
-function submitAnimation(event) {
-    event.preventDefault();
+// Lấy tất cả các nút với class 'load_animation'
+const loadAnimationButtons = document.querySelectorAll('.load_animation');
 
-    document.getElementById('loading').style.display = 'block';
-    document.getElementById('loading-overlay').style.display = 'block';
+// Thêm sự kiện click cho từng nút
+loadAnimationButtons.forEach(button => {
+    button.addEventListener('click', function (event) {
+        event.preventDefault();
 
-    const form = event.target;
-    const submitButton = form.querySelector('button[type="submit"]');
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('loading-overlay').style.display = 'block';
 
-    submitButton.disabled = true;
+        const form = this.closest('form'); // Lấy form cha của nút
+        const submitButton = form.querySelector('button[type="submit"]');
 
-    // setTimeout(() => {
-    //     document.getElementById('loading').style.display = 'none';
-    //     document.getElementById('loading-overlay').style.display = 'none';
+        submitButton.disabled = true;
 
-    //     submitButton.disabled = false;
-
-    // }, 2000);
-    form.submit();
-}
+        // Thực hiện gửi form
+        form.submit();
+    });
+});

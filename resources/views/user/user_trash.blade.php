@@ -1,102 +1,6 @@
 @extends('master_layout.layout')
 
 @section('styles')
-    <style>
-        .hover-table:hover {
-            background: #ccc;
-        }
-
-        .selected-row {
-            background: #ddd;
-        }
-
-        .active-row {
-            background: #d1c4e9;
-            /* Màu nền khi hàng được nhấp vào */
-        }
-
-        .checkbox-wrapper-6 .tgl {
-            display: none;
-        }
-
-        .checkbox-wrapper-6 .tgl,
-        .checkbox-wrapper-6 .tgl:after,
-        .checkbox-wrapper-6 .tgl:before,
-        .checkbox-wrapper-6 .tgl *,
-        .checkbox-wrapper-6 .tgl *:after,
-        .checkbox-wrapper-6 .tgl *:before,
-        .checkbox-wrapper-6 .tgl+.tgl-btn {
-            box-sizing: border-box;
-        }
-
-        .checkbox-wrapper-6 .tgl::-moz-selection,
-        .checkbox-wrapper-6 .tgl:after::-moz-selection,
-        .checkbox-wrapper-6 .tgl:before::-moz-selection,
-        .checkbox-wrapper-6 .tgl *::-moz-selection,
-        .checkbox-wrapper-6 .tgl *:after::-moz-selection,
-        .checkbox-wrapper-6 .tgl *:before::-moz-selection,
-        .checkbox-wrapper-6 .tgl+.tgl-btn::-moz-selection,
-        .checkbox-wrapper-6 .tgl::selection,
-        .checkbox-wrapper-6 .tgl:after::selection,
-        .checkbox-wrapper-6 .tgl:before::selection,
-        .checkbox-wrapper-6 .tgl *::selection,
-        .checkbox-wrapper-6 .tgl *:after::selection,
-        .checkbox-wrapper-6 .tgl *:before::selection,
-        .checkbox-wrapper-6 .tgl+.tgl-btn::selection {
-            background: none;
-        }
-
-        .checkbox-wrapper-6 .tgl+.tgl-btn {
-            outline: 0;
-            display: block;
-            width: 40px;
-            height: 22px;
-            position: relative;
-            cursor: pointer;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        .checkbox-wrapper-6 .tgl+.tgl-btn:after,
-        .checkbox-wrapper-6 .tgl+.tgl-btn:before {
-            position: relative;
-            display: block;
-            content: "";
-            width: 50%;
-            height: 100%;
-        }
-
-        .checkbox-wrapper-6 .tgl+.tgl-btn:after {
-            left: 0;
-        }
-
-        .checkbox-wrapper-6 .tgl+.tgl-btn:before {
-            display: none;
-        }
-
-        .checkbox-wrapper-6 .tgl:checked+.tgl-btn:after {
-            left: 50%;
-        }
-
-        .checkbox-wrapper-6 .tgl-light+.tgl-btn {
-            background: #b5b5b5;
-            border-radius: 2em;
-            padding: 2px;
-            transition: all 0.4s ease;
-        }
-
-        .checkbox-wrapper-6 .tgl-light+.tgl-btn:after {
-            border-radius: 50%;
-            background: #fff;
-            transition: all 0.2s ease;
-        }
-
-        .checkbox-wrapper-6 .tgl-light:checked+.tgl-btn {
-            background: #1fb948;
-        }
-    </style>
 @endsection
 
 @section('title')
@@ -198,18 +102,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             toggleDeleteAction();
         });
-
-        document.getElementById('form-1').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-2').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-3').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
     </script>
 @endsection
 
@@ -228,7 +120,7 @@
                 </a>
             </div>
         </div>
-        <form id="form-1" action="{{ route('user.user_trash') }}" method="POST">
+        <form action="{{ route('user.user_trash') }}" method="POST">
             @csrf
             <input type="hidden" name="action_type" id="action_type" value="">
             <div class="card-body py-3">
@@ -239,16 +131,16 @@
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 5% !important;">Mã ND</th>
+                                <th class="" style="width: 6% !important;">Mã ND</th>
                                 <th class="" style="width: 10% !important;">Ảnh</th>
-                                <th class="" style="width: 10% !important;">Họ Tên</th>
-                                <th class="" style="width: 15% !important;">Email</th>
-                                <th class="" style="width: 10% !important;">SĐT</th>
+                                <th class="" style="width: 12% !important;">Họ Tên</th>
+                                <th class="" style="width: 13% !important;">Email</th>
+                                <th class="" style="width: 11% !important;">SĐT</th>
                                 <th class="" style="width: 10% !important;">Giới Tính</th>
-                                <th class="" style="width: 10% !important;">Chức Vụ</th>
+                                <th class="" style="width: 8% !important;">Chức Vụ</th>
                                 <th class="" style="width: 10% !important;">Trạng Thái</th>
                                 <th class="" style="width: 10% !important;">Ngày Xóa</th>
-                                <th class="pe-3" style="width: 5% !important;"></th>
+                                <th class="pe-3" style="width: 10% !important;">Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -296,7 +188,7 @@
                                     <td>
                                         {{ $item->deleted_at->format('d-m-Y') }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <div class="btn-group">
                                             <button type="button" data-bs-toggle="dropdown">
                                                 <i class="fa fa-ellipsis-h me-2"></i>
@@ -320,65 +212,6 @@
                                         </div>
                                     </td>
                                 </tr>
-
-                                {{-- Khôi Phục --}}
-                                <div class="modal fade" id="restoreModal_{{ $item->code }}" data-bs-backdrop="static"
-                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="restoreModalLabel"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <form id="form-2" action="{{ route('user.user_trash') }}" method="POST">
-                                                @csrf
-                                                <div class="modal-header">
-                                                    <h3 class="modal-title" id="restoreModalLabel">Khôi Phục Người Dùng
-                                                    </h3>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <input type="hidden" name="user_code_restore"
-                                                        value="{{ $item->code }}">
-                                                    <h4 class="text-primary text-center">Khôi Phục Người Dùng Này?</h4>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn rounded-pill btn-sm btn-secondary"
-                                                        data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="submit" class="btn rounded-pill btn-sm btn-twitter">Khôi
-                                                        Phục</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {{-- Xóa --}}
-                                <div class="modal fade" id="deleteModal_{{ $item->code }}" data-bs-backdrop="static"
-                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <form id="form-3" action="{{ route('user.user_trash') }}" method="POST">
-                                                @csrf
-                                                <div class="modal-header">
-                                                    <h3 class="modal-title" id="deleteModalLabel">Xóa Vĩnh Viễn Người Dùng
-                                                    </h3>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <input type="hidden" name="user_code_delete"
-                                                        value="{{ $item->code }}">
-                                                    <h4 class="text-danger text-center">Xóa Vĩnh Viễn Người Dùng Này?</h4>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn rounded-pill btn-sm btn-secondary"
-                                                        data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="submit" class="btn rounded-pill btn-sm btn-danger">Xóa</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
                             @empty
                                 <tr id="noDataAlert">
                                     <td colspan="11" class="text-center">
@@ -443,7 +276,8 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4">Xóa</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Khôi
+                                Phục</button>
                         </div>
                     </div>
                 </div>
@@ -460,16 +294,75 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-center" style="padding-bottom: 0px;">
-                            <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả người dùng đã chọn?</p>
+                            <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa người dùng đã chọn?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4">Xóa</button>
+                            <button type="submit"
+                                class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
     </div>
+
+    @foreach ($allUserTrash as $item)
+        {{-- Khôi phục --}}
+        <div class="modal fade" id="restoreModal_{{ $item->code }}" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-labelledby="restoreModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <form action="{{ route('user.user_trash') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="user_code_restore" value="{{ $item->code }}">
+                        <div class="modal-header bg-primary">
+                            <h5 class="modal-title text-white" id="restoreModalLabel">Khôi Phục Người Dùng
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body pb-0 text-center">
+                            <p class="text-primary text-center">Khôi Phục Người Dùng Này?</p>
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Khôi
+                                Phục</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- Xóa --}}
+        <div class="modal fade" id="deleteModal_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <form action="{{ route('user.user_trash') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="user_code_delete" value="{{ $item->code }}">
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title text-white" id="deleteModalLabel">Xóa Vĩnh Viễn Người Dùng
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body pb-0 text-center">
+                            <p class="text-danger text-center">Xóa Vĩnh Viễn Người Dùng Này?</p>
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit"
+                                class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
 @endsection

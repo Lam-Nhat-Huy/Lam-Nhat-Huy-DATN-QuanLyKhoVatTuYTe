@@ -42,7 +42,7 @@
                 </a>
             </div>
         </div>
-        <form class="form" id="form-1" action="{{ $action }}" method="POST" enctype="multipart/form-data">
+        <form class="form" action="{{ $action }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="py-5 px-lg-17 row">
@@ -62,9 +62,8 @@
                         <div class="col-md-6 fv-row">
                             <label class="{{ $required }} fs-5 fw-bold mb-2">File Báo Cáo (PDF)</label>
 
-                            <input type="file"
-                                class="form-control form-control-sm rounded-pill border border-success" id="pdf-input"
-                                name="file" accept="application/pdf" />
+                            <input type="file" class="form-control form-control-sm rounded-pill border border-success"
+                                id="pdf-input" name="file" accept="application/pdf" />
 
                             @error('file')
                                 <div class="message_error">{{ $message }}</div>
@@ -77,8 +76,7 @@
                             <label class="{{ $required }} fs-5 fw-bold mb-2">Loại Báo Cáo</label>
 
                             <div class="d-flex align-items-center">
-                                <select name="report_type"
-                                    class="form-select form-select-sm rounded-pill setupSelect2">
+                                <select name="report_type" class="form-select form-select-sm rounded-pill setupSelect2">
                                     <option value="0">Chọn Loại Báo Cáo...</option>
                                     @foreach ($AllReportType as $item)
                                         <option value="{{ $item['id'] }}"
@@ -89,8 +87,9 @@
                                 </select>
 
                                 <span class="ms-4 pointer" data-bs-toggle="modal" data-bs-target="#add_modal_report_type"
-                                    title="Thêm Loại Báo Cáo">
-                                    <i class="fa fa-plus text-white py-2 px-2 bg-success rounded-circle"></i>
+                                    title="Thêm Nhà Cung Cấp">
+                                    <i class="fa fa-plus bg-primary rounded-circle p-2 text-white"
+                                        style="width: 25px; height: 25px;"></i>
                                 </span>
 
                             </div>
@@ -106,8 +105,8 @@
                     <div class="d-flex flex-column mb-5 fv-row">
                         <label class="{{ $required }} fs-5 fw-bold mb-2">Nội Dung Báo Cáo</label>
 
-                        <textarea name="content" class="form-control form-control-sm border border-success" cols="30"
-                            rows="5" placeholder="Nhập Nội Dung Báo Cáo..">{{ !empty($FirstReport['content']) ? $FirstReport['content'] : old('content') }}</textarea>
+                        <textarea name="content" class="form-control form-control-sm border border-success" cols="30" rows="5"
+                            placeholder="Nhập Nội Dung Báo Cáo..">{{ !empty($FirstReport['content']) ? $FirstReport['content'] : old('content') }}</textarea>
 
                         @error('content')
                             <div class="message_error">{{ $message }}</div>
@@ -118,7 +117,8 @@
             </div>
 
             <div class="modal-footer flex-right">
-                <button type="submit" id="kt_modal_new_address_submit" class="btn rounded-pill btn-twitter btn-sm">
+                <button type="submit" id="kt_modal_new_address_submit"
+                    class="btn rounded-pill btn-twitter btn-sm load_animation">
                     {{ $button_text }}
                 </button>
             </div>
@@ -126,7 +126,7 @@
     </div>
 
     <!-- Form thêm loại báo cáo -->
-    <form action="{{ route('report.create_report_type') }}" method="POST" id="form-2">
+    <form action="{{ route('report.create_report_type') }}" method="POST">
         @csrf
         <div class="modal fade" id="add_modal_report_type" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -139,8 +139,7 @@
                     <div class="modal-body pb-0">
                         <div class="mb-3">
                             <label class="required fs-5 fw-bold mb-2">Tên Loại</label>
-                            <input type="text"
-                                class="form-control form-control-sm rounded-pill border border-success"
+                            <input type="text" class="form-control form-control-sm rounded-pill border border-success"
                                 placeholder="Tên Loại Báo Cáo.." name="name" id="report_type_name" />
                             <div class="message_error" id="show-err-report-type"></div>
                         </div>
@@ -165,8 +164,8 @@
                                                 {{ $item->name }}
                                             </td>
                                             <td class="text-center">
-                                                <button type="button" class="btn rounded-pill btn-danger btn-sm" data-bs-toggle="modal"
-                                                    data-bs-target="#delete_modal_report_type"
+                                                <button type="button" class="btn rounded-pill btn-danger btn-sm"
+                                                    data-bs-toggle="modal" data-bs-target="#delete_modal_report_type"
                                                     onclick="setDeleteForm('{{ route('report.delete_report_type', $item->id) }}')">
                                                     <i class="fa fa-trash p-0"></i>
                                                 </button>
@@ -178,8 +177,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn rounded-pill btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn rounded-pill btn-sm btn-twitter" id="submit_report_type">Thêm</button>
+                        <button type="button" class="btn rounded-pill btn-sm btn-secondary"
+                            data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn rounded-pill btn-sm btn-twitter"
+                            id="submit_report_type">Thêm</button>
                     </div>
                 </div>
             </div>
@@ -205,7 +206,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary" data-bs-toggle="modal"
                                 data-bs-target="#add_modal_report_type">Trở Lại</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-danger">Xóa</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger load_animation">Xóa</button>
                         </div>
                     </form>
                 </div>
@@ -234,7 +235,14 @@
                 return;
             }
 
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loading-overlay').style.display = 'block';
+            this.disabled = true;
+
             document.getElementById('show-err-report-type').innerText = '';
+
+            const form = this.closest('form');
+            form.submit();
         });
 
         document.getElementById('pdf-input').addEventListener('change', function(event) {
@@ -248,17 +256,5 @@
         function setDeleteForm(actionUrl) {
             document.getElementById('form-3').action = actionUrl;
         }
-
-        document.getElementById('form-1').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-2').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-3').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
     </script>
 @endsection

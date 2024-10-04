@@ -151,7 +151,7 @@ class NotificationController extends Controller
 
         $action = 'create';
 
-        $allNotificationType = Notification_types::all();
+        $allNotificationType = Notification_types::orderBy('created_at', 'DESC')->get();
 
         return view("{$this->route}.notification_form", compact('title', 'action', 'title_form', 'allNotificationType'));
     }
@@ -252,6 +252,15 @@ class NotificationController extends Controller
     public function delete_notification_type($id)
     {
         if (!empty($id)) {
+
+            $checkExists = Notifications::where('notification_type', $id)->exists();
+
+            if ($checkExists) {
+
+                toastr()->error('Không thể xóa');
+
+                return redirect()->back();
+            }
 
             $rs = Notification_types::find($id)->delete();
 

@@ -26,7 +26,7 @@ class ReportController extends Controller
     {
         $title = 'Báo Cáo';
 
-        $AllReportType = Report_types::all();
+        $AllReportType = Report_types::orderBy('created_at', 'DESC')->get();
 
         $AllUser = Users::all();
 
@@ -163,7 +163,7 @@ class ReportController extends Controller
 
         $action = 'create';
 
-        $AllReportType = Report_types::all();
+        $AllReportType = Report_types::orderBy('created_at', 'DESC')->get();
 
         return view("admin.{$this->route}.form", compact('title', 'title_form', 'action', 'AllReportType'));
     }
@@ -182,6 +182,15 @@ class ReportController extends Controller
 
     public function delete_report_type($id)
     {
+        $checkExists = Reports::where('report_type', $id)->exists();
+
+        if ($checkExists) {
+
+            toastr()->error('Không thể xóa');
+
+            return redirect()->back();
+        }
+
         Report_types::find($id)->delete();
 
         toastr()->success('Đã xóa loại báo cáo');
@@ -225,7 +234,7 @@ class ReportController extends Controller
 
         $action = 'update';
 
-        $AllReportType = Report_types::all();
+        $AllReportType = Report_types::orderBy('created_at', 'DESC')->get();
 
         $FirstReport = $this->callModel::where('code', $code)->first();
 

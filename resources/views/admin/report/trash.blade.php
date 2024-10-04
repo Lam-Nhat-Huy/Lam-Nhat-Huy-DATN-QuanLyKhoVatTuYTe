@@ -1,20 +1,6 @@
 @extends('master_layout.layout')
 
 @section('styles')
-    <style>
-        .hover-table:hover {
-            background: #ccc;
-        }
-
-        .selected-row {
-            background: #ddd;
-        }
-
-        .active-row {
-            background: #d1c4e9;
-            /* Màu nền khi hàng được nhấp vào */
-        }
-    </style>
 @endsection
 
 @section('title')
@@ -108,67 +94,6 @@
                                                 </li>
                                             </ul>
                                         </div>
-
-                                        {{-- Khôi Phục --}}
-                                        <div class="modal fade" id="restore_{{ $item->code }}" data-bs-backdrop="static"
-                                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="checkModalLabel"
-                                            aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title" id="checkModalLabel">Khôi Phục Báo Cáo</h3>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <form action="{{ route('report.report_trash') }}" id="form-2"
-                                                        method="POST">
-                                                        @csrf
-                                                        <input type="hidden" name="restore_report"
-                                                            value="{{ $item->code }}">
-                                                        <div class="modal-body">
-                                                            <h4 class="text-primary">Khôi Phục Báo Cáo Này?</h4>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
-                                                                data-bs-dismiss="modal">Đóng</button>
-                                                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter">Khôi
-                                                                Phục</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="modal fade" id="deleteModal_{{ $item->code }}"
-                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                            aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title" id="deleteModalLabel">Xóa Vĩnh Viễn Báo
-                                                            Cáo
-                                                        </h3>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <form action="{{ route('report.report_trash') }}" id="form-3"
-                                                        method="POST">
-                                                        @csrf
-                                                        <input type="hidden" name="delete_report"
-                                                            value="{{ $item->code }}">
-                                                        <div class="modal-body">
-                                                            <h4 class="text-danger">Xóa Vĩnh Viễn Báo Cáo Này?</h4>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
-                                                                data-bs-dismiss="modal">Đóng</button>
-                                                            <button type="submit"
-                                                                class="btn rounded-pill btn-sm btn-danger">Xóa</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </td>
                                 </tr>
                             @empty
@@ -237,7 +162,7 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4">Khôi phục</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Khôi phục</button>
                         </div>
                     </div>
                 </div>
@@ -259,13 +184,70 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4">Xóa</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
     </div>
+
+    @foreach ($AllReportTrash as $item)
+        {{-- Khôi Phục --}}
+        <div class="modal fade" id="restore_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="checkModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-danger">
+                        <h3 class="modal-title text-white" id="checkModalLabel">Khôi Phục
+                            Báo Cáo</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('report.report_trash') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="restore_report" value="{{ $item->code }}">
+                        <div class="modal-body text-cente">
+                            <p class="text-primary">Khôi Phục Báo Cáo Này?</p>
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter load_animation">Khôi
+                                Phục</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- Xóa --}}
+        <div class="modal fade" id="deleteModal_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-danger">
+                        <h3 class="modal-title text-white" id="checkModalLabel">Xóa Vĩnh
+                            Viễn Báo
+                            Cáo</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('report.report_trash') }}" id="form-3" method="POST">
+                        @csrf
+                        <input type="hidden" name="delete_report" value="{{ $item->code }}">
+                        <div class="modal-body pb-0 text-center">
+                            <p class="text-danger">Xóa Vĩnh Viễn Báo Cáo Này?
+                            </p>
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger load_animation">Xóa</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
 @endsection
 
 

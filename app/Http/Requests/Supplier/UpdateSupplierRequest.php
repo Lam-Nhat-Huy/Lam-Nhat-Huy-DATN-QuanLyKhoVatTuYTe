@@ -26,7 +26,7 @@ class UpdateSupplierRequest extends FormRequest
             "contact_name" => "required|string|max:100",
             "tax_code" => "required|digits_between:1,13",
             'email' => 'required|email|unique:suppliers,email,' . session('supplier_code') . ',code',
-            "phone" => "required|digits_between:10,11",
+            "phone" => "required|regex:/^([0-9\s\-\+\(\)]*)$/|digits_between:10,11",
             "address" => "required|string|max:255",
         ];
     }
@@ -51,6 +51,7 @@ class UpdateSupplierRequest extends FormRequest
             "email.unique" => "Email này đã tồn tại.",
 
             "phone.required" => "Số điện thoại không được bỏ trống.",
+            "phone.regex" => "Số điện thoại phải là số.",
             "phone.digits_between" => "Số điện thoại phải có độ dài từ 10 đến 11 số.",
 
             "address.required" => "Địa chỉ không được bỏ trống.",
