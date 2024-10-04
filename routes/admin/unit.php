@@ -10,4 +10,5 @@ Route::prefix('units')->middleware(CheckLogin::class)->group(function () {
     Route::get('/edit/{code}', [UnitController::class, 'edit'])->name('units.edit'); // Trang chỉnh sửa đơn vị
     Route::put('/update/{code}', [UnitController::class, 'update'])->name('units.update'); // Sử dụng PUT cho cập nhật đơn vị
     Route::delete('/delete/{code}', [UnitController::class, 'destroy'])->name('units.destroy'); // Xóa đơn vị
+    Route::get('/search/ajax', [UnitController::class, 'ajaxSearch'])->name('units.ajax.search');
 });

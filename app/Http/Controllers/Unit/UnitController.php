@@ -15,14 +15,31 @@ class UnitController extends Controller
 
         // Lấy các tiêu chí lọc (nếu có)
         $searchKeyword = $request->input('kw');
+        $createdBy = $request->input('created_by'); // Thêm tiêu chí tìm kiếm theo người tạo
+        $startDate = $request->input('start_date'); // Ngày bắt đầu
+        $endDate = $request->input('end_date'); // Ngày kết thúc
 
         // Truy vấn danh sách đơn vị
         $query = Units::query();
 
         if ($searchKeyword) {
             $query->where('name', 'LIKE', '%' . $searchKeyword . '%')
-                  ->orWhere('code', 'LIKE', '%' . $searchKeyword . '%')
-                  ->orWhere('description', 'LIKE', '%' . $searchKeyword . '%');
+                ->orWhere('code', 'LIKE', '%' . $searchKeyword . '%')
+                ->orWhere('description', 'LIKE', '%' . $searchKeyword . '%');
+        }
+
+        // Tìm kiếm theo người tạo
+        if ($createdBy) {
+            $query->where('created_by', 'LIKE', '%' . $createdBy . '%');
+        }
+
+        // Tìm kiếm theo ngày tạo
+        if ($startDate && $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        } elseif ($startDate) {
+            $query->whereDate('created_at', '>=', $startDate);
+        } elseif ($endDate) {
+            $query->whereDate('created_at', '<=', $endDate);
         }
 
         $allUnits = $query->paginate(10); // Phân trang với 10 đơn vị mỗi trang
@@ -37,7 +54,6 @@ class UnitController extends Controller
         $action = 'create'; // Define action as create
         return view('units.form', compact('title', 'action'));
     }
-
 
     // Xử lý thêm mới đơn vị
     public function store(Request $request)
@@ -70,11 +86,12 @@ class UnitController extends Controller
             'created_by' => $createdBy, // Lấy từ session user_code
         ]);
 
-        // Chuyển hướng về trang danh sách với thông báo thành công
-        return redirect()->route('units.index')->with('success', 'Đơn vị đã được thêm thành công!');
+        // Trả về thông báo thành công
+        toastr()->success('Đơn vị đã được thêm thành công!');
+
+        // Chuyển hướng về trang danh sách
+        return redirect()->route('units.index');
     }
-
-
 
     // Hiển thị form chỉnh sửa đơn vị
     public function edit($id)
@@ -84,7 +101,6 @@ class UnitController extends Controller
         $action = 'edit'; // Define action as edit
         return view('units.form', compact('title', 'unit', 'action'));
     }
-
 
     // Xử lý cập nhật đơn vị
     public function update(Request $request, $id)
@@ -112,17 +128,71 @@ class UnitController extends Controller
             'code' => $code, // Cập nhật mã với tiền tố "UNIT"
         ]);
 
-        // Chuyển hướng về trang danh sách với thông báo thành công
-        return redirect()->route('units.index')->with('success', 'Đơn vị đã được cập nhật thành công!');
-    }
+        // Trả về thông báo thành công
+        toastr()->success('Đơn vị đã được cập nhật thành công!');
 
+        // Chuyển hướng về trang danh sách
+        return redirect()->route('units.index');
+    }
 
     // Xóa đơn vị
     public function destroy($id)
     {
+        // Tìm đơn vị theo ID
         $unit = Units::findOrFail($id);
+
+        // Kiểm tra nếu đơn vị có liên kết với thiết bị nào
+        if ($unit->equipments()->count() > 0) {
+            // Nếu có liên kết, trả về thông báo lỗi
+            return redirect()->route('units.index')->with('error', 'Không thể xóa đơn vị vì nó đang được liên kết với thiết bị.');
+        }
+
+        // Nếu không có liên kết, cho phép xóa đơn vị
         $unit->delete();
 
-        return redirect()->route('units.index')->with('success', 'Đơn vị đã được xóa thành công!');
+        // Trả về thông báo thành công
+        toastr()->success('Đơn vị đã được xóa thành công!');
+
+        return redirect()->route('units.index');
+    }
+
+    // Phương thức AJAX tìm kiếm
+    public function ajaxSearch(Request $request)
+    {
+        $searchKeyword = $request->input('kw');
+        $createdBy = $request->input('created_by');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $query = Units::query();
+
+        // Tìm kiếm theo từ khóa
+        if ($searchKeyword) {
+            $query->where(function ($q) use ($searchKeyword) {
+                $q->where('name', 'LIKE', '%' . $searchKeyword . '%')
+                    ->orWhere('code', 'LIKE', '%' . $searchKeyword . '%')
+                    ->orWhere('description', 'LIKE', '%' . $searchKeyword . '%');
+            });
+        }
+
+        // Tìm kiếm theo người tạo
+        if ($createdBy) {
+            $query->where('created_by', 'LIKE', '%' . $createdBy . '%');
+        }
+
+        // Tìm kiếm theo ngày tạo
+        if ($startDate && $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        } elseif ($startDate) {
+            $query->whereDate('created_at', '>=', $startDate);
+        } elseif ($endDate) {
+            $query->whereDate('created_at', '<=', $endDate);
+        }
+
+        // Lấy danh sách đơn vị (không phân trang)
+        $allUnits = $query->get();
+
+        // Trả về dữ liệu dưới dạng JSON
+        return response()->json($allUnits);
     }
 }

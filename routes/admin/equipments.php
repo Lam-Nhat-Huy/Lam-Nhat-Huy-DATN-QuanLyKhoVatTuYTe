@@ -52,4 +52,8 @@
 
         Route::post('/restore_material_group/{code}', [EquipmentsController::class, 'restore_material_group'])->name('equipments.restore_material_group');
         Route::delete('/delete_permanently_group/{code}', [EquipmentsController::class, 'delete_permanently_group'])->name('equipments.delete_permanently_group');
+
+        Route::get('/search/ajax', [EquipmentsController::class, 'ajaxSearch'])->name('equipments.ajax.search');
+        Route::get('/search/ajax/group', [EquipmentsController::class, 'ajaxSearch_Group'])->name('equipments.ajax.search_group');
+
     });

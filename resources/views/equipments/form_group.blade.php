@@ -151,35 +151,58 @@
                     @method('PUT')
                 @endif
 
+                <!-- Form tạo hoặc chỉnh sửa nhóm vật tư -->
                 <div class="form-group">
                     <label class="required fs-5 fw-bold mb-2">Mã Nhóm Vật Tư</label>
                     <input type="text" class="form-control form-control-solid border-success"
-                        value="{{ $action == 'edit' ? $materialGroup->code : old('code') }}" name="code"
-                        placeholder="Mã ET ví dụ: ET001"
-                        {{ $action == 'edit' ? 'disabled' : '' }} /> {{-- Không cho sửa code khi chỉnh sửa --}}
+                        value="{{ isset($materialGroup) ? $materialGroup->code : old('code') }}" name="code"
+                        placeholder="Mã ET ví dụ: ET001" {{ isset($materialGroup) ? 'disabled' : '' }} />
+                    {{-- Không cho sửa code khi chỉnh sửa --}}
                 </div>
 
                 <div class="form-group">
                     <label class="required fs-5 fw-bold mb-2">Tên Nhóm Vật Tư</label>
                     <input type="text" class="form-control form-control-solid border-success"
-                        value="{{ $action == 'edit' ? $materialGroup->name : old('name') }}" name="name" />
+                        value="{{ isset($materialGroup) ? $materialGroup->name : old('name') }}" name="name" />
                 </div>
 
                 <div class="form-group">
                     <label class="fs-5 fw-bold mb-2">Mô Tả</label>
-                    <textarea name="description" class="form-control form-control-solid border-success" cols="30" rows="5">{{ $action == 'edit' ? $materialGroup->description : old('description') }}</textarea>
+                    <textarea name="description" class="form-control form-control-solid border-success" cols="30" rows="5">{{ isset($materialGroup) ? $materialGroup->description : old('description') }}</textarea>
                 </div>
+
 
                 <div class="form-group">
                     <label class="fs-5 fw-bold mb-2">Trạng Thái</label>
                     <div class="checkbox-wrapper-6">
                         <!-- Thêm input hidden với giá trị mặc định là 0 -->
                         <input type="hidden" name="status" value="0">
-                        <input class="tgl tgl-light" id="status" type="checkbox" name="status" value="1"
-                            {{ $action == 'edit' ? ($materialGroup->status ? 'checked' : '') : 'checked' }} />
-                        <label class="tgl-btn" for="status"></label>
+
+                        <!-- Kiểm tra biến $canEditStatus -->
+                        <!-- Kiểm tra biến $materialGroup có tồn tại -->
+                        @if (isset($materialGroup))
+                            <!-- Nếu có thể chỉnh sửa -->
+                            @if (isset($canEditStatus) && $canEditStatus)
+                                <input class="tgl tgl-light" id="status" type="checkbox" name="status" value="1"
+                                    {{ $materialGroup->status ? 'checked' : '' }} />
+                                <label class="tgl-btn" for="status"></label>
+                            @else
+                                <!-- Nếu không thể chỉnh sửa, checkbox bị vô hiệu hóa -->
+                                <input class="tgl tgl-light" id="status" type="checkbox" name="status" value="1"
+                                    {{ $materialGroup->status ? 'checked' : '' }} disabled />
+                                <label class="tgl-btn" for="status"></label>
+                                <small class="text-danger">Trạng thái không thể thay đổi do có liên kết với sản
+                                    phẩm.</small>
+                            @endif
+                        @else
+                            <!-- Trường hợp thêm mới, checkbox mặc định không checked -->
+                            <input class="tgl tgl-light" id="status" type="checkbox" name="status" value="1" />
+                            <label class="tgl-btn" for="status"></label>
+                        @endif
+
                     </div>
                 </div>
+
 
                 <div class="d-grid">
                     <button type="submit" class="btn btn-success w-100 py-3">{{ $button_text }}</button>
