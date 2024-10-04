@@ -170,33 +170,33 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text bg-light"><i class="fas fa-search"></i></span>
                                 <input type="text" class="form-control" id="searchProductInput"
-                                    placeholder="Nhập tên hoặc mã hàng hoá (Nhấn F2)" aria-label="Search"
-                                    onkeyup="filterProducts()">
-                                <button type="button" class="btn btn-danger" onclick="addAllProducts()">
-                                    <i class="fas fa-list"></i>
+                                    placeholder="Nhập tên thiết bị để tiến hành thêm (Nhấn F2)" aria-label="Search"
+                                    onkeyup="filterProducts()" onfocus="showDropdown()">
+                                <button type="button" class="btn" style="background-color: #ff0000;"
+                                    onclick="addAllProducts()">
+                                    <i class="fas fa-list text-white"></i>
                                 </button>
                             </div>
+                            <div class="dropdown-menu w-750px" id="productDropdown" style="display:none;"></div>
 
                             <div class="modal fade" id="importantNotificationModal" data-bs-backdrop="static"
                                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="DetailModal" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
-                                        <div class="modal-header bg-danger">
-                                            <h3 class="modal-title text-white" id="DetailModal">Thông báo</h3>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
+                                        <div class="modal-header justify-content-center" style="background-color: #ff0000;">
+                                            <h3 class="modal-title text-white" id="DetailModal">BEESOFT THÔNG BÁO</h3>
                                         </div>
                                         <div class="modal-body" id="importantNotificationContent">
                                         </div>
-                                        <div class="modal-footer pt-1 pb-1">
-                                            <button type="button" class="btn btn-sm btn-danger" style="font-size: 10px"
+                                        <div class="modal-footer pt-2 pb-2">
+                                            <button type="button" class="btn btn-sm text-white"
+                                                style="font-size: 10px; background-color: #ff0000;"
                                                 data-bs-dismiss="modal">Đóng</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="dropdown-menu w-750px" id="productDropdown"></div>
                         </div>
 
                         {{-- Hiển thị trạng thái --}}
@@ -238,7 +238,7 @@
 
                         <div class="table-responsive mt-4">
                             <table class="table text-center align-middle" style="background-color: #f4f6f9;">
-                                <thead style="background-color: #0080ff;">
+                                <thead style="background-color: #FFA500;">
                                     <tr>
                                         <th style="width: 50px;">STT</th>
                                         <th style="width: 100px;">Mã thiết bị</th>
@@ -262,7 +262,8 @@
                                                         style="font-size: 36px; color: #6c757d;"></i>
                                                 </div>
                                                 <div class="text-center">
-                                                    <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin
+                                                    <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông
+                                                        tin
                                                         phiếu nhập trống</h5>
                                                     <p style="font-size: 14px; color: #6c757d; margin: 0;">
                                                         Hiện tại chưa có phiếu nhập nào được thêm vào. Vui lòng kiểm tra lại
@@ -326,10 +327,12 @@
                         <!-- Buttons -->
                         <div class="d-grid gap-3">
                             <button name="status" value="0" onclick="submitMaterials()" type="submit"
-                                class="btn btn-warning btn-lg rounded-pill">Lưu tạm</button>
+                                class="btn btn-lg rounded-pill text-white" style="background-color: #FFA500;">Lưu
+                                tạm</button>
 
                             <!-- Hoàn thành Button -->
-                            <button type="button" class="btn btn-success btn-lg rounded-pill" data-bs-toggle="modal"
+                            <button type="button" class="btn text-white btn-lg rounded-pill"
+                                style="background-color: #66CC00;" data-bs-toggle="modal"
                                 data-bs-target="#completeModal">
                                 Hoàn thành
                             </button>

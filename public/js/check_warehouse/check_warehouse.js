@@ -4,14 +4,23 @@ let matchedCount = 0;
 let mismatchedCount = 0;
 let uncheckedCount = 0;
 
+// Hiển thị dropdown khi focus vào ô tìm kiếm
+function showDropdown() {
+    var dropdown = document.getElementById('productDropdown');
+    dropdown.style.display = 'block'; // Hiển thị dropdown
+    filterProducts();
+}
+
+// Lọc sản phẩm dựa trên input
 function filterProducts() {
     var input = document.getElementById('searchProductInput');
     var filter = input.value.toUpperCase();
     var dropdown = document.getElementById('productDropdown');
 
-    dropdown.style.display = filter ? 'block' : 'none';
-    dropdown.innerHTML = '';
+    dropdown.style.display = filter || input === document.activeElement ? 'block' : 'none'; // Hiển thị khi có giá trị hoặc focus
+    dropdown.innerHTML = ''; // Xóa kết quả cũ
 
+    // Giả định có danh sách sản phẩm (products)
     var filteredProducts = products.filter(function (product) {
         return product.name.toUpperCase().indexOf(filter) > -1;
     });
@@ -42,6 +51,20 @@ function filterProducts() {
     }
 }
 
+// Ẩn dropdown khi click ra ngoài
+document.addEventListener('click', function(event) {
+    var dropdown = document.getElementById('productDropdown');
+    var searchInput = document.getElementById('searchProductInput');
+
+    // Kiểm tra nếu click bên ngoài cả dropdown và input tìm kiếm
+    if (!dropdown.contains(event.target) && !searchInput.contains(event.target)) {
+        dropdown.style.display = 'none'; // Ẩn dropdown
+    }
+});
+
+
+
+
 function selectProduct(element, name, equipment_code, current_quantity, batch_number) {
     addProductToTable(name, equipment_code, current_quantity, batch_number);
     document.getElementById('productDropdown').style.display = 'none';
@@ -52,7 +75,7 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
     var existingMaterial = materialData.find(material => material.equipment_code === equipment_code && material.batch_number === batch_number);
 
     if (existingMaterial) {
-        document.getElementById('importantNotificationContent').innerHTML = `Thiết bị <strong>${name}</strong> với mã <strong>${equipment_code}</strong> và lô <strong>${batch_number}</strong> đã tồn tại.`;
+        document.getElementById('importantNotificationContent').innerHTML = `Đã thêm tất cả thiết bị vào danh sách. Vui lòng tiến hành kiểm kê kho hàng!`;
         $('#importantNotificationModal').modal('show');
         return;
     }
@@ -122,10 +145,6 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
         });
     });
 }
-
-
-
-
 
 function removeProduct(index) {
     var tableBody = document.getElementById('materialList');

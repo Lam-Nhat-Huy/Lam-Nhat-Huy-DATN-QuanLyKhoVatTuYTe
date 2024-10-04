@@ -105,7 +105,8 @@
                                                         <table class="table table-flush gy-1">
                                                             <tbody>
                                                                 <tr>
-                                                                    <td class=""><strong>Mã kiểm kho</strong>
+                                                                    <td class="" style="width: 150px;"><strong>Mã kiểm
+                                                                            kho</strong>
                                                                     </td>
 
                                                                     <td class="text-gray-800">
@@ -166,7 +167,7 @@
                                                 <div class="col-md-12">
                                                     <div class="table-responsive">
                                                         <table class="table table-striped table-sm table-hover">
-                                                            <thead class="bg-danger">
+                                                            <thead style="background-color: #FFA500;">
                                                                 <tr class="text-center">
                                                                     <th class="ps-3">Mã vật tư</th>
                                                                     <th>Tên vật tư</th>
@@ -222,7 +223,7 @@
                                                 @if ($item['status'] == 1)
                                                     <!-- Nút In Phiếu -->
                                                     <button style="font-size: 10px;"
-                                                        class="btn btn-sm btn-twitter me-2 rounded-pill" id="printPdfBtn"
+                                                        class="btn btn-sm btn-dark me-2 rounded-pill" id="printPdfBtn"
                                                         type="button">
                                                         <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
                                                     </button>
@@ -251,7 +252,7 @@
                                                                 <button type="button" class="btn-close btn-close-white"
                                                                     data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
-                                                            <div class="modal-body text-center"
+                                                            <div class="modal-body text-center pb-0"
                                                                 style="padding-bottom: 0px;">
                                                                 <form
                                                                     action="{{ route('check_warehouse.approve', $item['code']) }}"
@@ -262,7 +263,7 @@
                                                                     </p>
                                                                 </form>
                                                             </div>
-                                                            <div class="modal-footer justify-content-center border-0">
+                                                            <div class="modal-footer justify-content-center pt-0 border-0">
                                                                 <button type="button"
                                                                     class="btn btn-sm btn-secondary px-4 rounded-pill"
                                                                     data-bs-dismiss="modal">Đóng</button>

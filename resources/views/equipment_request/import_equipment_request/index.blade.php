@@ -510,12 +510,14 @@
                                                     {{-- Đã duyệt --}}
 
                                                     <!-- Nút Tạo Phiếu Nhập Nhanh -->
-                                                    <a style="font-size: 10px;"
+                                                    <a style="font-size: 10px; background-color: #FFA500;"
                                                         href="{{ route('warehouse.create_import') }}?cd={{ $item->code }}"
-                                                        class="btn btn-sm rounded-pill btn-dark me-2">
-                                                        <i style="font-size: 10px;" class="fas fa-file-import"></i>Tạo
+                                                        class="btn btn-sm rounded-pill text-white me-2">
+                                                        <i style="font-size: 10px;"
+                                                            class="fas fa-file-import text-white"></i> Tạo
                                                         Phiếu Nhập Nhanh
                                                     </a>
+
 
                                                     <!-- Nút In Phiếu -->
                                                     <button style="font-size: 10px;"
@@ -744,11 +746,11 @@
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
-                        <div class="modal-body text-center" style="padding-bottom: 0px;">
+                        <div class="modal-body text-dark text-center pb-0" style="padding-bottom: 0px;">
                             <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt tất cả yêu cầu mua hàng đã chọn?
                             </p>
                         </div>
-                        <div class="modal-footer justify-content-center border-0">
+                        <div class="modal-footer justify-content-center border-0 pt-0">
                             <button type="button" class="btn btn-sm btn-secondary btn-sm px-4"
                                 data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" class="btn btn-sm btn-success px-4">
@@ -768,10 +770,10 @@
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
-                        <div class="modal-body text-center" style="padding-bottom: 0px;">
+                        <div class="modal-body text-center pb-0" style="padding-bottom: 0px;">
                             <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa tất cả yêu cầu mua hàng đã chọn?</p>
                         </div>
-                        <div class="modal-footer justify-content-center border-0">
+                        <div class="modal-footer justify-content-center border-0 pt-0">
                             <button type="button" class="btn btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" class="btn btn-sm btn-success px-4"> Xóa</button>
@@ -786,80 +788,78 @@
         {{-- Duyệt --}}
         <div class="modal fade" id="browse_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="checkModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="checkModalLabel">Duyệt Yêu Cầu Mua
-                            Hàng
-                        </h3>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-dialog modal-dialog-centered modal-md">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title text-white" id="checkModalLabel">Duyệt Yêu Cầu Mua Hàng</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <form action="{{ route('equipment_request.import') }}" method="POST">
                         @csrf
-                        <div class="modal-body">
-                            <h4 class="text-primary text-center">Duyệt Yêu Cầu Mua Hàng
-                                Này?
-                            </h4>
+                        <div class="modal-body text-dark text-center pb-0">
+                            <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt yêu cầu mua hàng này?</p>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <div class="modal-footer justify-content-center border-0 pt-0">
+                            <button type="button" class="btn btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" name="browse_request" value="{{ $item->code }}"
-                                class="btn btn-sm btn-twitter">Duyệt</button>
+                                class="btn btn-sm btn-success px-4">Duyệt</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
+
 
         {{-- Xóa --}}
         <div class="modal fade" id="deleteModal_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="deleteModalLabel">Xóa Yêu Cầu Mua Hàng
-                        </h3>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-dialog modal-dialog-centered modal-md">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title text-white" id="deleteModalLabel">Xác Nhận Xóa Yêu Cầu Mua Hàng</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <form action="{{ route('equipment_request.import') }}" method="POST">
                         @csrf
-                        <div class="modal-body">
-                            <h4 class="text-danger text-center">Xóa Yêu Cầu Mua Hàng Này?
-                            </h4>
+                        <div class="modal-body text-center pb-0">
+                            <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa yêu cầu mua hàng này?</p>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <div class="modal-footer justify-content-center border-0 pt-0">
+                            <button type="button" class="btn btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" name="delete_request" value="{{ $item->code }}"
-                                class="btn btn-sm btn-danger">Xóa</button>
+                                class="btn btn-sm btn-danger px-4">Xóa</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
+
         {{-- Lưu phiếu --}}
         <div class="modal fade" id="save_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
-            tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="deleteModalLabel">Tạo Phiếu Yêu Cầu
-                            Mua
-                            Hàng
-                        </h3>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            tabindex="-1" aria-labelledby="saveModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title text-white" id="saveModalLabel">Tạo Phiếu Yêu Cầu Mua Hàng</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <form action="{{ route('equipment_request.import') }}" method="POST">
                         @csrf
-                        <div class="modal-body">
-                            <h4 class="text-success text-center">Tạo Phiếu Yêu Cầu Mua Hàng
-                                Này?
-                            </h4>
+                        <div class="modal-body text-center pb-0">
+                            <p class="text-success mb-4">Bạn có chắc chắn muốn tạo phiếu yêu cầu mua hàng này?</p>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <div class="modal-footer justify-content-center border-0 pt-0">
+                            <button type="button" class="btn btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" name="save_status" value="{{ $item->code }}"
-                                class="btn btn-sm btn-success">Tạo</button>
+                                class="btn btn-sm btn-success px-4">Tạo</button>
                         </div>
                     </form>
                 </div>

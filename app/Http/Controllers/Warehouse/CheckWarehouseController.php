@@ -22,7 +22,7 @@ class CheckWarehouseController extends Controller
 
         // Lấy danh sách kiểm kho cùng với chi tiết và thiết bị
         $inventoryChecks = Inventory_checks::with(['details.equipment', 'user'])
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
 
