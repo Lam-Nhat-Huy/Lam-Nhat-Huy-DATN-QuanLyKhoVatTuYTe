@@ -4,23 +4,21 @@ let matchedCount = 0;
 let mismatchedCount = 0;
 let uncheckedCount = 0;
 
-// Hiển thị dropdown khi focus vào ô tìm kiếm
 function showDropdown() {
-    var dropdown = document.getElementById('productDropdown');
-    dropdown.style.display = 'block'; // Hiển thị dropdown
+    var dropdown = document.getElementById("productDropdown");
+    dropdown.style.display = "block";
     filterProducts();
 }
 
-// Lọc sản phẩm dựa trên input
 function filterProducts() {
-    var input = document.getElementById('searchProductInput');
+    var input = document.getElementById("searchProductInput");
     var filter = input.value.toUpperCase();
-    var dropdown = document.getElementById('productDropdown');
+    var dropdown = document.getElementById("productDropdown");
 
-    dropdown.style.display = filter || input === document.activeElement ? 'block' : 'none'; // Hiển thị khi có giá trị hoặc focus
-    dropdown.innerHTML = ''; // Xóa kết quả cũ
+    dropdown.style.display =
+        filter || input === document.activeElement ? "block" : "none";
+    dropdown.innerHTML = "";
 
-    // Giả định có danh sách sản phẩm (products)
     var filteredProducts = products.filter(function (product) {
         return product.name.toUpperCase().indexOf(filter) > -1;
     });
@@ -31,7 +29,7 @@ function filterProducts() {
                 Không tìm thấy kết quả
             </div>
         `;
-        dropdown.insertAdjacentHTML('beforeend', noResultItem);
+        dropdown.insertAdjacentHTML("beforeend", noResultItem);
     } else {
         filteredProducts.forEach(function (product) {
             product.inventories.forEach(function (inventory) {
@@ -45,45 +43,60 @@ function filterProducts() {
                         </div>
                     </a>
                 `;
-                dropdown.insertAdjacentHTML('beforeend', item);
+                dropdown.insertAdjacentHTML("beforeend", item);
             });
         });
     }
 }
 
-// Ẩn dropdown khi click ra ngoài
-document.addEventListener('click', function(event) {
-    var dropdown = document.getElementById('productDropdown');
-    var searchInput = document.getElementById('searchProductInput');
+document.addEventListener("click", function (event) {
+    var dropdown = document.getElementById("productDropdown");
+    var searchInput = document.getElementById("searchProductInput");
 
-    // Kiểm tra nếu click bên ngoài cả dropdown và input tìm kiếm
-    if (!dropdown.contains(event.target) && !searchInput.contains(event.target)) {
-        dropdown.style.display = 'none'; // Ẩn dropdown
+    if (
+        !dropdown.contains(event.target) &&
+        !searchInput.contains(event.target)
+    ) {
+        dropdown.style.display = "none";
     }
 });
 
-
-
-
-function selectProduct(element, name, equipment_code, current_quantity, batch_number) {
+function selectProduct(
+    element,
+    name,
+    equipment_code,
+    current_quantity,
+    batch_number
+) {
     addProductToTable(name, equipment_code, current_quantity, batch_number);
-    document.getElementById('productDropdown').style.display = 'none';
-    document.getElementById('searchProductInput').value = '';
+    document.getElementById("productDropdown").style.display = "none";
+    document.getElementById("searchProductInput").value = "";
 }
 
-function addProductToTable(name, equipment_code, current_quantity, batch_number) {
-    var existingMaterial = materialData.find(material => material.equipment_code === equipment_code && material.batch_number === batch_number);
+function addProductToTable(
+    name,
+    equipment_code,
+    current_quantity,
+    batch_number
+) {
+    var existingMaterial = materialData.find(
+        (material) =>
+            material.equipment_code === equipment_code &&
+            material.batch_number === batch_number
+    );
 
     if (existingMaterial) {
-        document.getElementById('importantNotificationContent').innerHTML = `Đã thêm tất cả thiết bị vào danh sách. Vui lòng tiến hành kiểm kê kho hàng!`;
-        $('#importantNotificationModal').modal('show');
+        document.getElementById(
+            "importantNotificationContent"
+        ).innerHTML = `Đã thêm tất cả thiết bị vào danh sách. Vui lòng tiến hành kiểm kê kho hàng!`;
+        $("#importantNotificationModal").modal("show");
         return;
     }
 
     totalCount++;
     uncheckedCount++;
 
-    var tableBody = document.getElementById('materialList');
+    var tableBody = document.getElementById("materialList");
     var rowCount = materialData.length;
 
     var row = `
@@ -109,33 +122,34 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
         </tr>
     `;
 
-    tableBody.insertAdjacentHTML('beforeend', row);
+    tableBody.insertAdjacentHTML("beforeend", row);
 
     materialData.push({
         equipment_code: equipment_code,
         current_quantity: current_quantity,
         actual_quantity: null,
         unequal: 0,
-        batch_number: batch_number
+        batch_number: batch_number,
     });
 
     updateCounts();
 
     if (tableBody.rows.length > 0) {
-        document.getElementById('noDataAlert').style.display = 'none';
+        document.getElementById("noDataAlert").style.display = "none";
     }
 
-    const actualQuantityInputs = document.querySelectorAll('.actual-quantity-input');
+    const actualQuantityInputs = document.querySelectorAll(
+        ".actual-quantity-input"
+    );
     actualQuantityInputs.forEach((input, index) => {
-        input.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
+        input.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
                 event.preventDefault();
-                // Move downwards (Enter)
                 const nextInput = actualQuantityInputs[index + 1];
                 if (nextInput) {
                     nextInput.focus();
                 }
-            } else if (event.key === 'Shift') {
+            } else if (event.key === "Shift") {
                 event.preventDefault();
                 const prevInput = actualQuantityInputs[index - 1];
                 if (prevInput) {
@@ -147,7 +161,7 @@ function addProductToTable(name, equipment_code, current_quantity, batch_number)
 }
 
 function removeProduct(index) {
-    var tableBody = document.getElementById('materialList');
+    var tableBody = document.getElementById("materialList");
     var row = tableBody.querySelector(`tr[data-index="${index}"]`);
     if (row) {
         tableBody.removeChild(row);
@@ -157,15 +171,15 @@ function removeProduct(index) {
         updateRowIndices();
         updateCounts();
         if (tableBody.rows.length === 0) {
-            document.getElementById('noDataAlert').style.display = 'table-row';
+            document.getElementById("noDataAlert").style.display = "table-row";
         }
     }
 }
 
 function updateRowIndices() {
-    var tableBody = document.getElementById('materialList');
+    var tableBody = document.getElementById("materialList");
     Array.from(tableBody.rows).forEach((row, index) => {
-        row.setAttribute('data-index', index);
+        row.setAttribute("data-index", index);
         row.cells[1].textContent = index + 1;
     });
 }
@@ -178,8 +192,21 @@ function updateProduct(index, value) {
         const unequal = value - current_quantity;
         materialData[index].unequal = unequal;
 
-        const unequalCountCell = document.getElementById(`unequal-count-${index}`);
+        const unequalCountCell = document.getElementById(
+            `unequal-count-${index}`
+        );
         unequalCountCell.textContent = unequal;
+
+        const tableRow = document.querySelector(`tr[data-index="${index}"]`);
+
+        if (unequal < 0 && value !== "") {
+            tableRow.style.backgroundColor = "#ffcccb";
+        } else if (unequal > 0 && value !== "") {
+            tableRow.style.backgroundColor = "#ffebc8";
+        } else {
+            tableRow.style.backgroundColor = "#d1f0d1";
+        }
+
         if (value > 0) {
             if (unequal === 0) {
                 matchedCount++;
@@ -195,31 +222,35 @@ function updateProduct(index, value) {
 }
 
 function updateCounts() {
-    document.getElementById('totalCount').textContent = totalCount;
-    document.getElementById('matchedCount').textContent = matchedCount;
-    document.getElementById('mismatchedCount').textContent = mismatchedCount;
-    document.getElementById('uncheckedCount').textContent = uncheckedCount;
+    document.getElementById("totalCount").textContent = totalCount;
+    document.getElementById("matchedCount").textContent = matchedCount;
+    document.getElementById("mismatchedCount").textContent = mismatchedCount;
+    document.getElementById("uncheckedCount").textContent = uncheckedCount;
 
-    const noDataAlert = document.getElementById('noDataAlert');
-    noDataAlert.style.display = materialData.length === 0 ? 'table-row' : 'none';
+    const noDataAlert = document.getElementById("noDataAlert");
+    noDataAlert.style.display =
+        materialData.length === 0 ? "table-row" : "none";
 }
 
 function addAllProducts() {
-    var tableBody = document.getElementById('materialList');
+    var tableBody = document.getElementById("materialList");
 
-    products.forEach(product => {
-        product.inventories.forEach(inventory => {
-            // Bỏ điều kiện kiểm tra trùng lặp, để luôn thêm tất cả sản phẩm và lô hàng
-            addProductToTable(product.name, inventory.equipment_code, inventory.current_quantity, inventory.batch_number);
+    products.forEach((product) => {
+        product.inventories.forEach((inventory) => {
+            addProductToTable(
+                product.name,
+                inventory.equipment_code,
+                inventory.current_quantity,
+                inventory.batch_number
+            );
         });
     });
 }
 
-
 function submitMaterials() {
-    var checkDate = document.getElementById('check_date').value;
-    var note = document.getElementById('note').value;
-    var created_by = document.getElementById('created_by').value;
+    var checkDate = document.getElementById("check_date").value;
+    var note = document.getElementById("note").value;
+    var created_by = document.getElementById("created_by").value;
     var status = document.querySelector('button[name="status"]:focus').value;
 
     materialData = materialData.map(function (material) {
@@ -228,16 +259,18 @@ function submitMaterials() {
             check_date: checkDate,
             note: note,
             status: status,
-            created_by: created_by
+            created_by: created_by,
         };
     });
 
-    document.getElementById('materialData').value = JSON.stringify(materialData);
+    document.getElementById("materialData").value =
+        JSON.stringify(materialData);
 }
 
-
 function autoFillQuantity(index, current_quantity) {
-    var inputField = document.querySelector(`tr[data-index="${index}"] input[type="number"]`);
+    var inputField = document.querySelector(
+        `tr[data-index="${index}"] input[type="number"]`
+    );
     inputField.value = current_quantity;
     updateProduct(index, current_quantity);
 }
@@ -246,7 +279,9 @@ function autoFillAllQuantities() {
     materialData.forEach((material, index) => {
         var current_quantity = material.current_quantity;
 
-        var inputField = document.querySelector(`tr[data-index="${index}"] input[type="number"]`);
+        var inputField = document.querySelector(
+            `tr[data-index="${index}"] input[type="number"]`
+        );
 
         if (inputField) {
             inputField.value = current_quantity;

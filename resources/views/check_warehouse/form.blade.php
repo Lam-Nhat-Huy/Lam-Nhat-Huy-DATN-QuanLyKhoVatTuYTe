@@ -2,29 +2,18 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-    <!-- Include Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        /* Custom styles for product search */
-        /* Định dạng dropdown cho danh sách sản phẩm */
         #productDropdown {
             position: absolute;
-            /* Đặt danh sách xuất hiện ngay dưới ô tìm kiếm */
             z-index: 1000;
-            /* Đảm bảo danh sách xuất hiện phía trên các phần tử khác */
             width: calc(100% - 80px);
-            /* Đặt chiều rộng của danh sách sản phẩm */
             display: none;
-            /* Mặc định ẩn danh sách */
             max-height: 200px;
-            /* Giới hạn chiều cao tối đa của danh sách */
             overflow-y: auto;
-            /* Cho phép cuộn nếu danh sách quá dài */
             background-color: white;
-            /* Đặt màu nền cho danh sách */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            /* Tạo bóng cho danh sách */
         }
 
         #productDropdown a.dropdown-item:hover {
@@ -131,7 +120,6 @@
             opacity: 0.7;
         }
 
-        /* Căn giữa chiều dọc cho các hàng và ô trong bảng */
         .align-middle>tbody>tr>td,
         .align-middle>tbody>tr>th,
         .align-middle>thead>tr>td,
@@ -139,18 +127,44 @@
             vertical-align: middle;
         }
 
-        /* Căn giữa chiều ngang cho các ô trong bảng */
         .text-center {
             text-align: center;
         }
 
-        /* Tùy chỉnh chiều rộng của ô input */
         .table input[type="number"] {
             width: 50px;
         }
 
         #noDataAlert {
             display: table-row;
+        }
+
+        .status-indicator {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .status-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .small-text {
+            font-size: 0.95rem;
         }
     </style>
 @endsection
@@ -286,7 +300,7 @@
 
                 {{-- Giao diện kiểm kho mới --}}
                 <div class="col-md-4">
-                    <div class="card border-0 shadow-lg p-4 bg-body rounded-4">
+                    <div class="card border-0 shadow-lg p-4 bg-body rounded-4 mb-5">
                         <h3 class="mb-4 text-dark text-uppercase">Chi tiết kiểm kho</h3>
 
                         <input type="hidden" id="created_by" value="{{ session('user_code') }}">
@@ -363,6 +377,23 @@
                                 </div>
                             </div>
 
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-lg p-4 bg-body rounded-4" style="display: block;">
+                        <div class="status-indicator">
+                            <div class="status-item">
+                                <div class="color-box" style="background-color: #ffcccb;"></div>
+                                <span class="status-text small-text">Thiếu số lượng (Màu đỏ nhạt)</span>
+                            </div>
+                            <div class="status-item">
+                                <div class="color-box" style="background-color: #ffebc8;"></div>
+                                <span class="status-text small-text">Thừa số lượng (Màu vàng nhạt)</span>
+                            </div>
+                            <div class="status-item">
+                                <div class="color-box" style="background-color: #d1f0d1;"></div>
+                                <span class="status-text small-text">Số lượng khớp (Màu xanh lá nhạt)</span>
+                            </div>
                         </div>
                     </div>
                 </div>

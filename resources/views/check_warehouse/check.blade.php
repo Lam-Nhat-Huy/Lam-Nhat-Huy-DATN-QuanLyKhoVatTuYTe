@@ -80,9 +80,11 @@
                                 </td>
                                 <td>
                                     @if ($item['status'] == 0)
-                                        <span class="label label-temp text-danger">Phiếu tạm</span>
-                                    @else
+                                        <span class="label label-temp text-warning">Phiếu lưu tạm</span>
+                                    @elseif($item['status'] == 1)
                                         <span class="label label-final text-success">Đã cân bằng</span>
+                                    @else
+                                        <span class="label label-temp text-danger">Phiếu đã hiểu</span>
                                     @endif
                                 </td>
                             </tr>
@@ -146,9 +148,11 @@
                                                                     <td class=""><strong>Trạng thái</strong></td>
                                                                     <td class="text-gray-800">
                                                                         @if ($item['status'] == 0)
-                                                                            <span class="text-danger">Phiếu tạm</span>
-                                                                        @else
+                                                                            <span class="text-warning">Phiếu lưu tạm</span>
+                                                                        @elseif($item['status'] == 1)
                                                                             <span class="text-success">Đã cân bằng </span>
+                                                                        @else
+                                                                            <span class="text-danger">Phiếu đã hủy</span>
                                                                         @endif
                                                                     </td>
                                                                 </tr>
@@ -209,35 +213,44 @@
                                                         class="btn btn-sm btn-success me-2 rounded-pill"
                                                         data-bs-toggle="modal" data-bs-target="#browse-{{ $item->code }}"
                                                         type="button">
-                                                        <i style="font-size: 10px;" class="fas fa-clipboard-check"></i>Duyệt
-                                                        Phiếu
+                                                        <i style="font-size: 10px;" class="fas fa-clipboard-check"></i>
+                                                        Duyệt Phiếu
+                                                    </button>
+
+                                                    <!-- Nút Xóa phiếu tạm -->
+                                                    <button style="font-size: 10px;"
+                                                        class="btn btn-danger btn-sm me-2 rounded-pill"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#delete-{{ $item->code }}">
+                                                        <i style="font-size: 10px;" class="fa fa-trash"></i> Xóa Phiếu
                                                     </button>
                                                 @endif
 
-                                                <!-- Nút Sửa đơn -->
-                                                @if ($item['status'] == 0)
-                                                    <a style="font-size: 10px;" href=""
-                                                        class="btn btn-dark btn-sm me-2 rounded-pill"><i
-                                                            style="font-size: 10px;" class="fa fa-edit"></i>Sửa Phiếu</a>
-                                                @endif
                                                 @if ($item['status'] == 1)
                                                     <!-- Nút In Phiếu -->
                                                     <button style="font-size: 10px;"
                                                         class="btn btn-sm btn-dark me-2 rounded-pill" id="printPdfBtn"
                                                         type="button">
-                                                        <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
+                                                        <i style="font-size: 10px;" class="fa fa-print"></i> In Phiếu
                                                     </button>
-                                                @endif
 
-                                                @if ($item['status'] == 0)
-                                                    <!-- Nút xóa, có thể nằm trong danh sách hoặc bảng -->
+                                                    <!-- Nút Hủy Phiếu -->
                                                     <button style="font-size: 10px;"
                                                         class="btn btn-danger btn-sm rounded-pill" data-bs-toggle="modal"
-                                                        data-bs-target="#delete-">
-                                                        <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa phiếu
+                                                        data-bs-target="#cancel-{{ $item->code }}">
+                                                        <i style="font-size: 10px;" class="fa fa-times"></i> Hủy Phiếu
                                                     </button>
                                                 @endif
 
+                                                @if ($item['status'] == 3)
+                                                    <!-- Nút Xóa phiếu đã hủy -->
+                                                    <button style="font-size: 10px;"
+                                                        class="btn btn-danger btn-sm me-2 rounded-pill"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#delete-{{ $item->code }}">
+                                                        <i style="font-size: 10px;" class="fa fa-trash"></i> Xóa Phiếu
+                                                    </button>
+                                                @endif
 
                                                 <!-- Modal Duyệt Phiếu -->
                                                 <div class="modal fade" id="browse-{{ $item['code'] }}"
@@ -247,30 +260,107 @@
                                                         <div class="modal-content border-0 shadow">
                                                             <div class="modal-header bg-success text-white">
                                                                 <h5 class="modal-title text-white"
-                                                                    id="browseLabel-{{ $item['code'] }}">Duyệt
-                                                                    Phiếu Kiểm Kho</h5>
+                                                                    id="browseLabel-{{ $item['code'] }}">
+                                                                    Duyệt Phiếu Kiểm Kho
+                                                                </h5>
                                                                 <button type="button" class="btn-close btn-close-white"
                                                                     data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
-                                                            <div class="modal-body text-center pb-0"
-                                                                style="padding-bottom: 0px;">
+                                                            <div class="modal-body text-center pb-0">
                                                                 <form
                                                                     action="{{ route('check_warehouse.approve', $item['code']) }}"
                                                                     method="POST" id="approveForm-{{ $item['code'] }}">
                                                                     @csrf
                                                                     <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt
-                                                                        phiếu kiểm kho này?
-                                                                    </p>
+                                                                        phiếu kiểm kho này?</p>
                                                                 </form>
                                                             </div>
-                                                            <div class="modal-footer justify-content-center pt-0 border-0">
+                                                            <div class="modal-footer justify-content-center">
                                                                 <button type="button"
-                                                                    class="btn btn-sm btn-secondary px-4 rounded-pill"
+                                                                    class="btn btn-secondary btn-sm rounded-pill"
+                                                                    data-bs-dismiss="modal">
+                                                                    Đóng
+                                                                </button>
+                                                                <button type="button"
+                                                                    class="btn btn-success btn-sm rounded-pill"
+                                                                    onclick="event.preventDefault(); document.getElementById('approveForm-{{ $item['code'] }}').submit();">
+                                                                    Duyệt
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Modal Hủy Phiếu -->
+                                                <div class="modal fade" id="cancel-{{ $item['code'] }}"
+                                                    data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                                    aria-labelledby="cancelLabel-{{ $item['code'] }}" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-md">
+                                                        <div class="modal-content border-0 shadow">
+                                                            <div class="modal-header bg-danger text-white">
+                                                                <h5 class="modal-title text-white"
+                                                                    id="cancelLabel-{{ $item['code'] }}">
+                                                                    Hủy Phiếu Kiểm Kho
+                                                                </h5>
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body text-center pb-0">
+                                                                <form
+                                                                    action="{{ route('check_warehouse.cancel', $item['code']) }}"
+                                                                    method="POST" id="cancelForm-{{ $item['code'] }}">
+                                                                    @csrf
+                                                                    <p class="text-danger mb-4">Bạn có chắc chắn muốn hủy
+                                                                        phiếu kiểm kho này?
+                                                                        Số lượng vật tư sẽ được trả về trạng thái trước khi
+                                                                        kiểm.</p>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer justify-content-center">
+                                                                <button type="button"
+                                                                    class="btn btn-secondary btn-sm rounded-pill"
                                                                     data-bs-dismiss="modal">Đóng</button>
                                                                 <button type="button"
-                                                                    class="btn btn-sm btn-success px-4 rounded-pill"
-                                                                    onclick="event.preventDefault(); document.getElementById('approveForm-{{ $item->code }}').submit();">
-                                                                    Duyệt
+                                                                    class="btn btn-danger btn-sm rounded-pill"
+                                                                    onclick="event.preventDefault(); document.getElementById('cancelForm-{{ $item['code'] }}').submit();">
+                                                                    Hủy Phiếu
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Modal Xóa Phiếu -->
+                                                <div class="modal fade" id="delete-{{ $item['code'] }}"
+                                                    data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                                    aria-labelledby="deleteLabel-{{ $item['code'] }}" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-md">
+                                                        <div class="modal-content border-0 shadow">
+                                                            <div class="modal-header bg-danger text-white">
+                                                                <h5 class="modal-title text-white"
+                                                                    id="deleteLabel-{{ $item['code'] }}">
+                                                                    Xóa Phiếu Kiểm Kho
+                                                                </h5>
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body text-center pb-0">
+                                                                <form
+                                                                    action="{{ route('check_warehouse.delete', $item['code']) }}"
+                                                                    method="POST" id="deleteForm-{{ $item['code'] }}">
+                                                                    @csrf
+                                                                    <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa
+                                                                        phiếu kiểm kho này?</p>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer justify-content-center">
+                                                                <button type="button"
+                                                                    class="btn btn-secondary btn-sm rounded-pill"
+                                                                    data-bs-dismiss="modal">Đóng</button>
+                                                                <button type="button"
+                                                                    class="btn btn-danger btn-sm rounded-pill"
+                                                                    onclick="event.preventDefault(); document.getElementById('deleteForm-{{ $item['code'] }}').submit();">
+                                                                    Xóa Phiếu
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -278,35 +368,35 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr id="noDataAlert">
-                                <td colspan="12" class="text-center">
-                                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
-                                        role="alert"
-                                        style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
-                                        <div class="mb-3">
-                                            <i class="fas fa-clipboard-check"
-                                                style="font-size: 36px; color: #6c757d;"></i>
-                                        </div>
-                                        <div class="text-center">
-                                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin phiếu
-                                                kiểm kho trống</h5>
-                                            <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                                Hiện tại chưa có phiếu kiểm kho nào được tạo. Vui lòng kiểm tra lại hoặc tạo
-                                                mới phiếu kiểm kho để bắt đầu.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
             </div>
+            </td>
+            </tr>
+        @empty
+            <tr id="noDataAlert">
+                <td colspan="12" class="text-center">
+                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                        role="alert" style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                        <div class="mb-3">
+                            <i class="fas fa-clipboard-check" style="font-size: 36px; color: #6c757d;"></i>
+                        </div>
+                        <div class="text-center">
+                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin phiếu
+                                kiểm kho trống</h5>
+                            <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                Hiện tại chưa có phiếu kiểm kho nào được tạo. Vui lòng kiểm tra lại hoặc tạo
+                                mới phiếu kiểm kho để bắt đầu.
+                            </p>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            @endforelse
+            </tbody>
+            </table>
         </div>
+    </div>
     </div>
 @endsection
 
@@ -316,11 +406,10 @@
             $('#search').on('keyup', function() {
                 let query = $(this).val();
 
-                // Lấy dữ liệu từ các trường bộ lọc
                 let startDate = $('input[name="start_date"]').val();
                 let endDate = $('input[name="end_date"]').val();
                 let userCode = $('select[name="user_code"]')
-                    .val(); // Thay 'supplier_code' bằng 'user_code' nếu bạn muốn tìm theo mã người dùng
+                    .val();
                 let status = $('select[name="status"]').val();
 
                 if (query.length > 0) {
@@ -335,7 +424,6 @@
                             'status': status
                         },
                         success: function(data) {
-                            // Hiển thị kết quả tìm kiếm
                             $('tbody').html(data);
                         },
                         error: function(xhr) {
@@ -347,12 +435,10 @@
                 }
             });
 
-            // Thêm sự kiện cho các trường lọc
             $('input[name="start_date"], input[name="end_date"], select[name="user_code"], input[name="note"], select[name="status"]')
                 .on('change', function() {
                     let query = $('#search').val();
 
-                    // Lấy dữ liệu từ các trường bộ lọc
                     let startDate = $('input[name="start_date"]').val();
                     let endDate = $('input[name="end_date"]').val();
                     let userCode = $('select[name="user_code"]').val();

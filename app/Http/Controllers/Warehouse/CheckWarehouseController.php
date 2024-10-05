@@ -20,15 +20,11 @@ class CheckWarehouseController extends Controller
     {
         $title = 'Kiểm Kho';
 
-        // Lấy danh sách kiểm kho cùng với chi tiết và thiết bị
         $inventoryChecks = Inventory_checks::with(['details.equipment', 'user'])
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at', 'DESC')
             ->get();
 
-
-        // Lấy tất cả nhà cung cấp và người dùng
         $users = Users::all();
-
 
         return view("{$this->route}.check", compact('title', 'inventoryChecks', 'users'));
     }
@@ -39,11 +35,10 @@ class CheckWarehouseController extends Controller
 
         $action = 'create';
 
-        // Lấy danh sách vật tư có tồn kho (current_quantity > 0)
         $equipmentsWithStock = Equipments::whereHas('inventories', function ($query) {
             $query->where('current_quantity', '>', 0);
         })->with(['inventories' => function ($query) {
-            $query->select('equipment_code', 'current_quantity', 'batch_number'); // Chọn các cột cần từ inventories
+            $query->select('equipment_code', 'current_quantity', 'batch_number');
         }])->get();
 
 
@@ -52,18 +47,13 @@ class CheckWarehouseController extends Controller
 
     public function store(Request $request)
     {
-        // Lấy dữ liệu từ form (JSON) và chuyển đổi thành mảng
         $materialData = json_decode($request->input('materialData'), true);
 
-        // dd($materialData);
-
-        // Kiểm tra nếu dữ liệu rỗng
         if (empty($materialData)) {
             toastr()->error('Đã lưu phiếu kiểm kho thất bại.');
             return redirect()->back();
         }
 
-        // Tạo mảng dữ liệu cho phiếu kiểm kho
         $inventoryCheckData = [
             'equipment_code' => $materialData[0]['equipment_code'],
             'check_date' => $materialData[0]['check_date'],
@@ -72,22 +62,17 @@ class CheckWarehouseController extends Controller
             'status' => $materialData[0]['status']
         ];
 
-        // Gán mã mới cho dữ liệu phiếu kiểm kho
         $inventoryCheckData['code'] = "KK" . $this->generateRandomString();
 
-        // Tạo phiếu kiểm kho mới
         $inventoryCheck = Inventory_checks::create($inventoryCheckData);
 
-        // Kiểm tra nếu việc lưu phiếu kiểm kho thất bại
         if (!$inventoryCheck) {
             toastr()->error('Lỗi khi lưu phiếu kiểm kho.');
             return redirect()->back();
         }
 
-        // Lấy mã phiếu kiểm kho vừa tạo
         $inventoryCheckCode = $inventoryCheck->code;
 
-        // Tạo dữ liệu chi tiết phiếu kiểm kho
         $inventoryCheckDetailData = [];
 
         foreach ($materialData as $material) {
@@ -101,7 +86,6 @@ class CheckWarehouseController extends Controller
             ];
         }
 
-        // Lưu dữ liệu chi tiết phiếu kiểm kho vào bảng inventory_check_details
         try {
             Inventory_check_details::insert($inventoryCheckDetailData);
         } catch (\Exception $e) {
@@ -109,7 +93,6 @@ class CheckWarehouseController extends Controller
             return redirect()->back();
         }
 
-        // Nếu status == 1, cập nhật số lượng tồn kho theo kết quả kiểm kho
         if ($materialData[0]['status'] == 1) {
             foreach ($materialData as $material) {
                 $this->updateInventoryByCheck($material);
@@ -119,24 +102,19 @@ class CheckWarehouseController extends Controller
             toastr()->warning('Phiếu kiểm kho tạm đã được lưu với mã ' . $inventoryCheckCode);
         }
 
-        // Điều hướng về trang danh sách phiếu kiểm kho sau khi lưu thành công
         return redirect()->route('check_warehouse.index');
     }
 
-    // Hàm cập nhật số lượng tồn kho theo kết quả kiểm kho
     private function updateInventoryByCheck($material)
     {
-        // Tìm lô hàng trong kho dựa vào mã thiết bị và số lô
         $inventory = Inventories::where('equipment_code', $material['equipment_code'])
             ->where('batch_number', $material['batch_number'])
             ->first();
 
         if ($inventory) {
-            // Cập nhật số lượng thực tế trong kho
             $inventory->current_quantity = $material['actual_quantity'];
             $inventory->save();
         } else {
-            // Nếu không tìm thấy lô hàng, tạo mới record trong bảng inventories
             $newInventoryCode = 'TK' . $this->generateRandomString();
             Inventories::create([
                 'code' => $newInventoryCode,
@@ -152,19 +130,14 @@ class CheckWarehouseController extends Controller
 
     public function approveCheck($code)
     {
-        // Tìm phiếu kiểm kho theo mã code
         $inventoryCheck = Inventory_checks::where('code', $code)->first();
 
-        // Kiểm tra trạng thái phiếu kiểm kho (chỉ duyệt nếu trạng thái là 0)
         if ($inventoryCheck && $inventoryCheck->status == 0) {
-            // Thay đổi trạng thái phiếu kiểm kho từ 0 sang 1 (đã duyệt)
             $inventoryCheck->status = 1;
             $inventoryCheck->save();
 
-            // Lấy tất cả các chi tiết phiếu kiểm kho liên quan
             $inventoryCheckDetails = Inventory_check_details::where('inventory_check_code', $code)->get();
 
-            // Cập nhật kho theo lô cho từng chi tiết phiếu kiểm kho
             foreach ($inventoryCheckDetails as $detail) {
                 $material = [
                     'equipment_code' => $detail->equipment_code,
@@ -173,7 +146,6 @@ class CheckWarehouseController extends Controller
                     'unequal' => $detail->unequal
                 ];
 
-                // Gọi hàm cập nhật kho (hàm updateInventoryByCheck đã được tạo ở phần trước)
                 $this->updateInventoryByCheck($material);
             }
 
@@ -234,5 +206,58 @@ class CheckWarehouseController extends Controller
         }
 
         return $randomString;
+    }
+
+    public function cancelCheck($code)
+    {
+        $inventoryCheck = Inventory_checks::where('code', $code)->first();
+
+        if ($inventoryCheck && $inventoryCheck->status == 1) {
+
+            $inventoryCheckDetails = Inventory_check_details::where('inventory_check_code', $code)->get();
+
+            foreach ($inventoryCheckDetails as $detail) {
+                $inventory = Inventories::where('equipment_code', $detail->equipment_code)
+                    ->where('batch_number', $detail->batch_number)
+                    ->first();
+
+                if ($inventory) {
+                    $inventory->current_quantity = $detail->current_quantity;
+
+                    $inventory->save();
+                }
+            }
+
+            $inventoryCheck->status = 3;
+
+            $inventoryCheck->save();
+
+            toastr()->success('Phiếu kiểm kho đã được hủy và số lượng tồn kho đã được phục hồi.');
+
+            return redirect()->back();
+        }
+
+        toastr()->error('Không thể hủy phiếu kiểm kho. Chỉ có thể hủy phiếu đã được duyệt.');
+
+        return redirect()->back();
+    }
+
+    public function deleteCheck($code)
+    {
+        $check = Inventory_checks::where('code', $code)->first();
+
+        if (!$check) {
+            return redirect()->back()->with('error', 'Phiếu kiểm kho không tồn tại.');
+        }
+
+        if ($check->status != 0 && $check->status != 3) {
+            return redirect()->back()->with('error', 'Chỉ có thể xóa phiếu tạm hoặc phiếu đã hủy.');
+        }
+
+        Inventory_check_details::where('inventory_check_code', $check->code)->delete();
+
+        $check->delete();
+
+        return redirect()->route('check_warehouse.index')->with('success', 'Phiếu kiểm kho đã được xóa thành công.');
     }
 }
