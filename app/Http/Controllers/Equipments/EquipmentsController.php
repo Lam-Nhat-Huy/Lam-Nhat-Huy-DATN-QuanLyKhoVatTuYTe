@@ -100,21 +100,35 @@ class EquipmentsController extends Controller
         // Tương tự với các đơn vị tính hoặc nhà cung cấp nếu cần thiết
         $units = Units::all();
         $suppliers = Suppliers::all();
-        toastr()->success('Chuẩn bị thêm mới vật tư');
-        return view('equipments.form_material', compact('title', 'action', 'title_form', 'equipmentTypes', 'suppliers', 'units'));
-    }
+        $AllSuppiler = Suppliers::orderBy('created_at', 'DESC')->get();
 
+        return view('equipments.form_material', compact('title', 'action', 'title_form', 'equipmentTypes', 'suppliers', 'units', 'AllSuppiler'));
+    }
 
     public function create_material(\App\Http\Requests\CreateMaterialRequest $request)
     {
-        // Xử lý upload ảnh
-        $imageName = null;
+        // Kiểm tra nếu có lỗi validation
+        $validated = $request->validated();
+
+        // Lấy đường dẫn ảnh cũ từ request (khi form bị submit lỗi)
+        $imageName = $request->input('current_image'); // Giữ nguyên ảnh cũ
+
+        // Kiểm tra nếu có file ảnh mới được tải lên
         if ($request->hasFile('material_image')) {
+            // Xóa ảnh cũ nếu cần thiết (tùy yêu cầu của bạn, không bắt buộc)
+            if ($imageName) {
+                $oldImagePath = public_path('images/equipments/' . $imageName);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath); // Xóa file ảnh cũ nếu có
+                }
+            }
+
+            // Lưu ảnh mới
             $imageName = time() . '.' . $request->material_image->extension();
             $request->material_image->move(public_path('images/equipments'), $imageName);
         }
 
-        // Tạo mới một bản ghi vật tư
+        // Nếu không có lỗi, tạo mới vật tư
         Equipments::create([
             'code' => 'EQ' . time(),
             'name' => $request->name,
@@ -131,10 +145,12 @@ class EquipmentsController extends Controller
             'updated_at' => now(),
         ]);
 
-        // Thay đổi thông báo thành toastr
         toastr()->success('Thiết bị đã được thêm thành công!');
         return redirect()->route('equipments.index');
     }
+
+
+
 
 
 
@@ -144,14 +160,19 @@ class EquipmentsController extends Controller
         $title_form = 'Cập Nhật Vật Tư';
         $action = 'edit';
 
+        $AllSuppiler = Suppliers::orderBy('created_at', 'DESC')->get();
+
         // Tìm vật tư bằng code thay vì id
         $currentEquipment = Equipments::where('code', $code)->firstOrFail();
         $equipmentTypes = Equipment_types::all();
         $suppliers = Suppliers::all();
         $units = Units::all();
-        toastr()->success('Chuẩn bị cập nhật thiết bị');
-        return view("equipments.form_material", compact('title', 'action', 'title_form', 'currentEquipment', 'equipmentTypes', 'suppliers', 'units'));
+
+        // Truyền currentEquipment sang view với tên 'equipment'
+        return view("equipments.form_material", compact('title', 'action', 'title_form', 'currentEquipment', 'equipmentTypes', 'suppliers', 'units', 'AllSuppiler'))
+            ->with('equipment', $currentEquipment);
     }
+
 
     public function edit_material(Request $request, $code)
     {
@@ -165,7 +186,6 @@ class EquipmentsController extends Controller
             'expiry_date' => 'nullable|date',
             'supplier_code' => 'required|string|max:255',
             'country' => 'required|string|max:255',
-            'description' => 'required|string',
         ]);
 
         // Tìm thiết bị theo code
@@ -330,36 +350,25 @@ class EquipmentsController extends Controller
 
         return redirect()->route('equipments.equipments_group')->with('success', 'Nhóm vật tư đã được tạo thành công!');
     }
+
     public function create_material_group_modal(Request $request)
     {
-        // Validate dữ liệu đầu vào
-        $request->validate([
-            'code' => 'required|string|max:20|unique:equipment_types,code',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'required|boolean',
-        ]);
 
         // Tạo nhóm vật tư mới
         $materialGroup = Equipment_types::create([
-            'code' => $request->code,
+            'code' => "NVT" . $this->generateRandomString(),
             'name' => $request->name,
             'description' => $request->description,
             'status' => $request->status,
         ]);
+
         toastr()->success('Thêm mới nhóm thiết bị thành công');
         // Chuyển hướng quay lại trang trước đó và thông báo thành công
         return redirect()->back()->with('success', 'Nhóm vật tư đã được thêm thành công!');
     }
+
     public function create_unit_modal(Request $request)
     {
-        // Validate dữ liệu đầu vào
-        $request->validate([
-            'code' => 'required|string|max:20|unique:units,code',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-        ]);
-
         // Lấy user code từ session hoặc một nguồn khác
         $createdBy = session('user_code');  // Hoặc lấy từ user đang đăng nhập
 
@@ -370,7 +379,7 @@ class EquipmentsController extends Controller
 
         // Tạo đơn vị tính mới
         Units::create([
-            'code' => $request->code,
+            'code' => 'DV' . $this->generateRandomString(),
             'name' => $request->name,
             'description' => $request->description,
             'created_by' => $createdBy,  // Đặt người tạo chính xác
@@ -592,5 +601,22 @@ class EquipmentsController extends Controller
 
         // Trả về kết quả dưới dạng JSON
         return response()->json($results);
+    }
+
+
+    function generateRandomString($length = 9)
+    {
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        $charactersLength = strlen($characters);
+
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        return $randomString;
     }
 }

@@ -128,13 +128,13 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Thiết Bị</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('equipments.equipments_trash') }}" class="btn btn-sm btn-danger me-2">
+                <a href="{{ route('equipments.equipments_trash') }}" class="btn btn-sm btn-danger me-2 rounded-pill">
                     <span class="align-items-center d-flex" style="font-size: 10px">
                         <i style="font-size: 10px" class="fa fa-trash me-1"></i>
                         Thùng Rác
                     </span>
                 </a>
-                <a href="{{ route('equipments.insert_equipments') }}" class="btn btn-sm btn-success">
+                <a href="{{ route('equipments.insert_equipments') }}" class="btn btn-sm btn-success rounded-pill">
                     <span class="align-items-center d-flex" style="font-size: 10px">
                         <i style="font-size: 10px" class="fa fa-plus"></i>
                         Thêm Thiết Bị
@@ -147,17 +147,20 @@
         <div class="card-body py-1 me-6">
             <form id="searchForm" class="row align-items-center">
                 <div class="col-4">
-                    <select name="equipment_type_code" id="equipment_type_code" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
+                    <select name="equipment_type_code" id="equipment_type_code"
+                        class="mt-2 mb-2 form-select form-select-sm setupSelect2 rounded-pill">
                         <option value="" selected>--Theo Nhóm Thiết Bị--</option>
                         @foreach ($equipmentTypes as $type)
-                            <option value="{{ $type->code }}" {{ request()->equipment_type_code == $type->code ? 'selected' : '' }}>
+                            <option value="{{ $type->code }}"
+                                {{ request()->equipment_type_code == $type->code ? 'selected' : '' }}>
                                 {{ $type->name }}
                             </option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-4">
-                    <select name="unit_code" id="unit_code" class="mt-2 mb-2 form-select form-select-sm setupSelect2">
+                    <select name="unit_code" id="unit_code"
+                        class="mt-2 mb-2 form-select form-select-sm setupSelect2 rounded-pill">
                         <option value="" selected>--Theo Đơn Vị Tính--</option>
                         @foreach ($units as $unit)
                             <option value="{{ $unit->code }}" {{ request()->unit_code == $unit->code ? 'selected' : '' }}>
@@ -168,14 +171,10 @@
                 </div>
                 <div class="col-4">
                     <div class="row">
-                        <div class="col-10">
+                        <div class="col-12">
                             <input type="search" name="kw" id="kw" placeholder="Tìm Kiếm Theo Mã, Tên.."
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success rounded-pill"
                                 value="{{ request()->kw }}">
-                        </div>
-                        <!-- Nút tìm kiếm ẩn (nếu bạn vẫn muốn giữ nút này) -->
-                        <div class="col-2">
-                            <button class="btn btn-dark btn-sm mt-2 mb-2" type="submit" style="display: none;">Tìm</button>
                         </div>
                     </div>
                 </div>
@@ -193,7 +192,8 @@
                             <i class="fas fa-search" style="font-size: 36px; color: #6c757d;"></i>
                         </div>
                         <div class="text-center">
-                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không tìm thấy kết quả phù hợp</h5>
+                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không tìm thấy kết quả phù hợp
+                            </h5>
                             <p style="font-size: 14px; color: #6c757d; margin: 0;">
                                 Vui lòng thử lại với từ khóa khác hoặc thay đổi bộ lọc tìm kiếm.
                             </p>
@@ -209,7 +209,8 @@
                         <div class="text-center">
                             <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Danh sách thiết bị trống</h5>
                             <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                Hiện tại chưa có thiết bị nào được tạo. Vui lòng kiểm tra lại hoặc thêm mới thiết bị để bắt đầu.
+                                Hiện tại chưa có thiết bị nào được tạo. Vui lòng kiểm tra lại hoặc thêm mới thiết bị để bắt
+                                đầu.
                             </p>
                         </div>
                     </div>
@@ -240,7 +241,8 @@
                                                 <div class="col">
                                                     <p class="mb-1 small text-muted">Mã vật tư: {{ $item->code }}</p>
                                                     <p class="mb-1 small text-muted">
-                                                        Tồn kho: {{ $item->inventories->sum('current_quantity') }} - {{ optional($item->units)->name }}
+                                                        Tồn kho: {{ $item->inventories->sum('current_quantity') }} -
+                                                        {{ optional($item->units)->name }}
                                                     </p>
                                                 </div>
                                                 <div class="col-auto">
@@ -254,7 +256,8 @@
 
                             <!-- Collapsible Content -->
                             <div class="collapse multi-collapse" id="collapse{{ $item->code }}">
-                                <div class="card card-body p-2" style="border: 1px solid #dcdcdc; background-color: #f8f9fa;">
+                                <div class="card card-body p-2"
+                                    style="border: 1px solid #dcdcdc; background-color: #f8f9fa;">
                                     <div class="row gy-3">
                                         <div class="col-md-4">
                                             <img src="{{ $item->image ? asset('images/equipments/' . $item->image) : 'https://st4.depositphotos.com/14953852/24787/v/380/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg' }}"
@@ -284,7 +287,8 @@
                                                                 <tr>
                                                                     <td><strong>Nhà cung cấp:</strong></td>
                                                                     <td class="text-gray-800">
-                                                                        {{ $item->supplier->name ?? 'Không có dữ liệu' }}</td>
+                                                                        {{ $item->supplier->name ?? 'Không có dữ liệu' }}
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Ngày hết hạn:</strong></td>
@@ -305,11 +309,13 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Ghi chú:</strong></td>
-                                                                    <td class="text-gray-800">{{ $item->description }}</td>
+                                                                    <td class="text-gray-800">{{ $item->description }}
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Đơn vị:</strong></td>
-                                                                    <td class="text-gray-800">{{ $item->units->name }}</td>
+                                                                    <td class="text-gray-800">{{ $item->units->name }}
+                                                                    </td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -322,6 +328,7 @@
                                                             <i class="fa fa-edit" style="font-size: 10px"></i>Cập Nhật
                                                         </a>
                                                         <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
+                                                            style="font-size: 10px;"
                                                             data-bs-target="#deleteConfirm{{ $item->code }}">
                                                             <i style="font-size: 10px" class="fa fa-trash"></i> Xóa
                                                         </button>
@@ -354,11 +361,13 @@
                             <form action="{{ route('equipments.delete_equipments', $item->code) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa vật tư này?</p>
-                                <div class="modal-footer justify-content-center border-0">
-                                    <button type="button" class="btn btn-sm btn-secondary px-4"
-                                        data-bs-dismiss="modal">Đóng</button>
-                                    <button type="submit" class="btn btn-sm btn-danger px-4"> Xóa</button>
+                                <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa thiết bị này?</p>
+                                <div class="modal-footer justify-content-center pt-0">
+                                    <button type="button" class="btn btn-sm btn-secondary px-4 rounded-pill"
+                                        data-bs-dismiss="modal" style="font-size: 10px;">Đóng</button>
+                                    <button type="submit" class="btn btn-sm btn-danger rounded-pill"
+                                        style="font-size: 10px;">
+                                        Xóa</button>
                                 </div>
                             </form>
                         </div>
@@ -370,12 +379,12 @@
 
     @section('scripts')
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 const searchForm = document.getElementById('searchForm');
                 const equipmentList = document.getElementById('equipmentList');
 
                 // Thêm sự kiện khi nhập liệu vào form tìm kiếm
-                searchForm.addEventListener('input', function () {
+                searchForm.addEventListener('input', function() {
                     let kw = document.getElementById('kw').value;
                     let equipmentType = document.getElementById('equipment_type_code').value;
                     let unit = document.getElementById('unit_code').value;
@@ -390,7 +399,9 @@
                     `;
 
                     // Gửi request AJAX
-                    fetch(`{{ route('equipments.ajax.search') }}?kw=${encodeURIComponent(kw)}&equipment_type_code=${encodeURIComponent(equipmentType)}&unit_code=${encodeURIComponent(unit)}`)
+                    fetch(
+                            `{{ route('equipments.ajax.search') }}?kw=${encodeURIComponent(kw)}&equipment_type_code=${encodeURIComponent(equipmentType)}&unit_code=${encodeURIComponent(unit)}`
+                        )
                         .then(response => response.json())
                         .then(data => {
                             // Xóa nội dung cũ
@@ -399,7 +410,9 @@
                             if (data.length > 0) {
                                 // Tạo nội dung mới dựa trên kết quả tìm kiếm
                                 data.forEach(item => {
-                                    let image = item.image ? `{{ asset('images/equipments') }}/${item.image}` : 'https://st4.depositphotos.com/14953852/24787/v/380/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg';
+                                    let image = item.image ?
+                                        `{{ asset('images/equipments') }}/${item.image}` :
+                                        'https://st4.depositphotos.com/14953852/24787/v/380/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg';
                                     let equipmentHtml = `
                                         <div class="col-xl-12 mb-2">
                                             <div class="card mb-1 card-body p-2 pointer" data-bs-toggle="collapse"

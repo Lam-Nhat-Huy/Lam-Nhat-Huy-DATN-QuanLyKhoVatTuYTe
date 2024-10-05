@@ -33,13 +33,13 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Thiết Bị</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('equipments.equipments_trash') }}" class="btn btn-sm btn-danger me-2">
+                <a href="{{ route('equipments.equipments_trash') }}" class="btn btn-sm btn-danger me-2 rounded-pill">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-trash me-1"></i>
                         Thùng Rác
                     </span>
                 </a>
-                <a href="{{ route('equipments.insert_equipments') }}" class="btn btn-sm btn-success">
+                <a href="{{ route('equipments.insert_equipments') }}" class="btn btn-sm btn-success rounded-pill">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-plus"></i>
                         Thêm Thiết Bị
@@ -52,7 +52,8 @@
         <div class="card-body py-1 me-6">
             <form action="" class="row align-items-center">
                 <div class="col-4">
-                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                    <select name="ur"
+                        class="mt-2 mb-2 form-select form-select-sm form-select-solid rounded-pill setupSelect2">
                         <option value="" selected>--Theo Nhóm Thiết Bị--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
@@ -60,7 +61,8 @@
                 </div>
 
                 <div class="col-4">
-                    <select name="ur" class="mt-2 mb-2 form-select form-select-sm form-select-solid setupSelect2">
+                    <select name="ur"
+                        class="mt-2 mb-2 form-select form-select-sm form-select-solid rounded-pill setupSelect2">
                         <option value="" selected>--Theo Đơn Vị Tính--</option>
                         <option value="a">A</option>
                         <option value="b">B</option>
@@ -71,7 +73,7 @@
                     <div class="row">
                         <div class="col-10">
                             <input type="search" name="kw" placeholder="Tìm Kiếm Theo Mã, Tên.."
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
+                                class="mt-2 mb-2 form-control form-control-sm form-control-solid rounded-pill border border-success"
                                 value="{{ request()->kw }}">
                         </div>
                         <div class="col-2">
@@ -140,7 +142,8 @@
                                 <td colspan="12" style="border: 1px solid #dcdcdc; background-color: #f8f9fa;">
                                     <div class="row gy-3">
                                         <div class="col-md-4">
-                                            <img src="{{ $item->material_image }}" alt="" class="img-fluid rounded">
+                                            <img src="{{ $item->material_image }}" alt=""
+                                                class="img-fluid rounded">
                                         </div>
                                         <div class="col-md-8">
                                             <div class="card card-body border-0">
@@ -158,11 +161,15 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Nhóm hàng:</strong></td>
-                                                                    <td class="text-gray-800">{{ $item->equipmentType->name ?? 'Không có dữ liệu' }}</td>
+                                                                    <td class="text-gray-800">
+                                                                        {{ $item->equipmentType->name ?? 'Không có dữ liệu' }}
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Nhà cung cấp:</strong></td>
-                                                                    <td class="text-gray-800">{{ $item->supplier->name ?? 'Không có dữ liệu' }}</td>
+                                                                    <td class="text-gray-800">
+                                                                        {{ $item->supplier->name ?? 'Không có dữ liệu' }}
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Vị trí:</strong></td>
@@ -170,7 +177,9 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Ngày hết hạn:</strong></td>
-                                                                    <td class="text-gray-800">{{ $item->expiry > 0 ? $item->expiry . ' Tháng' : 'Không có' }}</td>
+                                                                    <td class="text-gray-800">
+                                                                        {{ $item->expiry > 0 ? $item->expiry . ' Tháng' : 'Không có' }}
+                                                                    </td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -180,7 +189,8 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <td><strong>Giá nhập:</strong></td>
-                                                                    <td class="text-gray-800">{{ number_format($item->price) }} VNĐ</td>
+                                                                    <td class="text-gray-800">
+                                                                        {{ number_format($item->price) }} VNĐ</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Ghi chú:</strong></td>
@@ -188,7 +198,8 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Tồn kho:</strong></td>
-                                                                    <td class="text-gray-800">{{ $item->inventories->sum('quantity') }}</td>
+                                                                    <td class="text-gray-800">
+                                                                        {{ $item->inventories->sum('quantity') }}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td><strong>Số lượng đã dùng:</strong></td>
@@ -260,4 +271,3 @@
         </div>
     </div>
 @endsection
-    

@@ -107,7 +107,7 @@
         }
 
         /* Căn chỉnh form */
-        .form-control-solid {
+        .form-control-sm rounded-pill {
             border: 1px solid #ced4da;
             padding: 10px 15px;
             border-radius: 6px;
@@ -140,8 +140,8 @@
             <h3 class="card-title fw-bolder fs-3 mb-0">
                 {{ $action == 'edit' ? 'Chỉnh Sửa Nhóm Vật Tư' : 'Thêm Nhóm Vật Tư' }}
             </h3>
-            <a href="{{ $backToListUrl }}" class="btn btn-sm btn-secondary">
-                <i class="fa fa-arrow-left me-1"></i> Trở Về Danh Sách
+            <a href="{{ $backToListUrl }}" style="font-size: 10px;" class="btn btn-sm btn-dark rounded-pill">
+                <i class="fa fa-arrow-left me-1"></i> Trở Về
             </a>
         </div>
         <div class="card-body p-5">
@@ -154,7 +154,7 @@
                 <!-- Form tạo hoặc chỉnh sửa nhóm vật tư -->
                 <div class="form-group">
                     <label class="required fs-5 fw-bold mb-2">Mã Nhóm Vật Tư</label>
-                    <input type="text" class="form-control form-control-solid border-success"
+                    <input type="text" class="form-control form-control-sm rounded-pill border-success"
                         value="{{ isset($materialGroup) ? $materialGroup->code : old('code') }}" name="code"
                         placeholder="Mã ET ví dụ: ET001" {{ isset($materialGroup) ? 'disabled' : '' }} />
                     {{-- Không cho sửa code khi chỉnh sửa --}}
@@ -162,13 +162,14 @@
 
                 <div class="form-group">
                     <label class="required fs-5 fw-bold mb-2">Tên Nhóm Vật Tư</label>
-                    <input type="text" class="form-control form-control-solid border-success"
+                    <input type="text" class="form-control form-control-sm rounded-pill border-success"
                         value="{{ isset($materialGroup) ? $materialGroup->name : old('name') }}" name="name" />
                 </div>
 
                 <div class="form-group">
                     <label class="fs-5 fw-bold mb-2">Mô Tả</label>
-                    <textarea name="description" class="form-control form-control-solid border-success" cols="30" rows="5">{{ isset($materialGroup) ? $materialGroup->description : old('description') }}</textarea>
+                    <textarea name="description" class="form-control form-control-sm rounded-3 border-success" cols="30"
+                        rows="5">{{ isset($materialGroup) ? $materialGroup->description : old('description') }}</textarea>
                 </div>
 
 
@@ -204,8 +205,12 @@
                 </div>
 
 
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-success w-100 py-3">{{ $button_text }}</button>
+                <div class="d-grid gap-2 justify-content-end">
+                    <button type="submit" class="btn btn-success btn-sm py-2 rounded-pill"
+                        style="width: 120px; font-size: 12px; background-color: rgba(46, 204, 113, 0.8);">
+                        <!-- Thay đổi màu và độ trong suốt tại đây -->
+                        {{ $button_text }}
+                    </button>
                 </div>
             </form>
         </div>
