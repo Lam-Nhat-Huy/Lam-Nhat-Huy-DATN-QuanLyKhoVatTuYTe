@@ -1,6 +1,74 @@
 @extends('master_layout.layout')
 
 @section('styles')
+    <style>
+        /* Custom dropdown button */
+        .btn-outline-secondary {
+            border-radius: 50%;
+            /* Nút tròn */
+            padding: 8px;
+            /* Tạo khoảng cách thoải mái */
+            background-color: #f1f3f5;
+            /* Màu nền nhạt */
+            transition: background-color 0.3s ease;
+            /* Hiệu ứng khi hover */
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #e9ecef;
+            /* Tăng độ sáng khi hover */
+        }
+
+        /* Dropdown menu customization */
+        .dropdown-menu {
+            border-radius: 8px;
+            /* Bo góc mềm mại */
+            padding: 0;
+            /* Xóa padding mặc định */
+            min-width: 180px;
+            /* Độ rộng menu */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            /* Đổ bóng nhẹ */
+        }
+
+        /* Dropdown item customization */
+        /* Dropdown item customization */
+        .dropdown-item {
+            padding: 12px 20px;
+            /* Khoảng cách thoải mái */
+            display: flex;
+            align-items: center;
+            /* Căn giữa icon và text */
+            transition: background-color 0.2s ease-in-out;
+            /* Hiệu ứng hover nhẹ */
+            font-size: 14px;
+            /* Thay đổi kích thước chữ thành 14px */
+            border-bottom: 1px solid #f1f1f1;
+            /* Đường phân cách nhẹ giữa các mục */
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+            /* Xóa đường kẻ cho mục cuối cùng */
+        }
+
+
+        /* Hover effect on dropdown items */
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            /* Thêm hiệu ứng hover nhẹ */
+        }
+
+        /* Icon spacing and styling */
+        .dropdown-item i {
+            font-size: 1.3rem;
+            /* Điều chỉnh kích thước icon */
+            color: #6c757d;
+            /* Màu icon trung tính */
+            margin-right: 10px;
+            /* Khoảng cách giữa icon và text */
+        }
+    </style>
 @endsection
 
 @section('title')
@@ -216,12 +284,13 @@
                                         {{ $item->created_at->format('d-m-Y') }}
                                     </td>
                                     <td>
-                                        <div class="checkbox-wrapper-6">
-                                            <input class="tgl tgl-light" id="cb1-6" type="checkbox"
-                                                {{ $item->status == 1 ? 'checked' : '' }} disabled />
-                                            <label class="tgl-btn" for="cb1-6"></label>
-                                        </div>
+                                        @if ($item->status == 1)
+                                            <span style="font-size: 10px;" class="badge bg-success">Hiển thị</span>
+                                        @else
+                                            <span style="font-size: 10px;" class="badge bg-danger">Không hiển thị</span>
+                                        @endif
                                     </td>
+
                                     <td class="text-center">
                                         @if ($item->important == 1)
                                             <span class="rounded px-2 py-1 text-white bg-warning text-center"
@@ -233,125 +302,130 @@
                                     </td>
 
                                     <td class="text-center">
-                                        <div class="btn-group">
-                                            <button type="button" data-bs-toggle="dropdown">
-                                                <i class="fa fa-ellipsis-h me-2"></i>
+                                        <div class="btn-group dropstart">
+                                            <button type="button" class="btn btn-light btn-sm dropdown-toggle"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa fa-ellipsis-h"></i>
                                             </button>
-                                            <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
+                                            <ul class="dropdown-menu shadow" aria-labelledby="defaultDropdown"
+                                                style="min-width: 150px;">
                                                 @if ($item->status == 0)
                                                     <li>
-                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#browse_{{ $item->code }}"><i
-                                                                class="fa fa-clipboard-check me-1"></i>Duyệt</a>
+                                                        <a class="dropdown-item text-success" href="#"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#browse_{{ $item->code }}">
+                                                            <i class="fa fa-clipboard-check me-2"></i> Duyệt
+                                                        </a>
                                                     </li>
                                                 @endif
                                                 <li>
-                                                    <a class="dropdown-item"
+                                                    <a class="dropdown-item text-dark"
                                                         href="{{ route('notification.notification_edit', $item->code) }}">
-                                                        <i class="fa fa-edit me-1"></i>Sửa
+                                                        <i class="fa fa-edit me-2"></i> Sửa
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item pointer" data-bs-toggle="modal"
+                                                    <a class="dropdown-item text-dark pointer" data-bs-toggle="modal"
                                                         data-bs-target="#deleteModal_{{ $item->code }}">
-                                                        <i class="fa fa-trash me-1"></i>Xóa
+                                                        <i class="fa fa-trash me-2"></i> Xóa
                                                     </a>
                                                 </li>
                                             </ul>
                                         </div>
+                                    </td>
 
-                                        {{-- Chi Tiết --}}
-                                        <div class="modal fade" id="detail_{{ $item->code }}"
-                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                            aria-labelledby="DetailModal" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h3 class="modal-title" id="DetailModal">Nội Dung Thông Báo
-                                                            #{{ $item->code }}
-                                                        </h3>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
+
+                                    {{-- Chi Tiết --}}
+                                    <div class="modal fade" id="detail_{{ $item->code }}" data-bs-backdrop="static"
+                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="DetailModal"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title" id="DetailModal">Nội Dung Thông Báo
+                                                        #{{ $item->code }}
+                                                    </h3>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <strong>
+                                                        {!! $item->content !!}
+                                                    </strong>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn rounded-pill btn-sm btn-secondary"
+                                                        data-bs-dismiss="modal">Đóng</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal Duyệt Thông Báo -->
+                                    <div class="modal fade" id="browse_{{ $item->code }}" data-bs-backdrop="static"
+                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="checkModalLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content border-0 shadow">
+                                                <div class="modal-header bg-primary">
+                                                    <h5 class="modal-title text-white" id="checkModalLabel">Duyệt
+                                                        Thông Báo</h5>
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ route('notification.index') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="browse_notification"
+                                                        value="{{ $item->code }}">
+                                                    <div class="modal-body text-center pb-0">
+                                                        <p class="text-dark mb-4">Bạn có chắc chắn muốn duyệt thông báo
+                                                            này?
+                                                        </p>
                                                     </div>
-                                                    <div class="modal-body">
-                                                        <strong>
-                                                            {!! $item->content !!}
-                                                        </strong>
-                                                    </div>
-                                                    <div class="modal-footer">
+                                                    <div class="modal-footer justify-content-center border-0">
                                                         <button type="button"
-                                                            class="btn rounded-pill btn-sm btn-secondary"
+                                                            class="btn rounded-pill btn-sm btn-secondary px-4"
                                                             data-bs-dismiss="modal">Đóng</button>
+                                                        <button type="submit"
+                                                            class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Duyệt</button>
                                                     </div>
-                                                </div>
+                                                </form>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <!-- Modal Duyệt Thông Báo -->
-                                        <div class="modal fade" id="browse_{{ $item->code }}"
-                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                            aria-labelledby="checkModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content border-0 shadow">
-                                                    <div class="modal-header bg-primary">
-                                                        <h5 class="modal-title text-white" id="checkModalLabel">Duyệt
-                                                            Thông Báo</h5>
-                                                        <button type="button" class="btn-close btn-close-white"
-                                                            data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <form action="{{ route('notification.index') }}" method="POST">
-                                                        @csrf
-                                                        <input type="hidden" name="browse_notification"
-                                                            value="{{ $item->code }}">
-                                                        <div class="modal-body text-center pb-0">
-                                                            <p class="text-dark mb-4">Bạn có chắc chắn muốn duyệt thông báo
-                                                                này?
-                                                            </p>
-                                                        </div>
-                                                        <div class="modal-footer justify-content-center border-0">
-                                                            <button type="button"
-                                                                class="btn rounded-pill btn-sm btn-secondary px-4"
-                                                                data-bs-dismiss="modal">Đóng</button>
-                                                            <button type="submit"
-                                                                class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Duyệt</button>
-                                                        </div>
-                                                    </form>
+
+                                    {{-- Xóa --}}
+                                    <div class="modal fade" id="deleteModal_{{ $item->code }}"
+                                        data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                        aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content border-0 shadow">
+                                                <div class="modal-header bg-danger">
+                                                    <h5 class="modal-title text-white" id="deleteModalLabel">Xóa Thông
+                                                        Báo
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
                                                 </div>
+                                                <form action="{{ route('notification.index') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="delete_notification"
+                                                        value="{{ $item->code }}">
+                                                    <div class="modal-body pb-0 text-center">
+                                                        <p class="text-danger mb-4">Xóa Thông Báo Này?</p>
+                                                    </div>
+                                                    <div class="modal-footer justify-content-center border-0">
+                                                        <button type="button"
+                                                            class="btn rounded-pill btn-sm btn-secondary px-4"
+                                                            data-bs-dismiss="modal">Đóng</button>
+                                                        <button type="submit"
+                                                            class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
-
-
-                                        {{-- Xóa --}}
-                                        <div class="modal fade" id="deleteModal_{{ $item->code }}"
-                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                            aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content border-0 shadow">
-                                                    <div class="modal-header bg-danger">
-                                                        <h5 class="modal-title text-white" id="deleteModalLabel">Xóa Thông
-                                                            Báo
-                                                        </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <form action="{{ route('notification.index') }}" method="POST">
-                                                        @csrf
-                                                        <input type="hidden" name="delete_notification"
-                                                            value="{{ $item->code }}">
-                                                        <div class="modal-body pb-0 text-center">
-                                                            <p class="text-danger mb-4">Xóa Thông Báo Này?</p>
-                                                        </div>
-                                                        <div class="modal-footer justify-content-center border-0">
-                                                            <button type="button"
-                                                                class="btn rounded-pill btn-sm btn-secondary px-4"
-                                                                data-bs-dismiss="modal">Đóng</button>
-                                                            <button type="submit"
-                                                                class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    </div>
 
                                     </td>
                                 </tr>

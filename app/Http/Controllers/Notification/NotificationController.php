@@ -161,23 +161,16 @@ class NotificationController extends Controller
         $data = $request->validated();
 
         if ($data) {
-
             $data['code'] = 'TB' . $this->generateRandomString(8);
-
             $data['user_code'] = session('user_code');
-
             $data['created_at'] = now();
-
             $data['updated_at'] = null;
-
             $data['important'] = $request->input('important');
+            $data['status'] = $request->has('status') ? 1 : 0; // handle status toggle
 
             if ($request->input('important') == 1) {
-
                 $this->callModel::where('important', 1)
-                    ->update([
-                        'important' => 0
-                    ]);
+                    ->update(['important' => 0]);
             }
 
             $this->callModel::create($data);
@@ -187,6 +180,33 @@ class NotificationController extends Controller
             return redirect()->route('notification.index');
         }
     }
+
+    public function notification_update(UpdateNotificationRequest $request, $code)
+    {
+        $data = $request->validated();
+
+        if ($data) {
+            $data['updated_at'] = now();
+
+            // Set important to 0 if it's not checked
+            $data['important'] = $request->input('important') ?? 0;
+
+            // Set status to 0 if it's not checked
+            $data['status'] = $request->input('status') ?? 0;
+
+            $rs = $this->callModel::where('code', $code)->update($data);
+
+            if ($rs) {
+                toastr()->success('Đã cập nhật thông báo');
+                return redirect()->route('notification.index');
+            }
+
+            toastr()->error('Không thể cập nhật, thử lại sau');
+            return redirect()->route('notification.index');
+        }
+    }
+
+
 
     public function notification_edit($code)
     {
@@ -203,30 +223,6 @@ class NotificationController extends Controller
         return view("{$this->route}.notification_form", compact('title', 'action', 'title_form', 'allNotificationType', 'firstNotification'));
     }
 
-    public function notification_update(UpdateNotificationRequest $request, $code)
-    {
-        $data = $request->validated();
-
-        if ($data) {
-
-            $data['updated_at'] = now();
-
-            $data['important'] = $request->input('important') ?? 0;
-
-            $rs = $this->callModel::where('code', $code)->update($data);
-
-            if ($rs) {
-
-                toastr()->success('Đã cập nhật thông báo');
-
-                return redirect()->route('notification.index');
-            }
-
-            toastr()->error('Không thể cập nhật, thử lại sau');
-
-            return redirect()->route('notification.index');
-        }
-    }
 
     public function create_notification_type(Request $request)
     {

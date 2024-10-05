@@ -129,14 +129,27 @@
 
                     </div>
 
-                    <div class="form-group">
-                        <label class="fs-5 fw-bold mb-2">Thông Báo Quan Trọng</label>
-                        <div class="checkbox-wrapper-6">
-                            <input class="tgl tgl-light" id="cb1-6" type="checkbox" value="1" name="important"
-                                {{ (!empty($firstNotification->important) && $firstNotification->important == 1) || old('important') == 1 ? 'checked' : '' }} />
-                            <label class="tgl-btn" for="cb1-6"></label>
+                    <div class="action d-flex">
+                        <div class="form-group me-20">
+                            <label class="fs-5 fw-bold mb-2">Thông Báo Quan Trọng</label>
+                            <div class="checkbox-wrapper-6">
+                                <input class="tgl tgl-light" id="cb1-6" type="checkbox" value="1" name="important"
+                                    {{ (isset($firstNotification) && $firstNotification->important == 1) || old('important') == 1 ? 'checked' : '' }} />
+                                <label class="tgl-btn" for="cb1-6"></label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="fs-5 fw-bold mb-2">Trạng thái</label>
+                            <div class="checkbox-wrapper-6">
+                                <input class="tgl tgl-light" id="cb1-7" type="checkbox" value="1" name="status"
+                                    {{ (isset($firstNotification) && $firstNotification->status == 1) || old('status') == 1 ? 'checked' : '' }} />
+                                <label class="tgl-btn" for="cb1-7"></label>
+                            </div>
                         </div>
                     </div>
+
+
 
                 </div>
             </div>
@@ -194,7 +207,8 @@
                                             </td>
                                             <td class="text-center">
                                                 <button type="button" class="btn rounded-pill btn-danger btn-sm"
-                                                    data-bs-toggle="modal" data-bs-target="#delete_modal_notification_type"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#delete_modal_notification_type"
                                                     onclick="setDeleteForm('{{ route('notification.delete_notification_type', $item->id) }}')">
                                                     <i class="fa fa-trash p-0"></i>
                                                 </button>
