@@ -103,6 +103,9 @@ return [
                 'equipments.update_equipments',
                 'equipments.equipments_group_trash',
                 'equipments.update_equipments_group',
+                'units.index',
+                'units.create',
+                'units.edit',
             ],
             'subModule' => [
                 [

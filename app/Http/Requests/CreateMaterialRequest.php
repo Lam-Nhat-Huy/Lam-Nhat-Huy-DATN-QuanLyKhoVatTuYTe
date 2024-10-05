@@ -30,7 +30,6 @@ class CreateMaterialRequest extends FormRequest
             'expiry_date' => 'nullable|date',
             'supplier_code' => 'required|string|max:255',
             'country' => 'required|string|max:255',
-            'description' => 'required|string',
         ];
     }
 
@@ -70,9 +69,6 @@ class CreateMaterialRequest extends FormRequest
             'country.required' => 'Nước sản xuất là bắt buộc.',
             'country.string' => 'Nước sản xuất phải là chuỗi ký tự.',
             'country.max' => 'Nước sản xuất không được vượt quá 255 ký tự.',
-
-            'description.required' => 'Mô tả là bắt buộc.',
-            'description.string' => 'Mô tả phải là chuỗi ký tự.',
         ];
     }
 }
