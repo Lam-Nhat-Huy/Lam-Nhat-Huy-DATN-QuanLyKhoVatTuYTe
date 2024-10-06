@@ -1,6 +1,6 @@
-let materialData = [];
+let equipmentData = [];
 
-// Kiểm tra trùng số lô trước khi thêm vào danh sách vật tư
+// Kiểm tra trùng số lô trước khi thêm vào danh sách thiết bị
 async function checkBatchNumber(batch_number, equipment_code) {
     try {
         const response = await fetch(`/system/warehouse/check-batch-number/${batch_number}/${equipment_code}`);
@@ -12,7 +12,7 @@ async function checkBatchNumber(batch_number, equipment_code) {
     }
 }
 
-async function addMaterial() {
+async function addEquipment() {
     const supplier_code = document.getElementById('supplier_code').value;
     const note = document.getElementById('note').value;
     const equipment_code = document.getElementById('equipment_code').value;
@@ -41,7 +41,7 @@ async function addMaterial() {
         errors.push('Vui lòng nhập số hóa đơn.');
     }
     if (!equipment_code) {
-        errors.push('Vui lòng chọn tên vật tư.');
+        errors.push('Vui lòng chọn tên thiết bị.');
     }
     if (!batch_number) {
         errors.push('Vui lòng nhập số lô.');
@@ -68,22 +68,22 @@ async function addMaterial() {
         errors.push('Vui lòng nhập VAT hợp lệ (0-100%).');
     }
 
-    // Kiểm tra trùng mã vật tư và số lô trong danh sách hiện tại
-    const isDuplicateInList = materialData.some(material => material.batch_number === batch_number && material.equipment_code === equipment_code);
+    // Kiểm tra trùng mã thiết bị và số lô trong danh sách hiện tại
+    const isDuplicateInList = equipmentData.some(equipment => equipment.batch_number === batch_number && equipment.equipment_code === equipment_code);
     if (isDuplicateInList) {
-        errors.push('Vật tư ' + equipment_code + ' với số lô ' + batch_number + ' đã được thêm vào danh sách.');
+        errors.push('Thiết bị ' + equipment_code + ' với số lô ' + batch_number + ' đã được thêm vào danh sách.');
     }
 
-    // Kiểm tra trùng số lô nhưng khác mã vật tư trong danh sách hiện tại
-    const isBatchDuplicateForDifferentMaterial = materialData.some(material => material.batch_number === batch_number && material.equipment_code !== equipment_code);
-    if (isBatchDuplicateForDifferentMaterial) {
-        errors.push('Số lô ' + batch_number + ' đã được chỉ định cho vật tư khác.');
+    // Kiểm tra trùng số lô nhưng khác mã thiết bị trong danh sách hiện tại
+    const isBatchDuplicateForDifferentEquipment = equipmentData.some(equipment => equipment.batch_number === batch_number && equipment.equipment_code !== equipment_code);
+    if (isBatchDuplicateForDifferentEquipment) {
+        errors.push('Số lô ' + batch_number + ' đã được chỉ định cho thiết bị khác.');
     }
 
     // Kiểm tra trùng số lô qua AJAX
     const isDuplicateBatch = await checkBatchNumber(batch_number, equipment_code);
     if (isDuplicateBatch) {
-        errors.push('Số lô này đã tồn tại cho vật tư ' + equipment_code);
+        errors.push('Số lô này đã tồn tại cho thiết bị ' + equipment_code);
     }
 
     if (errors.length > 0) {
@@ -107,7 +107,7 @@ async function addMaterial() {
 
     const total_price = price * quantity * (1 - discount / 100) * (1 + VAT / 100);
 
-    const material = {
+    const equipment = {
         supplier_code,
         note,
         receipt_no,
@@ -123,12 +123,12 @@ async function addMaterial() {
         price,
         total_price: total_price
     };
-    materialData.push(material);
+    equipmentData.push(equipment);
 
-    const tableBody = document.getElementById('materialList');
+    const tableBody = document.getElementById('equipmentList');
     if (tableBody) {
         const row = document.createElement('tr');
-        const index = materialData.length - 1;
+        const index = equipmentData.length - 1;
 
         row.innerHTML = `
             <td style="font-size: 11px;" class="text-center">${equipment_code}</td>
@@ -141,7 +141,7 @@ async function addMaterial() {
             <td style="font-size: 11px;" class="text-center">${VAT}</td>
             <td style="font-size: 11px;" class="text-center">${total_price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }).replace(',00', '')}</td>
             <td class="text-center">
-                <button onclick="removeMaterial(${index}, this)">
+                <button onclick="removeEquipment(${index}, this)">
                     <i class="fas fa-trash-alt"></i>
                 </button>
             </td>
@@ -149,7 +149,7 @@ async function addMaterial() {
         tableBody.appendChild(row);
     }
 
-    if (materialData.length > 0) {
+    if (equipmentData.length > 0) {
         noDataAlert.style.display = 'none';
     } else {
         noDataAlert.style.display = 'table-row';
@@ -161,12 +161,12 @@ async function addMaterial() {
 
 
 
-function removeMaterial(index, element) {
-    materialData.splice(index, 1);
+function removeEquipment(index, element) {
+    equipmentData.splice(index, 1);
     const row = element.closest('tr');
     row.remove();
 
-    if (materialData.length === 0) {
+    if (equipmentData.length === 0) {
         document.getElementById('noDataAlert').style.display = 'table-row';
     }
 
@@ -178,10 +178,10 @@ function calculateTotals() {
     let totalVAT = 0;
     let totalAmount = 0;
 
-    materialData.forEach(material => {
-        const itemDiscount = material.price * material.quantity * material.discount / 100;
-        const itemVAT = (material.price * material.quantity - itemDiscount) * material.VAT / 100;
-        const itemTotal = parseFloat(material.total_price);
+    equipmentData.forEach(equipment => {
+        const itemDiscount = equipment.price * equipment.quantity * equipment.discount / 100;
+        const itemVAT = (equipment.price * equipment.quantity - itemDiscount) * equipment.VAT / 100;
+        const itemTotal = parseFloat(equipment.total_price);
 
         totalDiscount += itemDiscount;
         totalVAT += itemVAT;
@@ -194,15 +194,15 @@ function calculateTotals() {
 }
 
 
-function submitMaterials() {
-    document.getElementById('materialData').value = JSON.stringify(materialData);
+function submitEquipments() {
+    document.getElementById('equipmentData').value = JSON.stringify(equipmentData);
 }
 
 document.getElementById('equipment_code').addEventListener('change', function() {
     const equipmentCode = this.value;
 
     if (equipmentCode) {
-        // Gửi yêu cầu AJAX để lấy dữ liệu của vật tư
+        // Gửi yêu cầu AJAX để lấy dữ liệu của thiết bị
         fetch(`/system/system/warehouse/get_equipment/${equipmentCode}`)
             .then(response => response.json())
             .then(data => {
@@ -213,7 +213,7 @@ document.getElementById('equipment_code').addEventListener('change', function() 
                 document.getElementById('expiry_date').value = data.expiry_date || '';
             })
             .catch(error => {
-                console.error('Error fetching material data:', error);
+                console.error('Error fetching equipment data:', error);
             });
     }
 });
@@ -231,7 +231,7 @@ function formatCurrency(input) {
 
 
 function filterProducts() {
-    var input = document.getElementById('equipment_name'); // Lấy tên vật tư để tìm kiếm
+    var input = document.getElementById('equipment_name'); // Lấy tên thiết bị để tìm kiếm
     var filter = input.value.toUpperCase();
     var dropdown = document.getElementById('productDropdown');
 
@@ -248,7 +248,7 @@ function filterProducts() {
                 <img src="https://png.pngtree.com/template/20190316/ourlarge/pngtree-medical-health-logo-image_79595.jpg" alt="Product Image" class="me-2" style="width: 40px; height: 40px;">
                 <div>
                     <div class="fw-bold">${product.name}</div>
-                    <small>Mã vật tư: ${product.code}</small>
+                    <small>Mã thiết bị: ${product.code}</small>
                 </div>
             </a>
         `;
@@ -257,8 +257,8 @@ function filterProducts() {
 }
 
 function selectProduct(productCode, productName) {
-    document.getElementById('equipment_name').value = productName; // Hiển thị tên vật tư
-    document.getElementById('equipment_code').value = productCode; // Lưu mã vật tư trong input ẩn
+    document.getElementById('equipment_name').value = productName; // Hiển thị tên thiết bị
+    document.getElementById('equipment_code').value = productCode; // Lưu mã thiết bị trong input ẩn
     document.getElementById('productDropdown').style.display = 'none';
 }
 

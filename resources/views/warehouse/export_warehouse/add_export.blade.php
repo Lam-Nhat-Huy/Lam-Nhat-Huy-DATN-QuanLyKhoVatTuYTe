@@ -12,7 +12,7 @@
 @endsection
 
 @section('content')
-    <div class="card mb-5 pb-5 mb-xl-8">
+    <div class="card mb-5 pb-5 mb-xl-8 shadow">
         {{-- Tiêu đề --}}
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <!-- Form thêm vật tư -->
+        <!-- Form thêm thiết bị -->
         <form action="{{ route('warehouse.store_export') }}" method="POST">
             @csrf
             <div class="container mt-4">
@@ -35,10 +35,10 @@
                         <div class="mt-3">
                             <div class="row mb-3">
                                 <div class="col-12 mb-2">
-                                    <label for="material_code" class="required form-label mb-2">Tên vật tư</label>
-                                    <select class="form-select setupSelect2 form-select-sm" id="material_code"
-                                        name="material_code" style="width: 100%;">
-                                        <option value="" selected disabled>Chọn vật tư</option>
+                                    <label for="equipment_code" class="required form-label mb-2">Tên thiết bị</label>
+                                    <select class="form-select setupSelect2 form-select-sm" id="equipment_code"
+                                        name="equipment_code" style="width: 100%;">
+                                        <option value="" selected disabled>Chọn thiết bị</option>
                                         @foreach ($equipments as $equipment)
                                             <option value="{{ $equipment['code'] }}">{{ $equipment['name'] }}</option>
                                         @endforeach
@@ -49,7 +49,7 @@
                                     <h6 class="mb-3">Danh sách lô:</h6>
                                     <div id="batch_info" class="list-group">
                                         <div class="alert alert-danger" role="alert">
-                                            Bạn chưa chọn vật tư.
+                                            Bạn chưa chọn thiết bị.
                                         </div>
                                     </div>
 
@@ -65,9 +65,9 @@
                         </div>
 
 
-                        <!-- Bảng danh sách vật tư đã thêm -->
+                        <!-- Bảng danh sách thiết bị đã thêm -->
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="material-list">
+                            <table class="table table-bordered" id="equipment-list">
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Tên Thiết Bị</th>
@@ -76,12 +76,12 @@
                                         <th>Hành Động</th>
                                     </tr>
                                 </thead>
-                                <tbody id="material-list-body">
-                                    <tr id="no-material-alert">
+                                <tbody id="equipment-list-body">
+                                    <tr id="no-equipment-alert">
                                         <td colspan="4" class="text-center pe-0 px-0"
                                             style="box-shadow: none !important;">
                                             <div class="alert alert-warning" role="alert">
-                                                Chưa có vật tư nào được thêm vào danh sách.
+                                                Chưa có thiết bị nào được thêm vào danh sách.
                                             </div>
                                         </td>
                                     </tr>
@@ -127,7 +127,7 @@
 
                             <hr class="my-4">
 
-                            <input type="hidden" name="material_list" id="material_list_input">
+                            <input type="hidden" name="equipment_list" id="equipment_list_input">
 
                             <button type="submit" class="btn btn-success btn-sm rounded-pill w-100">Xuất Kho</button>
                         </div>
@@ -143,8 +143,8 @@
     <script>
         // Khởi tạo Select2 sau khi DOM đã tải xong
         $(document).ready(function() {
-            $('#material_code').select2({
-                placeholder: "Chọn vật tư",
+            $('#equipment_code').select2({
+                placeholder: "Chọn thiết bị",
                 allowClear: true
             });
 
@@ -158,15 +158,15 @@
         // Dữ liệu từ server cho tồn kho
         const inventories = @json($inventories);
 
-        let materialList = [];
+        let equipmentList = [];
 
-        // Khi chọn vật tư trong Select2, tải thông tin lô
-        $('#material_code').on('change', function() {
-            const selectedMaterial = $(this).val();
+        // Khi chọn thiết bị trong Select2, tải thông tin lô
+        $('#equipment_code').on('change', function() {
+            const selectedEquipment = $(this).val();
             const batchDetailsContainer = $('#batch_info');
             batchDetailsContainer.html('');
 
-            const filteredInventories = inventories.filter(inv => inv.material_code === selectedMaterial);
+            const filteredInventories = inventories.filter(inv => inv.equipment_code === selectedEquipment);
 
             if (filteredInventories.length > 0) {
                 const today = new Date();
@@ -212,12 +212,12 @@
                         icon =
                             `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThr7qrIazsvZwJuw-uZCtLzIjaAyVW_ZrlEQ&s"
                             alt="AI Icon" style="width: 20px; height: 20px; display: inline-block; margin-left: 10px;"
-                            title="Gợi ý: Nên xuất vật tư này trước khi hết hạn">`;
+                            title="Gợi ý: Nên xuất thiết bị này trước khi hết hạn">`;
                     } else if (daysToExpiry <= 0) {
                         icon =
                             `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThr7qrIazsvZwJuw-uZCtLzIjaAyVW_ZrlEQ&s"
                             alt="AI Icon" style="width: 20px; height: 20px; display: inline-block; margin-left: 10px;"
-                            title="Vật tư này đã hết hạn">`;
+                            title="Thiết bị này đã hết hạn">`;
                     }
 
                     const batchElement = document.createElement('div');
@@ -240,7 +240,7 @@
         });
 
         $('#add-to-list').on('click', function() {
-            const selectedMaterial = $('#material_code').val();
+            const selectedEquipment = $('#equipment_code').val();
             const departmentCode = $('#department_code').val();
             const createdBy = $('#created_by').val();
             const exportDate = $('#export_at').val();
@@ -253,9 +253,9 @@
                     quantity: parseInt(input.value)
                 }));
 
-            if (selectedMaterial && batches.length > 0) {
-                materialList.push({
-                    material_code: selectedMaterial,
+            if (selectedEquipment && batches.length > 0) {
+                equipmentList.push({
+                    equipment_code: selectedEquipment,
                     batches,
                     department_code: departmentCode,
                     created_by: createdBy,
@@ -263,36 +263,36 @@
                     note
                 });
 
-                updateMaterialListTable();
+                updateEquipmentListTable();
                 resetForm();
             }
         });
 
-        function updateMaterialListTable() {
-            const tbody = $('#material-list-body');
+        function updateEquipmentListTable() {
+            const tbody = $('#equipment-list-body');
             tbody.html('');
 
-            if (materialList.length === 0) {
+            if (equipmentList.length === 0) {
                 tbody.html(`
-                <tr id="no-material-alert">
+                <tr id="no-equipment-alert">
                     <td colspan="4" class="text-center pe-0 px-0">
                         <div class="alert alert-warning" role="alert">
-                            Chưa có vật tư nào được thêm vào danh sách. Vui lòng chọn vật tư
+                            Chưa có thiết bị nào được thêm vào danh sách. Vui lòng chọn thiết bị
                         </div>
                     </td>
                 </tr>
             `);
             } else {
-                materialList.forEach((item, materialIndex) => {
+                equipmentList.forEach((item, equipmentIndex) => {
                     item.batches.forEach(batch => {
                         const row = $('<tr>');
                         row.html(`
-                            <td class="text-center">${item.material_code}</td>
+                            <td class="text-center">${item.equipment_code}</td>
                             <td class="text-center">${batch.batch_code}</td>
                             <td class="text-center">${batch.quantity}</td>
                             <td class="text-center">
                                 <button type="button"
-                                    onclick="removeFromList(${materialIndex}, '${batch.batch_code}')"><i class='fa fa-trash'></i></button>
+                                    onclick="removeFromList(${equipmentIndex}, '${batch.batch_code}')"><i class='fa fa-trash'></i></button>
                             </td>
                         `);
                         tbody.append(row);
@@ -300,20 +300,20 @@
                 });
             }
 
-            $('#material_list_input').val(JSON.stringify(materialList));
+            $('#equipment_list_input').val(JSON.stringify(equipmentList));
         }
 
-        function removeFromList(materialIndex, batchCode) {
-            let material = materialList[materialIndex];
-            material.batches = material.batches.filter(batch => batch.batch_code !== batchCode);
-            if (material.batches.length === 0) {
-                materialList.splice(materialIndex, 1);
+        function removeFromList(equipmentIndex, batchCode) {
+            let equipment = equipmentList[equipmentIndex];
+            equipment.batches = equipment.batches.filter(batch => batch.batch_code !== batchCode);
+            if (equipment.batches.length === 0) {
+                equipmentList.splice(equipmentIndex, 1);
             }
-            updateMaterialListTable();
+            updateEquipmentListTable();
         }
 
         function resetForm() {
-            $('#material_code').val('').trigger('change');
+            $('#equipment_code').val('').trigger('change');
             $('#batch_info').html('');
         }
     </script>

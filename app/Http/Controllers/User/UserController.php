@@ -299,6 +299,8 @@ class UserController extends Controller
 
             $nameUser = $this->callModel::where('code', session('user_code_request'))->first();
 
+            session()->put('avatar', $nameUser->avatar);
+
             $nameUser = $nameUser->last_name . ' ' . $nameUser->first_name;
 
             toastr()->success("Cập nhật người dùng " . $nameUser . " thành công");

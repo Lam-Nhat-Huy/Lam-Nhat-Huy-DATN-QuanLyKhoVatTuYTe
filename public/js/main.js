@@ -14,7 +14,8 @@ loadAnimationButtons.forEach(button => {
 
         submitButton.disabled = true;
 
-        // Thực hiện gửi form
-        form.submit();
+        setTimeout(() => {
+            form.submit();
+        }, 1200);
     });
 });

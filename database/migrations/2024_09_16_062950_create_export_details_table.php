@@ -16,6 +16,8 @@ return new class extends Migration
             $table->char('batch_number', 20)->nullable();
             $table->decimal('unit_price', 8, 2)->nullable();
             $table->integer('required_quantity');
+            $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('export_code')->references('code')->on('exports')->onDelete('set null');
             $table->foreign('equipment_code')->references('code')->on('equipments')->onDelete('set null');

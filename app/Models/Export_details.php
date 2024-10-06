@@ -8,18 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Export_details extends Model
 {
-    protected $primaryKey = 'code';
-
-    public $incrementing = false;
-
-    protected $keyType = 'string';
-
     use HasFactory;
 
     use SoftDeletes;
 
     protected $fillable = [
-        'code',
+        'id',
         'export_code',
         'equipment_code',
         'batch_number',

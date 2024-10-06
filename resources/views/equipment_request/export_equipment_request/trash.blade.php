@@ -101,7 +101,7 @@
 @endsection
 
 @section('content')
-    <div class="card mb-5 pb-5 mb-xl-8">
+    <div class="card mb-5 pb-5 mb-xl-8 shadow">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">Thùng Rác</span>
@@ -183,7 +183,7 @@
                                                     <table class="table table-striped table-sm table-hover">
                                                         <thead class="fw-bolder bg-danger">
                                                             <tr>
-                                                                <th class="ps-3">Tên vật tư</th>
+                                                                <th class="ps-3">Tên thiết bị</th>
                                                                 <th>Đơn Vị Tính</th>
                                                                 <th class="pe-3">Số lượng</th>
                                                             </tr>

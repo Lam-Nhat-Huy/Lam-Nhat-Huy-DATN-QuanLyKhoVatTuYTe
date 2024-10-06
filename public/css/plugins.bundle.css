@@ -1899,23 +1899,23 @@ span.flatpickr-weekday {
     color: #cc4b37
 }
 
-.fv-plugins-materialize .fv-plugins-icon {
+.fv-plugins-equipmentize .fv-plugins-icon {
     height: 42px;
     line-height: 42px;
     width: 42px
 }
 
-.fv-plugins-materialize .fv-plugins-icon-check {
+.fv-plugins-equipmentize .fv-plugins-icon-check {
     top: -10px
 }
 
-.fv-plugins-materialize .fv-invalid-row .fv-plugins-icon,
-.fv-plugins-materialize .fv-invalid-row .helper-text {
+.fv-plugins-equipmentize .fv-invalid-row .fv-plugins-icon,
+.fv-plugins-equipmentize .fv-invalid-row .helper-text {
     color: #f44336
 }
 
-.fv-plugins-materialize .fv-valid-row .fv-plugins-icon,
-.fv-plugins-materialize .fv-valid-row .helper-text {
+.fv-plugins-equipmentize .fv-valid-row .fv-plugins-icon,
+.fv-plugins-equipmentize .fv-valid-row .helper-text {
     color: #4caf50
 }
 

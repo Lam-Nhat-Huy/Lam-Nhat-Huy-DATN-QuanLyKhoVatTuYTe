@@ -402,11 +402,11 @@
 
             // Low Stock Alerts
             const lowAlerts = [{
-                    text: 'Vật tư A đã đạt ngưỡng thấp',
+                    text: 'Thiết bị A đã đạt ngưỡng thấp',
                     quantity: 5
                 },
                 {
-                    text: 'Vật tư B sắp hết hàng',
+                    text: 'Thiết bị B sắp hết hàng',
                     quantity: 2
                 }
             ];
@@ -421,11 +421,11 @@
 
             // High Stock Alerts
             const highAlerts = [{
-                    text: 'Vật tư C vượt mức tồn kho tối đa',
+                    text: 'Thiết bị C vượt mức tồn kho tối đa',
                     quantity: 100
                 },
                 {
-                    text: 'Vật tư D tồn kho cao bất thường',
+                    text: 'Thiết bị D tồn kho cao bất thường',
                     quantity: 150
                 }
             ];

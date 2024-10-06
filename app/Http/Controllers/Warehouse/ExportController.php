@@ -44,19 +44,19 @@ class ExportController extends Controller
 
     // public function store_export(Request $request)
     // {
-    //     // Decode the list of materials and batches
-    //     $materialList = json_decode($request->input('material_list'), true);
+    //     // Decode the list of equipments and batches
+    //     $equipmentList = json_decode($request->input('equipment_list'), true);
 
-    //     foreach ($materialList as $material) {
-    //         $material_code = $material['material_code'];
-    //         $department_code = $material['department_code'];
-    //         $created_by = $material['created_by'];
-    //         $batches = $material['batches'];
+    //     foreach ($equipmentList as $equipment) {
+    //         $equipment_code = $equipment['equipment_code'];
+    //         $department_code = $equipment['department_code'];
+    //         $created_by = $equipment['created_by'];
+    //         $batches = $equipment['batches'];
 
-    //         // Check if material exists
-    //         $materialData = collect($this->materials)->firstWhere('code', $material_code);
-    //         if (!$materialData) {
-    //             return redirect()->route('warehouse.create_export')->with('error', 'Vật tư không tồn tại.');
+    //         // Check if equipment exists
+    //         $equipmentData = collect($this->equipments)->firstWhere('code', $equipment_code);
+    //         if (!$equipmentData) {
+    //             return redirect()->route('warehouse.create_export')->with('error', 'Thiết bị không tồn tại.');
     //         }
 
     //         // Check stock and process export
@@ -75,10 +75,10 @@ class ExportController extends Controller
     //         $export = [
     //             'code' => $export_code,
     //             'department_code' => $department_code,
-    //             'note' => $material['note'],
+    //             'note' => $equipment['note'],
     //             'price' => 0,
     //             'status' => 1,
-    //             'export_at_date' => $material['export_at'],
+    //             'export_at_date' => $equipment['export_at'],
     //             'created_by' => $created_by,
     //         ];
     //         $this->exports[] = $export;
@@ -98,7 +98,7 @@ class ExportController extends Controller
     //                 'code' => $export_detail_code,
     //                 'export_code' => $export_code,
     //                 'batch_code' => $batch_code,
-    //                 'material_code' => $material_code,
+    //                 'equipment_code' => $equipment_code,
     //                 'quantity_int' => $quantity,
     //                 'created_by' => $created_by,
     //             ];

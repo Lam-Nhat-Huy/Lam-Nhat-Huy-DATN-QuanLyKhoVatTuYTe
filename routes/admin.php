@@ -14,14 +14,13 @@ Route::prefix('system')->group(function () {
         'admin/supplier.php',
         'admin/profile.php',
         'admin/equipments.php',
-        'admin/material_request.php',
+        'admin/equipment_request.php',
         'admin/notification.php',
         'admin/user.php',
         'admin/inventory.php',
         'admin/import.php',
         'admin/export.php',
         'admin/unit.php',
-
     ];
 
     foreach ($routeFiles as $routeFile) {

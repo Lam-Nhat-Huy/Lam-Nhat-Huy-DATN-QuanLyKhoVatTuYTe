@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    <div class="card mb-5 pb-5 mb-xl-8">
+    <div class="card mb-5 pb-5 mb-xl-8 shadow">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Báo Cáo</span>
@@ -281,7 +281,7 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-success px-4 load_animation">
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4 load_animation">
                                 Xóa</button>
                         </div>
                     </div>
@@ -437,22 +437,6 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             toggleDeleteAction();
-        });
-
-        document.getElementById('form-1').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-2').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-3').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
-
-        document.getElementById('form-4').addEventListener('submit', function(event) {
-            submitAnimation(event);
         });
     </script>
 @endsection

@@ -42,7 +42,8 @@
                             Dữ Liệu Mẫu
                         </span>
                     </button>
-                    <a href="{{ route('user.index') }}?{{ request()->getQueryString() }}" class="btn rounded-pill btn-sm btn-dark">
+                    <a href="{{ route('user.index') }}?{{ request()->getQueryString() }}"
+                        class="btn rounded-pill btn-sm btn-dark">
                         <span class="align-items-center d-flex">
                             <i class="fa fa-arrow-left me-1"></i>
                             Trở Lại
@@ -60,7 +61,8 @@
                             <div class="mb-5">
                                 <img id="preview-avatar" class="border border-dark rounded-circle"
                                     src="{{ !empty($firstUser->avatar) ? asset('storage/' . $firstUser->avatar) : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png' }}"
-                                    style="width: 155px !important; height: 155px !important;" alt="image">
+                                    style="width: 155px !important; height: 155px !important;"
+                                    alt="image">
                             </div>
 
                             <div class="fv-row mb-5 text-center">
@@ -68,8 +70,8 @@
                                 <label for="avatar-input" class="pointer"><i class="fa fa-upload"></i> Tải Ảnh Lên</label>
 
                                 <input type="file"
-                                    class="form-control form-control-sm rounded-pill border border-success"
-                                    name="avatar" accept="image/*" id="avatar-input" style="display: none;">
+                                    class="form-control form-control-sm rounded-pill border border-success" name="avatar"
+                                    accept="image/*" id="avatar-input" style="display: none;">
 
                                 @error('avatar')
                                     <div class="message_error">{{ $message }}</div>
@@ -168,8 +170,8 @@
                                 <div class="col-12 fv-row mb-5">
                                     <label class="{{ $required }} fs-5 fw-bold mb-2">Địa Chỉ</label>
 
-                                    <textarea type="text" class="form-control form-control-sm border border-success"
-                                        placeholder="Địa Chỉ.." name="address" rows="5">{{ !empty($firstUser->address) ? $firstUser->address : old('address') }}</textarea>
+                                    <textarea type="text" class="form-control form-control-sm border border-success" placeholder="Địa Chỉ.."
+                                        name="address" rows="5">{{ !empty($firstUser->address) ? $firstUser->address : old('address') }}</textarea>
                                     @error('address')
                                         <div class="message_error">{{ $message }}</div>
                                     @enderror

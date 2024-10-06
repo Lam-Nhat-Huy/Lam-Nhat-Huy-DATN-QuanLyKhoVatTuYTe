@@ -115,13 +115,13 @@
         <div class="card-body py-1">
             <form action="" method="GET" class="row align-items-center d-flex justify-content-between">
                 <div class="col-4 pe-8">
-                    <select name="material_id"
+                    <select name="equipment_id"
                         class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success setupSelect2">
-                        <option value="">Chọn vật tư</option>
-                        <option value="1" {{ request()->material_id == 1 ? 'selected' : '' }}>Vật tư A</option>
-                        <option value="2" {{ request()->material_id == 2 ? 'selected' : '' }}>Vật tư B</option>
-                        <option value="3" {{ request()->material_id == 3 ? 'selected' : '' }}>Vật tư C</option>
-                        <option value="4" {{ request()->material_id == 4 ? 'selected' : '' }}>Vật tư D</option>
+                        <option value="">Chọn thiết bị</option>
+                        <option value="1" {{ request()->equipment_id == 1 ? 'selected' : '' }}>Thiết bị A</option>
+                        <option value="2" {{ request()->equipment_id == 2 ? 'selected' : '' }}>Thiết bị B</option>
+                        <option value="3" {{ request()->equipment_id == 3 ? 'selected' : '' }}>Thiết bị C</option>
+                        <option value="4" {{ request()->equipment_id == 4 ? 'selected' : '' }}>Thiết bị D</option>
                     </select>
                 </div>
 
@@ -190,7 +190,7 @@
                                             <h5>Thông tin bổ sung</h5>
                                             <p><strong>Nhà cung cấp:</strong> Công ty ABC</p>
                                             <p><strong>Địa chỉ kho:</strong> 123 Đường XYZ</p>
-                                            <p><strong>Ghi chú:</strong> Ghi chú về vật tư.</p>
+                                            <p><strong>Ghi chú:</strong> Ghi chú về thiết bị.</p>
                                         </div>
                                     </div>
                                 </td>

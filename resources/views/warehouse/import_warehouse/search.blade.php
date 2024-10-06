@@ -154,8 +154,8 @@
                                 <table class="table table-striped table-sm table-hover">
                                     <thead class="fw-bolder bg-danger">
                                         <tr>
-                                            <th class="ps-3">Mã vật tư</th>
-                                            <th>Tên vật tư</th>
+                                            <th class="ps-3">Mã thiết bị</th>
+                                            <th>Tên thiết bị</th>
                                             <th>Số lượng</th>
                                             <th>Giá nhập</th>
                                             <th>Số lô</th>

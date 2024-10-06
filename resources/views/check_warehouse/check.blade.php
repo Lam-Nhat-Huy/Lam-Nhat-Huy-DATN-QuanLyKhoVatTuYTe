@@ -26,7 +26,7 @@
 @endsection
 
 @section('content')
-    <div class="card mb-5 pb-5 mb-xl-8">
+    <div class="card mb-5 pb-5 mb-xl-8 shadow">
 
         @include('check_warehouse.filter')
 
@@ -173,8 +173,8 @@
                                                         <table class="table table-striped table-sm table-hover">
                                                             <thead style="background-color: #FFA500;">
                                                                 <tr class="text-center">
-                                                                    <th class="ps-3">Mã vật tư</th>
-                                                                    <th>Tên vật tư</th>
+                                                                    <th class="ps-3">Mã thiết bị</th>
+                                                                    <th>Tên thiết bị</th>
                                                                     <th>Tồn kho</th>
                                                                     <th>Số lượng thực tế</th>
                                                                     <th>Số lượng lệch</th>

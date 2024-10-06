@@ -120,7 +120,7 @@
 @endsection
 
 @section('content')
-    <div class="card mb-5 pb-5 mb-xl-8">
+    <div class="card mb-5 pb-5 mb-xl-8 shadow">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Nhà Cung Cấp</span>
@@ -211,7 +211,7 @@
                                                         </div>
 
                                                         <!-- Left column: Supplier Info -->
-                                                        <div class="col-7">
+                                                        <div class="col-8">
                                                             <table class="table table-borderless">
                                                                 <tbody>
                                                                     <tr>
@@ -233,7 +233,7 @@
                                                         </div>
 
                                                         <!-- Right column: Additional Supplier Info -->
-                                                        <div class="col-5">
+                                                        <div class="col-4">
                                                             <table class="table table-borderless">
                                                                 <tbody>
                                                                     <tr>
@@ -246,7 +246,7 @@
                                                                         <td class="text-dark">{{ $item->email }}</td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td class="fw-semibold">Số điện thoại:</td>
+                                                                        <td class="fw-semibold">SĐT:</td>
                                                                         <td class="text-dark">{{ $item->phone }}</td>
                                                                     </tr>
                                                                 </tbody>

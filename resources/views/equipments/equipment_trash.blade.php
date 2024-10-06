@@ -8,160 +8,38 @@
 @endsection
 
 @section('content')
-    <div class="card mb-5 pb-5 mb-xl-8 shadow">
-        {{-- Phần nút thêm thiết bị --}}
+    <div class="card mb-5 pb-5 mb-xl-8">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Thiết Bị</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Thùng Rác</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('equipments.equipments_trash') }}" class="btn btn-sm btn-danger me-2 rounded-pill">
+                <a href="{{ route('equipments.index') }}" class="btn btn-sm btn-dark me-2">
                     <span class="align-items-center d-flex">
-                        <i class="fa fa-trash me-1"></i>
-                        Thùng Rác
-                    </span>
-                </a>
-                <a href="{{ route('equipments.insert_equipments') }}" class="btn btn-sm btn-success rounded-pill">
-                    <span class="align-items-center d-flex">
-                        <i class="fa fa-plus"></i>
-                        Thêm Thiết Bị
+                        <i class="fa fa-arrow-left me-1"></i>
+                        Trở Lại
                     </span>
                 </a>
             </div>
         </div>
 
-        {{-- Bộ lọc thiết bị --}}
-        <div class="card-body py-1">
-            {{-- <form id="searchForm" class="row align-items-center">
-                <div class="col-4">
-                    <select name="equipment_type_code" id="equipment_type_code"
-                        class="mt-2 mb-2 form-select form-select-sm setupSelect2 rounded-pill">
-                        <option value="" selected>--Theo Nhóm Thiết Bị--</option>
-                        @foreach ($equipmentTypes as $type)
-                            <option value="{{ $type->code }}"
-                                {{ request()->equipment_type_code == $type->code ? 'selected' : '' }}>
-                                {{ $type->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-4">
-                    <select name="unit_code" id="unit_code"
-                        class="mt-2 mb-2 form-select form-select-sm setupSelect2 rounded-pill">
-                        <option value="" selected>--Theo Đơn Vị Tính--</option>
-                        @foreach ($units as $unit)
-                            <option value="{{ $unit->code }}" {{ request()->unit_code == $unit->code ? 'selected' : '' }}>
-                                {{ $unit->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-4">
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="search" name="kw" id="kw" placeholder="Tìm Kiếm Theo Mã, Tên.."
-                                class="mt-2 mb-2 form-control form-control-sm border border-success rounded-pill"
-                                value="{{ request()->kw }}">
-                        </div>
-                    </div>
-                </div>
-            </form> --}}
-            <form action="" method="GET" class="row align-items-center">
-                <div class="col-md-3">
-                    <select name="et" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
-                        <option value="" selected>--Theo Nhóm Thiết Bị--</option>
-                        @foreach ($equipmentTypes as $item)
-                            <option value="{{ $item->code }}" {{ request()->et == $item->code ? 'selected' : '' }}>
-                                {{ $item->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-md-3">
-                    <select name="un" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
-                        <option value="" selected>--Theo Đơn Vị--</option>
-                        @foreach ($units as $item)
-                            <option value="{{ $item->code }}" {{ request()->un == $item->code ? 'selected' : '' }}>
-                                {{ $item->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-md-3">
-                    <select name="sp" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
-                        <option value="" selected>--Theo Nhà Cung Cấp--</option>
-                        @foreach ($suppliers as $item)
-                            <option value="{{ $item->code }}" {{ request()->sp == $item->code ? 'selected' : '' }}>
-                                {{ $item->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-md-3">
-                    <select name="ct" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
-                        <option value="" selected>--Theo Quốc Gia--</option>
-                        @foreach (config('apps.country') as $value)
-                            <option value="{{ $value }}" {{ request()->ct == $value ? 'selected' : '' }}>
-                                {{ $value }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-md-12">
-                    <div class="row align-items-center">
-                        <div class="col-9">
-                            <input type="search" name="kw" placeholder="Tìm Kiếm Theo Mã, Tên.."
-                                class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success"
-                                value="{{ request()->kw }}">
-                        </div>
-                        <div class="col-3 d-flex justify-content-between">
-                            <a class="btn rounded-pill btn-info btn-sm mt-2 mb-2 w-100 me-2"
-                                href="{{ route('equipments.index') }}"><i class="fas fa-times-circle"
-                                    style="margin-bottom: 2px;"></i>Bỏ Lọc</a>
-                            <button class="btn rounded-pill btn-dark btn-sm mt-2 mb-2 w-100 load_animation"
-                                type="submit"><i class="fa fa-search" style="margin-bottom: 2px;"></i>Tìm</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-
         {{-- Danh sách thiết bị --}}
-        <form action="{{ route('equipments.index') }}" method="POST">
+        <form action="{{ route('equipments.equipments_trash') }}" method="POST">
             @csrf
+            <input type="hidden" name="action_type" id="action_type" value="">
             <div class="card-body py-3">
                 <div id="equipmentList">
-                    @if ($AllEquipment->isEmpty() && request()->has('kw'))
-                        {{-- Thông báo khi không tìm thấy kết quả tìm kiếm --}}
-                        <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
-                            role="alert" style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
-                            <div class="mb-3">
-                                <i class="fas fa-search" style="font-size: 36px; color: #6c757d;"></i>
-                            </div>
-                            <div class="text-center">
-                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không tìm thấy kết quả phù
-                                    hợp
-                                </h5>
-                                <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                    Vui lòng thử lại với từ khóa khác hoặc thay đổi bộ lọc tìm kiếm.
-                                </p>
-                            </div>
-                        </div>
-                    @elseif ($AllEquipment->isEmpty())
+                    @if ($AllEquipmentTrash->isEmpty())
                         {{-- Thông báo khi danh sách trống mà không có tìm kiếm --}}
                         <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
                             role="alert" style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                             <div class="mb-3">
-                                <i class="fas fa-clipboard-check" style="font-size: 36px; color: #6c757d;"></i>
+                                <i class="fa-regular fa-trash-can" style="font-size: 36px; color: #6c757d;"></i>
                             </div>
                             <div class="text-center">
-                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Danh sách thiết bị trống</h5>
+                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thùng Rác Trống</h5>
                                 <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                    Hiện tại chưa có thiết bị nào được tạo. Vui lòng thêm mới thiết bị.
+                                    Không Có Thiết Bị Nào Bị Xóa
                                 </p>
                             </div>
                         </div>
@@ -170,7 +48,7 @@
                             <label class="me-2 pointer" for="selectAll">Chọn Tất Cả</label>
                             <input type="checkbox" class="p-2 pointer" id="selectAll">
                         </div>
-                        @foreach ($AllEquipment as $item)
+                        @foreach ($AllEquipmentTrash as $item)
                             <div class="col-xl-12 mb-3 shadow" style="background: #ffffff !important; z-index: 1;">
                                 <div class="position-relative">
                                     <div class="d-flex align-items-center position-absolute top-0 right-0 me-3 mt-2"
@@ -229,8 +107,7 @@
                                                 </div>
                                                 <div class="col-md-9">
                                                     <div class="card card-body border-0 shadow">
-                                                        <div
-                                                            class="d-flex justify-content-between align-items-center mb-3">
+                                                        <div class="d-flex justify-content-between align-items-center mb-3">
                                                             <h6 class="card-title fw-bold">Chi Tiết</h6>
                                                             <span class="badge bg-success rounded-pill">Còn hàng</span>
                                                         </div>
@@ -292,35 +169,18 @@
                                                         </div>
                                                         <div class="text-end mt-4">
                                                             <div class="button-group">
-                                                                <a href="{{ route('equipments.update_equipments', $item->code) }}"
-                                                                    class="btn btn-sm btn-success me-2 rounded-pill">
-                                                                    <i class="fa fa-edit mb-1"></i>Cập Nhật
-                                                                </a>
-
-                                                                @php
-                                                                    $linkedCheck = \App\Models\Import_equipment_request_details::where(
-                                                                        'equipment_code',
-                                                                        $item->code,
-                                                                    )->count();
-                                                                @endphp
-
-                                                                @if ($linkedCheck == 0)
-                                                                    <button type="button"
-                                                                        class="btn btn-sm btn-danger rounded-pill"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#deleteConfirmModal{{ $item->code }}">
-                                                                        <i class="fa fa-trash"
-                                                                            style="margin-bottom: 2px;"></i> Xóa
-                                                                    </button>
-                                                                @else
-                                                                    <button type="button"
-                                                                        class="btn btn-sm btn-secondary rounded-pill"
-                                                                        disabled
-                                                                        title="Thiết bị này tồn tại trong giao dịch của hệ thống.">
-                                                                        <i class="fa fa-lock"
-                                                                            style="margin-bottom: 2px;"></i> Xóa
-                                                                    </button>
-                                                                @endif
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-twitter me-2 rounded-pill"
+                                                                    data-bs-toggle="modal" style="font-size: 10px;"
+                                                                    data-bs-target="#restoreConfirm{{ $item->code }}">
+                                                                    <i class="fa fa-rotate-right mb-1"></i> Khôi Phục
+                                                                </button>
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-danger me-2 rounded-pill"
+                                                                    data-bs-toggle="modal" style="font-size: 10px;"
+                                                                    data-bs-target="#deleteConfirm{{ $item->code }}">
+                                                                    <i class="fa fa-trash mb-1"></i> Xóa
+                                                                </button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -335,7 +195,7 @@
                 </div>
             </div>
 
-            @if ($AllEquipment->count() > 0)
+            @if ($AllEquipmentTrash->count() > 0)
                 <div class="card-body py-3 d-flex justify-content-between align-items-center">
                     <div class="dropdown" id="action_delete_all">
                         <span class="btn rounded-pill btn-info btn-sm dropdown-toggle" id="dropdownMenuButton1"
@@ -343,6 +203,11 @@
                             <span>Chọn Thao Tác</span>
                         </span>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li>
+                                <a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#restoreAll">
+                                    <i class="fa fa-rotate-right me-2 text-primary"></i>Khôi Phục
+                                </a>
+                            </li>
                             <li>
                                 <a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#deleteAll">
                                     <i class="fas fa-trash me-2 text-danger"></i>Xóa
@@ -352,10 +217,33 @@
                     </div>
                     <div class="DayNganCach"></div>
                     <ul class="pagination">
-                        {{ $AllEquipment->links('pagination::bootstrap-5') }}
+                        {{ $AllEquipmentTrash->links('pagination::bootstrap-5') }}
                     </ul>
                 </div>
             @endif
+
+            {{-- Modal Xác Nhận Khôi Phục --}}
+            <div class="modal fade" id="restoreAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="restoreAllLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-md">
+                    <div class="modal-content border-0 shadow">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title text-white" id="restoreAllLabel">Xác Nhận Khôi Phục Thiết Bị</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center" style="padding-bottom: 0px;">
+                            <p class="text-primary mb-4">Bạn có chắc chắn muốn khôi phục thiết bị đã chọn?</p>
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">
+                                Khôi Phục</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             {{-- Modal Xác Nhận Xóa --}}
             <div class="modal fade" id="deleteAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -382,7 +270,35 @@
         </form>
 
         {{-- Các Modal Xác Nhận Xóa Thiết Bị --}}
-        @foreach ($AllEquipment as $item)
+        @foreach ($AllEquipmentTrash as $item)
+            {{-- Khôi Phục --}}
+            <div class="modal fade" id="restoreConfirm{{ $item->code }}" data-bs-backdrop="static"
+                data-bs-keyboard="false" tabindex="-1" aria-labelledby="restoreConfirmLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-md">
+                    <div class="modal-content border-0 shadow">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title text-white" id="restoreConfirmLabel">Xác Nhận Khôi Phục Thiết Bị</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center" style="padding-bottom: 0px;">
+                            <form action="{{ route('equipments.restore_equipment', $item->code) }}" method="POST">
+                                @csrf
+                                <p class="text-primary mb-4">Bạn có chắc chắn muốn xóa thiết bị này?</p>
+                                <div class="modal-footer border-0 justify-content-center">
+                                    <button type="button" class="btn btn-sm btn-secondary px-4 rounded-pill"
+                                        data-bs-dismiss="modal" style="font-size: 10px;">Đóng</button>
+                                    <button type="submit" class="btn btn-sm btn-twitter rounded-pill load_animation"
+                                        style="font-size: 10px;">
+                                        Khôi Phục</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Xóa --}}
             <div class="modal fade" id="deleteConfirm{{ $item->code }}" data-bs-backdrop="static"
                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-md">
@@ -393,14 +309,14 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-center" style="padding-bottom: 0px;">
-                            <form action="{{ route('equipments.delete_equipments', $item->code) }}" method="POST">
+                            <form action="{{ route('equipments.delete_permanently', $item->code) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa thiết bị này?</p>
                                 <div class="modal-footer border-0 justify-content-center">
                                     <button type="button" class="btn btn-sm btn-secondary px-4 rounded-pill"
                                         data-bs-dismiss="modal" style="font-size: 10px;">Đóng</button>
-                                    <button type="submit" class="btn btn-sm btn-danger rounded-pill"
+                                    <button type="submit" class="btn btn-sm btn-danger rounded-pill load_animation"
                                         style="font-size: 10px;">
                                         Xóa</button>
                                 </div>
@@ -469,6 +385,16 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             toggleDeleteAction();
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('#restoreAll').addEventListener('show.bs.modal', function() {
+                document.getElementById('action_type').value = 'restore';
+            });
+
+            document.querySelector('#deleteAll').addEventListener('show.bs.modal', function() {
+                document.getElementById('action_type').value = 'delete';
+            });
         });
     </script>
 @endsection

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateMaterialRequest extends FormRequest
+class CreateEquipmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +22,15 @@ class CreateMaterialRequest extends FormRequest
     public function rules()
     {
         return [
+            'equipment_image' => 'required|mimes:jpg,png,pdf,docx|max:2048',
             'name' => 'required|string|max:255',
-            'material_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'equipment_type_code' => 'required|string|max:255',
-            'unit_code' => 'required|string|max:255',
+            'equipment_type_code' => 'not_in:0|string|max:255',
+            'unit_code' => 'not_in:0|string|max:255',
             'price' => 'required|numeric|min:0',
             'expiry_date' => 'nullable|date',
-            'supplier_code' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
+            'supplier_code' => 'not_in:0|string|max:255',
+            'country' => 'not_in:0|string|max:255',
+            'description' => 'required',
         ];
     }
 
@@ -40,19 +41,23 @@ class CreateMaterialRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Tên vật tư là bắt buộc.',
-            'name.string' => 'Tên vật tư phải là chuỗi ký tự.',
-            'name.max' => 'Tên vật tư không được vượt quá 255 ký tự.',
+            'equipment_image.required' => 'Vui lòng thêm ảnh cho thiết bị',
+            'equipment_image.mimes' => 'Ảnh không đúng định dạng',
+            'equipment_image.max' => 'Ảnh không được quá 2MB',
 
-            'material_image.image' => 'Tệp tải lên phải là hình ảnh.',
-            'material_image.mimes' => 'Hình ảnh phải có định dạng jpeg, png, jpg, gif hoặc svg.',
-            'material_image.max' => 'Kích thước hình ảnh không được vượt quá 2MB.',
+            'name.required' => 'Tên thiết bị là bắt buộc.',
+            'name.string' => 'Tên thiết bị phải là chuỗi ký tự.',
+            'name.max' => 'Tên thiết bị không được vượt quá 255 ký tự.',
 
-            'equipment_type_code.required' => 'Nhóm vật tư là bắt buộc.',
-            'equipment_type_code.string' => 'Nhóm vật tư phải là chuỗi ký tự.',
-            'equipment_type_code.max' => 'Nhóm vật tư không được vượt quá 255 ký tự.',
+            'equipment_image.image' => 'Tệp tải lên phải là hình ảnh.',
+            'equipment_image.mimes' => 'Hình ảnh phải có định dạng jpeg, png, jpg, gif hoặc svg.',
+            'equipment_image.max' => 'Kích thước hình ảnh không được vượt quá 2MB.',
 
-            'unit_code.required' => 'Đơn vị tính là bắt buộc.',
+            'equipment_type_code.not_in' => 'Nhóm thiết bị là bắt buộc.',
+            'equipment_type_code.string' => 'Nhóm thiết bị phải là chuỗi ký tự.',
+            'equipment_type_code.max' => 'Nhóm thiết bị không được vượt quá 255 ký tự.',
+
+            'unit_code.not_in' => 'Đơn vị tính là bắt buộc.',
             'unit_code.string' => 'Đơn vị tính phải là chuỗi ký tự.',
             'unit_code.max' => 'Đơn vị tính không được vượt quá 255 ký tự.',
 
@@ -62,13 +67,15 @@ class CreateMaterialRequest extends FormRequest
 
             'expiry_date.date' => 'Ngày hết hạn không hợp lệ.',
 
-            'supplier_code.required' => 'Nhà cung cấp là bắt buộc.',
+            'supplier_code.not_in' => 'Nhà cung cấp là bắt buộc.',
             'supplier_code.string' => 'Nhà cung cấp phải là chuỗi ký tự.',
             'supplier_code.max' => 'Nhà cung cấp không được vượt quá 255 ký tự.',
 
-            'country.required' => 'Nước sản xuất là bắt buộc.',
+            'country.not_in' => 'Nước sản xuất là bắt buộc.',
             'country.string' => 'Nước sản xuất phải là chuỗi ký tự.',
             'country.max' => 'Nước sản xuất không được vượt quá 255 ký tự.',
+
+            'description.required' => 'Mô tả là bắt buộc',
         ];
     }
 }

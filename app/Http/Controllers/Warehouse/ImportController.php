@@ -73,31 +73,31 @@ class ImportController extends Controller
 
     public function store_import(Request $request)
     {
-        $materialData = json_decode($request->input('materialData'), true);
+        $equipmentData = json_decode($request->input('equipmentData'), true);
         $status = $request->input('status');
 
-        if (empty($materialData)) {
+        if (empty($equipmentData)) {
             toastr()->error('Đã lưu phiếu nhập kho thất bại ');
             return redirect()->back();
         }
 
-        foreach ($materialData as $material) {
-            $existingInventory = Inventories::where('batch_number', $material['batch_number'])
-                ->where('equipment_code', $material['equipment_code'])
+        foreach ($equipmentData as $equipment) {
+            $existingInventory = Inventories::where('batch_number', $equipment['batch_number'])
+                ->where('equipment_code', $equipment['equipment_code'])
                 ->first();
 
             if ($existingInventory) {
-                toastr()->error('Số lô ' . $material['batch_number'] . ' đã tồn tại cho vật tư ' . $material['equipment_code']);
+                toastr()->error('Số lô ' . $equipment['batch_number'] . ' đã tồn tại cho thiết bị ' . $equipment['equipment_code']);
                 return redirect()->back();
             }
         }
 
         $receiptData = [
-            'supplier_code' => $materialData[0]['supplier_code'],
-            'receipt_date' => $materialData[0]['receipt_date'],
-            'note' => $materialData[0]['note'],
-            'created_by' => $materialData[0]['created_by'],
-            'receipt_no' => $materialData[0]['receipt_no'] ?? null,
+            'supplier_code' => $equipmentData[0]['supplier_code'],
+            'receipt_date' => $equipmentData[0]['receipt_date'],
+            'note' => $equipmentData[0]['note'],
+            'created_by' => $equipmentData[0]['created_by'],
+            'receipt_no' => $equipmentData[0]['receipt_no'] ?? null,
             'status' => $status
         ];
 
@@ -114,17 +114,17 @@ class ImportController extends Controller
         $receiptCode = $receipt->code;
         $receiptDetailsData = [];
 
-        foreach ($materialData as $material) {
+        foreach ($equipmentData as $equipment) {
             $receiptDetailsData[] = [
                 'receipt_code' => $receiptCode,
-                'equipment_code' => $material['equipment_code'],
-                'batch_number' => $material['batch_number'],
-                'expiry_date' => $material['expiry_date'],
-                'price' => $material['price'],
-                'quantity' => $material['quantity'],
-                'discount' => $material['discount'],
-                'VAT' => $material['VAT'],
-                'manufacture_date' => $material['product_date'],
+                'equipment_code' => $equipment['equipment_code'],
+                'batch_number' => $equipment['batch_number'],
+                'expiry_date' => $equipment['expiry_date'],
+                'price' => $equipment['price'],
+                'quantity' => $equipment['quantity'],
+                'discount' => $equipment['discount'],
+                'VAT' => $equipment['VAT'],
+                'manufacture_date' => $equipment['product_date'],
             ];
         }
 
@@ -136,8 +136,8 @@ class ImportController extends Controller
         }
 
         if ($status == 1) {
-            foreach ($materialData as $material) {
-                $this->updateInventoryByBatch($material, $receiptCode, $receipt->receipt_date);
+            foreach ($equipmentData as $equipment) {
+                $this->updateInventoryByBatch($equipment, $receiptCode, $receipt->receipt_date);
             }
         }
 
@@ -160,28 +160,28 @@ class ImportController extends Controller
         return response()->json(['exists' => false], 200);
     }
 
-    private function updateInventoryByBatch($material, $receiptCode, $receiptDate)
+    private function updateInventoryByBatch($equipment, $receiptCode, $receiptDate)
     {
-        $inventory = Inventories::where('equipment_code', $material['equipment_code'])
-            ->where('batch_number', $material['batch_number'])
+        $inventory = Inventories::where('equipment_code', $equipment['equipment_code'])
+            ->where('batch_number', $equipment['batch_number'])
             ->where('current_quantity', '>', 0)
             ->first();
 
         if ($inventory) {
-            $inventory->current_quantity += $material['quantity'];
+            $inventory->current_quantity += $equipment['quantity'];
             $inventory->save();
         } else {
             $newInventoryCode = 'TK' . $this->generateRandomString();
 
             $payload = [
                 'code' => $newInventoryCode,
-                'equipment_code' => $material['equipment_code'],
-                'batch_number' => $material['batch_number'],
-                'current_quantity' => $material['quantity'],
+                'equipment_code' => $equipment['equipment_code'],
+                'batch_number' => $equipment['batch_number'],
+                'current_quantity' => $equipment['quantity'],
                 'import_code' => $receiptCode,
                 'import_date' => $receiptDate,
-                'expiry_date' => $material['expiry_date'],
-                'manufacture_date' => $material['product_date'],
+                'expiry_date' => $equipment['expiry_date'],
+                'manufacture_date' => $equipment['product_date'],
             ];
 
             Inventories::create($payload);
@@ -199,7 +199,7 @@ class ImportController extends Controller
             $receiptDetails = Receipt_details::where('receipt_code', $code)->get();
 
             foreach ($receiptDetails as $detail) {
-                $material = [
+                $equipment = [
                     'equipment_code' => $detail->equipment_code,
                     'batch_number' => $detail->batch_number,
                     'expiry_date' => $detail->expiry_date,
@@ -207,7 +207,7 @@ class ImportController extends Controller
                     'product_date' => $detail->manufacture_date,
                 ];
 
-                $this->updateInventoryByBatch($material, $receipt->code, $receipt->receipt_date);
+                $this->updateInventoryByBatch($equipment, $receipt->code, $receipt->receipt_date);
             }
 
             toastr()->success('Đã duyệt phiếu nhập kho thành công với mã ' . $receipt->code);

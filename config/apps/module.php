@@ -33,7 +33,7 @@ return [
                     'title' => 'Danh Sách',
                     'route' => 'user.index',
                     'route_action' => ['user.add', 'user.edit', 'user.user_trash'],
-                    'icon' => 'fa fa-bars',
+                    'icon' => 'fas fa-check-square',
                     'user_role' => [1],
                 ],
             ]
@@ -97,11 +97,12 @@ return [
             'icon' => 'fa-solid fa-suitcase-medical',
             'route' => [
                 'equipments.index',
-                'equipments.equipments_group',
                 'equipments.equipments_trash',
                 'equipments.insert_equipments',
                 'equipments.update_equipments',
+                'equipments.equipments_group',
                 'equipments.equipments_group_trash',
+                'equipments.add_equipments_group',
                 'equipments.update_equipments_group',
                 'units.index',
                 'units.create',
@@ -112,21 +113,21 @@ return [
                     'title' => 'Danh Sách Thiết Bị',
                     'route' => 'equipments.index',
                     'route_action' => ['equipments.equipments_trash', 'equipments.insert_equipments', 'equipments.update_equipments'],
-                    'icon' => 'fa fa-pump-medical',
+                    'icon' => 'fas fa-stethoscope',
                     'user_role' => [0, 1],
                 ],
                 [
                     'title' => 'Danh Sách Nhóm Thiết Bị',
                     'route' => 'equipments.equipments_group',
-                    'route_action' => ['equipments.equipments_group_trash', 'equipments.update_equipments_group'],
-                    'icon' => 'fa fa-notes-medical',
+                    'route_action' => ['equipments.equipments_group_trash', 'equipments.add_equipments_group' , 'equipments.update_equipments_group'],
+                    'icon' => 'fa fa-box',
                     'user_role' => [0, 1],
                 ],
                 [
                     'title' => 'Danh Sách Đơn Vị',
                     'route' => 'units.index',
                     'route_action' => ['units.create', 'units.edit'],
-                    'icon' => 'fa fa-pencil-alt',
+                    'icon' => 'fas fa-medkit',
                     'user_role' => [0, 1]
                 ]
             ]
@@ -180,7 +181,7 @@ return [
                     'title' => 'Nhà cung cấp ',
                     'route' => 'supplier.list',
                     'route_action' => ['supplier.create', 'supplier.edit', 'supplier.trash'],
-                    'icon' => 'fa fa-address-book',
+                    'icon' => 'fas fa-building',
                     'user_role' => [0, 1],
                 ],
             ]
@@ -207,7 +208,7 @@ return [
                         'notification.notification_edit',
                         'notification.notification_trash',
                     ],
-                    'icon' => 'fa fa-bars',
+                    'icon' => 'fas fa-check-square',
                     'user_role' => [0, 1],
                 ],
             ],

@@ -30,7 +30,7 @@
 @endsection
 
 @section('content')
-    <div class="card mb-5 pb-5 mb-xl-8">
+    <div class="card mb-5 pb-5 mb-xl-8 shadow">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Xuất Kho</span>
@@ -213,8 +213,8 @@
                                                         <table class="table table-striped table-sm table-hover">
                                                             <thead class="fw-bolder bg-danger">
                                                                 <tr>
-                                                                    <th class="ps-3">Mã vật tư</th>
-                                                                    <th>Tên vật tư</th>
+                                                                    <th class="ps-3">Mã thiết bị</th>
+                                                                    <th>Tên thiết bị</th>
                                                                     <th>Số lượng</th>
                                                                     <th>Số lô</th>
                                                                     <th>Chiết khấu (%)</th>
@@ -465,12 +465,12 @@
 
                                 <!-- Begin::Export Items -->
                                 <div class="mb-4">
-                                    <h4 class="text-twitter border-bottom border-dark pb-4 mb-4">Danh sách vật tư</h4>
+                                    <h4 class="text-twitter border-bottom border-dark pb-4 mb-4">Danh sách thiết bị</h4>
                                     <div class="table-responsive">
                                         <table class="table table-striped table-sm table-hover">
                                             <thead class="fw-bolder bg-success">
                                                 <tr>
-                                                    <th class="ps-3">Mã vật tư</th>
+                                                    <th class="ps-3">Mã thiết bị</th>
                                                     <th>Số lượng</th>
                                                     <th>Đơn giá</th>
                                                     <th>Số lô</th>
@@ -596,12 +596,12 @@
 
                         <!-- Receipt Items -->
                         <div class="mb-5">
-                            <h5 class="text-twitter">Danh sách vật tư</h5>
+                            <h5 class="text-twitter">Danh sách thiết bị</h5>
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead>
                                         <tr class="fw-bold bg-success">
-                                            <th class="ps-3">Mã vật tư</th>
+                                            <th class="ps-3">Mã thiết bị</th>
                                             <th>Số lượng</th>
                                             <th>Đơn giá</th>
                                             <th>Số lô</th>
@@ -636,7 +636,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <button type="button" class="btn btn-twitter btn-sm">Thêm vật tư</button>
+                            <button type="button" class="btn btn-twitter btn-sm">Thêm thiết bị</button>
                         </div>
 
                         <!-- Summary -->

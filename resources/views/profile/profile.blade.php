@@ -176,23 +176,23 @@
 @endsection
 
 @section('content')
-    <div class="card mb-5 pb-15 mb-xl-10" id="kt_profile_details_view">
+    <div class="card mb-md-5 pb-15 mb-xl-10" id="kt_profile_details_view">
         <div class="px-10 py-5 border-bottom d-flex justify-content-between align-items-center cursor-pointer">
             <h4 class="fw-bolder m-0">Thông Tin Cá Nhân</h4>
             <span class="btn rounded-pill btn-dark btn-sm pointer" id="edit_form">
-                <i class="fas fa-edit mb-1"></i> <span>Chỉnh sửa</span>
+                <i class="fas fa-edit mb-md-1"></i> <span>Chỉnh sửa</span>
             </span>
             <span class="btn rounded-pill btn-secondary btn-sm pointer d-none" id="cancel_edit_form">
-                <i class="fas fa-arrow-left mb-1"></i> <span>Trở lại</span>
+                <i class="fas fa-arrow-left mb-md-1"></i> <span>Trở lại</span>
             </span>
         </div>
 
         <form action="{{ route('profile.update') }}" method="POST" id="profile-form" enctype="multipart/form-data">
             @csrf
-            <div class="row ms-5 mt-5">
-                <div class="col-2">
-                    <div class="mt-7 ms-7 position-relative image-overlay">
-                        <img class="border border-dark rounded-pill shadow"
+            <div class="row p-10">
+                <div class="col-md-2 col-sm-12">
+                    <div class="mt-md-7 ms-md-7 position-relative image-overlay">
+                        <img class="border border-dark rounded-pill shadow mt-5 mt-md-0"
                             src="{{ !empty($getUserProfile->avatar) ? asset('storage/' . $getUserProfile->avatar) : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png' }}"
                             alt="Image">
                         <div class="darken rounded-3 d-none"></div>
@@ -201,7 +201,7 @@
                             <i class="fas fa-camera-rotate text-white" id="change-avatar-icon"></i>
                         </div>
                     </div>
-                    <div class="ms-7 text-center mt-3 d-none input-edit">
+                    <div class="ms-md-7 text-center mt-3 d-none input-edit">
                         <strong class="text-danger">Ảnh Phải Là NxN Pixel</strong>
                     </div>
                 </div>
@@ -210,7 +210,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="row">
-                                    <label class="col-2 fw-bold text-muted">Họ Và Tên</label>
+                                    <label class="col-md-2 col-sm-12 fw-bold text-muted">Họ Và Tên</label>
                                     <div class="col-10">
                                         <span
                                             class="fw-bolder fs-6 text-gray-800 span-show">{{ !empty($getUserProfile->last_name) && !empty($getUserProfile->first_name) ? $getUserProfile->last_name . ' ' . $getUserProfile->first_name : 'N/A' }}</span>
@@ -240,7 +240,7 @@
 
                             <div class="col-12">
                                 <div class="row mb-6">
-                                    <label class="col-2 fw-bold text-muted">Vai Trò</label>
+                                    <label class="col-md-2 col-sm-12 fw-bold text-muted">Vai Trò</label>
                                     <div class="col-10 fv-row">
                                         <span
                                             class="fw-bolder text-gray-800 fs-6 span-show">{{ !empty($getUserProfile->position) ? $getUserProfile->position : 'N/A' }}
@@ -255,7 +255,7 @@
 
                             <div class="col-12">
                                 <div class="row mb-6">
-                                    <label class="col-2 fw-bold text-muted">Email</label>
+                                    <label class="col-md-2 col-sm-12 fw-bold text-muted">Email</label>
                                     <div class="col-10">
                                         <span
                                             class="fw-bolder text-gray-800 fs-6 span-show text-lowercase">{{ !empty($getUserProfile->email) ? $getUserProfile->email : 'N/A' }}
@@ -271,7 +271,7 @@
 
                             <div class="col-12">
                                 <div class="row mb-6">
-                                    <label class="col-2 fw-bold text-muted">Số Điện Thoại
+                                    <label class="col-md-2 col-sm-12 fw-bold text-muted">Số Điện Thoại
                                     </label>
                                     <div class="col-10">
                                         <span
@@ -287,7 +287,7 @@
 
                             <div class="col-12">
                                 <div class="row">
-                                    <label class="col-2 fw-bold text-muted">Ngày Sinh</label>
+                                    <label class="col-md-2 col-sm-12 fw-bold text-muted">Ngày Sinh</label>
                                     <div class="col-10">
                                         <span class="fw-bolder fs-6 text-gray-800 span-show">
                                             {{ !empty($getUserProfile->birth_day)
@@ -307,7 +307,7 @@
 
                             <div class="col-12">
                                 <div class="row">
-                                    <label class="col-2 fw-bold text-muted">Địa Chỉ</label>
+                                    <label class="col-md-2 col-sm-12 fw-bold text-muted">Địa Chỉ</label>
                                     <div class="col-10">
                                         <span
                                             class="fw-bolder fs-6 text-gray-800 span-show">{{ !empty($getUserProfile->address) ? $getUserProfile->address : 'N/A' }}</span>

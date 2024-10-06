@@ -103,13 +103,12 @@
 
     </div>
 
-    <div class="ring" id="loading">
-        Đang xử lý..
-        <span id="ring-loading"></span>
+    <div id="loading">
+        <div aria-live="assertive" role="alert" class="loader"></div>
     </div>
 
     <div id="loading-overlay" class="loading-overlay"></div>
-    
+
     {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
 
     <script src="{{ asset('js/main.js') }}"></script>

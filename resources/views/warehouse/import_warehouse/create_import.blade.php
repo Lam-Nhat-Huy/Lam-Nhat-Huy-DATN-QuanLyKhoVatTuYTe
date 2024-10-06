@@ -72,7 +72,7 @@
 @endsection
 
 @section('content')
-    <div class="card mb-5 pb-5 mb-xl-8">
+    <div class="card mb-5 pb-5 mb-xl-8 shadow">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">Tạo Phiếu Nhập Kho</span>
@@ -133,11 +133,11 @@
                         <div class="card shadow-sm border-0 p-4 bg-light rounded-3">
                             <div class="row mb-3">
                                 <div class="mb-4 col-6">
-                                    <label for="equipment_code" class="form-label fw-semibold">Tên vật tư</label>
+                                    <label for="equipment_code" class="form-label fw-semibold">Tên thiết bị</label>
                                     <input type="text" id="equipment_name"
                                         class="form-control form-control-sm border border-success rounded-pill"
-                                        placeholder="Tìm kiếm vật tư..." onkeyup="filterProducts()" aria-label="search">
-                                    <input type="hidden" id="equipment_code"> <!-- Input ẩn để lưu mã vật tư -->
+                                        placeholder="Tìm kiếm thiết bị..." onkeyup="filterProducts()" aria-label="search">
+                                    <input type="hidden" id="equipment_code"> <!-- Input ẩn để lưu mã thiết bị -->
                                     <div class="dropdown-menu w-100 mt-1" id="productDropdown" style="display: none;">
                                         <!-- Sản phẩm sẽ được thêm vào đây -->
                                     </div>
@@ -202,8 +202,8 @@
                                         class="btn btn-sm btn-success shadow-sm rounded-pill" data-bs-toggle="modal"
                                         data-bs-target="#importExcelModal">Nhập Excel</button>
                                     <button style="font-size: 10px;" type="button"
-                                        class="btn btn-sm btn-danger shadow-sm rounded-pill" onclick="addMaterial()">Thêm
-                                        vật tư</button>
+                                        class="btn btn-sm btn-danger shadow-sm rounded-pill" onclick="addEquipment()">Thêm
+                                        thiết bị</button>
                                 </div>
                             </div>
                         </div>
@@ -236,7 +236,7 @@
                             <table class="table table-bordered table-striped">
                                 <thead class="table-dark">
                                     <tr class="text-center">
-                                        <th style="font-size: 11px;" class="ps-4">Tên vật tư</th>
+                                        <th style="font-size: 11px;" class="ps-4">Tên thiết bị</th>
                                         <th style="font-size: 11px;">Nhà cung cấp</th>
                                         <th style="font-size: 11px;">Số lượng</th>
                                         <th style="font-size: 11px;">Giá nhập</th>
@@ -248,8 +248,8 @@
                                         <th style="font-size: 11px;" class="pe-3"></th>
                                     </tr>
                                 </thead>
-                                <tbody id="materialList">
-                                    {{-- Thông tin sau khi được thêm vật tư từ FORM 1 sẽ được hiển thị ở đây --}}
+                                <tbody id="equipmentList">
+                                    {{-- Thông tin sau khi được thêm thiết bị từ FORM 1 sẽ được hiển thị ở đây --}}
                                     <tr id="noDataAlert">
                                         <td colspan="12" class="text-center">
                                             <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
@@ -272,7 +272,7 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                                <input type="hidden" id="materialData" name="materialData">
+                                <input type="hidden" id="equipmentData" name="equipmentData">
                             </table>
                         </div>
                     </div>
@@ -302,7 +302,7 @@
 
                         <button type="submit" name="status" value="0"
                             class="btn btn-sm btn-warning w-100 mb-2 d-flex align-items-center justify-content-center rounded-pill"
-                            onclick="submitMaterials()">
+                            onclick="submitEquipments()">
                             <i class="fas fa-file-invoice-dollar me-1"></i>Lưu phiếu tạm
                         </button>
 
@@ -329,10 +329,10 @@
                                     <div class="modal-footer justify-content-center border-0 pt-0">
                                         <button type="button" class="btn btn-sm btn-secondary px-4 rounded-pill"
                                             data-bs-dismiss="modal">Đóng</button>
-                                        <!-- Gọi hàm submitMaterials() khi bấm nút Duyệt -->
+                                        <!-- Gọi hàm submitEquipments() khi bấm nút Duyệt -->
                                         <button type="submit" name="status" value="1"
                                             class="btn btn-sm btn-success px-4 rounded-pill"
-                                            onclick="submitMaterials()">Duyệt</button>
+                                            onclick="submitEquipments()">Duyệt</button>
                                     </div>
                                 </div>
                             </div>

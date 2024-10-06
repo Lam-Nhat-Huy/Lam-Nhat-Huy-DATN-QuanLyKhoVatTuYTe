@@ -3,7 +3,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content border-0 shadow-sm">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title fw-bold" id="displayCategoryLabel">Chọn nhóm vật tư</h5>
+                    <h5 class="modal-title fw-bold" id="displayCategoryLabel">Chọn nhóm thiết bị</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -18,7 +18,7 @@
                     <div class="mb-4">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" id="checkAllGroups">
-                            <label class="form-check-label" for="checkAllGroups">Tất cả nhóm vật tư</label>
+                            <label class="form-check-label" for="checkAllGroups">Tất cả nhóm thiết bị</label>
                         </div>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" id="checkGroupAA">

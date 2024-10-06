@@ -19,6 +19,9 @@ return new class extends Migration
             $table->decimal('discount', 10, 2)->nullable();
             $table->decimal('price', 10, 2)->nullable();
             $table->char('equipment_code', 20)->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+
             $table->foreign('receipt_code')->references('code')->on('receipts')->onDelete('set null');
             $table->foreign('equipment_code')->references('code')->on('equipments')->onDelete('set null');
         });

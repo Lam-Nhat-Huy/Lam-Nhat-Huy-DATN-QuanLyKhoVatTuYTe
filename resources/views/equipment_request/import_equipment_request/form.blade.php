@@ -157,7 +157,7 @@
                                             class="form-control form-control-sm border border-success rounded-pill w-50">
                                     </td>
                                     <td class="text-center">
-                                        <span class="btn btn-sm btn-danger pointer"
+                                        <span class="btn btn-sm btn-danger pointer rounded-pill"
                                             onclick="removeEquipment('{{ $item->equipment_code }}')">
                                             <i class="fa fa-trash p-0"></i>
                                         </span>
@@ -241,7 +241,7 @@
                                     <tr class="hover-table pointer" id="supplier-{{ $item->code }}">
                                         <td>{{ $item->name }}</td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                            <button type="button" class="btn btn-danger btn-sm rounded-pill" data-bs-toggle="modal"
                                                 data-bs-target="#delete_modal_supplier_type"
                                                 onclick="setDeleteForm('{{ route('equipment_request.delete_supplier', $item->code) }}', '{{ $item->name }}')">
                                                 <i class="fa fa-trash p-0"></i>
@@ -254,8 +254,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-sm btn-twitter" id="submit_supplier_type">Thêm</button>
+                    <button type="button" class="btn btn-sm btn-secondary rounded-pill" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-twitter rounded-pill" id="submit_supplier_type">Thêm</button>
                 </div>
             </div>
         </div>
@@ -274,9 +274,9 @@
                     <h6 class="text-danger" id="delete-supplier-message"></h6>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal"
+                    <button type="button" class="btn btn-sm btn-secondary rounded-pill" data-bs-toggle="modal"
                         data-bs-target="#add_modal_ncc">Trở Lại</button>
-                    <button type="button" class="btn btn-sm btn-danger" id="confirm-delete-supplier">Xóa</button>
+                    <button type="button" class="btn btn-sm btn-danger rounded-pill" id="confirm-delete-supplier">Xóa</button>
                 </div>
             </div>
         </div>
@@ -479,7 +479,7 @@
                                 <td>${data.unit}</td>
                                 <td><input type="number" id="quantity_change_${data.equipment_code}" value="${parseInt(data.quantity, 10)}" class="form-control form-control-sm border border-success rounded-pill w-50"></td>
                                 <td class="text-center">
-                                    <span class="btn btn-sm btn-danger pointer" onclick="removeEquipment('${data.equipment_code}')">
+                                    <span class="btn btn-sm btn-danger pointer rounded-pill" onclick="removeEquipment('${data.equipment_code}')">
                                         <i class="fa fa-trash p-0"></i>
                                     </span>
                                 </td>
@@ -606,7 +606,7 @@
                                 `
                             <td>${data.name}</td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-danger btn-sm rounded-pill" data-bs-toggle="modal"
                                     data-bs-target="#delete_modal_supplier_type"
                                     onclick="setDeleteForm('{{ route('equipment_request.delete_supplier', '') }}/` +
                                 data.code + `', '` + data.name + `')">

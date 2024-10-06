@@ -6,54 +6,53 @@
 
 
     Route::prefix('equipments')->middleware(CheckLogin::class)->group(function () {
-
+        // TB
         Route::get('/', [EquipmentsController::class, 'index'])->name('equipments.index');
+        Route::post('/', [EquipmentsController::class, 'index'])->name('equipments.index');
 
-        Route::get('/equipments_trash', [EquipmentsController::class, 'material_trash'])->name('equipments.equipments_trash');
-
-        Route::get('/insert_equipments', [EquipmentsController::class, 'insert_material'])->name('equipments.insert_equipments');
-
-        Route::post('/create_equipments', [EquipmentsController::class, 'create_material'])->name('equipments.create_equipments');
-
-        Route::get('/update_equipments/{code}', [EquipmentsController::class, 'update_material'])->name('equipments.update_equipments');
-
-        Route::post('/edit_equipments/{code}', [EquipmentsController::class, 'edit_material'])->name('equipments.edit_equipments');
-
-        Route::delete('/delete_equipments/{code}', [EquipmentsController::class, 'delete_material'])->name('equipments.delete_equipments');
-        // Route để khôi phục thiết bị từ thùng rác
-        Route::post('/restore/{code}', [EquipmentsController::class, 'restore_material'])->name('equipments.restore_material');
-        // Route để xóa vĩnh viễn thiết bị
+        // Thùng rác tb
+        Route::get('/equipments_trash', [EquipmentsController::class, 'equipment_trash'])->name('equipments.equipments_trash');
+        Route::post('/equipments_trash', [EquipmentsController::class, 'equipment_trash'])->name('equipments.equipments_trash');
+        Route::post('/restore/{code}', [EquipmentsController::class, 'restore_equipment'])->name('equipments.restore_equipment');
         Route::delete('/delete_permanently/{code}', [EquipmentsController::class, 'delete_permanently'])->name('equipments.delete_permanently');
 
-        Route::get('/equipments_group', [EquipmentsController::class, 'material_group'])->name('equipments.equipments_group');
+        // Thêm tb
+        Route::get('/insert_equipments', [EquipmentsController::class, 'insert_equipment'])->name('equipments.insert_equipments');
+        Route::post('/create_equipments', [EquipmentsController::class, 'create_equipment'])->name('equipments.create_equipments');
 
-        // Route để hiển thị form thêm nhóm vật tư
-        Route::get('/add_equipments_group', [EquipmentsController::class, 'showCreateForm'])->name('equipments.add_equipments_group');
+        // Sửa tb
+        Route::get('/update_equipments/{code}', [EquipmentsController::class, 'update_equipment'])->name('equipments.update_equipments');
+        Route::post('/edit_equipments/{code}', [EquipmentsController::class, 'edit_equipment'])->name('equipments.edit_equipments');
 
-        // Route để xử lý việc thêm nhóm vật tư
-        Route::post('/create_equipments_group', [EquipmentsController::class, 'create_material_group'])->name('equipments.create_equipments_group');
+        // Xóa tb
+        Route::delete('/delete_equipments/{code}', [EquipmentsController::class, 'delete_equipment'])->name('equipments.delete_equipments');
 
-        Route::get('/equipments_group_trash', [EquipmentsController::class, 'material_group_trash'])->name('equipments.equipments_group_trash');
+        // Modal thêm nhóm btn
+        Route::post('/create-equipment-group-modal', [EquipmentsController::class, 'create_equipment_group_modal'])->name('equipments.create_equipment_group');
+        Route::post('/delete-equipment-group-modal/{code}', [EquipmentsController::class, 'delete_equipment_group_modal'])->name('equipments.delete_equipment_group');
 
-        Route::get('/update_equipments_group/{code}', [EquipmentsController::class, 'update_material_group'])->name('equipments.update_equipments_group');
+        // Modal thêm đơn vị
+        Route::post('/create-unit-modal', [EquipmentsController::class, 'create_unit_modal'])->name('equipments.create_unit');
+        Route::post('/delete-unit-modal/{code}', [EquipmentsController::class, 'delete_unit_modal'])->name('equipments.delete_unit');
 
-        Route::put('/edit_equipments_group/{code}', [EquipmentsController::class, 'edit_material_group'])->name('equipments.edit_equipments_group');
+        //=========================================================================================================================================
+        
+        // Nhóm TB
+        Route::get('/equipments_group', [EquipmentsController::class, 'equipment_group'])->name('equipments.equipments_group');
+        Route::post('/equipments_group', [EquipmentsController::class, 'equipment_group'])->name('equipments.equipments_group');
+        Route::delete('/delete_equipments_group/{code}', [EquipmentsController::class, 'delete_equipment_group'])->name('equipments.delete_equipments_group');
 
-        Route::delete('/delete_equipments_group/{code}', [EquipmentsController::class, 'delete_material_group'])->name('equipments.delete_equipments_group');
-        // Route để xử lý việc thêm nhóm vật tư từ modal
-        Route::post('/create-material-group-modal', [EquipmentsController::class, 'create_material_group_modal'])
-            ->name('equipments.create_material_group_modal');
-        // Route để xử lý việc thêm đơn vị tính từ modal
-        Route::post('/create-unit-modal', [EquipmentsController::class, 'create_unit_modal'])
-            ->name('equipments.create_unit_modal');
-        // Route để xử lý việc thêm nhà cung cấp từ modal
-        Route::post('/create-supplier-modal', [EquipmentsController::class, 'create_supplier_modal'])
-            ->name('equipments.create_supplier_modal');
-
-        Route::post('/restore_material_group/{code}', [EquipmentsController::class, 'restore_material_group'])->name('equipments.restore_material_group');
+        // Thùng rác ntb
+        Route::get('/equipments_group_trash', [EquipmentsController::class, 'equipment_group_trash'])->name('equipments.equipments_group_trash');
+        Route::post('/equipments_group_trash', [EquipmentsController::class, 'equipment_group_trash'])->name('equipments.equipments_group_trash');
+        Route::post('/restore_equipment_group/{code}', [EquipmentsController::class, 'restore_equipment_group'])->name('equipments.restore_equipment_group');
         Route::delete('/delete_permanently_group/{code}', [EquipmentsController::class, 'delete_permanently_group'])->name('equipments.delete_permanently_group');
 
-        Route::get('/search/ajax', [EquipmentsController::class, 'ajaxSearch'])->name('equipments.ajax.search');
-        Route::get('/search/ajax/group', [EquipmentsController::class, 'ajaxSearch_Group'])->name('equipments.ajax.search_group');
+        // Thêm ntb
+        Route::get('/add_equipments_group', [EquipmentsController::class, 'showCreateForm'])->name('equipments.add_equipments_group');
+        Route::post('/create_equipments_group', [EquipmentsController::class, 'create_equipment_group'])->name('equipments.create_equipments_group');
 
+        // Sửa ntb
+        Route::get('/update_equipments_group/{code}', [EquipmentsController::class, 'update_equipment_group'])->name('equipments.update_equipments_group');
+        Route::post('/edit_equipments_group/{code}', [EquipmentsController::class, 'edit_equipment_group'])->name('equipments.edit_equipments_group');
     });

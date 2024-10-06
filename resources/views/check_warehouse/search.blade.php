@@ -113,8 +113,8 @@
                                 <table class="table table-striped table-sm table-hover">
                                     <thead class=" bg-danger">
                                         <tr>
-                                            <th class="ps-3">Mã vật tư</th>
-                                            <th>Tên vật tư</th>
+                                            <th class="ps-3">Mã thiết bị</th>
+                                            <th>Tên thiết bị</th>
                                             <th>Tồn kho</th>
                                             <th>Số lượng thực tế</th>
                                             <th>Số lượng lệch</th>

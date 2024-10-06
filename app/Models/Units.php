@@ -11,11 +11,13 @@ class Units extends Model
     use HasFactory;
 
     use SoftDeletes;
-    protected $table = 'units';
 
     protected $primaryKey = 'code'; // Chỉ định 'code' là khóa chính
+
     public $incrementing = false; // Nếu 'code' không phải là auto-increment
+
     protected $keyType = 'string'; // Nếu 'code' là kiểu chuỗi
+
     protected $fillable = [
         'code',
         'name',
@@ -29,5 +31,10 @@ class Units extends Model
     public function equipments()
     {
         return $this->hasMany(Equipments::class, 'unit_code', 'code');
+    }
+
+    public function users()
+    {
+        return $this->belongsTo(Users::class, 'created_by', 'code');
     }
 }

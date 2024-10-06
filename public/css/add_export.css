@@ -15,7 +15,7 @@
     border-radius: 50%;
 }
 
-.material-form-container {
+.equipment-form-container {
     padding: 15px;
     background-color: #fff;
     border-radius: 8px;
@@ -45,7 +45,7 @@
     margin-right: 0;
 }
 
-.material-input {
+.equipment-input {
     width: 100%;
     padding: 10px;
     font-size: 14px;
@@ -56,7 +56,7 @@
     transition: border-color 0.3s;
 }
 
-.material-input:focus {
+.equipment-input:focus {
     border-color: #007bff;
     background-color: #fff;
     outline: none;

@@ -26,7 +26,7 @@ class EquipmentTypesSeeder extends Seeder
             ],
             [
                 'code' => 'ET003',
-                'name' => 'Vật tư tiêu hao',
+                'name' => 'Thiết bị tiêu hao',
                 'created_at' => now(),
                 'updated_at' => now(),
                 'deleted_at' => null,

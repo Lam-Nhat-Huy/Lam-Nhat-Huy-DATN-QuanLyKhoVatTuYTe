@@ -278,17 +278,19 @@ class EquipmentRequestController extends Controller
 
         if ($importExists || $receiptsExists) {
             return response()->json([
-                'success' => false
+                'success' => false,
+                'messages' => 'Không thể xóa nhà cung cấp này vì đã có giao dịch trong hệ thống'
             ]);
         }
 
-        $supplier = Suppliers::where('code', $code)->first();
+        $supplier = Suppliers::where('code', $code)->whereNull('deleted_at')->first();
 
-        $supplier->forceDelete();
+        $supplier->delete();
 
         return response()->json([
             'success' => true,
             'supplier' => $supplier,
+            'messages' => 'Đã xóa nhà cung cấp'
         ]);
     }
 
