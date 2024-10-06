@@ -166,6 +166,20 @@
         .small-text {
             font-size: 0.95rem;
         }
+
+        .pointer {
+            transition: background-color 0.3s;
+        }
+
+        .pointer:hover,
+        .pointer:focus {
+            background-color: #e0e0e0;
+            /* Màu nền khi hover hoặc focus */
+            outline: none;
+            /* Xóa viền focus mặc định */
+            border-radius: 5px;
+            /* Bo góc cho hiệu ứng mượt mà hơn */
+        }
     </style>
 @endsection
 
@@ -213,13 +227,17 @@
 
                         </div>
 
-                        {{-- Hiển thị trạng thái --}}
                         <div class="d-flex justify-content-between mt-4">
                             <ul class="d-flex list-unstyled">
-                                <li class="me-5 text-dark">Tất cả (<span id="totalCount">0</span>)</li>
-                                <li class="me-5 text-success">Khớp (<span id="matchedCount">0</span>)</li>
-                                <li class="me-5 text-warning">Lệch (<span id="mismatchedCount">0</span>)</li>
-                                <li class="me-5 text-danger">Chưa kiểm (<span id="uncheckedCount">0</span>)</li>
+                                <li class="me-5 text-dark pointer" id="filterAll">Tất cả (<span id="totalCount">0</span>)
+                                </li>
+                                <li class="me-5 text-success pointer" id="filterMatched">Khớp (<span
+                                        id="matchedCount">0</span>)
+                                </li>
+                                <li class="me-5 text-warning pointer" id="filterMismatched">Lệch (<span
+                                        id="mismatchedCount">0</span>)</li>
+                                <li class="me-5 text-danger pointer" id="filterUnchecked">Chưa kiểm (<span
+                                        id="uncheckedCount">0</span>)</li>
                             </ul>
                         </div>
 
@@ -231,21 +249,26 @@
                                         - <strong>F2:</strong> Tìm kiếm thiết bị
                                     </li>
                                     <li class="mb-1 text-dark">
-                                        - <strong>ALT + A:</strong> Thêm tất cả sản phẩm vào danh sách
+                                        - <strong>ENTER:</strong> Di chuyển xuống ô số lượng của thiết bị tiếp theo
                                     </li>
                                     <li class="mb-1 text-dark">
-                                        - <strong>ALT + F:</strong> Tự động điền tất cả số lượng thực tế
+                                        - <strong>SHIFT:</strong> Di chuyển lên ô số lượng của thiết bị phía trên
                                     </li>
                                 </ul>
 
                                 <ul class="list-unstyled mb-0">
                                     <li class="mb-1 text-dark">
-                                        - <strong>ENTER:</strong> Di chuyển xuống ô Số lượng của thiết bị tiếp theo
+                                        - <strong>ALT + A:</strong> Thêm tất cả sản phẩm vào danh sách
                                     </li>
                                     <li class="mb-1 text-dark">
-                                        - <strong>SHIFT:</strong> Di chuyển lên ô Số lượng của thiết bị phía trên
+                                        - <strong>ALT + F:</strong> Điền tất cả số lượng thực tế
+                                    </li>
+                                    <li class="mb-1 text-dark">
+                                        - <strong>ALT + Q:</strong> Điền số lượng tồn kho cho sản phẩm đang chọn
                                     </li>
                                 </ul>
+
+
                             </div>
                         </div>
 
@@ -260,8 +283,8 @@
                                         <th>Số lô</th>
                                         <th>Tồn kho</th>
                                         <th>Thực tế</th>
-                                        <th>Số lượng lệch</th>
-                                        <th></th>
+                                        <th>SL lệch</th>
+                                        <th style="width: 15%;"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="materialList">
@@ -272,21 +295,21 @@
                                                 role="alert"
                                                 style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                                 <div class="mb-3">
-                                                    <i class="fas fa-file-invoice"
-                                                        style="font-size: 36px; color: #6c757d;"></i>
+                                                    <i class="fas fa-box" style="font-size: 36px; color: #6c757d;"></i>
+                                                    <!-- Đổi biểu tượng ở đây -->
                                                 </div>
                                                 <div class="text-center">
-                                                    <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông
-                                                        tin
-                                                        phiếu nhập trống</h5>
+                                                    <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin
+                                                        danh sách kiểm kho trống</h5>
                                                     <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                                        Hiện tại chưa có phiếu nhập nào được thêm vào. Vui lòng kiểm tra lại
-                                                        hoặc tạo mới phiếu nhập để bắt đầu.
+                                                        Hiện tại chưa có thiết bị nào được thêm vào danh sách kiểm kho. Vui
+                                                        lòng kiểm tra lại.
                                                     </p>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
+
                                 </tbody>
                             </table>
 
@@ -367,10 +390,11 @@
                                             <p>Bạn chắc chắn muốn cân bằng kho?</p>
                                         </div>
                                         <div class="modal-footer justify-content-center border-0 pt-0">
-                                            <button type="button" class="btn btn-sm btn-secondary px-4"
-                                                data-bs-dismiss="modal">Đóng</button>
+                                            <button type="button" class="btn btn-sm btn-secondary px-4 rounded-pill"
+                                                style="font-size: 12px" data-bs-dismiss="modal">Đóng</button>
                                             <button type="submit" name="status" value="1"
-                                                class="btn btn-sm btn-success px-4" onclick="submitMaterials()">Duyệt
+                                                class="btn btn-sm btn-success px-4 rounded-pill" style="font-size: 12px"
+                                                onclick="submitMaterials()">Duyệt
                                             </button>
                                         </div>
                                     </div>
@@ -382,6 +406,10 @@
 
                     <div class="card border-0 shadow-lg p-4 bg-body rounded-4" style="display: block;">
                         <div class="status-indicator">
+                            <div class="status-item">
+                                <div class="color-box" style="border: 2px dashed red"></div>
+                                <span class="status-text small-text">Chưa kiểm kê (Màu gạch đỏ)</span>
+                            </div>
                             <div class="status-item">
                                 <div class="color-box" style="background-color: #ffcccb;"></div>
                                 <span class="status-text small-text">Thiếu số lượng (Màu đỏ nhạt)</span>
@@ -426,6 +454,12 @@
                 event.preventDefault();
                 autoFillAllQuantities();
             }
+        });
+
+        document.querySelectorAll('.pointer').forEach(item => {
+            item.addEventListener('click', function() {
+                this.focus();
+            });
         });
     </script>
 

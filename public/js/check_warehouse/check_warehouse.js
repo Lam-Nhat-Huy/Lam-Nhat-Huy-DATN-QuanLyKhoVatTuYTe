@@ -93,33 +93,30 @@ function addProductToTable(
         return;
     }
 
-    totalCount++;
-    uncheckedCount++;
-
     var tableBody = document.getElementById("materialList");
     var rowCount = materialData.length;
 
     var row = `
-        <tr data-index="${rowCount}">
-            <td>${rowCount + 1}</td>
-            <td>${equipment_code}</td>
-            <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</td>
-            <td>${batch_number}</td>
-            <td>${current_quantity}</td>
-            <td>
-                <input type="number" class="actual-quantity-input" style="width: 70px; height: 40px; border-radius: 8px;" oninput="updateProduct(${rowCount}, this.value)">
-            </td>
-            <td class="unequal-count" id="unequal-count-${rowCount}">0</td>
-            <td>
-                <button class="btn btn-primary" title="Khi số lượng thực tế không bị lệch, điền số lượng tồn kho vào." type="button" onclick="autoFillQuantity(${rowCount}, ${current_quantity})">
-                    <i class="fa fa-random"></i>
-                </button>
+    <tr data-index="${rowCount}" class="unchecked">
+        <td>${rowCount + 1}</td>
+        <td>${equipment_code}</td>
+        <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</td>
+        <td>${batch_number}</td>
+        <td>${current_quantity}</td>
+        <td>
+            <input type="number" class="actual-quantity-input" style="width: 70px; height: 40px; border-radius: 8px;" oninput="updateProduct(${rowCount}, this.value)">
+        </td>
+        <td class="unequal-count" id="unequal-count-${rowCount}">0</td>
+        <td>
+            <button class="btn btn-primary" title="Điền số lượng tồn kho" type="button" onclick="autoFillQuantity(${rowCount}, ${current_quantity})">
+                <i class="fa fa-random"></i>
+            </button>
 
-                <a href="#" class="text-dark" title="Xóa thiết bị ra khỏi danh sách" onclick="removeProduct(${rowCount})">
-                    <i class="fa fa-trash"></i>
-                </a>
-            </td>
-        </tr>
+            <a href="#" class="text-dark" title="Xóa thiết bị" onclick="removeProduct(${rowCount})">
+                <i class="fa fa-trash"></i>
+            </a>
+        </td>
+    </tr>
     `;
 
     tableBody.insertAdjacentHTML("beforeend", row);
@@ -132,6 +129,7 @@ function addProductToTable(
         batch_number: batch_number,
     });
 
+    uncheckedCount++;
     updateCounts();
 
     if (tableBody.rows.length > 0) {
@@ -199,15 +197,32 @@ function updateProduct(index, value) {
 
         const tableRow = document.querySelector(`tr[data-index="${index}"]`);
 
-        if (unequal < 0 && value !== "") {
-            tableRow.style.backgroundColor = "#ffcccb";
-        } else if (unequal > 0 && value !== "") {
-            tableRow.style.backgroundColor = "#ffebc8";
+        const inputField = tableRow.querySelector(".actual-quantity-input");
+
+        if (value === "") {
+            tableRow.style.backgroundColor = "";
+            tableRow.classList.add("unchecked");
+            tableRow.classList.remove("matched", "mismatch");
+            inputField.style.border = "2px dashed red";
         } else {
-            tableRow.style.backgroundColor = "#d1f0d1";
+            inputField.style.border = "";
+            if (unequal < 0) {
+                tableRow.style.backgroundColor = "#ffcccb";
+                tableRow.classList.remove("unchecked", "matched");
+                tableRow.classList.add("mismatch");
+            } else if (unequal > 0) {
+                tableRow.style.backgroundColor = "#ffebc8";
+                tableRow.classList.remove("unchecked", "matched");
+                tableRow.classList.add("mismatch");
+            } else {
+                tableRow.style.backgroundColor = "#d1f0d1";
+                tableRow.classList.remove("unchecked", "mismatch");
+                tableRow.classList.add("matched");
+            }
         }
 
-        if (value > 0) {
+        if (value !== "") {
+            uncheckedCount = Math.max(0, uncheckedCount - 1);
             if (unequal === 0) {
                 matchedCount++;
                 mismatchedCount = Math.max(0, mismatchedCount - 1);
@@ -215,6 +230,10 @@ function updateProduct(index, value) {
                 mismatchedCount++;
                 matchedCount = Math.max(0, matchedCount - 1);
             }
+        } else {
+            uncheckedCount++;
+            matchedCount = Math.max(0, matchedCount - 1);
+            mismatchedCount = Math.max(0, mismatchedCount - 1);
         }
 
         updateCounts();
@@ -222,15 +241,78 @@ function updateProduct(index, value) {
 }
 
 function updateCounts() {
+    totalCount = materialData.length;
+    matchedCount = materialData.filter(
+        (material) =>
+            material.unequal === 0 && material.actual_quantity !== null
+    ).length;
+    mismatchedCount = materialData.filter(
+        (material) =>
+            material.unequal !== 0 && material.actual_quantity !== null
+    ).length;
+    uncheckedCount = materialData.filter(
+        (material) => material.actual_quantity === null
+    ).length;
+
+    // Cập nhật hiển thị số lượng
     document.getElementById("totalCount").textContent = totalCount;
     document.getElementById("matchedCount").textContent = matchedCount;
     document.getElementById("mismatchedCount").textContent = mismatchedCount;
     document.getElementById("uncheckedCount").textContent = uncheckedCount;
-
-    const noDataAlert = document.getElementById("noDataAlert");
-    noDataAlert.style.display =
-        materialData.length === 0 ? "table-row" : "none";
 }
+
+function filterTable(type) {
+    const rows = document.querySelectorAll("#materialList tr");
+    let hasVisibleRow = false;
+
+    rows.forEach((row) => {
+        row.style.display = "none";
+        console.log(row.classList);
+
+        if (type === "all") {
+            row.style.display = "";
+            hasVisibleRow = true;
+        } else if (type === "matched" && row.classList.contains("matched")) {
+            row.style.display = "";
+            hasVisibleRow = true;
+        } else if (type === "mismatch" && row.classList.contains("mismatch")) {
+            row.style.display = "";
+            hasVisibleRow = true;
+        } else if (
+            type === "unchecked" &&
+            row.classList.contains("unchecked")
+        ) {
+            row.style.display = "";
+            hasVisibleRow = true;
+        }
+    });
+
+    if (hasVisibleRow) {
+        document.getElementById("noDataAlert").style.display = "none";
+    } else {
+        document.getElementById("noDataAlert").style.display = "table-row";
+    }
+}
+
+document.getElementById("filterAll").addEventListener("click", function () {
+    filterTable("all");
+});
+
+document.getElementById("filterMatched").addEventListener("click", function () {
+    filterTable("matched");
+});
+
+document
+    .getElementById("filterMismatched")
+    .addEventListener("click", function () {
+        filterTable("mismatch");
+    });
+
+document
+    .getElementById("filterUnchecked")
+    .addEventListener("click", function () {
+        filterTable("unchecked");
+    });
 
 function addAllProducts() {
     var tableBody = document.getElementById("materialList");
@@ -248,6 +330,24 @@ function addAllProducts() {
 }
 
 function submitMaterials() {
+    const actualQuantityInputs = document.querySelectorAll(
+        ".actual-quantity-input"
+    );
+    let hasEmptyInput = false;
+
+    actualQuantityInputs.forEach((input) => {
+        if (input.value.trim() === "") {
+            input.style.border = "2px solid red";
+            hasEmptyInput = true;
+        } else {
+            input.style.border = "";
+        }
+    });
+
+    if (hasEmptyInput) {
+        return false;
+    }
+
     var checkDate = document.getElementById("check_date").value;
     var note = document.getElementById("note").value;
     var created_by = document.getElementById("created_by").value;
@@ -290,3 +390,40 @@ function autoFillAllQuantities() {
         }
     });
 }
+
+function checkNoDataAlert() {
+    const rows = document.querySelectorAll("#materialList tr");
+    let hasData = false;
+
+    rows.forEach((row) => {
+        if (row.style.display !== "none" && !row.id.includes("noDataAlert")) {
+            hasData = true;
+        }
+    });
+
+    if (hasData) {
+        document.getElementById("noDataAlert").style.display = "none";
+    } else {
+        document.getElementById("noDataAlert").style.display = "table-row";
+    }
+}
+
+document.addEventListener("keydown", function (event) {
+    if (event.altKey && event.key === "q") {
+        const focusedElement = document.activeElement;
+
+        if (
+            focusedElement &&
+            focusedElement.classList.contains("actual-quantity-input")
+        ) {
+            const rowIndex = focusedElement
+                .closest("tr")
+                .getAttribute("data-index");
+
+            const current_quantity = materialData[rowIndex].current_quantity;
+
+            focusedElement.value = current_quantity;
+            updateProduct(rowIndex, current_quantity);
+        }
+    }
+});
