@@ -181,7 +181,7 @@
                                 <th class="ps-4">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 10%">Mão</th>
+                                <th class="" style="width: 10%">Mã</th>
                                 <th class="" style="width: 10%">Người Tạo</th>
                                 <th class="" style="width: 8%">Nội Dung</th>
                                 <th class="" style="width: 12%">Loại</th>
