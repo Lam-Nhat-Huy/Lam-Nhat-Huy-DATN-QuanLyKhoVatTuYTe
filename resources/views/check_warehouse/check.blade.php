@@ -36,14 +36,13 @@
                     <!-- Trong phần <thead> của bảng -->
                     <thead>
                         <tr class="bg-success text-center">
-                            <th class="ps-3">
-                            </th>
+                            <th class="ps-3"></th>
                             <th style="width: 15%;" class="ps-3">Mã kiểm kho</th>
-                            <th style="width: 15%;" class="">Thời gian</th>
-                            <th style="width: 15%;" class="">Tổng chênh lệch</th>
-                            <th style="width: 15%;" class="">Số lượng lệch tăng</th>
-                            <th style="width: 15%;" class="">Số lượng lệch giảm</th>
-                            <th style="width: 15%;" class="">Trạng Thái</th>
+                            <th style="width: 15%;">Thời gian</th>
+                            <th style="width: 15%;">Tổng chênh lệch</th>
+                            <th style="width: 15%;">Số lượng lệch tăng</th>
+                            <th style="width: 15%;">Số lượng lệch giảm</th>
+                            <th style="width: 15%;">Trạng Thái</th>
                         </tr>
                     </thead>
 
@@ -61,23 +60,13 @@
                                     <!-- Sử dụng Font Awesome icon để hiển thị mũi tên -->
                                     <i class="row-icon fa fa-chevron-right"></i>
                                 </td>
-                                <td>
-                                    {{ $item['code'] }}
-                                </td>
-                                <td>
-                                    {{ \Carbon\Carbon::parse($item['check_date'])->format('d/m/Y') }}
-                                </td>
-                                <td>
-                                    {{ $totalUnequal }} <!-- Hiển thị tổng chênh lệch -->
-                                </td>
-                                <td>
-                                    {{ $item['details']->where('unequal', '>', 0)->sum('unequal') }}
-                                    <!-- Số lượng lệch tăng -->
-                                </td>
-                                <td>
-                                    {{ $item['details']->where('unequal', '<', 0)->sum('unequal') }}
-                                    <!-- Số lượng lệch giảm -->
-                                </td>
+                                <td>{{ $item['code'] }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item['check_date'])->format('d/m/Y') }}</td>
+                                <td>{{ $totalUnequal }}</td> <!-- Hiển thị tổng chênh lệch -->
+                                <td>{{ $item['details']->where('unequal', '>', 0)->sum('unequal') }}</td>
+                                <!-- Số lượng lệch tăng -->
+                                <td>{{ $item['details']->where('unequal', '<', 0)->sum('unequal') }}</td>
+                                <!-- Số lượng lệch giảm -->
                                 <td>
                                     @if ($item['status'] == 0)
                                         <span class="label label-temp text-warning">Phiếu lưu tạm</span>
@@ -108,34 +97,24 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <td class="" style="width: 150px;"><strong>Mã kiểm
-                                                                            kho</strong>
-                                                                    </td>
-
-                                                                    <td class="text-gray-800">
-                                                                        {{ $item['code'] }}
-                                                                    </td>
+                                                                            kho</strong></td>
+                                                                    <td class="text-gray-800">{{ $item['code'] }}</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class=""><strong>Thời gian</strong>
-                                                                    </td>
+                                                                    <td class=""><strong>Thời gian</strong></td>
                                                                     <td class="text-gray-800">
                                                                         {{ \Carbon\Carbon::parse($item['created_by'])->format('d/m/Y H:i:s') }}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class=""><strong>Ngày cân bằng</strong>
-                                                                    </td>
+                                                                    <td class=""><strong>Ngày cân bằng</strong></td>
                                                                     <td class="text-gray-800">
                                                                         {{ \Carbon\Carbon::parse($item['check_date'])->format('d/m/Y') }}
                                                                     </td>
                                                                 </tr>
-
                                                                 <tr>
-                                                                    <td class=""><strong>Ghi chú</strong>
-                                                                    </td>
-                                                                    <td class="text-gray-800">
-                                                                        {{ $item['note'] }}
-                                                                    </td>
+                                                                    <td class=""><strong>Ghi chú</strong></td>
+                                                                    <td class="text-gray-800">{{ $item['note'] }}</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -150,15 +129,14 @@
                                                                         @if ($item['status'] == 0)
                                                                             <span class="text-warning">Phiếu lưu tạm</span>
                                                                         @elseif($item['status'] == 1)
-                                                                            <span class="text-success">Đã cân bằng </span>
+                                                                            <span class="text-success">Đã cân bằng</span>
                                                                         @else
                                                                             <span class="text-danger">Phiếu đã hủy</span>
                                                                         @endif
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class=""><strong>Tài khoản tạo</strong>
-                                                                    </td>
+                                                                    <td class=""><strong>Tài khoản tạo</strong></td>
                                                                     <td class="text-gray-800">
                                                                         {{ $item->user->last_name . ' ' . $item->user->first_name }}
                                                                     </td>
@@ -184,32 +162,21 @@
                                                             <tbody>
                                                                 @foreach ($item['details'] as $detail)
                                                                     <tr class="text-center">
-                                                                        <td class="ps-4">
-                                                                            {{ $detail['equipment_code'] }}
+                                                                        <td class="ps-4">{{ $detail['equipment_code'] }}
                                                                         </td>
-                                                                        <td>
-                                                                            {{ $detail->equipment->name }}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{ $detail['batch_number'] }}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{ $detail['current_quantity'] }}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{ $detail['actual_quantity'] }}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{ $detail['unequal'] }}
-                                                                        </td>
+                                                                        <td>{{ $detail->equipment->name }}</td>
+                                                                        <td>{{ $detail['batch_number'] }}</td>
+                                                                        <td>{{ $detail['current_quantity'] }}</td>
+                                                                        <td>{{ $detail['actual_quantity'] }}</td>
+                                                                        <td>{{ $detail['unequal'] }}</td>
                                                                     </tr>
                                                                 @endforeach
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            </div> <!-- End card-body -->
+                                        </div> <!-- End card -->
 
                                         <div class="card-body py-3 text-end">
                                             <div class="button-group">
@@ -374,40 +341,44 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                    </div> <!-- End flex-lg-row-fluid -->
+                                </td>
+                            </tr>
+                        @empty
+                            <tr id="noDataAlert">
+                                <td colspan="12" class="text-center">
+                                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                        role="alert"
+                                        style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                        <div class="mb-3">
+                                            <i class="fas fa-clipboard-check"
+                                                style="font-size: 36px; color: #6c757d;"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin phiếu
+                                                kiểm kho trống</h5>
+                                            <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                Hiện tại chưa có phiếu kiểm kho nào được tạo. Vui lòng kiểm tra lại hoặc tạo
+                                                mới phiếu kiểm kho để bắt đầu.
+                                            </p>
+                                        </div>
                                     </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div> <!-- End table-responsive -->
+        </div> <!-- End card-body -->
+
+        <div class="card-body py-3 mb-3 d-flex justify-center">
+            <div class="action-bar">
+                {{ $inventoryChecks->links('pagination::bootstrap-4') }}
             </div>
-        @empty
-            <tr id="noDataAlert">
-                <td colspan="12" class="text-center">
-                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
-                        role="alert" style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
-                        <div class="mb-3">
-                            <i class="fas fa-clipboard-check" style="font-size: 36px; color: #6c757d;"></i>
-                        </div>
-                        <div class="text-center">
-                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin phiếu
-                                kiểm kho trống</h5>
-                            <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                Hiện tại chưa có phiếu kiểm kho nào được tạo. Vui lòng kiểm tra lại hoặc tạo
-                                mới phiếu kiểm kho để bắt đầu.
-                            </p>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            @endforelse
         </div>
-    </div>
-    <div class="card-body py-3 mb-3 d-flex justify-center">
-        <div class="action-bar">
-            {{ $inventoryChecks->links('pagination::bootstrap-4') }}
-        </div>
-    </div>
-    </div>
-
-
+    </div> <!-- End card -->
 @endsection
+
 
 @section('scripts')
     <script>
