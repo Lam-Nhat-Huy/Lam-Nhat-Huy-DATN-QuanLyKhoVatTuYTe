@@ -350,8 +350,9 @@
                             <label for="check_date" class="form-label fw-semibold text-dark"
                                 style="font-size: 13px;">Ngày nhập</label>
                             <input type="date" id="check_date" class="form-control form-control-sm rounded-pill"
-                                value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                                value="{{ \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d') }}">
                         </div>
+
 
                         <!-- Ghi chú -->
                         <div class="mb-4">

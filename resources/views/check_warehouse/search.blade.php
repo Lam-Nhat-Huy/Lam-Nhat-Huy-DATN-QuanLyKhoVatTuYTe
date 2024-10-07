@@ -1,8 +1,13 @@
 @forelse ($inventoryChecks as $item)
+    @php
+        $totalUnequal = collect($item['details'])->sum('unequal');
+    @endphp
+
     <tr class="text-center hover-table pointer" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item['code'] }}"
         aria-expanded="false" aria-controls="collapse{{ $item['code'] }}">
         <td>
-            <input type="checkbox" class="row-checkbox" />
+            <!-- Sử dụng Font Awesome icon để hiển thị mũi tên -->
+            <i class="row-icon fa fa-chevron-right"></i>
         </td>
         <td>
             {{ $item['code'] }}
@@ -11,19 +16,23 @@
             {{ $item['check_date'] }}
         </td>
         <td>
-            -8
+            {{ $totalUnequal }} <!-- Hiển thị tổng chênh lệch -->
         </td>
         <td>
-            0
+            {{ $item['details']->where('unequal', '>', 0)->sum('unequal') }}
+            <!-- Số lượng lệch tăng -->
         </td>
         <td>
-            -8
+            {{ $item['details']->where('unequal', '<', 0)->sum('unequal') }}
+            <!-- Số lượng lệch giảm -->
         </td>
         <td>
             @if ($item['status'] == 0)
-                <span class="label label-temp text-danger">Phiếu tạm</span>
-            @else
+                <span class="label label-temp text-warning">Phiếu lưu tạm</span>
+            @elseif($item['status'] == 1)
                 <span class="label label-final text-success">Đã cân bằng</span>
+            @else
+                <span class="label label-temp text-danger">Phiếu đã hiểu</span>
             @endif
         </td>
     </tr>
@@ -46,7 +55,8 @@
                                 <table class="table table-flush gy-1">
                                     <tbody>
                                         <tr>
-                                            <td class=""><strong>Mã kiểm kho</strong>
+                                            <td class="" style="width: 150px;"><strong>Mã kiểm
+                                                    kho</strong>
                                             </td>
 
                                             <td class="text-gray-800">
@@ -64,7 +74,7 @@
                                             <td class=""><strong>Ngày cân bằng</strong>
                                             </td>
                                             <td class="text-gray-800">
-                                                {{ $item['check_date'] }}
+                                                {{ \Carbon\Carbon::parse($item['check_date'])->format('d/m/Y') }}
                                             </td>
                                         </tr>
 
@@ -78,7 +88,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!-- End::Receipt Info -->
 
                             <div class="col-md-4">
                                 <table class="table table-flush gy-1">
@@ -87,9 +96,11 @@
                                             <td class=""><strong>Trạng thái</strong></td>
                                             <td class="text-gray-800">
                                                 @if ($item['status'] == 0)
-                                                    <span class="text-danger">Phiếu tạm</span>
-                                                @else
+                                                    <span class="text-warning">Phiếu lưu tạm</span>
+                                                @elseif($item['status'] == 1)
                                                     <span class="text-success">Đã cân bằng </span>
+                                                @else
+                                                    <span class="text-danger">Phiếu đã hủy</span>
                                                 @endif
                                             </td>
                                         </tr>
@@ -97,28 +108,24 @@
                                             <td class=""><strong>Tài khoản tạo</strong>
                                             </td>
                                             <td class="text-gray-800">
-                                                {{ $item['user_code'] }}
+                                                {{ $item->user->last_name . ' ' . $item->user->first_name }}
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-
-                            <!-- End::Receipt Info -->
                         </div>
 
-                        <!-- Begin::Receipt Items (Right column) -->
                         <div class="col-md-12">
                             <div class="table-responsive">
                                 <table class="table table-striped table-sm table-hover">
-                                    <thead class=" bg-danger">
-                                        <tr>
+                                    <thead style="background-color: #FFA500;">
+                                        <tr class="text-center">
                                             <th class="ps-3">Mã thiết bị</th>
                                             <th>Tên thiết bị</th>
                                             <th>Tồn kho</th>
                                             <th>Số lượng thực tế</th>
                                             <th>Số lượng lệch</th>
-                                            <th class="pe-3">Giá trị lệch</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -137,134 +144,177 @@
                                                 <td>
                                                     {{ $detail['unequal'] }}
                                                 </td>
-                                                <td>
-                                                    190.000 đ
-                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <!-- End::Receipt Items -->
                     </div>
                 </div>
 
                 <div class="card-body py-3 text-end">
                     <div class="button-group">
                         <!-- Nút Duyệt đơn, chỉ hiển thị khi là Phiếu Tạm -->
-                        @if (true)
-                            <button style="font-size: 10px;" class="btn btn-sm btn-success me-2" data-bs-toggle="modal"
-                                data-bs-target="#browse-}" type="button">
-                                <i style="font-size: 10px;" class="fas fa-clipboard-check"></i>Duyệt
-                                Phiếu
+                        @if ($item['status'] == 0)
+                            <button style="font-size: 10px;" class="btn btn-sm btn-success me-2 rounded-pill"
+                                data-bs-toggle="modal" data-bs-target="#browse-{{ $item->code }}" type="button">
+                                <i style="font-size: 10px;" class="fas fa-clipboard-check"></i>
+                                Duyệt Phiếu
+                            </button>
+
+                            <!-- Nút Xóa phiếu tạm -->
+                            <button style="font-size: 10px;" class="btn btn-danger btn-sm me-2 rounded-pill"
+                                data-bs-toggle="modal" data-bs-target="#delete-{{ $item->code }}">
+                                <i style="font-size: 10px;" class="fa fa-trash"></i> Xóa Phiếu
                             </button>
                         @endif
 
-                        <!-- Nút Sửa đơn -->
-                        @if (true)
-                            <a style="font-size: 10px;" href="" class="btn btn-dark btn-sm me-2"><i
-                                    style="font-size: 10px;" class="fa fa-edit"></i>Sửa Phiếu</a>
-                        @endif
-                        @if (true)
+                        @if ($item['status'] == 1)
                             <!-- Nút In Phiếu -->
-                            <button style="font-size: 10px;" class="btn btn-sm btn-twitter me-2" id="printPdfBtn"
-                                type="button">
-                                <i style="font-size: 10px;" class="fa fa-print"></i>In Phiếu
+                            <button style="font-size: 10px;" class="btn btn-sm btn-dark me-2 rounded-pill"
+                                id="printPdfBtn" type="button">
+                                <i style="font-size: 10px;" class="fa fa-print"></i> In Phiếu
+                            </button>
+
+                            <!-- Nút Hủy Phiếu -->
+                            <button style="font-size: 10px;" class="btn btn-danger btn-sm rounded-pill"
+                                data-bs-toggle="modal" data-bs-target="#cancel-{{ $item->code }}">
+                                <i style="font-size: 10px;" class="fa fa-times"></i> Hủy Phiếu
                             </button>
                         @endif
 
-                        @if (true)
-                            <!-- Nút xóa, có thể nằm trong danh sách hoặc bảng -->
-                            <button style="font-size: 10px;" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#delete-">
-                                <i style="font-size: 10px;" class="fa fa-trash"></i>Xóa phiếu
+                        @if ($item['status'] == 3)
+                            <!-- Nút Xóa phiếu đã hủy -->
+                            <button style="font-size: 10px;" class="btn btn-danger btn-sm me-2 rounded-pill"
+                                data-bs-toggle="modal" data-bs-target="#delete-{{ $item->code }}">
+                                <i style="font-size: 10px;" class="fa fa-trash"></i> Xóa Phiếu
                             </button>
                         @endif
 
+                        <!-- Modal Duyệt Phiếu -->
+                        <div class="modal fade" id="browse-{{ $item['code'] }}" data-bs-backdrop="static"
+                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="browseLabel-{{ $item['code'] }}"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-md">
+                                <div class="modal-content border-0 shadow">
+                                    <div class="modal-header bg-success text-white">
+                                        <h5 class="modal-title text-white" id="browseLabel-{{ $item['code'] }}">
+                                            Duyệt Phiếu Kiểm Kho
+                                        </h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center pb-0">
+                                        <form action="{{ route('check_warehouse.approve', $item['code']) }}"
+                                            method="POST" id="approveForm-{{ $item['code'] }}">
+                                            @csrf
+                                            <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt
+                                                phiếu kiểm kho này?</p>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-secondary btn-sm rounded-pill"
+                                            data-bs-dismiss="modal">
+                                            Đóng
+                                        </button>
+                                        <button type="button" class="btn btn-success btn-sm rounded-pill"
+                                            onclick="event.preventDefault(); document.getElementById('approveForm-{{ $item['code'] }}').submit();">
+                                            Duyệt
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
+                        <!-- Modal Hủy Phiếu -->
+                        <div class="modal fade" id="cancel-{{ $item['code'] }}" data-bs-backdrop="static"
+                            data-bs-keyboard="false" tabindex="-1"
+                            aria-labelledby="cancelLabel-{{ $item['code'] }}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-md">
+                                <div class="modal-content border-0 shadow">
+                                    <div class="modal-header bg-danger text-white">
+                                        <h5 class="modal-title text-white" id="cancelLabel-{{ $item['code'] }}">
+                                            Hủy Phiếu Kiểm Kho
+                                        </h5>
+                                        <button type="button" class="btn-close btn-close-white"
+                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center pb-0">
+                                        <form action="{{ route('check_warehouse.cancel', $item['code']) }}"
+                                            method="POST" id="cancelForm-{{ $item['code'] }}">
+                                            @csrf
+                                            <p class="text-danger mb-4">Bạn có chắc chắn muốn hủy
+                                                phiếu kiểm kho này?
+                                                Số lượng vật tư sẽ được trả về trạng thái trước khi
+                                                kiểm.</p>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-secondary btn-sm rounded-pill"
+                                            data-bs-dismiss="modal">Đóng</button>
+                                        <button type="button" class="btn btn-danger btn-sm rounded-pill"
+                                            onclick="event.preventDefault(); document.getElementById('cancelForm-{{ $item['code'] }}').submit();">
+                                            Hủy Phiếu
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Xóa Phiếu -->
+                        <div class="modal fade" id="delete-{{ $item['code'] }}" data-bs-backdrop="static"
+                            data-bs-keyboard="false" tabindex="-1"
+                            aria-labelledby="deleteLabel-{{ $item['code'] }}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-md">
+                                <div class="modal-content border-0 shadow">
+                                    <div class="modal-header bg-danger text-white">
+                                        <h5 class="modal-title text-white" id="deleteLabel-{{ $item['code'] }}">
+                                            Xóa Phiếu Kiểm Kho
+                                        </h5>
+                                        <button type="button" class="btn-close btn-close-white"
+                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center pb-0">
+                                        <form action="{{ route('check_warehouse.delete', $item['code']) }}"
+                                            method="POST" id="deleteForm-{{ $item['code'] }}">
+                                            @csrf
+                                            <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa
+                                                phiếu kiểm kho này?</p>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-secondary btn-sm rounded-pill"
+                                            data-bs-dismiss="modal">Đóng</button>
+                                        <button type="button" class="btn btn-danger btn-sm rounded-pill"
+                                            onclick="event.preventDefault(); document.getElementById('deleteForm-{{ $item['code'] }}').submit();">
+                                            Xóa Phiếu
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+            </div>
             </div>
         </td>
     </tr>
-
-    {{-- <!-- Modal Duyệt Phiếu -->
-<div class="modal fade" id="browse-{{ $item->code }}" data-bs-backdrop="static"
-    data-bs-keyboard="false" tabindex="-1" aria-labelledby="browseLabel-{{ $item->code }}"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title text-white" id="browseLabel-{{ $item->code }}">Duyệt
-                    Phiếu Nhập Kho</h5>
-                <button type="button" class="btn-close btn-close-white"
-                    data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center" style="padding-bottom: 0px;">
-                <form action="{{ route('receipts.approve', $item->code) }}" method="POST"
-                    id="approveForm-{{ $item->code }}">
-                    @csrf
-                    <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt phiếu nhập kho này?
-                    </p>
-                </form>
-            </div>
-            <div class="modal-footer justify-content-center border-0">
-                <button type="button" class="btn btn-sm btn-secondary px-4"
-                    data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-sm btn-success px-4"
-                    onclick="event.preventDefault(); document.getElementById('approveForm-{{ $item->code }}').submit();">
-                    Duyệt
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Xóa Phiếu -->
-<div class="modal fade" id="delete-{{ $item->code }}" data-bs-backdrop="static"
-    data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="deleteLabel-{{ $item->code }}" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title text-white" id="deleteLabel-{{ $item->code }}">Xác
-                    Nhận Xóa Phiếu</h5>
-                <button type="button" class="btn-close btn-close-white"
-                    data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center" style="padding-bottom: 0px;">
-                <form action="{{ route('receipts.delete', $item->code) }}" method="POST"
-                    id="deleteForm-{{ $item->code }}">
-                    @csrf
-                    <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa phiếu này?</p>
-                </form>
-            </div>
-            <div class="modal-footer justify-content-center border-0">
-                <button type="button" class="btn btn-sm btn-secondary px-4"
-                    data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-sm btn-danger px-4"
-                    onclick="event.preventDefault(); document.getElementById('deleteForm-{{ $item->code }}').submit();">
-                    Xóa
-                </button>
-            </div>
-        </div>
-    </div>
-</div> --}}
-
-
 @empty
     <tr id="noDataAlert">
         <td colspan="12" class="text-center">
             <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
                 role="alert" style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                 <div class="mb-3">
-                    <i class="fas fa-search" style="font-size: 36px; color: #6c757d;"></i>
+                    <i class="fas fa-clipboard-check" style="font-size: 36px; color: #6c757d;"></i>
                 </div>
                 <div class="text-center">
-                    <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không có kết quả tìm kiếm</h5>
+                    <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin phiếu
+                        kiểm kho trống</h5>
                     <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                        Không tìm thấy kết quả phù hợp với yêu cầu tìm kiếm của bạn. Vui lòng thử lại với từ khóa khác.
+                        Hiện tại chưa có phiếu kiểm kho nào được tạo. Vui lòng kiểm tra lại hoặc tạo
+                        mới phiếu kiểm kho để bắt đầu.
                     </p>
                 </div>
             </div>

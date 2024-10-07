@@ -20,7 +20,7 @@
         .custom-file-input-label {
             border-radius: 10px;
             display: flex;
-            border: 1px solid #28a745;
+            border: 2px dashed #28a745;
             padding: 5px;
             width: 250px;
             text-align: center;

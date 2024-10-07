@@ -65,7 +65,7 @@
                                     {{ $item['code'] }}
                                 </td>
                                 <td>
-                                    {{ $item['check_date'] }}
+                                    {{ \Carbon\Carbon::parse($item['check_date'])->format('d/m/Y') }}
                                 </td>
                                 <td>
                                     {{ $totalUnequal }} <!-- Hiển thị tổng chênh lệch -->
@@ -84,7 +84,7 @@
                                     @elseif($item['status'] == 1)
                                         <span class="label label-final text-success">Đã cân bằng</span>
                                     @else
-                                        <span class="label label-temp text-danger">Phiếu đã hiểu</span>
+                                        <span class="label label-temp text-danger">Phiếu đã hủy</span>
                                     @endif
                                 </td>
                             </tr>
@@ -119,7 +119,7 @@
                                                                     <td class=""><strong>Thời gian</strong>
                                                                     </td>
                                                                     <td class="text-gray-800">
-                                                                        {{ $item['created_at'] }}
+                                                                        {{ \Carbon\Carbon::parse($item['created_by'])->format('d/m/Y H:i:s') }}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -173,11 +173,12 @@
                                                         <table class="table table-striped table-sm table-hover">
                                                             <thead style="background-color: #FFA500;">
                                                                 <tr class="text-center">
-                                                                    <th class="ps-3">Mã thiết bị</th>
-                                                                    <th>Tên thiết bị</th>
-                                                                    <th>Tồn kho</th>
-                                                                    <th>Số lượng thực tế</th>
-                                                                    <th>Số lượng lệch</th>
+                                                                    <th style="width: 15%;" class="ps-3">Mã thiết bị</th>
+                                                                    <th style="width: 15%;">Tên thiết bị</th>
+                                                                    <th style="width: 15%;">Số lô</th>
+                                                                    <th style="width: 15%;">Tồn kho</th>
+                                                                    <th style="width: 15%;">Số lượng thực tế</th>
+                                                                    <th style="width: 15%;">Số lượng lệch</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -186,7 +187,12 @@
                                                                         <td class="ps-4">
                                                                             {{ $detail['equipment_code'] }}
                                                                         </td>
-                                                                        <td>Băng gạc</td>
+                                                                        <td>
+                                                                            {{ $detail->equipment->name }}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ $detail['batch_number'] }}
+                                                                        </td>
                                                                         <td>
                                                                             {{ $detail['current_quantity'] }}
                                                                         </td>
@@ -371,8 +377,6 @@
 
                                     </div>
             </div>
-            </td>
-            </tr>
         @empty
             <tr id="noDataAlert">
                 <td colspan="12" class="text-center">
@@ -393,8 +397,6 @@
                 </td>
             </tr>
             @endforelse
-            </tbody>
-            </table>
         </div>
     </div>
     <div class="card-body py-3 mb-3 d-flex justify-center">

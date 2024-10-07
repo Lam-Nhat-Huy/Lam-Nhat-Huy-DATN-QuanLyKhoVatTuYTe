@@ -149,7 +149,6 @@ class ImportController extends Controller
     {
         // Kiểm tra xem số lô đã tồn tại chưa
         $existingInventory = Inventories::where('batch_number', $batch_number)
-            ->where('equipment_code', $equipment_code)
             ->first();
 
         // Trả về phản hồi dưới dạng JSON

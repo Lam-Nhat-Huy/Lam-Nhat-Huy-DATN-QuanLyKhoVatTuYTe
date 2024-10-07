@@ -108,10 +108,6 @@ function addProductToTable(
         </td>
         <td class="unequal-count" id="unequal-count-${rowCount}">0</td>
         <td>
-            <button class="btn btn-primary" title="Điền số lượng tồn kho" type="button" onclick="autoFillQuantity(${rowCount}, ${current_quantity})">
-                <i class="fa fa-random"></i>
-            </button>
-
             <a href="#" class="text-dark" title="Xóa thiết bị" onclick="removeProduct(${rowCount})">
                 <i class="fa fa-trash"></i>
             </a>

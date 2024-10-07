@@ -7,8 +7,10 @@ use App\Models\Equipments;
 use App\Models\Inventories;
 use App\Models\Inventory_check_details;
 use App\Models\Inventory_checks;
+use App\Models\Notifications;
 use App\Models\Suppliers;
 use App\Models\Users;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -90,14 +92,19 @@ class CheckWarehouseController extends Controller
             Inventory_check_details::insert($inventoryCheckDetailData);
         } catch (\Exception $e) {
             toastr()->error('Lỗi khi lưu chi tiết phiếu kiểm kho: ' . $e->getMessage());
+
             return redirect()->back();
         }
 
         if ($materialData[0]['status'] == 1) {
+
             foreach ($materialData as $material) {
                 $this->updateInventoryByCheck($material);
             }
+
             toastr()->success('Đã lưu và cập nhật kho thành công với mã ' . $inventoryCheckCode);
+
+            $this->createNotificationAfterUpdateInventory($inventoryCheckCode, $materialData[0]['created_by']);
         } else {
             toastr()->warning('Phiếu kiểm kho tạm đã được lưu với mã ' . $inventoryCheckCode);
         }
@@ -128,35 +135,6 @@ class CheckWarehouseController extends Controller
         }
     }
 
-    public function approveCheck($code)
-    {
-        $inventoryCheck = Inventory_checks::where('code', $code)->first();
-
-        if ($inventoryCheck && $inventoryCheck->status == 0) {
-            $inventoryCheck->status = 1;
-            $inventoryCheck->save();
-
-            $inventoryCheckDetails = Inventory_check_details::where('inventory_check_code', $code)->get();
-
-            foreach ($inventoryCheckDetails as $detail) {
-                $material = [
-                    'equipment_code' => $detail->equipment_code,
-                    'batch_number' => $detail->batch_number,
-                    'actual_quantity' => $detail->actual_quantity,
-                    'unequal' => $detail->unequal
-                ];
-
-                $this->updateInventoryByCheck($material);
-            }
-
-            toastr()->success('Đã duyệt phiếu kiểm kho thành công với mã ' . $inventoryCheck->code);
-            return redirect()->back();
-        }
-
-        toastr()->success('Phiếu kiểm kho đã được duyệt trước đó.');
-        return redirect()->back();
-    }
-
     public function search(Request $request)
     {
         $title = 'Kiểm Kho';
@@ -178,13 +156,14 @@ class CheckWarehouseController extends Controller
             ->when($endDate, function ($q) use ($endDate) {
                 return $q->whereDate('check_date', '<=', $endDate);
             })
+            ->when(!is_null($status), function ($q) use ($status) {
+                return $q->where('status', $status);
+            })
             ->when($userCode, function ($q) use ($userCode) {
                 return $q->where('user_code', $userCode);
             })
-            ->when($status, function ($q) use ($status) {
-                return $q->where('status', $status);
-            })
             ->get();
+
 
         return view("{$this->route}.search", [
             'title' => $title,
@@ -208,12 +187,52 @@ class CheckWarehouseController extends Controller
         return $randomString;
     }
 
-    public function cancelCheck($code)
+    public function approveCheck($code)
     {
         $inventoryCheck = Inventory_checks::where('code', $code)->first();
 
-        if ($inventoryCheck && $inventoryCheck->status == 1) {
+        if ($inventoryCheck && $inventoryCheck->status == 0) {
+            $inventoryCheck->status = 1;
+            $inventoryCheck->check_date = now();
+            $inventoryCheck->save();
 
+            $inventoryCheckDetails = Inventory_check_details::where('inventory_check_code', $code)->get();
+
+            foreach ($inventoryCheckDetails as $detail) {
+                $material = [
+                    'equipment_code' => $detail->equipment_code,
+                    'batch_number' => $detail->batch_number,
+                    'actual_quantity' => $detail->actual_quantity,
+                    'unequal' => $detail->unequal
+                ];
+
+                $this->updateInventoryByCheck($material);
+            }
+
+            toastr()->success('Đã duyệt phiếu kiểm kho thành công với mã ' . $inventoryCheck->code);
+            return redirect()->back();
+        }
+
+        toastr()->success('Phiếu kiểm kho đã được duyệt trước đó.');
+        return redirect()->back();
+    }
+
+    public function cancelCheck($code)
+    {
+        $inventoryCheck = Inventory_checks::where('code', $code)->first();
+        $now = Carbon::now('Asia/Ho_Chi_Minh');
+
+        if ($inventoryCheck && $inventoryCheck->status == 1) {
+            $checkDate = Carbon::parse($inventoryCheck->check_date)->setTimezone('Asia/Ho_Chi_Minh');
+
+            $daysPassed = $checkDate->diffInDays($now);
+
+            if ($daysPassed > 1) {
+                toastr()->error('Không thể hủy phiếu kiểm kho vì đã quá thời gian cho phép (1 ngày).');
+                return redirect()->back();
+            }
+
+            // Thực hiện cập nhật số lượng tồn kho
             $inventoryCheckDetails = Inventory_check_details::where('inventory_check_code', $code)->get();
 
             foreach ($inventoryCheckDetails as $detail) {
@@ -223,24 +242,22 @@ class CheckWarehouseController extends Controller
 
                 if ($inventory) {
                     $inventory->current_quantity = $detail->current_quantity;
-
                     $inventory->save();
                 }
             }
 
             $inventoryCheck->status = 3;
-
             $inventoryCheck->save();
 
             toastr()->success('Phiếu kiểm kho đã được hủy và số lượng tồn kho đã được phục hồi.');
-
             return redirect()->back();
         }
 
         toastr()->error('Không thể hủy phiếu kiểm kho. Chỉ có thể hủy phiếu đã được duyệt.');
-
         return redirect()->back();
     }
+
+
 
     public function deleteCheck($code)
     {
@@ -259,5 +276,22 @@ class CheckWarehouseController extends Controller
         $check->delete();
 
         return redirect()->route('check_warehouse.index')->with('success', 'Phiếu kiểm kho đã được xóa thành công.');
+    }
+
+    public function createNotificationAfterUpdateInventory($inventoryCheckCode, $userCode)
+    {
+        $notificationContent = "Kho đã được cân bằng thành công với mã phiếu kiểm kho: {$inventoryCheckCode}";
+
+        $payload = [
+            'code' => 'TB' . $this->generateRandomString(8),
+            'user_code' => $userCode,
+            'content' => $notificationContent,
+            'created_at' => now(),
+            'updated_at' => null,
+            'important' => 0,
+            'status' => 1
+        ];
+
+        Notifications::create($payload);
     }
 }
