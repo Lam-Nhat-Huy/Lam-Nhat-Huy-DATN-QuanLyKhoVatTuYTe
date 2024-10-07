@@ -37,14 +37,13 @@
                     <thead>
                         <tr class="bg-success text-center">
                             <th class="ps-3">
-                                <input type="checkbox" id="selectAll" />
                             </th>
-                            <th class="ps-3">Mã kiểm kho</th>
-                            <th class="">Thời gian</th>
-                            <th class="">Tổng chênh lệch</th>
-                            <th class="">Số lượng lệch tăng</th>
-                            <th class="">Số lượng lệch giảm</th>
-                            <th class="">Trạng Thái</th>
+                            <th style="width: 15%;" class="ps-3">Mã kiểm kho</th>
+                            <th style="width: 15%;" class="">Thời gian</th>
+                            <th style="width: 15%;" class="">Tổng chênh lệch</th>
+                            <th style="width: 15%;" class="">Số lượng lệch tăng</th>
+                            <th style="width: 15%;" class="">Số lượng lệch giảm</th>
+                            <th style="width: 15%;" class="">Trạng Thái</th>
                         </tr>
                     </thead>
 
@@ -59,7 +58,8 @@
                                 data-bs-target="#collapse{{ $item['code'] }}" aria-expanded="false"
                                 aria-controls="collapse{{ $item['code'] }}">
                                 <td>
-                                    <input type="checkbox" class="row-checkbox" />
+                                    <!-- Sử dụng Font Awesome icon để hiển thị mũi tên -->
+                                    <i class="row-icon fa fa-chevron-right"></i>
                                 </td>
                                 <td>
                                     {{ $item['code'] }}
@@ -397,10 +397,48 @@
             </table>
         </div>
     </div>
+    <div class="card-body py-3 mb-3 d-flex justify-center">
+        <div class="action-bar">
+            {{ $inventoryChecks->links('pagination::bootstrap-4') }}
+        </div>
     </div>
+    </div>
+
+
 @endsection
 
 @section('scripts')
+    <script>
+        // Lắng nghe sự kiện click
+        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(element) {
+            let targetId = element.getAttribute('data-bs-target');
+            let icon = element.querySelector('.row-icon');
+            let target = document.querySelector(targetId);
+
+            // Thay đổi biểu tượng ngay lập tức khi click
+            element.addEventListener('click', function() {
+                if (icon.classList.contains('fa-chevron-right')) {
+                    icon.classList.remove('fa-chevron-right');
+                    icon.classList.add('fa-chevron-down');
+                } else {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-right');
+                }
+            });
+
+            // Đảm bảo trạng thái của icon khi collapse hoàn thành
+            target.addEventListener('shown.bs.collapse', function() {
+                icon.classList.remove('fa-chevron-right');
+                icon.classList.add('fa-chevron-down');
+            });
+
+            target.addEventListener('hidden.bs.collapse', function() {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-right');
+            });
+        });
+    </script>
+
     <script>
         $(document).ready(function() {
             $('#search').on('keyup', function() {

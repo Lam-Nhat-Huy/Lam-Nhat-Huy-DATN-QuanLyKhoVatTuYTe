@@ -22,7 +22,7 @@ class CheckWarehouseController extends Controller
 
         $inventoryChecks = Inventory_checks::with(['details.equipment', 'user'])
             ->orderBy('created_at', 'DESC')
-            ->get();
+            ->paginate(5);
 
         $users = Users::all();
 

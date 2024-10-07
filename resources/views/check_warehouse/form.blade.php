@@ -277,14 +277,14 @@
                             <table class="table text-center align-middle" style="background-color: #f4f6f9;">
                                 <thead style="background-color: #FFA500;">
                                     <tr>
-                                        <th style="width: 50px;">STT</th>
-                                        <th style="width: 100px;">Mã thiết bị</th>
-                                        <th>Tên thiết bị</th>
-                                        <th>Số lô</th>
-                                        <th>Tồn kho</th>
-                                        <th>Thực tế</th>
-                                        <th>SL lệch</th>
-                                        <th style="width: 15%;"></th>
+                                        <th style="width: 15%;">STT</th>
+                                        <th style="width: 15%;">Mã thiết bị</th>
+                                        <th style="width: 15%;">Tên thiết bị</th>
+                                        <th style="width: 15%;">Số lô</th>
+                                        <th style="width: 15%;">Tồn kho</th>
+                                        <th style="width: 15%;">Thực tế</th>
+                                        <th style="width: 10%;">SL lệch</th>
+                                        <th style="width: 25%;"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="materialList">
