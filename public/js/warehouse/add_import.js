@@ -90,11 +90,7 @@ async function addEquipment() {
         equipment_code
     );
     if (isDuplicateBatchInDB) {
-        errors.push(
-            "Số lô này đã tồn tại cho thiết bị " +
-                equipment_code +
-                " trong cơ sở dữ liệu."
-        );
+        errors.push("Số lô này đã được sử dụng. Vui lòng chọn số lô khác");
     }
 
     // Hiển thị lỗi nếu có
