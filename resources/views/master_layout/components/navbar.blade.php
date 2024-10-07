@@ -44,13 +44,16 @@
                                             @foreach ($item['subModule'] as $sub)
                                                 @if (in_array(session('isAdmin'), (array) $sub['user_role']))
                                                     @if (Route::has($sub['route']))
-                                                        <div class="menu-item">
-                                                            <a class="menu-link py-3 {{ in_array(Route::currentRouteName(), (array) $sub['route']) || in_array(Route::currentRouteName(), (array) $sub['route_action']) ? 'active' : '' }}"
-                                                                href="{{ route($sub['route']) }}">
-                                                                <i class="{{ $sub['icon'] }} me-2"></i>
-                                                                <span class="menu-title">{{ $sub['title'] }}</span>
-                                                            </a>
-                                                        </div>
+                                                        @if ($firstLockWarehouse == 1 && ($sub['route'] == 'warehouse.import' || $sub['route'] == 'warehouse.export'))
+                                                        @else
+                                                            <div class="menu-item">
+                                                                <a class="menu-link py-3 {{ in_array(Route::currentRouteName(), (array) $sub['route']) || in_array(Route::currentRouteName(), (array) $sub['route_action']) ? 'active' : '' }}"
+                                                                    href="{{ route($sub['route']) }}">
+                                                                    <i class="{{ $sub['icon'] }} me-2"></i>
+                                                                    <span class="menu-title">{{ $sub['title'] }}</span>
+                                                                </a>
+                                                            </div>
+                                                        @endif
                                                     @else
                                                         <div class="menu-item">
                                                             <strong class="menu-link py-3">

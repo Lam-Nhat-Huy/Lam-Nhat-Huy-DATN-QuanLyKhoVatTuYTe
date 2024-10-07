@@ -308,7 +308,7 @@
                                                                     <button type="button"
                                                                         class="btn btn-sm btn-danger rounded-pill"
                                                                         data-bs-toggle="modal"
-                                                                        data-bs-target="#deleteConfirmModal{{ $item->code }}">
+                                                                        data-bs-target="#deleteConfirm{{ $item->code }}">
                                                                         <i class="fa fa-trash"
                                                                             style="margin-bottom: 2px;"></i> Xóa
                                                                     </button>

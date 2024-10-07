@@ -32,7 +32,7 @@ class EquipmentRequestController extends Controller
 
         $AllUser = Users::orderBy('created_at', 'DESC')->get();
 
-        $AllEquipmentRequest = $this->callModel::with(['suppliers', 'users'])
+        $AllEquipmentRequest = $this->callModel::with(['suppliers', 'users', 'import_equipment_request_details'])
             ->orderBy('request_date', 'DESC')
             ->whereNull('deleted_at');
 
@@ -110,6 +110,9 @@ class EquipmentRequestController extends Controller
 
                 $this->callModel::whereIn('code', $request->import_reqest_codes)->update(['status' => 1]);
 
+                Import_equipment_request_details::whereIn('import_request_code', $request->import_reqest_codes)
+                    ->update(['status' => 1]);
+
                 toastr()->success('Duyệt thành công');
 
                 return redirect()->back();
@@ -130,7 +133,7 @@ class EquipmentRequestController extends Controller
     {
         $title = 'Yêu Cầu Mua Hàng';
 
-        $AllEquipmentRequestTrash = $this->callModel::with(['suppliers', 'users'])
+        $AllEquipmentRequestTrash = $this->callModel::with(['suppliers', 'users', 'import_equipment_request_details'])
             ->orderBy('deleted_at', 'DESC')
             ->onlyTrashed()
             ->paginate(10);
@@ -206,7 +209,7 @@ class EquipmentRequestController extends Controller
                 return response()->json([
                     'success' => true,
                     'equipment_name' => $equipment->name,
-                    'unit' => $equipment->units->name ?? 'Không có',
+                    'unit' => $equipment->units->name,
                     'quantity' => $request->quantity,
                     'equipment_code' => $equipment->code,
                 ]);
@@ -224,18 +227,17 @@ class EquipmentRequestController extends Controller
             $equipmentList = json_decode($request->input('equipment_list'), true);
 
             $existingEquipment = Import_equipment_request_details::whereIn('equipment_code', array_column($equipmentList, 'equipment_code'))
-                ->whereHas('importEquipmentRequests', function ($query) {
+                ->where(function ($query) {
                     $query->where('status', 0)
-                        ->whereNull('deleted_at')
-                        ->where("request_date", '>', now()->subDays(3))
                         ->orWhere('status', 3);
-                })->get(['equipment_code']);
+                })
+                ->where('created_at', '>', now()->subDays(3))
+                ->get(['equipment_code']);
 
             if ($existingEquipment->isNotEmpty()) {
-                // Kiểm tra nội dung của $existingEquipment
                 return response()->json([
                     'success' => false,
-                    'message' => 'Thiết bị yêu cầu mua đã tồn tại trong lịch sử yêu cầu, vui lòng kiểm tra lại',
+                    'message' => 'Thiết bị yêu cầu mua đã tồn tại trong lịch sử yêu cầu hoặc thùng rác, vui lòng kiểm tra lại',
                     'list_duplicated' => $existingEquipment->pluck('equipment_code')->toArray(),
                 ]);
             }
@@ -258,12 +260,13 @@ class EquipmentRequestController extends Controller
                         'import_request_code' => $insertImportEquipmentRequest->code,
                         'equipment_code' => $equipment['equipment_code'],
                         'quantity' => $equipment['quantity'],
-                        'created_at' => now(),
+                        'status' => $request->input('importEquipmentStatus') == 4 ? 0 : $request->input('importEquipmentStatus'),
+                        'created_at' => $insertImportEquipmentRequest->request_date,
                         'updated_at' => null,
                     ]);
                 }
 
-                return response()->json(['success' => true, 'message' => 'Tạo phiếu yêu cầu mua thiết bị thành công']);
+                return response()->json(['success' => true, 'message' => 'Đã tạo phiếu yêu cầu']);
             }
         }
 
@@ -327,22 +330,21 @@ class EquipmentRequestController extends Controller
 
             $existingEquipment = Import_equipment_request_details::whereIn('equipment_code', array_column($equipmentList, 'equipment_code'))
                 ->where('import_request_code', '!=', $code)
-                ->whereHas('importEquipmentRequests', function ($query) {
+                ->where(function ($query) {
                     $query->where('status', 0)
-                        ->whereNull('deleted_at')
-                        ->orWhere('status', 3)
-                        ->where("request_date", '>', now()->subDays(3));
-                })->get(['equipment_code']);
+                        ->orWhere('status', 3);
+                })
+                ->where('created_at', '>', now()->subDays(3))
+                ->get(['equipment_code']);
 
             if ($existingEquipment->isNotEmpty()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Thiết bị yêu cầu mua đã tồn tại trong lịch sử yêu cầu, vui lòng kiểm tra lại',
+                    'message' => 'Thiết bị yêu cầu mua đã tồn tại trong lịch sử yêu cầu hoặc thùng rác, vui lòng kiểm tra lại',
                     'list_duplicated' => $existingEquipment->pluck('equipment_code')->toArray(),
                 ]);
             }
 
-            // Kiểm tra nếu trong mảng cập nhật không có thiết bị này trước đó của mã phiếu yêu cầu thì xóa luôn, nếu có thì cập nhật số lượng
             // Tìm các bản ghi không có mã trong $equipmentList và thuộc về import_request_code
             $equipmentToDelete = Import_equipment_request_details::whereNotIn('equipment_code', array_column($equipmentList, 'equipment_code'))
                 ->where('import_request_code', $code)
@@ -374,6 +376,8 @@ class EquipmentRequestController extends Controller
                     ],
                     [
                         'quantity' => $equipment['quantity'],
+                        'status' => $record->status,
+                        'created_at' => $record->request_date,
                         'updated_at' => now()
                     ]
                 );

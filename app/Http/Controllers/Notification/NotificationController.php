@@ -107,6 +107,13 @@ class NotificationController extends Controller
 
             if ($request->action_type === 'restore') {
 
+                $this->callModel::withTrashed()
+                    ->whereIn('code', $request->notification_codes)
+                    ->update([
+                        'important' => 0,
+                        'lock_warehouse' => 0,
+                    ]);
+
                 $this->callModel::whereIn('code', $request->notification_codes)->restore();
 
                 toastr()->success('Khôi phục thành công');
@@ -123,6 +130,14 @@ class NotificationController extends Controller
         }
 
         if (isset($request->restore_notification)) {
+
+            $this->callModel::withTrashed()
+                ->where('code', $request->restore_notification)
+                ->update([
+                    'important' => 0,
+                    'lock_warehouse' => 0,
+                ]);
+
 
             $this->callModel::where('code', $request->restore_notification)->restore();
 
@@ -162,15 +177,27 @@ class NotificationController extends Controller
 
         if ($data) {
             $data['code'] = 'TB' . $this->generateRandomString(8);
-            $data['user_code'] = session('user_code');
-            $data['created_at'] = now();
-            $data['updated_at'] = null;
-            $data['important'] = $request->input('important');
-            $data['status'] = $request->has('status') ? 1 : 0; // handle status toggle
 
-            if ($request->input('important') == 1) {
+            $data['user_code'] = session('user_code');
+
+            $data['created_at'] = now();
+
+            $data['updated_at'] = null;
+
+            $data['important'] = $request->has('important') ? 1 : 0;
+
+            $data['status'] = $request->has('status') ? 1 : 0;
+
+            $data['lock_warehouse'] = $request->has('lock_warehouse') ? 1 : 0;
+
+            if ($request->important == 1) {
                 $this->callModel::where('important', 1)
                     ->update(['important' => 0]);
+            }
+
+            if ($request->lock_warehouse == 1) {
+                $this->callModel::where('lock_warehouse', 1)
+                    ->update(['lock_warehouse' => 0]);
             }
 
             $this->callModel::create($data);
@@ -188,11 +215,21 @@ class NotificationController extends Controller
         if ($data) {
             $data['updated_at'] = now();
 
-            // Set important to 0 if it's not checked
-            $data['important'] = $request->input('important') ?? 0;
+            $data['important'] = $request->has('important') ? 1 : 0;
 
-            // Set status to 0 if it's not checked
-            $data['status'] = $request->input('status') ?? 0;
+            $data['status'] = $request->has('status') ? 1 : 0;
+
+            $data['lock_warehouse'] = $request->has('lock_warehouse') ? 1 : 0;
+
+            if ($request->important == 1) {
+                $this->callModel::where('important', 1)
+                    ->update(['important' => 0]);
+            }
+
+            if ($request->lock_warehouse == 1) {
+                $this->callModel::where('lock_warehouse', 1)
+                    ->update(['lock_warehouse' => 0]);
+            }
 
             $rs = $this->callModel::where('code', $code)->update($data);
 
@@ -205,8 +242,6 @@ class NotificationController extends Controller
             return redirect()->route('notification.index');
         }
     }
-
-
 
     public function notification_edit($code)
     {

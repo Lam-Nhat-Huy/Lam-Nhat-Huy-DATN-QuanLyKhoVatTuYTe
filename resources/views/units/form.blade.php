@@ -50,7 +50,7 @@
                         <div class="d-flex align-items-center">
 
                             <input name="name" class="form-control form-control-sm border-success rounded-pill"
-                                value="{{ old('name', $unit->name ?? '') }}">
+                                value="{{ old('name', $unit->name ?? '') }}" placeholder="Tên đơn vị..">
                         </div>
 
                         @error('name')
@@ -62,7 +62,7 @@
 
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Mô Tả</label>
 
-                        <textarea name="description" id="description" class="form-control form-control-sm border-success" rows="5">{{ old('description', $unit->description ?? '') }}</textarea>
+                        <textarea name="description" id="description" class="form-control form-control-sm border-success" rows="5" placeholder="Mô tả đơn vị..">{{ old('description', $unit->description ?? '') }}</textarea>
 
                     </div>
 

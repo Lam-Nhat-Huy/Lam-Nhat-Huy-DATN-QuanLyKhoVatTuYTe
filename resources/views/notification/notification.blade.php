@@ -1,74 +1,6 @@
 @extends('master_layout.layout')
 
 @section('styles')
-    <style>
-        /* Custom dropdown button */
-        .btn-outline-secondary {
-            border-radius: 50%;
-            /* Nút tròn */
-            padding: 8px;
-            /* Tạo khoảng cách thoải mái */
-            background-color: #f1f3f5;
-            /* Màu nền nhạt */
-            transition: background-color 0.3s ease;
-            /* Hiệu ứng khi hover */
-        }
-
-        .btn-outline-secondary:hover {
-            background-color: #e9ecef;
-            /* Tăng độ sáng khi hover */
-        }
-
-        /* Dropdown menu customization */
-        .dropdown-menu {
-            border-radius: 8px;
-            /* Bo góc mềm mại */
-            padding: 0;
-            /* Xóa padding mặc định */
-            min-width: 180px;
-            /* Độ rộng menu */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            /* Đổ bóng nhẹ */
-        }
-
-        /* Dropdown item customization */
-        /* Dropdown item customization */
-        .dropdown-item {
-            padding: 12px 20px;
-            /* Khoảng cách thoải mái */
-            display: flex;
-            align-items: center;
-            /* Căn giữa icon và text */
-            transition: background-color 0.2s ease-in-out;
-            /* Hiệu ứng hover nhẹ */
-            font-size: 14px;
-            /* Thay đổi kích thước chữ thành 14px */
-            border-bottom: 1px solid #f1f1f1;
-            /* Đường phân cách nhẹ giữa các mục */
-        }
-
-        .dropdown-item:last-child {
-            border-bottom: none;
-            /* Xóa đường kẻ cho mục cuối cùng */
-        }
-
-
-        /* Hover effect on dropdown items */
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            /* Thêm hiệu ứng hover nhẹ */
-        }
-
-        /* Icon spacing and styling */
-        .dropdown-item i {
-            font-size: 1.3rem;
-            /* Điều chỉnh kích thước icon */
-            color: #6c757d;
-            /* Màu icon trung tính */
-            margin-right: 10px;
-            /* Khoảng cách giữa icon và text */
-        }
-    </style>
 @endsection
 
 @section('title')
@@ -216,8 +148,8 @@
                 <div class="col-lg-2 col-md-4 col-sm-12">
                     <select name="st" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2 w-100">
                         <option value="" {{ request()->st == '' ? 'selected' : '' }}>--Theo Trạng Thái--</option>
-                        <option value="0" {{ request()->st == '0' ? 'selected' : '' }}>Chưa Duyệt</option>
-                        <option value="1" {{ request()->st == '1' ? 'selected' : '' }}>Đã Duyệt</option>
+                        <option value="1" {{ request()->st == '1' ? 'selected' : '' }}>Hiển Thị</option>
+                        <option value="0" {{ request()->st == '0' ? 'selected' : '' }}>Không Hiển Thị</option>
                     </select>
                 </div>
                 <div class="col-lg-6 col-md-12 col-sm-12">
@@ -249,14 +181,15 @@
                                 <th class="ps-4">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 10%">Mã Thông Báo</th>
-                                <th class="" style="width: 15%">Người Tạo</th>
-                                <th class="" style="width: 17%">Nội Dung</th>
-                                <th class="" style="width: 15%">Loại Thông Báo</th>
-                                <th class="" style="width: 13%">Ngày Tạo</th>
-                                <th class="" style="width: 10%">Trạng Thái</th>
-                                <th class="text-center" style="width: 10%">Quan Trọng</th>
-                                <th class="pe-3 text-center" style="width: 10%">Hành Động</th>
+                                <th class="" style="width: 10%">Mão</th>
+                                <th class="" style="width: 10%">Người Tạo</th>
+                                <th class="" style="width: 8%">Nội Dung</th>
+                                <th class="" style="width: 12%">Loại</th>
+                                <th class="" style="width: 10%">Ngày Tạo</th>
+                                <th class="text-center" style="width: 12%">Trạng Thái</th>
+                                <th class="text-center" style="width: 9%">Quan Trọng</th>
+                                <th class="text-center" style="width: 9%">Khóa Kho</th>
+                                <th class="pe-3 text-center" style="width: 20%">Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -274,7 +207,7 @@
                                     </td>
                                     <td>
                                         <span class="text-primary pointer" data-bs-toggle="modal"
-                                            data-bs-target="#detail_{{ $item->code }}">Xem Nội Dung
+                                            data-bs-target="#detail_{{ $item->code }}">Xem
                                         </span>
                                     </td>
                                     <td>
@@ -283,7 +216,7 @@
                                     <td>
                                         {{ $item->created_at->format('d-m-Y') }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         @if ($item->status == 1)
                                             <span style="font-size: 10px;" class="badge bg-success">Hiển thị</span>
                                         @else
@@ -302,35 +235,25 @@
                                     </td>
 
                                     <td class="text-center">
-                                        <div class="btn-group dropstart">
-                                            <button type="button" class="btn btn-light btn-sm dropdown-toggle"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="fa fa-ellipsis-h"></i>
+                                        @if ($item->lock_warehouse == 1)
+                                            <span class="rounded px-2 py-1 text-white bg-warning text-center"
+                                                style="font-size: 10px;"> Có</span>
+                                        @else
+                                            <span class="rounded px-2 py-1 text-white bg-danger text-center"
+                                                style="font-size: 10px;"> Không</span>
+                                        @endif
+                                    </td>
+
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            <a href="{{ route('notification.notification_edit', $item->code) }}"
+                                                class="btn btn-sm btn-info me-2 rounded-pill">
+                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i> Sửa
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-danger rounded-pill"
+                                                data-bs-toggle="modal" data-bs-target="#deleteModal_{{ $item->code }}">
+                                                <i class="fa fa-trash" style="margin-bottom: 2px;"></i> Xóa
                                             </button>
-                                            <ul class="dropdown-menu shadow" aria-labelledby="defaultDropdown"
-                                                style="min-width: 150px;">
-                                                @if ($item->status == 0)
-                                                    <li>
-                                                        <a class="dropdown-item text-success" href="#"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#browse_{{ $item->code }}">
-                                                            <i class="fa fa-clipboard-check me-2"></i> Duyệt
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                                <li>
-                                                    <a class="dropdown-item text-dark"
-                                                        href="{{ route('notification.notification_edit', $item->code) }}">
-                                                        <i class="fa fa-edit me-2"></i> Sửa
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item text-dark pointer" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteModal_{{ $item->code }}">
-                                                        <i class="fa fa-trash me-2"></i> Xóa
-                                                    </a>
-                                                </li>
-                                            </ul>
                                         </div>
                                     </td>
 
@@ -362,7 +285,7 @@
                                     </div>
 
                                     <!-- Modal Duyệt Thông Báo -->
-                                    <div class="modal fade" id="browse_{{ $item->code }}" data-bs-backdrop="static"
+                                    {{-- <div class="modal fade" id="browse_{{ $item->code }}" data-bs-backdrop="static"
                                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="checkModalLabel"
                                         aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
@@ -392,7 +315,7 @@
                                                 </form>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
 
                                     {{-- Xóa --}}

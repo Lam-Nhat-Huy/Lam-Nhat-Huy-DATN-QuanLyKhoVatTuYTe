@@ -250,7 +250,7 @@
                                                 <button class="btn rounded-pill btn-sm btn-twitter me-2 rounded-pill"
                                                     data-bs-toggle="modal" data-bs-target="#restore_{{ $item->code }}"
                                                     type="button">
-                                                    <i class="fas fa-clipboard-check"></i>Khôi Phục
+                                                    <i class="fas fa-rotate-right"></i>Khôi Phục
                                                 </button>
 
                                                 <!-- Nút xóa vv đơn -->
@@ -298,7 +298,7 @@
                         </span>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#restoreAll">
-                                    <i class="fas fa-clipboard-check me-2 text-twitter"></i>Khôi Phục</a>
+                                    <i class="fas fa-rotate-right me-2 text-twitter"></i>Khôi Phục</a>
                             </li>
                             <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#deleteAll">
                                     <i class="fas fa-trash me-2 text-danger"></i>Xóa</a>
@@ -329,7 +329,7 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary btn-sm px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4">
+                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">
                                 Khôi Phục</button>
                         </div>
                     </div>
@@ -353,7 +353,8 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4">Xóa Vĩnh Viễn</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa Vĩnh
+                                Viễn</button>
                         </div>
                     </div>
                 </div>
@@ -376,6 +377,7 @@
                     </div>
                     <form action="{{ route('equipment_request.import_trash') }}" method="POST">
                         @csrf
+                        <input type="hidden" name="restore_request" value="{{ $item->code }}">
                         <div class="modal-body text-center pb-0">
                             <p class="text-primary mb-4">Khôi Phục Yêu Cầu Mua Hàng
                                 Này?
@@ -384,8 +386,7 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" name="restore_request" value="{{ $item->code }}"
-                                class="btn rounded-pill btn-sm btn-twitter px-4">Khôi
+                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Khôi
                                 Phục</button>
                         </div>
                     </form>
@@ -407,6 +408,7 @@
                     </div>
                     <form action="{{ route('equipment_request.import_trash') }}" method="POST">
                         @csrf
+                        <input type="hidden" name="delete_request" value="{{ $item->code }}">
                         <div class="modal-body pb-0 text-center">
                             <p class="text-danger mb-4">Xóa Vĩnh Viễn Yêu Cầu Mua Hàng Này?
                             </p>
@@ -414,8 +416,7 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" name="delete_request" value="{{ $item->code }}"
-                                class="btn rounded-pill btn-sm btn-danger px-4">Xóa</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
                         </div>
                     </form>
                 </div>

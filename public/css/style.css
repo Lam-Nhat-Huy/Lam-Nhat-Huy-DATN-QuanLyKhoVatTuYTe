@@ -55215,8 +55215,8 @@ a {
 
 .loader {
     --hue: 210;
-    --size: 100px;
-    --border: 10px;
+    --size: 60px;
+    --border: 7px;
     --speed: 1s;
     --blur: var(--border);
 }

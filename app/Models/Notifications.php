@@ -24,6 +24,7 @@ class Notifications extends Model
         'notification_type',
         'important',
         'status',
+        'lock_warehouse',
         'content',
         'created_at',
         'updated_at',

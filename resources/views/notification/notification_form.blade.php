@@ -139,7 +139,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group me-20">
                             <label class="fs-5 fw-bold mb-2">Trạng thái</label>
                             <div class="checkbox-wrapper-6">
                                 <input class="tgl tgl-light" id="cb1-7" type="checkbox" value="1" name="status"
@@ -147,10 +147,16 @@
                                 <label class="tgl-btn" for="cb1-7"></label>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label class="fs-5 fw-bold mb-2">Khóa Kho <span class="text-danger fw-bolder ms-1">(Chỉ bật khi tạo thông báo kiểm kho)</span></label>
+                            <div class="checkbox-wrapper-6">
+                                <input class="tgl tgl-light" id="cb1-8" type="checkbox" value="1" name="lock_warehouse"
+                                    {{ (isset($firstNotification) && $firstNotification->lock_warehouse == 1) || old('lock_warehouse') == 1 ? 'checked' : '' }} />
+                                <label class="tgl-btn" for="cb1-8"></label>
+                            </div>
+                        </div>
                     </div>
-
-
-
                 </div>
             </div>
 
@@ -174,7 +180,7 @@
                         <h3 class="modal-title" id="deleteModalLabel">Thêm Loại Thông Báo</h3>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body pb-0">
                         <div class="mb-3">
                             <label class="required fs-5 fw-bold mb-2">Tên Loại Thông
                                 Báo</label>

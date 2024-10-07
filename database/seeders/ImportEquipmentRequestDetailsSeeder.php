@@ -15,6 +15,7 @@ class ImportEquipmentRequestDetailsSeeder extends Seeder
                 'import_request_code' => 'IMREQ001',
                 'equipment_code' => 'E001',
                 'quantity' => 10,
+                'status' => false,
                 'created_at' => now(),
                 'updated_at' => null,
                 'deleted_at' => null,

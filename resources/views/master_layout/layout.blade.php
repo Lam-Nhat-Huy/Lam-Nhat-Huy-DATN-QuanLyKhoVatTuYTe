@@ -46,68 +46,74 @@
     class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
     style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
 
-    <div class="d-flex flex-column flex-root">
+    @if (
+        $firstLockWarehouse == 1 &&
+            (Route::currentRouteName() == 'warehouse.import' || Route::currentRouteName() == 'warehouse.export'))
+        {{ abort(404) }}
+    @else
+        <div class="d-flex flex-column flex-root">
 
-        <div class="page d-flex flex-row flex-column-fluid">
+            <div class="page d-flex flex-row flex-column-fluid">
 
-            <navbar>
-                @include('master_layout.components.navbar')
-            </navbar>
+                <navbar>
+                    @include('master_layout.components.navbar')
+                </navbar>
 
-            <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+                <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
-                <sidebar>
-                    @include('master_layout.components.sidebar')
-                </sidebar>
+                    <sidebar>
+                        @include('master_layout.components.sidebar')
+                    </sidebar>
 
-                <main>
-                    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-                        <div class="toolbar" id="kt_toolbar">
-                            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-                                <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
-                                    data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-                                    class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                                    <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">
-                                        @yield('title', 'BeeSoft')
-                                    </h1>
+                    <main>
+                        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                            <div class="toolbar" id="kt_toolbar">
+                                <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                                    <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                                        data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                                        class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                                        <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">
+                                            @yield('title', 'BeeSoft')
+                                        </h1>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="post d-flex flex-column-fluid" id="kt_post">
-                            <div id="kt_content_container" class="container-xxl">
-                                <div class="row gy-5 g-xl-8">
-                                    <div class="col-xxl-12">
-                                        @yield('content')
+                            <div class="post d-flex flex-column-fluid" id="kt_post">
+                                <div id="kt_content_container" class="container-xxl">
+                                    <div class="row gy-5 g-xl-8">
+                                        <div class="col-xxl-12">
+                                            @yield('content')
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </main>
+                    </main>
 
-                <footer>
-                    @include('master_layout.components.footer')
-                </footer>
+                    <footer>
+                        @include('master_layout.components.footer')
+                    </footer>
 
-                <notification>
-                    @include('master_layout.components.notification_modal')
-                </notification>
+                    <notification>
+                        @include('master_layout.components.notification_modal')
+                    </notification>
 
-                <scrolltop>
-                    @include('master_layout.components.scroll_top')
-                </scrolltop>
+                    <scrolltop>
+                        @include('master_layout.components.scroll_top')
+                    </scrolltop>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
+        <div id="loading">
+            <div aria-live="assertive" role="alert" class="loader"></div>
+        </div>
 
-    <div id="loading">
-        <div aria-live="assertive" role="alert" class="loader"></div>
-    </div>
-
-    <div id="loading-overlay" class="loading-overlay"></div>
+        <div id="loading-overlay" class="loading-overlay"></div>
+    @endif
 
     {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
 

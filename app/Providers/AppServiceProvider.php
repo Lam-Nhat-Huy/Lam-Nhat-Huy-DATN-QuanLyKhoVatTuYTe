@@ -29,11 +29,16 @@ class AppServiceProvider extends ServiceProvider
                 ->orderBy('created_at', 'DESC')
                 ->where('created_at', '>', now()->subDays(7))
                 ->where('status', 1)
-                ->where('important', 0)
                 ->whereNull('deleted_at')
                 ->get();
 
             $data['getNotification'] = $getNotifications;
+
+            $firstLockWarehouse = Notifications::where('lock_warehouse', 1)
+                ->whereNull('deleted_at')
+                ->first();
+
+            $data['firstLockWarehouse'] = $firstLockWarehouse->lock_warehouse ?? 2;
         }
 
         View::share($data);

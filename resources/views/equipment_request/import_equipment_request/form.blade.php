@@ -191,7 +191,7 @@
             <div class="d-none mb-3" id="important_error"><strong class="text-danger">Lưu ý: </strong><span
                     class="ms-1 fw-bolder">Các thiết bị yêu cầu được đánh dấu <span class="text-warning bg-dark">màu
                         vàng</span>
-                    đã tồn tại trong lịch sử yêu cầu (3 Ngày gần đây). Xin hãy kiểm tra và thử lại.</div>
+                    đã tồn tại trong lịch sử yêu cầu hoặc thùng rác (3 ngày gần đây). Xin hãy kiểm tra và thử lại.</div>
 
             <div class="modal-footer flex-right pe-0">
                 <button type="button" class="btn btn-info btn-sm {{ $d_none_temp }} rounded-pill"
@@ -350,6 +350,7 @@
                 let equipment_error = document.getElementById('equipment_error');
                 let equipmentList = getEquipmentList();
 
+                
                 supplier_code_error.innerText = '';
                 equipment_error.innerText = '';
 
@@ -394,7 +395,6 @@
                             toastr.error(data.message);
                             document.getElementById('important_error').classList.remove('d-none');
                             highlightDuplicatedEquipment(data.list_duplicated);
-                            console.log('list_duplicated content:', data.list_duplicated);
 
                             setTimeout(() => {
                                 document.getElementById('important_error').classList.add('d-none');
@@ -410,7 +410,6 @@
 
             }, 2000);
         }
-
 
         let addedEquipments = [];
 

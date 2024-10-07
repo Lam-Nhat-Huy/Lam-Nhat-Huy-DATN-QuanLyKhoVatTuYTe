@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Equipment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateEquipmentRequest extends FormRequest
+class UpdateEquipmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class CreateEquipmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'equipment_image' => 'required|mimes:jpg,png,pdf,docx|max:2048',
+            'equipment_image' => 'nullable|mimes:jpg,png,pdf,docx|max:2048',
             'name' => 'required|string|max:255',
             'equipment_type_code' => 'not_in:0|string|max:255',
             'unit_code' => 'not_in:0|string|max:255',
@@ -41,7 +41,6 @@ class CreateEquipmentRequest extends FormRequest
     public function messages()
     {
         return [
-            'equipment_image.required' => 'Vui lòng thêm ảnh cho thiết bị',
             'equipment_image.mimes' => 'Ảnh không đúng định dạng',
             'equipment_image.max' => 'Ảnh không được quá 2MB',
 

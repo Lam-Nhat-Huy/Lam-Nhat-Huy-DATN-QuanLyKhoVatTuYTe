@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Equipments;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateEquipmentRequest;
+use App\Http\Requests\Equipment\CreateEquipmentRequest;
+use App\Http\Requests\Equipment\UpdateEquipmentRequest;
 use App\Http\Requests\EquipmentType\CreateEquipmentType;
-use App\Http\Requests\EquipmentType\EquipmentType;
 use App\Http\Requests\EquipmentType\UpdateEquipmentType;
 use App\Models\Equipment_types;
 use App\Models\Equipments;
@@ -171,18 +171,14 @@ class EquipmentsController extends Controller
         return view('equipments.form_equipment', compact('title', 'action', 'title_form', 'equipmentTypes', 'suppliers', 'units', 'AllSuppiler'));
     }
 
-    public function create_equipment(\App\Http\Requests\CreateEquipmentRequest $request)
+    public function create_equipment(CreateEquipmentRequest $request)
     {
-        // Kiểm tra nếu có lỗi validation
         $data = $request->validated();
 
-        // Lấy đường dẫn ảnh cũ từ request (khi form bị submit lỗi)
-        $imageName = $request->input('current_image'); // Giữ nguyên ảnh cũ
+        $imageName = $request->input('current_image');
 
-        // Kiểm tra nếu có file ảnh mới được tải lên
         if ($request->hasFile('equipment_image')) {
 
-            // Lưu ảnh mới
             $imageName = time() . '.' . $request->equipment_image->extension();
             $request->equipment_image->move(public_path('images/equipments'), $imageName);
         }
@@ -190,14 +186,14 @@ class EquipmentsController extends Controller
         // Nếu không có lỗi, tạo mới thiết bị
         $this->equipmentModal::create([
             'code' => 'EQ' . $this->generateRandomString(8),
-            'name' => $request->name,
+            'name' => $data->name,
             'barcode' => '123456',
-            'description' => $request->description,
-            'price' => $request->price,
-            'country' => $request->country,
-            'equipment_type_code' => $request->equipment_type_code,
-            'supplier_code' => $request->supplier_code,
-            'unit_code' => $request->unit_code,
+            'description' => $data->description,
+            'price' => $data->price,
+            'country' => $data->country,
+            'equipment_type_code' => $data->equipment_type_code,
+            'supplier_code' => $data->supplier_code,
+            'unit_code' => $data->unit_code,
             'image' => $imageName,
             'expiry_date' => $request->expiry_date,
             'created_at' => now(),
@@ -227,7 +223,7 @@ class EquipmentsController extends Controller
             ->with('equipment', $currentEquipment);
     }
 
-    public function edit_equipment(Request $request, $code)
+    public function edit_equipment(UpdateEquipmentRequest $request, $code)
     {
         // Validate dữ liệu đầu vào
         $request->validate([

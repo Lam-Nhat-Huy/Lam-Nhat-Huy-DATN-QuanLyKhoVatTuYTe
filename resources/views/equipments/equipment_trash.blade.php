@@ -14,7 +14,7 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Thùng Rác</span>
             </h3>
             <div class="card-toolbar">
-                <a href="{{ route('equipments.index') }}" class="btn btn-sm btn-dark me-2">
+                <a href="{{ route('equipments.index') }}" class="btn btn-sm btn-dark me-2 rounded-pill">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-arrow-left me-1"></i>
                         Trở Lại
