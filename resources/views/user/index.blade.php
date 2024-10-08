@@ -9,6 +9,28 @@
 
 @section('scripts')
     <script>
+        // Đổi biểu tượng khi bấm vào td có chứa chevron
+        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(td) {
+            td.addEventListener('click', function(event) {
+                // Tìm phần tử <i> bên trong <td>
+                var icon = this.querySelector('i');
+
+                // Kiểm tra nếu có <i> thì thực hiện đổi biểu tượng
+                if (icon) {
+                    // Đổi icon khi click
+                    if (icon.classList.contains('fa-chevron-right')) {
+                        icon.classList.remove('fa-chevron-right');
+                        icon.classList.add('fa-chevron-down');
+                    } else {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-right');
+                    }
+                }
+
+                // Ngăn chặn việc click ảnh hưởng đến hàng (row)
+                event.stopPropagation();
+            });
+        });
         // Hàm kiểm tra và ẩn/hiện nút xóa tất cả
         function toggleDeleteAction() {
             var anyChecked = false;
@@ -93,7 +115,6 @@
     </script>
 @endsection
 
-
 @section('content')
     <div class="card mb-5 pb-5 mb-xl-8 shadow">
         <div class="card-header border-0 pt-5">
@@ -168,15 +189,14 @@
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 6% !important;">Mã ND</th>
-                                <th class="" style="width: 11% !important;">Ảnh</th>
-                                <th class="" style="width: 13% !important;">Họ Tên</th>
-                                <th class="" style="width: 14% !important;">Email</th>
-                                <th class="" style="width: 14% !important;">SĐT</th>
-                                <th class="" style="width: 11% !important;">Giới Tính</th>
-                                <th class="" style="width: 11% !important;">Chức Vụ</th>
-                                <th class="" style="width: 11% !important;">Trạng Thái</th>
-                                <th class="pe-3" style="width: 10% !important;">Hành Động</th>
+                                <th class="" style="width: 7% !important;">Mã</th>
+                                <th class="" style="width: 10% !important;">Ảnh</th>
+                                <th class="" style="width: 15% !important;">Họ Tên</th>
+                                <th class="" style="width: 25% !important;">Email</th>
+                                <th class="" style="width: 12% !important;">Số Điện Thoại</th>
+                                <th class="" style="width: 8% !important;">Giới Tính</th>
+                                <th class="" style="width: 10% !important;">Trạng Thái</th>
+                                <th class="pe-3 text-center" style="width: 20% !important;">Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -207,34 +227,111 @@
                                         {{ $item->gender }}
                                     </td>
                                     <td>
-                                        @if ($item->position == 'Nhân Viên')
-                                            <span class="text-primary">{{ $item->position }}</span>
-                                        @else
-                                            <span class="text-danger">{{ $item->position }}</span>
-                                        @endif
-                                    </td>
-                                    <td>
                                         <div class="checkbox-wrapper-6">
                                             <input class="tgl tgl-light" id="cb1-6" type="checkbox"
                                                 {{ !empty($item->status) == 1 ? 'checked' : '' }} disabled />
                                             <label class="tgl-btn" for="cb1-6"></label>
                                         </div>
                                     </td>
-                                    <td class="text-center">
-                                        <div class="btn-group">
-                                            <button type="button" data-bs-toggle="dropdown">
-                                                <i class="fa fa-ellipsis-h me-2"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a href="{{ route('user.edit', $item->code) }}?{{ request()->getQueryString() }}"
-                                                        class="dropdown-item"><i class="fa fa-edit me-1"></i>Sửa</a></li>
-                                                <li><a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteModal_{{ $item->code }}"
-                                                        class="dropdown-item"><i class="fa fa-trash me-1">
-                                                        </i>Xóa
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                    <td class="text-center" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse_{{ $item['code'] }}" id="toggleIcon{{ $item['code'] }}">
+                                        Chi Tiết<i class="fa fa-chevron-right pointer ms-2"></i>
+                                    </td>
+                                </tr>
+
+                                <!-- Collapse content -->
+                                <tr class="collapse multi-collapse" id="collapse_{{ $item['code'] }}">
+                                    <td class="p-0" colspan="12">
+                                        <div class="flex-lg-row-fluid border-2">
+                                            <div class="card card-flush p-2"
+                                                style="padding-top: 0px !important; padding-bottom: 0px !important;">
+                                                <div class="card-header justify-content-center p-2"
+                                                    style="padding-top: 0 !important; padding-bottom: 0px !important;">
+                                                    <div class="row px-5 w-100">
+                                                        <div class="col-md-12 my-3">
+                                                            <h4 class="fw-bold mt-3">Thông Tin Chi Tiết</h4>
+                                                        </div>
+
+                                                        <div class="row mb-5 justify-content-center">
+                                                            <div class="col-md-3">
+                                                                <img src="{{ $item->avatar ? asset('storage/' . $item->avatar) : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png' }}" class="rounded border border-dark" style="width: 175px !important; height: 175px !important;" alt="">
+                                                            </div>
+                                                            <div class="col-md-9">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <table class="table table-borderless">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Họ Và Tên:</td>
+                                                                                    <td class="text-dark">
+                                                                                        {{ $item->last_name . ' ' . $item->first_name }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Email:</td>
+                                                                                    <td class="text-dark">{{ $item->email }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Phone:</td>
+                                                                                    <td class="text-dark">{{ $item->phone }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Địa Chỉ:</td>
+                                                                                    <td class="text-dark">{{ $item->address }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+    
+                                                                    <div class="col-md-6">
+                                                                        <table class="table table-borderless">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Năm Sinh:</td>
+                                                                                    <td class="text-dark">
+                                                                                        {{ $item->birth_day }}</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Giới Tính:</td>
+                                                                                    <td class="text-dark">{{ $item->gender }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Vai Trò:</td>
+                                                                                    <td class="text-dark">
+                                                                                        {{ $item->position }}</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Ngày Tạo Tài Khoản:</td>
+                                                                                    <td class="text-dark">
+                                                                                        {{ $item->created_at->format('d-m-Y') }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body py-3 border-top-0 border-2 text-end">
+                                            <div class="button-group">
+                                                <a href="{{ route('user.edit', $item->code) }}?{{ request()->getQueryString() }}"
+                                                    class="btn btn-sm btn-info me-2 rounded-pill"><i
+                                                        class="fa fa-edit me-1"></i>Sửa</a></li>
+
+                                                <button type="button" class="btn btn-sm btn-danger rounded-pill"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal_{{ $item->code }}">
+                                                    <i class="fa fa-trash" style="margin-bottom: 2px;"></i> Xóa
+                                                </button>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -299,7 +396,8 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
+                            <button type="submit"
+                                class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
                         </div>
                     </div>
                 </div>
@@ -310,26 +408,25 @@
     @foreach ($allUser as $item)
         {{-- Xóa --}}
         <div class="modal fade" id="deleteModal_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
-            tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
+            tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title text-white" id="deleteLabel">Xác Nhận Xóa người dùng</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center" style="padding-bottom: 0px;">
+                        <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa người dùng đã chọn?</p>
+                    </div>
                     <form action="{{ route('user.index') }}" method="POST">
                         @csrf
-                        <div class="modal-header">
-                            <h3 class="modal-title" id="deleteModalLabel">Xóa Người Dùng
-                            </h3>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="hidden" name="user_code_delete" value="{{ $item->code }}">
-                            <h4 class="text-danger text-center">Xóa Người Dùng Này?</h4>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn rounded-pill btn-sm btn-secondary"
+                        <input type="hidden" name="user_code_delete" value="{{ $item->code }}">
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
                             <button type="submit"
-                                class="btn rounded-pill btn-sm btn-danger load_animation">Xóa</button>
+                                class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
                         </div>
                     </form>
                 </div>
