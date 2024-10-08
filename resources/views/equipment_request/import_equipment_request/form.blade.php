@@ -109,6 +109,12 @@
                                         {{ $item->name }} - (Tổng Tồn:
                                         {{ $item->inventories->sum('current_quantity') ?? 0 }})
                                     </option>
+                                @else
+                                    <option value="{{ $item->code }}"
+                                        {{ in_array($item->code, $checkList ?? []) ? 'd-none' : '' }}">
+                                        {{ $item->name }} - (Tổng Tồn:
+                                        {{ $item->inventories->sum('current_quantity') ?? 0 }})
+                                    </option>
                                 @endif
                             @endforeach
                         </select>
@@ -200,10 +206,9 @@
             </div>
 
             <div class="d-none mb-3" id="important_error"><strong class="text-danger">Lưu ý: </strong><span
-                    class="ms-1 fw-bolder">Các thiết bị yêu cầu được đánh dấu <span class="text-warning bg-dark">màu
-                        vàng</span>
-                    đã tồn tại trong lịch sử yêu cầu hoặc thùng rác (3 ngày gần đây). Xin hãy kiểm tra và thử lại.</div>
-
+                    class="ms-1 fw-bolder">Các thiết bị được đánh dấu <span class="text-warning bg-dark">màu vàng</span>
+                    đã tồn tại trong lịch sử yêu cầu hoặc phiếu tạm của người khác, hoặc đã bị đưa vào thùng rác (trong 3
+                    ngày gần đây). Vui lòng kiểm tra và thử lại.. (<span id="countdown">20</span>)</div>
 
             <div class="modal-footer flex-right pe-0">
                 <button type="button" class="btn btn-info btn-sm {{ $d_none_temp }} rounded-pill"
@@ -300,6 +305,17 @@
 
 @section('scripts')
     <script>
+        function countDown() {
+            let timeLeft = 20;
+            const countdownElement = document.getElementById('countdown');
+
+            const countdownTimer = setInterval(() => {
+                timeLeft--;
+
+                countdownElement.textContent = timeLeft;
+            }, 1000);
+        }
+
         // Duyệt danh sách bị trùng
         function highlightDuplicatedEquipment(list_duplicated) {
             list_duplicated.forEach(equipmentCode => {
@@ -365,7 +381,6 @@
                 let equipment_error = document.getElementById('equipment_error');
                 let equipmentList = getEquipmentList();
 
-
                 supplier_code_error.innerText = '';
                 equipment_error.innerText = '';
 
@@ -422,12 +437,13 @@
                             toastr.success(data.message);
                         } else {
                             toastr.error(data.message);
+                            countDown();
                             document.getElementById('important_error').classList.remove('d-none');
                             highlightDuplicatedEquipment(data.list_duplicated);
 
                             setTimeout(() => {
                                 document.getElementById('important_error').classList.add('d-none');
-                            }, 20000);
+                            }, 21000);
                         }
                     })
                     .catch(error => console.error('Error:', error))
@@ -503,7 +519,7 @@
                             newRow.id = `equipment-row-${data.equipment_code}`;
 
                             newRow.innerHTML = `
-                                <td>${data.equipment_name}</td>
+                                <td>${data.equipment_name} - (Tổng tồn: ${data.inventory})</td>
                                 <td>${data.unit}</td>
                                 <td>
                                     <div class="d-flex align-items-center">

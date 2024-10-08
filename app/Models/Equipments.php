@@ -5,16 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
+use Milon\Barcode\DNS1D;
+use Milon\Barcode\DNS2D;
+use Illuminate\Support\Facades\Storage;
 
 class Equipments extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'equipments';
 
-    protected $primaryKey = 'code'; // Chỉ định 'code' là khóa chính
-    public $incrementing = false; // Nếu 'code' không phải là auto-increment
-    protected $keyType = 'string'; // Nếu 'code' là kiểu chuỗi
+    protected $primaryKey = 'code';
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
 
     protected $fillable = [
         'code',
@@ -32,6 +38,27 @@ class Equipments extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    // Tạo mã vạch 1D
+    protected static function booted()
+    {
+        static::created(function ($equipments) {
+            $barcode = new DNS1D();
+            $barcodeData = $barcode->getBarcodePNG($equipments->barcode, 'C128');
+            $barcodeImage = base64_decode($barcodeData);
+            $barcodePath = 'barcodes/' . $equipments->barcode . '.png';
+            Storage::disk('public')->put($barcodePath, $barcodeImage);
+            $equipments->barcode = $barcodePath;
+            $equipments->save();
+        });
+    }
+
+    // Tạo mã vạch 2D (QRCODE)
+    // public function generateBarcode()
+    // {
+    //     $barcode = new DNS2D();
+    //     return $barcode->getBarcodePNGPath($this->barcode, 'C128', 4, 4);
+    // }
 
     // Định nghĩa mối quan hệ với Inventories
     public function inventories()
