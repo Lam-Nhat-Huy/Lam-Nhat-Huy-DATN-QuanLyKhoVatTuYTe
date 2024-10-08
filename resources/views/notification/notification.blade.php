@@ -211,7 +211,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        {{ $item->notification_types->name }}
+                                        {{ $item->notification_types->name ?? 'Kiểm Kho' }}
                                     </td>
                                     <td>
                                         {{ $item->created_at->format('d-m-Y') }}
