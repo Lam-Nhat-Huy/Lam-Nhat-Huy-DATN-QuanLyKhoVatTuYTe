@@ -273,7 +273,6 @@ class EquipmentRequestController extends Controller
         return response()->json(['success' => false, 'message' => 'Vui lòng điền đẩy đủ các trường dữ liệu']);
     }
 
-
     public function delete_supplier($code)
     {
         $importExists = Import_equipment_requests::where('supplier_code', $code)->exists();

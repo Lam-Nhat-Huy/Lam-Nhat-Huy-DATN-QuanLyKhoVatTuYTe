@@ -387,7 +387,8 @@
                                                     <button class="btn btn-sm rounded-pill btn-twitter me-2"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#browse_{{ $item->code }}" type="button">
-                                                        <i class="fas fa-clipboard-check" style="margin-bottom: 2px;"></i>Duyệt Phiếu
+                                                        <i class="fas fa-clipboard-check"
+                                                            style="margin-bottom: 2px;"></i>Duyệt Phiếu
                                                     </button>
 
                                                     <!-- Nút Sửa đơn -->
@@ -442,7 +443,8 @@
                                                     <!-- Nút Tạo Phiếu Nhập -->
                                                     <a href="{{ route('warehouse.create_import') }}?cd={{ $item->code }}"
                                                         class="btn btn-sm rounded-pill btn-dark me-2">
-                                                        <i class="fas fa-file-import" style="margin-bottom: 2px;"></i>Tạo Phiếu Nhập
+                                                        <i class="fas fa-file-import" style="margin-bottom: 2px;"></i>Tạo
+                                                        Phiếu Nhập
                                                     </a>
 
                                                     <!-- Nút In Phiếu -->
@@ -466,8 +468,8 @@
                                         <div class="fade modal" id="printArea_{{ $item->code }}">
                                             <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
                                                 <div class="d-flex mb-5">
-                                                    <img src="{{ asset('image/logo_warehouse.png') }}"
-                                                        width="100" alt="">
+                                                    <img src="{{ asset('image/logo_warehouse.png') }}" width="100"
+                                                        alt="">
                                                     <div class="text-left mt-3">
                                                         <h6 class="mb-0 pb-0">BỆNH VIỆN ĐA KHOA BEESOFT</h6>
                                                         <div>307C Nguyễn Văn Linh, An Khánh, Ninh Kiều, Cần Thơ
@@ -566,11 +568,11 @@
                                                                         <tr class=" border border-dark">
                                                                             <td colspan="4">
                                                                             </td>
-                                                                            <td colspan="1">
-
+                                                                            <td colspan="1"
+                                                                                style="height: 30px; min-height: 30px;">
                                                                             </td>
-                                                                            <td colspan="1">
-
+                                                                            <td colspan="1"
+                                                                                style="height: 30px; min-height: 30px;">
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
