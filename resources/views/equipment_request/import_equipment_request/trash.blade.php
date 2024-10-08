@@ -274,10 +274,9 @@
                                             </div>
                                             <div class="text-center">
                                                 <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thùng rác
-                                                    trống</h5>
+                                                    rỗng</h5>
                                                 <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                                    Hiện tại không có mục nào trong thùng rác. Vui lòng kiểm tra lại hoặc
-                                                    xóa dữ liệu để thêm vào thùng rác.
+                                                    Hiện tại không có mục nào trong thùng rác.
                                                 </p>
                                             </div>
                                         </div>
@@ -416,7 +415,8 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
+                            <button type="submit"
+                                class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
                         </div>
                     </form>
                 </div>

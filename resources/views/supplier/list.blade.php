@@ -108,10 +108,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             toggleDeleteAction();
         });
-
-        document.getElementById('form-2').addEventListener('submit', function(event) {
-            submitAnimation(event);
-        });
     </script>
 @endsection
 

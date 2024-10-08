@@ -131,16 +131,14 @@
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 6% !important;">Mã ND</th>
+                                <th class="" style="width: 7% !important;">Mã</th>
                                 <th class="" style="width: 10% !important;">Ảnh</th>
-                                <th class="" style="width: 12% !important;">Họ Tên</th>
-                                <th class="" style="width: 13% !important;">Email</th>
-                                <th class="" style="width: 11% !important;">SĐT</th>
-                                <th class="" style="width: 10% !important;">Giới Tính</th>
-                                <th class="" style="width: 8% !important;">Chức Vụ</th>
+                                <th class="" style="width: 15% !important;">Họ Tên</th>
+                                <th class="" style="width: 25% !important;">Email</th>
+                                <th class="" style="width: 12% !important;">Số Điện Thoại</th>
+                                <th class="" style="width: 8% !important;">Giới Tính</th>
                                 <th class="" style="width: 10% !important;">Trạng Thái</th>
-                                <th class="" style="width: 10% !important;">Ngày Xóa</th>
-                                <th class="pe-3" style="width: 10% !important;">Hành Động</th>
+                                <th class="pe-3 text-center" style="width: 20% !important;">Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -171,44 +169,121 @@
                                         {{ $item->gender }}
                                     </td>
                                     <td>
-                                        @if ($item->position == 'Nhân Viên')
-                                            <span class="text-primary">{{ $item->position }}</span>
-                                        @else
-                                            <span class="text-danger">{{ $item->position }}</span>
-                                        @endif
-                                    </td>
-                                    <td>
                                         <div class="checkbox-wrapper-6">
-                                            <input class="tgl tgl-light" id="cb1-6" type="checkbox" value="1"
-                                                name="status" {{ !empty($item->status) == 1 ? 'checked' : '' }}
-                                                disabled />
+                                            <input class="tgl tgl-light" id="cb1-6" type="checkbox"
+                                                {{ !empty($item->status) == 1 ? 'checked' : '' }} disabled />
                                             <label class="tgl-btn" for="cb1-6"></label>
                                         </div>
                                     </td>
-                                    <td>
-                                        {{ $item->deleted_at->format('d-m-Y') }}
+                                    <td class="text-center" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse_{{ $item['code'] }}" id="toggleIcon{{ $item['code'] }}">
+                                        Chi Tiết<i class="fa fa-chevron-right pointer ms-2"></i>
                                     </td>
-                                    <td class="text-center">
-                                        <div class="btn-group">
-                                            <button type="button" data-bs-toggle="dropdown">
-                                                <i class="fa fa-ellipsis-h me-2"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li>
-                                                    <a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#restoreModal_{{ $item->code }}"
-                                                        class="dropdown-item"><i class="fa fa-rotate-right me-1">
-                                                        </i>Khôi Phục
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteModal_{{ $item->code }}"
-                                                        class="dropdown-item"><i class="fa fa-trash me-1">
-                                                        </i>Xóa Vĩnh Viễn
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                </tr>
+
+                                <!-- Collapse content -->
+                                <tr class="collapse multi-collapse" id="collapse_{{ $item['code'] }}">
+                                    <td class="p-0" colspan="12">
+                                        <div class="flex-lg-row-fluid border-2">
+                                            <div class="card card-flush p-2"
+                                                style="padding-top: 0px !important; padding-bottom: 0px !important;">
+                                                <div class="card-header justify-content-center p-2"
+                                                    style="padding-top: 0 !important; padding-bottom: 0px !important;">
+                                                    <div class="row px-5 w-100">
+                                                        <div class="col-md-12 my-3">
+                                                            <h4 class="fw-bold mt-3">Thông Tin Chi Tiết</h4>
+                                                        </div>
+
+                                                        <div class="row mb-5 justify-content-center">
+                                                            <div class="col-md-3">
+                                                                <img src="{{ $item->avatar ? asset('storage/' . $item->avatar) : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png' }}"
+                                                                    class="rounded border border-dark"
+                                                                    style="width: 175px !important; height: 175px !important;"
+                                                                    alt="">
+                                                            </div>
+                                                            <div class="col-md-9">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <table class="table table-borderless">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Họ Và Tên:</td>
+                                                                                    <td class="text-dark">
+                                                                                        {{ $item->last_name . ' ' . $item->first_name }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Email:</td>
+                                                                                    <td class="text-dark">
+                                                                                        {{ $item->email }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Phone:</td>
+                                                                                    <td class="text-dark">
+                                                                                        {{ $item->phone }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Địa Chỉ:</td>
+                                                                                    <td class="text-dark">
+                                                                                        {{ $item->address }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+
+                                                                    <div class="col-md-6">
+                                                                        <table class="table table-borderless">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Năm Sinh:</td>
+                                                                                    <td class="text-dark">
+                                                                                        {{ $item->birth_day }}</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Giới Tính:</td>
+                                                                                    <td class="text-dark">
+                                                                                        {{ $item->gender }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Vai Trò:</td>
+                                                                                    <td class="text-dark">
+                                                                                        {{ $item->position }}</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td class="fw-semibold">Ngày Xóa Tài
+                                                                                        Khoản:</td>
+                                                                                    <td class="text-dark">
+                                                                                        {{ $item->deleted_at->format('d-m-Y') }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body py-3 border-top-0 border-2 text-end">
+                                            <div class="button-group">
+                                                <button type="button" class="btn btn-sm btn-twitter rounded-pill me-2"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#restoreModal_{{ $item->code }}">
+                                                    <i class="fa fa-rotate-right" style="margin-bottom: 2px;"></i> Khôi Phục
+                                                </button>
+
+                                                <button type="button" class="btn btn-sm btn-danger rounded-pill"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal_{{ $item->code }}">
+                                                    <i class="fa fa-trash" style="margin-bottom: 2px;"></i> Xóa
+                                                </button>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>

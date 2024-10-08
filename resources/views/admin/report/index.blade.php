@@ -86,13 +86,13 @@
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 15%;">Mã Báo Cáo</th>
-                                <th class="" style="width: 15%;">Người Báo Cáo</th>
-                                <th class="" style="width: 20%;">Nội Dung Báo Cáo</th>
+                                <th class="" style="width: 8%;">Mã</th>
+                                <th class="" style="width: 12%;">Người Báo Cáo</th>
+                                <th class="" style="width: 15%;">Nội Dung</th>
                                 <th class="" style="width: 15%;">Loại Báo Cáo</th>
                                 <th class="" style="width: 15%;">File Báo Cáo</th>
                                 <th class="" style="width: 10%;">Trạng Thái</th>
-                                <th class="pe-3" style="width: 10%;">Hành Động</th>
+                                <th class="pe-3 text-center" style="width: 25%;">Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -138,31 +138,25 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group">
-                                            <button type="button" data-bs-toggle="dropdown">
-                                                <i class="fa fa-ellipsis-h me-2"></i>
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
-                                                @if ($item['status'] == 0)
-                                                    <li>
-                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#browse_{{ $item->code }}">
-                                                            <i class="fa fa-clipboard-check me-1"></i>Duyệt
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('report.update_report', $item->code) }}">
-                                                            <i class="fa fa-edit me-1"></i>Sửa
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                                <li>
-                                                    <a class="dropdown-item pointer" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteModal_{{ $item->code }}">
-                                                        <i class="fa fa-trash me-1"></i>Xóa
+                                            <div class="btn-group">
+                                                @if ($item->status == 0)
+                                                    <button type="button" class="btn btn-sm btn-info rounded-pill me-2"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#browse_{{ $item->code }}">
+                                                        <i class="fa fa-clipboard-check" style="margin-bottom: 2px;"></i>
+                                                        Duyệt
+                                                    </button>
+                                                    <a href="{{ route('report.update_report', $item->code) }}"
+                                                        class="btn btn-sm btn-twitter me-2 rounded-pill">
+                                                        <i class="fa fa-edit" style="margin-bottom: 2px;"></i> Sửa
                                                     </a>
-                                                </li>
-                                            </ul>
+                                                @endif
+                                                <button type="button" class="btn btn-sm btn-danger rounded-pill"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal_{{ $item->code }}">
+                                                    <i class="fa fa-trash" style="margin-bottom: 2px;"></i> Xóa
+                                                </button>
+                                            </div>
                                         </div>
 
                                         {{-- Chi Tiết --}}
@@ -225,7 +219,7 @@
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li>
                                 <a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#browseAll">
-                                    <i class="fas fa-clipboard-check me-2 text-success"></i>Duyệt
+                                    <i class="fas fa-clipboard-check me-2"></i>Duyệt
                                 </a>
                             </li>
                             <li>
@@ -247,18 +241,18 @@
                 aria-labelledby="browseAllLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-md">
                     <div class="modal-content border-0 shadow">
-                        <div class="modal-header bg-success text-white">
+                        <div class="modal-header bg-primary text-white">
                             <h5 class="modal-title text-white" id="browseAllLabel">Duyệt Tất Cả báo cáo</h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-center" style="padding-bottom: 0px;">
-                            <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt tất cả báo cáo đã chọn?</p>
+                            <p class="text-primary mb-4">Bạn có chắc chắn muốn duyệt tất cả báo cáo đã chọn?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary btn-sm px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-success px-4 load_animation">
+                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">
                                 Duyệt</button>
                         </div>
                     </div>
@@ -297,8 +291,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow">
                     <div class="modal-header bg-primary">
-                        <h5 class="modal-title text-whitee" id="checkModalLabel">Duyệt Báo
-                            Cáo</h5>
+                        <h5 class="modal-title text-white" id="checkModalLabel">Duyệt Báo Cáo</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="{{ route('report.index') }}" method="POST">

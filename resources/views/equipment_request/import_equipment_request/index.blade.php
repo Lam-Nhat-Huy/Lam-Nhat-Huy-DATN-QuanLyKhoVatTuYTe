@@ -384,7 +384,7 @@
                                                     {{-- Chưa duyệt và ngày yêu cầu trong 3 ngày gần đây --}}
 
                                                     <!-- Nút Duyệt đơn -->
-                                                    <button class="btn btn-sm rounded-pill btn-success me-2"
+                                                    <button class="btn btn-sm rounded-pill btn-twitter me-2"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#browse_{{ $item->code }}" type="button">
                                                         <i class="fas fa-clipboard-check" style="margin-bottom: 2px;"></i>Duyệt Phiếu
@@ -466,7 +466,7 @@
                                         <div class="fade modal" id="printArea_{{ $item->code }}">
                                             <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
                                                 <div class="d-flex mb-5">
-                                                    <img src="https://scontent.fsgn5-10.fna.fbcdn.net/v/t39.30808-6/461795706_122150149076301177_979471153721540592_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_ohc=jwug30TlBfoQ7kNvgER-vPh&_nc_ht=scontent.fsgn5-10.fna&_nc_gid=AZEIDiRBv3qMSzSuNj1loeR&oh=00_AYBBkIoezVdAhNlWNMSuLNgxRWZj0ZbAvdYzpYB4U7pdAw&oe=6702867C"
+                                                    <img src="{{ asset('image/logo_warehouse.png') }}"
                                                         width="100" alt="">
                                                     <div class="text-left mt-3">
                                                         <h6 class="mb-0 pb-0">BỆNH VIỆN ĐA KHOA BEESOFT</h6>

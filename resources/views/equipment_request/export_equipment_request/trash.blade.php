@@ -288,7 +288,7 @@
                 </span>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#confirmAll">
-                            <i class="fas fa-clipboard-check me-2 text-success"></i>Khôi Phục Tất Cả
+                            <i class="fas fa-rotate-right me-2 text-success"></i>Khôi Phục Tất Cả
                         </a>
                     </li>
                     <li><a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#deleteAll">

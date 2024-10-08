@@ -33,13 +33,13 @@
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 10%;">Mã Báo Cáo</th>
-                                <th class="" style="width: 15%;">Người Báo Cáo</th>
-                                <th class="" style="width: 25%;">Nội Dung Báo Cáo</th>
+                                <th class="" style="width: 8%;">Mã</th>
+                                <th class="" style="width: 12%;">Người Báo Cáo</th>
+                                <th class="" style="width: 15%;">Nội Dung</th>
                                 <th class="" style="width: 15%;">Loại Báo Cáo</th>
                                 <th class="" style="width: 15%;">File Báo Cáo</th>
-                                <th class="" style="width: 10%;">Ngày Xóa</th>
-                                <th class="pe-3" style="width: 10%;">Hành Động</th>
+                                <th class="" style="width: 10%;">Trạng Thái</th>
+                                <th class="pe-3 text-center" style="width: 25%;">Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -76,23 +76,14 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group">
-                                            <button type="button" data-bs-toggle="dropdown">
-                                                <i class="fa fa-ellipsis-h me-2"></i>
+                                            <button type="button" class="btn btn-sm btn-twitter rounded-pill me-2"
+                                                data-bs-toggle="modal" data-bs-target="#restore_{{ $item->code }}">
+                                                <i class="fa fa-rotate-right" style="margin-bottom: 2px;"></i> Khôi Phục
                                             </button>
-                                            <ul class="dropdown-menu" aria-labelledby="defaultDropdown">
-                                                <li>
-                                                    <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#restore_{{ $item->code }}">
-                                                        <i class="fa fa-rotate-right me-1"></i>Khôi Phục
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item pointer" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteModal_{{ $item->code }}">
-                                                        <i class="fa fa-trash me-1"></i>Xóa Vĩnh Viễn
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                            <button type="button" class="btn btn-sm btn-danger rounded-pill"
+                                                data-bs-toggle="modal" data-bs-target="#deleteModal_{{ $item->code }}">
+                                                <i class="fa fa-trash" style="margin-bottom: 2px;"></i> Xóa Vĩnh Viễn
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -129,7 +120,7 @@
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li>
                                 <a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#restoreAll">
-                                    <i class="fas fa-clipboard-check me-2 text-success"></i>Khôi Phục
+                                    <i class="fas fa-rotate-right me-2"></i>Khôi Phục
                                 </a>
                             </li>
                             <li>
@@ -162,7 +153,8 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Khôi phục</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Khôi
+                                phục</button>
                         </div>
                     </div>
                 </div>
@@ -184,7 +176,8 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
+                            <button type="submit"
+                                class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa</button>
                         </div>
                     </div>
                 </div>
@@ -198,7 +191,7 @@
             tabindex="-1" aria-labelledby="checkModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow">
-                    <div class="modal-header bg-danger">
+                    <div class="modal-header bg-primary">
                         <h3 class="modal-title text-white" id="checkModalLabel">Khôi Phục
                             Báo Cáo</h3>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -206,8 +199,8 @@
                     <form action="{{ route('report.report_trash') }}" method="POST">
                         @csrf
                         <input type="hidden" name="restore_report" value="{{ $item->code }}">
-                        <div class="modal-body text-cente">
-                            <p class="text-primary">Khôi Phục Báo Cáo Này?</p>
+                        <div class="modal-body pb-0">
+                            <p class="text-primary text-center">Khôi Phục Báo Cáo Này?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
@@ -234,8 +227,8 @@
                     <form action="{{ route('report.report_trash') }}" id="form-3" method="POST">
                         @csrf
                         <input type="hidden" name="delete_report" value="{{ $item->code }}">
-                        <div class="modal-body pb-0 text-center">
-                            <p class="text-danger">Xóa Vĩnh Viễn Báo Cáo Này?
+                        <div class="modal-body pb-0">
+                            <p class="text-danger text-center">Xóa Vĩnh Viễn Báo Cáo Này?
                             </p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
