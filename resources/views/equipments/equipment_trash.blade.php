@@ -37,7 +37,7 @@
                                 <i class="fa-regular fa-trash-can" style="font-size: 36px; color: #6c757d;"></i>
                             </div>
                             <div class="text-center">
-                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thùng Rác Trống</h5>
+                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thùng Rác Rỗng</h5>
                                 <p style="font-size: 14px; color: #6c757d; margin: 0;">
                                     Không Có Thiết Bị Nào Bị Xóa
                                 </p>
@@ -64,7 +64,7 @@
                                         <div class="row align-items-center p-2">
                                             <div class="col-auto pe-0">
                                                 <a href="#">
-                                                    <img src="{{ $item->image ? asset('images/equipments/' . $item->image) : 'https://st4.depositphotos.com/14953852/24787/v/380/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg' }}"
+                                                    <img src="{{ $item->image ? asset('storage/' . $item->image) : 'https://st4.depositphotos.com/14953852/24787/v/380/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg' }}"
                                                         class="rounded-3" width="80" alt="Medical Supply Image">
                                                 </a>
                                             </div>
@@ -101,7 +101,7 @@
                                             style="border: 1px solid #dcdcdc; background-color: #f8f9fa;">
                                             <div class="row">
                                                 <div class="col-md-3">
-                                                    <img src="{{ $item->image ? asset('images/equipments/' . $item->image) : 'https://st4.depositphotos.com/14953852/24787/v/380/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg' }}"
+                                                    <img src="{{ $item->image ? asset('storage/' . $item->image) : 'https://st4.depositphotos.com/14953852/24787/v/380/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg' }}"
                                                         alt="Medical Supply Image" width="100%"
                                                         class="img-fluid rounded shadow">
                                                 </div>

@@ -327,7 +327,8 @@
                                             <div class="card card-flush px-5" style="padding-top: 0px !important;">
                                                 <div class="card-header d-flex justify-content-between align-items-center px-2"
                                                     style="padding-top: 0 !important; padding-bottom: 0px !important;">
-                                                    <h4 class="fw-bold m-0 text-uppercase fw-bolder">Chi tiết phiếu nhập kho
+                                                    <h4 class="fw-bold m-0 text-uppercase fw-bolder">Danh Sách Thiết Bị Yêu
+                                                        Cầu
                                                     </h4>
                                                     <div class="card-toolbar">
                                                         @if (($item->status == 0 || $item->status == 3) && \Carbon\Carbon::parse($item->request_date)->diffInDays(now()) > 3)

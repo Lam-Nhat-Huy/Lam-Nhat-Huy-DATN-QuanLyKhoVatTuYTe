@@ -19,6 +19,7 @@ use App\Models\Suppliers;
 use App\Models\Units;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EquipmentsController extends Controller
 {
@@ -175,32 +176,21 @@ class EquipmentsController extends Controller
     {
         $data = $request->validated();
 
-        $imageName = $request->input('current_image');
+        $data['code'] = 'EQ' . $this->generateRandomString(8);
 
-        if ($request->hasFile('equipment_image')) {
+        $data['barcode'] = $data['code'];
 
-            $imageName = time() . '.' . $request->equipment_image->extension();
-            $request->equipment_image->move(public_path('images/equipments'), $imageName);
+        if ($request->file('equipment_image')) {
+
+            $data['image'] = $request->file('equipment_image')->store('uploads', 'public');
         }
 
-        // Nếu không có lỗi, tạo mới thiết bị
-        $this->equipmentModal::create([
-            'code' => 'EQ' . $this->generateRandomString(8),
-            'name' => $data->name,
-            'barcode' => '123456',
-            'description' => $data->description,
-            'price' => $data->price,
-            'country' => $data->country,
-            'equipment_type_code' => $data->equipment_type_code,
-            'supplier_code' => $data->supplier_code,
-            'unit_code' => $data->unit_code,
-            'image' => $imageName,
-            'expiry_date' => $request->expiry_date,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $data['expiry_date'] = $request->expiry_date ?? null;
+
+        $this->equipmentModal::create($data);
 
         toastr()->success('Thiết bị đã được thêm thành công!');
+
         return redirect()->route('equipments.index');
     }
 
@@ -225,52 +215,28 @@ class EquipmentsController extends Controller
 
     public function edit_equipment(UpdateEquipmentRequest $request, $code)
     {
-        // Validate dữ liệu đầu vào
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'equipment_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'equipment_type_code' => 'required|string|max:255',
-            'unit_code' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'expiry_date' => 'nullable|date',
-            'supplier_code' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
-        ]);
+        $data = $request->validated();
 
-        // Tìm thiết bị theo code
-        $equipment = $this->equipmentModal::where('code', $code)->firstOrFail();
+        $equipment = $this->equipmentModal::find($code);
 
-        // Xử lý upload ảnh nếu có
-        if ($request->hasFile('equipment_image')) {
-            // Xóa ảnh cũ nếu có
+        if (!empty($request->file('equipment_image'))) {
+
             if ($equipment->image) {
-                $oldImagePath = public_path('images/equipments/' . $equipment->image);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
+
+                Storage::disk('public')->delete($equipment->image);
             }
 
-            // Upload ảnh mới
-            $imageName = time() . '.' . $request->equipment_image->extension();
-            $request->equipment_image->move(public_path('images/equipments'), $imageName);
-            $equipment->image = $imageName;
+            $data['image'] = $request->file('equipment_image')->store('uploads', 'public');
         }
 
-        // Cập nhật thông tin thiết bị
-        $equipment->update([
-            'name' => $request->name,
-            'equipment_type_code' => $request->equipment_type_code,
-            'unit_code' => $request->unit_code,
-            'price' => $request->price,
-            'expiry_date' => $request->expiry_date,
-            'supplier_code' => $request->supplier_code,
-            'country' => $request->country,
-            'description' => $request->description,
-            'updated_at' => now(),
-        ]);
+        $data['expiry_date'] = $request->expiry_date ?? null;
 
-        // Thay đổi thông báo thành toastr
+        $data['updated_at'] = now();
+
+        $equipment->update($data);
+
         toastr()->success('Thiết bị đã được cập nhật thành công!');
+        
         return redirect()->route('equipments.index');
     }
 
@@ -547,7 +513,7 @@ class EquipmentsController extends Controller
             ]);
 
             toastr()->success('Đã cập nhật nhóm thiết bị');
-    
+
             return redirect()->route('equipments.equipments_group');
         }
 

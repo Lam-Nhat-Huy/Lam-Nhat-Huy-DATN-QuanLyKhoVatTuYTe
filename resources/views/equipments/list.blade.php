@@ -186,7 +186,7 @@
                                         <div class="row align-items-center p-2">
                                             <div class="col-auto pe-0">
                                                 <a href="#">
-                                                    <img src="{{ $item->image ? asset('images/equipments/' . $item->image) : 'https://st4.depositphotos.com/14953852/24787/v/380/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg' }}"
+                                                    <img src="{{ $item->image ? asset('storage/' . $item->image) : 'https://st4.depositphotos.com/14953852/24787/v/380/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg' }}"
                                                         class="rounded-3" width="80" alt="Medical Supply Image">
                                                 </a>
                                             </div>
@@ -209,7 +209,13 @@
                                                             </p>
                                                         </div>
                                                         <div class="col-auto">
-                                                            <span class="fw-bold text-success">Còn Hàng</span>
+                                                            @if ($item->inventories->sum('current_quantity') > 25)
+                                                                <span class="fw-bolder text-white bg-success py-1 px-2 rounded-pill" style="font-size: 10px;">Còn Hàng</span>
+                                                            @elseif ($item->inventories->sum('current_quantity') <= 25 && $item->inventories->sum('current_quantity') > 0)
+                                                                <span class="fw-bolder bg-warning py-1 px-2 rounded-pill" style="font-size: 10px;">Sắp Hết Hàng</span>
+                                                            @else
+                                                                <span class="fw-bolder text-white bg-danger py-1 px-2 rounded-pill" style="font-size: 10px;">Hết Hàng</span>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
@@ -223,7 +229,7 @@
                                             style="border: 1px solid #dcdcdc; background-color: #f8f9fa;">
                                             <div class="row">
                                                 <div class="col-md-3">
-                                                    <img src="{{ $item->image ? asset('images/equipments/' . $item->image) : 'https://st4.depositphotos.com/14953852/24787/v/380/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg' }}"
+                                                    <img src="{{ $item->image ? asset('storage/' . $item->image) : 'https://st4.depositphotos.com/14953852/24787/v/380/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg' }}"
                                                         alt="Medical Supply Image" width="100%"
                                                         class="img-fluid rounded shadow">
                                                 </div>
@@ -232,58 +238,76 @@
                                                         <div
                                                             class="d-flex justify-content-between align-items-center mb-3">
                                                             <h6 class="card-title fw-bold">Chi Tiết</h6>
-                                                            <span class="badge bg-success rounded-pill">Còn hàng</span>
+                                                            @if ($item->inventories->sum('current_quantity') > 25)
+                                                                <span class="fw-bolder text-white bg-success py-1 px-2 rounded-pill" style="font-size: 10px;">Còn Hàng</span>
+                                                            @elseif ($item->inventories->sum('current_quantity') <= 25 && $item->inventories->sum('current_quantity') > 0)
+                                                                <span class="fw-bolder bg-warning py-1 px-2 rounded-pill" style="font-size: 10px;">Sắp Hết Hàng</span>
+                                                            @else
+                                                                <span class="fw-bolder text-white bg-danger py-1 px-2 rounded-pill" style="font-size: 10px;">Hết Hàng</span>
+                                                            @endif
                                                         </div>
                                                         <!-- Chi tiết Thiết Bị -->
                                                         <div class="row mt-3">
-                                                            <div class="col-md-9">
+                                                            <div class="col-md-7">
                                                                 <table class="table table-borderless">
                                                                     <tbody>
                                                                         <tr>
                                                                             <td><strong>Mã:</strong></td>
-                                                                            <td class="text-gray-800">#{{ $item->code }}
+                                                                            <td class="text-dark">#{{ $item->code }}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td><strong>Nhóm:</strong></td>
-                                                                            <td class="text-gray-800">
+                                                                            <td class="text-dark">
                                                                                 {{ $item->equipmentType->name ?? 'Không có dữ liệu' }}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td><strong>Nhà cung cấp:</strong></td>
-                                                                            <td class="text-gray-800">
+                                                                            <td class="text-dark">
                                                                                 {{ $item->supplier->name ?? 'Không có dữ liệu' }}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td><strong>Ngày hết hạn:</strong></td>
-                                                                            <td class="text-gray-800">
-                                                                                {{ $item->expiry_date ? \Carbon\Carbon::parse($item->expiry_date)->format('d/m/Y') : 'Không Có' }}
-                                                                                {{ $item->time_remaining ? '- ' . $item->time_remaining : '' }}
+                                                                            <td><strong>Mã vạch:</strong></td>
+                                                                            <td class="text-dark">
+                                                                                @if ($item->barcode)
+                                                                                    <img src="{{ asset('storage/' . $item->barcode) }}"
+                                                                                        alt="Barcode" width="100%">
+                                                                                    <div class="text-center mt-2">
+                                                                                        {{ $item->code }}
+                                                                                    </div>
+                                                                                @endif
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
                                                             </div>
-                                                            <div class="col-md-3">
+                                                            <div class="col-md-5">
                                                                 <table class="table table-borderless">
                                                                     <tbody>
                                                                         <tr>
                                                                             <td><strong>Giá:</strong></td>
-                                                                            <td class="text-gray-800">
+                                                                            <td class="text-dark">
                                                                                 {{ number_format($item->price) }} VNĐ</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td><strong>Đơn vị:</strong></td>
-                                                                            <td class="text-gray-800">
+                                                                            <td class="text-dark">
                                                                                 {{ $item->units->name }}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td><strong>Mô tả:</strong></td>
-                                                                            <td class="text-gray-800">
+                                                                            <td class="text-dark">
                                                                                 {{ $item->description }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><strong>Ngày hết hạn:</strong></td>
+                                                                            <td class="text-dark">
+                                                                                {{ $item->expiry_date ? \Carbon\Carbon::parse($item->expiry_date)->format('d/m/Y') : 'Không Có' }}
+                                                                                {{ $item->time_remaining ? '- ' . $item->time_remaining : '' }}
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -400,7 +424,7 @@
                                 <div class="modal-footer border-0 justify-content-center">
                                     <button type="button" class="btn btn-sm btn-secondary px-4 rounded-pill"
                                         data-bs-dismiss="modal" style="font-size: 10px;">Đóng</button>
-                                    <button type="submit" class="btn btn-sm btn-danger rounded-pill"
+                                    <button type="submit" class="btn btn-sm btn-danger rounded-pill load_animation"
                                         style="font-size: 10px;">
                                         Xóa</button>
                                 </div>

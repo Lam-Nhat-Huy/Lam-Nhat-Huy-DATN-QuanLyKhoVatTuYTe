@@ -25,10 +25,9 @@ class UnitController extends Controller
                 ->orWhere('description', 'LIKE', '%' . $request->kw . '%');
         }
 
-        // Tìm kiếm theo người tạo
-        if ($request->created_by) {
+        if ($request->us) {
 
-            $allUnit->where('created_by', 'LIKE', '%' . $request->created_by . '%');
+            $allUnit->where('created_by', $request->us);
         }
 
         if (!empty($request->unit_codes)) {

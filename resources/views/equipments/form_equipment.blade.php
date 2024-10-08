@@ -96,7 +96,7 @@
                                 <div class="required">Ảnh Thiết Bị</div>
                                 <div class="image-preview-wrapper mt-3">
                                     <img id="preview-image"
-                                        src="{{ old('current_image') ? asset('images/equipments/' . old('current_image')) : (!empty($equipment) && $equipment->image ? asset('images/equipments/' . $equipment->image) : '') }}"
+                                        src="{{ old('current_image') ? asset('storage/' . old('current_image')) : (!empty($equipment) && $equipment->image ? asset('storage/' . $equipment->image) : '') }}"
                                         alt="Hình ảnh thiết bị" class="image-preview"
                                         style="display: {{ !empty($equipment->image) || old('current_image') ? 'block' : 'none' }}; cursor: pointer;" />
                                     <!-- Thêm cursor: pointer để hiển thị con trỏ khi hover -->
