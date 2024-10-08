@@ -61,7 +61,7 @@
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Nhà Cung Cấp</label>
                         <div class="d-flex align-items-center">
                             <select name="supplier_code" id="supplier_code" onchange="changeSupplier()"
-                                class="form-select form-select-sm form-select-solid border border-success rounded-pill ps-5">
+                                class="form-select form-select-sm border border-success rounded-pill ps-5">
                                 <option value="0">Chọn Nhà Cung Cấp...</option>
                                 @foreach ($AllSuppiler as $item)
                                     <option value="{{ $item->code }}" id="option_supplier_{{ $item->code }}"
@@ -73,7 +73,8 @@
 
                             <span class="ms-4 pointer" data-bs-toggle="modal" data-bs-target="#add_modal_ncc"
                                 title="Thêm Nhà Cung Cấp">
-                                <i class="fa fa-plus bg-primary rounded-circle p-2 text-white" style="width: 25px; height: 25px;"></i>
+                                <i class="fa fa-plus bg-primary rounded-circle p-2 text-white"
+                                    style="width: 25px; height: 25px;"></i>
                             </span>
                         </div>
                         <div class="message_error" id="supplier_code_error"></div>
@@ -99,15 +100,16 @@
                     <div class="col-md-6 fv-row">
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Thiết Bị</label>
                         <select name="equipment" id="equipment" onchange="changeEquipment()"
-                            class="form-select form-select-sm form-select-solid border border-success rounded-pill ps-5">
+                            class="form-select form-select-sm border border-success rounded-pill ps-5">
                             <option value="" selected>Chọn Thiết Bị...</option>
                             @foreach ($AllEquipment as $item)
-                                <option value="{{ $item->code }}"
-                                    class="{{ $item->quantity <= 10000 || \Carbon\Carbon::parse($item['expiry'])->diffInDays(now(), true) < 10 ? 'text-danger' : '' }}
-                                    {{ in_array($item->code, $checkList ?? []) ? 'd-none' : '' }}">
-                                    {{ $item->name }} - (Tổng Tồn: {{ $item->quantity ?? 0 }}) - (HSD:
-                                    {{ $item->expiry_date ?? 'Không Có' }})
-                                </option>
+                                @if ($item->inventories->sum('current_quantity') <= 10)
+                                    <option value="{{ $item->code }}" class="text-danger"
+                                        {{ in_array($item->code, $checkList ?? []) ? 'd-none' : '' }}">
+                                        {{ $item->name }} - (Tổng Tồn:
+                                        {{ $item->inventories->sum('current_quantity') ?? 0 }})
+                                    </option>
+                                @endif
                             @endforeach
                         </select>
                         <div class="message_error" id="equipment_error"></div>
@@ -140,9 +142,9 @@
                 <table class="table table-striped align-middle gs-0 gy-4" id="table_list_equipment">
                     <thead>
                         <tr class="fw-bolder bg-success">
-                            <th class="ps-3" style="width: 40%;">Thiết Bị</th>
+                            <th class="ps-3" style="width: 35%;">Thiết Bị</th>
                             <th class="" style="width: 20%;">Đơn Vị</th>
-                            <th class="" style="width: 20%;">Số Lượng</th>
+                            <th class="" style="width: 25%;">Số Lượng</th>
                             <th class="pe-3 text-center" style="width: 20%;">Hành Động</th>
                         </tr>
                     </thead>
@@ -152,9 +154,18 @@
                                 <tr id="equipment-row-{{ $item->equipment_code }}">
                                     <td>{{ $item->equipments->name }}</td>
                                     <td>{{ $item->equipments->units->name }}</td>
-                                    <td><input type="number" id="quantity_change_{{ $item->equipment_code }}"
-                                            value="{{ $item->quantity }}"
-                                            class="form-control form-control-sm border border-success rounded-pill w-50">
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <input type="number" id="quantity_change_{{ $item->equipment_code }}"
+                                                value="{{ $item->quantity }}"
+                                                class="form-control form-control-sm border border-success rounded-pill"
+                                                style="width: 30%;">
+                                            <div class="message_error d-none ms-2 m-0 p-0"
+                                                id="quantity_error_{{ $item->equipment_code }}">
+                                                (Số lượng
+                                                phải lớn hơn 0)
+                                            </div>
+                                        </div>
                                     </td>
                                     <td class="text-center">
                                         <span class="btn btn-sm btn-danger pointer rounded-pill"
@@ -192,6 +203,7 @@
                     class="ms-1 fw-bolder">Các thiết bị yêu cầu được đánh dấu <span class="text-warning bg-dark">màu
                         vàng</span>
                     đã tồn tại trong lịch sử yêu cầu hoặc thùng rác (3 ngày gần đây). Xin hãy kiểm tra và thử lại.</div>
+
 
             <div class="modal-footer flex-right pe-0">
                 <button type="button" class="btn btn-info btn-sm {{ $d_none_temp }} rounded-pill"
@@ -241,8 +253,8 @@
                                     <tr class="hover-table pointer" id="supplier-{{ $item->code }}">
                                         <td>{{ $item->name }}</td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-danger btn-sm rounded-pill" data-bs-toggle="modal"
-                                                data-bs-target="#delete_modal_supplier_type"
+                                            <button type="button" class="btn btn-danger btn-sm rounded-pill"
+                                                data-bs-toggle="modal" data-bs-target="#delete_modal_supplier_type"
                                                 onclick="setDeleteForm('{{ route('equipment_request.delete_supplier', $item->code) }}', '{{ $item->name }}')">
                                                 <i class="fa fa-trash p-0"></i>
                                             </button>
@@ -254,8 +266,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-secondary rounded-pill" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-sm btn-twitter rounded-pill" id="submit_supplier_type">Thêm</button>
+                    <button type="button" class="btn btn-sm btn-secondary rounded-pill"
+                        data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-twitter rounded-pill"
+                        id="submit_supplier_type">Thêm</button>
                 </div>
             </div>
         </div>
@@ -276,7 +290,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-secondary rounded-pill" data-bs-toggle="modal"
                         data-bs-target="#add_modal_ncc">Trở Lại</button>
-                    <button type="button" class="btn btn-sm btn-danger rounded-pill" id="confirm-delete-supplier">Xóa</button>
+                    <button type="button" class="btn btn-sm btn-danger rounded-pill"
+                        id="confirm-delete-supplier">Xóa</button>
                 </div>
             </div>
         </div>
@@ -350,7 +365,7 @@
                 let equipment_error = document.getElementById('equipment_error');
                 let equipmentList = getEquipmentList();
 
-                
+
                 supplier_code_error.innerText = '';
                 equipment_error.innerText = '';
 
@@ -358,6 +373,7 @@
 
                 if (supplier_code == 0) {
                     supplier_code_error.innerText = "Vui lòng chọn nhà cung cấp";
+                    document.getElementById('quantity_error').innerText = '';
                     hasError = true;
                 }
 
@@ -365,6 +381,19 @@
                     equipment_error.innerText = "Vui lòng thêm thiết bị yêu cầu";
                     hasError = true;
                 }
+
+                equipmentList.forEach((item) => {
+                    if (item.quantity <= 0) {
+                        document.getElementById('quantity_error').innerText = '';
+                        document.getElementById(`quantity_error_${item.equipment_code}`).classList.remove(
+                            'd-none');
+                        hasError = true;
+                    } else {
+                        document.getElementById('quantity_error').innerText = '';
+                        document.getElementById(`quantity_error_${item.equipment_code}`).classList.add(
+                            'd-none');
+                    }
+                });
 
                 if (hasError) {
                     document.getElementById('loading').style.display = 'none';
@@ -427,7 +456,7 @@
                 let equipment = document.getElementById('equipment').value;
                 let quantity = document.getElementById('quantity').value;
                 let equipment_error = document.getElementById('equipment_error');
-                let quantity_error = document.getElementById('quantity_error');
+                let _list = document.getElementById('quantity_error');
 
                 equipment_error.innerText = '';
                 quantity_error.innerText = '';
@@ -476,7 +505,18 @@
                             newRow.innerHTML = `
                                 <td>${data.equipment_name}</td>
                                 <td>${data.unit}</td>
-                                <td><input type="number" id="quantity_change_${data.equipment_code}" value="${parseInt(data.quantity, 10)}" class="form-control form-control-sm border border-success rounded-pill w-50"></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <input type="number" id="quantity_change_${data.equipment_code}"
+                                            value="${parseInt(data.quantity, 10)}"
+                                            class="form-control form-control-sm border border-success rounded-pill" style="width: 30%;">
+                                        <div class="message_error d-none ms-2 m-0 p-0"
+                                            id="quantity_error_${data.equipment_code}">
+                                            (Số lượng
+                                            phải lớn hơn 0)
+                                        </div>
+                                    </div>
+                                </td>
                                 <td class="text-center">
                                     <span class="btn btn-sm btn-danger pointer rounded-pill" onclick="removeEquipment('${data.equipment_code}')">
                                         <i class="fa fa-trash p-0"></i>
@@ -576,7 +616,7 @@
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('loading-overlay').style.display = 'none';
                     this.disabled = false;
-                    equipment_error.innerText = 'Tên nhà cung cấp đã tồn tại';
+                    equipment_error.innerText = 'Nhà cung cấp đã tồn tại';
                     supplierTypeName.focus();
                 }
 
