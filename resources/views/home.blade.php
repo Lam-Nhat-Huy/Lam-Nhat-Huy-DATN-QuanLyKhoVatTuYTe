@@ -69,9 +69,6 @@
                         </p>
                         <!--end::Description-->
                     </div>
-                    <!--end::Content-->
-                    <div class="d-flex flex-row-auto bgi-no-repeat bgi-position-x-center bgi-size-contain bgi-position-y-bottom min-h-100px min-h-lg-350px"
-                        style="background-image: url(assets/media/illustrations/sketchy-1/13.png"></div>
                 </div>
             </div>
             <!--end::Aside-->
@@ -97,8 +94,7 @@
                             <div class="fv-row mb-10">
                                 <div class="d-flex flex-stack mb-2">
                                     <label class="form-label fw-bolder text-dark fs-6 mb-0">Mật Khẩu</label>
-                                    <a href="{{ route('forgot.forgot') }}" class="link-primary fs-6 fw-bolder">Quên Mật
-                                        Khẩu?</a>
+                                    <a href="{{ route('home.forgot') }}" class="link-primary fs-6 fw-bolder">Quên Mật Khẩu?</a>
                                 </div>
                                 <input class="form-control form-control-lg form-control-solid" type="password"
                                     name="password" id="password" autocomplete="off" />
@@ -118,11 +114,6 @@
                                     <span class="indicator-progress">Đợi Chút...<span
                                             class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                                 </button>
-
-                                <div class="text-center text-muted text-uppercase fw-bolder mb-5">Hoặc</div>
-                                <a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
-                                    <i class="fa-brands fa-google text-danger me-1"></i><span class="text-dark">Đăng
-                                        Nhập Bằng Google</span></a>
                             </div>
                         </form>
                     </div>

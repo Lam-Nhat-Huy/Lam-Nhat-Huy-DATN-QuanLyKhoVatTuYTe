@@ -1,0 +1,1 @@
+Đường dẫn thay đổi mật khẩu:<a href="{{ route('home.resetPassword') }}">Tại Đây</a>
