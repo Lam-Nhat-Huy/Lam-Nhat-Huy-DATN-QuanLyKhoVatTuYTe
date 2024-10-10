@@ -293,7 +293,7 @@
                                         <td colspan="12" class="text-center">
                                             <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
                                                 role="alert"
-                                                style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                                style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057; height: 290px;">
                                                 <div class="mb-3">
                                                     <i class="fas fa-box" style="font-size: 36px; color: #6c757d;"></i>
                                                     <!-- Đổi biểu tượng ở đây -->
