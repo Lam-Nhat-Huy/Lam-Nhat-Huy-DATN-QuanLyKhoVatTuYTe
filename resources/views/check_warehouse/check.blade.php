@@ -36,7 +36,7 @@
                     <!-- Trong phần <thead> của bảng -->
                     <thead>
                         <tr class="bg-success text-center">
-                            <th class="ps-3"></th>
+                            <th class="ps-3" style="width: 5%;"></th>
                             <th style="width: 15%;" class="ps-3">Mã kiểm kho</th>
                             <th style="width: 15%;">Thời gian</th>
                             <th style="width: 15%;">Tổng chênh lệch</th>
@@ -244,11 +244,11 @@
                                                                     action="{{ route('check_warehouse.approve', $item['code']) }}"
                                                                     method="POST" id="approveForm-{{ $item['code'] }}">
                                                                     @csrf
-                                                                    <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt
+                                                                    <p class="text-dark mb-4">Bạn có chắc chắn muốn duyệt
                                                                         phiếu kiểm kho này?</p>
                                                                 </form>
                                                             </div>
-                                                            <div class="modal-footer justify-content-center">
+                                                            <div class="modal-footer justify-content-center pt-0">
                                                                 <button type="button"
                                                                     class="btn btn-secondary btn-sm rounded-pill"
                                                                     data-bs-dismiss="modal">
@@ -289,7 +289,7 @@
                                                                         kiểm.</p>
                                                                 </form>
                                                             </div>
-                                                            <div class="modal-footer justify-content-center">
+                                                            <div class="modal-footer justify-content-center pt-0">
                                                                 <button type="button"
                                                                     class="btn btn-secondary btn-sm rounded-pill"
                                                                     data-bs-dismiss="modal">Đóng</button>
@@ -326,7 +326,7 @@
                                                                         phiếu kiểm kho này?</p>
                                                                 </form>
                                                             </div>
-                                                            <div class="modal-footer justify-content-center">
+                                                            <div class="modal-footer justify-content-center pt-0">
                                                                 <button type="button"
                                                                     class="btn btn-secondary btn-sm rounded-pill"
                                                                     data-bs-dismiss="modal">Đóng</button>
