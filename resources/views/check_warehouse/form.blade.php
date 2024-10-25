@@ -404,7 +404,6 @@
                                 style="pointer-events: none;">
                         </div>
 
-
                         <!-- Ghi chú -->
                         <div class="mb-4">
                             <label for="note" class="form-label fw-semibold text-dark" style="font-size: 13px;">Ghi
@@ -418,13 +417,6 @@
                             <button name="status" value="0" onclick="submitMaterials()" type="submit"
                                 class="btn btn-lg rounded-pill text-white" style="background-color: #66CC00;">Lưu phiếu
                             </button>
-
-                            <!-- Hoàn thành Button -->
-                            {{-- <button type="button" class="btn text-white btn-lg rounded-pill"
-                                style="background-color: #007BFF;" data-bs-toggle="modal" data-bs-target="#completeModal"
-                                @if (!session('isAdmin')) disabled @endif>
-                                Lưu và duyệt phiếu
-                            </button> --}}
 
                             <!-- Modal Hoàn thành -->
                             <div class="modal fade" id="completeModal" data-bs-backdrop="static"
@@ -495,6 +487,7 @@
         <script>
             var products = @json($equipmentsWithStock);
             var productDetails = @json($equipmentsWithJson).original;
+            console.log(productDetails);
         </script>
         <script src="{{ asset('js/check_warehouse/update_warehouse.js') }}"></script>
     @elseif ($action === 'excel')

@@ -89,27 +89,44 @@
                             <th style="width: 8%;" class="ps-3">Mã kiểm kho</th>
                             <th style="width: 10%;">Ngày cân bằng</th>
                             <th style="width: 10%;">Tổng chênh lệch</th>
-                            <th style="width: 10%;">Lệch tăng</th>
                             <th style="width: 10%;">Lệch giảm</th>
+                            <th style="width: 10%;">Lệch tăng</th>
                             <th style="width: 10%;">Trạng Thái</th>
                             <th style="width: 10%;">Lần kiểm</th>
                             <th style="width: 15%;">Ghi chú</th>
                         </tr>
                     </thead>
 
-                    <!-- Trong phần <tbody> của bảng -->
                     <tbody>
                         @forelse ($inventoryChecks as $item)
                             @php
-                                // Total unequal calculation (absolute values)
-                                $totalUnequal = collect($item['details'])->sum(function ($detail) {
-                                    return abs($detail['unequal']);
-                                });
+                                $checkRound = collect($item['details'])->contains('check_round', 2) ? 2 : 1;
 
-                                // Calculate positive and negative unequal sums
-                                $unequalPositive = $item['details']->where('unequal', '>', 0)->sum('unequal');
-                                $unequalNegative = $item['details']->where('unequal', '<', 0)->sum('unequal');
+                                $totalUnequal = collect($item['details'])
+                                    ->where('check_round', $checkRound)
+                                    ->sum(fn($detail) => abs($detail['unequal']));
+
+                                $unequalPositive = collect($item['details'])
+                                    ->where('check_round', $checkRound)
+                                    ->sum(
+                                        fn($detail) => max(0, $detail['current_quantity'] - $detail['actual_quantity']),
+                                    );
+
+                                $unequalNegative = abs(
+                                    collect($item['details'])
+                                        ->where('check_round', $checkRound)
+                                        ->sum(
+                                            fn($detail) => min(
+                                                0,
+                                                $detail['current_quantity'] - $detail['actual_quantity'],
+                                            ),
+                                        ),
+                                );
                             @endphp
+
+
+
+
                             <tr class="text-center hover-table pointer" data-bs-toggle="collapse"
                                 data-bs-target="#collapse{{ $item['code'] }}" aria-expanded="false"
                                 aria-controls="collapse{{ $item['code'] }}">
@@ -120,38 +137,31 @@
                                 <td>{{ \Carbon\Carbon::parse($item['check_date'])->format('d/m/Y') }}</td>
                                 <td>
                                     @if ($totalUnequal == 0)
-                                        <span style="color: #6c757d;">Không lệch</span> <!-- Màu xám cho không lệch -->
+                                        <span style="color: #6c757d;">Không lệch</span>
                                     @else
                                         <span style="color: #dc3545; font-weight: bold;">{{ $totalUnequal }}</span>
                                         <i class="fa fa-arrow-right-arrow-left" style="color: #dc3545;"
                                             title="Tổng chênh lệch"></i>
                                     @endif
                                 </td>
+
                                 <td>
                                     @if ($unequalPositive > 0)
-                                        <span style="color: #28a745; font-weight: bold;">+{{ $unequalPositive }}</span>
-                                        <!-- Màu xanh lá cho lệch dương -->
-                                        <i class="fa fa-arrow-up" style="color: #28a745;" title="Tăng"></i>
-                                        <!-- Mũi tên lên -->
-                                    @elseif ($unequalPositive < 0)
-                                        <span style="color: #dc3545; font-weight: bold;">{{ $unequalPositive }}</span>
-                                        <!-- Màu đỏ cho lệch âm -->
+                                        <span style="color: #dc3545; font-weight: bold;">-{{ $unequalPositive }}</span>
                                         <i class="fa fa-arrow-down" style="color: #dc3545;" title="Giảm"></i>
-                                        <!-- Mũi tên xuống -->
                                     @else
-                                        <span style="color: #6c757d;">Không lệch</span> <!-- Màu xám cho không lệch -->
+                                        <span style="color: #6c757d;">Không lệch</span>
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($unequalNegative < 0)
-                                        <span style="color: #dc3545; font-weight: bold;">{{ $unequalNegative }}</span>
-                                        <!-- Màu đỏ cho lệch âm -->
-                                        <i class="fa fa-arrow-down" style="color: #dc3545;" title="Giảm"></i>
-                                        <!-- Mũi tên xuống -->
+                                    @if ($unequalNegative > 0)
+                                        <span style="color: #28a745; font-weight: bold;">+{{ $unequalNegative }}</span>
+                                        <i class="fa fa-arrow-up" style="color: #28a745;" title="Tăng"></i>
                                     @else
-                                        <span style="color: #6c757d;">Không lệch</span> <!-- Màu xám cho không lệch -->
+                                        <span style="color: #6c757d;">Không lệch</span>
                                     @endif
                                 </td>
+
                                 <td>
                                     @if ($item['status'] == 0)
                                         <span class="label label-temp text-warning">Phiếu lưu tạm</span>
@@ -269,7 +279,9 @@
                                                     </div>
                                                 </div>
 
+                                                <!-- Lần kiểm 1 -->
                                                 <div class="col-md-12">
+                                                    <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-2">Lần kiểm 1</h6>
                                                     <div class="table-responsive rounded">
                                                         <table class="table table-striped table-sm table-hover">
                                                             <thead style="background-color: #FFA500;">
@@ -285,54 +297,151 @@
                                                             </thead>
                                                             <tbody>
                                                                 @foreach ($item['details'] as $detail)
-                                                                    <tr class="text-center hover-table pointer"
-                                                                        data-bs-toggle="collapse"
-                                                                        data-bs-target="#collapse{{ $detail['equipment_code'] }}"
-                                                                        aria-expanded="false"
-                                                                        aria-controls="collapse{{ $detail['equipment_code'] }}">
-                                                                        <td class="ps-4 text-left">
-                                                                            #{{ $detail['equipment_code'] }}
-                                                                        </td>
-                                                                        <td title="{{ $detail->equipment->name }}"
-                                                                            style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                                                            {{ $detail->equipment->name }}
-                                                                        </td>
-                                                                        <td>{{ $detail['batch_number'] }}</td>
-                                                                        <td>{{ $detail['current_quantity'] }}</td>
-                                                                        <td>{{ $detail['actual_quantity'] }}</td>
-                                                                        <td
-                                                                            style="
-                                                                            color: 
-                                                                            @if ($detail['unequal'] > 0) #28a745; font-weight: bold; 
-                                                                            @elseif ($detail['unequal'] < 0) #dc3545; font-weight: bold; 
-                                                                            @else #6c757d; @endif">
-                                                                            @if ($detail['unequal'] > 0)
-                                                                                <span>+{{ $detail['unequal'] }}</span>
-                                                                                <i class="fa fa-arrow-up"
-                                                                                    style="color: #28a745;"
-                                                                                    title="Lệch dương"></i>
-                                                                            @elseif ($detail['unequal'] < 0)
-                                                                                <span>{{ $detail['unequal'] }}</span>
-                                                                                <i class="fa fa-arrow-down"
-                                                                                    style="color: #dc3545;"
-                                                                                    title="Lệch âm"></i>
-                                                                            @else
-                                                                                <span>Không lệch</span>
-                                                                            @endif
-                                                                        </td>
-                                                                        <td>
-                                                                            <span class="text-gray">
-                                                                                @if (!empty($detail['equipment_note']))
-                                                                                    {{ $detail['equipment_note'] }}
+                                                                    @if ($detail['check_round'] == 1)
+                                                                        <tr class="text-center hover-table pointer"
+                                                                            data-bs-toggle="collapse"
+                                                                            data-bs-target="#collapse{{ $detail['equipment_code'] }}"
+                                                                            aria-expanded="false"
+                                                                            aria-controls="collapse{{ $detail['equipment_code'] }}">
+                                                                            <td class="ps-4 text-left">
+                                                                                #{{ $detail['equipment_code'] }}
+                                                                            </td>
+                                                                            <td title="{{ $detail->equipment->name }}"
+                                                                                style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                                                {{ $detail->equipment->name }}
+                                                                            </td>
+                                                                            <td>{{ $detail['batch_number'] }}</td>
+                                                                            <td>{{ $detail['current_quantity'] }}</td>
+                                                                            <td>{{ $detail['actual_quantity'] }}</td>
+                                                                            <td>
+                                                                                @php
+                                                                                    // Calculate unequal values
+                                                                                    $unequal =
+                                                                                        $detail['current_quantity'] -
+                                                                                        $detail['actual_quantity'];
+                                                                                @endphp
+
+                                                                                @if ($unequal > 0)
+                                                                                    -{{ $unequal }}
+                                                                                @elseif ($unequal < 0)
+                                                                                    +{{ abs($unequal) }}
                                                                                 @else
-                                                                                    không có ghi chú
+                                                                                    <span style="color: #6c757d;">Không
+                                                                                        lệch</span>
                                                                                 @endif
-                                                                            </span>
-                                                                        </td>
-                                                                    </tr>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span class="text-gray">
+                                                                                    @if (!empty($detail['equipment_note']))
+                                                                                        {{ $detail['equipment_note'] }}
+                                                                                    @else
+                                                                                        không có ghi chú
+                                                                                    @endif
+                                                                                </span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endif
                                                                 @endforeach
+
+
                                                             </tbody>
                                                         </table>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Lần kiểm 2 -->
+                                                <div class="col-md-12">
+                                                    <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-2">Lần kiểm 2</h6>
+                                                    <div class="table-responsive rounded">
+                                                        @php
+                                                            $hasSecondCheck = false;
+                                                            foreach ($item['details'] as $detail) {
+                                                                if ($detail['check_round'] == 2) {
+                                                                    $hasSecondCheck = true;
+                                                                    break;
+                                                                }
+                                                            }
+                                                        @endphp
+
+                                                        @if (!$hasSecondCheck)
+                                                            <div class="alert alert-warning d-flex align-items-center shadow-sm border border-warning rounded-3"
+                                                                role="alert">
+                                                                <i class="fas fa-exclamation-triangle me-3"
+                                                                    style="font-size: 1.75rem; color: #856404;"></i>
+                                                                <div>
+                                                                    <h6 class="alert-heading fw-bold m-0">Thông báo!</h6>
+                                                                    <hr class="my-1"
+                                                                        style="border-top: 1px solid rgba(0, 0, 0, 0.1);">
+                                                                    <p class="mb-0 small text-muted">Vui lòng
+                                                                        tiến hành kiểm kho lần 2.</p>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            <table class="table table-striped table-sm table-hover">
+                                                                <thead style="background-color: #FFA500;">
+                                                                    <tr class="text-center">
+                                                                        <th style="width: 15%;" class="ps-3">Mã thiết bị
+                                                                        </th>
+                                                                        <th style="width: 15%;">Tên thiết bị</th>
+                                                                        <th style="width: 15%;">Số lô</th>
+                                                                        <th style="width: 10%;">Tồn kho</th>
+                                                                        <th style="width: 10%;">Số lượng thực tế</th>
+                                                                        <th style="width: 10%;">Số lượng lệch</th>
+                                                                        <th style="width: 20%;">Ghi chú thiết bị</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach ($item['details'] as $detail)
+                                                                        @if ($detail['check_round'] == 2)
+                                                                            <tr class="text-center hover-table pointer"
+                                                                                data-bs-toggle="collapse"
+                                                                                data-bs-target="#collapse{{ $detail['equipment_code'] }}"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="collapse{{ $detail['equipment_code'] }}">
+                                                                                <td class="ps-4 text-left">
+                                                                                    #{{ $detail['equipment_code'] }}
+                                                                                </td>
+                                                                                <td title="{{ $detail->equipment->name }}"
+                                                                                    style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                                                    {{ $detail->equipment->name }}
+                                                                                </td>
+                                                                                <td>{{ $detail['batch_number'] }}</td>
+                                                                                <td>{{ $detail['current_quantity'] }}</td>
+                                                                                <td>{{ $detail['actual_quantity'] }}</td>
+                                                                                <td>
+                                                                                    @php
+                                                                                        // Calculate unequal values
+                                                                                        $unequal =
+                                                                                            $detail[
+                                                                                                'current_quantity'
+                                                                                            ] -
+                                                                                            $detail['actual_quantity'];
+                                                                                    @endphp
+
+                                                                                    @if ($unequal > 0)
+                                                                                        -{{ $unequal }}
+                                                                                    @elseif($unequal < 0)
+                                                                                        +{{ abs($unequal) }}
+                                                                                    @else
+                                                                                        <span style="color: #6c757d;">Không
+                                                                                            lệch</span>
+                                                                                    @endif
+                                                                                </td>
+                                                                                <td>
+                                                                                    <span class="text-gray">
+                                                                                        @if (!empty($detail['equipment_note']))
+                                                                                            {{ $detail['equipment_note'] }}
+                                                                                        @else
+                                                                                            không có ghi chú
+                                                                                        @endif
+                                                                                    </span>
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div> <!-- End card-body -->
@@ -354,7 +463,7 @@
                                                         @endif
                                                     @endif
 
-                                                    @if ($item['user_code'] == session('user_code'))
+                                                    @if ($item['user_code'] == session('user_code') || session('isAdmin') == true || $item['recheck_user_code'])
                                                         <a href="{{ route('inventory_check.edit', $item->code) }}"
                                                             class="btn btn-info btn-sm me-2 rounded-pill">
                                                             <i class="fa fa-edit"></i> Chỉnh sửa

@@ -155,12 +155,18 @@ function populateTableWithProducts() {
 }
 
 function generateTableRow(index, product) {
-    const productName =
-        product.equipment && product.equipment.name
-            ? product.equipment.name
-            : product.name || "Không có tên";
+    const productName = product.name || "Không có tên";
+    const rowColor =
+        product.actual_quantity == product.current_quantity
+            ? "#d1f0d1"
+            : product.actual_quantity < product.current_quantity
+            ? "#ffcccb"
+            : product.actual_quantity > product.current_quantity
+            ? "#ffebc8"
+            : "";
+
     return `
-        <tr data-index="${index}" class="unchecked">
+        <tr data-index="${index}" class="unchecked" style="background-color: ${rowColor};">
             <td>${index + 1}</td>
             <td class="text-left">${product.equipment_code}</td>
             <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -224,12 +230,21 @@ function addListeners() {
 function updateUnequal(index, actualQuantity) {
     const row = document.querySelectorAll("#materialList tr")[index];
     const currentQuantity = parseInt(row.cells[4].innerText);
-    const unequalInput = row.querySelector(".unequal-input");
+    const unequalCountCell = row.querySelector(".unequal-count");
 
     const unequal = Math.abs(currentQuantity - actualQuantity);
-    unequalInput.value = unequal;
+    unequalCountCell.innerText = unequal;
 
     materialData[index].actual_quantity = parseInt(actualQuantity) || 0;
+    materialData[index].unequal = unequal;
+
+    if (actualQuantity == currentQuantity) {
+        row.style.backgroundColor = "#d1f0d1";
+    } else if (actualQuantity < currentQuantity) {
+        row.style.backgroundColor = "#ffcccb";
+    } else if (actualQuantity > currentQuantity) {
+        row.style.backgroundColor = "#ffebc8";
+    }
 }
 
 populateTableWithProducts();

@@ -24,6 +24,7 @@ class Inventory_checks extends Model
         'user_code',
         'recheck_user_code',
         'check_date',
+        'check_round',
         'note',
         'status',
         'equipment_note',
