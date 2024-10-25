@@ -12,7 +12,7 @@
     if ($action == 'create' && !empty(request('cd'))) {
         $action = route('warehouse.import_equipment_request');
 
-        $required = 'required';
+        $required = '';
 
         $d_none_save = '';
 
@@ -71,12 +71,12 @@
         <div class="container">
             <div class="card border-0 px-8 mb-4 rounded-3 mt-3">
                 <div class="row">
-                    <div class="col-md-6 fv-row">
+                    <div class="{{ !empty($infoIER) ? 'col-md-12' : 'col-md-6' }} mb-3 fv-row">
                         <label for="supplier_code" class="{{ $required }} form-label fw-semibold">Nhà cung cấp</label>
                         <div class="d-flex align-items-center">
                             <select name="supplier_code" id="supplier_code" {{ !empty($infoIER) ? 'disabled' : '' }}
                                 onchange="cSupplier()"
-                                class="form-select form-select-sm border border-success rounded-pill ps-5">
+                                class="form-select form-select-sm border border-success rounded-pill setupSelect2">
                                 <option value="0">Chọn Nhà Cung Cấp...</option>
                                 @foreach ($suppliers as $item)
                                     <option value="{{ $item->code }}" id="option_supplier_{{ $item->code }}"
@@ -95,14 +95,41 @@
                         <div class="message_error" id="supplier_code_error"></div>
                     </div>
 
-                    <div class="mb-3 col-6">
-                        <label for="receipt_no" class="{{ $required }} form-label fw-semibold">Số hóa đơn</label>
-                        <input type="text" tabindex="3" onchange="cReceiptNo()"
-                            class="form-control form-control-sm border border-success rounded-pill" id="receipt_no"
-                            name="receipt_no" placeholder="Nhập số hóa đơn" {{ !empty($infoIER) ? 'disabled' : '' }}
-                            value="{{ !empty($infoIER) ? $infoIER->code : old('receipt_no', $editForm->receipt_no ?? null) }}">
-                        <div class="message_error" id="receipt_no_error"></div>
-                    </div>
+                    @if (!empty($infoIER))
+                        <div class="mb-3 col-6">
+                            <label for="order_number" class="{{ $required }} form-label fw-semibold">Số đơn đặt
+                                hàng</label>
+                            <input type="text" tabindex="3" onchange="cOrderNumber()"
+                                class="form-control form-control-sm border border-success rounded-pill" id="order_number"
+                                name="order_number" placeholder="Nhập số đơn đặt hàng" disabled
+                                value="{{ $infoIER->code }}">
+                            <div class="message_error" id="order_number_error"></div>
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="receipt_no" class="required form-label fw-semibold">Số hóa
+                                đơn</label>
+                            <input type="text" tabindex="3" onchange="cReceiptNo()"
+                                class="form-control form-control-sm border border-success rounded-pill" id="receipt_no"
+                                name="receipt_no" placeholder="Nhập số hóa đơn" value="{{ old('receipt_no') }}">
+                            <div class="message_error" id="receipt_no_error"></div>
+                        </div>
+                    @else
+                        <div class="mb-3 col-6 d-none">
+                            <label for="order_number" class="{{ $required }} form-label fw-semibold">Số đơn đặt
+                                hàng</label>
+                            <input type="text" tabindex="3"
+                                class="form-control form-control-sm border border-success rounded-pill" id="order_number"
+                                name="order_number" placeholder="Nhập số đơn đặt hàng" disabled value="1">
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="receipt_no" class="{{ $required }} form-label fw-semibold">Số hóa đơn</label>
+                            <input type="text" tabindex="3" onchange="cReceiptNo()"
+                                class="form-control form-control-sm border border-success rounded-pill" id="receipt_no"
+                                name="receipt_no" placeholder="Nhập số hóa đơn"
+                                value="{{ old('receipt_no', $editForm->receipt_no ?? null) }}">
+                            <div class="message_error" id="receipt_no_error"></div>
+                        </div>
+                    @endif
 
                     <div class="mb-3 col-12">
                         <label for="note" class="form-label fw-semibold">Ghi chú</label>
@@ -127,7 +154,7 @@
                         <label for="equipment_code" class="{{ $required }} form-label fw-semibold">Thiết
                             bị</label>
                         <select name="equipment" id="equipment" onchange="cEquipment()"
-                            class="form-select form-select-sm border border-success rounded-pill ps-5">
+                            class="form-select form-select-sm border border-success rounded-pill setupSelect2">
                             <option value="" selected>Chọn Thiết Bị...</option>
                             @foreach ($equipmentsWithStock as $item)
                                 @if ($item->inventories->sum('current_quantity') <= 25)
@@ -157,7 +184,7 @@
                         <div class="message_error" id="price_error"></div>
                     </div>
 
-                    <div class="col-3 mb-4">
+                    <div class="col-4 mb-4">
                         <label for="batch_number" class="{{ $required }} form-label fw-semibold"
                             id="batch_number_label">Số lô</label>
                         <input type="text" tabindex="7" onchange="cBatchNumber()"
@@ -166,7 +193,7 @@
                         <div class="message_error" id="batch_number_error"></div>
                     </div>
 
-                    <div class="col-3 mb-4">
+                    <div class="col-4 mb-4">
                         <label for="quantity" class="{{ $required }} form-label fw-semibold" id="quantity_label">Số
                             lượng</label>
                         <input type="number" tabindex="11" onchange="cQuantity()"
@@ -175,22 +202,13 @@
                         <div class="message_error" id="quantity_error"></div>
                     </div>
 
-                    <div class="col-3 mb-4">
+                    <div class="col-4 mb-4">
                         <label for="discount_rate" class="form-label fw-semibold" id="discount_rate_label">Chiết khấu
                             (%)</label>
                         <input type="text" tabindex="12" onchange="cDiscountRate()"
                             class="form-control form-control-sm border border-success rounded-pill" id="discount_rate"
                             name="discount_rate" placeholder="Nhập chiết khấu (%)">
                         <div class="message_error" id="discount_rate_error"></div>
-                    </div>
-
-                    <div class="col-3 mb-4">
-                        <label for="VAT" class="form-label fw-semibold" id="vat_label">VAT
-                            (%)</label>
-                        <input type="text" tabindex="13" onchange="cVAT()"
-                            class="form-control form-control-sm border border-success rounded-pill" id="VAT"
-                            name="VAT" placeholder="Nhập thuế VAT (%)">
-                        <div class="message_error" id="VAT_error"></div>
                     </div>
                 </div>
 
@@ -214,13 +232,17 @@
                             <thead class="table-dark">
                                 <tr class="">
                                     @if (!empty($getListIERD))
-                                        <th style="width: 30%;" class="ps-5">Thiết bị</th>
-                                        <th style="width: 15%;">Số lô</th>
+                                        <th style="width: 15%;" class="ps-5">Thiết bị</th>
+                                        <th style="width: 10%;">Số lô</th>
                                         <th style="width: 10%;">Giá</th>
-                                        <th style="width: 10%;">SL</th>
-                                        <th style="width: 9%;">CK</th>
-                                        <th style="width: 9%;">VAT</th>
-                                        <th style="width: 25%;" class="pe-5">Thành tiền</th>
+                                        <th style="width: 10%;" data-bs-toggle="tooltip" data-bs-placement="top"
+                                            title="Số Lượng Yêu Cầu">SLYC</th>
+                                        <th style="width: 10%;" data-bs-toggle="tooltip" data-bs-placement="top"
+                                            title="Số Lượng Nhập">SLN</th>
+                                        <th style="width: 10%;">Lệch</th>
+                                        <th style="width: 10%;">CK</th>
+                                        <th style="width: 10%;">VAT</th>
+                                        <th style="width: 15%;" class="pe-5">Tổng cộng</th>
                                     @else
                                         <th style="width: 24%;" class="ps-5">Thiết bị</th>
                                         <th style="width: 12%;">Số lô</th>
@@ -228,7 +250,7 @@
                                         <th style="width: 10%;">SL</th>
                                         <th style="width: 9%;">CK</th>
                                         <th style="width: 9%;">VAT</th>
-                                        <th style="width: 14%;" class="pe-5">Thành tiền</th>
+                                        <th style="width: 14%;">Thành tiền</th>
                                         <th class="" style="width: 10%;" class="pe-5">Hành Động</th>
                                     @endif
                                 </tr>
@@ -239,16 +261,15 @@
                                         @php
                                             $total_price =
                                                 $item->price *
-                                                $item->quantity *
+                                                $item->quantity_quote *
                                                 (1 - $item->discount / 100) *
-                                                (1 + $item->VAT / 100);
+                                                (1 + $item->equipments->vat / 100);
                                         @endphp
                                         <tr id="equipment-row-{{ $item->equipment_code }}">
                                             <td class="ps-5">{{ $item->equipments->name }}</td>
                                             <td class="">
                                                 <div class="d-flex align-items-center">
                                                     <input type="text"
-                                                        onkeyup="checkBatchNumberOnKeyUp(this.value, '{{ $item->equipment_code }}')"
                                                         id="batch_number_change_{{ $item->equipment_code }}"
                                                         class="form-control form-control-sm border border-success rounded-pill">
                                                 </div>
@@ -264,12 +285,24 @@
                                             </td>
                                             <td class="">
                                                 <div class="d-flex align-items-center">
-                                                    <input type="number"
-                                                        id="quantity_change_{{ $item->equipment_code }}"
-                                                        value="{{ $item->quantity }}" min="0"
-                                                        oninput="calculateTotalPriceTop('{{ $item->equipment_code }}'); calculateTotalPriceBottom(); showNote('{{ $item->equipment_code }}', '{{ $item->equipments->name }}', '{{ $item->quantity }}', '{{ $infoIER->note }}');"
+                                                    <input type="number" value="{{ $item->quantity_quote }}"
+                                                        id="quantity_quote_{{ $item->equipment_code }}" disabled
                                                         class="form-control form-control-sm border border-success rounded-pill">
                                                 </div>
+                                            </td>
+                                            <td class="">
+                                                <div class="d-flex align-items-center">
+                                                    <input type="number"
+                                                        id="quantity_change_{{ $item->equipment_code }}"
+                                                        value="{{ $item->quantity_quote }}" min="0"
+                                                        oninput="calculateTotalPriceTop('{{ $item->equipment_code }}'); calculateTotalPriceBottom();"
+                                                        class="form-control form-control-sm border border-success rounded-pill">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span id="deviation_after_quote_{{ $item->equipment_code }}">
+                                                    Không lệch
+                                                </span>
                                             </td>
                                             <td class="">
                                                 <div class="d-flex align-items-center">
@@ -284,8 +317,7 @@
                                             <td class="">
                                                 <div class="d-flex align-items-center">
                                                     <input type="number" id="vat_change_{{ $item->equipment_code }}"
-                                                        value="{{ number_format($item->VAT, 0, ',', '') }}"
-                                                        min="0" max="100"
+                                                        value="{{ $item->equipments->vat ?? 0 }}" disabled
                                                         class="form-control form-control-sm border border-success rounded-pill"
                                                         oninput="calculateTotalPriceTop('{{ $item->equipment_code }}'); calculateTotalPriceBottom();">
                                                 </div>
@@ -305,14 +337,14 @@
                                                 $item->price *
                                                 $item->quantity *
                                                 (1 - $item->discount / 100) *
-                                                (1 + $item->VAT / 100);
+                                                (1 + $item->equipments->vat / 100);
                                         @endphp
                                         <tr id="equipment-row-{{ $item->equipment_code }}">
                                             <td class="ps-5">{{ $item->equipments->name }}</td>
                                             <td class="">
                                                 <div class="d-flex align-items-center">
                                                     <input type="text" value="{{ $item->batch_number }}"
-                                                        id="batch_number_change_{{ $item->equipment_code }}" disabled
+                                                        id="batch_number_change_{{ $item->equipment_code }}"
                                                         class="form-control form-control-sm border border-success rounded-pill">
                                                 </div>
                                             </td>
@@ -324,6 +356,18 @@
                                                         class="form-control form-control-sm border border-success rounded-pill"
                                                         oninput="calculateTotalPriceTop('{{ $item->equipment_code }}'); calculateTotalPriceBottom();">
                                                 </div>
+                                            </td>
+                                            <td class="d-none">
+                                                <div class="d-flex align-items-center">
+                                                    <input type="number" value="{{ $item->quantity_quote }}"
+                                                        id="quantity_quote_{{ $item->equipment_code }}" disabled
+                                                        class="form-control form-control-sm border border-success rounded-pill">
+                                                </div>
+                                            </td>
+                                            <td class="d-none">
+                                                <span id="deviation_after_quote_{{ $item->equipment_code }}">
+                                                    Không lệch
+                                                </span>
                                             </td>
                                             <td class="">
                                                 <div class="d-flex align-items-center">
@@ -346,8 +390,7 @@
                                             <td class="">
                                                 <div class="d-flex align-items-center">
                                                     <input type="number" id="vat_change_{{ $item->equipment_code }}"
-                                                        value="{{ number_format($item->VAT, 0, ',', '') }}"
-                                                        min="0" max="100"
+                                                        value="{{ $item->equipments->vat }}" disabled
                                                         class="form-control form-control-sm border border-success rounded-pill"
                                                         oninput="calculateTotalPriceTop('{{ $item->equipment_code }}'); calculateTotalPriceBottom();">
                                                 </div>
@@ -397,6 +440,13 @@
                     @foreach ($getList as $item)
                         <div id="error_quantity_card_{{ $item->equipment_code }}"
                             class="card border-0 p-4 bg-light-warning rounded-0 d-none">
+
+                            <span class="mt-1 mb-1 d-none" id="batch_number_error_{{ $item->equipment_code }}"> <i
+                                    class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
+                                <strong>Số lô</strong> của thiết bị <strong>{{ $item->equipments->name }}</strong> là bắt
+                                buộc
+                            </span>
+
                             <span class="mb-1 d-none" id="price_error_{{ $item->equipment_code }}"> <i
                                     class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
                                 <strong>Giá nhập</strong> của thiết bị <strong>{{ $item->equipments->name }}</strong> là
@@ -415,34 +465,19 @@
                                     class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
                                 <strong>Chiết khấu</strong> của thiết bị <strong>{{ $item->equipments->name }}</strong>
                                 phải bé hơn 100</span>
-
-                            <span class="mt-1 d-none" id="vat_error_{{ $item->equipment_code }}"> <i
-                                    class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
-                                <strong>VAT</strong> của thiết bị <strong>{{ $item->equipments->name }}</strong>
-                                phải bé hơn 100</span>
                         </div>
                     @endforeach
                 @elseif (!empty($getListIERD))
                     @foreach ($getListIERD as $item)
-                        <div id="error_quantity_card_2_{{ $item->equipment_code }}"
-                            class="card border-0 p-4 bg-light-warning rounded-0 d-none">
-                            <span class="mt-1 mb-1 d-none" id="batch_number_error_{{ $item->equipment_code }}"> <i
-                                    class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
-                                <strong>Số lô</strong> của thiết bị <strong>{{ $item->equipments->name }}</strong> đã tồn
-                                tại
-                                trên hệ thống
-                            </span>
-
-                            <span class="mt-1 mb-1 d-none" id="list_batch_number_error_{{ $item->equipment_code }}"> <i
-                                    class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
-                                <strong>Số lô</strong> của thiết bị <strong>{{ $item->equipments->name }}</strong> đã tồn
-                                tại
-                                trong danh sách
-                            </span>
-                        </div>
-
                         <div id="error_quantity_card_{{ $item->equipment_code }}"
                             class="card border-0 p-4 bg-light-warning rounded-0 d-none">
+
+                            <span class="mt-1 mb-1 d-none" id="batch_number_error_{{ $item->equipment_code }}"> <i
+                                    class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
+                                <strong>Số lô</strong> của thiết bị <strong>{{ $item->equipments->name }}</strong> là bắt
+                                buộc
+                            </span>
+
                             <span class="mb-1 d-none" id="price_error_{{ $item->equipment_code }}"> <i
                                     class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
                                 <strong>Giá nhập</strong> của thiết bị <strong>{{ $item->equipments->name }}</strong>
@@ -462,11 +497,6 @@
                             <span class="mt-1 mb-1 d-none" id="discount_rate_error_{{ $item->equipment_code }}"> <i
                                     class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
                                 <strong>Chiết khấu</strong> của thiết bị <strong>{{ $item->equipments->name }}</strong>
-                                phải bé hơn 100</span>
-
-                            <span class="mt-1 d-none" id="vat_error_{{ $item->equipment_code }}"> <i
-                                    class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
-                                <strong>VAT</strong> của thiết bị <strong>{{ $item->equipments->name }}</strong>
                                 phải bé hơn 100</span>
                         </div>
                     @endforeach
@@ -491,7 +521,7 @@
                                 $price = $detail->price ?? 0;
                                 $quantity = $detail->quantity;
                                 $discount = $detail->discount ?? 0;
-                                $vat = $detail->VAT ?? 0;
+                                $vat = $detail->equipments->vat ?? 0;
 
                                 $totalPrice += $quantity * $price;
 
@@ -512,9 +542,9 @@
 
                             foreach ($getListIERD as $detail) {
                                 $priceIerd = $detail->price ?? 0;
-                                $quantityIerd = $detail->quantity;
+                                $quantityIerd = $detail->quantity_quote;
                                 $discountIerd = $detail->discount ?? 0;
-                                $vatIerd = $detail->VAT ?? 0;
+                                $vatIerd = $detail->equipments->vat ?? 0;
 
                                 $totalPriceIerd += $quantityIerd * $priceIerd;
 
@@ -528,7 +558,8 @@
                         <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
                             <span class="fw-semibold">Tổng Đầu</span>
                             <span id="totalPrice"
-                                class="fw-bolder text-danger">{{ number_format($totalPriceIerd, 0, ',', '.') }} VND</span>
+                                class="fw-bolder text-danger">{{ number_format($totalPriceIerd, 0, ',', '.') }}
+                                VND</span>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -584,7 +615,7 @@
                     @if (!empty($getListIERD))
                         <button type="button"
                             class="btn btn-sm btn-twitter w-100 d-flex align-items-center justify-content-center rounded-pill"
-                            id="import_equipment_request_create" disabled>
+                            id="import_equipment_request_create">
                             <i class="fas fa-save me-1"></i>Duyệt Phiếu
                         </button>
                     @else
@@ -729,6 +760,7 @@
 
             setTimeout(async () => {
                 let supplier_code = document.getElementById('supplier_code').value.trim();
+                let order_number = document.getElementById('order_number').value.trim();
                 let receipt_no = document.getElementById('receipt_no').value.trim();
                 let note = document.getElementById('note').value.trim();
                 let request_code = document.getElementById('request_code') ? document.getElementById(
@@ -754,12 +786,22 @@
                 if (!receipt_no) {
                     receipt_no_error.innerText = "Vui lòng thêm số hóa đơn";
                     hasError = true;
+                } else if (receipt_no.length >= 9 || receipt_no.length <= 7) {
+                    receipt_no_error.innerText = "Số hóa đơn phải có 8 ký tự";
+                    hasError = true;
                 } else {
                     const receiptNo = await checkReceiptNo(receipt_no, request_code);
                     if (receiptNo) {
                         receipt_no_error.innerText = "Số hóa đơn đã tồn tại trên hệ thống, hãy thử lại";
                         hasError = true;
                     }
+                }
+
+                const orderNumberCheck = await checkOrderNumber(order_number, request_code);
+                if (orderNumberCheck) {
+                    order_number_error.innerText =
+                        "Số đơn đặt hàng đã tồn tại vì đã có người tạo phiếu nhập này trước đó.";
+                    hasError = true;
                 }
 
                 if (equipmentList.length === 0) {
@@ -774,6 +816,20 @@
                         six_month = new Date(item.product_date);
                         six_month.setMonth(six_month
                             .getMonth() + 6);
+                    }
+
+                    if (!item.batch_number) {
+                        document.getElementById(`error_quantity_card_${item.equipment_code}`).classList
+                            .remove(
+                                'd-none');
+                        document.getElementById(`batch_number_error_${item.equipment_code}`).classList
+                            .remove(
+                                'd-none');
+                        hasError = true;
+                    } else {
+                        document.getElementById(`batch_number_error_${item.equipment_code}`).classList
+                            .add(
+                                'd-none');
                     }
 
                     if (!item.price || item.price <= 0) {
@@ -814,18 +870,6 @@
                             .add(
                                 'd-none');
                     }
-
-                    if (item.vat < 0 || item.vat > 100) {
-                        document.getElementById(`error_quantity_card_${item.equipment_code}`).classList
-                            .remove(
-                                'd-none');
-                        document.getElementById(`vat_error_${item.equipment_code}`).classList.remove(
-                            'd-none');
-                        hasError = true;
-                    } else {
-                        document.getElementById(`vat_error_${item.equipment_code}`).classList.add(
-                            'd-none');
-                    }
                 });
 
                 if (hasError) {
@@ -837,6 +881,7 @@
 
                 let formData = new FormData();
                 formData.append('supplier_code', supplier_code);
+                formData.append('order_number', order_number);
                 formData.append('receipt_no', receipt_no);
                 formData.append('note', note);
                 formData.append('importEquipmentStatus', importEquipmentStatus);
@@ -883,7 +928,6 @@
                 let batch_number = document.getElementById('batch_number').value.trim();
                 let quantity = document.getElementById('quantity').value.trim();
                 let discount_rate = document.getElementById('discount_rate').value.trim();
-                let VAT = document.getElementById('VAT').value.trim();
                 let getEquipmentLists = getEquipmentList();
 
                 let equipment_error = document.getElementById('equipment_error');
@@ -891,7 +935,6 @@
                 let batch_number_error = document.getElementById('batch_number_error');
                 let quantity_error = document.getElementById('quantity_error');
                 let discount_rate_error = document.getElementById('discount_rate_error');
-                let VAT_error = document.getElementById('VAT_error');
 
                 // Reset lỗi
                 equipment_error.innerText = '';
@@ -899,7 +942,6 @@
                 batch_number_error.innerText = '';
                 quantity_error.innerText = '';
                 discount_rate_error.innerText = '';
-                VAT_error.innerText = '';
 
                 let hasError = false;
 
@@ -917,22 +959,6 @@
                 if (!batch_number) {
                     batch_number_error.innerText = "Vui lòng nhập số lô";
                     hasError = true;
-                } else {
-                    const batchExists = await checkBatchNumber(batch_number, equipment);
-
-                    if (batchExists) {
-                        batch_number_error.innerText =
-                            "Số lô này đã bị trùng với thiết bị nhập khác trên hệ thống";
-                        hasError = true;
-                    } else {
-                        getEquipmentLists.forEach((item) => {
-                            if (batch_number === item.batch_number) {
-                                batch_number_error.innerText =
-                                    "Số lô này đã bị trùng với thiết bị nhập khác trong danh sách";
-                                hasError = true;
-                            }
-                        });
-                    }
                 }
 
                 if (!quantity || quantity <= 0) {
@@ -942,11 +968,6 @@
 
                 if (discount_rate < 0 || discount_rate > 100) {
                     discount_rate_error.innerText = "Chiết khấu phải bé hơn 100";
-                    hasError = true;
-                }
-
-                if (VAT < 0 || VAT > 100) {
-                    VAT_error.innerText = "Thuế VAT phải bé hơn 100";
                     hasError = true;
                 }
 
@@ -965,10 +986,6 @@
                 formData.append('batch_number', batch_number);
                 formData.append('quantity', quantity);
                 formData.append('discount_rate', discount_rate);
-                formData.append('VAT', VAT);
-
-                const total_price = price * quantity * (1 - discount_rate / 100) * (1 + VAT /
-                    100);
 
                 fetch('{{ route('warehouse.create_import') }}', {
                         method: 'POST',
@@ -979,6 +996,9 @@
                     }).then(response => response.json())
                     .then(data => {
                         if (data.success) {
+                            const total_price = (data.price * data.quantity) - (data
+                                .discount_rate / 100) + (data.vat / 100);
+
                             // Kiểm tra xem thiết bị đã được thêm chưa
                             if (!addedEquipments.includes(data.equipment_code)) {
                                 addedEquipments.push(data.equipment_code);
@@ -998,7 +1018,7 @@
                                 <td class="">
                                     <div class="d-flex align-items-center">
                                         <input type="text" value="${data.batch_number}"
-                                            id="batch_number_change_${data.equipment_code}" disabled
+                                            id="batch_number_change_${data.equipment_code}"
                                             class="form-control form-control-sm border border-success rounded-pill">
                                     </div>
                                 </td>
@@ -1009,6 +1029,18 @@
                                             class="form-control form-control-sm border border-success rounded-pill"
                                             oninput="calculateTotalPriceTop('${data.equipment_code}'); calculateTotalPriceBottom();">
                                     </div>
+                                </td>
+                                <td class="d-none">
+                                    <div class="d-flex align-items-center">
+                                        <input type="number" value="1"
+                                            id="quantity_quote_${data.equipment_code}" disabled
+                                            class="form-control form-control-sm border border-success rounded-pill">
+                                    </div>
+                                </td>
+                                <td class="d-none">
+                                    <span id="deviation_after_quote_${data.equipment_code}">
+                                        Không lệch
+                                    </span>
                                 </td>
                                 <td class="">
                                     <div class="d-flex align-items-center">
@@ -1029,7 +1061,7 @@
                                 <td class="">
                                     <div class="d-flex align-items-center">
                                         <input type="number" id="vat_change_${data.equipment_code}"
-                                            value="${data.vat}"
+                                            value="${data.vat}" disabled
                                             class="form-control form-control-sm border border-success rounded-pill"
                                             oninput="calculateTotalPriceTop('${data.equipment_code}'); calculateTotalPriceBottom();">
                                     </div>
@@ -1062,7 +1094,6 @@
                             let discount_rate_Label = document.getElementById(
                                     'discount_rate_label')
                                 .textContent;
-                            let vat_Label = document.getElementById('vat_label').textContent;
 
                             let newDivErr = document.createElement('div');
 
@@ -1073,6 +1104,9 @@
                                 'rounded-0', 'd-none');
 
                             newDivErr.innerHTML = `
+                                <span class="mb-1 d-none" id="batch_number_error_${data.equipment_code}"> <i class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
+                                    <strong>${batch_number_Label}</strong> của thiết bị <strong>${data.equipment_name}</strong> là bắt buộc</span>
+
                                 <span class="mb-1 d-none" id="price_error_${data.equipment_code}"> <i class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
                                     <strong>${price_Label}</strong> của thiết bị <strong>${data.equipment_name}</strong> là bắt buộc và phải lớn hơn 0</span>
 
@@ -1081,9 +1115,6 @@
 
                                 <span class="mt-1 mb-1 d-none" id="discount_rate_error_${data.equipment_code}"> <i class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
                                     <strong>${discount_rate_Label}</strong> của thiết bị <strong>${data.equipment_name}</strong> phải bé hơn 100</span>
-
-                                <span class="mt-1 d-none" id="vat_error_${data.equipment_code}"> <i class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
-                                    <strong>${vat_Label}</strong> của thiết bị <strong>${data.equipment_name}</strong> phải bé hơn 100</span>
                             `;
 
                             error_quantity_container.appendChild(newDivErr);
@@ -1094,7 +1125,6 @@
                             document.getElementById('batch_number').value = "";
                             document.getElementById('quantity').value = "";
                             document.getElementById('discount_rate').value = "";
-                            document.getElementById('VAT').value = "";
 
                             // Ẩn các tùy chọn đã thêm trong danh sách thiết bị
                             let equipmentOptions = document.querySelectorAll(
@@ -1194,8 +1224,12 @@
                 let equipmentCode = row.id.split('-')[2]; // Lấy mã thiết bị từ ID của hàng
                 let priceInput = document.getElementById(`price_change_${equipmentCode}`);
                 let priceValue = priceInput.value.trim();
+                let quantityQuoteInput = document.getElementById(`quantity_quote_${equipmentCode}`);
+                let quantityQuoteValue = quantityQuoteInput.value.trim();
                 let quantityInput = document.getElementById(`quantity_change_${equipmentCode}`);
                 let quantityValue = quantityInput.value.trim();
+                let deviation_after_quote = document.getElementById(`deviation_after_quote_${equipmentCode}`)
+                    .innerText.trim();
                 let batch_numberInput = document.getElementById(`batch_number_change_${equipmentCode}`);
                 let batch_numberValue = batch_numberInput.value.trim();
                 let discount_rateInput = document.getElementById(`discount_rate_change_${equipmentCode}`);
@@ -1207,7 +1241,9 @@
                 equipmentList.push({
                     equipment_code: equipmentCode,
                     price: priceValue,
+                    quantityQuote: quantityQuoteValue,
                     quantity: quantityValue,
+                    deviation_quote: deviation_after_quote ?? 'Không lệch',
                     batch_number: batch_numberValue,
                     discount_rate: discount_rateValue,
                     vat: vatValue,
@@ -1218,94 +1254,6 @@
             return equipmentList;
         }
 
-        function checkAllBatchNumbers() {
-            const allBatchInputs = document.querySelectorAll('input[id^="batch_number_change_"]');
-            let allFilled = true;
-
-            allBatchInputs.forEach(input => {
-                if (!input.value) {
-                    allFilled = false;
-                }
-            });
-
-            const submitButton = document.getElementById('import_equipment_request_create');
-            submitButton.disabled = !allFilled;
-        }
-
-        // Cập nhật hàm kiểm tra số lô để gọi checkAllBatchNumbers
-        function checkBatchNumberOnKeyUp(batch_number, equipment_code) {
-            setTimeout(async function() {
-                const batchExists = await checkBatchNumber(batch_number, equipment_code);
-
-                let isDuplicateInList = false;
-                const allBatchInputs = document.querySelectorAll('input[id^="batch_number_change_"]');
-
-                allBatchInputs.forEach(input => {
-                    if (input.id !== `batch_number_change_${equipment_code}` && input.value ===
-                        batch_number) {
-                        isDuplicateInList = true;
-                    }
-                });
-
-                if (batchExists || isDuplicateInList) {
-                    document.getElementById('import_equipment_request_create').disabled = true;
-                    document.getElementById(`error_quantity_card_2_${equipment_code}`).classList.remove(
-                        'd-none');
-                    if (batchExists) {
-                        document.getElementById(`batch_number_error_${equipment_code}`).classList.remove(
-                            'd-none');
-                        document.getElementById(`list_batch_number_error_${equipment_code}`).classList.add(
-                            'd-none');
-                    } else {
-                        document.getElementById(`list_batch_number_error_${equipment_code}`).classList.remove(
-                            'd-none');
-                        document.getElementById(`batch_number_error_${equipment_code}`).classList.add('d-none');
-                    }
-                    return false;
-                } else {
-                    document.getElementById(`error_quantity_card_2_${equipment_code}`).classList.add('d-none');
-                    document.getElementById(`batch_number_error_${equipment_code}`).classList.add('d-none');
-                    document.getElementById(`list_batch_number_error_${equipment_code}`).classList.add(
-                        'd-none');
-                }
-
-                // Kiểm tra trạng thái tất cả số lô
-                checkAllBatchNumbers();
-
-            }, 100);
-        }
-
-        function checkBatchNumber(batch_number_check, equipment_code) {
-            if (updateReceiptEquipmentCodeArr.includes(batch_number_check) && updateReceiptBatchNumberArr.includes(
-                    equipment_code)) {
-                return Promise.resolve(false);
-            } else {
-                const formData = new FormData();
-                formData.append('batch_number', batch_number_check);
-                formData.append('equipment_code', equipment_code);
-
-                return fetch('{{ route('warehouse.check_batch_number') }}', {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        // Kiểm tra xem success có phải true không
-                        if (data.success === true) {
-                            return false; // Không có lỗi, batch number hợp lệ
-                        } else {
-                            return true; // Batch number bị trùng
-                        }
-                    })
-                    .catch(error => {
-                        return Promise.reject('fetch_error');
-                    });
-            }
-        }
-
         function checkReceiptNo(receipt_no, request_code) {
             const formData = new FormData();
             formData.append('receipt_no', receipt_no);
@@ -1314,6 +1262,32 @@
             return fetch('{{ route('warehouse.check_receipt_no') }}', {
                     method: 'POST',
                     body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Kiểm tra xem success có phải true không
+                    if (data.success === true) {
+                        return true; // Bị trùng
+                    } else {
+                        return false; // Không có lỗi
+                    }
+                })
+                .catch(error => {
+                    return Promise.reject('fetch_error');
+                });
+        }
+
+        function checkOrderNumber(orderNumber, request_code) {
+            const formDataOrderNumber = new FormData();
+            formDataOrderNumber.append('order_number', orderNumber);
+            formDataOrderNumber.append('code', request_code);
+
+            return fetch('{{ route('warehouse.check_order_number') }}', {
+                    method: 'POST',
+                    body: formDataOrderNumber,
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                     }
@@ -1376,14 +1350,31 @@
         }
 
         function calculateTotalPriceTop(equipment_code) {
-            // Lấy giá trị từ các trường input
+            // Lấy giá trị từ các trường 
             const price = parseFloat(document.getElementById(`price_change_${equipment_code}`).value.replace(/,/g, '')) ||
                 0;
+            const quantity_quote = parseFloat(document.getElementById(`quantity_quote_${equipment_code}`).value
+                .replace(/,/g,
+                    '')) || 0;
             const quantity = parseFloat(document.getElementById(`quantity_change_${equipment_code}`).value.replace(/,/g,
                 '')) || 0;
             const discount = parseFloat(document.getElementById(`discount_rate_change_${equipment_code}`).value.replace(
                 /,/g, '')) || 0;
             const vat = parseFloat(document.getElementById(`vat_change_${equipment_code}`).value.replace(/,/g, '')) || 0;
+
+            if (quantity >= 0) {
+                const quantityAfterImport = quantity - quantity_quote;
+
+                if (quantityAfterImport > 0) {
+                    document.getElementById(`deviation_after_quote_${equipment_code}`).innerText =
+                        `Dư ${Math.abs(quantityAfterImport)}`;
+                } else if (quantityAfterImport < 0) {
+                    document.getElementById(`deviation_after_quote_${equipment_code}`).innerText =
+                        `Thiếu ${Math.abs(quantityAfterImport)}`;
+                } else {
+                    document.getElementById(`deviation_after_quote_${equipment_code}`).innerText = 'Không lệch';
+                }
+            }
 
             // Tính toán thành tiền
             const discountedPrice = price * quantity * (1 - discount / 100);
@@ -1401,7 +1392,6 @@
             // Cập nhật thành tiền trong HTML
             document.getElementById(`total_price_${equipment_code}`).innerText = formattedTotalPrice;
         }
-
 
         function calculateTotalPriceBottom() {
             let totalPrice = 0;
@@ -1559,8 +1549,8 @@
 
             // Gán dữ liệu ngẫu nhiên vào các trường
             document.getElementById('supplier_code').value = getRandomArr(allSuppliers);
-            document.getElementById('receipt_no').value = 'LH' + getRandomNumber(1000,
-                9999);
+            document.getElementById('receipt_no').value = 'LH' + getRandomNumber(000000,
+                999999);
             document.getElementById('note').value = 'Nhập Kho Thiết Bị Mới';
             document.getElementById('equipment').value = getRandomArr(availableEquipments);
             document.getElementById('price').value = getRandomNumber(50000,
@@ -1571,7 +1561,6 @@
                 300);
             document.getElementById('discount_rate').value = getRandomNumber(0,
                 30);
-            document.getElementById('VAT').value = getRandomNumber(5, 20);
         });
     </script>
     <script>
@@ -1716,40 +1705,40 @@
             }, 500);
         });
 
-        let notes = {}; // Object để lưu các thiết bị đã thay đổi số lượng và chênh lệch
+        // let notes = {}; // Object để lưu các thiết bị đã thay đổi số lượng và chênh lệch
 
-        function showNote(equipment_code, equipment_name, equipment_quantity, noteDefault) {
+        // function showNote(equipment_code, equipment_name, equipment_quantity, noteDefault) {
 
-            const quantity_showNote = document.getElementById(`quantity_change_${equipment_code}`).value;
+        //     const quantity_showNote = document.getElementById(`quantity_change_${equipment_code}`).value;
 
-            let quantityCalculate = equipment_quantity - quantity_showNote;
-            let quantityShowNote = Math.abs(quantityCalculate);
+        //     let quantityCalculate = equipment_quantity - quantity_showNote;
+        //     let quantityShowNote = Math.abs(quantityCalculate);
 
-            if (quantity_showNote == 0) {
-                notes[equipment_name] = `Thiết Bị "${equipment_name}" đã hết hàng`;
-            } else if (quantityCalculate > 0) {
-                notes[equipment_name] =
-                    `Thiết Bị "${equipment_name}" thiếu "${quantityShowNote}" so với ban đầu là "${equipment_quantity}"`;
-            } else if (quantityCalculate < 0) {
-                notes[equipment_name] =
-                    `Thiết Bị "${equipment_name}" dư "${quantityShowNote}" so với ban đầu là "${equipment_quantity}"`;
-            } else if (quantityCalculate === 0) {
-                delete notes[equipment_name];
-            }
+        //     if (quantity_showNote == 0) {
+        //         notes[equipment_name] = `Thiết Bị "${equipment_name}" đã hết hàng`;
+        //     } else if (quantityCalculate > 0) {
+        //         notes[equipment_name] =
+        //             `Thiết Bị "${equipment_name}" thiếu "${quantityShowNote}" so với ban đầu là "${equipment_quantity}"`;
+        //     } else if (quantityCalculate < 0) {
+        //         notes[equipment_name] =
+        //             `Thiết Bị "${equipment_name}" dư "${quantityShowNote}" so với ban đầu là "${equipment_quantity}"`;
+        //     } else if (quantityCalculate === 0) {
+        //         delete notes[equipment_name];
+        //     }
 
-            let noteText = noteDefault ? `${noteDefault}` : ''; // Kiểm tra giá trị noteDefault
+        //     let noteText = noteDefault ? `${noteDefault}` : ''; // Kiểm tra giá trị noteDefault
 
-            // Kiểm tra nếu có thiết bị chênh lệch để chèn thêm nội dung mới
-            if (Object.keys(notes).length > 0) {
-                let additionalText = Object.keys(notes).map(name => {
-                    return `${notes[name]}`;
-                }).join(', ');
+        //     // Kiểm tra nếu có thiết bị chênh lệch để chèn thêm nội dung mới
+        //     if (Object.keys(notes).length > 0) {
+        //         let additionalText = Object.keys(notes).map(name => {
+        //             return `${notes[name]}`;
+        //         }).join(', ');
 
-                // Nếu có giá trị noteDefault, nối với additionalText; nếu không, chỉ hiển thị additionalText
-                noteText = noteDefault ? `${noteText}, ${additionalText}` : additionalText;
-            }
+        //         // Nếu có giá trị noteDefault, nối với additionalText; nếu không, chỉ hiển thị additionalText
+        //         noteText = noteDefault ? `${noteText}, ${additionalText}` : additionalText;
+        //     }
 
-            document.getElementById('note').value = noteText;
-        }
+        //     document.getElementById('note').value = noteText;
+        // }
     </script>
 @endsection

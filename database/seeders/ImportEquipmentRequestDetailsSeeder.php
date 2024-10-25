@@ -10,16 +10,6 @@ class ImportEquipmentRequestDetailsSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('import_equipment_request_details')->insert([
-            [
-                'import_request_code' => 'IMREQ001',
-                'equipment_code' => 'E001',
-                'quantity' => 10,
-                'status' => false,
-                'created_at' => now(),
-                'updated_at' => null,
-                'deleted_at' => null,
-            ],
-        ]);
+        DB::table('import_equipment_request_details')->insert([]);
     }
 }

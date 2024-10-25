@@ -9,10 +9,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('units', function (Blueprint $table) {
-            $table->char('code', 20)->primary();
+            $table->char('code', 10)->primary();
             $table->string('name', 255)->unique();
             $table->text('description')->nullable();
-            $table->char('created_by', 20)->nullable();;
+            $table->char('created_by', 10)->nullable();;
             $table->timestamps();
             $table->softDeletes();
             

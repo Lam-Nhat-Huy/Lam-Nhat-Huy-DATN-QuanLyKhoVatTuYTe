@@ -9,8 +9,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('import_equipment_requests', function (Blueprint $table) {
-            $table->char('code', 20)->primary();
-            $table->char('user_code', 20)->nullable();
+            $table->char('code', 10)->primary();
+            $table->char('user_code', 10)->nullable();
             $table->char('supplier_code', 20)->nullable();
             $table->text('note')->nullable();
             $table->boolean('status')->default(false);

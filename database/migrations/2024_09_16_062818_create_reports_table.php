@@ -9,8 +9,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('reports', function (Blueprint $table) {
-            $table->char('code', 20)->primary();
-            $table->char('user_code', 20)->nullable();
+            $table->char('code', 10)->primary();
+            $table->char('user_code', 10)->nullable();
             $table->string('report_type')->nullable();
             $table->text('content');
             $table->string('file');

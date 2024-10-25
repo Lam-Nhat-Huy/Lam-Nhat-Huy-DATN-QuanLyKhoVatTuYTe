@@ -98,7 +98,7 @@
                     <div class="me-n7 pe-7">
                         <div class="row mb-5">
                             <!-- Ảnh thiết bị -->
-                            <div class="col-3 mb-5">
+                            <div class="col-md-3 mb-5">
                                 <div class="required">Ảnh Thiết Bị</div>
                                 <div class="image-preview-wrapper mt-3">
                                     <img id="preview-image"
@@ -121,32 +121,32 @@
                                 @enderror
                             </div>
 
-                            <div class="col-9">
+                            <div class="col-md-9">
                                 <div class="row">
                                     <!-- Tên thiết bị -->
-                                    <div class="col-12 fv-row mb-5">
+                                    <div class="col-md-12 fv-row mb-5">
                                         <label class="required fw-bold mb-3">Tên thiết bị</label>
                                         <input type="text" onchange="changeName()"
                                             class="form-control form-control-sm rounded-pill border border-success"
                                             name="name" id="name" placeholder="Tên thiết bị.."
-                                            value="{{ !empty($currentEquipment) ? $currentEquipment->name : old('name') }}">
+                                            value="{{ old('name', $currentEquipment->name ?? null) }}">
                                         @error('name')
                                             <div class="message_error" id="name_error">{{ $message }}</div>
                                         @enderror
                                     </div>
 
                                     <!-- Nhóm thiết bị -->
-                                    <div class="col-6 fv-row mb-5">
+                                    <div class="col-md-6 fv-row mb-5">
                                         <label class="required fw-bold mb-3">Nhóm thiết bị</label>
                                         <div class="d-flex align-items-center">
                                             <select name="equipment_type_code" id="equipment_type_code"
                                                 onchange="changeEquipmentType()"
-                                                class="form-select form-select-sm rounded-pill border-success">
+                                                class="form-select form-select-sm rounded-pill border-success setupSelect2">
                                                 <option value="0">--Chọn Nhóm thiết bị--</option>
                                                 @foreach ($equipmentTypes as $type)
                                                     <option value="{{ $type->code }}"
                                                         id="option_equipment_type_{{ $type->code }}"
-                                                        {{ !empty($currentEquipment) && $currentEquipment->equipment_type_code == $type->code ? 'selected' : '' }}>
+                                                        {{ old('equipment_type_code', $currentEquipment->equipment_type_code ?? null) == $type->code ? 'selected' : '' }}>
                                                         {{ $type->name }}
                                                     </option>
                                                 @endforeach
@@ -163,16 +163,16 @@
                                     </div>
 
                                     <!-- Đơn Vị Tính -->
-                                    <div class="col-6 fv-row mb-5">
+                                    <div class="col-md-6 fv-row mb-5">
                                         <label class="required fw-bold mb-3">Đơn Vị Tính</label>
                                         <div class="d-flex align-items-center">
                                             <select name="unit_code" id="unit_code" onchange="changeUnit()"
-                                                class="form-select form-select-sm rounded-pill border-success">
+                                                class="form-select form-select-sm rounded-pill border-success setupSelect2">
                                                 <option value="0">--Chọn Đơn Vị Tính--</option>
                                                 @foreach ($units as $unit)
                                                     <option value="{{ $unit->code }}"
                                                         id="option_unit_{{ $unit->code }}"
-                                                        {{ !empty($currentEquipment) && $currentEquipment->unit_code == $unit->code ? 'selected' : '' }}>
+                                                        {{ old('unit_code', $currentEquipment->unit_code ?? null) == $unit->code ? 'selected' : '' }}>
                                                         {{ $unit->name }}
                                                     </option>
                                                 @endforeach
@@ -189,66 +189,27 @@
                                         @enderror
                                     </div>
 
-                                    <!-- Giá -->
-                                    <div class="col-6 fv-row mb-5">
-                                        <label class="required fw-bold mb-3">Giá</label>
-                                        <input type="number" onchange="changePrice()"
+                                    <!-- Thuế VAT -->
+                                    <div class="col-md-6 fv-row mb-5">
+                                        <label class="required fw-bold mb-3">VAT (%)</label>
+                                        <input type="number" onchange="changeVAT()" min="1" max="100"
                                             class="form-control form-control-sm rounded-pill border border-success"
-                                            name="price" id="price"
-                                            value="{{ old('price', !empty($currentEquipment) ? $currentEquipment->price : '') }}"
-                                            placeholder="Vui lòng nhập giá">
-                                        @error('price')
-                                            <div class="message_error" id="price_error">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <!-- Ngày Hết Hạn -->
-                                    <div class="col-6 fv-row mb-5">
-                                        <label class="fw-bold mb-3">Ngày Hết Hạn (Nếu Có)</label>
-                                        <input type="date"
-                                            class="form-control form-control-sm rounded-pill border border-success"
-                                            name="expiry_date" id="expiry_date"
-                                            value="{{ old('expiry_date', !empty($currentEquipment) ? $currentEquipment->expiry_date : '') }}">
-                                        @error('expiry_date')
-                                            <div class="message_error">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <!-- Nhà Cung Cấp -->
-                                    <div class="col-6 fv-row mb-5">
-                                        <label class="required fw-bold mb-3">Nhà Cung Cấp</label>
-                                        <div class="d-flex align-items-center">
-                                            <select name="supplier_code" id="supplier_code" onchange="changeSupplier()"
-                                                class="form-select form-select-sm rounded-pill border-success">
-                                                <option value="0">--Chọn Nhà Cung Cấp--</option>
-                                                @foreach ($suppliers as $supplier)
-                                                    <option value="{{ $supplier->code }}"
-                                                        id="option_supplier_{{ $supplier->code }}"
-                                                        {{ old('supplier_code', !empty($currentEquipment) ? $currentEquipment->supplier_code : '') == $supplier->code ? 'selected' : '' }}>
-                                                        {{ $supplier->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <span class="ms-4 pointer" data-bs-toggle="modal"
-                                                data-bs-target="#add_modal_ncc" title="Thêm Nhà Cung Cấp">
-                                                <i class="fa fa-plus bg-primary rounded-circle p-2 text-white"
-                                                    style="width: 25px; height: 25px;"></i>
-                                            </span>
-                                        </div>
-                                        @error('supplier_code')
-                                            <div class="message_error" id="supplier_code_error">{{ $message }}</div>
+                                            name="vat" id="vat" placeholder="Thuế VAT..."
+                                            value="{{ old('vat', $currentEquipment->vat ?? null) }}">
+                                        @error('vat')
+                                            <div class="message_error" id="vat_error">{{ $message }}</div>
                                         @enderror
                                     </div>
 
                                     <!-- Nước Sản Xuất -->
-                                    <div class="col-6 fv-row mb-5">
+                                    <div class="col-md-6 fv-row mb-5">
                                         <label class="required fw-bold mb-3">Nước Sản Xuất</label>
                                         <select name="country" id="country" onchange="changeCountry()"
-                                            class="form-select form-select-sm rounded-pill border-success">4
+                                            class="form-select form-select-sm rounded-pill border-success setupSelect2">
                                             <option value="0">--Chọn Nước Sản Xuất--</option>
                                             @foreach (config('apps.country') as $value)
                                                 <option value="{{ $value }}"
-                                                    {{ old('country', !empty($currentEquipment) ? $currentEquipment->country : '') == $value ? 'selected' : '' }}>
+                                                    {{ old('country', $currentEquipment->country ?? null) == $value ? 'selected' : '' }}>
                                                     {{ $value }}</option>
                                             @endforeach
                                         </select>
@@ -258,10 +219,10 @@
                                     </div>
 
                                     <!-- Mô Tả -->
-                                    <div class="col-12 fv-row mb-5">
+                                    <div class="col-md-12 fv-row mb-5">
                                         <label class="required fw-bold mb-3">Mô Tả</label>
                                         <textarea name="description" id="description" cols="30" rows="10" onchange="changeDescription()"
-                                            class="form-control form-control-sm rounded-3 border border-success" placeholder="Thêm Mô Tả Cho thiết bị..">{{ old('description', !empty($currentEquipment) ? $currentEquipment->description : '') }}</textarea>
+                                            class="form-control form-control-sm rounded-3 border border-success" placeholder="Thêm Mô Tả Cho thiết bị..">{{ old('description', $currentEquipment->description ?? null) }}</textarea>
                                         @error('description')
                                             <div class="message_error" id="description_error">{{ $message }}</div>
                                         @enderror
@@ -534,7 +495,6 @@
 
             const equipmentTypes = @json($equipmentTypes->pluck('code')->toArray());
             const units = @json($units->pluck('code')->toArray());
-            const suppliers = @json($suppliers->pluck('code')->toArray());
             const country = @json(config('apps.country'));
 
             // Gán dữ liệu ngẫu nhiên vào các trường
@@ -543,11 +503,8 @@
                     .random() - 0.5)[0];
             document.getElementById('equipment_type_code').value = getRandomArr(equipmentTypes);
             document.getElementById('unit_code').value = getRandomArr(units);
-            document.getElementById('price').value = getRandomNumber(50000,
-                500000);
-            document.getElementById('expiry_date').value = new Date(new Date().setFullYear(new Date()
-                .getFullYear() + 1)).toISOString().split('T')[0];
-            document.getElementById('supplier_code').value = getRandomArr(suppliers);
+            document.getElementById('vat').value = getRandomNumber(000,
+                100);
             document.getElementById('country').value = getRandomArr(country);
             document.getElementById('description').value = 'Mô Tả Sản Phẩm';
         });
@@ -1050,12 +1007,12 @@
             }
         }
 
-        function changePrice() {
-            const price = document.getElementById('price').value;
-            const priceerr = document.getElementById('price_error');
+        function changeVAT() {
+            const vat = document.getElementById('vat').value;
+            const vaterr = document.getElementById('vat_error');
 
-            if (price !== "") {
-                priceerr.innerText = '';
+            if (vat !== "") {
+                vaterr.innerText = '';
             }
         }
 

@@ -9,13 +9,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('receipts', function (Blueprint $table) {
-            $table->char('code', 20)->primary();
+            $table->char('code', 10)->primary();
             $table->char('supplier_code', 20);
             $table->text('note')->nullable();
             $table->boolean('status')->default(false);
-            $table->char('receipt_no');
+            $table->char('order_number', 10)->nullable();
+            $table->char('receipt_no', 8);
             $table->timestamp('receipt_date')->nullable();
-            $table->char('created_by', 20);
+            $table->string('receipt_type', 55)->nullable();
+            $table->char('created_by', 10);
             $table->timestamps();
             $table->softDeletes();
         });

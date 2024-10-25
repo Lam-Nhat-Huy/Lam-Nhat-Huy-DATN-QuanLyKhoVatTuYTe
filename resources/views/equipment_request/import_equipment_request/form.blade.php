@@ -22,10 +22,10 @@
         $d_none_temp = '';
 
         $hidden = '';
-    } elseif (request('status') == 5) {
+    } elseif (request('status') === 'update_quote') {
         $action = route('equipment_request.edit_import_price', request('code'));
 
-        $button_text = 'Cập Nhật';
+        $button_text = 'Lưu';
 
         $required = '';
 
@@ -81,7 +81,7 @@
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Nhà Cung Cấp</label>
                         <div class="d-flex align-items-center">
                             <select name="supplier_code" id="supplier_code" onchange="changeSupplier()"
-                                class="form-select form-select-sm border border-success rounded-pill ps-5">
+                                class="form-select form-select-sm border border-success rounded-pill setupSelect2">
                                 <option value="0">Chọn Nhà Cung Cấp...</option>
                                 @foreach ($AllSupplier as $item)
                                     <option value="{{ $item->code }}" id="option_supplier_{{ $item->code }}"
@@ -118,12 +118,12 @@
             </h3>
         </div>
         <div class="py-3 px-lg-17">
-            <div class="me-n7 pe-7 {{ request('status') == 5 ? 'd-none' : '' }}">
+            <div class="me-n7 pe-7 {{ request('status') === 'update_quote' ? 'd-none' : '' }}">
                 <div class="row align-items-center">
                     <div class="col-md-6 fv-row">
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Thiết Bị</label>
                         <select name="equipment" id="equipment" onchange="changeEquipment()"
-                            class="form-select form-select-sm border border-success rounded-pill ps-5">
+                            class="form-select form-select-sm border border-success rounded-pill setupSelect2">
                             <option value="" selected>Chọn Thiết Bị...</option>
                             @foreach ($AllEquipment as $item)
                                 @if ($item->inventories->sum('current_quantity') <= 25)
@@ -154,7 +154,7 @@
                 </div>
             </div>
 
-            <div class="modal-footer flex-right pe-0 py-5 {{ request('status') == 5 ? 'd-none' : '' }}">
+            <div class="modal-footer flex-right pe-0 py-5 {{ request('status') === 'update_quote' ? 'd-none' : '' }}">
                 <button type="butotn" class="btn btn-danger btn-sm rounded-pill" id="btn_add_equipment">
                     <i class="fa fa-plus" style="margin-bottom: 2px;"></i>Thêm Vào Danh Sách
                 </button>
@@ -164,17 +164,19 @@
                 <table class="table table-striped align-middle gs-0 gy-4" id="table_list_equipment">
                     <thead class="table-dark">
                         <tr class="fw-bolder bg-success">
-                            @if (!empty(request('status') == 5))
-                                <th class="ps-10" style="width: 30%;">Thiết Bị</th>
-                                <th class="" style="width: 10%;">Đơn Vị</th>
-                                <th class="" style="width: 20%;">Số Lượng</th>
-                                <th class="" style="width: 20%;">Giá Tiền</th>
-                                <th class="" style="width: 15%;">Tổng Cộng</th>
+                            @if (!empty(request('status') === 'update_quote'))
+                                <th class="ps-10" style="width: 20%;">Thiết bị</th>
+                                <th class="" style="width: 10%;">Đơn vị</th>
+                                <th class="" style="width: 15%;">Số lượng ban đầu</th>
+                                <th class="" style="width: 15%;">Số lượng báo giá</th>
+                                <th class="" style="width: 10%;">Lệch</th>
+                                <th class="" style="width: 15%;">Giá tiền</th>
+                                <th class="" style="width: 15%;">Tổng cộng</th>
                             @else
-                                <th class="ps-10" style="width: 45%;">Thiết Bị</th>
-                                <th class="" style="width: 15%;">Đơn Vị</th>
-                                <th class="" style="width: 25%;">Số Lượng</th>
-                                <th class="pe-3 text-center" style="width: 15%;">Hành Động</th>
+                                <th class="ps-10" style="width: 45%;">Thiết bị</th>
+                                <th class="" style="width: 15%;">Đơn vị</th>
+                                <th class="" style="width: 25%;">Số lượng</th>
+                                <th class="pe-3 text-center" style="width: 15%;">Hành động</th>
                             @endif
                         </tr>
                     </thead>
@@ -182,16 +184,15 @@
                         @if (!empty($getList))
                             @foreach ($getList as $item)
                                 <tr id="equipment-row-{{ $item->equipment_code }}">
-                                    @if (!empty(request('status') == 5))
+                                    @if (!empty(request('status') === 'update_quote'))
                                         <td>{{ $item->equipments->name }}</td>
                                         <td>{{ $item->equipments->units->name }}</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <input type="number" id="quantity_change_{{ $item->equipment_code }}"
-                                                    value="{{ $item->quantity }}"
-                                                    oninput="calculateTotalPriceTr('{{ $item->equipment_code }}'); showNote('{{ $item->equipment_code }}', '{{ $item->equipments->name }}', '{{ $item->quantity }}', '{{ $editForm->note }}');"
+                                                <input type="num" id="quantity_change_{{ $item->equipment_code }}"
+                                                    value="{{ $item->quantity }}" disabled
                                                     class="form-control form-control-sm border border-success rounded-pill"
-                                                    style="width: 50%;">
+                                                    style="width: 30%;">
                                                 <div class="message_error d-none ms-2 m-0 p-0"
                                                     id="quantity_error_{{ $item->equipment_code }}">
                                                 </div>
@@ -199,11 +200,36 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <input type="number" id="price_change_{{ $item->equipment_code }}"
-                                                    value="{{ $item->price ?? 0 }}" min="0"
-                                                    oninput="calculateTotalPriceTr('{{ $item->equipment_code }}');"
+                                                <input type="number"
+                                                    id="quantity_quote_change_{{ $item->equipment_code }}"
+                                                    value="{{ $item->quantity_quote ?? 0 }}" min="0"
+                                                    oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
                                                     class="form-control form-control-sm border border-success rounded-pill"
                                                     style="width: 50%;">
+                                                <div class="message_error d-none ms-2 m-0 p-0"
+                                                    id="quantity_quote_error_{{ $item->equipment_code }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Vui lòng nhập số lượng">
+                                                    <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span id="deviation_after_quote_{{ $item->equipment_code }}">Không lệch</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <input type="number" id="price_change_{{ $item->equipment_code }}"
+                                                    value="{{ $item->price ?? 0 }}" min="0"
+                                                    oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
+                                                    class="form-control form-control-sm border border-success rounded-pill"
+                                                    style="width: 75%;">
+                                                <div class="message_error d-none ms-2 m-0 p-0"
+                                                    id="price_change_error_{{ $item->equipment_code }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Vui lòng nhập giá">
+                                                    <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                                </div>
                                             </div>
                                         </td>
                                         <td id="total_price_{{ $item->equipment_code }}">
@@ -214,26 +240,45 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <input type="number" id="quantity_change_{{ $item->equipment_code }}"
-                                                    value="{{ $item->quantity }}"
-                                                    oninput="chanQuantityTr('{{ $item->equipment_code }}'); calculateTotalPriceTr('{{ $item->equipment_code }}');"
+                                                    value="{{ $item->quantity }}" min="0"
                                                     class="form-control form-control-sm border border-success rounded-pill"
                                                     style="width: 30%;">
                                                 <div class="message_error d-none ms-2 m-0 p-0"
                                                     id="quantity_error_{{ $item->equipment_code }}">
-                                                    (Số lượng
-                                                    phải lớn hơn 0)
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="d-none">
                                             <div class="d-flex align-items-center">
-                                                <input type="number" id="price_change_{{ $item->equipment_code }}"
-                                                    value="{{ $item->price }}" min="0"
-                                                    oninput="calculateTotalPriceTr('{{ $item->equipment_code }}');"
+                                                <input type="number"
+                                                    id="quantity_quote_change_{{ $item->equipment_code }}"
+                                                    value="{{ $item->quantity_quote ?? 1 }}" min="0"
+                                                    oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
                                                     class="form-control form-control-sm border border-success rounded-pill"
-                                                    style="width: 30%;">
+                                                    style="width: 50%;">
                                                 <div class="message_error d-none ms-2 m-0 p-0"
-                                                    id="price_error_{{ $item->equipment_code }}">
+                                                    id="quantity_quote_error_{{ $item->equipment_code }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Vui lòng nhập số lượng">
+                                                    <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="d-none">
+                                            <span id="deviation_after_quote_{{ $item->equipment_code }}">Không lệch</span>
+                                        </td>
+                                        <td class="d-none">
+                                            <div class="d-flex align-items-center">
+                                                <input type="number" id="price_change_{{ $item->equipment_code }}"
+                                                    value="{{ $item->price ?? 1 }}" min="0"
+                                                    oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
+                                                    class="form-control form-control-sm border border-success rounded-pill"
+                                                    style="width: 75%;">
+                                                <div class="message_error d-none ms-2 m-0 p-0"
+                                                    id="price_change_error_{{ $item->equipment_code }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Vui lòng nhập giá">
+                                                    <i class="fa-solid fa-triangle-exclamation text-danger"></i>
                                                 </div>
                                             </div>
                                         </td>
@@ -271,12 +316,12 @@
                 </table>
             </div>
 
-            <div class="d-none mb-3" id="important_error"><strong class="text-danger">Lưu ý: </strong><span
+            {{-- <div class="d-none mb-3" id="important_error"><strong class="text-danger">Lưu ý: </strong><span
                     class="ms-1 fw-bolder">Các thiết bị được đánh dấu <span class="text-warning bg-dark">màu
                         vàng</span>
                     đã tồn tại trong lịch sử yêu cầu hoặc phiếu tạm của người khác, hoặc đã bị đưa vào thùng rác (trong
                     3
-                    ngày gần đây). Vui lòng kiểm tra và thử lại.. (<span id="countdown">20</span>)</div>
+                    ngày gần đây). Vui lòng kiểm tra và thử lại.. (<span id="countdown">20</span>)</div> --}}
 
             <div class="modal-footer flex-right pe-0 py-5">
                 <button type="button" class="btn btn-info btn-sm {{ $d_none_temp }} rounded-pill"
@@ -429,15 +474,15 @@
         }
 
         // Duyệt danh sách bị trùng
-        function highlightDuplicatedEquipment(list_duplicated) {
-            list_duplicated.forEach(equipmentCode => {
-                const row = document.getElementById(`equipment-row-${equipmentCode}`);
-                if (row) {
-                    row.style.backgroundColor = '#ffc700';
-                    row.style.setProperty('--bs-table-accent-bg', 'none');
-                }
-            });
-        }
+        // function highlightDuplicatedEquipment(list_duplicated) {
+        //     list_duplicated.forEach(equipmentCode => {
+        //         const row = document.getElementById(`equipment-row-${equipmentCode}`);
+        //         if (row) {
+        //             row.style.backgroundColor = '#ffc700';
+        //             row.style.setProperty('--bs-table-accent-bg', 'none');
+        //         }
+        //     });
+        // }
 
         // Lấy dữ liệu từ danh sách thiết bị yêu cầu
         function getEquipmentList() {
@@ -453,6 +498,12 @@
                 let quantityInput = document.getElementById(`quantity_change_${equipmentCode}`);
                 let quantity = quantityInput.value.trim();
 
+                let quantity_quote_Input = document.getElementById(`quantity_quote_change_${equipmentCode}`);
+                let quantity_quote = quantity_quote_Input.value.trim();
+
+                let deviation_after_quote = document.getElementById(`deviation_after_quote_${equipmentCode}`)
+                    .innerText.trim();
+
                 let priceInput = document.getElementById(`price_change_${equipmentCode}`);
                 let price = priceInput.value.trim();
 
@@ -461,6 +512,8 @@
                     equipment_code: equipmentCode,
                     unit: unit,
                     quantity: quantity,
+                    quantity_quote: quantity_quote ?? 0,
+                    deviation_quote: deviation_after_quote ?? 'Không lệch',
                     price: price ?? 0,
                 });
 
@@ -515,14 +568,34 @@
 
                 equipmentList.forEach((item) => {
                     if (item.quantity <= 0) {
-                        document.getElementById('quantity_error').innerText = '';
                         document.getElementById(`quantity_error_${item.equipment_code}`).classList.remove(
                             'd-none');
                         hasError = true;
                     } else {
-                        document.getElementById('quantity_error').innerText = '';
                         document.getElementById(`quantity_error_${item.equipment_code}`).classList.add(
                             'd-none');
+                    }
+
+                    if (item.quantity_quote <= 0) {
+                        document.getElementById(`quantity_quote_error_${item.equipment_code}`).classList
+                            .remove(
+                                'd-none');
+                        hasError = true;
+                    } else {
+                        document.getElementById(`quantity_quote_error_${item.equipment_code}`).classList
+                            .add(
+                                'd-none');
+                    }
+
+                    if (item.price <= 0) {
+                        document.getElementById(`price_change_error_${item.equipment_code}`).classList
+                            .remove(
+                                'd-none');
+                        hasError = true;
+                    } else {
+                        document.getElementById(`price_change_error_${item.equipment_code}`).classList
+                            .add(
+                                'd-none');
                     }
                 });
 
@@ -555,13 +628,13 @@
                             }, 1000);
                         } else {
                             toastr.error(data.message);
-                            countDown();
-                            document.getElementById('important_error').classList.remove('d-none');
-                            highlightDuplicatedEquipment(data.list_duplicated);
+                            // countDown();
+                            // document.getElementById('important_error').classList.remove('d-none');
+                            // highlightDuplicatedEquipment(data.list_duplicated);
 
-                            setTimeout(() => {
-                                document.getElementById('important_error').classList.add('d-none');
-                            }, 21000);
+                            // setTimeout(() => {
+                            //     document.getElementById('important_error').classList.add('d-none');
+                            // }, 21000);
                         }
                     })
                     .catch(error => console.error('Error:', error))
@@ -659,13 +732,35 @@
                                 </td>
                                 <td class="d-none">
                                     <div class="d-flex align-items-center">
-                                        <input type="number" id="price_change_${data.equipment_code}"
-                                            value="0" min="0"
-                                            oninput="calculateTotalPriceTr('${data.equipment_code}');"
+                                        <input type="number"
+                                            id="quantity_quote_change_${data.equipment_code}"
+                                            value="1" min="0"
+                                            oninput="calculateTotalPriceQuoteTr('${data.equipment_code}');"
                                             class="form-control form-control-sm border border-success rounded-pill"
-                                            style="width: 30%;">
+                                            style="width: 50%;">
                                         <div class="message_error d-none ms-2 m-0 p-0"
-                                            id="price_error_${data.equipment_code}">
+                                            id="quantity_quote_error_${data.equipment_code}"
+                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                            title="Vui lòng nhập số lượng">
+                                            <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="d-none">
+                                    <span id="deviation_after_quote_${data.equipment_code}">Không lệch</span>
+                                </td>
+                                <td class="d-none">
+                                    <div class="d-flex align-items-center">
+                                        <input type="number" id="price_change_${data.equipment_code}"
+                                            value="1" min="0"
+                                            oninput="calculateTotalPriceQuoteTr('${data.equipment_code}');"
+                                            class="form-control form-control-sm border border-success rounded-pill"
+                                            style="width: 75%;">
+                                        <div class="message_error d-none ms-2 m-0 p-0"
+                                            id="price_change_error_${data.equipment_code}"
+                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                            title="Vui lòng nhập giá">
+                                            <i class="fa-solid fa-triangle-exclamation text-danger"></i>
                                         </div>
                                     </div>
                                 </td>
@@ -934,6 +1029,7 @@
         function calculateTotalPriceTr(equipment_code) {
             const price = parseFloat(document.getElementById(`price_change_${equipment_code}`).value.replace(/,/g, '')) ||
                 0;
+
             const quantity = parseFloat(document.getElementById(`quantity_change_${equipment_code}`).value.replace(/,/g,
                 '')) || 0;
 
@@ -953,41 +1049,46 @@
             document.getElementById(`total_price_${equipment_code}`).innerText = formattedTotalPrice;
         }
 
-        // let notes = {}; // Object để lưu các thiết bị đã thay đổi số lượng và chênh lệch
+        function calculateTotalPriceQuoteTr(equipment_code) {
+            const price_quote = parseFloat(document.getElementById(`price_change_${equipment_code}`).value.replace(
+                    /,/g, '')) ||
+                0;
+            const quantityQ = parseFloat(document.getElementById(`quantity_change_${equipment_code}`).value.replace(
+                    /,/g, '')) ||
+                0;
+            const quantity_quote = parseFloat(document.getElementById(`quantity_quote_change_${equipment_code}`).value
+                .replace(/,/g,
+                    '')) || 0;
 
-        // function showNote(equipment_code, equipment_name, equipment_quantity, noteDefault) {
+            if (quantity_quote >= 0) {
+                const quantityAfterQuote = quantity_quote - quantityQ;
 
-        //     const quantity_showNote = document.getElementById(`quantity_change_${equipment_code}`).value;
+                if (quantityAfterQuote > 0) {
+                    document.getElementById(`deviation_after_quote_${equipment_code}`).innerText =
+                        `Dư ${Math.abs(quantityAfterQuote)}`;
+                } else if (quantityAfterQuote < 0) {
+                    document.getElementById(`deviation_after_quote_${equipment_code}`).innerText =
+                        `Thiếu ${Math.abs(quantityAfterQuote)}`;
+                } else {
+                    document.getElementById(`deviation_after_quote_${equipment_code}`).innerText = 'Không lệch';
+                }
+            }
 
-        //     let quantityCalculate = equipment_quantity - quantity_showNote;
-        //     let quantityShowNote = Math.abs(quantityCalculate);
+            // Tính toán thành tiền
+            const totalPrice_quote = price_quote * quantity_quote;
 
-        //     if (quantity_showNote == 0) {
-        //         notes[equipment_name] = `Thiết Bị "${equipment_name}" đã hết hàng`;
-        //     } else if (quantityCalculate > 0) {
-        //         notes[equipment_name] =
-        //             `Thiết Bị "${equipment_name}" thiếu "${quantityShowNote}" so với yêu cầu ban đầu là "${equipment_quantity}"`;
-        //     } else if (quantityCalculate < 0) {
-        //         notes[equipment_name] =
-        //             `Thiết Bị "${equipment_name}" dư "${quantityShowNote}" so với yêu cầu ban đầu là "${equipment_quantity}"`;
-        //     } else if (quantityCalculate === 0) {
-        //         delete notes[equipment_name];
-        //     }
+            // Định dạng lại thành tiền
+            const formattedTotalPrice = totalPrice_quote.toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                    minimumFractionDigits: 0
+                })
+                .replace("₫", "VND")
+                .replace(",00", "");
 
-        //     let noteText = noteDefault ? `${noteDefault}` : ''; // Kiểm tra giá trị noteDefault
-
-        //     // Kiểm tra nếu có thiết bị chênh lệch để chèn thêm nội dung mới
-        //     if (Object.keys(notes).length > 0) {
-        //         let additionalText = Object.keys(notes).map(name => {
-        //             return `${notes[name]}`;
-        //         }).join(', ');
-
-        //         // Nếu có giá trị noteDefault, nối với additionalText; nếu không, chỉ hiển thị additionalText
-        //         noteText = noteDefault ? `${noteText}, ${additionalText}` : additionalText;
-        //     }
-
-        //     document.getElementById('note').value = noteText;
-        // }
+            // Cập nhật thành tiền trong HTML
+            document.getElementById(`total_price_${equipment_code}`).innerText = formattedTotalPrice;
+        }
 
         function displayFileName() {
             const fileInput = document.getElementById('excel_file');

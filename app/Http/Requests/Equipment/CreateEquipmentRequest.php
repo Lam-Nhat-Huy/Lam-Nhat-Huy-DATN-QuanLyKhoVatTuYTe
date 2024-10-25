@@ -26,9 +26,7 @@ class CreateEquipmentRequest extends FormRequest
             'name' => 'required|string|max:255',
             'equipment_type_code' => 'not_in:0|string|max:255',
             'unit_code' => 'not_in:0|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'expiry_date' => 'nullable|date',
-            'supplier_code' => 'not_in:0|string|max:255',
+            'vat' => 'required|integer|min:1|max:100',
             'country' => 'not_in:0|string|max:255',
             'description' => 'required',
         ];
@@ -61,15 +59,10 @@ class CreateEquipmentRequest extends FormRequest
             'unit_code.string' => 'Đơn vị tính phải là chuỗi ký tự.',
             'unit_code.max' => 'Đơn vị tính không được vượt quá 255 ký tự.',
 
-            'price.required' => 'Giá là bắt buộc.',
-            'price.numeric' => 'Giá phải là số.',
-            'price.min' => 'Giá phải lớn hơn hoặc bằng 0.',
-
-            'expiry_date.date' => 'Ngày hết hạn không hợp lệ.',
-
-            'supplier_code.not_in' => 'Nhà cung cấp là bắt buộc.',
-            'supplier_code.string' => 'Nhà cung cấp phải là chuỗi ký tự.',
-            'supplier_code.max' => 'Nhà cung cấp không được vượt quá 255 ký tự.',
+            'vat.required' => 'VAT là bắt buộc.',
+            'vat.integer' => 'VAT phải là số.',
+            'vat.min' => 'VAT phải lớn hơn 0.',
+            'vat.max' => 'VAT phải bé hơn hoặc bằng 100.',
 
             'country.not_in' => 'Nước sản xuất là bắt buộc.',
             'country.string' => 'Nước sản xuất phải là chuỗi ký tự.',

@@ -13,6 +13,8 @@ class   Receipt_details extends Model
         'receipt_code',
         'batch_number',
         'quantity',
+        'quantity_quote',
+        'deviation_quote',
         'VAT',
         'discount',
         'price',

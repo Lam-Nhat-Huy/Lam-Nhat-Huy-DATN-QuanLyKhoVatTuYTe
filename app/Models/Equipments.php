@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Log;
 use Milon\Barcode\DNS1D;
 use Milon\Barcode\DNS2D;
 use Illuminate\Support\Facades\Storage;
@@ -27,13 +26,11 @@ class Equipments extends Model
         'name',
         'barcode',
         'description',
-        'price',
         'country',
+        'vat',
         'equipment_type_code',
-        'supplier_code',
         'unit_code',
         'image',
-        'expiry_date',
         'created_at',
         'updated_at',
         'deleted_at',

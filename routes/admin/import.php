@@ -20,6 +20,6 @@ Route::prefix('warehouse')->group(function () {
     Route::post('delete', [ImportController::class, 'delete'])->name('receipts.delete');
     Route::get('/export-excel', [ImportController::class, 'exportExcel'])->name('warehouse.exportExcel');
     Route::post('/import-excel', [ImportController::class, 'importExcel'])->name('warehouse.importExcel');
-    Route::post('/check-batch-number', [ImportController::class, 'checkBatchNumber'])->name('warehouse.check_batch_number');
     Route::post('/check-receipt-no', [ImportController::class, 'checkReceiptNo'])->name('warehouse.check_receipt_no');
+    Route::post('/check-order-number', [ImportController::class, 'checkOrderNumber'])->name('warehouse.check_order_number');
 });

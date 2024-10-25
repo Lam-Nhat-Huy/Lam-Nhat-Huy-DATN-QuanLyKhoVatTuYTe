@@ -108,11 +108,6 @@ class ImportController extends Controller
                             'updated_at' => now(),
                         ]
                     );
-
-                    // Cập nhật giá cho thiết bị
-                    Equipments::where('code', $item->equipment_code)->update([
-                        'price' => $item->price,
-                    ]);
                 }
 
                 toastr()->success('Duyệt phiếu chờ thành công');
@@ -181,8 +176,13 @@ class ImportController extends Controller
         }
 
         if (!empty($request->restore_value)) {
+            $receipt = Receipts::where('code', $request->restore_value)->onlyTrashed()->first();
 
-            Receipts::where('code', $request->restore_value)->onlyTrashed()->restore();
+            if ($receipt->status == 1) {
+                $this->updateInventories($request->restore_value, '+');
+            }
+
+            $receipt->restore();
 
             toastr()->success('Khôi phục thành công');
 
@@ -191,7 +191,13 @@ class ImportController extends Controller
 
         if (!empty($request->delete_value)) {
 
-            Receipts::where('code', $request->delete_value)->onlyTrashed()->forceDelete();
+            $receipt = Receipts::where('code', $request->delete_value)->onlyTrashed()->first();
+
+            if ($receipt->order_number) {
+                Import_equipment_requests::where('code', $receipt->order_number)->forceDelete();
+            }
+
+            $receipt->forceDelete();
 
             toastr()->success('Xóa vĩnh viễn thành công');
 
@@ -243,7 +249,7 @@ class ImportController extends Controller
                     'batch_number' => $request->batch_number,
                     'quantity' => $request->quantity,
                     'discount_rate' => $request->discount_rate ?? 0,
-                    'vat' => $request->VAT ?? 0,
+                    'vat' => $equipment->vat ?? 0,
                 ]);
             }
         }
@@ -288,6 +294,7 @@ class ImportController extends Controller
                 'status' => $request->importEquipmentStatus == 4 ? 0 : $request->importEquipmentStatus,
                 'receipt_no' => $receiptNo,
                 'receipt_date' => now(),
+                'receipt_type' => 'Nhập Từ Nhà Cung Cấp',
                 'created_by' => session('user_code'),
                 'created_at' => now(),
                 'updated_at' => null,
@@ -320,6 +327,7 @@ class ImportController extends Controller
     // Tạo phiếu nhập bằng yêu cầu mua hàng
     public function import_equipment_request(Request $request)
     {
+        // try {
         if (
             !empty($request->supplier_code) &&
             !empty($request->receipt_no) &&
@@ -328,8 +336,17 @@ class ImportController extends Controller
         ) {
             $supplierCode = $request->supplier_code;
             $receiptNo = $request->receipt_no;
+            $orderNumber = $request->order_number;
             $note = $request->note;
             $equipmentList = json_decode($request->equipment_list, true);
+
+            Import_equipment_requests::where('code', $orderNumber)->update([
+                'status' => 4,
+            ]);
+
+            Import_equipment_request_details::where('import_request_code', $orderNumber)->update([
+                'status' => 4,
+            ]);
 
             // Tạo phiếu nhập
             $record = Receipts::create([
@@ -337,29 +354,25 @@ class ImportController extends Controller
                 'supplier_code' => $supplierCode,
                 'note' => $note ?? '',
                 'status' => 1,
+                'order_number' => $orderNumber,
                 'receipt_no' => $receiptNo,
                 'receipt_date' => now(),
+                'receipt_type' => 'Nhập Từ Nhà Cung Cấp',
                 'created_by' => session('user_code'),
                 'created_at' => now(),
                 'updated_at' => null,
                 'deleted_at' => null,
             ]);
 
-            Import_equipment_requests::where('code', $receiptNo)->update([
-                'status' => 4,
-            ]);
-
-            Import_equipment_request_details::where('import_request_code', $receiptNo)->update([
-                'status' => 4,
-            ]);
-
             // Tạo chi tiết phiếu nhập
             if ($record) {
                 foreach ($equipmentList as $equipment) {
-                    $record_detail = Receipt_details::create([
+                    Receipt_details::create([
                         'receipt_code' => $record->code,
                         'batch_number' => $equipment['batch_number'],
                         'quantity' => $equipment['quantity'],
+                        'quantity_quote' => $equipment['quantityQuote'],
+                        'deviation_quote' => $equipment['deviation_quote'],
                         'VAT' => $equipment['vat'],
                         'discount' => $equipment['discount_rate'],
                         'price' => $equipment['price'],
@@ -368,48 +381,18 @@ class ImportController extends Controller
                         'updated_at' => null,
                         'deleted_at' => null,
                     ]);
-
-                    Equipments::where('code', $record_detail->equipment_code)->update([
-                        'price' => $record_detail->price,
-                    ]);
                 }
 
-                // Insert inventories
-                $receiptDetails = Receipt_details::where('receipt_code', $record->code)->get();
-
-                foreach ($receiptDetails as $item) {
-                    // Tìm bản ghi inventory theo batch_number và equipment_code từ $item
-                    $countQuantityInventoryWhere = Inventories::where('batch_number', $item->batch_number)
-                        ->where('equipment_code', $item->equipment_code)
-                        ->first();
-
-                    // Nếu tìm thấy trong Inventories thì cộng số lượng
-                    $current_quantity = $countQuantityInventoryWhere ? $countQuantityInventoryWhere->current_quantity + $item->quantity : $item->quantity;
-
-                    // Cập nhật hoặc tạo mới Inventory
-                    $inventoryCode = $countQuantityInventoryWhere ? $countQuantityInventoryWhere->code : 'TK' . $this->generateRandomString(8);
-
-                    Inventories::updateOrCreate(
-                        [
-                            'batch_number' => $item['batch_number'],
-                            'equipment_code' => $item['equipment_code']
-                        ],
-                        [
-                            'code' => $inventoryCode,
-                            'batch_number' => $item['batch_number'],
-                            'current_quantity' => $current_quantity,
-                            'import_code' => $record->code,
-                            'created_at' => $record->receipt_date,
-                            'updated_at' => now(),
-                        ]
-                    );
-                }
+                $this->updateInventories($record->code, '+');
             }
 
             return response()->json(['success' => true, 'message' => 'Đã tạo phiếu nhập']);
         }
 
         return response()->json(['success' => false, 'message' => 'Vui lòng điền đẩy đủ các trường dữ liệu']);
+        // } catch (\Throwable $th) {
+        //     return response()->json(['success' => false, 'message' => $th->getMessage()]);
+        // }
     }
 
     public function edit_import($code)
@@ -505,23 +488,6 @@ class ImportController extends Controller
         return response()->json(['success' => false, 'message' => 'Vui lòng điền đẩy đủ các trường dữ liệu']);
     }
 
-    public function checkBatchNumber(Request $request)
-    {
-        // Kiểm tra nếu có bản ghi có cùng batch_number nhưng khác equipment_code
-        $existingInventory = Receipt_details::where('batch_number', $request->batch_number)
-            ->where('equipment_code', '!=', $request->equipment_code) // Khác mã thiết bị
-            ->first();
-
-        // Nếu có bản ghi với cùng số lô nhưng mã thiết bị khác, trả về false (không cho thêm)
-        if ($existingInventory) {
-            return response()->json(['success' => false, 'message' => 'Số lô đã tồn tại với thiết bị khác']);
-        }
-
-        // Nếu không có bản ghi nào trùng cả số lô và khác mã thiết bị, cho phép thêm
-        return response()->json(['success' => true, 'message' => 'Có thể thêm']);
-    }
-
-
     public function checkReceiptNo(Request $request)
     {
         $existingRN = Receipts::where('receipt_no', $request->receipt_no)
@@ -541,6 +507,25 @@ class ImportController extends Controller
         ]);
     }
 
+    public function checkOrderNumber(Request $request)
+    {
+        $existingON = Receipts::where('order_number', $request->order_number)
+            ->where('code', '!=', $request->code)
+            ->first();
+
+        if ($existingON) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Số đơn đặt hàng đã tồn tại vì đã có người tạo phiếu nhập này trước đó.'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Được phép tạo'
+        ]);
+    }
+
     public function approve(Request $request)
     {
         if (!empty($request->browse_code)) {
@@ -550,37 +535,7 @@ class ImportController extends Controller
                 'status' => 1,
             ]);
 
-            $receiptDetails = Receipt_details::where('receipt_code', $request->browse_code)->get();
-
-            foreach ($receiptDetails as $item) {
-                // Tìm bản ghi inventory theo batch_number và equipment_code từ $item
-                $countQuantityInventoryWhere = Inventories::where('batch_number', $item->batch_number)
-                    ->where('equipment_code', $item->equipment_code)
-                    ->first();
-
-                // Nếu tìm thấy trong Inventories thì cộng số lượng
-                $current_quantity = $countQuantityInventoryWhere ? $countQuantityInventoryWhere->current_quantity + $item->quantity : $item->quantity;
-
-                // Cập nhật hoặc tạo mới Inventory
-                Inventories::updateOrCreate(
-                    [
-                        'batch_number' => $item['batch_number'],
-                        'equipment_code' => $item['equipment_code']
-                    ],
-                    [
-                        'code' => $countQuantityInventoryWhere ? $countQuantityInventoryWhere->code : 'TK' . $this->generateRandomString(8),
-                        'batch_number' => $item['batch_number'],
-                        'current_quantity' => $current_quantity,
-                        'import_code' => $request->browse_code,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]
-                );
-
-                Equipments::where('code', $item['equipment_code'])->update([
-                    'price' => $item['price'],
-                ]);
-            }
+            $this->updateInventories($request->browse_code, '+');
 
             toastr()->success("Phiếu #$request->browse_code đã được duyệt");
 
@@ -609,8 +564,7 @@ class ImportController extends Controller
         }
 
         if ($receipt->status == 1) {
-            toastr()->error('Không thể hủy phiếu đã được duyệt.');
-            return redirect()->back();
+            $this->updateInventories($request->delete_code, '-');
         }
 
         $receipt->delete();
@@ -633,6 +587,47 @@ class ImportController extends Controller
         Excel::import(new ReceiptsImport, $request->file('file'));
 
         return redirect()->back()->with('success', 'Dữ liệu đã được nhập thành công!');
+    }
+
+    private function updateInventories($receipt_code, $operation)
+    {
+        // Insert inventories
+        $receiptDetails = Receipt_details::where('receipt_code', $receipt_code)->get();
+
+        foreach ($receiptDetails as $item) {
+            // Tìm bản ghi inventory theo batch_number và equipment_code từ $item
+            $countQuantityInventoryWhere = Inventories::where('batch_number', $item->batch_number)
+                ->where('equipment_code', $item->equipment_code)
+                ->first();
+
+            // Nếu tìm thấy trong Inventories thì cộng số lượng
+            if ($countQuantityInventoryWhere) {
+                if ($operation === '+') {
+                    $current_quantity = $countQuantityInventoryWhere->current_quantity + $item->quantity;
+                } elseif ($operation === '-') {
+                    $current_quantity = $countQuantityInventoryWhere->current_quantity - $item->quantity;
+                }
+            } else {
+                // If inventory record is not found, set current quantity to the item's quantity
+                $current_quantity = $item->quantity;
+            }
+
+            // Cập nhật hoặc tạo mới Inventory
+            $inventoryCode = $countQuantityInventoryWhere ? $countQuantityInventoryWhere->code : 'TK' . $this->generateRandomString(8);
+
+            Inventories::updateOrCreate(
+                [
+                    'batch_number' => $item['batch_number'],
+                    'equipment_code' => $item['equipment_code']
+                ],
+                [
+                    'code' => $inventoryCode,
+                    'current_quantity' => $current_quantity,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
+        }
     }
 
     function generateRandomString($length = 9)

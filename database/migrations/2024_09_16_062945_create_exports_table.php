@@ -9,7 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('exports', function (Blueprint $table) {
-            $table->char('code', 20)->primary();
+            $table->char('code', 10)->primary();
             $table->text('note')->nullable();
             $table->boolean('status')->default(true);
             $table->char('created_by')->nullable();

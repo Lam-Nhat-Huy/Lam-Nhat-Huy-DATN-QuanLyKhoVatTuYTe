@@ -33,7 +33,7 @@
         {{-- Bộ lọc thiết bị --}}
         <div class="card-body py-1">
             <form action="" method="GET" class="row align-items-center">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <select name="et" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" selected>--Theo Nhóm Thiết Bị--</option>
                         @foreach ($equipmentTypes as $item)
@@ -44,7 +44,7 @@
                     </select>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <select name="un" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" selected>--Theo Đơn Vị--</option>
                         @foreach ($units as $item)
@@ -55,18 +55,7 @@
                     </select>
                 </div>
 
-                <div class="col-md-3">
-                    <select name="sp" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
-                        <option value="" selected>--Theo Nhà Cung Cấp--</option>
-                        @foreach ($suppliers as $item)
-                            <option value="{{ $item->code }}" {{ request()->sp == $item->code ? 'selected' : '' }}>
-                                {{ $item->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <select name="ct" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" selected>--Theo Quốc Gia--</option>
                         @foreach (config('apps.country') as $value)
@@ -240,12 +229,6 @@
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td><strong>Nhà cung cấp:</strong></td>
-                                                                            <td class="text-dark">
-                                                                                {{ $item->supplier->name ?? 'Không có dữ liệu' }}
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
                                                                             <td><strong>Mã vạch:</strong></td>
                                                                             <td class="text-dark">
                                                                                 @if ($item->barcode)
@@ -264,27 +247,21 @@
                                                                 <table class="table table-borderless">
                                                                     <tbody>
                                                                         <tr>
-                                                                            <td><strong>Giá:</strong></td>
-                                                                            <td class="text-dark">
-                                                                                {{ number_format($item->price) }} VNĐ</td>
-                                                                        </tr>
-                                                                        <tr>
                                                                             <td><strong>Đơn vị:</strong></td>
                                                                             <td class="text-dark">
                                                                                 {{ $item->units->name }}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td><strong>Mô tả:</strong></td>
+                                                                            <td><strong>VAT:</strong></td>
                                                                             <td class="text-dark">
-                                                                                {{ $item->description }}
+                                                                                {{ $item->vat }}%
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td><strong>Ngày hết hạn:</strong></td>
+                                                                            <td><strong>Mô tả:</strong></td>
                                                                             <td class="text-dark">
-                                                                                {{ $item->expiry_date ? \Carbon\Carbon::parse($item->expiry_date)->format('d/m/Y') : 'Không Có' }}
-                                                                                {{ $item->time_remaining ? '- ' . $item->time_remaining : '' }}
+                                                                                {{ $item->description }}
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>

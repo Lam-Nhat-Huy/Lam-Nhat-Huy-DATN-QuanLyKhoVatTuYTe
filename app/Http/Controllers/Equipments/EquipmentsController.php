@@ -183,8 +183,6 @@ class EquipmentsController extends Controller
             $data['image'] = $request->file('equipment_image')->store('uploads', 'public');
         }
 
-        $data['expiry_date'] = $request->expiry_date ?? null;
-
         $this->equipmentModal::create($data);
 
         toastr()->success('Thiết bị đã được thêm thành công!');
@@ -226,8 +224,6 @@ class EquipmentsController extends Controller
 
             $data['image'] = $request->file('equipment_image')->store('uploads', 'public');
         }
-
-        $data['expiry_date'] = $request->expiry_date ?? null;
 
         $data['updated_at'] = now();
 

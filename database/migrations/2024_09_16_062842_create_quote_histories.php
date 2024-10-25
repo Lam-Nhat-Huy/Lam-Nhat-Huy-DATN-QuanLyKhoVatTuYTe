@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->char('supplier_code', 10);
             $table->string('file_excel', 255);
-            $table->char('user_code', 20)->nullable();
+            $table->char('user_code', 10)->nullable();
             $table->timestamps();
 
             $table->foreign('user_code')->references('code')->on('users')->onDelete('set null');

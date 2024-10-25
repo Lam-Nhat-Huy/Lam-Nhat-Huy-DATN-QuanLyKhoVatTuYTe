@@ -17,6 +17,8 @@ class Import_equipment_request_details extends Model
         'import_request_code',
         'equipment_code',
         'quantity',
+        'quantity_quote',
+        'deviation_quote',
         'price',
         'status',
         'created_at',
