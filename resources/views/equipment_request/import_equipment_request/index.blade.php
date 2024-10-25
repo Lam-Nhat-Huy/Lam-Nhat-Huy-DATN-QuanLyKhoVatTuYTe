@@ -215,14 +215,18 @@
                                                                 <table
                                                                     class="table table-striped table-sm table-hover mb-0">
                                                                     <thead class="bg-dark">
-                                                                        <tr class="text-center">
+                                                                        <tr class="">
                                                                             <th class="ps-3">STT</th>
                                                                             <th>Tên thiết bị</th>
                                                                             <th>Đơn vị tính</th>
-                                                                            <th>Số lượng yêu cầu</th>
-                                                                            @if ($item->status == 1)
-                                                                                <th>Số lượng báo giá</th>
-                                                                                <th>SL lệch</th>
+                                                                            <th data-bs-toggle="tooltip"
+                                                                                data-bs-placement="top"
+                                                                                title="Số Lượng Yêu Cầu">SLYC</th>
+                                                                            @if ($item->status == 1 || $item->status == 4)
+                                                                                <th data-bs-toggle="tooltip"
+                                                                                    data-bs-placement="top"
+                                                                                    title="Số Lượng Báo Giá">SLBG</th>
+                                                                                <th>Lệch</th>
                                                                                 <th>Đơn giá</th>
                                                                                 <th class="pe-3">Thành tiền</th>
                                                                             @endif
@@ -230,14 +234,14 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         @foreach ($item->import_equipment_request_details as $key => $detail)
-                                                                            <tr class="text-center">
+                                                                            <tr class="">
                                                                                 <td>{{ $key + 1 }}</td>
                                                                                 <td>{{ $detail->equipments->name }}
                                                                                 </td>
                                                                                 <td>{{ $detail->equipments->units->name }}
                                                                                 </td>
                                                                                 <td>{{ $detail->quantity }}</td>
-                                                                                @if ($item->status == 1)
+                                                                                @if ($item->status == 1 || $item->status == 4)
                                                                                     <td>{{ $detail->quantity_quote }}</td>
                                                                                     <td>{{ $detail->deviation_quote }}</td>
                                                                                     <td>{{ number_format($detail->price, 0, ',', '.') }}
@@ -342,7 +346,7 @@
                                                             <a href="{{ route('equipment_request.update_import', ['code' => $item->code, 'status' => 'update_quote']) }}"
                                                                 class="btn btn-sm rounded-pill btn-info me-2">
                                                                 <i class="fas fa-edit" style="margin-bottom: 2px;"></i>
-                                                                Cập Nhật Giá
+                                                                Cập Nhật
                                                             </a>
                                                         @endif
                                                         <!-- Nút Tạo Phiếu Nhập -->
