@@ -91,9 +91,9 @@
                             <th style="width: 10%;">Tổng chênh lệch</th>
                             <th style="width: 10%;">Lệch giảm</th>
                             <th style="width: 10%;">Lệch tăng</th>
-                            <th style="width: 10%;">Trạng Thái</th>
                             <th style="width: 10%;">Lần kiểm</th>
                             <th style="width: 15%;">Ghi chú</th>
+                            <th style="width: 10%;">Trạng Thái</th>
                         </tr>
                     </thead>
 
@@ -133,7 +133,7 @@
                                 <td>
                                     <i class="row-icon fa fa-chevron-right"></i>
                                 </td>
-                                <td>#{{ $item['code'] }}</td>
+                                <td>{{ $item['code'] }}</td>
                                 <td>{{ \Carbon\Carbon::parse($item['check_date'])->format('d/m/Y') }}</td>
                                 <td>
                                     @if ($totalUnequal == 0)
@@ -163,17 +163,9 @@
                                 </td>
 
                                 <td>
-                                    @if ($item['status'] == 0)
-                                        <span class="label label-temp text-warning">Phiếu lưu tạm</span>
-                                    @elseif ($item['status'] == 1)
-                                        <span class="label label-final text-success">Đã cân bằng</span>
-                                    @else
-                                        <span class="label label-temp text-danger">Phiếu đã hủy</span>
-                                    @endif
-                                </td>
-                                <td>
                                     Lần thứ {{ $item['check_count'] }}
                                 </td>
+
                                 <td title="{{ $item['note'] }}"
                                     style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                     @if (!empty($item['note']))
@@ -184,6 +176,17 @@
                                         <span class="text-center">
                                             Không có ghi chú
                                         </span>
+                                    @endif
+                                </td>
+
+
+                                <td>
+                                    @if ($item['status'] == 0)
+                                        <span class="label label-temp text-warning">Phiếu lưu tạm</span>
+                                    @elseif ($item['status'] == 1)
+                                        <span class="label label-final text-success">Đã cân bằng</span>
+                                    @else
+                                        <span class="label label-temp text-danger">Phiếu đã hủy</span>
                                     @endif
                                 </td>
                             </tr>
@@ -210,7 +213,7 @@
                                                                 <tr>
                                                                     <td class="" style="width: 150px;"><strong>Mã kiểm
                                                                             kho</strong></td>
-                                                                    <td class="text-gray-800">#{{ $item['code'] }}</td>
+                                                                    <td class="text-gray-800">{{ $item['code'] }}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td class=""><strong>Thời gian</strong></td>
@@ -281,7 +284,19 @@
 
                                                 <!-- Lần kiểm 1 -->
                                                 <div class="col-md-12">
-                                                    <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-2">Lần kiểm 1</h6>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-2">Lần kiểm đầu
+                                                        </h6>
+
+                                                        @if (session('isAdmin') == true && $item['check_count'] == 1)
+                                                            <a class="text-dark"
+                                                                href="{{ route('inventory_check.editByCheckround', ['code' => $item->code, 'check_round' => 1]) }}">
+                                                                <i class="fa fa-edit"></i> Chỉnh sửa phiếu 1
+                                                            </a>
+                                                        @endif
+                                                    </div>
+
+
                                                     <div class="table-responsive rounded">
                                                         <table class="table table-striped table-sm table-hover">
                                                             <thead style="background-color: #FFA500;">
@@ -304,7 +319,7 @@
                                                                             aria-expanded="false"
                                                                             aria-controls="collapse{{ $detail['equipment_code'] }}">
                                                                             <td class="ps-4 text-left">
-                                                                                #{{ $detail['equipment_code'] }}
+                                                                                {{ $detail['equipment_code'] }}
                                                                             </td>
                                                                             <td title="{{ $detail->equipment->name }}"
                                                                                 style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -351,7 +366,17 @@
 
                                                 <!-- Lần kiểm 2 -->
                                                 <div class="col-md-12">
-                                                    <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-2">Lần kiểm 2</h6>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-2">Lần kiểm cuối
+                                                        </h6>
+
+                                                        @if (session('isAdmin') == true && $item['check_count'] == 2)
+                                                            <a class="text-dark"
+                                                                href="{{ route('inventory_check.editByCheckround', ['code' => $item->code, 'check_round' => 2]) }}">
+                                                                <i class="fa fa-edit"></i> Chỉnh sửa phiếu 2
+                                                            </a>
+                                                        @endif
+                                                    </div>
                                                     <div class="table-responsive rounded">
                                                         @php
                                                             $hasSecondCheck = false;
@@ -399,7 +424,7 @@
                                                                                 aria-expanded="false"
                                                                                 aria-controls="collapse{{ $detail['equipment_code'] }}">
                                                                                 <td class="ps-4 text-left">
-                                                                                    #{{ $detail['equipment_code'] }}
+                                                                                    {{ $detail['equipment_code'] }}
                                                                                 </td>
                                                                                 <td title="{{ $detail->equipment->name }}"
                                                                                     style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -449,7 +474,6 @@
 
                                         <div class="card-body py-3 text-end">
                                             <div class="button-group">
-                                                <!-- Nút Duyệt đơn, chỉ hiển thị khi là Phiếu Tạm -->
                                                 @if ($item['status'] == 0)
                                                     @if (session('isAdmin') == true)
                                                         @if ($item->check_count == 2)
@@ -463,16 +487,15 @@
                                                         @endif
                                                     @endif
 
-                                                    @if ($item['created_by'] == session('user_code') || session('isAdmin') == true || $item['recheck_created_by'])
+                                                    {{-- @if ($item['user_code'] == session('user_code') || session('isAdmin') == true || $item['recheck_user_code'])
                                                         <a href="{{ route('inventory_check.edit', $item->code) }}"
                                                             class="btn btn-info btn-sm me-2 rounded-pill">
                                                             <i class="fa fa-edit"></i> Chỉnh sửa
                                                         </a>
-                                                    @endif
+                                                    @endif --}}
 
-
-                                                    @if ($item['created_by'] == session('user_code') || session('isAdmin') == true)
-                                                        <!-- Nút Xóa phiếu tạm -->
+                                                    {{-- Restrict delete permission to admins only when check_count is 2 --}}
+                                                    @if (session('isAdmin') == true || ($item['check_count'] != 2 && $item['user_code'] == session('user_code')))
                                                         <button class="btn btn-danger btn-sm me-2 rounded-pill"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#delete-{{ $item->code }}">
@@ -481,8 +504,8 @@
                                                     @endif
                                                 @endif
 
-                                                @if ($item['check_count'] == 1 && $item['created_by'] != session('user_code'))
-                                                    <!-- Nút In Phiếu -->
+
+                                                @if ($item['check_count'] == 1 && $item['user_code'] != session('user_code'))
                                                     <a href="{{ route('inventory_check.check', $item->code) }}"
                                                         class="btn btn-info btn-sm me-2 rounded-pill">
                                                         <i class="fa fa-check"></i> Kiểm phiếu lại
@@ -714,7 +737,7 @@
 
                 let startDate = $('input[name="start_date"]').val();
                 let endDate = $('input[name="end_date"]').val();
-                let userCode = $('select[name="created_by"]')
+                let userCode = $('select[name="user_code"]')
                     .val();
                 let status = $('select[name="status"]').val();
 
@@ -726,7 +749,7 @@
                             'search': query,
                             'start_date': startDate,
                             'end_date': endDate,
-                            'created_by': userCode,
+                            'user_code': userCode,
                             'status': status
                         },
                         success: function(data) {
@@ -741,13 +764,13 @@
                 }
             });
 
-            $('input[name="start_date"], input[name="end_date"], select[name="created_by"], input[name="note"], select[name="status"]')
+            $('input[name="start_date"], input[name="end_date"], select[name="user_code"], input[name="note"], select[name="status"]')
                 .on('change', function() {
                     let query = $('#search').val();
 
                     let startDate = $('input[name="start_date"]').val();
                     let endDate = $('input[name="end_date"]').val();
-                    let userCode = $('select[name="created_by"]').val();
+                    let userCode = $('select[name="user_code"]').val();
                     let status = $('select[name="status"]').val();
 
                     $.ajax({
@@ -757,7 +780,7 @@
                             'search': query,
                             'start_date': startDate,
                             'end_date': endDate,
-                            'created_by': userCode,
+                            'user_code': userCode,
                             'status': status
                         },
                         success: function(data) {

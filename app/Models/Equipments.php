@@ -88,4 +88,9 @@ class Equipments extends Model
     {
         return $this->belongsTo(Equipment_types::class, 'equipment_type_code', 'code');
     }
+
+    public function inventoryCheckDetails()
+    {
+        return $this->hasMany(Inventory_check_details::class, 'equipment_code', 'code');
+    }
 }

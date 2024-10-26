@@ -163,6 +163,8 @@ class CheckWarehouseController extends Controller
 
         $inventoryCheck = Inventory_checks::findOrFail($code);
 
+        $note = old('note', $inventoryCheck->note);
+
         if ($inventoryCheck->check_count == 2) {
             $equipmentsWithStock = Equipments::whereHas('inventories', function ($query) {
                 $query->where('current_quantity', '>', 0);
@@ -183,28 +185,49 @@ class CheckWarehouseController extends Controller
             $equipmentsWithJson = $this->showInventoryCheckEdits($code);
         }
 
-        return view("{$this->route}.form", compact('title', 'action', 'equipmentsWithJson', 'inventoryCheck', 'equipmentsWithStock', 'statusMessage', 'userName'));
+        return view("{$this->route}.form", compact('title', 'action', 'equipmentsWithJson', 'inventoryCheck', 'equipmentsWithStock', 'statusMessage', 'userName', 'note'));
     }
 
-    public function showInventoryCheckEdits($code, $checkRound = 1)
+    public function editByCheckround($code)
     {
-        $inventoryCheckEdit = Inventory_check_details::where('inventory_check_code', $code)
-            ->where('check_round', $checkRound)
-            ->with('equipment')
-            ->get();
+        $title = 'Chỉnh sửa Phiếu Kiểm';
+        $action = 'edit';
+        $statusMessage = 'Đang sửa phiếu';
 
-        if ($inventoryCheckEdit->isEmpty()) {
-            return response()->json(['message' => 'Không tìm thấy chi tiết cho phiếu kiểm kho này.'], 404);
-        }
+        $userCode = session('user_code');
+        $user = Users::where('code', $userCode)->first();
+        $userName = $user->last_name . ' ' . $user->first_name;
 
-        return response()->json($inventoryCheckEdit);
+        $inventoryCheck = Inventory_checks::findOrFail($code);
+        $note = old('note', $inventoryCheck->note);
+
+        $checkRound = request('check_round', 1);
+
+        $equipmentsWithStock = Equipments::whereHas('inventoryCheckDetails', function ($query) use ($checkRound) {
+            $query->where('check_round', '<=', 2);
+        })
+            ->with(['inventories' => function ($query) {
+                $query->select('equipment_code', 'current_quantity', 'batch_number')
+                    ->where('current_quantity', '>', 0);
+            }])->get();
+
+        $equipmentsWithJson = $this->showInventoryCheckEdits($code, $checkRound);
+
+        return view("{$this->route}.form", compact(
+            'title',
+            'action',
+            'equipmentsWithJson',
+            'inventoryCheck',
+            'equipmentsWithStock',
+            'statusMessage',
+            'userName',
+            'note'
+        ));
     }
-
 
     public function update(Request $request, $code)
     {
         $inventoryCheck = Inventory_checks::where('code', $code)->firstOrFail();
-        // dd($inventoryCheck->check_count);
 
         $materialData = json_decode($request->input('materialData'), true);
 
@@ -271,7 +294,19 @@ class CheckWarehouseController extends Controller
         return redirect()->route('check_warehouse.index');
     }
 
+    public function showInventoryCheckEdits($code, $checkRound = 1)
+    {
+        $inventoryCheckEdit = Inventory_check_details::where('inventory_check_code', $code)
+            ->where('check_round', $checkRound)
+            ->with('equipment')
+            ->get();
 
+        if ($inventoryCheckEdit->isEmpty()) {
+            return response()->json(['message' => 'Không tìm thấy chi tiết cho phiếu kiểm kho này.'], 404);
+        }
+
+        return response()->json($inventoryCheckEdit);
+    }
 
     public function store(Request $request)
     {
