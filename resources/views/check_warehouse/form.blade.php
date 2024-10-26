@@ -400,16 +400,16 @@
                             <label for="check_date" class="form-label fw-semibold text-dark"
                                 style="font-size: 13px;">Ngày kiểm kho</label>
                             <input type="date" id="check_date" class="form-control form-control-sm rounded-pill"
-                                value="{{ \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d') }}" readonly
-                                style="pointer-events: none;">
+                                value="{{ \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->format('Y-m-d') }}">
                         </div>
 
                         <!-- Ghi chú -->
                         <div class="mb-4">
-                            <label for="note" class="form-label fw-semibold text-dark" style="font-size: 13px;">Ghi
-                                chú</label>
-                            <textarea id="note" class="form-control form-control-lg rounded-3" placeholder="Nhập ghi chú..."
-                                style="font-size: 12px;" rows="3"></textarea>
+                            <label for="note" class="form-label fw-semibold text-dark" style="font-size: 13px;">
+                                Ghi chú
+                            </label>
+                            <textarea id="note" name="note" class="form-control form-control-lg rounded-3" placeholder="Nhập ghi chú..."
+                                style="font-size: 12px;" rows="3">{{ $note ?? '' }}</textarea>
                         </div>
 
                         <!-- Buttons -->

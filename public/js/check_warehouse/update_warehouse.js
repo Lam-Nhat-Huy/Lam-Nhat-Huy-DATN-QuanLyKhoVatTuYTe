@@ -539,18 +539,96 @@ document
     });
 
 function addAllProducts() {
-    var tableBody = document.getElementById("materialList");
+    let anyNewItemsAdded = false;
+    let rowsHtml = "";
 
     products.forEach((product) => {
         product.inventories.forEach((inventory) => {
-            addProductToTable(
-                product.name,
-                inventory.equipment_code,
-                inventory.current_quantity,
-                inventory.batch_number
+            var existingMaterial = materialData.find(
+                (material) =>
+                    material.equipment_code === inventory.equipment_code &&
+                    material.batch_number === inventory.batch_number
             );
+
+            if (!existingMaterial) {
+                rowsHtml += `
+                        <tr data-index="${
+                            materialData.length
+                        }" class="unchecked">
+                            <td>${materialData.length + 1}</td>
+                            <td class="text-left">${
+                                inventory.equipment_code
+                            }</td>
+                            <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${
+                                product.name
+                            }</td>
+                            <td>${inventory.batch_number}</td>
+                            <td>${inventory.current_quantity}</td>
+                            <td>
+                                <input type="number" min="0" class="actual-quantity-input" 
+                                    style="width: 70px; height: 40px; border-radius: 8px;" 
+                                    oninput="validateQuantity(this, ${
+                                        materialData.length
+                                    }); checkInputs()">
+                            </td>
+                            <td class="unequal-count" id="unequal-count-${
+                                materialData.length
+                            }">0</td>
+                            <td>
+                                <textarea class="equipment_note rounded-3" 
+                                    placeholder="" name="equipment_note_${
+                                        materialData.length
+                                    }"
+                                    style="width: 150px; height: 40px; border-radius: 8px; padding: 5px; font-size: 12px;"></textarea>
+                            </td>
+                            <td>
+                                <a href="#" class="text-dark" title="Xóa thiết bị" onclick="removeProduct(${
+                                    materialData.length
+                                })">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        `;
+
+                materialData.push({
+                    equipment_code: inventory.equipment_code,
+                    current_quantity: inventory.current_quantity,
+                    actual_quantity: null,
+                    unequal: 0,
+                    batch_number: inventory.batch_number,
+                    equipment_note: "",
+                });
+                anyNewItemsAdded = true;
+            }
         });
     });
+
+    if (anyNewItemsAdded) {
+        document
+            .getElementById("materialList")
+            .insertAdjacentHTML("beforeend", rowsHtml);
+        updateCounts();
+
+        if (document.getElementById("materialList").rows.length > 0) {
+            document.getElementById("noDataAlert").style.display = "none";
+        }
+
+        document
+            .querySelectorAll(`textarea[name^="equipment_note_"]`)
+            .forEach((textarea, index) => {
+                textarea.addEventListener("input", function () {
+                    materialData[index].equipment_note = this.value;
+                });
+            });
+
+        checkInputs();
+    } else {
+        document.getElementById(
+            "importantNotificationContent"
+        ).innerHTML = `Đã thêm tất cả thiết bị vào danh sách. Vui lòng tiến hành kiểm kê kho hàng!`;
+        $("#importantNotificationModal").modal("show");
+    }
 }
 
 function autoFillQuantity(index, current_quantity) {

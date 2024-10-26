@@ -30,4 +30,7 @@ Route::prefix('check_warehouse')->middleware(CheckLogin::class)->group(function 
     Route::get('/checkwarehouse-excel-export', [CheckWarehouseController::class, 'exportCheckWarehouseExcel'])->name('warehouse.exportCheckWarehouseExcel');
 
     Route::post('/checkwarehouse-excel-import', [CheckWarehouseController::class, 'importCheckWarehouseExcel'])->name('warehouse.importCheckWarehouseExcel');
+
+    Route::get('/edit-checkRound/{code}', [CheckWarehouseController::class, 'editByCheckround'])
+        ->name('inventory_check.editByCheckround');
 });
