@@ -463,7 +463,7 @@
                                                         @endif
                                                     @endif
 
-                                                    @if ($item['user_code'] == session('user_code') || session('isAdmin') == true || $item['recheck_user_code'])
+                                                    @if ($item['created_by'] == session('user_code') || session('isAdmin') == true || $item['recheck_created_by'])
                                                         <a href="{{ route('inventory_check.edit', $item->code) }}"
                                                             class="btn btn-info btn-sm me-2 rounded-pill">
                                                             <i class="fa fa-edit"></i> Chỉnh sửa
@@ -471,7 +471,7 @@
                                                     @endif
 
 
-                                                    @if ($item['user_code'] == session('user_code') || session('isAdmin') == true)
+                                                    @if ($item['created_by'] == session('user_code') || session('isAdmin') == true)
                                                         <!-- Nút Xóa phiếu tạm -->
                                                         <button class="btn btn-danger btn-sm me-2 rounded-pill"
                                                             data-bs-toggle="modal"
@@ -481,7 +481,7 @@
                                                     @endif
                                                 @endif
 
-                                                @if ($item['check_count'] == 1 && $item['user_code'] != session('user_code'))
+                                                @if ($item['check_count'] == 1 && $item['created_by'] != session('user_code'))
                                                     <!-- Nút In Phiếu -->
                                                     <a href="{{ route('inventory_check.check', $item->code) }}"
                                                         class="btn btn-info btn-sm me-2 rounded-pill">
@@ -714,7 +714,7 @@
 
                 let startDate = $('input[name="start_date"]').val();
                 let endDate = $('input[name="end_date"]').val();
-                let userCode = $('select[name="user_code"]')
+                let userCode = $('select[name="created_by"]')
                     .val();
                 let status = $('select[name="status"]').val();
 
@@ -726,7 +726,7 @@
                             'search': query,
                             'start_date': startDate,
                             'end_date': endDate,
-                            'user_code': userCode,
+                            'created_by': userCode,
                             'status': status
                         },
                         success: function(data) {
@@ -741,13 +741,13 @@
                 }
             });
 
-            $('input[name="start_date"], input[name="end_date"], select[name="user_code"], input[name="note"], select[name="status"]')
+            $('input[name="start_date"], input[name="end_date"], select[name="created_by"], input[name="note"], select[name="status"]')
                 .on('change', function() {
                     let query = $('#search').val();
 
                     let startDate = $('input[name="start_date"]').val();
                     let endDate = $('input[name="end_date"]').val();
-                    let userCode = $('select[name="user_code"]').val();
+                    let userCode = $('select[name="created_by"]').val();
                     let status = $('select[name="status"]').val();
 
                     $.ajax({
@@ -757,7 +757,7 @@
                             'search': query,
                             'start_date': startDate,
                             'end_date': endDate,
-                            'user_code': userCode,
+                            'created_by': userCode,
                             'status': status
                         },
                         success: function(data) {

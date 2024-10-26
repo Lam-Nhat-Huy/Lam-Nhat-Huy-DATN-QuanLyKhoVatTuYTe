@@ -10,16 +10,18 @@ return new class extends Migration
     {
         Schema::create('inventory_checks', function (Blueprint $table) {
             $table->char('code', 10)->primary();
-            $table->char('user_code', 10)->nullable();
-            $table->char('recheck_user_code', 20)->nullable();
-            $table->date('check_date')->nullable();
+            $table->char('recheck_created_by', 20)->nullable();
+            $table->timestamp('check_date')->nullable();
             $table->text('note')->nullable();
             $table->boolean('status')->default(true);
             $table->integer('check_count')->default(1);
+            $table->char('created_by', 10)->nullable();
+            $table->char('updated_by', 10)->nullable();
+            $table->char('deleted_by', 10)->nullable();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('user_code')->references('code')->on('users')->onDelete('set null');
+            $table->foreign('created_by')->references('code')->on('users')->onDelete('set null');
         });
     }
 

@@ -24,15 +24,18 @@ class Equipments extends Model
     protected $fillable = [
         'code',
         'name',
+        'image',
         'barcode',
         'description',
-        'country',
         'vat',
+        'country',
         'equipment_type_code',
         'unit_code',
-        'image',
+        'created_by',
         'created_at',
+        'updated_by',
         'updated_at',
+        'deleted_by',
         'deleted_at',
     ];
 
@@ -56,6 +59,11 @@ class Equipments extends Model
     //     $barcode = new DNS2D();
     //     return $barcode->getBarcodePNGPath($this->barcode, 'C128', 4, 4);
     // }
+
+    public function users()
+    {
+        return $this->belongsTo(Users::class, 'created_by', 'code');
+    }
 
     // Định nghĩa mối quan hệ với Inventories
     public function inventories()

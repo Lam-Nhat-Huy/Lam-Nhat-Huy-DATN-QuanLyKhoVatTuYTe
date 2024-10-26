@@ -106,7 +106,7 @@
                                 <tr class="hover-table pointer">
                                     <td>
                                         {{-- Phiếu tạm => ẩn hết, phiếu chờ duyệt thì hiện, phiếu đã duyệt chưa tạo thì hiện icon, phiếu đã duyệt tạo rồi thì ẩn --}}
-                                        @if (($item->status == 3 || $item->status == 0) && $item->user_code == session('user_code'))
+                                        @if (($item->status == 3 || $item->status == 0) && $item->created_by == session('user_code'))
                                             <input type="checkbox" name="export_reqest_codes[]" value="{{ $item->code }}"
                                                 class="row-checkbox" />
                                         @elseif ($item->status == 5)
@@ -338,7 +338,7 @@
                                                     @elseif (
                                                         $item->status == 3 &&
                                                             now()->lt(\Carbon\Carbon::parse($item->required_date)->addDays(1)) &&
-                                                            $item->user_code == session('user_code'))
+                                                            $item->created_by == session('user_code'))
                                                         {{-- Lưu tạm và ngày yêu cầu trong 3 ngày gần nhất --}}
 
                                                         <!-- Nút lưu phiếu -->

@@ -20,21 +20,23 @@ class Export_equipment_requests extends Model
 
     protected $fillable = [
         'code',
-        'user_code',
         'department_code',
         'reason_export',
         'note',
         'status',
         'request_date',
         'required_date',
+        'created_by',
         'created_at',
+        'updated_by',
         'updated_at',
+        'deleted_by',
         'deleted_at',
     ];
 
     public function users()
     {
-        return $this->belongsTo(Users::class, 'user_code', 'code');
+        return $this->belongsTo(Users::class, 'created_by', 'code');
     }
 
     public function departments()

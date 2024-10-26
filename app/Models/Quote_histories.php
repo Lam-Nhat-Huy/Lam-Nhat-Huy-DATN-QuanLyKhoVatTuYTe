@@ -13,14 +13,13 @@ class Quote_histories extends Model
         'id',
         'supplier_code',
         'file_excel',
-        'user_code',
+        'created_by',
         'created_at',
-        'updated_at',
     ];
 
     public function users()
     {
-        return $this->belongsTo(Users::class, 'user_code', 'code');
+        return $this->belongsTo(Users::class, 'created_by', 'code');
     }
 
     public function suppliers()

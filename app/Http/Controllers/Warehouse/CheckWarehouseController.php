@@ -285,7 +285,7 @@ class CheckWarehouseController extends Controller
         $inventoryCheckData = [
             'equipment_code' => $materialData[0]['equipment_code'],
             'note' => $materialData[0]['note'],
-            'user_code' => $materialData[0]['created_by'],
+            'created_by' => $materialData[0]['created_by'],
             'status' => $materialData[0]['status']
         ];
 
@@ -548,7 +548,7 @@ class CheckWarehouseController extends Controller
         $query = $request->input('search');
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
-        $userCode = $request->input('user_code');
+        $userCode = $request->input('created_by');
         $status = $request->input('status');
 
         $inventoryChecks = Inventory_checks::with(['user'])
@@ -566,7 +566,7 @@ class CheckWarehouseController extends Controller
                 return $q->where('status', $status);
             })
             ->when($userCode, function ($q) use ($userCode) {
-                return $q->where('user_code', $userCode);
+                return $q->where('created_by', $userCode);
             })
             ->get();
 
@@ -602,7 +602,7 @@ class CheckWarehouseController extends Controller
             return redirect()->back();
         }
 
-        if ($check->user_code != session('user_code') && session('isAdmin') != true) {
+        if ($check->created_by != session('user_code') && session('isAdmin') != true) {
             toastr()->error('Bạn không có quyền xóa phiếu này. Chỉ có người tạo phiếu hoặc admin mới có quyền xóa.');
             return redirect()->back();
         }
@@ -625,7 +625,7 @@ class CheckWarehouseController extends Controller
 
         $payload = [
             'code' => 'TB' . $this->generateRandomString(8),
-            'user_code' => $userCode,
+            'created_by' => $userCode,
             'content' => $notificationContent,
             'created_at' => now(),
             'updated_at' => null,
@@ -685,7 +685,7 @@ class CheckWarehouseController extends Controller
         // Cập nhật thông tin phiếu kiểm kho
         $inventoryCheckData = [
             'note' => $materialData[0]['note'],
-            'recheck_user_code' => $materialData[0]['created_by'],
+            'recheck_created_by' => $materialData[0]['created_by'],
             'status' => $materialData[0]['status'],
             'check_count' => $inventoryCheck->check_count + 1 // Tăng số lần kiểm
         ];

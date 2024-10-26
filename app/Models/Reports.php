@@ -20,17 +20,19 @@ class Reports extends Model
 
     protected $fillable = [
         'code',
-        'user_code',
         'report_type',
         'content',
         'file',
+        'created_by',
         'created_at',
+        'updated_by',
         'updated_at',
+        'deleted_by',
         'deleted_at',
     ];
 
     public function users()
     {
-        return $this->belongsTo(Users::class, 'user_code', 'code');
+        return $this->belongsTo(Users::class, 'created_by', 'code');
     }
 }

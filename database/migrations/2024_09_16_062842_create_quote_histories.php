@@ -12,10 +12,11 @@ return new class extends Migration
             $table->id();
             $table->char('supplier_code', 10);
             $table->string('file_excel', 255);
-            $table->char('user_code', 10)->nullable();
+            $table->char('created_by', 10)->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
-            $table->foreign('user_code')->references('code')->on('users')->onDelete('set null');
+            $table->foreign('created_by')->references('code')->on('users')->onDelete('set null');
         });
     }
 

@@ -10,18 +10,17 @@ return new class extends Migration
     {
         Schema::create('import_equipment_request_details', function (Blueprint $table) {
             $table->id();
-            $table->char('import_request_code', 20)->nullable();
-            $table->char('equipment_code', 20)->nullable();
+            $table->char('equipment_code', 10)->nullable();
+            $table->char('import_request_code', 10)->nullable();
             $table->integer('quantity');
             $table->integer('quantity_quote')->nullable();
             $table->string('deviation_quote', 20)->nullable();
-            $table->decimal('price')->nullable();
-            $table->boolean('status')->default(false);
+            $table->decimal('price', 10, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('import_request_code')->references('code')->on('import_equipment_requests')->onDelete('cascade');
             $table->foreign('equipment_code')->references('code')->on('equipments')->onDelete('set null');
+            $table->foreign('import_request_code')->references('code')->on('import_equipment_requests')->onDelete('cascade');
         });
     }
 

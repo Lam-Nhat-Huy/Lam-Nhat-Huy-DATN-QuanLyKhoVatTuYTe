@@ -12,10 +12,13 @@ return new class extends Migration
             $table->char('code', 10)->primary();
             $table->string('name', 255);
             $table->string('contact_name', 255)->nullable();
-            $table->string('tax_code', 255)->nullable();
-            $table->string('email', 255)->nullable();
+            $table->string('tax_code', 10)->nullable();
+            $table->string('email', 50)->nullable();
             $table->string('phone', 11)->nullable();
             $table->text('address')->nullable();
+            $table->char('created_by', 10)->nullable();
+            $table->char('updated_by', 10)->nullable();
+            $table->char('deleted_by', 10)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

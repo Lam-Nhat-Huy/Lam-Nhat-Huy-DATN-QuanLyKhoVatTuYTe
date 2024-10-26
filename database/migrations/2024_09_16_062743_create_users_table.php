@@ -18,9 +18,12 @@ return new class extends Migration
             $table->string('password', 255);
             $table->date('birth_day')->nullable();
             $table->string('gender', 5);
-            $table->string('address', 255)->nullable();
+            $table->text('address')->nullable();
             $table->boolean('isAdmin')->default(false);
             $table->boolean('status')->default(true);
+            $table->char('created_by', 10)->nullable();
+            $table->char('updated_by', 10)->nullable();
+            $table->char('deleted_by', 10)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

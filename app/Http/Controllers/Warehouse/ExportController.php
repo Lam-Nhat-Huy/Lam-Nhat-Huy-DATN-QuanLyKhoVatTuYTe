@@ -8,7 +8,6 @@ use App\Models\Equipments;
 use App\Models\Export_details;
 use App\Models\Exports;
 use App\Models\Inventories;
-use App\Models\Receipts;
 use App\Models\Users;
 use Illuminate\Http\Request;
 

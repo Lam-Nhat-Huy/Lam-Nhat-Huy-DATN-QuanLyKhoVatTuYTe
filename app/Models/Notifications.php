@@ -20,20 +20,22 @@ class Notifications extends Model
 
     protected $fillable = [
         'code',
-        'user_code',
         'notification_type',
+        'content',
         'important',
         'status',
         'lock_warehouse',
         'is_read',
-        'content',
+        'created_by',
         'created_at',
+        'updated_by',
         'updated_at',
+        'deleted_by',
         'deleted_at',
     ];
 
     public function users()
     {
-        return $this->belongsTo(Users::class, 'user_code', 'code');
+        return $this->belongsTo(Users::class, 'created_by', 'code');
     }
 }

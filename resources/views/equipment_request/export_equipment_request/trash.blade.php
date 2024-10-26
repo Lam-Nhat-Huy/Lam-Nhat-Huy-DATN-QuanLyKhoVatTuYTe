@@ -48,7 +48,7 @@
                                 <tr class="hover-table pointer">
                                     <td>
                                         {{-- Phiếu tạm => ẩn hết, phiếu chờ duyệt thì hiện, phiếu đã duyệt chưa tạo thì hiện icon, phiếu đã duyệt tạo rồi thì ẩn --}}
-                                        @if (($item->status == 3 || $item->status == 0) && $item->user_code == session('user_code'))
+                                        @if (($item->status == 3 || $item->status == 0) && $item->created_by == session('user_code'))
                                             <input type="checkbox" name="export_reqest_codes[]" value="{{ $item->code }}"
                                                 class="row-checkbox" />
                                         @elseif ($item->status == 5)
@@ -196,7 +196,7 @@
 
                                             <div class="card-body py-5 text-end bg-white">
                                                 <div
-                                                    class="button-group {{ $item->status == 3 && $item->user_code != session('user_code') ? 'd-none' : '' }}">
+                                                    class="button-group {{ $item->status == 3 && $item->created_by != session('user_code') ? 'd-none' : '' }}">
                                                     <!-- Nút khôi phục -->
                                                     <button class="btn btn-sm rounded-pill btn-twitter me-2"
                                                         data-bs-toggle="modal"

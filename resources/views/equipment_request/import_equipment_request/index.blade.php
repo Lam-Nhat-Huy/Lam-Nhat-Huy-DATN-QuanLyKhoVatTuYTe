@@ -104,7 +104,7 @@
                                 <tr class="hover-table pointer">
                                     <td>
                                         {{-- Phiếu tạm => ẩn hết, phiếu chờ duyệt thì hiện, phiếu đã duyệt chưa tạo thì hiện icon, phiếu đã duyệt tạo rồi thì ẩn --}}
-                                        @if (($item->status == 3 || $item->status == 0) && $item->user_code == session('user_code'))
+                                        @if (($item->status == 3 || $item->status == 0) && $item->created_by == session('user_code'))
                                             <input type="checkbox" name="import_reqest_codes[]" value="{{ $item->code }}"
                                                 class="row-checkbox" />
                                         @elseif ($item->status == 2)
@@ -286,7 +286,7 @@
                                                             </button>
                                                         @endif
 
-                                                        @if ($item->user_code == session('user_code') || session('isAdmin') == 1)
+                                                        @if ($item->created_by == session('user_code') || session('isAdmin') == 1)
                                                             <!-- Nút Sửa đơn -->
                                                             <a href="{{ route('equipment_request.update_import', $item->code) }}"
                                                                 class="btn btn-sm rounded-pill btn-dark me-2">
@@ -306,7 +306,7 @@
                                                     @elseif (
                                                         $item->status == 3 &&
                                                             now()->lt(\Carbon\Carbon::parse($item->request_date)->addDays(3)) &&
-                                                            $item->user_code == session('user_code'))
+                                                            $item->created_by == session('user_code'))
                                                         {{-- Lưu tạm và ngày yêu cầu trong 3 ngày gần nhất --}}
 
                                                         <!-- Nút lưu phiếu -->

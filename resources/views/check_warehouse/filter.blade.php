@@ -40,7 +40,7 @@
 
 
         <div class="col-md-2">
-            <select name="user_code" id="user_code"
+            <select name="created_by" id="created_by"
                 class="form-select form-select-sm border-success setupSelect2 rounded-pill">
                 <option value="" selected>--Theo Người Tạo--</option>
                 @foreach ($users as $user)

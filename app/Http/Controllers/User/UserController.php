@@ -31,9 +31,9 @@ class UserController extends Controller
     {
         $title = 'Người Dùng';
 
-        if (isset($request->user_codes)) {
+        if (isset($request->created_bys)) {
 
-            $checkDeleteMe = Users::whereIn('code', $request->user_codes)
+            $checkDeleteMe = Users::whereIn('code', $request->created_bys)
                 ->pluck('code')
                 ->toArray();
 
@@ -53,15 +53,15 @@ class UserController extends Controller
             }
         }
 
-        if (isset($request->user_code_delete)) {
+        if (isset($request->created_by_delete)) {
 
-            if (session('user_code') == $request->user_code_delete) {
+            if (session('user_code') == $request->created_by_delete) {
 
                 toastr()->error('Không thể tự xóa chính mình');
 
                 return redirect()->back();
             } else {
-                $usersWithRelatedData = $this->checkRelatedTables([$request->user_code_delete]);
+                $usersWithRelatedData = $this->checkRelatedTables([$request->created_by_delete]);
 
                 if ($usersWithRelatedData) {
 
@@ -70,7 +70,7 @@ class UserController extends Controller
                     return redirect()->back();
                 }
 
-                $rs = $this->callModel::where('code', $request->user_code_delete)->delete();
+                $rs = $this->callModel::where('code', $request->created_by_delete)->delete();
 
                 if ($rs) {
 
@@ -119,11 +119,11 @@ class UserController extends Controller
     {
         $title = 'Người Dùng';
 
-        if (isset($request->user_codes)) {
+        if (isset($request->created_bys)) {
 
             if ($request->action_type === 'restore') {
 
-                $rs = $this->callModel::whereIn('code', $request->user_codes)->restore();
+                $rs = $this->callModel::whereIn('code', $request->created_bys)->restore();
 
                 if ($rs) {
 
@@ -137,7 +137,7 @@ class UserController extends Controller
                 return redirect()->back();
             } elseif ($request->action_type === 'delete') {
 
-                $users = $this->callModel::onlyTrashed()->whereIn('code', $request->user_codes)->get();
+                $users = $this->callModel::onlyTrashed()->whereIn('code', $request->created_bys)->get();
 
                 foreach ($users as $user) {
 
@@ -155,9 +155,9 @@ class UserController extends Controller
             }
         }
 
-        if (isset($request->user_code_restore)) {
+        if (isset($request->created_by_restore)) {
 
-            $rs = $this->callModel::where('code', $request->user_code_restore)->restore();
+            $rs = $this->callModel::where('code', $request->created_by_restore)->restore();
 
             if ($rs) {
 
@@ -171,9 +171,9 @@ class UserController extends Controller
             return redirect()->back();
         }
 
-        if (isset($request->user_code_delete)) {
+        if (isset($request->created_by_delete)) {
 
-            $user = $this->callModel::onlyTrashed()->where('code', $request->user_code_delete)->first();
+            $user = $this->callModel::onlyTrashed()->where('code', $request->created_by_delete)->first();
 
             if ($user->avatar) {
 
@@ -246,7 +246,7 @@ class UserController extends Controller
             return redirect()->back();
         }
 
-        session()->put('user_code_request', $firstUser->code);
+        session()->put('created_by_request', $firstUser->code);
 
         $title = 'Người Dùng';
 
@@ -263,7 +263,7 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        $record = $this->callModel::where('code', session('user_code_request'));
+        $record = $this->callModel::where('code', session('created_by_request'));
 
         if (!empty($request->password)) {
 
@@ -297,7 +297,7 @@ class UserController extends Controller
 
         if ($rs) {
 
-            $nameUser = $this->callModel::where('code', session('user_code_request'))->first();
+            $nameUser = $this->callModel::where('code', session('created_by_request'))->first();
 
             if ($nameUser->code == session('user_code')) {
                 session()->put('avatar', $nameUser->avatar);
@@ -307,7 +307,7 @@ class UserController extends Controller
 
             toastr()->success("Cập nhật người dùng " . $nameUser . " thành công");
 
-            session()->forget(['user_code_request']);
+            session()->forget(['created_by_request']);
 
             return redirect()->route('user.index');
         }
@@ -337,17 +337,17 @@ class UserController extends Controller
     {
         $usersWithRelatedData = [];
 
-        $reportUsers = Reports::whereIn('user_code', $userCodes)->pluck('user_code')->toArray();
+        $reportUsers = Reports::whereIn('created_by', $userCodes)->pluck('created_by')->toArray();
 
-        $notificationUsers = Notifications::whereIn('user_code', $userCodes)->pluck('user_code')->toArray();
+        $notificationUsers = Notifications::whereIn('created_by', $userCodes)->pluck('created_by')->toArray();
 
-        $inventoryCheckUsers = Inventory_checks::whereIn('user_code', $userCodes)->pluck('user_code')->toArray();
+        $inventoryCheckUsers = Inventory_checks::whereIn('created_by', $userCodes)->pluck('created_by')->toArray();
 
-        $importEquipmentRequestUsers = Import_equipment_requests::whereIn('user_code', $userCodes)->pluck('user_code')->toArray();
+        $importEquipmentRequestUsers = Import_equipment_requests::whereIn('created_by', $userCodes)->pluck('created_by')->toArray();
 
         $receiptUsers = Receipts::whereIn('created_by', $userCodes)->pluck('created_by')->toArray();
 
-        // $exportUsers = Exports::whereIn('user_code', $userCodes)->pluck('user_code')->toArray();
+        // $exportUsers = Exports::whereIn('created_by', $userCodes)->pluck('created_by')->toArray();
 
         $unitUsers = Units::whereIn('created_by', $userCodes)->pluck('created_by')->toArray();
 

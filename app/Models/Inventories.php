@@ -23,10 +23,11 @@ class Inventories extends Model
         'equipment_code',
         'batch_number',
         'current_quantity',
-        // 'import_code',
-        // 'export_code',
+        'created_by',
         'created_at',
+        'updated_by',
         'updated_at',
+        'deleted_by',
         'deleted_at',
     ];
 

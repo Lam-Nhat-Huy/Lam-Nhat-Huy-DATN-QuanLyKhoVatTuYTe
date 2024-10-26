@@ -49,7 +49,7 @@ class EquipmentRequestController extends Controller
         }
 
         if (isset($request->us)) {
-            $AllEquipmentRequest = $AllEquipmentRequest->where("user_code", $request->us);
+            $AllEquipmentRequest = $AllEquipmentRequest->where("created_by", $request->us);
         }
 
         if (isset($request->stt)) {
@@ -278,7 +278,7 @@ class EquipmentRequestController extends Controller
             // Tạo yêu cầu nhập thiết bị
             $insertImportEquipmentRequest = $this->callModel::create([
                 'code' => 'YCMH' . $this->generateRandomString(6),
-                'user_code' => session('user_code'),
+                'created_by' => session('user_code'),
                 'supplier_code' => $supplierCode,
                 'note' => $note ?? '',
                 'status' => $request->input('importEquipmentStatus') == 4 ? 0 : $request->input('importEquipmentStatus'),
@@ -487,7 +487,7 @@ class EquipmentRequestController extends Controller
         }
 
         if (isset($request->us)) {
-            $AllWarehouseExportRequest = $AllWarehouseExportRequest->where("user_code", $request->us);
+            $AllWarehouseExportRequest = $AllWarehouseExportRequest->where("created_by", $request->us);
         }
 
         if (isset($request->stt)) {
@@ -713,7 +713,7 @@ class EquipmentRequestController extends Controller
             // Tạo yêu cầu nhập thiết bị
             $insertExportEquipmentRequest = Export_equipment_requests::create([
                 'code' => 'YCXK' . $this->generateRandomString(6),
-                'user_code' => session('user_code'),
+                'created_by' => session('user_code'),
                 'department_code' => $departmentCode,
                 'reason_export' => $reasonExport,
                 'note' => $note ?? '',

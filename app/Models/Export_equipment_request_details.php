@@ -14,13 +14,10 @@ class Export_equipment_request_details extends Model
 
     protected $fillable = [
         'id',
-        'export_request_code',
         'equipment_code',
+        'export_request_code',
         'quantity',
         'status',
-        'created_at',
-        'updated_at',
-        'deleted_at',
     ];
 
     public function equipments()

@@ -12,7 +12,9 @@ return new class extends Migration
             $table->char('code', 10)->primary();
             $table->string('name', 255)->unique();
             $table->text('description')->nullable();
-            $table->char('created_by', 10)->nullable();;
+            $table->char('created_by', 10)->nullable();
+            $table->char('updated_by', 10)->nullable();
+            $table->char('deleted_by', 10)->nullable();
             $table->timestamps();
             $table->softDeletes();
             

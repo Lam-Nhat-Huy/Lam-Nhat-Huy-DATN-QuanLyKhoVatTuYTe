@@ -32,7 +32,7 @@ class ReportController extends Controller
             ->where('deleted_at', null);
 
         if (isset($request->ur)) {
-            $AllReport = $AllReport->where("user_code", $request->ur);
+            $AllReport = $AllReport->where("created_by", $request->ur);
         }
 
         if (isset($request->st)) {
@@ -176,7 +176,7 @@ class ReportController extends Controller
 
             $data['code'] = 'RP' . $this->generateRandomString(8);
 
-            $data['user_code'] = session('user_code');
+            $data['created_by'] = session('user_code');
 
             $data['created_at'] = now();
 

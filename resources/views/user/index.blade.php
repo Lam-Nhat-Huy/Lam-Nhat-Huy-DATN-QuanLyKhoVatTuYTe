@@ -98,7 +98,7 @@
                             @forelse ($allUser as $item)
                                 <tr class="hover-table pointer">
                                     <td>
-                                        <input type="checkbox" name="user_codes[]" value="{{ $item->code }}"
+                                        <input type="checkbox" name="created_bys[]" value="{{ $item->code }}"
                                             class="row-checkbox" />
                                     </td>
                                     <td>
@@ -333,7 +333,7 @@
                     </div>
                     <form action="{{ route('user.index') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="user_code_delete" value="{{ $item->code }}">
+                        <input type="hidden" name="created_by_delete" value="{{ $item->code }}">
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>

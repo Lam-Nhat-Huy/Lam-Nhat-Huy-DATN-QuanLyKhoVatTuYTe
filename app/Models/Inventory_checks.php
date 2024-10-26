@@ -21,16 +21,16 @@ class Inventory_checks extends Model
 
     protected $fillable = [
         'code',
-        'user_code',
-        'recheck_user_code',
+        'recheck_created_by',
         'check_date',
-        'check_round',
         'note',
         'status',
-        'equipment_note',
         'check_count',
+        'created_by',
         'created_at',
+        'updated_by',
         'updated_at',
+        'deleted_by',
         'deleted_at',
     ];
 
@@ -41,11 +41,11 @@ class Inventory_checks extends Model
 
     public function user()
     {
-        return $this->belongsTo(Users::class, 'user_code', 'code');
+        return $this->belongsTo(Users::class, 'created_by', 'code');
     }
 
     public function recheckUser()
     {
-        return $this->belongsTo(Users::class, 'recheck_user_code', 'code');
+        return $this->belongsTo(Users::class, 'recheck_created_by', 'code');
     }
 }

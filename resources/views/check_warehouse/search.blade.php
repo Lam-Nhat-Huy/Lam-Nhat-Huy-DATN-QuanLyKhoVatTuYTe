@@ -223,7 +223,7 @@
                                 </button>
                             @endif
 
-                            @if ($item['user_code'] == session('user_code'))
+                            @if ($item['created_by'] == session('user_code'))
                                 <a href="{{ route('inventory_check.edit', $item->code) }}"
                                     class="btn btn-info btn-sm me-2 rounded-pill">
                                     <i class="fa fa-edit"></i> Chỉnh sửa
@@ -231,7 +231,7 @@
                             @endif
 
 
-                            @if ($item['user_code'] == session('user_code') || session('isAdmin') == true)
+                            @if ($item['created_by'] == session('user_code') || session('isAdmin') == true)
                                 <!-- Nút Xóa phiếu tạm -->
                                 <button class="btn btn-danger btn-sm me-2 rounded-pill" data-bs-toggle="modal"
                                     data-bs-target="#delete-{{ $item->code }}">
@@ -240,7 +240,7 @@
                             @endif
                         @endif
 
-                        @if ($item['check_count'] == 1 && $item['user_code'] != session('user_code'))
+                        @if ($item['check_count'] == 1 && $item['created_by'] != session('user_code'))
                             <!-- Nút In Phiếu -->
                             <a href="{{ route('inventory_check.check', $item->code) }}"
                                 class="btn btn-info btn-sm me-2 rounded-pill">

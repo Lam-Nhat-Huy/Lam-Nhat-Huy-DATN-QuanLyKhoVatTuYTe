@@ -10,7 +10,9 @@ class   Receipt_details extends Model
     use HasFactory;
 
     protected $fillable = [
+        'int',
         'receipt_code',
+        'equipment_code',
         'batch_number',
         'quantity',
         'quantity_quote',
@@ -18,10 +20,6 @@ class   Receipt_details extends Model
         'VAT',
         'discount',
         'price',
-        'equipment_code',
-        'created_at',
-        'updated_at',
-        'deleted_at',
     ];
 
     public function receipt()

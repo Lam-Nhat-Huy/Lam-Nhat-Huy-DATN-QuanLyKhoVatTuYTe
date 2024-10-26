@@ -18,8 +18,8 @@ return new class extends Migration
             $table->char('batch_number', 20); // Mã lô hàng
             $table->text('equipment_note')->nullable(); // Ghi chú thiết bị
             $table->integer('check_round')->default(1); // Lần kiểm (thêm mới)
-            $table->timestamps(); // Ngày tạo và cập nhật
-            $table->softDeletes(); // Xóa mềm
+            $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('inventory_check_code')->references('code')->on('inventory_checks')->onDelete('set null');
             $table->foreign('equipment_code')->references('code')->on('equipments')->onDelete('set null');

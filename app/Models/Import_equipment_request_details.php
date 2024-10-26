@@ -14,16 +14,12 @@ class Import_equipment_request_details extends Model
 
     protected $fillable = [
         'id',
-        'import_request_code',
         'equipment_code',
+        'import_request_code',
         'quantity',
         'quantity_quote',
         'deviation_quote',
         'price',
-        'status',
-        'created_at',
-        'updated_at',
-        'deleted_at',
     ];
 
     public function equipments()

@@ -32,7 +32,7 @@ class NotificationController extends Controller
             ->where('deleted_at', null);
 
         if (isset($request->ur)) {
-            $AllNotification = $AllNotification->where("user_code", $request->ur);
+            $AllNotification = $AllNotification->where("created_by", $request->ur);
         }
 
         if (isset($request->rt)) {
@@ -174,7 +174,7 @@ class NotificationController extends Controller
         if ($data) {
             $data['code'] = 'TB' . $this->generateRandomString(8);
 
-            $data['user_code'] = session('user_code');
+            $data['created_by'] = session('user_code');
 
             $data['created_at'] = now();
 
@@ -275,7 +275,7 @@ class NotificationController extends Controller
     public function getNewNotificationCount(Request $request)
     {
         // Lấy số lượng thông báo mới cho người dùng hiện tại
-        $count = $this->callModel::where('user_code', session('user_code'))
+        $count = $this->callModel::where('created_by', session('user_code'))
             ->where('is_read', false) // Chưa đọc (cột is_read là false)
             ->count();
 
@@ -284,7 +284,7 @@ class NotificationController extends Controller
 
     public function markNotificationsAsRead(Request $request)
     {
-        $this->callModel::where('user_code', session('user_code'))
+        $this->callModel::where('created_by', session('user_code'))
             ->where('is_read', false) // Các thông báo chưa đọc
             ->update(['is_read' => true]); // Đánh dấu là đã đọc
 

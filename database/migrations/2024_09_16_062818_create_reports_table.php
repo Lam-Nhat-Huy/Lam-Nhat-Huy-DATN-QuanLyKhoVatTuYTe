@@ -10,15 +10,16 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->char('code', 10)->primary();
-            $table->char('user_code', 10)->nullable();
-            $table->string('report_type')->nullable();
+            $table->string('report_type');
             $table->text('content');
-            $table->string('file');
-            $table->boolean('status')->default(0);
+            $table->string('file', 255);
+            $table->char('created_by', 10)->nullable();
+            $table->char('updated_by', 10)->nullable();
+            $table->char('deleted_by', 10)->nullable();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('user_code')->references('code')->on('users')->onDelete('set null');
+            $table->foreign('created_by')->references('code')->on('users')->onDelete('set null');
         });
     }
 

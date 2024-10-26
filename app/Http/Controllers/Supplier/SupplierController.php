@@ -64,7 +64,7 @@ class SupplierController extends Controller
 
                         $data['file_excel'] = $filePath;
 
-                        $data['user_code'] = session('user_code');
+                        $data['created_by'] = session('user_code');
 
                         Quote_histories::create($data);
 

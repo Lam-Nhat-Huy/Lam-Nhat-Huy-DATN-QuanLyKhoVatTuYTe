@@ -23,11 +23,11 @@ class Equipment_types extends Model
         'name',
         'description', // Cột mô tả
         'status', // Cột trạng thái
+        'created_by',
         'created_at',
+        'updated_by',
         'updated_at',
+        'deleted_by',
         'deleted_at',
     ];
-
-    // Các cột cần được xử lý ngày tháng
-    protected $dates = ['deleted_at'];
 }

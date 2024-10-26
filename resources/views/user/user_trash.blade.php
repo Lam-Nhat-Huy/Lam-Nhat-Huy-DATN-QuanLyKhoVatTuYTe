@@ -50,7 +50,7 @@
                             @forelse ($allUserTrash as $item)
                                 <tr class="hover-table pointer">
                                     <td>
-                                        <input type="checkbox" name="user_codes[]" value="{{ $item->code }}"
+                                        <input type="checkbox" name="created_bys[]" value="{{ $item->code }}"
                                             class="row-checkbox" />
                                     </td>
                                     <td>
@@ -309,7 +309,7 @@
                 <div class="modal-content border-0 shadow">
                     <form action="{{ route('user.user_trash') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="user_code_restore" value="{{ $item->code }}">
+                        <input type="hidden" name="created_by_restore" value="{{ $item->code }}">
                         <div class="modal-header bg-primary">
                             <h5 class="modal-title text-white" id="restoreModalLabel">Khôi Phục Người Dùng
                             </h5>
@@ -337,7 +337,7 @@
                 <div class="modal-content border-0 shadow">
                     <form action="{{ route('user.user_trash') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="user_code_delete" value="{{ $item->code }}">
+                        <input type="hidden" name="created_by_delete" value="{{ $item->code }}">
                         <div class="modal-header bg-danger">
                             <h5 class="modal-title text-white" id="deleteModalLabel">Xóa Vĩnh Viễn Người Dùng
                             </h5>
