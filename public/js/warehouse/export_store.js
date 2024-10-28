@@ -1,5 +1,7 @@
 $(document).ready(function () {
     let equipmentName;
+    let equipmentQuantities = {}; // Lưu trữ số lượng đã thêm cho từng thiết bị
+    let inventoryState = {};
     $('#material_code').on('change', function () {
         const equipmentCode = $(this).val();
         const batchInfoContainer = $('#batch_info');
@@ -7,7 +9,7 @@ $(document).ready(function () {
 
         if (equipmentCode) {
             $.ajax({
-                url: postExportUrl, // Gửi yêu cầu để lấy thông tin lô
+                url: postExportUrl,
                 method: 'POST',
                 data: {
                     _token: csrfToken,
@@ -15,206 +17,171 @@ $(document).ready(function () {
                 },
                 success: function (response) {
                     let tableContent = `
-                <table class="table table-hover align-middle text-center" id="batch-table">
-                    <thead class="table-dark">
-                        <tr>
-                            <th class="text-center">Số lô</th>  
-                            <th class="text-center">Tồn kho</th>
-                            <th class="text-center">Hạn dùng</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                `;
+                    <table class="table table-hover align-middle text-center" id="batch-table">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="text-center">Số lô</th>  
+                                <th class="text-center">Tồn kho</th>
+                                <th class="text-center">Hạn dùng</th>
+                                <th class="text-center">Số lượng</th>
+                                <th class="text-center">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    `;
                     if (response.length > 0) {
                         response.forEach(inventory => {
+                            const initialQuantity = inventory.current_quantity;
+                            const batchNumber = inventory.batch_number; // Lấy batchNumber ở đây
+                            const remainingQuantity = inventoryState[batchNumber] ?? initialQuantity;
                             const currentDate = new Date();
                             let displayExpiryDate = 'Không có';
                             let monthsDifference = null;
                             equipmentName = inventory.equipments.name;
+
                             if (inventory.expiry_date) {
                                 const expiryDate = new Date(inventory.expiry_date);
                                 monthsDifference = (expiryDate - currentDate) / (1000 * 60 * 60 * 24 * 30);
-
                                 displayExpiryDate = monthsDifference > 5 ? formatDate(inventory.expiry_date) : 'Hết hạn';
                             }
 
+                            // Tạo hàng mới trong bảng với tồn kho từ trạng thái đã lưu
                             tableContent += `
-                            <tr class="batch-row ${monthsDifference !== null && monthsDifference <= 5 ? 'expired' : ''}" style="cursor:pointer;" data-batch-number="${inventory.batch_number}" data-current-quantity="${inventory.current_quantity}">
-                                <td class="text-center">${inventory.batch_number}</td>
-                                <td class="text-center">${inventory.current_quantity}</td>
+                            <tr class="batch-row ${monthsDifference !== null && monthsDifference <= 5 ? 'expired' : ''}" 
+                                data-batch-number="${batchNumber}" 
+                                data-initial-quantity="${initialQuantity}" 
+                                data-current-quantity="${remainingQuantity}">
+    
+                                <td class="text-center">${batchNumber}</td>
+                                <td class="text-center">${remainingQuantity}</td>
                                 <td class="text-center">${displayExpiryDate}</td>
+                                <td class="text-center d-flex justify-content-center">
+                                    <input type="number" class="form-control form-control-sm border border-success rounded-pill quantity-input" 
+                                        min="1" max="${remainingQuantity}" placeholder="Số lượng" style="text-align: left;">
+                                </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-sm btn-danger rounded-pill add-quantity" style="font-size: 11px;">Thêm</button>
+                                </td>
                             </tr>
                             `;
                         });
                     } else {
                         tableContent += `
-                    <tr id="noDataAlert">
-                        <td colspan="4" class="text-center">
-                            <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
-                                role="alert"
-                                style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
-                                <div class="mb-3">
-                                    <i class="fas fa-file-invoice"
-                                        style="font-size: 36px; color: #6c757d;"></i>
+                        <tr id="noDataAlert">
+                            <td colspan="5" class="text-center">
+                                <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                    role="alert"
+                                    style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                    <div class="mb-3">
+                                        <i class="fas fa-file-invoice" style="font-size: 36px; color: #6c757d;"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin tồn kho trống</h5>
+                                        <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                            Hiện tại chưa có vật tư nào được thêm vào. Vui lòng kiểm tra lại hoặc tạo mới vật tư để bắt đầu.
+                                        </p>
+                                    </div>
                                 </div>
-                                <div class="text-center">
-                                    <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin tồn kho trống</h5>
-                                    <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                        Hiện tại chưa có vật tư nào được thêm vào. Vui lòng kiểm tra lại hoặc tạo mới vật tư để bắt đầu.
-                                    </p>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    `;
+                            </td>
+                        </tr>
+                        `;
                     }
-
                     tableContent += `</tbody></table>`;
                     batchInfoContainer.html(tableContent);
 
-                    // Bỏ sự kiện click cho hàng đã hết hạn
-                    $('.batch-row').on('click', function () {
-                        if ($(this).hasClass('expired')) {
-                            return; // Không làm gì nếu hàng đã hết hạn
-                        }
-
-                        const batchNumber = $(this).data('batch-number');
-                        const currentQuantity = $(this).data(
-                            'current-quantity');
-
-                        // Xóa class bg-success khỏi tất cả các hàng
-                        $('.batch-row').removeClass('bg-success');
-
-                        // Thêm class bg-success vào hàng được chọn
-                        $(this).addClass('bg-success');
-
-                        // Mở modal nhập số lượng
-                        $('#batchNumberModal').val(
-                            batchNumber); // Lưu số lô vào modal
-                        $('#currentQuantityModal').val(
-                            currentQuantity); // Lưu số lượng tồn vào modal
-                        $('#inputQuantity').val(
-                            ''); // Reset input trước khi mở modal
-                        $('#quantityError').text(''); // Reset lỗi
-                        $('#quantityModal').modal('show');
-                    });
-
-
-                    // Sự kiện lưu số lượng sau khi nhập trong modal
-                    $('#saveQuantity').off('click').on('click', function () {
-                        const inputQuantity = parseInt($('#inputQuantity').val());
-                        const batchNumber = $('#batchNumberModal').val();
-                        const currentQuantity = parseInt($('#currentQuantityModal').val());
+                    $('.add-quantity').on('click', function () {
+                        const row = $(this).closest('tr');
+                        const batchNumber = row.data('batch-number');
+                        const currentQuantity = row.data('current-quantity');
+                        const inputQuantity = parseInt(row.find('.quantity-input').val());
 
                         // Kiểm tra tính hợp lệ của số lượng nhập
                         if (!inputQuantity || isNaN(inputQuantity) || inputQuantity <= 0 || inputQuantity > currentQuantity) {
-                            $('#quantityError').text('Số lượng nhập không hợp lệ hoặc lớn hơn số lượng tồn.');
-                            $('#inputQuantity').addClass('is-invalid');
-                            return;
-                        } else {
-                            $('#inputQuantity').removeClass('is-invalid');
+                            return; // Nếu số lượng không hợp lệ thì dừng lại
                         }
 
-                        const materialListBody = $('#material-list-body');
-                        const existingRow = materialListBody.find(`tr[data-batch-number="${batchNumber}"]`);
+                        // Cập nhật số lượng tồn kho cho thiết bị
+                        equipmentQuantities[batchNumber] = (equipmentQuantities[batchNumber] || 0) + inputQuantity;
 
+                        // Cập nhật số lượng trong bảng
+                        const existingRow = $('#material-list-body').find(`tr[data-batch-number="${batchNumber}"]`);
                         if (existingRow.length > 0) {
-                            // Nếu lô đã tồn tại, cộng dồn số lượng
-                            const existingQuantity = parseInt(existingRow.find('td:nth-child(3)').text());
-
+                            // Nếu dòng đã tồn tại, cập nhật số lượng
+                            const existingInput = existingRow.find('.quantity-input-add');
+                            const existingQuantity = parseInt(existingInput.val()) || 0;
                             const newQuantity = existingQuantity + inputQuantity;
 
-                            // Cập nhật số lượng trong bảng
-                            existingRow.find('td:nth-child(3)').text(newQuantity);
+                            // Cập nhật giá trị trong ô input
+                            existingInput.val(newQuantity);
 
-                            // Cập nhật lại số lượng tồn kho
-                            const remainingQuantity = currentQuantity - newQuantity;
-                            const batchRow = $(`#batch-table tr[data-batch-number="${batchNumber}"]`);
+                            // Cập nhật lại số lượng tồn kho dựa trên số lượng ban đầu
+                            const remainingQuantity = currentQuantity - inputQuantity; // Trừ số lượng nhập mới vào số lượng ban đầu
+                            row.data('current-quantity', remainingQuantity); // Cập nhật dữ liệu mới
+                            inventoryState[batchNumber] = remainingQuantity; // Cập nhật lại trạng thái tồn kho
 
-                            if (batchRow.length > 0) {
-                                batchRow.find('td:nth-child(2)').text(remainingQuantity);
-                                batchRow.data('current-quantity', remainingQuantity);
-                            }
+                            // Cập nhật lại hiển thị trong bảng
+                            row.find('td:nth-child(2)').text(remainingQuantity); // Cập nhật lại hiển thị số tồn kho
                         } else {
-                            // Nếu lô chưa tồn tại, thêm dòng mới vào bảng
+                            // Nếu dòng chưa tồn tại, thêm mới
                             const newRow = `
                             <tr data-batch-number="${batchNumber}" data-equipment-code="${equipmentCode}">
-                            <td>${equipmentName}</td>
-                            <td>${batchNumber}</td>
-                            <td>${inputQuantity}</td>
+                                <td>${equipmentName}</td>
+                                <td>${batchNumber}</td>
+                                <td class="text-center d-flex justify-content-center"><input type="number" class="form-control form-control-sm border border-success rounded-pill quantity-input-add w-50" value="${inputQuantity}" placeholder="Số lượng" style="text-align: left;"></td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-dark edit-material" style="font-size:10px"><i class="fa fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger btn-sm remove-material" style="font-size:10px"><i class="fa fa-trash"></i></button>
-                                    </td>
+                                    <button type="button" class="btn btn-danger btn-sm remove-material" style="font-size:10px"><i class="fa fa-trash"></i></button>
+                                </td>
                             </tr>`;
-                            materialListBody.append(newRow);
-
-                            $('#no-material-alert').remove();
+                            $('#material-list-body').append(newRow);
 
                             // Cập nhật số lượng tồn kho
-                            const remainingQuantity = currentQuantity - inputQuantity;
-                            const batchRow = $(`#batch-table tr[data-batch-number="${batchNumber}"]`);
-
-                            if (batchRow.length > 0) {
-                                batchRow.find('td:nth-child(2)').text(remainingQuantity);
-                                batchRow.data('current-quantity', remainingQuantity);
-                            } else {
-                                // Nếu dòng lô hàng chưa tồn tại trong bảng batch, có thể thêm mới ở đây
-                                const newBatchRow = `
-                                    <tr data-batch-number="${batchNumber}">
-                                        <td>${batchNumber}</td>
-                                        <td>${remainingQuantity}</td>
-                                    </tr>`;
-                                $('#batch-table tbody').append(newBatchRow);
-                            }
+                            const remainingQuantity = currentQuantity - inputQuantity; // Trừ số lượng nhập vào số lượng ban đầu
+                            row.find('td:nth-child(2)').text(remainingQuantity);
+                            row.data('current-quantity', remainingQuantity); // Cập nhật dữ liệu mới
+                            inventoryState[batchNumber] = remainingQuantity; // Cập nhật lại trạng thái tồn kho
                         }
 
-                        $('#quantityModal').modal('hide');
+                        // Reset ô nhập số lượng
+                        row.find('.quantity-input').val('');
+                    });
+
+
+                    // Sự kiện thay đổi cho ô input số lượng
+                    $(document).on('input', '.quantity-input', function () {
+                        const row = $(this).closest('tr');
+                        const batchNumber = row.data('batch-number');
+                        const currentQuantity = row.data('current-quantity');
+                        const inputQuantity = parseInt($(this).val());
+
+                        // Kiểm tra tính hợp lệ của số lượng nhập
+                        if (!inputQuantity || isNaN(inputQuantity) || inputQuantity <= 0 || inputQuantity > currentQuantity) {
+                            $(this).addClass('is-invalid');
+                            $(this).addClass('border-danger');
+                        } else {
+                            $(this).removeClass('is-invalid');
+                            $(this).removeClass('border-danger');
+                        }
                     });
                 },
                 error: function (xhr, status, error) {
                     console.error(error);
-                    batchInfoContainer.html(
-                        '<div class="alert alert-danger text-center">Đã xảy ra lỗi khi lấy dữ liệu.</div>'
-                    );
+                    batchInfoContainer.html('<div class="alert alert-danger text-center">Đã xảy ra lỗi khi lấy dữ liệu.</div>');
                 }
             });
         } else {
-            batchInfoContainer.html('<div class="alert alert-danger">Bạn chưa chọn vật tư</div>');
-        }
-    });
-
-    // Sự kiện xác nhận xóa vật tư trong danh sách
-    $(document).on('click', '.remove-material', function () {
-        const rowToDelete = $(this).closest('tr');
-        const batchNumber = rowToDelete.data('batch-number');
-        const materialQuantity = parseInt(rowToDelete.find('td:nth-child(3)').text());
-
-        // Hiển thị modal xác nhận xóa
-        $('#confirmDelete').data('row-to-delete', rowToDelete).data('batch-number', batchNumber)
-            .data('material-quantity', materialQuantity);
-        $('#confirmDeleteModal').modal('show');
-    });
-
-    $('#confirmDelete').on('click', function () {
-        const rowToDelete = $(this).data('row-to-delete');
-        const batchNumber = $(this).data('batch-number');
-        const materialQuantity = $(this).data('material-quantity');
-
-        // Xóa dòng khỏi bảng vật tư
-        rowToDelete.remove();
-
-        // Cập nhật lại số lượng tồn kho bên trên
-        const rowInBatchTable = $(`#batch-table tr[data-batch-number="${batchNumber}"]`);
-        const currentBatchQuantity = parseInt(rowInBatchTable.data('current-quantity'));
-        const updatedBatchQuantity = currentBatchQuantity + materialQuantity;
-        rowInBatchTable.find('td:nth-child(2)').text(updatedBatchQuantity);
-        rowInBatchTable.data('current-quantity', updatedBatchQuantity);
-
-        // Kiểm tra nếu không còn vật tư nào trong bảng
-        if ($('#material-list-body').children().length === 0) {
-            $('#material-list-body').append(`
-                <tr id="no-material-alert">
+            batchInfoContainer.html(`
+                <table class="table table-hover table-striped align-middle text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="text-center">Số lô</th>
+                            <th class="text-center">Tồn kho</th>
+                            <th class="text-center">Hạn dùng</th>
+                            <th class="text-center">Số lượng</th>
+                            <th class="text-center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="noDataAlert">
                                 <td colspan="12" class="text-center">
                                     <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
                                         role="alert"
@@ -233,64 +200,80 @@ $(document).ready(function () {
                                     </div>
                                 </td>
                             </tr>
+                    </tbody>
+                </table>
             `);
         }
-
-        // Đóng modal xác nhận xóa
-        $('#confirmDeleteModal').modal('hide');
     });
-
-    // Sự kiện khi chọn "Sửa" trong danh sách vật tư
-    $(document).on('click', '.edit-material', function () {
+    $(document).on('input', '.quantity-input-add', function () {
         const row = $(this).closest('tr');
         const batchNumber = row.data('batch-number');
-        const oldQuantity = row.find('td:nth-child(3)').text(); // Lấy số lượng đã nhập từ cột 3
+        const batchRow = $(`#batch-table tr[data-batch-number="${batchNumber}"]`);
 
-        // Đặt giá trị vào input của modal và lưu dữ liệu vào modal
-        $('#editInputQuantity').val(oldQuantity);
-        $('#editMaterialModal').data('batch-number', batchNumber); // Lưu số lô vào modal
+        // Lấy giá trị tồn kho ban đầu
+        const initialQuantity = parseInt(batchRow.data('initial-quantity')) || 0;
+        const inputQuantity = parseInt($(this).val()) || 0;
 
-        // Hiển thị modal để người dùng sửa
-        $('#editMaterialModal').modal('show');
-    });
+        // Tính số lượng tồn kho hiện tại dựa trên tồn kho ban đầu và tổng số lượng đã nhập của lô đó
+        const totalAddedQuantity = inputQuantity;
+        const remainingQuantity = initialQuantity - totalAddedQuantity;
 
-    // Sự kiện khi nhấn "Lưu" sau khi chỉnh sửa số lượng
-    $('#saveEditMaterial').on('click', function () {
-        const batchNumber = $('#editMaterialModal').data('batch-number'); // Lấy số lô từ modal
-        const newQuantity = $('#editInputQuantity').val(); // Lấy số lượng mới từ input
-
-        // Lấy số lượng tồn kho hiện tại trong bảng batch-table
-        const rowInBatchTable = $(`#batch-table tr[data-batch-number="${batchNumber}"]`);
-        const currentBatchQuantity = parseInt(rowInBatchTable.data('current-quantity'));
-
-        // Lấy số lượng vật tư đã nhập trước đó (số lượng cũ)
-        const oldQuantity = parseInt($('#material-list-body').find(
-            `tr[data-batch-number="${batchNumber}"] td:nth-child(3)`).text());
-
-        const availableQuantity = currentBatchQuantity + oldQuantity;
-
-        if (!newQuantity || isNaN(newQuantity) || parseInt(newQuantity) <= 0 || parseInt(
-            newQuantity) > availableQuantity) {
-            $('#editQuantityError').text('Số lượng không hợp lệ hoặc lớn hơn số lượng tồn kho.');
-            $('#editInputQuantity').addClass('is-invalid');
-            return;
-        } else {
-            $('#editInputQuantity').removeClass('is-invalid');
-            $('#editQuantityError').text('');
+        // Cập nhật tồn kho trong bảng
+        if (batchRow.length > 0) {
+            batchRow.find('td:nth-child(2)').text(remainingQuantity);
+            batchRow.data('current-quantity', remainingQuantity);
         }
 
-        // Cập nhật hàng trong bảng vật tư
-        const rowToUpdate = $('#material-list-body').find(`tr[data-batch-number="${batchNumber}"]`);
-        rowToUpdate.find('td:nth-child(3)').text(newQuantity); // Cập nhật số lượng mới vào cột 3
+        // Cập nhật tổng số lượng đã nhập cho lô đó
+        equipmentQuantities[batchNumber] = totalAddedQuantity;
+    });
+    $(document).on('click', '.remove-equipment-btn', function () {
+        $(this).closest('tr').remove();
+    });
 
-        // Tính lại số lượng tồn kho sau khi sửa
-        const remainingQuantity = availableQuantity - parseInt(newQuantity);
-        rowInBatchTable.find('td:nth-child(2)').text(
-            remainingQuantity); // Cập nhật số lượng tồn kho mới
-        rowInBatchTable.data('current-quantity', remainingQuantity); // Cập nhật thuộc tính data
+    $(document).on('click', '.remove-equipment-btn', function () {
+        $(this).closest('tr').remove();
+    });
 
-        // Đóng modal sau khi cập nhật thành công
-        $('#editMaterialModal').modal('hide');
+    // Sự kiện xác nhận xóa vật tư trong danh sách
+    // Sự kiện xác nhận xóa vật tư trong danh sách
+    $(document).on('click', '.remove-material', function () {
+        const rowToDelete = $(this).closest('tr');
+        const batchNumber = rowToDelete.data('batch-number');
+        const materialQuantity = parseInt(rowToDelete.find('.quantity-input-add').val()) || 0; // Lấy số lượng cần xóa
+
+        // Hiển thị modal xác nhận xóa
+        $('#confirmDelete').data('row-to-delete', rowToDelete).data('batch-number', batchNumber)
+            .data('material-quantity', materialQuantity);
+        $('#confirmDeleteModal').modal('show');
+    });
+
+    $('#confirmDelete').on('click', function () {
+        const rowToDelete = $(this).data('row-to-delete');
+        const batchNumber = $(this).data('batch-number');
+        const materialQuantity = $(this).data('material-quantity');
+
+        // Xóa dòng khỏi bảng vật tư
+        rowToDelete.remove();
+
+        // Cập nhật lại số lượng tồn kho bên trên
+        const rowInBatchTable = $(`#batch-table tr[data-batch-number="${batchNumber}"]`);
+        const currentBatchQuantityText = rowInBatchTable.find('td:nth-child(2)').text(); // Lấy giá trị text từ ô
+        const currentBatchQuantity = parseInt(currentBatchQuantityText.trim(), 10); // Cắt khoảng trắng và chuyển đổi
+
+        // Kiểm tra xem currentBatchQuantity có phải là NaN không
+
+        // Cập nhật số lượng tồn kho
+        const updatedBatchQuantity = currentBatchQuantity + materialQuantity;
+
+        // Cập nhật giao diện và dữ liệu
+        rowInBatchTable.find('td:nth-child(2)').text(updatedBatchQuantity); // Cập nhật lại hiển thị số tồn kho
+        rowInBatchTable.data('current-quantity', updatedBatchQuantity); // Cập nhật lại data attribute
+        inventoryState[batchNumber] = updatedBatchQuantity; // Cập nhật trạng thái tồn kho
+
+        // Kiểm tra nếu không còn vật tư nào trong bảng
+        // Đóng modal xác nhận xóa
+        $('#confirmDeleteModal').modal('hide');
     });
 
     $('#inputQuantity').on('keypress', function (event) {
@@ -310,8 +293,6 @@ $(document).ready(function () {
             $('#inputQuantity').addClass('is-invalid');
         }
     });
-
-    // Format ngày theo dd/mm/yyyy
     // Format ngày theo dd/mm/yyyy
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -330,7 +311,7 @@ $(document).ready(function () {
         $('#material-list-body tr').each(function () {
             const batchNumber = $(this).data('batch-number'); // Lấy số lô từ thuộc tính data
             const equipmentCode = $(this).data('equipment-code'); // Lấy equipment_code từ thuộc tính data
-            const quantity = $(this).find('td:nth-child(3)').text(); // Lấy số lượng từ cột thứ 3
+            const quantity = $(this).find('.quantity-input-add').val(); // Sửa lại để lấy giá trị từ ô input
 
             if (batchNumber && quantity) { // Kiểm tra nếu có dữ liệu
                 materialList.push({
@@ -346,8 +327,23 @@ $(document).ready(function () {
     }
 
 
+
     // Khi form submit, gọi hàm để lưu dữ liệu vào input ẩn
     $('#warehouse-export-form').on('submit', function () {
         updateMaterialListInput();
     });
 });
+
+$(document).on('change', '#material_code', function () {
+    const selectedOption = $(this).find(':selected');
+    const totalInventory = parseInt(selectedOption.data('total-inventory')); // Lấy giá trị từ thuộc tính data
+
+    // Kiểm tra tổng tồn và thêm class nếu bằng 0
+    if (totalInventory === 0) {
+        $(this).addClass('text-danger'); // Thêm lớp màu đỏ
+    } else {
+        $(this).removeClass('text-danger'); // Gỡ lớp màu đỏ nếu không bằng 0
+    }
+});
+
+

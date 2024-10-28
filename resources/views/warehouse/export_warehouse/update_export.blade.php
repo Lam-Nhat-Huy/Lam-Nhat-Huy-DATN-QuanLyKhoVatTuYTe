@@ -17,7 +17,7 @@
 @endsection
 
 @section('title')
-    Tạo Phiếu Xuất Kho
+    Sửa phiếu xuất kho
 @endsection
 
 @section('content')
@@ -25,7 +25,7 @@
         {{-- Tiêu đề --}}
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Xuất Kho</span>
+                <span class="card-label fw-bolder fs-3 mb-1 text-uppercase">Xuất kho</span>
             </h3>
 
             <div class="card-toolbar">
@@ -36,7 +36,7 @@
         </div>
 
         <!-- Form thêm vật tư -->
-        <form action="{{ route('warehouse.store_export') }}" id="warehouse-export-form" method="POST">
+        <form action="{{ route('warehouse.update_export', $export->code) }}" id="warehouse-export-form" method="POST">
             @csrf
             <div class="container mt-4">
                 <div class="row">
@@ -110,7 +110,21 @@
                                     </tr>
                                 </thead>
                                 <tbody id="material-list-body">
-
+                                    @foreach ($export->exportDetail as $detail)
+                                        <tr data-batch-number="{{$detail->batch_number}}" data-equipment-code="{{$detail->equipment_code}}">
+                                            <td>{{ $detail->equipments->name }}</td>
+                                            <td>{{ $detail->batch_number }}</td>
+                                            <td class="text-center d-flex justify-content-center"><input type="number"
+                                                    class="form-control form-control-sm border border-success rounded-pill quantity-input-add w-50"
+                                                    value="{{ $detail->quantity }}" placeholder="Số lượng"
+                                                    style="text-align: left;">
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-sm remove-material"
+                                                    style="font-size:10px"><i class="fa fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
 
@@ -123,14 +137,19 @@
                             <h6 class="mb-4 fw-bold text-dark text-uppercase"><i
                                     class="fas fa-info-circle me-2 text-primary"></i>Thông tin phiếu xuất</h6>
                             <div class="mb-4">
-                                <label for="department_code" class="form-label fw-semibold text-muted">Mã phòng ban</label>
+                                <label for="department_code_{{ $export->code }}"
+                                    class="form-label fw-semibold text-muted">Mã phòng ban</label>
                                 <div class="d-flex" style="width: 100%;">
                                     <select name="department_code"
-                                        class="form-select form-select-sm setupSelect2 rounded-pill" id="department_code"
-                                        style="width: calc(100% - 40px);" required>
+                                        class="form-select form-select-sm setupSelect2 rounded-pill"
+                                        id="department_code_{{ $export->code }}" style="width: calc(10  0% - 40px);"
+                                        required>
                                         <option value="">-- Chọn phòng ban --</option>
                                         @foreach ($departments as $department)
-                                            <option value="{{ $department['code'] }}">{{ $department['name'] }}</option>
+                                            <option value="{{ $department['code'] }}"
+                                                @if (isset($export->department_code) && $export->department_code == $department['code']) selected @endif>
+                                                {{ $department['name'] }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     <span class="ms-2 pointer d-flex align-items-center justify-content-center"
@@ -142,7 +161,7 @@
                             </div>
                             <div class="mb-4">
                                 <label for="created_by" class="form-label fw-semibold text-muted">Người tạo</label>
-                                <input type="text" name="created_by" value="{{ $users->first_name }}"
+                                <input type="text" name="created_by" value="{{ $export->user->last_name . ' ' . $export->user->first_name }}"
                                     class="form-control form-control-sm bg-white rounded-pill py-2 px-3" id="export_at"
                                     disabled>
                             </div>
@@ -151,9 +170,8 @@
                                 <label for="export_at" class="form-label fw-semibold text-muted">Ngày xuất</label>
                                 <input type="date" name="export_at"
                                     class="form-control form-control-sm rounded-pill py-2 px-3" id="export_at"
-                                    value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
+                                    value="{{$export->export_date}}" required>
                             </div>
-
 
                             <div class="mb-4">
                                 <label for="note" class="form-label fw-semibold text-muted">Ghi chú</label>
@@ -162,12 +180,10 @@
                             </div>
 
                             <hr class="my-4">
-
                             <input type="hidden" name="material_list" id="material_list_input">
-
                             <button type="submit" name="status" value="2"
                                 class="btn btn-sm btn-info w-100 mb-2 d-flex align-items-center justify-content-center rounded-pill">
-                                <i class="fas fa-cloud-arrow-down me-1"></i>Lưu tạm
+                                <i class="fas fa-cloud-arrow-down me-1"></i>Cập nhật
                             </button>
                             <button type="submit" name="status" value="0"
                                 class="btn btn-twitter btn-sm rounded-pill w-100">
