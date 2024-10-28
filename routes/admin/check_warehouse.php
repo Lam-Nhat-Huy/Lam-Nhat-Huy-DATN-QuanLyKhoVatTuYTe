@@ -31,6 +31,7 @@ Route::prefix('check_warehouse')->middleware(CheckLogin::class)->group(function 
 
     Route::post('/checkwarehouse-excel-import', [CheckWarehouseController::class, 'importCheckWarehouseExcel'])->name('warehouse.importCheckWarehouseExcel');
 
-    Route::get('/edit-checkRound/{code}', [CheckWarehouseController::class, 'editByCheckround'])
-        ->name('inventory_check.editByCheckround');
+    Route::get('/edit-checkRound/{code}', [CheckWarehouseController::class, 'editByCheckround'])->name('inventory_check.editByCheckround');
+
+    Route::get('/inventory_check/cancel/{code}', [CheckWarehouseController::class, 'cancelCheck'])->name('inventory_check.cancel');
 });

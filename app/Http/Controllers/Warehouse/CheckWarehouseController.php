@@ -404,7 +404,7 @@ class CheckWarehouseController extends Controller
 
         Exports::create([
             'code' => $exportCode,
-            'note' => 'Xuất kho các vật tư thiếu',
+            'note' => 'Xuất kho để cân bằng kho',
             'status' => true,
             'created_by' => session('user_code'),
             'export_date' => now(),
@@ -439,10 +439,11 @@ class CheckWarehouseController extends Controller
         Receipts::create([
             'code' => $receiptCode,
             'supplier_code' => $materials[0]['supplier_code'],
-            'note' => 'Nhập kho các vật tư dư',
+            'note' => 'Nhập kho để cân bằng kho',
             'status' => true,
-            'receipt_no' => 'RN-' . $this->generateRandomString(5),
+            'receipt_no' => 'Không có',
             'receipt_date' => now(),
+            'receipt_type' => "Nhập cân bằng kho",
             'created_by' => session('user_code'),
         ]);
 
@@ -481,9 +482,8 @@ class CheckWarehouseController extends Controller
             $inventoryCheck->check_date = now();
             $inventoryCheck->save();
 
-            // Chỉ lấy chi tiết lần kiểm 2
             $inventoryCheckDetails = Inventory_check_details::where('inventory_check_code', $code)
-                ->where('check_round', 2) // Điều kiện chỉ lấy kết quả lần kiểm 2
+                ->where('check_round', 2)
                 ->get();
 
             $materialsForExport = [];
@@ -653,7 +653,6 @@ class CheckWarehouseController extends Controller
         return redirect()->route('check_warehouse.index');
     }
 
-
     public function createNotificationAfterUpdateInventory($inventoryCheckCode, $userCode)
     {
         $notificationContent = "Kho đã được cân bằng thành công với mã phiếu kiểm kho: {$inventoryCheckCode}";
@@ -683,7 +682,6 @@ class CheckWarehouseController extends Controller
 
         $inventoryCheck = Inventory_checks::findOrFail($code);
 
-        // Lấy danh sách thiết bị có tồn kho
         $equipmentsWithStock = Equipments::whereHas('inventories', function ($query) {
             $query->where('current_quantity', '>', 0);
         })->with(['inventories' => function ($query) {
@@ -691,7 +689,6 @@ class CheckWarehouseController extends Controller
                 ->where('current_quantity', '>', 0);
         }])->get();
 
-        // Lấy chi tiết kiểm kho lần trước để hiển thị (nếu có)
         $equipmentsWithJson = $this->showInventoryCheckAgain($code);
 
         return view("{$this->route}.form", compact(
@@ -709,7 +706,6 @@ class CheckWarehouseController extends Controller
     {
         $inventoryCheck = Inventory_checks::where('code', $code)->firstOrFail();
 
-        // Lấy dữ liệu từ request
         $materialData = json_decode($request->input('materialData'), true);
 
         if (empty($materialData)) {
@@ -717,16 +713,14 @@ class CheckWarehouseController extends Controller
             return redirect()->back();
         }
 
-        // Cập nhật thông tin phiếu kiểm kho
         $inventoryCheckData = [
             'note' => $materialData[0]['note'],
             'recheck_user_code' => $materialData[0]['created_by'],
             'status' => $materialData[0]['status'],
-            'check_count' => $inventoryCheck->check_count + 1 // Tăng số lần kiểm
+            'check_count' => $inventoryCheck->check_count + 1
         ];
         $inventoryCheck->update($inventoryCheckData);
 
-        // Không xóa chi tiết kiểm kho lần trước nữa, chỉ thêm mới lần kiểm này
         $inventoryCheckDetailData = [];
         $materialsForExport = [];
         $materialsForImport = [];
@@ -739,11 +733,10 @@ class CheckWarehouseController extends Controller
                 'current_quantity' => $material['current_quantity'],
                 'actual_quantity' => $material['actual_quantity'],
                 'unequal' => $material['unequal'],
-                'check_round' => $inventoryCheck->check_count, // Lần kiểm (1 hoặc 2)
+                'check_round' => $inventoryCheck->check_count,
                 'equipment_note' => $material['equipment_note'],
             ];
 
-            // Xử lý chênh lệch tồn kho
             $this->handleStockDiscrepancy($material, $materialsForExport, $materialsForImport);
         }
 
@@ -757,7 +750,6 @@ class CheckWarehouseController extends Controller
         }
 
         try {
-            // Thêm chi tiết kiểm kho vào DB mà không xóa cái cũ
             Inventory_check_details::insert($inventoryCheckDetailData);
         } catch (\Exception $e) {
             toastr()->error('Lỗi khi lưu chi tiết phiếu kiểm kho: ' . $e->getMessage());
@@ -780,5 +772,68 @@ class CheckWarehouseController extends Controller
         }
 
         return response()->json($inventoryCheckEdit);
+    }
+
+    public function cancelCheck($code)
+    {
+        $inventoryCheck = Inventory_checks::where('code', $code)->first();
+
+        $now = Carbon::now('Asia/Ho_Chi_Minh');
+
+        if ($inventoryCheck && $inventoryCheck->status == 1) {
+            $latestApprovedCheck = Inventory_checks::where('status', 1)
+                ->orderBy('check_date', 'desc')
+                ->first();
+
+            if ($latestApprovedCheck && $latestApprovedCheck->code != $code) {
+                toastr()->error('Không thể hủy phiếu kiểm kho vì chỉ có thể hủy phiếu kiểm kho gần nhất đã được duyệt.');
+                return redirect()->back();
+            }
+
+            $checkDate = Carbon::parse($inventoryCheck->check_date)->setTimezone('Asia/Ho_Chi_Minh');
+
+            $daysPassed = $checkDate->diffInDays($now);
+
+            if ($daysPassed > 1) {
+                toastr()->error('Không thể hủy phiếu kiểm kho vì đã quá thời gian cho phép (1 ngày).');
+                return redirect()->back();
+            }
+
+            $inventoryCheckDetails = Inventory_check_details::where('inventory_check_code', $code)->get();
+
+            Exports::where('note', 'Xuất kho để cân bằng kho')->where('created_by', session('user_code'))->delete();
+
+            Export_details::whereIn('export_code', function ($query) {
+                $query->select('code')->from('exports')->where('note', 'Xuất kho để cân bằng kho');
+            })->delete();
+
+            Receipts::where('note', 'Nhập kho để cân bằng kho')->where('created_by', session('user_code'))->delete();
+
+            Receipt_details::whereIn('receipt_code', function ($query) {
+                $query->select('code')->from('receipts')->where('note', 'Nhập kho để cân bằng kho');
+            })->delete();
+
+            foreach ($inventoryCheckDetails as $detail) {
+                $inventory = Inventories::where('equipment_code', $detail->equipment_code)
+                    ->where('batch_number', $detail->batch_number)
+                    ->first();
+
+                if ($inventory) {
+                    $inventory->current_quantity = $detail->current_quantity;
+                    $inventory->save();
+                }
+            }
+
+            $inventoryCheck->status = 0;
+
+            $inventoryCheck->save();
+
+            toastr()->success('Phiếu kiểm kho đã được hủy và số lượng tồn kho đã được phục hồi.');
+
+            return redirect()->back();
+        }
+
+        toastr()->error('Không thể hủy phiếu kiểm kho. Chỉ có thể hủy phiếu đã được duyệt.');
+        return redirect()->back();
     }
 }
