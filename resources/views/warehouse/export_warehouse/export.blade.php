@@ -193,8 +193,10 @@
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class="text-start w-50"><strong>Phòng ban</strong></td>
-                                                                    <td class="text-start text-dark">{{ $export->departments->name }}
+                                                                    <td class="text-start w-50"><strong>Phòng ban</strong>
+                                                                    </td>
+                                                                    <td class="text-start text-dark">
+                                                                        {{ $export->departments->name }}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -253,21 +255,23 @@
                                         <div class="card-body py-3 text-end">
                                             <div class="button-group">
                                                 @if ($export->status == 0 || $export->status == 2)
-                                                    <button class="btn btn-sm btn-success me-2" data-bs-toggle="modal"
+                                                    <button class="btn btn-sm btn-success me-2 rounded-pill"
+                                                        data-bs-toggle="modal"
                                                         data-bs-target="#browse{{ $export->code }}" type="button">
                                                         <i class="fas fa-clipboard-check"></i> Duyệt Phiếu
                                                     </button>
-                                                    <a class="btn btn-sm btn-dark me-2"
+                                                    <a class="btn btn-sm btn-dark me-2 rounded-pill"
                                                         href="{{ route('warehouse.edit_export', $export->code) }}">
                                                         <i class="fa fa-edit"></i> Sửa Phiếu
                                                     </a>
-                                                    <button class="btn btn-sm btn-danger me-2" data-bs-toggle="modal"
+                                                    <button class="btn btn-sm btn-danger me-2 rounded-pill"
+                                                        data-bs-toggle="modal"
                                                         data-bs-target="#deleteConfirm{{ $export->code }}"
                                                         type="button">
                                                         <i class="fa fa-trash"></i> Xóa Phiếu
                                                     </button>
                                                 @endif
-                                                <button class="btn btn-sm btn-twitter me-2" type="button"
+                                                <button class="btn btn-sm btn-twitter me-2 rounded-pill" type="button"
                                                     onclick="printInvoice('{{ $export->code }}')">
                                                     <i class="fa fa-print"></i> In Phiếu
                                                 </button>
@@ -301,8 +305,10 @@
                                                                             class="ms-2">{{ $export->code }}</span></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class="text-start" style="width: 40%;"><strong>Phòng ban:</strong><span
-                                                                            class="ms-2">{{ $export->departments->name }}</span></td>
+                                                                    <td class="text-start" style="width: 40%;">
+                                                                        <strong>Phòng ban:</strong><span
+                                                                            class="ms-2">{{ $export->departments->name }}</span>
+                                                                    </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td class="text-start"><strong>Ngày xuất:</strong><span

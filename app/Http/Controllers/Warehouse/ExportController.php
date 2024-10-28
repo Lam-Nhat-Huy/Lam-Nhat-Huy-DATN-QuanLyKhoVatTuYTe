@@ -99,7 +99,7 @@ class ExportController extends Controller
             return redirect()->back()->with('error', 'Danh sách vật tư không hợp lệ.');
         }
         $export = new Exports();
-        $export->code = 'EXP' . time();
+        $export->code = 'EXP' . $this->generateRandomString(7);
         $export->note = $request->note;
         $export->status = $request->input('status');
         $export->created_by = session('user_code');
@@ -252,11 +252,27 @@ class ExportController extends Controller
         return redirect()->route('warehouse.export');
     }
     public function destroy($code)
-    {   
+    {
         $export = Exports::findOrFail($code);
         $export->delete();
 
         toastr()->success('Đã xóa phiếu xuất thành công.');
         return redirect()->route('warehouse.export');
+    }
+
+    function generateRandomString($length = 9)
+    {
+        $characters = '0123456789';
+
+        $charactersLength = strlen($characters);
+
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        return $randomString;
     }
 }
