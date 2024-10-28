@@ -77,12 +77,16 @@
         <div class="py-3 px-lg-17">
             <div class="me-n7 pe-7">
                 <div class="row align-items-center">
-                    <div class="col-md-12 fv-row">
+                    <div
+                        class="col-md-12 fv-row {{ !empty($editForm) && (!empty($editForm->status == 1) || !empty($editForm->status == 2)) ? '' : 'd-none' }}">
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Nhà Cung Cấp</label>
                         <div class="d-flex align-items-center">
                             <select name="supplier_code" id="supplier_code" onchange="changeSupplier()"
                                 class="form-select form-select-sm border border-success rounded-pill setupSelect2">
-                                <option value="0">Chọn Nhà Cung Cấp...</option>
+                                <option
+                                    value="{{ !empty($editForm) && (!empty($editForm->status == 1) || !empty($editForm->status == 2)) ? '0' : 'SPDEFAULT' }}">
+                                    Chọn Nhà Cung Cấp...
+                                </option>
                                 @foreach ($AllSupplier as $item)
                                     <option value="{{ $item->code }}" id="option_supplier_{{ $item->code }}"
                                         {{ old('supplier_code', $editForm->supplier_code ?? '') == $item->code ? 'selected' : '' }}>

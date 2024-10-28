@@ -4,7 +4,6 @@ namespace App\Http\Controllers\EquipmentRequest;
 
 use App\Exports\EquipmentRequest;
 use App\Http\Controllers\Controller;
-use App\Imports\equipmentRequest as ImportsEquipmentRequest;
 use App\Models\Departments;
 use App\Models\Equipments;
 use App\Models\Export_equipment_request_details;
@@ -117,9 +116,6 @@ class EquipmentRequestController extends Controller
                     'status' => 2,
                 ]);
 
-            Import_equipment_request_details::where('import_request_code', $request->browse_request)
-                ->update(['status' => 2]);
-
             toastr()->success('Đã duyệt phiếu yêu cầu mua hàng');
 
             return redirect()->back();
@@ -130,9 +126,6 @@ class EquipmentRequestController extends Controller
             if ($request->action_type === 'browse') {
 
                 $this->callModel::whereIn('code', $request->import_reqest_codes)->where('status', 0)->update(['status' => 2]);
-
-                Import_equipment_request_details::whereIn('import_request_code', $request->import_reqest_codes)
-                    ->update(['status' => 2]);
 
                 toastr()->success('Duyệt phiếu chờ thành công');
 
@@ -255,31 +248,13 @@ class EquipmentRequestController extends Controller
     public function store_import_equipment_request(Request $request)
     {
         if (!empty($request->input('supplier_code')) && !empty($request->input('equipment_list')) && !empty($request->input('importEquipmentStatus'))) {
-            $supplierCode = $request->input('supplier_code');
             $note = $request->input('note');
             $equipmentList = json_decode($request->input('equipment_list'), true);
-
-            // $existingEquipment = Import_equipment_request_details::whereIn('equipment_code', array_column($equipmentList, 'equipment_code'))
-            //     ->where(function ($query) {
-            //         $query->where('status', 0)
-            //             ->orWhere('status', 3);
-            //     })
-            //     ->where('created_at', '>', now()->subDays(3))
-            //     ->get(['equipment_code']);
-
-            // if ($existingEquipment->isNotEmpty()) {
-            //     return response()->json([
-            //         'success' => false,
-            //         'message' => 'Thiết bị yêu cầu mua đã tồn tại trong lịch sử yêu cầu hoặc thùng rác, vui lòng kiểm tra lại',
-            //         'list_duplicated' => $existingEquipment->pluck('equipment_code')->toArray(),
-            //     ]);
-            // }
 
             // Tạo yêu cầu nhập thiết bị
             $insertImportEquipmentRequest = $this->callModel::create([
                 'code' => 'YCMH' . $this->generateRandomString(6),
                 'user_code' => session('user_code'),
-                'supplier_code' => $supplierCode,
                 'note' => $note ?? '',
                 'status' => $request->input('importEquipmentStatus') == 4 ? 0 : $request->input('importEquipmentStatus'),
                 'request_date' => now(),
@@ -293,7 +268,6 @@ class EquipmentRequestController extends Controller
                         'import_request_code' => $insertImportEquipmentRequest->code,
                         'equipment_code' => $equipment['equipment_code'],
                         'quantity' => $equipment['quantity'],
-                        'status' => $request->input('importEquipmentStatus') == 4 ? 0 : $request->input('importEquipmentStatus'),
                         'created_at' => $insertImportEquipmentRequest->request_date,
                         'updated_at' => null,
                     ]);
@@ -360,23 +334,6 @@ class EquipmentRequestController extends Controller
             $note = $request->input('note');
             $equipmentList = json_decode($request->input('equipment_list'), true);
 
-            // $existingEquipment = Import_equipment_request_details::whereIn('equipment_code', array_column($equipmentList, 'equipment_code'))
-            //     ->where('import_request_code', '!=', $code)
-            //     ->where(function ($query) {
-            //         $query->where('status', 0)
-            //             ->orWhere('status', 3);
-            //     })
-            //     ->where('created_at', '>', now()->subDays(3))
-            //     ->get(['equipment_code']);
-
-            // if ($existingEquipment->isNotEmpty()) {
-            //     return response()->json([
-            //         'success' => false,
-            //         'message' => 'Thiết bị yêu cầu mua đã tồn tại trong lịch sử yêu cầu hoặc thùng rác, vui lòng kiểm tra lại',
-            //         'list_duplicated' => $existingEquipment->pluck('equipment_code')->toArray(),
-            //     ]);
-            // }
-
             // Tìm các bản ghi không có mã trong $equipmentList và thuộc về import_request_code
             $equipmentToDelete = Import_equipment_request_details::whereNotIn('equipment_code', array_column($equipmentList, 'equipment_code'))
                 ->where('import_request_code', $code)
@@ -394,7 +351,6 @@ class EquipmentRequestController extends Controller
             $record = $existingRequest->first();
 
             $existingRequest->update([
-                'supplier_code' => $supplierCode ?? $record->supplier_code,
                 'note' => $note ?? $record->note,
                 'status' => $record->status,
                 'updated_at' => now(),
@@ -408,7 +364,6 @@ class EquipmentRequestController extends Controller
                     ],
                     [
                         'quantity' => $equipment['quantity'],
-                        'status' => $record->status,
                         'created_at' => now(),
                         'updated_at' => now()
                     ]
@@ -431,11 +386,9 @@ class EquipmentRequestController extends Controller
 
             $existingRequest = $this->callModel::where('code', $code);
 
-            $record = $existingRequest->first();
-
             $existingRequest->update([
-                'supplier_code' => $supplierCode ?? $record->supplier_code,
-                'note' => $note ?? $record->note,
+                'supplier_code' => $supplierCode,
+                'note' => $note,
                 'status' => 1,
                 'updated_at' => now(),
             ]);
@@ -451,7 +404,6 @@ class EquipmentRequestController extends Controller
                         'quantity_quote' => $equipment['quantity_quote'],
                         'deviation_quote' => $equipment['deviation_quote'],
                         'price' => $equipment['price'],
-                        'status' => 1,
                         'created_at' => now(),
                         'updated_at' => now()
                     ]

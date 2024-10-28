@@ -344,10 +344,6 @@ class ImportController extends Controller
                 'status' => 4,
             ]);
 
-            Import_equipment_request_details::where('import_request_code', $orderNumber)->update([
-                'status' => 4,
-            ]);
-
             // Tạo phiếu nhập
             $record = Receipts::create([
                 'code' => 'PN' . $this->generateRandomString(8),

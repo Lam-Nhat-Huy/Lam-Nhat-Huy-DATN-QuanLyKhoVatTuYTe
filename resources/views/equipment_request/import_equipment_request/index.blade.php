@@ -123,7 +123,7 @@
                                         #{{ $item->code }}
                                     </td>
                                     <td>
-                                        {{ $item->suppliers->name ?? 'N/A' }}
+                                        {{ !empty($item->supplier_code) ? $item->suppliers->name : 'Chưa Có' }}
                                     </td>
                                     <td>
                                         {{ $item->users->last_name . ' ' . $item->users->first_name ?? 'N/A' }}
@@ -413,7 +413,7 @@
                                                                                 class="text-success">BeeSoft</span>
                                                                             Có Nhu Cầu Đặt Mua Thiết Bị Tại
                                                                             <span
-                                                                                class="text-danger">{{ $item->suppliers->name }}</span>
+                                                                                class="text-danger">{{ !empty($item->supplier_code) ? $item->suppliers->name : '' }}</span>
                                                                             theo mẫu yêu
                                                                             cầu như sau:
                                                                         </span>
@@ -503,6 +503,9 @@
                                                                 </div>
                                                                 <div>
                                                                     <div class="order-form">
+                                                                        <p class="mb-0"><strong>Ghi Chú:</strong></p>
+                                                                        <div class="dotted-line">{{ $item->note }}</div>
+
                                                                         <p class="mb-0"><strong>Thời gian giao
                                                                                 hàng:</strong></p>
                                                                         <div class="dotted-line"></div>

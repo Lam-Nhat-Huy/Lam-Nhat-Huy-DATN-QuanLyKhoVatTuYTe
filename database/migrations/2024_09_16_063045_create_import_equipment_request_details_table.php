@@ -16,7 +16,6 @@ return new class extends Migration
             $table->integer('quantity_quote')->nullable();
             $table->string('deviation_quote', 20)->nullable();
             $table->decimal('price')->nullable();
-            $table->boolean('status')->default(false);
             $table->timestamps();
             $table->softDeletes();
 
