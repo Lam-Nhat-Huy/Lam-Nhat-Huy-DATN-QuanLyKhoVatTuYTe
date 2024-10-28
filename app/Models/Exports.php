@@ -36,4 +36,9 @@ class Exports extends Model
     {
         return $this->belongsTo(Users::class, 'created_by', 'code');
     }
+
+    public function departments()
+    {
+        return $this->belongsTo(Departments::class, 'department_code', 'code');
+    }
 }

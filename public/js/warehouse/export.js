@@ -54,10 +54,17 @@ document.querySelectorAll('tbody tr').forEach(function (row) {
         }
     });
 });
-document.getElementById('printPdfBtn').addEventListener('click', function () {
-    var printContents = document.getElementById('printArea').innerHTML;
-    var originalContents = document.body.innerHTML;
+function printInvoice(code) {
+    const printContents = document.getElementById(`printArea_${code}`).innerHTML;
+    const originalContents = document.body.innerHTML;
+
+    // Thay đổi nội dung trang thành nội dung cần in
     document.body.innerHTML = printContents;
+
+    // Gọi lệnh in của trình duyệt
     window.print();
-    document.body.innerHTML = originalContents;
-});
+
+    // Khôi phục lại trạng thái của trang
+    window.location.reload();
+}
+
