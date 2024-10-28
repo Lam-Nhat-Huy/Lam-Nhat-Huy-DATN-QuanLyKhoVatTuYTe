@@ -5,6 +5,55 @@
         #notification_content p {
             font-size: 14px;
         }
+
+        /* Áp dụng chỉ cho phân trang có class nk (Nhật ký xuất kho) */
+        .pagination.nk .page-link {
+            color: #fff;
+            /* Màu chữ trắng */
+            background-color: #28a745;
+            /* Màu nền xanh lá */
+            border-color: #28a745;
+            /* Viền xanh lá */
+        }
+
+        .pagination.nk .page-link:hover {
+            background-color: #218838;
+            /* Màu xanh lá đậm hơn khi hover */
+            border-color: #1e7e34;
+        }
+
+        .pagination.nk .page-item.active .page-link {
+            background-color: #218838;
+            /* Màu xanh lá đậm cho nút đang được chọn */
+            border-color: #1e7e34;
+            color: #fff;
+            /* Màu chữ trắng */
+        }
+
+        /* Áp dụng chỉ cho phân trang có class nk (Nhật ký xuất kho) */
+        .pagination.tk .page-link {
+            color: #fff;
+            /* Màu chữ trắng */
+            background-color: #a79428;
+            /* Màu nền xanh lá */
+            border-color: #a79428;
+            /* Viền xanh lá */
+        }
+
+        .pagination.tk .page-link:hover {
+            background-color: #a79428;
+            /* Màu xanh lá đậm hơn khi hover */
+            border-color: #a79428;
+        }
+
+        .pagination.tk .page-item.active .page-link {
+            background-color: #a79428;
+            /* Màu xanh lá đậm cho nút đang được chọn */
+            border-color: #a79428;
+            color: #fff;
+            /* Màu chữ trắng */
+        }
+        
     </style>
     <!-- Tải jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -81,7 +130,6 @@
             });
         </script>
     @endif
-
     <div class="card mb-5 mb-xl-8">
         <div class="row gy-5 g-xl-8">
             <!--begin::Col-->
@@ -119,10 +167,10 @@
                                         </svg>
                                     </span>
                                     <!--end::Svg Icon-->
-                                    <a href="#" class="text-warning fw-bold fs-6">Đơn Hàng: <span>56</span></a>
+                                    <a href="#" class="text-warning fw-bold fs-6">Số lượng nhập tháng
+                                        {{ now()->format('m') }}: <span>{{ $importTotal }} thiết bị</span></a>
                                 </div>
                                 <!--end::Col-->
-
                                 <!--begin::Col-->
                                 <div class="bg-light-danger px-6 py-8 rounded-2 me-7 mb-7 flex-fill col-md-3">
                                     <!--begin::Svg Icon | path: icons/duotune/abstract/abs027.svg-->
@@ -138,7 +186,8 @@
                                         </svg>
                                     </span>
                                     <!--end::Svg Icon-->
-                                    <a href="#" class="text-danger fw-bold fs-6 mt-2">Đơn Đặt Hàng: 11</a>
+                                    <a href="#" class="text-danger fw-bold fs-6">Số lượng xuất tháng
+                                        {{ now()->format('m') }}: <span>{{ $exportTotal }}</span></a>
                                 </div>
 
                                 <!--end::Col-->
@@ -156,7 +205,8 @@
                                         </svg>
                                     </span>
                                     <!--end::Svg Icon-->
-                                    <a href="#" class="text-success fw-bold fs-6 mt-2">Tổng Chi: 100,000VNĐ</a>
+                                    <a href="#" class="text-success fw-bold fs-6">Tổng chi tháng
+                                        {{ now()->format('m') }}: {{ number_format($expenseTotal, 0, ',', '.') }} VNĐ</a>
                                 </div>
                             </div>
                             <!--end::Row-->
@@ -169,219 +219,99 @@
             </div>
             <!--end::Col-->
             <div class="col-xxl-7">
-                <!--begin::List Widget 5-->
-                <div class="card card-xxl-stretch">
-                    <!--begin::Header-->
+                <div class="card card-xxl-stretch h-100">
+                    <!-- Header -->
                     <div class="card-header align-items-center border-0 bg-light rounded shadow-sm">
                         <h3 class="card-title align-items-start flex-column">
-                            <span class="fw-bolder mb-2 text-dark fs-4">Cảnh Báo Tồn Kho</span>
-                            <span class="text-danger fw-bold fs-6">14 sản phẩm</span>
+                            <span class="fw-bolder mb-2 text-dark fs-4">Cảnh Báo Tồn Kho Thấp</span>
+                            <span class="text-danger fw-bold fs-6">{{ $warnings->total() }} sản phẩm</span>
                         </h3>
                     </div>
-                    <!--end::Header-->
-
-                    <!--begin::Body-->
-                    <div class="card-body pt-5">
-                        <!--begin::Timeline-->
-                        <div class="timeline-label">
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">08:42</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-exclamation-circle text-warning fs-2"></i>
+                    <!-- Body -->
+                    <div class="card-body pt-5 d-flex flex-column justify-content-between">
+                        <div class="timeline-label flex-grow-1">
+                            @foreach ($warnings as $warning)
+                                <div class="timeline-item">
+                                    <div class="timeline-label fw-bolder text-gray-800 fs-6">{{ now()->format('H:i') }}
+                                    </div>
+                                    <div class="timeline-badge">
+                                        <i class="fa fa-exclamation-circle text-warning fs-2"></i>
+                                    </div>
+                                    <div class="fw-normal timeline-content text-muted ps-3">
+                                        Sản phẩm {{ $warning->equipments->name }} (Mã SP: {{ $warning->code }}) chỉ còn
+                                        {{ $warning->current_quantity }} đơn vị trong kho.
+                                        @if ($warning->current_quantity <= 0)
+                                            <span class="text-danger">Hết hàng</span>.
+                                        @else
+                                            <span class="text-warning">Gần hết hàng</span>.
+                                        @endif
+                                    </div>
                                 </div>
-                                <!--end::Badge-->
-                                <!--begin::Text-->
-                                <div class="fw-normal timeline-content text-muted ps-3">Sản phẩm XYZ (Mã SP: 12345) đang
-                                    gần hết hàng. Cần nhập thêm để tránh hết hàng.</div>
-                                <!--end::Text-->
-                            </div>
-                            <!--end::Item-->
-
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">09:15</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-exclamation-circle text-warning fs-2"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Text-->
-                                <div class="fw-normal timeline-content text-muted ps-3">Sản phẩm ABC (Mã SP: 67890) đã hết
-                                    hàng trong kho.</div>
-                                <!--end::Text-->
-                            </div>
-                            <!--end::Item-->
-
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">10:30</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-exclamation-circle text-warning fs-2"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Text-->
-                                <div class="fw-normal timeline-content text-muted ps-3">Cảnh báo: Sản phẩm DEF (Mã SP:
-                                    11223) chỉ còn 5 đơn vị trong kho.</div>
-                                <!--end::Text-->
-                            </div>
-                            <!--end::Item-->
-
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">11:45</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-exclamation-circle text-warning fs-2"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Text-->
-                                <div class="fw-normal timeline-content text-muted ps-3">Sản phẩm GHI (Mã SP: 44556) tồn kho
-                                    đang dưới mức an toàn.</div>
-                                <!--end::Text-->
-                            </div>
-                            <!--end::Item-->
-
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">13:20</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-exclamation-circle text-warning fs-2"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Text-->
-                                <div class="fw-normal timeline-content text-muted ps-3">Thông báo: Hết hàng sản phẩm JKL
-                                    (Mã SP: 78901). Hãy liên hệ nhà cung cấp.</div>
-                                <!--end::Text-->
-                            </div>
-                            <!--end::Item-->
+                            @endforeach
                         </div>
-                        <!--end::Timeline-->
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-center mt-4">
+                            <ul class="pagination pagination-lg tk">
+                                {{ $warnings->appends(['export_log_page' => request('export_log_page')])->links('pagination::bootstrap-4') }}
+                            </ul>
+                        </div>
                     </div>
-                    <!--end: Card Body-->
                 </div>
-                <!--end: List Widget 5-->
-
             </div>
             <!--end::Col-->
-
-            <div class="col-xl-5">
-                <!--begin::List Widget 3-->
-                <div class="card card-xl-stretch mb-xl-8">
-                    <!--begin::Header-->
+            <div class="col-xxl-5">
+                <div class="card card-xxl-stretch h-100">
+                    <!-- Header -->
                     <div class="card-header border-0">
                         <h3 class="card-title fw-bolder text-dark">Nhật ký xuất kho</h3>
                     </div>
-                    <!--end::Header-->
-                    <!--begin::Body-->
-                    <div class="card-body pt-2">
-                        <!--begin::Item-->
-                        <div class="d-flex align-items-center mb-8">
-                            <!--begin::Bullet-->
-                            <span class="bullet bullet-vertical h-40px bg-warning"></span>
-                            <!--end::Bullet-->
-                            <!--begin::Checkbox-->
-                            <div class="form-check form-check-custom form-check-solid mx-5">
-                                <input class="form-check-input" type="checkbox" value="">
-                            </div>
-                            <!--end::Checkbox-->
-                            <!--begin::Description-->
+                    <!-- Body -->
+                    <div class="card-body pt-2 d-flex flex-column justify-content-between">
+                        @if ($exportLog->isEmpty())
+                            <div class="text-center text-muted">Không có nhật ký xuất kho</div>
+                        @else
                             <div class="flex-grow-1">
-                                <a href="#" class="text-gray-800 text-hover-primary fw-bolder fs-6">Xuất hàng theo
-                                    đơn 123</a>
-                                <span class="text-muted fw-bold d-block">Hạn trong 5 ngày</span>
+                                @foreach ($exportLog as $export)
+                                    <div class="d-flex align-items-center mb-8">
+                                        <span
+                                            class="bullet bullet-vertical h-40px bg-{{ $loop->index % 2 == 0 ? 'warning' : 'primary' }}"></span>
+                                        <div class="form-check form-check-custom form-check-solid mx-5">
+                                            <i class="fa fa-check-circle text-success fs-3"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <a href="#" class="text-gray-800 text-hover-primary fw-bolder fs-6">Xuất
+                                                hàng theo đơn {{ $export->code }}</a>
+                                            <span
+                                                class="text-muted fw-bold d-block">{{ \Carbon\Carbon::parse($export->export_date)->format('d/m/Y H:i') }}</span>
+                                            @foreach ($export->exportDetail as $detail)
+                                                <span>Sản phẩm: {{ $detail->equipments->name }} - Số lượng:
+                                                    {{ $detail->quantity }}</span><br>
+                                            @endforeach
+                                        </div>
+                                        <span
+                                            class="badge badge-light-{{ $loop->index % 2 == 0 ? 'warning' : 'primary' }} fs-8 fw-bolder">Mới</span>
+                                    </div>
+                                @endforeach
                             </div>
-                            <!--end::Description-->
-                            <span class="badge badge-light-warning fs-8 fw-bolder">Mới</span>
-                        </div>
-                        <!--end:Item-->
-                        <!--begin::Item-->
-                        <div class="d-flex align-items-center mb-8">
-                            <!--begin::Bullet-->
-                            <span class="bullet bullet-vertical h-40px bg-primary"></span>
-                            <!--end::Bullet-->
-                            <!--begin::Checkbox-->
-                            <div class="form-check form-check-custom form-check-solid mx-5">
-                                <input class="form-check-input" type="checkbox" value="">
+                            <!-- Pagination -->
+                            <div class="d-flex justify-content-center mt-4">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination pagination-lg nk">
+                                        {{ $exportLog->appends(['low_inventory_page' => request('low_inventory_page')])->links('pagination::bootstrap-4') }}
+                                    </ul>
+                                </nav>
                             </div>
-                            <!--end::Checkbox-->
-                            <!--begin::Description-->
-                            <div class="flex-grow-1">
-                                <a href="#" class="text-gray-800 text-hover-primary fw-bolder fs-6">Xuất hàng theo
-                                    đơn 456</a>
-                                <span class="text-muted fw-bold d-block">Hạn trong 2 ngày</span>
-                            </div>
-                            <!--end::Description-->
-                            <span class="badge badge-light-primary fs-8 fw-bolder">Mới</span>
-                        </div>
-                        <!--end:Item-->
-                        <!--begin::Item-->
-                        <div class="d-flex align-items-center mb-8">
-                            <!--begin::Bullet-->
-                            <span class="bullet bullet-vertical h-40px bg-danger"></span>
-                            <!--end::Bullet-->
-                            <!--begin::Checkbox-->
-                            <div class="form-check form-check-custom form-check-solid mx-5">
-                                <input class="form-check-input" type="checkbox" value="">
-                            </div>
-                            <!--end::Checkbox-->
-                            <!--begin::Description-->
-                            <div class="flex-grow-1">
-                                <a href="#" class="text-gray-800 text-hover-primary fw-bolder fs-6">Xuất hàng theo
-                                    đơn 789</a>
-                                <span class="text-muted fw-bold d-block">Hạn trong 12 ngày</span>
-                            </div>
-                            <!--end::Description-->
-                            <span class="badge badge-light-danger fs-8 fw-bolder">Mới</span>
-                        </div>
-                        <!--end:Item-->
-                        <!--begin::Item-->
-                        <div class="d-flex align-items-center">
-                            <!--begin::Bullet-->
-                            <span class="bullet bullet-vertical h-40px bg-success"></span>
-                            <!--end::Bullet-->
-                            <!--begin::Checkbox-->
-                            <div class="form-check form-check-custom form-check-solid mx-5">
-                                <input class="form-check-input" type="checkbox" value="">
-                            </div>
-                            <!--end::Checkbox-->
-                            <!--begin::Description-->
-                            <div class="flex-grow-1">
-                                <a href="#" class="text-gray-800 text-hover-primary fw-bolder fs-6">Xuất hàng theo
-                                    đơn 101112</a>
-                                <span class="text-muted fw-bold d-block">Hạn trong 1 tuần</span>
-                            </div>
-                            <!--end::Description-->
-                            <span class="badge badge-light-success fs-8 fw-bolder">Mới</span>
-                        </div>
-                        <!--end:Item-->
+                        @endif
                     </div>
-                    <!--end::Body-->
                 </div>
-                <!--end:List Widget 3-->
             </div>
-
         </div>
-
         <div class="row mb-5 mt-5 mb-xl-8" style="padding: 0 25px">
             <!--begin::Col-->
             <div class="col-xxl-6">
-                <div class="card mb-5 mb-xl-8">
-                    <div class="chart-container">
-                        <h2>Biểu đồ tồn kho theo thời gian</h2>
+                <div class="card mb-5 mb-xl-8 shadow-sm border-0">
+                    <div class="chart-container p-4">
+                        <h2 class="chart-title text-center mb-4">Biểu đồ tồn kho theo thời gian</h2>
                         <canvas id="inventoryChart"></canvas>
                     </div>
                 </div>
@@ -389,14 +319,15 @@
             <!--end::Col-->
 
             <!--begin::Col-->
-            <div class="col-xxl-6">
-                <div class="card mb-5 mb-xl-8">
-                    <div class="forecast-container">
-                        <h2>Dự Báo Tồn Kho Tương Lai</h2>
-                        <canvas id="forecastChart"></canvas>
+            <div class="col-xxl-6 mx-auto">
+                <div class="card mb-5 mb-xl-8 shadow-sm border-0">
+                    <div class="forecast-container p-4">
+                        <h2 class="forecast-title text-center mb-4">Dự Báo Tồn Kho Tương Lai</h2>
+                        <canvas id="forecastChart" width="400" height="200"></canvas>
                     </div>
                 </div>
             </div>
+            
             <!--end::Col-->
         </div>
     </div>
@@ -405,109 +336,89 @@
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Inventory Chart data and configuration
-            const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-            const data = {
-                labels: labels,
+        const ctx = document.getElementById('inventoryChart').getContext('2d');
+        const inventoryChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                    @foreach ($inventoryData as $data)
+                        "{{ date('F', mktime(0, 0, 0, $data->month, 10)) }}",
+                    @endforeach
+                ],
                 datasets: [{
-                    label: 'Tồn Kho',
-                    data: [12, 19, 3, 5, 2, 3, 7],
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
+                    label: 'Tồn kho (Số lượng)',
+                    data: [
+                        @foreach ($inventoryData as $data)
+                            {{ $data->total_quantity }},
+                        @endforeach
+                    ],
+                    borderWidth: 3,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                    pointRadius: 5,
+                    fill: true,
                 }]
-            };
-
-            const config = {
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            label: function(context) {
+                                return `Số lượng: ${context.raw}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Tháng'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Số lượng tồn kho'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var forecastData = @json($forecastTrendData);
+            var ctx = document.getElementById('forecastChart').getContext('2d');
+        
+            new Chart(ctx, {
                 type: 'line',
-                data: data,
+                data: {
+                    labels: forecastData.map(item => item.month),
+                    datasets: [{
+                        label: 'Dự báo tồn kho',
+                        data: forecastData.map(item => item.inventory),
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }]
+                },
                 options: {
-                    responsive: true,
                     scales: {
-                        x: {
-                            beginAtZero: true
-                        },
                         y: {
                             beginAtZero: true
                         }
                     }
                 }
-            };
-
-            const ctx = document.getElementById('inventoryChart').getContext('2d');
-            new Chart(ctx, config);
-
-            // Low Stock Alerts
-            const lowAlerts = [{
-                    text: 'Thiết bị A đã đạt ngưỡng thấp',
-                    quantity: 5
-                },
-                {
-                    text: 'Thiết bị B sắp hết hàng',
-                    quantity: 2
-                }
-            ];
-
-            const lowAlertList = document.getElementById('lowAlertList');
-            lowAlerts.forEach(alert => {
-                const li = document.createElement('li');
-                li.textContent = `${alert.text} (${alert.quantity} items)`;
-                li.style.color = '#721c24';
-                lowAlertList.appendChild(li);
-            });
-
-            // High Stock Alerts
-            const highAlerts = [{
-                    text: 'Thiết bị C vượt mức tồn kho tối đa',
-                    quantity: 100
-                },
-                {
-                    text: 'Thiết bị D tồn kho cao bất thường',
-                    quantity: 150
-                }
-            ];
-
-            const highAlertList = document.getElementById('highAlertList');
-            highAlerts.forEach(alert => {
-                const li = document.createElement('li');
-                li.textContent = `${alert.text} (${alert.quantity} items)`;
-                li.style.color = '#856404';
-                highAlertList.appendChild(li);
             });
         });
-
-        const forecastLabels = @json(array_column($forecastData, 'month'));
-        const forecastValues = @json(array_column($forecastData, 'inventory'));
-
-        const forecastData = {
-            labels: forecastLabels,
-            datasets: [{
-                label: 'Dự Báo Tồn Kho',
-                data: forecastValues,
-                backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                borderColor: 'rgba(255, 206, 86, 1)',
-                borderWidth: 1
-            }]
-        };
-
-        const forecastConfig = {
-            type: 'line',
-            data: forecastData,
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        beginAtZero: true
-                    },
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        };
-
-        const forecastCtx = document.getElementById('forecastChart').getContext('2d');
-        new Chart(forecastCtx, forecastConfig);
-    </script>
+        </script>
 @endsection
