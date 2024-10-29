@@ -244,7 +244,7 @@ function checkInputs() {
 
     if (allFilled) {
         saveButton.disabled = false;
-        saveButton.textContent = "Lưu phiếu tạm";
+        saveButton.textContent = "Lưu phiếu";
 
         if (isAdmin) {
             completeButton.disabled = false;
@@ -255,7 +255,7 @@ function checkInputs() {
         }
     } else {
         saveButton.disabled = true;
-        saveButton.textContent = "Vui lòng nhập đủ số lượng";
+        saveButton.textContent = "Lưu phiếu";
         completeButton.disabled = true;
         completeButton.textContent = "Không thể hoàn thành";
     }

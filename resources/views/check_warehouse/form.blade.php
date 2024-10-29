@@ -218,7 +218,7 @@
                                 </button>
                             </div>
 
-                            <div class="dropdown-menu w-90px" id="productDropdown" style="display:none;"></div>
+                            <div class="dropdown-menu w-850px" id="productDropdown" style="display:none;"></div>
 
                             <div class="modal fade" id="importantNotificationModal" data-bs-backdrop="static"
                                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="DetailModal" aria-hidden="true">
