@@ -11,10 +11,10 @@
             <div class="modal-body text-center" style="padding-bottom: 0px;">
                 <form action="" method="">
                     @csrf
-                    <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt tất cả phiếu đã chọn?</p>
+                    <p class="text-dark mb-4">Bạn có chắc chắn muốn duyệt tất cả phiếu đã chọn?</p>
                 </form>
             </div>
-            <div class="modal-footer justify-content-center border-0">
+            <div class="modal-footer justify-content-center border-0 pt-0">
                 <button type="button" class="btn btn-sm btn-secondary btn-sm px-4"
                     data-bs-dismiss="modal">Đóng</button>
                 <button type="button" class="btn btn-sm btn-success px-4">
@@ -61,10 +61,10 @@
             <div class="modal-body text-center" style="padding-bottom: 0px;">
                 <form action="" method="">
                     @csrf
-                    <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt phiếu này?</p>
+                    <p class="text-dark mb-4">Bạn có chắc chắn muốn duyệt phiếu này?</p>
                 </form>
             </div>
-            <div class="modal-footer justify-content-center border-0">
+            <div class="modal-footer justify-content-center border-0 pt-0">
                 <button type="button" class="btn btn-sm btn-secondary btn-sm px-4"
                     data-bs-dismiss="modal">Đóng</button>
                 <button type="button" class="btn btn-sm btn-success px-4">

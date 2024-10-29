@@ -66,6 +66,10 @@ class ExportController extends Controller
     {
         $title = 'Tạo phiếu xuất kho';
 
+        $userCode = session('user_code');
+        $user = Users::where('code', $userCode)->first();
+        $userName = $user->last_name . ' ' . $user->first_name;
+
         if ($request->ajax()) {
             $equipment_code = $request->input('equipment_code');
             $inventories = Inventories::with('equipments')
@@ -87,7 +91,8 @@ class ExportController extends Controller
                 'inventories' => $this->inventories,
                 'users' => $this->users,
                 'departments' => $this->departments,
-                'title' => $title
+                'title' => $title,
+                'userName' => $userName
             ]
         );
     }

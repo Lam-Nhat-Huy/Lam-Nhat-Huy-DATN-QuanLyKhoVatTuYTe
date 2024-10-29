@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <!-- Form thêm vật tư -->
+        <!-- Form thêm thiết bị -->
         <form action="{{ route('warehouse.update_export', $export->code) }}" id="warehouse-export-form" method="POST">
             @csrf
             <div class="container mt-4">
@@ -44,11 +44,11 @@
                         <div class="mt-3">
                             <div class="row mb-3">
                                 <div class="col-12 mb-2">
-                                    <label for="material_code" class="required form-label mb-2">Tên vật tư</label>
+                                    <label for="material_code" class="required form-label mb-2">Tên thiết bị</label>
                                     <div class="d-flex align-items-center">
                                         <select class="form-select setupSelect2 bg-white form-select-sm rounded-pill"
                                             id="material_code" name="equipment_code" style="width: 100%;">
-                                            <option value="" selected>Chọn vật tư</option>
+                                            <option value="" selected>Chọn thiết bị</option>
                                             @foreach ($equipments as $equipment)
                                                 <option value="{{ $equipment->code }}"
                                                     data-total-inventory="{{ $equipment->total_inventory }}">
@@ -86,8 +86,9 @@
                                                                     style="font-size: 16px; font-weight: 600; color: #495057;">
                                                                     Thông tin tồn kho trống</h5>
                                                                 <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                                                    Hiện tại chưa có vật tư nào được thêm vào. Vui lòng kiểm
-                                                                    tra lại hoặc tạo mới vật tư để bắt đầu.
+                                                                    Hiện tại chưa có thiết bị nào được thêm vào. Vui lòng
+                                                                    kiểm
+                                                                    tra lại hoặc tạo mới thiết bị để bắt đầu.
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -103,7 +104,8 @@
                             <table class="table table-hover table-striped align-middle text-center" id="material-list">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th class="">Tên vật tư</th>
+                                        <th class="text-center">Mã thiết bị</th>
+                                        <th class="">Tên thiết bị</th>
                                         <th class="">Số lô</th>
                                         <th class="">Số lượng</th>
                                         <th class="">Hành động</th>
@@ -111,12 +113,14 @@
                                 </thead>
                                 <tbody id="material-list-body">
                                     @foreach ($export->exportDetail as $detail)
-                                        <tr data-batch-number="{{$detail->batch_number}}" data-equipment-code="{{$detail->equipment_code}}">
+                                        <tr data-batch-number="{{ $detail->batch_number }}"
+                                            data-equipment-code="{{ $detail->equipment_code }}">
+                                            <td>{{ $detail->equipments->code }}</td>
                                             <td>{{ $detail->equipments->name }}</td>
                                             <td>{{ $detail->batch_number }}</td>
                                             <td class="text-center d-flex justify-content-center"><input type="number"
                                                     class="form-control form-control-sm border border-success rounded-pill quantity-input-add w-50"
-                                                    value="{{ $detail->quantity }}" placeholder="Số lượng"
+                                                    value="{{ $detail->quantity }}" max="" placeholder="Số lượng"
                                                     style="text-align: left;">
                                             </td>
                                             <td>
@@ -161,7 +165,8 @@
                             </div>
                             <div class="mb-4">
                                 <label for="created_by" class="form-label fw-semibold text-muted">Người tạo</label>
-                                <input type="text" name="created_by" value="{{ $export->user->last_name . ' ' . $export->user->first_name }}"
+                                <input type="text" name="created_by"
+                                    value="{{ $export->user->last_name . ' ' . $export->user->first_name }}"
                                     class="form-control form-control-sm bg-white rounded-pill py-2 px-3" id="export_at"
                                     disabled>
                             </div>
@@ -170,7 +175,7 @@
                                 <label for="export_at" class="form-label fw-semibold text-muted">Ngày xuất</label>
                                 <input type="date" name="export_at"
                                     class="form-control form-control-sm rounded-pill py-2 px-3" id="export_at"
-                                    value="{{$export->export_date}}" required>
+                                    value="{{ $export->export_date }}" required>
                             </div>
 
                             <div class="mb-4">

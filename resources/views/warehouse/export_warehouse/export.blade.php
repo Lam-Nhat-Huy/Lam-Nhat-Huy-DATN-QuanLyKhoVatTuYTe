@@ -196,7 +196,7 @@
                                                                     <td class="text-start w-50"><strong>Phòng ban</strong>
                                                                     </td>
                                                                     <td class="text-start text-dark">
-                                                                        {{ $export->departments->name }}
+                                                                        {{ $export->departments->name ?? 'Không có' }}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -240,7 +240,8 @@
                                                                     <tr class="text-center">
                                                                         <td>{{ $loop->iteration }}</td>
                                                                         <td>{{ $detail->equipment_code }}</td>
-                                                                        <td>{{ $detail->equipments->name ?? 'Không có' }}
+                                                                        <td class="text-start">
+                                                                            {{ $detail->equipments->name ?? 'Không có' }}
                                                                         </td>
                                                                         <td>{{ $detail->batch_number }}</td>
                                                                         <td>{{ $detail->quantity }}</td>
@@ -307,7 +308,7 @@
                                                                 <tr>
                                                                     <td class="text-start" style="width: 40%;">
                                                                         <strong>Phòng ban:</strong><span
-                                                                            class="ms-2">{{ $export->departments->name }}</span>
+                                                                            class="ms-2">{{ $export->departments->name ?? 'Không có' }}</span>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -341,7 +342,8 @@
                                                                         <tr class="text-center border border-dark">
                                                                             <td>{{ $loop->iteration }}</td>
                                                                             <td>{{ $details->equipment_code }}</td>
-                                                                            <td>{{ $details->equipments->name ?? 'Không có' }}
+                                                                            <td class="text-start">
+                                                                                {{ $details->equipments->name ?? 'Không có' }}
                                                                             </td>
                                                                             <td>{{ $details->batch_number }}</td>
                                                                             <td>{{ $details->quantity }}</td>
@@ -392,13 +394,13 @@
                                                 <form action="{{ route('warehouse.approve_export', $export->code) }}"
                                                     method="POST">
                                                     @csrf
-                                                    <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt phiếu này?</p>
-                                                    <div class="modal-footer justify-content-center border-0">
+                                                    <p class="text-dark mb-4">Bạn có chắc chắn muốn duyệt phiếu này?</p>
+                                                    <div class="modal-footer justify-content-center border-0 pt-0">
                                                         <button type="button"
-                                                            class="btn btn-sm btn-secondary btn-sm px-4"
+                                                            class="btn btn-sm btn-secondary btn-sm px-4 rounded-pill"
                                                             data-bs-dismiss="modal">Đóng</button>
                                                         <button type="submit"
-                                                            class="btn btn-sm btn-success px-4">Duyệt</button>
+                                                            class="btn btn-sm btn-success px-4 rounded-pill">Duyệt</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -428,10 +430,10 @@
                                                         value="{{ $export->code }}">
                                                 </form>
                                             </div>
-                                            <div class="modal-footer justify-content-center border-0">
-                                                <button type="button" class="btn btn-sm btn-secondary px-4"
+                                            <div class="modal-footer justify-content-center border-0 pt-0">
+                                                <button type="button" class="btn btn-sm btn-secondary px-4 rounded-pill"
                                                     data-bs-dismiss="modal">Đóng</button>
-                                                <button type="button" class="btn btn-sm btn-danger px-4"
+                                                <button type="button" class="btn btn-sm btn-danger px-4 rounded-pill"
                                                     onclick="document.getElementById('deleteForm{{ $export->code }}').submit();">Xóa</button>
                                             </div>
                                         </div>

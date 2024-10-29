@@ -13,6 +13,11 @@
         .expired>td {
             color: red;
         }
+
+        .is-invalid {
+            border-color: red !important;
+            box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
     </style>
 @endsection
 
@@ -35,20 +40,20 @@
             </div>
         </div>
 
-        <!-- Form thêm vật tư -->
+        <!-- Form thêm thiết bị -->
         <form action="{{ route('warehouse.store_export') }}" id="warehouse-export-form" method="POST">
             @csrf
             <div class="container mt-4">
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-9">
                         <div class="mt-3">
                             <div class="row mb-3">
                                 <div class="col-12 mb-2">
-                                    <label for="material_code" class="required form-label mb-2">Tên vật tư</label>
+                                    <h6>Chọn thiết bị:</h6>
                                     <div class="d-flex align-items-center">
                                         <select class="form-select setupSelect2 bg-white form-select-sm rounded-pill"
                                             id="material_code" name="equipment_code" style="width: 100%;">
-                                            <option value="" selected>Chọn vật tư</option>
+                                            <option value="" selected>Chọn thiết bị</option>
                                             @foreach ($equipments as $equipment)
                                                 <option value="{{ $equipment->code }}"
                                                     data-total-inventory="{{ $equipment->total_inventory }}">
@@ -65,6 +70,7 @@
                                         <table class="table table-hover table-striped align-middle text-center">
                                             <thead class="table-dark">
                                                 <tr>
+                                                    <th class="text-center">Mã thiết bị</th>
                                                     <th class="text-center">Số lô</th>
                                                     <th class="text-center">Tồn kho</th>
                                                     <th class="text-center">Hạn dùng</th>
@@ -86,8 +92,9 @@
                                                                     style="font-size: 16px; font-weight: 600; color: #495057;">
                                                                     Thông tin tồn kho trống</h5>
                                                                 <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                                                    Hiện tại chưa có vật tư nào được thêm vào. Vui lòng kiểm
-                                                                    tra lại hoặc tạo mới vật tư để bắt đầu.
+                                                                    Hiện tại chưa có thiết bị nào được thêm vào. Vui lòng
+                                                                    kiểm
+                                                                    tra lại hoặc tạo mới thiết bị để bắt đầu.
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -99,11 +106,18 @@
                                 </div>
                             </div>
                         </div>
+
+
                         <div class="table-responsive">
+                            <h6 class="mb-3">Danh thiết bị xuất kho:</h6>
+
                             <table class="table table-hover table-striped align-middle text-center" id="material-list">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th class="">Tên vật tư</th>
+                                        <th class="text-center">Mã thiết bị</th>
+                                        <th
+                                            style="max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            Tên thiết bị</th>
                                         <th class="">Số lô</th>
                                         <th class="">Số lượng</th>
                                         <th class="">Hành động</th>
@@ -113,12 +127,11 @@
 
                                 </tbody>
                             </table>
-
                         </div>
 
                     </div>
 
-                    <div class="col-4">
+                    <div class="col-3">
                         <div class="card border-0 shadow-sm p-4 mb-4 bg-white rounded-4 mt-3">
                             <h6 class="mb-4 fw-bold text-dark text-uppercase"><i
                                     class="fas fa-info-circle me-2 text-primary"></i>Thông tin phiếu xuất</h6>
@@ -142,7 +155,7 @@
                             </div>
                             <div class="mb-4">
                                 <label for="created_by" class="form-label fw-semibold text-muted">Người tạo</label>
-                                <input type="text" name="created_by" value="{{ $users->first_name }}"
+                                <input type="text" name="created_by" value="{{ $userName }}"
                                     class="form-control form-control-sm bg-white rounded-pill py-2 px-3" id="export_at"
                                     disabled>
                             </div>
