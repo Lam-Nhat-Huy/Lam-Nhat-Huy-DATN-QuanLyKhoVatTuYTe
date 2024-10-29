@@ -292,8 +292,10 @@
                                                                             $discount = $detail->discount ?? 0;
                                                                             $vat = $detail->VAT ?? 0;
 
-                                                                            $totalPrice =
-                                                                                $quantity * ($price - $discount);
+                                                                            $itemPrice = $quantity * $price;
+                                                                            $itemDiscount =
+                                                                                $itemPrice * ($discount / 100);
+                                                                            $totalPrice = $itemPrice - $itemDiscount;
                                                                             $totalPriceWithVAT =
                                                                                 $totalPrice * (1 + $vat / 100);
                                                                         @endphp
@@ -601,10 +603,16 @@
                                                                                                         $detail->VAT ??
                                                                                                         0;
 
-                                                                                                    $totalPrice =
+                                                                                                    $itemPrice =
                                                                                                         $quantity *
-                                                                                                        ($price -
-                                                                                                            $discount);
+                                                                                                        $price;
+                                                                                                    $itemDiscount =
+                                                                                                        $itemPrice *
+                                                                                                        ($discount /
+                                                                                                            100);
+                                                                                                    $totalPrice =
+                                                                                                        $itemPrice -
+                                                                                                        $itemDiscount;
                                                                                                     $totalPriceWithVAT =
                                                                                                         $totalPrice *
                                                                                                         (1 +
