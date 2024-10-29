@@ -126,7 +126,7 @@ class DepartmentController extends Controller
     {
         $data = $request->validated();
 
-        $data['code'] = 'DEP' . $this->generateRandomString(9);
+        $data['code'] = 'DEP' . $this->generateRandomString(7);
 
         $data['name'] = $request->name;
 
