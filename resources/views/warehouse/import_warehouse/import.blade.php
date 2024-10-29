@@ -122,6 +122,7 @@
                                                                 <button type="button"
                                                                     class="btn btn-danger px-2 py-1 btn-sm rounded-pill me-2"
                                                                     data-bs-toggle="modal"
+                                                                    {{ $item->no_action == 1 ? 'disabled' : '' }}
                                                                     data-bs-target="#delete-{{ $item->code }}">
                                                                     <i class="fa fa-trash"
                                                                         style="margin-bottom: 2px;"></i>Hủy

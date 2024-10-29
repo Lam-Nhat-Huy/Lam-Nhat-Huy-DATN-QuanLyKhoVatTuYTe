@@ -17,6 +17,7 @@ return new class extends Migration
             $table->char('receipt_no', 8);
             $table->timestamp('receipt_date')->nullable();
             $table->string('receipt_type', 55)->nullable();
+            $table->boolean('no_action')->default(false);
             $table->char('created_by', 10);
             $table->timestamps();
             $table->softDeletes();

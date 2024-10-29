@@ -324,6 +324,7 @@
                                                 <div class="button-group">
                                                     <button class="btn btn-sm btn-twitter rounded-pill me-2"
                                                         data-bs-toggle="modal"
+                                                        {{ $item->no_action == 1 ? 'disabled' : '' }}
                                                         data-bs-target="#restore-{{ $item->code }}" type="button">
                                                         <i class="fas fa-rotate-right"
                                                             style="margin-bottom: 2px;"></i>Khôi Phục

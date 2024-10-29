@@ -477,17 +477,6 @@
             }, 1000);
         }
 
-        // Duyệt danh sách bị trùng
-        // function highlightDuplicatedEquipment(list_duplicated) {
-        //     list_duplicated.forEach(equipmentCode => {
-        //         const row = document.getElementById(`equipment-row-${equipmentCode}`);
-        //         if (row) {
-        //             row.style.backgroundColor = '#ffc700';
-        //             row.style.setProperty('--bs-table-accent-bg', 'none');
-        //         }
-        //     });
-        // }
-
         // Lấy dữ liệu từ danh sách thiết bị yêu cầu
         function getEquipmentList() {
             let equipmentList = [];
@@ -627,18 +616,9 @@
                     .then(data => {
                         if (data.success) {
                             toastr.success(data.message);
-                            setTimeout(() => {
-                                window.location.href = "{{ route('equipment_request.import') }}";
-                            }, 1000);
+                            window.location.href = "{{ route('equipment_request.import') }}";
                         } else {
                             toastr.error(data.message);
-                            // countDown();
-                            // document.getElementById('important_error').classList.remove('d-none');
-                            // highlightDuplicatedEquipment(data.list_duplicated);
-
-                            // setTimeout(() => {
-                            //     document.getElementById('important_error').classList.add('d-none');
-                            // }, 21000);
                         }
                     })
                     .catch(error => console.error('Error:', error))
