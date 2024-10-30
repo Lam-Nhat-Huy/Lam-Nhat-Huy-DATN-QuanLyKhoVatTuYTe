@@ -13,6 +13,13 @@
         .expired>td {
             color: red;
         }
+
+        .is-invalid {
+            border-color: red !important;
+            background-color: #f8d7da;
+            box-shadow: none;
+            /* Loại bỏ hiệu ứng đổ bóng nếu có */
+        }
     </style>
 @endsection
 
@@ -118,17 +125,32 @@
                                             <td>{{ $detail->equipments->code }}</td>
                                             <td>{{ $detail->equipments->name }}</td>
                                             <td>{{ $detail->batch_number }}</td>
-                                            <td class="text-center d-flex justify-content-center"><input type="number"
-                                                    class="form-control form-control-sm border border-success rounded-pill quantity-input-add w-50"
-                                                    value="{{ $detail->quantity }}" max="" placeholder="Số lượng"
-                                                    style="text-align: left;">
+
+                                            @php
+                                                $inventory = $detail->equipments->inventories
+                                                    ->where('batch_number', $detail->batch_number)
+                                                    ->first();
+                                                $maxQuantity = $inventory ? $inventory->current_quantity : 0;
+                                            @endphp
+
+                                            <td class="text-center d-flex justify-content-center">
+                                                <input type="number"
+                                                    class="form-control form-control-sm border border-success rounded-pill quantity-input-add"
+                                                    style="max-width: 100px; " value="{{ $detail->quantity }}"
+                                                    max="{{ $maxQuantity }}" placeholder="Số lượng"
+                                                    style="text-align: left; width: 100px;">
+
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-danger btn-sm remove-material"
-                                                    style="font-size:10px"><i class="fa fa-trash"></i></button>
+                                                    style="font-size:10px">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     @endforeach
+
+
                                 </tbody>
                             </table>
 
@@ -210,4 +232,19 @@
         const csrfToken = '{{ csrf_token() }}';
     </script>
     <script src="{{ asset('js/warehouse/export_store.js') }}"></script>
+
+    <script>
+        document.querySelectorAll('.quantity-input-add').forEach(input => {
+            input.addEventListener('input', function() {
+                const max = parseInt(this.getAttribute('max')) || 0;
+                const value = parseInt(this.value) || 0;
+
+                if (value > max) {
+                    this.classList.add('is-invalid'); // Thêm class báo lỗi
+                } else {
+                    this.classList.remove('is-invalid'); // Xóa class báo lỗi
+                }
+            });
+        });
+    </script>
 @endsection

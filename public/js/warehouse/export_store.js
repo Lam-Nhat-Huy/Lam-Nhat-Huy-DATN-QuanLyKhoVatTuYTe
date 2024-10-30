@@ -31,11 +31,12 @@ $(document).ready(function () {
                         </thead>
                         <tbody>
                     `;
+
                     if (response.length > 0) {
                         response.forEach((inventory) => {
                             const initialQuantity = inventory.current_quantity;
                             const batchNumber = inventory.batch_number;
-                            const equipment_code = inventory.equipment_code;
+                            const equipmentCode = inventory.equipment_code;
                             const remainingQuantity =
                                 inventoryState[
                                     `${batchNumber}-${equipmentCode}`
@@ -43,8 +44,6 @@ $(document).ready(function () {
                             const currentDate = new Date();
                             let displayExpiryDate = "Không có";
                             let monthsDifference = null;
-
-                            equipmentName = inventory.equipments.name;
 
                             if (inventory.expiry_date) {
                                 const expiryDate = new Date(
@@ -69,28 +68,28 @@ $(document).ready(function () {
                                 data-batch-number="${batchNumber}" 
                                 data-initial-quantity="${initialQuantity}" 
                                 data-current-quantity="${remainingQuantity}"    
-                                data-equipment-name="${equipmentName}"> 
-                                <td class="text-center">${equipment_code}</td>
+                                data-equipment-name="${
+                                    inventory.equipments.name
+                                }">
+                                <td class="text-center">${equipmentCode}</td>
                                 <td class="text-center">${batchNumber}</td>
                                 <td class="text-center">${remainingQuantity}</td>
                                 <td class="text-center">${displayExpiryDate}</td>
                                 <td class="text-center d-flex justify-content-center">
                                     <input type="number" class="form-control form-control-sm border border-success rounded-pill quantity-input" 
-                                        min="1" max="${remainingQuantity}" placeholder="Số lượng" style="text-align: left;">
+                                        min="1" max="${remainingQuantity}" placeholder="Số lượng" style="text-align: left; width: 100px;">
                                 </td>
                                 <td class="text-center">
                                     <button type="button" class="btn btn-sm btn-danger rounded-pill add-quantity" style="font-size: 11px;">Thêm</button>
                                 </td>
-                            </tr>
-                            `;
+                            </tr>`;
                         });
                     } else {
                         tableContent += `
                         <tr id="noDataAlert">
                             <td colspan="5" class="text-center">
                                 <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
-                                    role="alert"
-                                    style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                    role="alert" style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                     <div class="mb-3">
                                         <i class="fas fa-file-invoice" style="font-size: 36px; color: #6c757d;"></i>
                                     </div>
@@ -102,26 +101,36 @@ $(document).ready(function () {
                                     </div>
                                 </div>
                             </td>
-                        </tr>
-                        `;
+                        </tr>`;
                     }
 
                     tableContent += `</tbody></table>`;
                     batchInfoContainer.html(tableContent);
 
-                    // Hàm thêm thiết bị
+                    // Bắt sự kiện nhập vào ô số lượng
+                    $(".quantity-input").on("input", function () {
+                        const maxQuantity = parseInt($(this).attr("max"));
+                        const inputQuantity = parseInt($(this).val());
+
+                        if (inputQuantity > maxQuantity) {
+                            $(this).addClass("is-invalid"); // Thêm viền đỏ nếu vượt quá số lượng
+                        } else {
+                            $(this).removeClass("is-invalid"); // Xóa viền đỏ nếu hợp lệ
+                        }
+                    });
+
+                    // Xử lý khi nhấn nút Thêm
                     $(".add-quantity").on("click", function () {
                         const row = $(this).closest("tr");
                         const batchNumber = row.data("batch-number");
                         const equipmentCode = $("#material_code").val();
                         const equipmentName = row.data("equipment-name");
                         const currentQuantity = row.data("current-quantity");
-                        const inputQuantity = parseInt(
-                            row.find(".quantity-input").val()
-                        );
                         const quantityInputField = row.find(".quantity-input");
+                        const inputQuantity = parseInt(
+                            quantityInputField.val()
+                        );
 
-                        // Kiểm tra nếu số lượng nhập vào không hợp lệ hoặc vượt quá tồn kho hiện tại
                         if (
                             !inputQuantity ||
                             isNaN(inputQuantity) ||
@@ -157,24 +166,43 @@ $(document).ready(function () {
                             existingInput.val(previousQuantity + inputQuantity);
                         } else {
                             const newRow = `
-                                <tr data-key="${uniqueKey}" data-batch-number="${batchNumber}" data-equipment-code="${equipmentCode}">
-                                    <td>${equipmentCode}</td>
-                                    <td class="text-start">${equipmentName}</td>
-                                    <td>${batchNumber}</td>
-                                    <td class="text-center d-flex justify-content-center">
-                                        <input type="number" class="form-control form-control-sm border border-success rounded-pill quantity-input-add w-50" 
-                                            value="${inputQuantity}" max="${currentQuantity}" placeholder="Số lượng" style="text-align: left;">
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm remove-material" style="font-size:10px">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>`;
+                            <tr data-key="${uniqueKey}" data-batch-number="${batchNumber}" data-equipment-code="${equipmentCode}">
+                                <td>${equipmentCode}</td>
+                                <td class="text-start">${equipmentName}</td>
+                                <td>${batchNumber}</td>
+                                <td class="text-center d-flex justify-content-center">
+                                    <input type="number" class="form-control form-control-sm border border-success rounded-pill quantity-input-add" 
+                                        value="${inputQuantity}" max="${currentQuantity}" placeholder="Số lượng" style="text-align: left; width: 100px;">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm remove-material" style="font-size:10px">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>`;
                             $("#material-list-body").append(newRow);
+
+                            // Gán sự kiện kiểm tra số lượng cho input vừa thêm vào
+                            $("#material-list-body").on(
+                                "input",
+                                ".quantity-input-add",
+                                function () {
+                                    const maxQuantity = parseInt(
+                                        $(this).attr("max")
+                                    );
+                                    const inputQuantity = parseInt(
+                                        $(this).val()
+                                    );
+
+                                    if (inputQuantity > maxQuantity) {
+                                        $(this).addClass("is-invalid"); // Thêm viền đỏ nếu vượt quá số lượng
+                                    } else {
+                                        $(this).removeClass("is-invalid"); // Xóa viền đỏ nếu hợp lệ
+                                    }
+                                }
+                            );
                         }
 
-                        // Cập nhật tồn kho sau khi thêm số lượng
                         const remainingQuantity =
                             currentQuantity - inputQuantity;
                         row.find("td:nth-child(3)").text(remainingQuantity);
@@ -192,38 +220,9 @@ $(document).ready(function () {
                 },
             });
         } else {
-            batchInfoContainer.html(`
-                <table class="table table-hover table-striped align-middle text-center">
-                    <thead class="table-dark">
-                        <tr>
-                            <th class="text-center">Số lô</th>
-                            <th class="text-center">Tồn kho</th>
-                            <th class="text-center">Hạn dùng</th>
-                            <th class="text-center">Số lượng</th>
-                            <th class="text-center">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr id="noDataAlert">
-                            <td colspan="5" class="text-center">
-                                <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
-                                    role="alert"
-                                    style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
-                                    <div class="mb-3">
-                                        <i class="fas fa-file-invoice" style="font-size: 36px; color: #6c757d;"></i>
-                                    </div>
-                                    <div class="text-center">
-                                        <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin phiếu xuất trống</h5>
-                                        <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                            Hiện tại chưa có phiếu xuất nào được thêm vào. Vui lòng kiểm tra lại hoặc tạo mới phiếu xuất để bắt đầu.
-                                        </p>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            `);
+            batchInfoContainer.html(
+                '<div class="alert alert-secondary">Không có mã thiết bị được nhập.</div>'
+            );
         }
     });
 
