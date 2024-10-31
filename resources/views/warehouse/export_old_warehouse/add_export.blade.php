@@ -22,7 +22,7 @@
 @endsection
 
 @section('title')
-    Tạo Phiếu Xuất Kho
+    Xuất Kho
 @endsection
 
 @section('content')
@@ -30,7 +30,7 @@
         {{-- Tiêu đề --}}
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Xuất Kho</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Tạo Phiếu Xuất</span>
             </h3>
 
             <div class="card-toolbar">
@@ -48,7 +48,7 @@
                     <div class="col-9">
                         <div class="mt-3">
                             <div class="row mb-3">
-                                <div class="col-12 mb-2">
+                                <div class="col-12 mb-3">
                                     <h6>Chọn thiết bị:</h6>
                                     <div class="d-flex align-items-center">
                                         <select class="form-select setupSelect2 bg-white form-select-sm rounded-pill"
@@ -75,11 +75,12 @@
                                                     <th class="text-center">Tồn kho</th>
                                                     <th class="text-center">Hạn dùng</th>
                                                     <th class="text-center">Số lượng</th>
+                                                    <th class="text-center">Hành động</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr id="noDataAlert">
-                                                    <td colspan="5" class="text-center">
+                                                    <td colspan="12" class="text-center">
                                                         <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
                                                             role="alert"
                                                             style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">

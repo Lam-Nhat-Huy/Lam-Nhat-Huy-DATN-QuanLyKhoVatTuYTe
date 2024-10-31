@@ -47,6 +47,7 @@ return [
                 'warehouse.export',
                 'check_warehouse.index',
                 'warehouse.trash',
+                'warehouse.trash_export',
                 'inventory.index',
                 'card_warehouse.index',
                 'warehouse.create_import',
@@ -65,7 +66,7 @@ return [
                 [
                     'title' => 'Xuất Kho',
                     'route' => 'warehouse.export',
-                    'route_action' => ['warehouse.create_export'],
+                    'route_action' => ['warehouse.create_export', 'warehouse.trash_export'],
                     'icon' => 'fa fa-upload',
                     'user_role' => [0, 1],
                 ],

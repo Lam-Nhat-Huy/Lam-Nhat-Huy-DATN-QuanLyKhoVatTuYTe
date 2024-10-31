@@ -125,7 +125,7 @@
                                                                     {{ $item->no_action == 1 ? 'disabled' : '' }}
                                                                     data-bs-target="#delete-{{ $item->code }}">
                                                                     <i class="fa fa-trash"
-                                                                        style="margin-bottom: 2px;"></i>Hủy
+                                                                        style="margin-bottom: 2px;"></i>Xóa
                                                                     phiếu
                                                                 </button>
                                                             @endif

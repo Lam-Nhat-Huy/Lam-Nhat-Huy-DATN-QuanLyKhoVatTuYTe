@@ -20,10 +20,14 @@ class Exports extends Model
 
     protected $fillable = [
         'code',
-        'department_code',
         'note',
         'status',
         'export_date',
+        'export_type',
+        'department_code',
+        'supplier_code',
+        'reason',
+        'export_request_code',
         'created_by'
     ];
 
@@ -40,5 +44,10 @@ class Exports extends Model
     public function departments()
     {
         return $this->belongsTo(Departments::class, 'department_code', 'code');
+    }
+
+    public function suppliers()
+    {
+        return $this->belongsTo(Suppliers::class, 'supplier_code', 'code');
     }
 }

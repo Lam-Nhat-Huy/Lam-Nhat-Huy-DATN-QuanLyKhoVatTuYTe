@@ -14,11 +14,11 @@
 
         $required = '';
 
+        $hidden = 'd-none';
+
         $d_none_save = '';
 
         $d_none_update = 'd-none';
-
-        $hidden = 'd-none';
 
         $d_none_temp = '';
     } elseif ($action == 'create') {
@@ -26,11 +26,11 @@
 
         $required = 'required';
 
+        $hidden = '';
+
         $d_none_save = '';
 
         $d_none_update = 'd-none';
-
-        $hidden = '';
 
         $d_none_temp = '';
     } elseif ($action == 'update') {
@@ -38,11 +38,11 @@
 
         $required = '';
 
+        $hidden = '';
+
         $d_none_save = 'd-none';
 
         $d_none_update = '';
-
-        $hidden = '';
 
         $d_none_temp = 'd-none';
     }
@@ -724,10 +724,6 @@
 @section('scripts')
     <script>
         let addedEquipments = [];
-        let equipmentData = [];
-        let batchData = [];
-        let updateReceiptEquipmentCodeArr = [];
-        let updateReceiptBatchNumberArr = [];
 
         if (document.getElementById('import_equipment_request_temp') && document.getElementById(
                 'import_equipment_request_save') && document.getElementById('import_equipment_request_update')) {
@@ -1313,9 +1309,6 @@
             this.disabled = true;
 
             setTimeout(() => {
-                updateReceiptEquipmentCodeArr.push(equipmentCode);
-                updateReceiptBatchNumberArr.push(batchNumber);
-
                 // Tìm hàng trong bảng dựa trên mã thiết bị
                 let row = document.getElementById(`equipment-row-${equipmentCode}`);
                 if (row) {

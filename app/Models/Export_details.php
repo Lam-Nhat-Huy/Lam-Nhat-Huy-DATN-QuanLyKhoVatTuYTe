@@ -8,30 +8,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Export_details extends Model
 {
-    protected $primaryKey = 'code';
-
-    public $incrementing = false;
-
-    public $timestamps = false;
-    
-    protected $keyType = 'string';
-
     use HasFactory;
 
     protected $fillable = [
         'code',
         'export_code',
         'equipment_code',
+        'quantity',
         'batch_number',
-        'quantity'
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     public function export()
     {
-        return $this->belongsTo(Exports::class, 'export_code', 'code'); 
+        return $this->belongsTo(Exports::class, 'export_code', 'code');
     }
 
-    public function equipments(){
+    public function equipments()
+    {
         return $this->belongsTo(Equipments::class, 'equipment_code', 'code');
     }
 }

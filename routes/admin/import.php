@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Warehouse\CardWarehouseController;
 use App\Http\Controllers\Warehouse\ImportController;
 use Illuminate\Support\Facades\Route;
 

@@ -10,15 +10,15 @@ return new class extends Migration
     {
         Schema::create('receipt_details', function (Blueprint $table) {
             $table->id();
-            $table->char('receipt_code', 20)->nullable();
-            $table->char('batch_number', 20)->nullable();
+            $table->char('receipt_code', 10)->nullable();
+            $table->string('batch_number', 10)->nullable();
             $table->integer('quantity');
             $table->integer('quantity_quote')->nullable();
             $table->string('deviation_quote', 20)->nullable();
             $table->decimal('VAT', 10, 2)->nullable();
             $table->decimal('discount', 10, 2)->nullable();
             $table->decimal('price', 10, 2)->nullable();
-            $table->char('equipment_code', 20)->nullable();
+            $table->char('equipment_code', 10)->nullable();
             $table->timestamps();
             $table->softDeletes();
 
