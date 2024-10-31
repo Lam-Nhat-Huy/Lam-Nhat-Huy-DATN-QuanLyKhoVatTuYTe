@@ -544,7 +544,124 @@
                                                     @include('check_warehouse.print')
                                                 @endif
 
-                                                @include('check_warehouse.modal')
+
+
+                                                <!-- Modal Duyệt Phiếu -->
+                                                <div class="modal fade" id="browse-{{ $item['code'] }}"
+                                                    data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                                    aria-labelledby="browseLabel-{{ $item['code'] }}" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-md">
+                                                        <div class="modal-content border-0 shadow">
+                                                            <div class="modal-header bg-success text-white">
+                                                                <h5 class="modal-title text-white"
+                                                                    id="browseLabel-{{ $item['code'] }}">
+                                                                    Duyệt Phiếu Kiểm Kho
+                                                                </h5>
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body text-center pb-0">
+                                                                <form
+                                                                    action="{{ route('check_warehouse.approve', $item['code']) }}"
+                                                                    method="POST" id="approveForm-{{ $item['code'] }}">
+                                                                    @csrf
+                                                                    <p class="text-dark mb-4">Bạn có chắc chắn muốn duyệt
+                                                                        phiếu kiểm kho này?</p>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer justify-content-center">
+                                                                <button type="button"
+                                                                    class="btn btn-secondary btn-sm rounded-pill"
+                                                                    data-bs-dismiss="modal">
+                                                                    Đóng
+                                                                </button>
+                                                                <button type="button"
+                                                                    class="btn btn-success btn-sm rounded-pill"
+                                                                    onclick="event.preventDefault(); document.getElementById('approveForm-{{ $item['code'] }}').submit();">
+                                                                    Duyệt
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Modal Hủy Phiếu -->
+                                                <div class="modal fade" id="cancel-{{ $item['code'] }}"
+                                                    data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                                    aria-labelledby="cancelLabel-{{ $item['code'] }}" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-md">
+                                                        <div class="modal-content border-0 shadow">
+                                                            <div class="modal-header bg-danger text-white">
+                                                                <h5 class="modal-title text-white"
+                                                                    id="cancelLabel-{{ $item['code'] }}">
+                                                                    Hủy Phiếu Kiểm Kho
+                                                                </h5>
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body text-center pb-0">
+                                                                <form
+                                                                    action="{{ route('check_warehouse.cancel', $item['code']) }}"
+                                                                    method="POST" id="cancelForm-{{ $item['code'] }}">
+                                                                    @csrf
+                                                                    <p class="text-danger mb-4">
+                                                                        Bạn có chắc chắn muốn hủy phiếu kiểm kho này?
+                                                                        Số lượng vật tư sẽ được trả về trạng thái trước khi
+                                                                        kiểm.
+                                                                    </p>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer justify-content-center">
+                                                                <button type="button"
+                                                                    class="btn btn-secondary btn-sm rounded-pill"
+                                                                    data-bs-dismiss="modal">Đóng</button>
+                                                                <button type="button"
+                                                                    class="btn btn-danger btn-sm rounded-pill"
+                                                                    onclick="event.preventDefault(); document.getElementById('cancelForm-{{ $item['code'] }}').submit();">
+                                                                    Hủy Phiếu
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Modal Xóa Phiếu -->
+                                                <div class="modal fade" id="delete-{{ $item['code'] }}"
+                                                    data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                                    aria-labelledby="deleteLabel-{{ $item['code'] }}" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-md">
+                                                        <div class="modal-content border-0 shadow">
+                                                            <div class="modal-header bg-danger text-white">
+                                                                <h5 class="modal-title text-white"
+                                                                    id="deleteLabel-{{ $item['code'] }}">
+                                                                    Xóa Phiếu Kiểm Kho
+                                                                </h5>
+                                                                <button type="button" class="btn-close btn-close-white"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body text-center pb-0">
+                                                                <form
+                                                                    action="{{ route('check_warehouse.delete', $item['code']) }}"
+                                                                    method="POST" id="deleteForm-{{ $item['code'] }}">
+                                                                    @csrf
+                                                                    <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa
+                                                                        phiếu kiểm kho này?</p>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer justify-content-center">
+                                                                <button type="button"
+                                                                    class="btn btn-secondary btn-sm rounded-pill"
+                                                                    data-bs-dismiss="modal">Đóng</button>
+                                                                <button type="button"
+                                                                    class="btn btn-danger btn-sm rounded-pill"
+                                                                    onclick="event.preventDefault(); document.getElementById('deleteForm-{{ $item['code'] }}').submit();">
+                                                                    Xóa Phiếu
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div> <!-- End flex-lg-row-fluid -->
