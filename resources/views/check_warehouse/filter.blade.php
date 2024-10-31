@@ -3,10 +3,14 @@
         <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Kiểm Kho</span>
     </h3>
     <div class="card-toolbar">
-        <a href="{{ route('check_warehouse.create') }}" class="btn btn-sm btn-success rounded-pill">
-            <i class="fas fa-plus"></i> Kiểm Kho
+        <a href="{{ route('check_warehouse.create') }}" class="btn btn-sm rounded-pill"
+            style="background: linear-gradient(45deg, #4caf50, #81c784); color: white; border: none; transition: background 0.3s;"
+            onmouseover="this.style.background='linear-gradient(45deg, #388e3c, #66bb6a)';"
+            onmouseout="this.style.background='linear-gradient(45deg, #4caf50, #81c784)';">
+            Kiểm Kho
         </a>
     </div>
+
 </div>
 
 {{-- Bộ lọc --}}
@@ -29,18 +33,14 @@
             </div>
         </div>
 
-
-
         <div class="col-md-2">
             <select name="status" id="status"
                 class="form-select form-select-sm border-success setupSelect2 rounded-pill">
                 <option value="" selected>--Theo Trạng Thái--</option>
-                <option value="0">Phiếu lưu tạm</option>
-                <option value="1">Đã cân bằng</option>
-                <option value="3">Phiếu đã hủy</option>
+                <option value="0">Chưa duyệt</option>
+                <option value="1">Đã duyệt</option>
             </select>
         </div>
-
 
         <div class="col-md-2">
             <select name="user_code" id="user_code"

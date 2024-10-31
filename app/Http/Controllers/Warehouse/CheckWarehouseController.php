@@ -603,14 +603,15 @@ class CheckWarehouseController extends Controller
             ->when($userCode, function ($q) use ($userCode) {
                 return $q->where('user_code', $userCode);
             })
+            ->orderBy('created_at', 'DESC')
             ->get();
-
 
         return view("{$this->route}.search", [
             'title' => $title,
             'inventoryChecks' => $inventoryChecks,
         ]);
     }
+
 
     function generateRandomString($length = 9)
     {

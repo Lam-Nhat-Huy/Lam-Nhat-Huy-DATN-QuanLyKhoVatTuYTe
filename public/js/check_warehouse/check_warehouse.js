@@ -293,16 +293,16 @@ function validateQuantity(input, rowCount) {
     // Giới hạn số lượng tối đa
     if (input.value > maxQuantity) {
         input.value = maxQuantity;
-        // Sử dụng SweetAlert để thông báo
         Swal.fire({
             icon: "warning",
             title: "Thông báo",
             text: `Số lượng không được vượt quá ${maxQuantity}.`,
-            confirmButtonText: "OK",
+            confirmButtonText: "Tôi biết rồi",
+            confirmButtonColor: "#f0ad4e",
         });
     }
 
-    updateProduct(rowCount, input.value); // Cập nhật dữ liệu
+    updateProduct(rowCount, input.value);
 }
 
 function removeProduct(index) {
@@ -543,18 +543,12 @@ function addAllProducts() {
 
         checkInputs();
     } else {
-        // document.getElementById(
-        //     "importantNotificationContent"
-        // ).innerHTML = `Đã thêm tất cả thiết bị vào danh sách. Vui lòng tiến hành kiểm kê kho hàng!`;
-        // $("#importantNotificationModal").modal("show");
-
-        // Sử dụng SweetAlert thay cho modal
         Swal.fire({
-            icon: "info", // Biểu tượng
-            title: "Thông báo", // Tiêu đề
-            text: "Đã thêm tất cả thiết bị vào danh sách. Vui lòng tiến hành kiểm kê kho hàng!", // Nội dung
-            confirmButtonText: "Tôi biết rồi", // Nút xác nhận
-            confirmButtonColor: "#3085d6", // Màu nút xác nhận
+            icon: "error",
+            title: "Thông báo",
+            text: "Đã thêm tất cả thiết bị vào danh sách. Vui lòng tiến hành kiểm kê kho hàng!",
+            confirmButtonText: "Tôi biết rồi",
+            confirmButtonColor: "#d33",
         });
     }
 }

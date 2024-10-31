@@ -17,15 +17,12 @@
         );
     @endphp
 
-
-
-
     <tr class="text-center hover-table pointer" data-bs-toggle="collapse" data-bs-target="#collapse{{ $item['code'] }}"
         aria-expanded="false" aria-controls="collapse{{ $item['code'] }}">
         <td>
             <i class="row-icon fa fa-chevron-right"></i>
         </td>
-        <td>#{{ $item['code'] }}</td>
+        <td>{{ $item['code'] }}</td>
         <td>{{ \Carbon\Carbon::parse($item['check_date'])->format('d/m/Y') }}</td>
         <td>
             @if ($totalUnequal == 0)
@@ -54,17 +51,9 @@
         </td>
 
         <td>
-            @if ($item['status'] == 0)
-                <span class="label label-temp text-warning">Phiếu lưu tạm</span>
-            @elseif ($item['status'] == 1)
-                <span class="label label-final text-success">Đã cân bằng</span>
-            @else
-                <span class="label label-temp text-danger">Phiếu đã hủy</span>
-            @endif
-        </td>
-        <td>
             Lần thứ {{ $item['check_count'] }}
         </td>
+
         <td title="{{ $item['note'] }}"
             style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
             @if (!empty($item['note']))
@@ -75,6 +64,17 @@
                 <span class="text-center">
                     Không có ghi chú
                 </span>
+            @endif
+        </td>
+
+
+        <td>
+            @if ($item['status'] == 0)
+                <span class="label label-temp text-danger">Chưa duyệt</span>
+            @elseif ($item['status'] == 1)
+                <span class="label label-final text-success">Đã duyệt</span>
+            @else
+                <span class="label label-temp text-danger">Phiếu đã hủy</span>
             @endif
         </td>
     </tr>
@@ -101,7 +101,7 @@
                                         <tr>
                                             <td class="" style="width: 150px;"><strong>Mã kiểm
                                                     kho</strong></td>
-                                            <td class="text-gray-800">#{{ $item['code'] }}</td>
+                                            <td class="text-gray-800">{{ $item['code'] }}</td>
                                         </tr>
                                         <tr>
                                             <td class=""><strong>Thời gian</strong></td>
@@ -136,9 +136,9 @@
                                             <td class=""><strong>Trạng thái</strong></td>
                                             <td class="text-gray-800">
                                                 @if ($item['status'] == 0)
-                                                    <span class="text-warning">Phiếu lưu tạm</span>
+                                                    <span class="text-danger">Chưa duyệt</span>
                                                 @elseif($item['status'] == 1)
-                                                    <span class="text-success">Đã cân bằng</span>
+                                                    <span class="text-success">Đã duyệt</span>
                                                 @else
                                                     <span class="text-danger">Phiếu đã hủy</span>
                                                 @endif
@@ -172,7 +172,19 @@
 
                         <!-- Lần kiểm 1 -->
                         <div class="col-md-12">
-                            <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-2">Lần kiểm 1</h6>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-2">Lần kiểm đầu
+                                </h6>
+
+                                @if ($item['check_count'] == 1 && session('user_code') === $item['user_code'])
+                                    <a class="text-dark"
+                                        href="{{ route('inventory_check.editByCheckround', ['code' => $item->code, 'check_round' => 1]) }}">
+                                        <i class="fa fa-edit"></i> Chỉnh sửa phiếu 1
+                                    </a>
+                                @endif
+                            </div>
+
+
                             <div class="table-responsive rounded">
                                 <table class="table table-striped table-sm table-hover">
                                     <thead style="background-color: #FFA500;">
@@ -194,9 +206,10 @@
                                                     aria-expanded="false"
                                                     aria-controls="collapse{{ $detail['equipment_code'] }}">
                                                     <td class="ps-4 text-left">
-                                                        #{{ $detail['equipment_code'] }}
+                                                        {{ $detail['equipment_code'] }}
                                                     </td>
-                                                    <td title="{{ $detail->equipment->name }}"
+                                                    <td data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        title="{{ $detail->equipment->name }}"
                                                         style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                         {{ $detail->equipment->name }}
                                                     </td>
@@ -241,7 +254,23 @@
 
                         <!-- Lần kiểm 2 -->
                         <div class="col-md-12">
-                            <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-2">Lần kiểm 2</h6>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-2">Lần kiểm cuối
+                                </h6>
+
+                                @if (
+                                    $item['check_count'] == 2 &&
+                                        isset($item['recheck_user_code']) &&
+                                        session('user_code') == $item['recheck_user_code'] &&
+                                        $item['status'] === 0)
+                                    <a class="text-dark"
+                                        href="{{ route('inventory_check.editByCheckround', ['code' => $item->code, 'check_round' => 2]) }}">
+                                        <i class="fa fa-edit"></i> Chỉnh sửa phiếu 2
+                                    </a>
+                                @endif
+
+
+                            </div>
                             <div class="table-responsive rounded">
                                 @php
                                     $hasSecondCheck = false;
@@ -288,9 +317,10 @@
                                                         aria-expanded="false"
                                                         aria-controls="collapse{{ $detail['equipment_code'] }}">
                                                         <td class="ps-4 text-left">
-                                                            #{{ $detail['equipment_code'] }}
+                                                            {{ $detail['equipment_code'] }}
                                                         </td>
-                                                        <td title="{{ $detail->equipment->name }}"
+                                                        <td data-bs-toggle="tooltip" data-bs-placement="top"
+                                                            title="{{ $detail->equipment->name }}"
                                                             style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                             {{ $detail->equipment->name }}
                                                         </td>
@@ -299,16 +329,19 @@
                                                         <td>{{ $detail['actual_quantity'] }}</td>
                                                         <td>
                                                             @php
-                                                                // Calculate unequal values
                                                                 $unequal =
                                                                     $detail['current_quantity'] -
                                                                     $detail['actual_quantity'];
                                                             @endphp
 
                                                             @if ($unequal > 0)
-                                                                -{{ $unequal }}
+                                                                <span class="text-danger">
+                                                                    -{{ $unequal }}
+                                                                </span>
                                                             @elseif($unequal < 0)
-                                                                +{{ abs($unequal) }}
+                                                                <span class="text-success">
+                                                                    +{{ abs($unequal) }}
+                                                                </span>
                                                             @else
                                                                 <span style="color: #6c757d;">Không
                                                                     lệch</span>
@@ -336,42 +369,46 @@
 
                 <div class="card-body py-3 text-end">
                     <div class="button-group">
-                        <!-- Nút Duyệt đơn, chỉ hiển thị khi là Phiếu Tạm -->
                         @if ($item['status'] == 0)
                             @if (session('isAdmin') == true)
                                 @if ($item->check_count == 2)
-                                    <button class="btn btn-sm btn-success me-2 rounded-pill" data-bs-toggle="modal"
-                                        data-bs-target="#browse-{{ $item->code }}" type="button">
-                                        <i class="fas fa-clipboard-check"></i>
+                                    <button class="btn btn-sm rounded-pill me-2"
+                                        style="background: linear-gradient(45deg, #4CAF50, #76FF03); color: white;"
+                                        data-bs-toggle="modal" data-bs-target="#browse-{{ $item->code }}"
+                                        type="button">
+                                        <i class="fas fa-clipboard-check" style="color: white;"></i>
                                         Duyệt phiếu
                                     </button>
                                 @endif
                             @endif
 
-                            @if ($item['user_code'] == session('user_code') || session('isAdmin') == true || $item['recheck_user_code'])
-                                <a href="{{ route('inventory_check.edit', $item->code) }}"
-                                    class="btn btn-info btn-sm me-2 rounded-pill">
-                                    <i class="fa fa-edit"></i> Chỉnh sửa
-                                </a>
-                            @endif
-
-
-                            @if ($item['user_code'] == session('user_code') || session('isAdmin') == true)
-                                <!-- Nút Xóa phiếu tạm -->
-                                <button class="btn btn-danger btn-sm me-2 rounded-pill" data-bs-toggle="modal"
-                                    data-bs-target="#delete-{{ $item->code }}">
-                                    <i class="fa fa-trash"></i> Xóa Phiếu
+                            @if (session('isAdmin') == true || ($item['check_count'] != 2 && $item['user_code'] == session('user_code')))
+                                <button class="btn btn-sm rounded-pill me-2"
+                                    style="background: linear-gradient(45deg, #FF5252, #FF1744); color: white;"
+                                    data-bs-toggle="modal" data-bs-target="#delete-{{ $item->code }}">
+                                    <i class="fa fa-trash" style="color: white;"></i> Xóa Phiếu
                                 </button>
                             @endif
                         @endif
 
                         @if ($item['check_count'] == 1 && $item['user_code'] != session('user_code'))
-                            <!-- Nút In Phiếu -->
                             <a href="{{ route('inventory_check.check', $item->code) }}"
-                                class="btn btn-info btn-sm me-2 rounded-pill">
-                                <i class="fa fa-check"></i> Kiểm phiếu lại
+                                class="btn btn-sm rounded-pill me-2"
+                                style="background: linear-gradient(45deg, #00B0FF, #0091EA); color: white;">
+                                <i class="fa fa-check" style="color: white;"></i> Kiểm phiếu lại
                             </a>
                         @endif
+
+                        @if (session('isAdmin') == true && $item['status'] == 1)
+                            <a class="btn btn-sm rounded-pill me-2"
+                                style="background: linear-gradient(45deg, #FF4081, #F50057); color: white;"
+                                data-bs-toggle="modal" data-bs-target="#cancel-{{ $item['code'] }}">
+                                <i class="fa fa-times" style="color: white;"></i> Hủy phiếu kiểm
+                                kho
+                            </a>
+                        @endif
+
+
 
                         <!-- Modal Duyệt Phiếu -->
                         <div class="modal fade" id="browse-{{ $item['code'] }}" data-bs-backdrop="static"
@@ -394,7 +431,7 @@
                                                 phiếu kiểm kho này?</p>
                                         </form>
                                     </div>
-                                    <div class="modal-footer justify-content-center pt-0">
+                                    <div class="modal-footer justify-content-center">
                                         <button type="button" class="btn btn-secondary btn-sm rounded-pill"
                                             data-bs-dismiss="modal">
                                             Đóng
@@ -425,13 +462,14 @@
                                         <form action="{{ route('check_warehouse.cancel', $item['code']) }}"
                                             method="POST" id="cancelForm-{{ $item['code'] }}">
                                             @csrf
-                                            <p class="text-danger mb-4">Bạn có chắc chắn muốn hủy
-                                                phiếu kiểm kho này?
+                                            <p class="text-danger mb-4">
+                                                Bạn có chắc chắn muốn hủy phiếu kiểm kho này?
                                                 Số lượng vật tư sẽ được trả về trạng thái trước khi
-                                                kiểm.</p>
+                                                kiểm.
+                                            </p>
                                         </form>
                                     </div>
-                                    <div class="modal-footer justify-content-center pt-0">
+                                    <div class="modal-footer justify-content-center">
                                         <button type="button" class="btn btn-secondary btn-sm rounded-pill"
                                             data-bs-dismiss="modal">Đóng</button>
                                         <button type="button" class="btn btn-danger btn-sm rounded-pill"
@@ -464,7 +502,7 @@
                                                 phiếu kiểm kho này?</p>
                                         </form>
                                     </div>
-                                    <div class="modal-footer justify-content-center pt-0">
+                                    <div class="modal-footer justify-content-center">
                                         <button type="button" class="btn btn-secondary btn-sm rounded-pill"
                                             data-bs-dismiss="modal">Đóng</button>
                                         <button type="button" class="btn btn-danger btn-sm rounded-pill"
