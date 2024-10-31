@@ -12,21 +12,24 @@
 {{-- Bộ lọc --}}
 <div class="card-body py-1">
     <form id="filterForm" class="row g-3 align-items-center">
+
         <div class="col-md-4">
             <div class="row align-items-center">
                 <div class="col-5 pe-0">
                     <input type="date" name="start_date"
                         class="form-control form-control-sm border-success rounded-pill"
-                        value="{{ \Carbon\Carbon::now()->subMonths(3)->format('Y-m-d') }}">
+                        value="{{ \Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}">
                 </div>
                 <div class="col-2 text-center">Đến</div>
                 <div class="col-5 ps-0">
                     <input type="date" name="end_date"
                         class="form-control form-control-sm border-success rounded-pill"
-                        value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+                        value="{{ \Carbon\Carbon::now()->endOfMonth()->format('Y-m-d') }}">
                 </div>
             </div>
         </div>
+
+
 
         <div class="col-md-2">
             <select name="status" id="status"

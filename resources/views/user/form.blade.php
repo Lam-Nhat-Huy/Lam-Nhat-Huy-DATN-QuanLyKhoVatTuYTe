@@ -126,7 +126,7 @@
 
                                 <div class="col-6 fv-row mb-5">
 
-                                    <label class="{{ $required }} fs-5 fw-bold mb-2">Số Điện Thoại</label>
+                                    <label class="{{ $required }} fs-5 fw-bold mb-2">Số điện thoại</label>
 
                                     <input type="text"
                                         class="form-control form-control-sm rounded-pill border border-success"
@@ -140,7 +140,7 @@
 
                                 <div class="col-6 fv-row mb-5">
 
-                                    <label class="{{ $required }} fs-5 fw-bold mb-2">Mật Khẩu</label>
+                                    <label class="{{ $required }} fs-5 fw-bold mb-2">Mật khẩu</label>
 
                                     <input type="password"
                                         class="form-control form-control-sm rounded-pill border border-success"
@@ -153,7 +153,7 @@
 
                                 <div class="col-6 fv-row mb-5">
 
-                                    <label class="{{ $required }} fs-5 fw-bold mb-2">Năm Sinh</label>
+                                    <label class="{{ $required }} fs-5 fw-bold mb-2">Năm sinh</label>
 
                                     <input type="date"
                                         class="form-control form-control-sm rounded-pill border border-success"
@@ -167,7 +167,7 @@
                                 </div>
 
                                 <div class="col-12 fv-row mb-5">
-                                    <label class="{{ $required }} fs-5 fw-bold mb-2">Địa Chỉ</label>
+                                    <label class="{{ $required }} fs-5 fw-bold mb-2">Địa chỉ</label>
 
                                     <textarea type="text" class="form-control form-control-sm border border-success" placeholder="Địa Chỉ.."
                                         name="address" rows="5">{{ !empty($firstUser->address) ? $firstUser->address : old('address') }}</textarea>
@@ -180,7 +180,7 @@
                                     <div class="row">
                                         <div class="col-4 fv-row mb-5">
 
-                                            <label class="{{ $required }} fs-5 fw-bold mb-1">Giới Tính</label>
+                                            <label class="{{ $required }} fs-5 fw-bold mb-1">Giới tính</label>
 
                                             <div>
                                                 <label for="male" class="me-2" style="font-size: 15px;">
@@ -201,7 +201,7 @@
                                         </div>
 
                                         <div class="col-4 fv-row mb-5">
-                                            <label class="fs-5 fw-bold mb-2">Tài Khoản Admin</label>
+                                            <label class="fs-5 fw-bold mb-2">Tài khoản admin</label>
                                             <div class="checkbox-wrapper-6">
                                                 <input class="tgl tgl-light" id="cb1-7" type="checkbox"
                                                     value="1" name="isAdmin"
@@ -211,7 +211,7 @@
                                         </div>
 
                                         <div class="col-4 fv-row mb-5">
-                                            <label class="fs-5 fw-bold mb-2">Trạng Thái Tài Khoản</label>
+                                            <label class="fs-5 fw-bold mb-2">Trạng thái tài khoản</label>
 
                                             <div class="checkbox-wrapper-6">
                                                 <input class="tgl tgl-light" id="cb1-6" type="checkbox"

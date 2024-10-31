@@ -799,6 +799,19 @@ class CheckWarehouseController extends Controller
                 return redirect()->back();
             }
 
+            $hasApprovedExport = Exports::where('status', 1)
+                ->where('export_date', '>', $inventoryCheck->check_date)
+                ->exists();
+
+            $hasApprovedReceipt = Receipts::where('status', 1)
+                ->where('receipt_date', '>', $inventoryCheck->check_date)
+                ->exists();
+
+            if ($hasApprovedExport || $hasApprovedReceipt) {
+                toastr()->error('Không thể hủy phiếu kiểm kho vì đã có hoạt động xuất hoặc nhập hàng sau thời điểm kiểm kho này.');
+                return redirect()->back();
+            }
+
             $inventoryCheckDetails = Inventory_check_details::where('inventory_check_code', $code)->get();
 
             Exports::where('note', 'Xuất kho để cân bằng kho')->where('created_by', session('user_code'))->delete();

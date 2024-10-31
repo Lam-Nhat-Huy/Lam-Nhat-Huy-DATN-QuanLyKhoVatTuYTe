@@ -322,7 +322,7 @@ function checkInputs() {
 
     if (allFilled) {
         saveButton.disabled = false;
-        saveButton.textContent = "Lưu phiếu tạm";
+        saveButton.textContent = "Lưu phiếu";
 
         if (isAdmin) {
             completeButton.disabled = false;

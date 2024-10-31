@@ -198,13 +198,16 @@
                                                     <div class="card card-body border-0 shadow">
                                                         <div
                                                             class="d-flex justify-content-between align-items-center mb-3">
-                                                            <h6 class="card-title fw-bold">Chi Tiết</h6>
+                                                            <h6 class="fw-bold m-0 text-uppercase fw-bolder">
+                                                                Chi tiết thiết bị
+                                                            </h6>
                                                             @if ($item->inventories->sum('current_quantity') > 25)
                                                                 <span
                                                                     class="fw-bolder text-white bg-success py-1 px-2 rounded-pill"
                                                                     style="font-size: 10px;">Còn Hàng</span>
                                                             @elseif ($item->inventories->sum('current_quantity') <= 25 && $item->inventories->sum('current_quantity') > 0)
-                                                                <span class="fw-bolder bg-warning py-1 px-2 rounded-pill"
+                                                                <span
+                                                                    class="fw-bolder bg-warning py-1 text-white px-2 rounded-pill"
                                                                     style="font-size: 10px;">Sắp Hết Hàng</span>
                                                             @else
                                                                 <span

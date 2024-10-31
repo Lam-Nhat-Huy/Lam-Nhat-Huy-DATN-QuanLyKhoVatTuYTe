@@ -179,11 +179,11 @@
 @section('content')
     <div class="card mb-md-5 pb-15 mb-xl-10" id="kt_profile_details_view">
         <div class="px-10 py-5 border-bottom d-flex justify-content-between align-items-center cursor-pointer">
-            <h4 class="fw-bolder m-0">Thông Tin Cá Nhân</h4>
+            <h4 class="fw-bolder m-0">Thông tin cá nhân</h4>
             <span class="btn rounded-pill btn-dark btn-sm pointer" id="edit_form">
                 <i class="fas fa-edit mb-md-1"></i> <span>Chỉnh sửa</span>
             </span>
-            <span class="btn rounded-pill btn-secondary btn-sm pointer d-none" id="cancel_edit_form">
+            <span class="btn rounded-pill btn-dark btn-sm pointer d-none" id="cancel_edit_form">
                 <i class="fas fa-arrow-left mb-md-1"></i> <span>Trở lại</span>
             </span>
         </div>
@@ -212,10 +212,10 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="row">
-                                    <label class="col-md-2 col-sm-12 fw-bold text-muted">Họ Và Tên</label>
+                                    <label class="col-md-2 col-sm-12 fw-bold text-muted"><strong>Họ và tên</strong></label>
                                     <div class="col-10">
                                         <span
-                                            class="fw-bolder fs-6 text-gray-800 span-show">{{ !empty($getUserProfile->last_name) && !empty($getUserProfile->first_name) ? $getUserProfile->last_name . ' ' . $getUserProfile->first_name : 'N/A' }}</span>
+                                            class=" fs-6 text-gray-800 span-show">{{ !empty($getUserProfile->last_name) && !empty($getUserProfile->first_name) ? $getUserProfile->last_name . ' ' . $getUserProfile->first_name : 'N/A' }}</span>
 
                                         <div class="row">
                                             <div class="col-6">
@@ -242,10 +242,10 @@
 
                             <div class="col-12">
                                 <div class="row mb-6">
-                                    <label class="col-md-2 col-sm-12 fw-bold text-muted">Vai Trò</label>
+                                    <label class="col-md-2 col-sm-12 fw-bold text-muted"><strong>Vai trò</strong></label>
                                     <div class="col-10 fv-row">
                                         <span
-                                            class="fw-bolder text-gray-800 fs-6 span-show">{{ !empty($getUserProfile->isAdmin) == 1 ? 'Admin' : 'Nhân Viên' }}
+                                            class="text-gray-800 fs-6 span-show">{{ !empty($getUserProfile->isAdmin) == 1 ? 'Admin' : 'Nhân Viên' }}
                                         </span>
 
                                         <input type="text"
@@ -258,10 +258,10 @@
 
                             <div class="col-12">
                                 <div class="row mb-6">
-                                    <label class="col-md-2 col-sm-12 fw-bold text-muted">Email</label>
+                                    <label class="col-md-2 col-sm-12 fw-bold text-muted"><strong>Email</strong></label>
                                     <div class="col-10">
                                         <span
-                                            class="fw-bolder text-gray-800 fs-6 span-show text-lowercase">{{ !empty($getUserProfile->email) ? $getUserProfile->email : 'N/A' }}
+                                            class="text-gray-800 fs-6 span-show text-lowercase">{{ !empty($getUserProfile->email) ? $getUserProfile->email : 'N/A' }}
                                         </span>
 
                                         <input type="text"
@@ -274,11 +274,11 @@
 
                             <div class="col-12">
                                 <div class="row mb-6">
-                                    <label class="col-md-2 col-sm-12 fw-bold text-muted">Số Điện Thoại
+                                    <label class="col-md-2 col-sm-12 fw-bold text-muted"><strong>Số điện thoại</strong>
                                     </label>
                                     <div class="col-10">
                                         <span
-                                            class="fw-bolder text-gray-800 fs-6 span-show">{{ !empty($getUserProfile->phone) ? $getUserProfile->phone : 'N/A' }}
+                                            class="text-gray-800 fs-6 span-show">{{ !empty($getUserProfile->phone) ? $getUserProfile->phone : 'N/A' }}
                                         </span>
 
                                         <input type="text"
@@ -290,9 +290,9 @@
 
                             <div class="col-12">
                                 <div class="row">
-                                    <label class="col-md-2 col-sm-12 fw-bold text-muted">Ngày Sinh</label>
+                                    <label class="col-md-2 col-sm-12 fw-bold text-muted"><strong>Ngày sinh</strong></label>
                                     <div class="col-10">
-                                        <span class="fw-bolder fs-6 text-gray-800 span-show">
+                                        <span class="fs-6 text-gray-800 span-show">
                                             {{ !empty($getUserProfile->birth_day)
                                                 ? \Carbon\Carbon::parse($getUserProfile->birth_day)->format('d-m-Y')
                                                 : 'N/A' }}
@@ -310,10 +310,10 @@
 
                             <div class="col-12">
                                 <div class="row">
-                                    <label class="col-md-2 col-sm-12 fw-bold text-muted">Địa Chỉ</label>
+                                    <label class="col-md-2 col-sm-12 fw-bold text-muted"><strong>Địa chỉ</strong></label>
                                     <div class="col-10">
                                         <span
-                                            class="fw-bolder fs-6 text-gray-800 span-show">{{ !empty($getUserProfile->address) ? $getUserProfile->address : 'N/A' }}</span>
+                                            class="fs-6 text-gray-800 span-show">{{ !empty($getUserProfile->address) ? $getUserProfile->address : 'N/A' }}</span>
 
                                         <input type="text"
                                             class="form-control form-control-sm rounded-pill border border-success d-none input-edit"

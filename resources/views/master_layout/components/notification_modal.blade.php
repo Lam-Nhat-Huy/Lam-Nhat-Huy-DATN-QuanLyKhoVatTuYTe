@@ -50,9 +50,18 @@
                             </div>
                         </div>
                     @empty
-                        <div class="d-flex justify-content-center">
-                            <h6 class="text-danger">Không Có Thông Báo</h6>
+                        <div class="notification-container d-flex justify-content-center align-items-center">
+                            <h6 class="notification-text">Không có thông báo</h6>
                         </div>
+
+                        <style>
+                            .notification-text {
+                                color: #6c757d;
+                                font-size: 1rem;
+                                font-weight: 500;
+                                margin: 0;
+                            }
+                        </style>
                     @endforelse
                 </div>
             </div>

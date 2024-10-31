@@ -322,7 +322,7 @@ function checkInputs() {
 
     if (allFilled) {
         saveButton.disabled = false;
-        saveButton.textContent = "Lưu phiếu tạm";
+        saveButton.textContent = "Lưu phiếu";
 
         if (isAdmin) {
             completeButton.disabled = false;
@@ -624,10 +624,13 @@ function addAllProducts() {
 
         checkInputs();
     } else {
-        document.getElementById(
-            "importantNotificationContent"
-        ).innerHTML = `Đã thêm tất cả thiết bị vào danh sách. Vui lòng tiến hành kiểm kê kho hàng!`;
-        $("#importantNotificationModal").modal("show");
+        Swal.fire({
+            icon: "info", // Biểu tượng
+            title: "Thông báo", // Tiêu đề
+            text: "Đã thêm tất cả thiết bị vào danh sách. Vui lòng tiến hành kiểm kê kho hàng!", // Nội dung
+            confirmButtonText: "Tôi biết rồi", // Nút xác nhận
+            confirmButtonColor: "#3085d6", // Màu nút xác nhận
+        });
     }
 }
 

@@ -86,12 +86,13 @@
                                 </th>
                                 <th class="" style="width: 7% !important;">Mã</th>
                                 <th class="" style="width: 10% !important;">Ảnh</th>
-                                <th class="" style="width: 15% !important;">Họ Tên</th>
+                                <th class="" style="width: 12% !important;">Họ tên</th>
                                 <th class="" style="width: 25% !important;">Email</th>
-                                <th class="" style="width: 12% !important;">Số Điện Thoại</th>
-                                <th class="" style="width: 8% !important;">Giới Tính</th>
-                                <th class="" style="width: 12% !important;">Trạng Thái</th>
-                                <th class="pe-3 text-center" style="width: 20% !important;">Hành Động</th>
+                                <th class="" style="width: 10% !important;">Số điện thoại</th>
+                                <th class="" style="width: 8% !important;">Giới tính</th>
+                                <th class="" style="width: 8% !important;">Vai trò</th>
+                                <th class="" style="width: 11% !important;">Trạng thái</th>
+                                <th class="pe-3 text-center" style="width: 20% !important;">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -122,10 +123,17 @@
                                         {{ $item->gender }}
                                     </td>
                                     <td>
+                                        {{ $item->isAdmin == 1 ? 'Admin' : 'Nhân viên' }}
+                                    </td>
+                                    <td>
                                         @if ($item['status'] == 0)
-                                            <span class="text-danger">Không hoạt động</span>
+                                            <span class=" text-white bg-danger py-1 px-2 rounded-pill"
+                                                style="font-size: 10px;">Không hoạt
+                                                động</span>
                                         @elseif($item['status'] == 1)
-                                            <span class="text-success">Hoạt động</span>
+                                            <span class=" text-white bg-success py-1 px-2 rounded-pill"
+                                                style="font-size: 10px;">Hoạt
+                                                động</span>
                                         @endif
                                     </td>
                                     <td class="text-center" data-bs-toggle="collapse"
@@ -146,7 +154,10 @@
                                                         style="padding-top: 0 !important; padding-bottom: 0px !important;">
                                                         <div class="row px-5 w-100">
                                                             <div class="col-md-12 my-3">
-                                                                <h4 class="fw-bold mt-3">Thông Tin Chi Tiết</h4>
+                                                                <h4
+                                                                    class="fw-bold m-0 text-uppercase fw-bolder text-center">
+                                                                    Thông tin người dùng
+                                                                </h4>
                                                             </div>
 
                                                             <div class="row mb-5 justify-content-center">
@@ -162,26 +173,32 @@
                                                                             <table class="table table-borderless">
                                                                                 <tbody>
                                                                                     <tr>
-                                                                                        <td class="fw-semibold">Họ Và Tên:
+                                                                                        <td class="fw-semibold">
+                                                                                            <strong>Họ và tên:</strong>
                                                                                         </td>
                                                                                         <td class="text-dark">
                                                                                             {{ $item->last_name . ' ' . $item->first_name }}
                                                                                         </td>
                                                                                     </tr>
                                                                                     <tr>
-                                                                                        <td class="fw-semibold">Email:</td>
+                                                                                        <td class="fw-semibold">
+                                                                                            <strong>Email:</strong>
+                                                                                        </td>
                                                                                         <td class="text-dark">
                                                                                             {{ $item->email }}
                                                                                         </td>
                                                                                     </tr>
                                                                                     <tr>
-                                                                                        <td class="fw-semibold">Phone:</td>
+                                                                                        <td class="fw-semibold">
+                                                                                            <strong>Số điện thoại:</strong>
+                                                                                        </td>
                                                                                         <td class="text-dark">
                                                                                             {{ $item->phone }}
                                                                                         </td>
                                                                                     </tr>
                                                                                     <tr>
-                                                                                        <td class="fw-semibold">Địa Chỉ:
+                                                                                        <td class="fw-semibold">
+                                                                                            <strong>Địa chỉ:</strong>
                                                                                         </td>
                                                                                         <td class="text-dark">
                                                                                             {{ $item->address }}
@@ -195,28 +212,34 @@
                                                                             <table class="table table-borderless">
                                                                                 <tbody>
                                                                                     <tr>
-                                                                                        <td class="fw-semibold">Năm Sinh:
+                                                                                        <td class="fw-semibold">
+                                                                                            <strong>Năm sinh:</strong>
                                                                                         </td>
                                                                                         <td class="text-dark">
-                                                                                            {{ \Carbon\Carbon::parse($item->birth_day)->format('d-m-Y') }}</td>
+                                                                                            {{ \Carbon\Carbon::parse($item->birth_day)->format('d-m-Y') }}
+                                                                                        </td>
                                                                                     </tr>
                                                                                     <tr>
-                                                                                        <td class="fw-semibold">Giới Tính:
+                                                                                        <td class="fw-semibold">
+                                                                                            <strong>Giới tính:</strong>
                                                                                         </td>
                                                                                         <td class="text-dark">
                                                                                             {{ $item->gender }}
                                                                                         </td>
                                                                                     </tr>
                                                                                     <tr>
-                                                                                        <td class="fw-semibold">Vai Trò:
+                                                                                        <td class="fw-semibold">
+                                                                                            <strong>Vai trò:</strong>
                                                                                         </td>
                                                                                         <td class="text-dark">
-                                                                                            {{ $item->isAdmin == 1 ? 'Admin' : 'Nhân Viên' }}</td>
+                                                                                            {{ $item->isAdmin == 1 ? 'Admin' : 'Nhân Viên' }}
+                                                                                        </td>
                                                                                     </tr>
                                                                                     <tr>
-                                                                                        <td class="fw-semibold">Ngày Tạo
-                                                                                            Tài
-                                                                                            Khoản:</td>
+                                                                                        <td class="fw-semibold">
+                                                                                            <strong>Ngày tạo tài
+                                                                                                khoản:</strong>
+                                                                                        </td>
                                                                                         <td class="text-dark">
                                                                                             {{ $item->created_at->format('d-m-Y') }}
                                                                                         </td>

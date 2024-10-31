@@ -100,29 +100,29 @@ function addProductToTable(
     var rowCount = materialData.length;
 
     var row = `
-    <tr data-index="${rowCount}" class="unchecked">
-        <td>${rowCount + 1}</td>
-        <td class="text-left">${equipment_code}</td>
-        <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</td>
-        <td>${batch_number}</td>
-        <td>${current_quantity}</td>
-        <td>
-            <input type="number" min="0" class="actual-quantity-input" 
-                style="width: 70px; height: 40px; border-radius: 8px;" 
-                oninput="validateQuantity(this, ${rowCount}); checkInputs()">
-        </td>
-        <td class="unequal-count" id="unequal-count-${rowCount}">0</td>
-        <td>
-            <textarea class="equipment_note rounded-3" 
-                placeholder="" name="equipment_note_${rowCount}"
-                style="width: 150px; height: 40px; border-radius: 8px; padding: 5px; font-size: 12px;"></textarea>
-        </td>
-        <td>
-            <a href="#" class="text-dark" title="Xóa thiết bị" onclick="removeProduct(${rowCount})">
-                <i class="fa fa-trash"></i>
-            </a>
-        </td>
-    </tr>
+        <tr data-index="${rowCount}" class="unchecked">
+            <td>${rowCount + 1}</td>
+            <td class="text-left">${equipment_code}</td>
+            <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</td>
+            <td>${batch_number}</td>
+            <td>${current_quantity}</td>
+            <td>
+                <input type="number" min="0" class="actual-quantity-input" 
+                    style="width: 70px; height: 40px; border-radius: 8px;" 
+                    oninput="validateQuantity(this, ${rowCount}); checkInputs()">
+            </td>
+            <td class="unequal-count" id="unequal-count-${rowCount}">0</td>
+            <td>
+                <textarea class="equipment_note rounded-3" 
+                    placeholder="" name="equipment_note_${rowCount}"
+                    style="width: 150px; height: 40px; border-radius: 8px; padding: 5px; font-size: 12px;"></textarea>
+            </td>
+            <td>
+                <a href="#" class="text-dark" title="Xóa thiết bị" onclick="removeProduct(${rowCount})">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </td>
+        </tr>
     `;
 
     tableBody.insertAdjacentHTML("beforeend", row);
@@ -283,10 +283,26 @@ document.addEventListener("keydown", function (event) {
 });
 
 function validateQuantity(input, rowCount) {
+    const maxQuantity = 10000; // Giới hạn số lượng tối đa
+
+    // Đảm bảo số lượng không âm
     if (input.value < 0) {
         input.value = 0;
     }
-    updateProduct(rowCount, input.value);
+
+    // Giới hạn số lượng tối đa
+    if (input.value > maxQuantity) {
+        input.value = maxQuantity;
+        // Sử dụng SweetAlert để thông báo
+        Swal.fire({
+            icon: "warning",
+            title: "Thông báo",
+            text: `Số lượng không được vượt quá ${maxQuantity}.`,
+            confirmButtonText: "OK",
+        });
+    }
+
+    updateProduct(rowCount, input.value); // Cập nhật dữ liệu
 }
 
 function removeProduct(index) {
@@ -527,10 +543,19 @@ function addAllProducts() {
 
         checkInputs();
     } else {
-        document.getElementById(
-            "importantNotificationContent"
-        ).innerHTML = `Đã thêm tất cả thiết bị vào danh sách. Vui lòng tiến hành kiểm kê kho hàng!`;
-        $("#importantNotificationModal").modal("show");
+        // document.getElementById(
+        //     "importantNotificationContent"
+        // ).innerHTML = `Đã thêm tất cả thiết bị vào danh sách. Vui lòng tiến hành kiểm kê kho hàng!`;
+        // $("#importantNotificationModal").modal("show");
+
+        // Sử dụng SweetAlert thay cho modal
+        Swal.fire({
+            icon: "info", // Biểu tượng
+            title: "Thông báo", // Tiêu đề
+            text: "Đã thêm tất cả thiết bị vào danh sách. Vui lòng tiến hành kiểm kê kho hàng!", // Nội dung
+            confirmButtonText: "Tôi biết rồi", // Nút xác nhận
+            confirmButtonColor: "#3085d6", // Màu nút xác nhận
+        });
     }
 }
 

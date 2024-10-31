@@ -1,6 +1,11 @@
 @extends('master_layout.layout')
 
 @section('styles')
+    <!-- SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- SweetAlert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         .hover-table:hover {
             background: #ccc;
@@ -67,6 +72,8 @@
             /* Màu khi hover */
             transition: background-color 0.3s;
         }
+
+        
     </style>
 @endsection
 
