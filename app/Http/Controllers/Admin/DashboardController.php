@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Exports;
 use App\Models\Inventories;
+use App\Models\Inventory_checks;
 use App\Models\Notifications;
 use App\Models\Receipt_details;
 use App\Models\Receipts;
@@ -28,7 +29,7 @@ class DashboardController extends Controller
         // Example forecast data (replace with actual logic)
         $forecastData = $this->calculateForecast();
         $forecastTrendData = $this->calculateTrendForecast();
-        
+
         $threshold = 10; // Ngưỡng cảnh báo tồn kho (ví dụ 10)
         $warnings = $this->getLowInventoryWarnings($threshold);
         $exportLog = $this->getExportLog();
@@ -45,8 +46,9 @@ class DashboardController extends Controller
             DB::raw('MONTH(created_at) as month'),
             DB::raw('SUM(current_quantity) as total_quantity')
         )->groupBy('month')->get();
-
-        return view("admin.{$this->route}.index", compact('title', 'forecastData','forecastTrendData', 'importantNotification', 'warnings', 'exportLog', 'importTotal', 'exportTotal', 'expenseTotal','inventoryData'));
+        $importStatistics = $this->getImportStatistics(now()->month);
+        $inventoryCheckLog = $this->getInventoryCheckLog();
+        return view("admin.{$this->route}.index", compact('title','inventoryCheckLog','importStatistics', 'forecastData', 'forecastTrendData', 'importantNotification', 'warnings', 'exportLog', 'importTotal', 'exportTotal', 'expenseTotal', 'inventoryData'));
     }
 
     private function calculateForecast()
@@ -85,37 +87,67 @@ class DashboardController extends Controller
 
         return $exports;
     }
+
     private function calculateTrendForecast()
-{
-    // Lấy dữ liệu tồn kho từ 6 tháng trước
-    $historicalData = Inventories::select(
-        DB::raw('MONTH(created_at) as month'),
-        DB::raw('SUM(current_quantity) as total_quantity')
-    )->where('created_at', '>=', Carbon::now()->subMonths(6))
-     ->groupBy('month')
-     ->orderBy('month', 'asc')
-     ->get()
-     ->pluck('total_quantity')
-     ->toArray();
+    {
+        // Lấy dữ liệu tồn kho từ 6 tháng trước
+        $historicalData = Inventories::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('SUM(current_quantity) as total_quantity')
+        )->where('created_at', '>=', Carbon::now()->subMonths(6))
+            ->groupBy('month')
+            ->orderBy('month', 'asc')
+            ->get()
+            ->pluck('total_quantity')
+            ->toArray();
 
-    $forecast = [];
-    $numMonths = count($historicalData);
-    
-    // Nếu có đủ dữ liệu, áp dụng trung bình động
-    if ($numMonths > 0) {
-        $average = array_sum($historicalData) / $numMonths;
+        $forecast = [];
+        $numMonths = count($historicalData);
 
-        // Dự báo cho 5 tháng tới dựa trên giá trị trung bình
-        for ($i = 1; $i <= 5; $i++) {
-            $month = Carbon::now()->addMonths($i)->format('F');
-            $forecast[] = [
-                'month' => $month,
-                'inventory' => max($average, 0) // Ngăn chặn giá trị âm
-            ];
+        // Nếu có đủ dữ liệu, áp dụng trung bình động
+        if ($numMonths > 0) {
+            $average = array_sum($historicalData) / $numMonths;
+
+            // Dự báo cho 5 tháng tới dựa trên giá trị trung bình
+            for ($i = 1; $i <= 5; $i++) {
+                $month = Carbon::now()->addMonths($i)->format('F');
+                $forecast[] = [
+                    'month' => $month,
+                    'inventory' => max($average, 0) // Ngăn chặn giá trị âm
+                ];
+            }
         }
+
+        return $forecast;
     }
 
-    return $forecast;
+    public function getImportStatistics($month = null)
+    {
+        $query = Receipt_details::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('SUM(quantity) as total_quantity'),
+            DB::raw('SUM(quantity * price) as total_value')
+        );
+
+        if ($month) {
+            $query->whereMonth('created_at', $month);
+        }
+
+        $importStatistics = $query->groupBy('month')
+            ->orderBy('month', 'asc')
+            ->get();
+
+        return $importStatistics;
+    }
+    public function getInventoryCheckLog()
+{
+    // Lấy dữ liệu từ bảng Inventory_checks và các bảng liên quan
+    $inventoryChecks = Inventory_checks::with(['details.equipment', 'user', 'recheckUser'])
+        ->whereNull('deleted_at')
+        ->orderBy('check_date', 'desc')
+        ->paginate(5, ['*'], 'inventory_check_page'); // Số lượng bản ghi trên một trang
+
+    return $inventoryChecks;
 }
 
 }

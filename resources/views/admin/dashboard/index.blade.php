@@ -53,7 +53,6 @@
             color: #fff;
             /* Màu chữ trắng */
         }
-        
     </style>
     <!-- Tải jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -218,33 +217,49 @@
                 <!--end::Mixed Widget 2-->
             </div>
             <!--end::Col-->
-            <div class="col-xxl-7">
-                <div class="card card-xxl-stretch h-100">
+            <!-- Cảnh Báo Tồn Kho Thấp Column -->
+            <div class="mb-5">
+
+            </div>
+            <div class="mb-5">
+
+            </div>
+  
+            <div class="col-xxl-6 mb-5">
+                <div class="card card-xxl-stretch h-100 shadow-sm">
                     <!-- Header -->
-                    <div class="card-header align-items-center border-0 bg-light rounded shadow-sm">
-                        <h3 class="card-title align-items-start flex-column">
-                            <span class="fw-bolder mb-2 text-dark fs-4">Cảnh Báo Tồn Kho Thấp</span>
-                            <span class="text-danger fw-bold fs-6">{{ $warnings->total() }} sản phẩm</span>
+                    <div class="card-header align-items-center bg-warning border-0 rounded d-flex justify-content-between">
+                        <h3 class="card-title fw-bolder text-dark fs-4 d-flex align-items-center">
+                            <i class="fa fa-exclamation-circle me-2 text-danger"></i>
+                            Cảnh Báo Tồn Kho Thấp
                         </h3>
+                        <span class="text-danger fw-bold fs-6">{{ $warnings->total() }} sản phẩm</span>
                     </div>
                     <!-- Body -->
                     <div class="card-body pt-5 d-flex flex-column justify-content-between">
                         <div class="timeline-label flex-grow-1">
                             @foreach ($warnings as $warning)
-                                <div class="timeline-item">
-                                    <div class="timeline-label fw-bolder text-gray-800 fs-6">{{ now()->format('H:i') }}
+                                <div class="timeline-item mb-3 border-bottom pb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <!-- Icon đồng hồ và giờ -->
+                                        <i class="fa fa-clock text-muted fs-5 me-2"></i>
+                                        <span class="fw-bolder text-gray-800 fs-6">{{ now()->format('H:i') }}</span>
                                     </div>
-                                    <div class="timeline-badge">
-                                        <i class="fa fa-exclamation-circle text-warning fs-2"></i>
-                                    </div>
-                                    <div class="fw-normal timeline-content text-muted ps-3">
-                                        Sản phẩm {{ $warning->equipments->name }} (Mã SP: {{ $warning->code }}) chỉ còn
-                                        {{ $warning->current_quantity }} đơn vị trong kho.
-                                        @if ($warning->current_quantity <= 0)
-                                            <span class="text-danger">Hết hàng</span>.
-                                        @else
-                                            <span class="text-warning">Gần hết hàng</span>.
-                                        @endif
+                                    <div class="d-flex align-items-center mt-2">
+                                        <!-- Icon cảnh báo và nội dung -->
+                                        <div class="timeline-badge d-flex align-items-center">
+                                            <i class="fa fa-exclamation-triangle text-warning fs-3"></i>
+                                        </div>
+                                        <div class="fw-normal timeline-content text-muted ps-3">
+                                            Sản phẩm {{ $warning->equipments->name }} (Mã SP: {{ $warning->code }}) chỉ
+                                            còn
+                                            {{ $warning->current_quantity }} đơn vị trong kho.
+                                            @if ($warning->current_quantity <= 0)
+                                                <span class="text-danger">Hết hàng</span>.
+                                            @else
+                                                <span class="text-warning">Gần hết hàng</span>.
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach
@@ -258,12 +273,16 @@
                     </div>
                 </div>
             </div>
+
             <!--end::Col-->
-            <div class="col-xxl-5">
-                <div class="card card-xxl-stretch h-100">
+            <!-- Nhật ký xuất kho Column -->
+            <div class="col-xxl-6 mb-5">
+                <div class="card card-xxl-stretch h-100 shadow-sm">
                     <!-- Header -->
-                    <div class="card-header border-0">
-                        <h3 class="card-title fw-bolder text-dark">Nhật ký xuất kho</h3>
+                    <div class="card-header bg-primary text-white border-0 rounded align-items-center">
+                        <h3 class="card-title fw-bolder fs-4 d-flex align-items-center">
+                            <i class="fa fa-box-open me-2"></i> Nhật Ký Xuất Kho
+                        </h3>
                     </div>
                     <!-- Body -->
                     <div class="card-body pt-2 d-flex flex-column justify-content-between">
@@ -272,7 +291,8 @@
                         @else
                             <div class="flex-grow-1">
                                 @foreach ($exportLog as $export)
-                                    <div class="d-flex align-items-center mb-8">
+                                    <div
+                                        class="d-flex align-items-center mb-4 border-bottom pb-3 {{ $loop->index % 2 == 0 ? 'bg-light' : '' }}">
                                         <span
                                             class="bullet bullet-vertical h-40px bg-{{ $loop->index % 2 == 0 ? 'warning' : 'primary' }}"></span>
                                         <div class="form-check form-check-custom form-check-solid mx-5">
@@ -295,13 +315,108 @@
                             </div>
                             <!-- Pagination -->
                             <div class="d-flex justify-content-center mt-4">
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination pagination-lg nk">
-                                        {{ $exportLog->appends(['low_inventory_page' => request('low_inventory_page')])->links('pagination::bootstrap-4') }}
-                                    </ul>
-                                </nav>
+                                <ul class="pagination pagination-lg nk">
+                                    {{ $exportLog->appends(['low_inventory_page' => request('low_inventory_page')])->links('pagination::bootstrap-4') }}
+                                </ul>
                             </div>
                         @endif
+                    </div>
+                </div>
+            </div>
+            <div class="mb-5">
+
+            </div>
+            <div class="col-xxl-6 mb-5">
+                <div class="card card-xxl-stretch h-100 shadow-lg">
+                    <!-- Header -->
+                    <div class="card-header bg-success text-white border-0 rounded align-items-center">
+                        <h3 class="card-title fw-bolder fs-4 d-flex align-items-center">
+                            <i class="fa fa-arrow-circle-down me-2"></i> Thống Kê Nhập Kho Chi Tiết
+                        </h3>
+                    </div>
+                    <!-- Body -->
+                    <div class="card-body pt-2">
+                        <!-- Summary Cards -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="bg-light-success px-6 py-8 rounded-2 shadow-sm text-center">
+                                    <i class="fa fa-box fs-2 text-success mb-3"></i>
+                                    <h4 class="fw-bold text-success">Số lượng nhập tháng {{ now()->format('m') }}</h4>
+                                    <span class="fs-5">{{ $importTotal }} thiết bị</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="bg-light-info px-6 py-8 rounded-2 shadow-sm text-center">
+                                    <i class="fa fa-dollar-sign fs-2 text-info mb-3"></i>
+                                    <h4 class="fw-bold text-info">Giá trị nhập tháng {{ now()->format('m') }}</h4>
+                                    <span class="fs-5">{{ number_format($expenseTotal, 0, ',', '.') }} VNĐ</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Data Table -->
+                        @if($importStatistics->isEmpty())
+                            <div class="text-center text-muted">Không có dữ liệu nhập kho</div>
+                        @else
+                            <table class="table table-striped table-hover border shadow-sm">
+                                <thead class="bg-success text-white">
+                                    <tr>
+                                        <th>Tháng</th>
+                                        <th class="text-center">Số lượng</th>
+                                        <th class="text-end">Giá trị tổng (VNĐ)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($importStatistics as $stat)
+                                        <tr>
+                                            <td>{{ str_pad($stat->month, 2, '0', STR_PAD_LEFT) }}</td>
+                                            <td class="text-center">{{ $stat->total_quantity }} thiết bị</td>
+                                            <td class="text-end">{{ number_format($stat->total_value, 2, ',', '.') }} VNĐ</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-6 mb-5">
+                <div class="card card-xxl-stretch h-100 shadow-sm">
+                    <!-- Header -->
+                    <div class="card-header bg-light-warning text-white border-0 rounded align-items-center">
+                        <h3 class="card-title fw-bolder fs-4 d-flex align-items-center">
+                            <i class="fa fa-clipboard-check me-2"></i> Nhật Ký Kiểm Kho
+                        </h3>
+                    </div>
+                    <!-- Body -->
+                    <div class="card-body pt-2 d-flex flex-column justify-content-between">
+                        @if($inventoryCheckLog->isEmpty())
+                            <div class="text-center text-muted">Không có nhật ký kiểm kho</div>
+                        @else
+                            @foreach($inventoryCheckLog as $check)
+                                <div class="d-flex align-items-center mb-4 border-bottom pb-3">
+                                    <span class="bullet bullet-vertical h-40px"></span>
+                                    <div class="form-check form-check-custom form-check-solid mx-5">
+                                        <i class="fa fa-check-circle text-success fs-3"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <a href="#" class="text-gray-800 text-hover-primary fw-bolder fs-6">
+                                            Mã Kiểm Kho: {{ $check->code }}
+                                        </a>
+                                        <span class="text-muted fw-bold d-block">
+                                            Ngày Kiểm: {{ $check->created_at }}
+                                        </span>
+                                        <span>Người Kiểm: {{ $check->user->last_name ?? '' }} {{ $check->user->first_name ?? 'Không xác định' }} </span><br>
+
+                                    </div>
+                                    <span class="badge fs-8 fw-bolder">{{ $check->status }}</span>
+                                </div>
+                            @endforeach
+                        @endif
+            
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-center mt-4">
+                            {{ $inventoryCheckLog->appends(['low_inventory_page' => request('low_inventory_page')])->links('pagination::bootstrap-4') }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -327,7 +442,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!--end::Col-->
         </div>
     </div>
@@ -395,10 +510,10 @@
         });
     </script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             var forecastData = @json($forecastTrendData);
             var ctx = document.getElementById('forecastChart').getContext('2d');
-        
+
             new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -420,5 +535,5 @@
                 }
             });
         });
-        </script>
+    </script>
 @endsection
