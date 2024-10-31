@@ -72,8 +72,6 @@
             /* Màu khi hover */
             transition: background-color 0.3s;
         }
-
-        
     </style>
 @endsection
 
@@ -558,7 +556,7 @@
                                                                         phiếu kiểm kho này?</p>
                                                                 </form>
                                                             </div>
-                                                            <div class="modal-footer justify-content-center pt-0">
+                                                            <div class="modal-footer justify-content-center">
                                                                 <button type="button"
                                                                     class="btn btn-secondary btn-sm rounded-pill"
                                                                     data-bs-dismiss="modal">
@@ -600,7 +598,7 @@
                                                                     </p>
                                                                 </form>
                                                             </div>
-                                                            <div class="modal-footer justify-content-center pt-0">
+                                                            <div class="modal-footer justify-content-center">
                                                                 <button type="button"
                                                                     class="btn btn-secondary btn-sm rounded-pill"
                                                                     data-bs-dismiss="modal">Đóng</button>
@@ -637,7 +635,7 @@
                                                                         phiếu kiểm kho này?</p>
                                                                 </form>
                                                             </div>
-                                                            <div class="modal-footer justify-content-center pt-0">
+                                                            <div class="modal-footer justify-content-center">
                                                                 <button type="button"
                                                                     class="btn btn-secondary btn-sm rounded-pill"
                                                                     data-bs-dismiss="modal">Đóng</button>

@@ -782,8 +782,10 @@ class CheckWarehouseController extends Controller
 
         if ($inventoryCheck && $inventoryCheck->status == 1) {
             $latestApprovedCheck = Inventory_checks::where('status', 1)
-                ->orderBy('check_date', 'desc')
+                ->orderBy('created_at', 'desc')
                 ->first();
+
+            // dd($latestApprovedCheck);
 
             if ($latestApprovedCheck && $latestApprovedCheck->code != $code) {
                 toastr()->error('Không thể hủy phiếu kiểm kho vì chỉ có thể hủy phiếu kiểm kho gần nhất đã được duyệt.');
@@ -800,12 +802,22 @@ class CheckWarehouseController extends Controller
             }
 
             $hasApprovedExport = Exports::where('status', 1)
-                ->where('export_date', '>', $inventoryCheck->check_date)
+                ->where('created_at', '>', $inventoryCheck->created_at)
+                ->where('code', 'not like', 'PX-KK%')
                 ->exists();
 
             $hasApprovedReceipt = Receipts::where('status', 1)
-                ->where('receipt_date', '>', $inventoryCheck->check_date)
+                ->where('created_at', '>', $inventoryCheck->created_at)
+                ->where('code', 'not like', 'PN-KK%')
                 ->exists();
+
+            // dd(
+            //     [
+            //         'receipt_date' => $hasApprovedReceipt,
+            //         'export_date' => $hasApprovedExport,
+            //         'check_date' => $inventoryCheck->created_at
+            //     ]
+            // );
 
             if ($hasApprovedExport || $hasApprovedReceipt) {
                 toastr()->error('Không thể hủy phiếu kiểm kho vì đã có hoạt động xuất hoặc nhập hàng sau thời điểm kiểm kho này.');
