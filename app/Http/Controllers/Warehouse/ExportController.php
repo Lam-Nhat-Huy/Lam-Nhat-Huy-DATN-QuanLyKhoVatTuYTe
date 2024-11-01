@@ -200,7 +200,8 @@ class ExportController extends Controller
         $equipmentBatches = [];
 
         foreach ($getBatchWithQuantity as $inventory) {
-            $equipmentBatches[$inventory->equipment_code][] = [
+            $equipmentBatches[] = [
+                'equipment_code' => $inventory->equipment_code,
                 'batch_number' => $inventory->batch_number,
                 'total_quantity' => $inventory->total_quantity,
             ];
@@ -304,6 +305,8 @@ class ExportController extends Controller
 
         $allDepartment = Departments::orderBy('created_at', 'DESC')->get();
 
+        $allSupplier = Suppliers::orderBy('created_at', 'DESC')->get();
+
         $equipmentsWithStock = Equipments::all();
 
         $getBatchWithQuantity = Inventories::select('batch_number', 'equipment_code', DB::raw('SUM(current_quantity) as total_quantity'))
@@ -329,6 +332,7 @@ class ExportController extends Controller
             'action' => $action,
             'editExport' => $editExport,
             'checkList' => $checkList,
+            'allSupplier' => $allSupplier,
             'allDepartment' => $allDepartment,
             'equipmentsWithStock' => $equipmentsWithStock,
             'jsonEquipmentBatches' => $jsonEquipmentBatches,
@@ -337,59 +341,69 @@ class ExportController extends Controller
 
     public function update_export(Request $request, $code)
     {
-        if (
-            !empty($request->department_code) &&
-            !empty($request->export_type) &&
-            !empty($request->export_date) &&
-            !empty($request->exportStatus) &&
-            !empty($request->equipment_list)
-        ) {
-            $departmentCode = $request->department_code;
-            $exportType = $request->export_type;
-            $note = $request->note;
-            $equipmentList = json_decode($request->equipment_list, true);
+        try {
+            if (
+                !empty($request->department_code) &&
+                !empty($request->supplier_code) &&
+                !empty($request->reason) &&
+                !empty($request->export_type) &&
+                !empty($request->export_date) &&
+                !empty($request->exportStatus) &&
+                !empty($request->equipment_list)
+            ) {
+                $departmentCode = $request->department_code;
+                $supplierCode = $request->supplier_code;
+                $reason = $request->reason;
+                $exportType = $request->export_type;
+                $note = $request->note;
+                $equipmentList = json_decode($request->equipment_list, true);
 
-            // Tìm các bản ghi không có mã trong $equipmentList và thuộc về receipt_code
-            $batchToDelete = Export_details::whereNotIn('batch_number', array_column($equipmentList, 'batch_number'))
-                ->where('export_code', $code)
-                ->get();
+                // Tìm các bản ghi không có mã trong $equipmentList và thuộc về receipt_code
+                $batchToDelete = Export_details::whereNotIn('batch_number', array_column($equipmentList, 'batch_number'))
+                    ->where('export_code', $code)
+                    ->get();
 
-            // Xóa các bản ghi tìm thấy
-            if ($batchToDelete->isNotEmpty()) {
-                $batchToDelete->each(function ($item) {
-                    $item->forceDelete();
-                });
+                // Xóa các bản ghi tìm thấy
+                if ($batchToDelete->isNotEmpty()) {
+                    $batchToDelete->each(function ($item) {
+                        $item->forceDelete();
+                    });
+                }
+
+                $existingRequest = Exports::where('code', $code);
+
+                $record = $existingRequest->first();
+
+                $existingRequest->update([
+                    'department_code' => $departmentCode == 1 ? NULL : $departmentCode,
+                    'supplier_code' => $supplierCode == 1 ? NULL : $supplierCode,
+                    'reason' => $reason == 1 ? NULL : $reason,
+                    'note' => $note ?? $record->note,
+                    'export_type' => $exportType,
+                    'updated_at' => now(),
+                ]);
+
+                foreach ($equipmentList as $equipment) {
+                    Export_details::updateOrCreate(
+                        [
+                            'export_code' => $code,
+                            'batch_number' => $equipment['batch_number']
+                        ],
+                        [
+                            'quantity' => $equipment['quantity'],
+                            'equipment_code' => $equipment['equipment_code'],
+                            'quantity' => $equipment['quantity'],
+                        ]
+                    );
+                }
+
+                return response()->json(['success' => true, 'message' => 'Cập nhật phiếu xuất thành công']);
             }
 
-            $existingRequest = Exports::where('code', $code);
-
-            $record = $existingRequest->first();
-
-            $existingRequest->update([
-                'department_code' => $departmentCode,
-                'note' => $note ?? $record->note,
-                'export_type' => $exportType,
-                'updated_at' => now(),
-            ]);
-
-            foreach ($equipmentList as $equipment) {
-                Export_details::updateOrCreate(
-                    [
-                        'export_code' => $code,
-                        'batch_number' => $equipment['batch_number']
-                    ],
-                    [
-                        'quantity' => $equipment['quantity'],
-                        'equipment_code' => $equipment['equipment_code'],
-                        'quantity' => $equipment['quantity'],
-                    ]
-                );
-            }
-
-            return response()->json(['success' => true, 'message' => 'Cập nhật phiếu xuất thành công']);
+            return response()->json(['success' => false, 'message' => 'Vui lòng điền đẩy đủ các trường dữ liệu']);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()]);
         }
-
-        return response()->json(['success' => false, 'message' => 'Vui lòng điền đẩy đủ các trường dữ liệu']);
     }
 
     public function approve(Request $request)

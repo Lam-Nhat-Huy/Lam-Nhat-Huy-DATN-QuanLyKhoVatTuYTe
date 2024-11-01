@@ -45,29 +45,6 @@
         <div class="container">
             <div class="card border-0 px-8 mb-4 rounded-3 mt-3">
                 <div class="row">
-                    <div class="col-md-6 mb-3 fv-row d-none" id="supplier_show">
-                        <label for="supplier_code" class="required form-label fw-semibold">Nhà Cung Cấp</label>
-                        <div class="d-flex align-items-center">
-                            <select name="supplier_code" id="supplier_code"
-                                class="form-select form-select-sm border border-success rounded-pill">
-                                <option value="0">Chọn Nhà Cung Cấp...</option>
-                                <option value="1" class="d-none">Chọn Nhà Cung Cấp...</option>
-                                @foreach ($allSupplier as $item)
-                                    <option value="{{ $item->code }}"
-                                        {{ !empty($editExport) && $editExport->supplier_code == $item->code ? 'selected' : '' }}>
-                                        {{ $item->name }}</option>
-                                @endforeach
-                            </select>
-
-                            <span class="ms-4 pointer" data-bs-toggle="modal" data-bs-target="#add_supplier"
-                                title="Thêm Nhà Cung Cấp">
-                                <i class="fa fa-plus bg-primary rounded-circle p-2 text-white"
-                                    style="width: 25px; height: 25px;"></i>
-                            </span>
-                        </div>
-                        <div class="message_error" id="supplier_code_error"></div>
-                    </div>
-
                     <div class="col-md-6 mb-3 fv-row" id="department_show">
                         <label for="department_code" class="required form-label fw-semibold">Phòng Ban</label>
                         <div class="d-flex align-items-center">
@@ -91,7 +68,30 @@
                         <div class="message_error" id="department_code_error"></div>
                     </div>
 
-                    <div class="col-md-6 mb-3 fv-row d-none" id="cancel_reason">
+                    <div class="col-md-6 mb-3 fv-row" id="supplier_show">
+                        <label for="supplier_code" class="required form-label fw-semibold">Nhà Cung Cấp</label>
+                        <div class="d-flex align-items-center">
+                            <select name="supplier_code" id="supplier_code"
+                                class="form-select form-select-sm border border-success rounded-pill">
+                                <option value="0">Chọn Nhà Cung Cấp...</option>
+                                <option value="1" class="d-none">Chọn Nhà Cung Cấp...</option>
+                                @foreach ($allSupplier as $item)
+                                    <option value="{{ $item->code }}"
+                                        {{ !empty($editExport) && $editExport->supplier_code == $item->code ? 'selected' : '' }}>
+                                        {{ $item->name }}</option>
+                                @endforeach
+                            </select>
+
+                            <span class="ms-4 pointer" data-bs-toggle="modal" data-bs-target="#add_supplier"
+                                title="Thêm Nhà Cung Cấp">
+                                <i class="fa fa-plus bg-primary rounded-circle p-2 text-white"
+                                    style="width: 25px; height: 25px;"></i>
+                            </span>
+                        </div>
+                        <div class="message_error" id="supplier_code_error"></div>
+                    </div>
+
+                    <div class="col-md-6 mb-3 fv-row" id="cancel_reason">
                         <label for="reason" class="required form-label fw-semibold">Lý Do Hủy</label>
                         <select name="reason" id="reason"
                             class="form-select form-select-sm border border-success rounded-pill">
@@ -298,6 +298,164 @@
             </div>
         </div>
     </div>
+
+    <!-- Form thêm phòng ban -->
+    <div class="modal fade" id="add_department" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="add_modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="add_modalLabel">Thêm Phòng Ban</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pb-0">
+                    <div>
+                        <label class="required fs-5 er mb-2">Tên Phòng Ban</label>
+                        <input type="text" class="form-control form-control-sm border border-success rounded-pill"
+                            placeholder="Tên phòng ban.." name="name" id="department_type_name" />
+                        <div class="message_error" id="show-err-department-type"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="required fs-5 er mb-2">Vị Trí Phòng Ban</label>
+                        <input type="text" class="form-control form-control-sm border border-success rounded-pill"
+                            placeholder="Vị trí phòng ban.." name="location" id="department_type_location" />
+                        <div class="message_error" id="show-err-department-type-location"></div>
+                    </div>
+                </div>
+                <div class="modal-body pt-0">
+                    <div class="overflow-auto" style="max-height: 300px;">
+                        <table class="table table-striped align-middle">
+                            <thead>
+                                <tr class="erer bg-success">
+                                    <th class="ps-3" style="width: 40%;">Tên Phòng Ban</th>
+                                    <th class="ps-3" style="width: 30%;">Vị Trí</th>
+                                    <th class="pe-3 text-center" style="width: 30%;">Hành Động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="department-list">
+                                @foreach ($allDepartment as $item)
+                                    <tr class="hover-table pointer" id="department-{{ $item->code }}">
+                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->location }}</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-danger btn-sm rounded-pill"
+                                                data-bs-toggle="modal" data-bs-target="#delete_modal_department_type"
+                                                onclick="setDeleteForm('{{ route('equipment_request.delete_department', $item->code) }}', '{{ $item->name }}')">
+                                                <i class="fa fa-trash p-0"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary rounded-pill"
+                        data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-twitter rounded-pill"
+                        id="submit_department_type">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Form xóa phòng ban --}}
+    <div class="modal fade" id="delete_modal_department_type" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="deleteModalLabel1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="deleteModalLabel1">Xóa Phòng Ban</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h6 class="text-danger" id="delete-department-message"></h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary rounded-pill" data-bs-toggle="modal"
+                        data-bs-target="#add_modal_pb">Trở Lại</button>
+                    <button type="button" class="btn btn-sm btn-danger rounded-pill"
+                        id="confirm-delete-department">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form thêm nhà cung cấp -->
+    <div class="modal fade" id="add_supplier" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="add_modalLabel2" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="add_modalLabel2">Thêm Nhà Cung Cấp</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pb-0">
+                    <div class="mb-3">
+                        <label class="required fs-5 er mb-2">Tên Nhà Cung Cấp</label>
+                        <input type="text" class="form-control form-control-sm border border-success rounded-pill"
+                            placeholder="Tên nhà cung cấp.." name="name" id="supplier_type_name" />
+                        <div class="message_error" id="show-err-supplier-type"></div>
+                    </div>
+                </div>
+                <div class="modal-body pt-0">
+                    <div class="overflow-auto" style="max-height: 300px;">
+                        <table class="table table-striped align-middle">
+                            <thead>
+                                <tr class="erer bg-success">
+                                    <th class="ps-3" style="width: 70%;">Tên Nhà Cung Cấp</th>
+                                    <th class="pe-3 text-center" style="width: 30%;">Hành Động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="supplier-list">
+                                @foreach ($allSupplier as $item)
+                                    <tr class="hover-table pointer" id="supplier-{{ $item->code }}">
+                                        <td>{{ $item->name }}</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-danger btn-sm rounded-pill"
+                                                data-bs-toggle="modal" data-bs-target="#delete_modal_supplier_type"
+                                                onclick="setDeleteFormSupplier('{{ route('equipment_request.delete_supplier', $item->code) }}', '{{ $item->name }}')">
+                                                <i class="fa fa-trash p-0"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary rounded-pill"
+                        data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-sm btn-twitter rounded-pill"
+                        id="submit_supplier_type">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Form xóa nhà cung cấp --}}
+    <div class="modal fade" id="delete_modal_supplier_type" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="deleteModalLabel2" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="deleteModalLabel2">Xóa Nhà Cung Cấp</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h6 class="text-danger" id="delete-supplier-message"></h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary rounded-pill" data-bs-toggle="modal"
+                        data-bs-target="#add_modal_ncc">Trở Lại</button>
+                    <button type="button" class="btn btn-sm btn-danger rounded-pill"
+                        id="confirm-delete-supplier">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -319,35 +477,57 @@
             var reasonSelectErr = document.getElementById('reason_error');
 
             if (exportType === 'Xuất Sử Dụng') {
+                let firstDepartment = {!! json_encode($editExport ?? []) !!};
+
                 supplierShow.classList.add('d-none');
                 departmentShow.classList.remove('d-none');
                 cancelReason.classList.add('d-none');
 
+                if (firstDepartment && firstDepartment.department_code) {
+                    departmentSelect.value = firstDepartment.department_code;
+                } else {
+                    departmentSelect.value = '0';
+                }
+
                 supplierSelect.value = '1';
-                departmentSelect.value = '0';
                 reasonSelect.value = '1';
 
                 supplierSelectErr.innerText = '';
                 reasonSelectErr.innerText = '';
             } else if (exportType === 'Xuất Trả') {
+                let firstSupplier = {!! json_encode($editExport ?? []) !!};
+
                 departmentShow.classList.add('d-none');
                 supplierShow.classList.remove('d-none');
                 cancelReason.classList.add('d-none');
 
-                supplierSelect.value = '0';
+                if (firstSupplier && firstSupplier.supplier_code) {
+                    supplierSelect.value = firstSupplier.supplier_code;
+                } else {
+                    supplierSelect.value = '0';
+                }
+
                 departmentSelect.value = '1';
                 reasonSelect.value = '1';
 
+                // Xóa lỗi hiển thị
                 departmentSelectErr.innerText = '';
                 reasonSelectErr.innerText = '';
             } else if (exportType === 'Xuất Hủy') {
+                let firstReason = {!! json_encode($editExport ?? []) !!};
+
                 supplierShow.classList.add('d-none');
                 departmentShow.classList.add('d-none');
                 cancelReason.classList.remove('d-none');
 
+                if (firstReason && firstReason.reason) {
+                    reasonSelect.value = firstReason.reason;
+                } else {
+                    reasonSelect.value = '0';
+                }
+
                 supplierSelect.value = '1';
                 departmentSelect.value = '1';
-                reasonSelect.value = '0';
 
                 supplierSelectErr.innerText = '';
                 departmentSelectErr.innerText = '';
@@ -372,40 +552,48 @@
         // Lấy mảng số lô đã thêm từ controller
         let checkList = {!! $checkList !!};
 
-        // Lấy danh sách và hiển thị vào option số lô theo mã thiết bị
+        // Xử lý khi chọn thiết bị
         document.getElementById('equipment').addEventListener('change', function() {
             const selectedEquipment = this.value;
             const batchSelect = document.getElementById('batch_number');
 
-            // Xóa tất cả các option hiện tại
+            // Xóa các option hiện tại
             batchSelect.innerHTML = '<option value="" id="choose_batch_number">Chọn Số Lô...</option>';
 
-            // Kiểm tra xem thiết bị đã chọn có số lô tương ứng hay không
-            if (equipmentBatches[selectedEquipment] && equipmentBatches[selectedEquipment].length > 0) {
-                let allHidden = true; // Biến để kiểm tra nếu tất cả các lô đã bị ẩn
+            // Lọc các số lô theo mã thiết bị đã chọn
+            const filteredBatches = equipmentBatches.filter(batch => batch.equipment_code === selectedEquipment);
 
-                equipmentBatches[selectedEquipment].forEach(function(batch) {
+            if (filteredBatches.length > 0) {
+                let allHidden = true;
+
+                filteredBatches.forEach(function(batch) {
                     const option = document.createElement('option');
                     option.value = batch.batch_number;
                     option.textContent = `${batch.batch_number} - Số lượng: ${batch.total_quantity}`;
                     batchSelect.appendChild(option);
                 });
 
-                // Kiểm tra và ẩn các lô đã được thêm trong addedEquipmentBatchs
+                // Kiểm tra các số lô đã thêm trước đó
                 let equipmentOptions = document.querySelectorAll('#batch_number option');
                 equipmentOptions.forEach(option => {
-                    if (addedEquipmentBatchs.includes(option.value)) {
-                        option.classList.add('d-none');
-                    } else if (checkList.includes(option.value)) {
+                    const batchExistsInAdded = addedEquipmentBatchs.some(item =>
+                        item.equipment_code === selectedEquipment && item.batch_number === option.value
+                    );
+
+                    const batchExistsInCheckList = checkList.some(item =>
+                        item.equipment_code === selectedEquipment && item.batch_number === option.value
+                    );
+
+                    if (batchExistsInAdded || batchExistsInCheckList) {
                         option.classList.add('d-none');
                     } else if (option.value !== '') {
-                        allHidden = false; // Nếu có ít nhất một lô không bị ẩn, đặt allHidden thành false
+                        allHidden = false;
                     }
                 });
 
-                // Nếu tất cả các lô đều bị ẩn, hiển thị thông báo
+                // Nếu tất cả các số lô đều bị ẩn, hiển thị thông báo
                 if (allHidden) {
-                    batchSelect.innerHTML = ''; // Xóa tất cả các option
+                    batchSelect.innerHTML = ''; // Xóa các option
                     const noBatchOption = document.createElement('option');
                     noBatchOption.value = '';
                     noBatchOption.textContent = 'Đã Thêm Toàn Bộ Số Lô';
@@ -413,8 +601,7 @@
                 }
 
             } else {
-                // Nếu không có lô nào, thêm option "Không Có Số Lô Nào"
-                batchSelect.innerHTML = '';
+                batchSelect.innerHTML = ''; // Nếu không có số lô nào cho thiết bị này
                 const noBatchOption = document.createElement('option');
                 noBatchOption.value = '';
                 noBatchOption.textContent = 'Không Có Số Lô Nào';
@@ -428,16 +615,19 @@
             const selectedEquipment = document.getElementById('equipment').value;
 
             if (selectedBatch && selectedEquipment) {
-                // Find the total quantity for the selected batch
-                const batchInfo = equipmentBatches[selectedEquipment].find(batch => batch.batch_number ===
-                    selectedBatch);
+                // Tìm thông tin số lượng cho số lô đã chọn
+                const batchInfo = equipmentBatches.find(batch =>
+                    batch.batch_number === selectedBatch &&
+                    batch.equipment_code === selectedEquipment
+                );
+
                 if (batchInfo) {
                     const totalQuantity = batchInfo.total_quantity;
 
-                    // Update the quantity input field
+                    // Cập nhật trường nhập liệu số lượng
                     const quantityInput = document.getElementById('quantity');
-                    quantityInput.setAttribute('max', totalQuantity); // Set the max attribute
-                    quantityInput.value = totalQuantity; // Set the default value to max
+                    quantityInput.setAttribute('max', totalQuantity); // Đặt thuộc tính max
+                    quantityInput.value = totalQuantity; // Đặt giá trị mặc định là max
                 }
             }
         });
@@ -631,12 +821,18 @@
 
                     // Kiểm tra số lượng nhập vào có lớn hơn số lượng tồn kho hay không
                     if (equipment && batch_number) {
-                        const batchInfo = equipmentBatches[equipment].find(batch => batch
-                            .batch_number === batch_number);
+                        const batchInfo = equipmentBatches.find(batch =>
+                            batch.equipment_code === equipment && batch.batch_number ===
+                            batch_number
+                        );
+
                         if (batchInfo && quantity > batchInfo.total_quantity) {
                             quantity_error.innerText =
                                 `Số lượng không thể lớn hơn ${batchInfo.total_quantity}`;
                             hasError = true;
+                        } else {
+                            quantity_error.innerText = '';
+                            hasError = false;
                         }
                     }
                 }
@@ -665,8 +861,13 @@
                     .then(data => {
                         if (data.success) {
                             // Kiểm tra xem thiết bị đã được thêm chưa
-                            if (!addedEquipmentBatchs.includes(data.batch_number)) {
-                                addedEquipmentBatchs.push(data.batch_number);
+                            if (!addedEquipmentBatchs.some(item => item.equipment_code === data
+                                    .equipment_code && item.batch_number === data.batch_number
+                                )) {
+                                addedEquipmentBatchs.push({
+                                    equipment_code: data.equipment_code,
+                                    batch_number: data.batch_number
+                                });
                             }
 
                             noDataAlert.classList.add('d-none');
@@ -715,10 +916,20 @@
                             // Ẩn các tùy chọn đã thêm trong danh sách thiết bị
                             let equipmentOptions = document.querySelectorAll(
                                 '#batch_number option');
+                            const selectedEquipment2 = document.getElementById('equipment')
+                                .value;
                             equipmentOptions.forEach(option => {
-                                // Kiểm tra nếu giá trị option có trong danh sách addedEquipmentBatchs
-                                if (addedEquipmentBatchs.includes(option.value)) {
-                                    option.classList.add('d-none'); // Ẩn option
+                                // Kiểm tra nếu option có batch_number và equipment_code đã tồn tại trong addedEquipmentBatchs
+                                const batchExistsInAdded = addedEquipmentBatchs.some(
+                                    item =>
+                                    item.equipment_code === selectedEquipment2 &&
+                                    // Sửa để dùng đúng selectedEquipment
+                                    item.batch_number === option.value
+                                );
+
+                                if (batchExistsInAdded) {
+                                    option.classList.add(
+                                        'd-none'); // Ẩn option nếu đã tồn tại
                                 }
                             });
 
@@ -766,14 +977,28 @@
                 // Bỏ ẩn các tùy chọn thiết bị đã thêm trong danh sách
                 let equipmentOptions = document.querySelectorAll('#batch_number option');
                 equipmentOptions.forEach(option => {
-                    if (option.value === equipmentCode) {
-                        option.classList.remove('d-none');
+                    const batchExistsInAdded = addedEquipmentBatchs.some(
+                        item =>
+                        item.equipment_code === equipmentCode &&
+                        item.batch_number === option.value
+                    );
+
+                    if (!batchExistsInAdded) {
+                        option.classList.remove(
+                            'd-none');
                     }
                 });
 
                 // Cập nhật lại mảng thiết bị đã thêm
-                addedEquipmentBatchs = addedEquipmentBatchs.filter(batch_number => batch_number !== batchNumber);
-                checkList = checkList.filter(batch_number => batch_number !== batchNumber);
+                // Lọc addedEquipmentBatchs để loại bỏ phần tử có cả equipment_code và batch_number
+                addedEquipmentBatchs = addedEquipmentBatchs.filter(item =>
+                    !(item.equipment_code === equipmentCode && item.batch_number === batchNumber)
+                );
+
+                // Lọc checkList để loại bỏ phần tử có cả equipment_code và batch_number
+                checkList = checkList.filter(item =>
+                    !(item.equipment_code === equipmentCode && item.batch_number === batchNumber)
+                );
 
                 toastr.success("Đã xóa thiết bị khỏi danh sách");
 
@@ -782,6 +1007,303 @@
                 this.disabled = false;
             }, 500);
         }
+
+        // Thêm phòng ban
+        document.getElementById('submit_department_type').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loading-overlay').style.display = 'block';
+            this.disabled = true;
+
+            setTimeout(() => {
+                let departmentTypeName1 = document.getElementById('department_type_name').value.trim();
+                let departmentTypeName2 = document.getElementById('department_type_location').value.trim();
+                let equipment_error1 = document.getElementById('show-err-department-type');
+                let equipment_error2 = document.getElementById('show-err-department-type-location');
+                let existingSuppliers = Array.from(document.querySelectorAll(
+                    '#department-list tr td:first-child')).map(td => td.textContent.trim());
+
+                equipment_error1.innerText = '';
+                equipment_error2.innerText = '';
+
+                if (departmentTypeName1 === '') {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    this.disabled = false;
+                    equipment_error1.innerText = 'Vui lòng nhập tên phòng ban';
+                    departmentTypeName1.focus();
+                }
+
+                if (departmentTypeName2 === '') {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    this.disabled = false;
+                    equipment_error2.innerText = 'Vui lòng nhập vị trí phòng ban';
+                    departmentTypeName2.focus();
+                }
+
+                if (existingSuppliers.includes(departmentTypeName1)) {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    this.disabled = false;
+                    equipment_error1.innerText = 'Phòng ban đã tồn tại';
+                    departmentTypeName1.focus();
+                }
+
+                let formData = new FormData();
+                formData.append('name', departmentTypeName1);
+                formData.append('location', departmentTypeName2);
+
+                fetch('{{ route('equipment_request.create_export') }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Thêm thiết bị vào danh sách trong bảng mà không cần tải lại trang
+                            let tableBodySupplier = document.getElementById('department-list');
+                            let newRowSupplier = document.createElement('tr');
+                            newRowSupplier.id = `department-${data.code}`;
+                            newRowSupplier.className = `pointer`;
+
+                            newRowSupplier.innerHTML =
+                                `
+                            <td>${data.name}</td>
+                            <td>${data.location}</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-danger btn-sm rounded-pill" data-bs-toggle="modal"
+                                    data-bs-target="#delete_modal_department_type"
+                                    onclick="setDeleteForm('{{ route('equipment_request.delete_department', '') }}/` +
+                                data.code + `', '` + data.name + `')">
+                                    <i class="fa fa-trash p-0"></i>
+                                </button>
+                            </td>
+                            `;
+
+                            tableBodySupplier.prepend(newRowSupplier);
+
+                            let selectOptionSupplier = document.getElementById('department_code');
+                            let newOption = document.createElement('option');
+                            newOption.value = data.code;
+                            newOption.textContent = `${data.name} - ${data.location}`;
+                            newOption.id = `option_department_${data.code}`;
+
+                            let defaultOption = selectOptionSupplier.querySelector('option[value="0"]');
+                            selectOptionSupplier.insertBefore(newOption, defaultOption
+                                .nextSibling);
+
+                            toastr.success("Đã thêm phòng ban");
+
+                            document.getElementById('department_type_name').value = "";
+                            document.getElementById('department_type_location').value = "";
+                        }
+                    })
+                    .catch(error => console.error('Error:', error))
+                    .finally(() => {
+                        document.getElementById('loading').style.display = 'none';
+                        document.getElementById('loading-overlay').style.display = 'none';
+                        this.disabled = false;
+                    });
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('loading-overlay').style.display = 'none';
+                this.disabled = false;
+            }, 500);
+        });
+
+        // Xóa phòng ban
+        let deleteActionUrl = '';
+
+        function setDeleteForm(actionUrlDpm, departmentNameDpm) {
+            deleteActionUrl = actionUrlDpm;
+            document.getElementById('delete-department-message').innerText =
+                `Bạn có chắc chắn muốn xóa phòng ban "${departmentNameDpm}" này?`;
+        }
+
+        // Xác nhận xóa phòng ban
+        document.getElementById('confirm-delete-department').addEventListener('click', function() {
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loading-overlay').style.display = 'block';
+            this.disabled = true;
+
+            setTimeout(() => {
+                fetch(deleteActionUrl, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById(`department-${data.department.code}`).remove();
+                            $('#delete_modal_department_type').modal('hide');
+                            $('#add_modal_pb').modal('show');
+                            document.getElementById(`option_department_${data.department.code}`)
+                                .classList
+                                .add(
+                                    'd-none');
+                            toastr.success("Đã xóa phòng ban");
+                        } else {
+                            toastr.error(
+                                "Không thể xóa phòng ban này vì đã có giao dịch trong hệ thống");
+                        }
+                    })
+                    .catch(error => console.error('Error:', error))
+                    .finally(() => {
+                        document.getElementById('loading').style.display = 'none';
+                        document.getElementById('loading-overlay').style.display = 'none';
+                        this.disabled = false;
+                    });
+            }, 500);
+        });
+
+        // Thêm nhà cung cấp
+        document.getElementById('submit_supplier_type').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loading-overlay').style.display = 'block';
+            this.disabled = true;
+
+            setTimeout(() => {
+                let supplierTypeName = document.getElementById('supplier_type_name').value.trim();
+                let equipment_error = document.getElementById('show-err-supplier-type');
+                let existingSuppliers = Array.from(document.querySelectorAll(
+                    '#supplier-list tr td:first-child')).map(td => td.textContent.trim());
+
+                if (supplierTypeName === '') {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    this.disabled = false;
+                    equipment_error.innerText = 'Vui lòng nhập tên nhà cung cấp';
+                    supplierTypeName.focus();
+                }
+
+                if (existingSuppliers.includes(supplierTypeName)) {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    this.disabled = false;
+                    equipment_error.innerText = 'Nhà cung cấp đã tồn tại';
+                    supplierTypeName.focus();
+                }
+
+                equipment_error.innerText = '';
+
+                let formData = new FormData();
+                formData.append('name', supplierTypeName);
+
+                fetch('{{ route('equipment_request.create_import') }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Thêm thiết bị vào danh sách trong bảng mà không cần tải lại trang
+                            let tableBodySupplier = document.getElementById('supplier-list');
+                            let newRowSupplier = document.createElement('tr');
+                            newRowSupplier.id = `supplier-${data.code}`;
+                            newRowSupplier.className = `pointer`;
+
+                            newRowSupplier.innerHTML =
+                                `
+                            <td>${data.name}</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-danger btn-sm rounded-pill" data-bs-toggle="modal"
+                                    data-bs-target="#delete_modal_supplier_type"
+                                    onclick="setDeleteForm('{{ route('equipment_request.delete_supplier', '') }}/` +
+                                data.code + `', '` + data.name + `')">
+                                    <i class="fa fa-trash p-0"></i>
+                                </button>
+                            </td>
+                            `;
+
+                            tableBodySupplier.prepend(newRowSupplier);
+
+                            let selectOptionSupplier = document.getElementById('supplier_code');
+                            let newOption = document.createElement('option');
+                            newOption.value = data.code;
+                            newOption.textContent = data.name;
+                            newOption.id = `option_supplier_${data.code}`;
+
+                            let defaultOption = selectOptionSupplier.querySelector('option[value="0"]');
+                            selectOptionSupplier.insertBefore(newOption, defaultOption
+                                .nextSibling);
+
+                            toastr.success("Đã thêm nhà cung cấp");
+
+                            document.getElementById('supplier_type_name').value = "";
+                        }
+                    })
+                    .catch(error => console.error('Error:', error))
+                    .finally(() => {
+                        document.getElementById('loading').style.display = 'none';
+                        document.getElementById('loading-overlay').style.display = 'none';
+                        this.disabled = false;
+                    });
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('loading-overlay').style.display = 'none';
+                this.disabled = false;
+            }, 500);
+        });
+
+        // Xóa nhà cung cấp
+        let deleteActionUrlSpl = '';
+
+        function setDeleteFormSupplier(actionUrlSpl, supplierNameSpl) {
+            deleteActionUrlSpl = actionUrlSpl;
+            document.getElementById('delete-supplier-message').innerText =
+                `Bạn có chắc chắn muốn xóa nhà cung cấp "${supplierNameSpl}" này?`;
+        }
+
+        // Xác nhận xóa nhà cung cấp
+        document.getElementById('confirm-delete-supplier').addEventListener('click', function() {
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loading-overlay').style.display = 'block';
+            this.disabled = true;
+
+            setTimeout(() => {
+                fetch(deleteActionUrlSpl, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById(`supplier-${data.supplier.code}`).remove();
+                            $('#delete_modal_supplier_type').modal('hide');
+                            $('#add_modal_ncc').modal('show');
+                            document.getElementById(`option_supplier_${data.supplier.code}`).classList
+                                .add(
+                                    'd-none');
+                            toastr.success("Đã xóa nhà cung cấp");
+                        } else {
+                            toastr.error(
+                                "Không thể xóa nhà cung cấp này vì đã có giao dịch trong hệ thống");
+                        }
+                    })
+                    .catch(error => console.error('Error:', error))
+                    .finally(() => {
+                        document.getElementById('loading').style.display = 'none';
+                        document.getElementById('loading-overlay').style.display = 'none';
+                        this.disabled = false;
+                    });
+            }, 500);
+        });
 
         function cEquipment() {
             const cEquipment = document.getElementById('equipment').value;
