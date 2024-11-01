@@ -53933,7 +53933,7 @@ label.rating-label:hover~.rating-label>.svg-icon svg:hover [fill]:not(.permanent
     position: relative
 }
 
-.timeline-label:before {
+/* .timeline-label:before {
     content: "";
     position: absolute;
     left: 51px;
@@ -53941,7 +53941,7 @@ label.rating-label:hover~.rating-label>.svg-icon svg:hover [fill]:not(.permanent
     top: 0;
     bottom: 0;
     background-color: #eff2f5
-}
+} */
 
 .timeline-label .timeline-item {
     display: flex;

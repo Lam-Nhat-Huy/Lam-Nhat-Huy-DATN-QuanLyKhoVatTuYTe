@@ -48,7 +48,7 @@ class DashboardController extends Controller
         )->groupBy('month')->get();
         $importStatistics = $this->getImportStatistics(now()->month);
         $inventoryCheckLog = $this->getInventoryCheckLog();
-        return view("admin.{$this->route}.index", compact('title','inventoryCheckLog','importStatistics', 'forecastData', 'forecastTrendData', 'importantNotification', 'warnings', 'exportLog', 'importTotal', 'exportTotal', 'expenseTotal', 'inventoryData'));
+        return view("admin.{$this->route}.index", compact('title', 'inventoryCheckLog', 'importStatistics', 'forecastData', 'forecastTrendData', 'importantNotification', 'warnings', 'exportLog', 'importTotal', 'exportTotal', 'expenseTotal', 'inventoryData'));
     }
 
     private function calculateForecast()
@@ -72,7 +72,7 @@ class DashboardController extends Controller
     {
         $lowInventories = Inventories::where('current_quantity', '<=', $threshold)
             ->whereNull('deleted_at')
-            ->paginate(7, ['*'], 'low_inventory_page');  // Đặt tên cho phân trang
+            ->paginate(5, ['*'], 'low_inventory_page');  // Đặt tên cho phân trang
 
         return $lowInventories;
     }
@@ -83,7 +83,7 @@ class DashboardController extends Controller
         $exports = Exports::with('exportDetail.equipments')
             ->whereNull('deleted_at')
             ->orderBy('export_date', 'desc')
-            ->paginate(4, ['*'], 'export_log_page');  // Đặt tên cho phân trang
+            ->paginate(5, ['*'], 'export_log_page');  // Đặt tên cho phân trang
 
         return $exports;
     }
@@ -140,14 +140,13 @@ class DashboardController extends Controller
         return $importStatistics;
     }
     public function getInventoryCheckLog()
-{
-    // Lấy dữ liệu từ bảng Inventory_checks và các bảng liên quan
-    $inventoryChecks = Inventory_checks::with(['details.equipment', 'user', 'recheckUser'])
-        ->whereNull('deleted_at')
-        ->orderBy('check_date', 'desc')
-        ->paginate(5, ['*'], 'inventory_check_page'); // Số lượng bản ghi trên một trang
+    {
+        // Lấy dữ liệu từ bảng Inventory_checks và các bảng liên quan
+        $inventoryChecks = Inventory_checks::with(['details.equipment', 'user', 'recheckUser'])
+            ->whereNull('deleted_at')
+            ->orderBy('check_date', 'desc')
+            ->paginate(5, ['*'], 'inventory_check_page'); // Số lượng bản ghi trên một trang
 
-    return $inventoryChecks;
-}
-
+        return $inventoryChecks;
+    }
 }
