@@ -92,13 +92,13 @@
                                     <input type="checkbox" id="selectAll" />
                                 </th>
                                 <th class="" style="width: 10%;">Mã Yêu Cầu</th>
-                                <th class="" style="width: 13%;">Phòng Ban</th>
+                                <th class="" style="width: 20%;">Phòng Ban</th>
                                 <th class="" style="width: 13%;">Lý Do Xuất</th>
-                                <th class="" style="width: 15%;">Người Tạo</th>
-                                <th class="" style="width: 12%;">Ngày Yêu Cầu</th>
-                                <th class="" style="width: 12%;">Ngày Cần Thiết</th>
+                                <th class="" style="width: 12%;">Người Tạo</th>
+                                <th class="" style="width: 10%;">N.Yêu Cầu</th>
+                                <th class="" style="width: 15%;">N.Cần Thiết</th>
                                 <th class="text-center" style="width: 10%;">Trạng Thái</th>
-                                <th class="pe-3 text-center" style="width: 25%;">Hành Động</th>
+                                <th class="pe-3 text-center" style="width: 20%;">Hành Động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -137,7 +137,7 @@
                                         {{ \Carbon\Carbon::parse($item->request_date)->format('d-m-Y') }}
                                     </td>
                                     <td>
-                                        {{ \Carbon\Carbon::parse($item->required_date)->format('d-m-Y') }}
+                                        {{ \Carbon\Carbon::parse($item->required_date)->format('d-m-Y H:i:s') }}
                                     </td>
                                     <td class="text-center">
                                         @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->required_date)))
@@ -220,6 +220,9 @@
                                                             @endif
                                                         </div>
                                                     </div>
+                                                    @php
+                                                        $canApprove = true;
+                                                    @endphp
                                                     <div class="card-body p-0" style="padding-top: 0px !important">
                                                         <!-- Begin::Receipt Items (Right column) -->
                                                         <div class="col-md-12">
@@ -236,6 +239,17 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         @foreach ($item->export_equipment_request_details as $key => $detail)
+                                                                            @php
+                                                                                // Tính tổng số lượng tồn kho của thiết bị
+                                                                                $totalStock = $detail->equipments->inventories->sum(
+                                                                                    'current_quantity',
+                                                                                );
+
+                                                                                // Kiểm tra nếu số lượng xuất lớn hơn số lượng tồn kho
+                                                                                if ($detail->quantity > $totalStock) {
+                                                                                    $canApprove = false; // Không thể duyệt nếu có ít nhất một thiết bị vượt quá số lượng tồn
+                                                                                }
+                                                                            @endphp
                                                                             <tr class="text-center">
                                                                                 <td>{{ $key + 1 }}</td>
                                                                                 <td>{{ $detail->equipments->name }}
@@ -293,37 +307,54 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="mt-5 ms-3">
+                                                        <i>Ghi Chú: {{ $item->note ?? '...' }}</i>
+                                                    </div>
                                                 </div>
                                             </div>
 
                                             <div class="card-body py-5 text-end bg-white">
                                                 <div class="button-group">
-                                                    @if ($item->status == 0 && now()->lt(\Carbon\Carbon::parse($item->required_date)->addDays(1)))
+                                                    @if ($item->status == 0 && now()->lt(\Carbon\Carbon::parse($item->required_date)))
                                                         {{-- Chưa duyệt và ngày cần thiết bé hơn ngày hiện tại --}}
 
                                                         <!-- Nút Duyệt đơn -->
-                                                        <button class="btn btn-sm rounded-pill btn-twitter me-2"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#browse_{{ $item->code }}" type="button">
-                                                            <i class="fas fa-clipboard-check"
-                                                                style="margin-bottom: 2px;"></i>Duyệt Phiếu
-                                                        </button>
+                                                        @if ($canApprove)
+                                                            <button class="btn btn-sm rounded-pill btn-twitter me-2"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#browse_{{ $item->code }}"
+                                                                type="button">
+                                                                <i class="fas fa-clipboard-check"
+                                                                    style="margin-bottom: 2px;"></i>Duyệt Phiếu
+                                                            </button>
+                                                        @else
+                                                            <button class="btn btn-sm btn-secondary rounded-pill me-2"
+                                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                title="Trong danh sách có thiết bị chứa số
+                                                            lượng yêu cầu xuất vượt quá số lượng tồn"
+                                                                type="button">
+                                                                <i class="fas fa-save" style="margin-bottom: 2px;"></i>
+                                                                Không thể duyệt
+                                                            </button>
+                                                        @endif
 
-                                                        <!-- Nút Sửa đơn -->
-                                                        <a href="{{ route('equipment_request.update_export', $item->code) }}"
-                                                            class="btn btn-sm rounded-pill btn-dark me-2">
-                                                            <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                            Phiếu
-                                                        </a>
+                                                        @if ($item->user_code == session('user_code') || session('isAdmin') == 1)
+                                                            <!-- Nút Sửa đơn -->
+                                                            <a href="{{ route('equipment_request.update_export', $item->code) }}"
+                                                                class="btn btn-sm rounded-pill btn-dark me-2">
+                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
+                                                                Phiếu
+                                                            </a>
 
-                                                        <!-- Nút Hủy đơn -->
-                                                        <button class="btn btn-sm rounded-pill btn-danger me-2"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#deleteModal_{{ $item->code }}"
-                                                            type="button">
-                                                            <i class="fa fa-trash" style="margin-bottom: 2px;"></i>Hủy
-                                                            Phiếu
-                                                        </button>
+                                                            <!-- Nút Hủy đơn -->
+                                                            <button class="btn btn-sm rounded-pill btn-danger me-2"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#deleteModal_{{ $item->code }}"
+                                                                type="button">
+                                                                <i class="fa fa-trash" style="margin-bottom: 2px;"></i>Hủy
+                                                                Phiếu
+                                                            </button>
+                                                        @endif
                                                     @elseif (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->required_date)))
                                                         {{-- Quá ngày cần thiết --}}
 
@@ -341,13 +372,25 @@
                                                             $item->user_code == session('user_code'))
                                                         {{-- Lưu tạm và ngày yêu cầu trong 3 ngày gần nhất --}}
 
-                                                        <!-- Nút lưu phiếu -->
-                                                        <button class="btn btn-sm rounded-pill btn-twitter me-2"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#save_{{ $item->code }}" type="button">
-                                                            <i class="fa fa-save" style="margin-bottom: 2px;"></i>Tạo
-                                                            Phiếu
-                                                        </button>
+                                                        @if ($canApprove)
+                                                            <!-- Nút lưu phiếu -->
+                                                            <button class="btn btn-sm rounded-pill btn-twitter me-2"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#save_{{ $item->code }}"
+                                                                type="button">
+                                                                <i class="fa fa-save" style="margin-bottom: 2px;"></i>Tạo
+                                                                Phiếu
+                                                            </button>
+                                                        @else
+                                                            <button class="btn btn-sm btn-secondary rounded-pill me-2"
+                                                                type="button" data-bs-toggle="tooltip"
+                                                                data-bs-placement="top"
+                                                                title="Trong danh sách có thiết bị chứa số
+                                                            lượng yêu cầu xuất vượt quá số lượng tồn">
+                                                                <i class="fas fa-save" style="margin-bottom: 2px;"></i>
+                                                                Không thể tạo
+                                                            </button>
+                                                        @endif
 
                                                         <!-- Nút Sửa đơn -->
                                                         <a href="{{ route('equipment_request.update_export', $item->code) }}"
@@ -367,6 +410,23 @@
                                                     @else
                                                         {{-- Đã duyệt --}}
                                                         @if ($item->status < 4)
+                                                            @if (session('isAdmin') == 1)
+                                                                <!-- Nút Hủy đơn -->
+                                                                <button class="btn btn-sm rounded-pill btn-danger me-2"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#deleteModal_{{ $item->code }}"
+                                                                    type="button">
+                                                                    <i class="fa fa-trash"
+                                                                        style="margin-bottom: 2px;"></i>Hủy
+                                                                    Phiếu
+                                                                </button>
+                                                                <a href="{{ route('equipment_request.update_export', $item->code) }}"
+                                                                    class="btn btn-sm rounded-pill btn-info me-2">
+                                                                    <i class="fas fa-edit"
+                                                                        style="margin-bottom: 2px;"></i>
+                                                                    Cập Nhật
+                                                                </a>
+                                                            @endif
                                                             <!-- Nút Tạo Phiếu Xuất -->
                                                             <a href="{{ route('warehouse.create_export') }}?cd={{ $item->code }}"
                                                                 class="btn btn-sm rounded-pill btn-dark me-2">
@@ -388,7 +448,9 @@
 
                                             {{-- In --}}
                                             <div class="fade modal position-relative" id="printArea_{{ $item->code }}">
-                                                <span class="link-primary position-absolute" style="top: 5%; right: 5%;"><strong class="text-danger">Mã: </strong>{{ $item->code }}</span>
+                                                <span class="link-primary position-absolute"
+                                                    style="top: 5%; right: 5%;"><strong class="text-danger">Mã:
+                                                    </strong>{{ $item->code }}</span>
                                                 <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
                                                     <div class="d-flex mb-5">
                                                         <img src="{{ asset('image/logo_warehouse.png') }}" width="100"
@@ -445,7 +507,7 @@
                                                                 <h4 class="text-primary mb-3">
                                                                     Danh Sách Thiết Bị
                                                                 </h4>
-                                                                <div class="table-responsive rounded">
+                                                                <div class="table-responsive">
                                                                     <table
                                                                         class="table border border-dark align-middle gs-0 gy-4">
                                                                         <thead>
@@ -485,19 +547,6 @@
                                                                                     </td>
                                                                                 </tr>
                                                                             @endforeach
-                                                                            <tr class=" border border-dark">
-                                                                                <td colspan="1">
-                                                                                </td>
-                                                                                <td colspan="1" class="text-center">
-                                                                                    Tổng Cộng
-                                                                                </td>
-                                                                                <td colspan="1"
-                                                                                    style="height: 30px; min-height: 30px;">
-                                                                                </td>
-                                                                                <td colspan="1"
-                                                                                    style="height: 30px; min-height: 30px;">
-                                                                                </td>
-                                                                            </tr>
                                                                         </tbody>
                                                                     </table>
                                                                 </div>

@@ -9,8 +9,18 @@
 @endsection
 
 @php
-    if ($action === 'create') {
+    if (!empty($getExportRequest)) {
+        $d_none_save = 'd-none';
+
+        $d_none_save_request = '';
+
+        $d_none_update = 'd-none';
+
+        $d_none_temp = 'd-none';
+    } elseif ($action === 'create') {
         $action = route('warehouse.store_export');
+
+        $d_none_save_request = 'd-none';
 
         $d_none_save = '';
 
@@ -21,6 +31,8 @@
         $action = route('warehouse.update_export', request('code'));
 
         $d_none_save = 'd-none';
+
+        $d_none_save_request = 'd-none';
 
         $d_none_update = '';
 
@@ -49,12 +61,16 @@
                         <label for="department_code" class="required form-label fw-semibold">Phòng Ban</label>
                         <div class="d-flex align-items-center">
                             <select name="department_code" id="department_code"
+                                {{ !empty($getExportRequest) ? 'disabled' : '' }}
                                 class="form-select form-select-sm border border-success rounded-pill">
                                 <option value="0">Chọn Phòng Ban...</option>
                                 <option value="1" class="d-none">Chọn Phòng Ban...</option>
                                 @foreach ($allDepartment as $item)
                                     <option value="{{ $item->code }}"
-                                        {{ !empty($editExport) && $editExport->department_code == $item->code ? 'selected' : '' }}>
+                                        {{ (!empty($getExportRequest) && $getExportRequest->department_code == $item->code) ||
+                                        (!empty($editExport) && $editExport->department_code == $item->code)
+                                            ? 'selected'
+                                            : '' }}>
                                         {{ $item->name }}</option>
                                 @endforeach
                             </select>
@@ -68,7 +84,7 @@
                         <div class="message_error" id="department_code_error"></div>
                     </div>
 
-                    <div class="col-md-6 mb-3 fv-row" id="supplier_show">
+                    <div class="col-md-6 mb-3 fv-row d-none" id="supplier_show">
                         <label for="supplier_code" class="required form-label fw-semibold">Nhà Cung Cấp</label>
                         <div class="d-flex align-items-center">
                             <select name="supplier_code" id="supplier_code"
@@ -91,7 +107,7 @@
                         <div class="message_error" id="supplier_code_error"></div>
                     </div>
 
-                    <div class="col-md-6 mb-3 fv-row" id="cancel_reason">
+                    <div class="col-md-6 mb-3 fv-row d-none" id="cancel_reason">
                         <label for="reason" class="required form-label fw-semibold">Lý Do Hủy</label>
                         <select name="reason" id="reason"
                             class="form-select form-select-sm border border-success rounded-pill">
@@ -108,7 +124,7 @@
                         <div class="message_error" id="reason_error"></div>
                     </div>
 
-                    <div class="mb-3 col-md-6">
+                    <div class="mb-3 col-md-6 {{ !empty($getExportRequest) ? 'd-none' : '' }}">
                         <label for="export_type" class="required form-label fw-semibold">Loại Xuất</label>
                         <div class="d-flex align-items-center">
                             <select name="export_type" id="export_type"
@@ -127,13 +143,24 @@
                         <div class="message_error" id="export_type_error"></div>
                     </div>
 
-                    <div class="mb-3 col-md-6">
-                        <label for="" class="form-label fw-semibold">Ngày Xuất Kho</label>
+                    <div class="mb-3 col-md-6 d-none" id="export_date_div">
+                        <label for="" class="form-label fw-semibold">Ngày Tạo</label>
                         <input type="date" name="export_date" id="export_date" disabled
                             class="form-control form-control-sm border-success rounded-pill"
                             value="{{ !empty($editExport) && $editExport->export_date ? \Carbon\Carbon::parse($editExport->export_date)->format('Y-m-d') : \Carbon\Carbon::parse(now())->format('Y-m-d') }}">
                         <div class="message_error"></div>
                     </div>
+
+                    @if (!empty($getExportRequest) || $action == route('warehouse.store_export'))
+                        <div class="mb-3 col-md-6" id="required_date_div">
+                            <label for="" class="form-label fw-semibold">Ngày Cần Thiết</label>
+                            <input type="datetime-local" name="required_date" id="required_date"
+                                {{ !empty($getExportRequest) ? 'disabled' : '' }}
+                                class="form-control form-control-sm border-success rounded-pill"
+                                value="{{ !empty($getExportRequest) && $getExportRequest->required_date ? \Carbon\Carbon::parse($getExportRequest->required_date)->format('Y-m-d H:i:s') : '' }}">
+                            <div class="message_error" id="required_date_error"></div>
+                        </div>
+                    @endif
 
                     <div class="mb-3 col-md-6">
                         <label for="" class="form-label fw-semibold">Ghi Chú</label>
@@ -153,7 +180,7 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Thiết Bị Xuất</span>
             </h3>
         </div>
-        <div class="container">
+        <div class="container {{ !empty($getExportRequest) ? 'd-none' : '' }}">
             <div class="card border-0 px-8 mb-4 rounded-3">
                 <div class="row">
                     <div class="col-6">
@@ -212,7 +239,9 @@
                                     <th style="width: 50%;" class="ps-5">Thiết bị</th>
                                     <th style="width: 25%;">Số lô</th>
                                     <th style="width: 15%;">Số Lượng</th>
-                                    <th style="width: 10%;" class="pe-5">Hành Động</th>
+                                    <th style="width: 10%;" class="pe-5 {{ !empty($getExportRequest) ? 'd-none' : '' }}">
+                                        Hành Động
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody id="equipmentList">
@@ -237,7 +266,7 @@
                                                         class="form-control form-control-sm border border-success rounded-pill">
                                                     <div class="message_error d-none ms-2 m-0 p-0 pointer"
                                                         data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Số Lượng Phải Lớn Hơn 0 Và Nhỏ Hơn {{ $item->equipments->inventories->sum('current_quantity') }}"
+                                                        title="Số lượng không được vượt quá {{ $item->equipments->inventories->sum('current_quantity') }}"
                                                         id="quantity_list_{{ $item->batch_number }}">
                                                         <i class="fa-solid fa-triangle-exclamation text-danger"></i>
                                                     </div>
@@ -252,8 +281,95 @@
                                             </td>
                                         </tr>
                                     @endforeach
+                                @elseif(!empty($getExportRequest))
+                                    @foreach ($getExportRequest->export_equipment_request_details as $er)
+                                        @php
+                                            $batches = $er->equipments->inventories;
+                                        @endphp
+
+                                        @php
+                                            $singleBatch = null;
+
+                                            if ($batches->count() === 1) {
+                                                $singleBatch = $batches->first();
+                                            }
+                                        @endphp
+
+                                        <tr>
+                                            <td colspan="2">
+                                                {{ $er->equipments->name }}
+                                            </td>
+                                            <td class="pe-5">
+                                                <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Tổng số lượng xuất" class="pointer"
+                                                    id="quantity_total_input_{{ $er->equipments->code }}">{{ isset($singleBatch) ? $er->quantity : 0 }}</span>
+                                                /
+                                                <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Số lượng yêu cầu" class="pointer"
+                                                    id="quantity_current_by_batch_{{ $er->equipments->code }}">
+                                                    {{ $er->quantity }}
+                                                </span>
+                                                <span class="pointer ms-1 d-none"
+                                                    id="quantity_export_request_error_{{ $er->equipments->code }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Tổng số lượng phải bằng với số lượng yêu cầu là {{ $er->quantity }}">
+                                                    <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+
+                                        @foreach ($batches as $batchNumber)
+                                            <tr class="list_batch_export_detail"
+                                                id="equipment-row-export-request-{{ $batchNumber->batch_number }}-{{ $batchNumber->equipment_code }}">
+                                                <td></td>
+                                                <td>
+                                                    <div class="d-flex align-ers-center"
+                                                        id="batch_number_change_{{ $batchNumber->batch_number }}_{{ $batchNumber->equipment_code }}">
+                                                        {{ $batchNumber->batch_number }} - (Tồn Kho:
+                                                        {{ $batchNumber->current_quantity }}
+                                                        {{ $batchNumber->units->name }})
+                                                    </div>
+                                                    <input type="hidden"
+                                                        id="current_quantity_{{ $batchNumber->batch_number }}_{{ $batchNumber->equipment_code }}"
+                                                        value="{{ $batchNumber->current_quantity }}" />
+                                                </td>
+                                                <td class="pe-5">
+                                                    <div class="d-flex align-items-center">
+                                                        <input type="number"
+                                                            id="quantity_change_{{ $batchNumber->batch_number }}_{{ $batchNumber->equipment_code }}"
+                                                            value="{{ isset($singleBatch) ? $er->quantity : 0 }}"
+                                                            min="0" max="{{ $batchNumber->current_quantity }}"
+                                                            class="form-control form-control-sm border border-success rounded-pill"
+                                                            data-er-code="{{ $er->equipments->code }}" />
+                                                        <div class="message_error d-none ms-2 m-0 p-0 pointer"
+                                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                                            title="Số lượng không được vượt quá {{ $batchNumber->current_quantity }}"
+                                                            id="quantity_list_{{ $batchNumber->batch_number }}_{{ $batchNumber->equipment_code }}">
+                                                            <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+                                    <script>
+                                        document.querySelectorAll('input[type="number"]').forEach(input => {
+                                            input.addEventListener('input', function() {
+                                                let erCode = this.getAttribute('data-er-code');
+                                                let total = 0;
+
+                                                document.querySelectorAll(`input[data-er-code="${erCode}"]`).forEach(item => {
+                                                    let value = parseInt(item.value) || 0;
+                                                    total += value;
+                                                });
+
+                                                document.getElementById(`quantity_total_input_${erCode}`).textContent = total;
+                                            });
+                                        });
+                                    </script>
                                 @endif
-                                <tr id="noDataAlert" class="{{ !empty($editExport) ? 'd-none' : '' }}">
+                                <tr id="noDataAlert"
+                                    class="{{ !empty($editExport) || !empty($getExportRequest) ? 'd-none' : '' }}">
                                     <td colspan="12" class="text-center">
                                         <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
                                             role="alert"
@@ -277,6 +393,11 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end align-items-center mt-10">
+                    <button type="button"
+                        class="btn btn-sm btn-twitter d-flex align-items-center justify-content-center rounded-pill {{ $d_none_save_request }}"
+                        id="export_browse">
+                        <i class="fas fa-save me-1"></i>Duyệt Phiếu
+                    </button>
                     <button type="button"
                         class="btn btn-sm btn-twitter d-flex align-items-center justify-content-center rounded-pill {{ $d_none_update }}"
                         id="export_update">
@@ -471,6 +592,9 @@
             var supplierSelect = document.getElementById('supplier_code');
             var departmentSelect = document.getElementById('department_code');
             var reasonSelect = document.getElementById('reason');
+            var export_dateSelect = document.getElementById('export_date_div');
+            var required_date = document.getElementById('required_date');
+            var required_date_div = document.getElementById('required_date_div');
 
             var supplierSelectErr = document.getElementById('supplier_code_error');
             var departmentSelectErr = document.getElementById('department_code_error');
@@ -478,19 +602,25 @@
 
             if (exportType === 'Xuất Sử Dụng') {
                 let firstDepartment = {!! json_encode($editExport ?? []) !!};
+                let firstDepartmentByRequestExport = {!! json_encode($getExportRequest ?? []) !!};
 
                 supplierShow.classList.add('d-none');
                 departmentShow.classList.remove('d-none');
                 cancelReason.classList.add('d-none');
+                export_dateSelect.classList.add('d-none');
+                required_date_div.classList.remove('d-none');
 
-                if (firstDepartment && firstDepartment.department_code) {
-                    departmentSelect.value = firstDepartment.department_code;
+                if ((firstDepartment && firstDepartment.department_code) || (firstDepartmentByRequestExport &&
+                        firstDepartmentByRequestExport.department_code)) {
+                    departmentSelect.value = firstDepartment.department_code ?? firstDepartmentByRequestExport
+                        .department_code;
                 } else {
                     departmentSelect.value = '0';
                 }
 
                 supplierSelect.value = '1';
                 reasonSelect.value = '1';
+                required_date.value = '';
 
                 supplierSelectErr.innerText = '';
                 reasonSelectErr.innerText = '';
@@ -500,6 +630,8 @@
                 departmentShow.classList.add('d-none');
                 supplierShow.classList.remove('d-none');
                 cancelReason.classList.add('d-none');
+                export_dateSelect.classList.remove('d-none');
+                required_date_div.classList.add('d-none');
 
                 if (firstSupplier && firstSupplier.supplier_code) {
                     supplierSelect.value = firstSupplier.supplier_code;
@@ -509,6 +641,7 @@
 
                 departmentSelect.value = '1';
                 reasonSelect.value = '1';
+                required_date.value = '2090-01-01T12:00:00';
 
                 // Xóa lỗi hiển thị
                 departmentSelectErr.innerText = '';
@@ -519,6 +652,8 @@
                 supplierShow.classList.add('d-none');
                 departmentShow.classList.add('d-none');
                 cancelReason.classList.remove('d-none');
+                export_dateSelect.classList.remove('d-none');
+                required_date_div.classList.add('d-none');
 
                 if (firstReason && firstReason.reason) {
                     reasonSelect.value = firstReason.reason;
@@ -528,16 +663,11 @@
 
                 supplierSelect.value = '1';
                 departmentSelect.value = '1';
+                required_date.value = '2090-01-01T12:00:00';
 
                 supplierSelectErr.innerText = '';
                 departmentSelectErr.innerText = '';
             }
-        });
-
-        // Đảm bảo thiết lập đúng trạng thái ban đầu dựa trên giá trị đã chọn (nếu có)
-        window.addEventListener('DOMContentLoaded', function() {
-            var event = new Event('change');
-            document.getElementById('export_type').dispatchEvent(event);
         });
 
         // Đảm bảo thiết lập đúng trạng thái ban đầu dựa trên giá trị đã chọn (nếu có)
@@ -564,7 +694,6 @@
             const filteredBatches = equipmentBatches.filter(batch => batch.equipment_code === selectedEquipment);
 
             if (filteredBatches.length > 0) {
-                let allHidden = true;
 
                 filteredBatches.forEach(function(batch) {
                     const option = document.createElement('option');
@@ -586,19 +715,8 @@
 
                     if (batchExistsInAdded || batchExistsInCheckList) {
                         option.classList.add('d-none');
-                    } else if (option.value !== '') {
-                        allHidden = false;
                     }
                 });
-
-                // Nếu tất cả các số lô đều bị ẩn, hiển thị thông báo
-                if (allHidden) {
-                    batchSelect.innerHTML = ''; // Xóa các option
-                    const noBatchOption = document.createElement('option');
-                    noBatchOption.value = '';
-                    noBatchOption.textContent = 'Đã Thêm Toàn Bộ Số Lô';
-                    batchSelect.appendChild(noBatchOption);
-                }
 
             } else {
                 batchSelect.innerHTML = ''; // Nếu không có số lô nào cho thiết bị này
@@ -651,15 +769,39 @@
                     quantity: quantityValue,
                     batch_number: batchNumber,
                 });
-
             });
-
             return equipmentList;
         }
 
-        // Tạo hoặc lưu tạm phiếu xuất
+        function getEquipmentListExportRequest() {
+            let equipmentListExportRequest = [];
+            let rowsExportRequest = document.querySelectorAll('.list_batch_export_detail');
 
-        // Lấy sự kiện click
+            rowsExportRequest.forEach((row) => {
+                if (row.id === "noDataAlert") return;
+
+                let parts = row.id.split('-');
+                let batchNumberExportRequest = parts[4];
+                let equipmentCodeExportRequest = parts[5];
+
+                let quantityIpExportRequest = document.getElementById(
+                    `quantity_change_${batchNumberExportRequest}_${equipmentCodeExportRequest}`
+                );
+
+                let quantityValueExportRequest = parseInt(quantityIpExportRequest.value.trim(), 10);
+
+                equipmentListExportRequest.push({
+                    equipment_code: equipmentCodeExportRequest,
+                    quantity: quantityValueExportRequest,
+                    batch_number: batchNumberExportRequest,
+                });
+            });
+
+
+            return equipmentListExportRequest;
+        }
+
+        // Tạo hoặc lưu tạm phiếu xuất
         document.getElementById('export_save').addEventListener('click', function(event) {
             event.preventDefault();
             handleImportEquipmentRequest(4);
@@ -686,15 +828,20 @@
                 let reason = document.getElementById('reason').value.trim();
                 let export_type = document.getElementById('export_type').value.trim();
                 let export_date = document.getElementById('export_date').value.trim();
+                let required_date_create = document.getElementById('required_date').value.trim();
                 let note = document.getElementById('note').value.trim();
 
                 let department_code_error = document.getElementById('department_code_error');
+                let required_date_error = document.getElementById('required_date_error');
                 let supplier_code_error = document.getElementById('supplier_code_error');
                 let reason_error = document.getElementById('reason_error');
                 let equipment_error = document.getElementById('equipment_error');
                 let equipmentList = getEquipmentList();
 
                 department_code_error.innerText = '';
+                supplier_code_error.innerText = '';
+                reason_error.innerText = '';
+                required_date_error.innerText = '';
                 equipment_error.innerText = '';
 
                 let hasError = false;
@@ -713,6 +860,27 @@
                     reason_error.innerText = "Vui lòng chọn lý do hủy";
                     hasError = true;
                 }
+
+                let requiredDateCreate = new Date(required_date_create);
+                let currentDate = new Date();
+
+                if (!required_date_create) {
+                    required_date_error.innerText = "Vui lòng thêm ngày cần thiết";
+                    hasError = true;
+                } else {
+                    let timeDifference = requiredDateCreate.getTime() - currentDate.getTime();
+
+                    let differenceInHours = timeDifference / (1000 * 60 * 60);
+
+                    if (differenceInHours < 1) {
+                        required_date_error.innerText =
+                            "Ngày cần thiết phải lớn hơn thời gian hiện tại ít nhất 1 giờ";
+                        hasError = true;
+                    } else {
+                        required_date_error.innerText = "";
+                    }
+                }
+
 
                 if (equipmentList.length === 0) {
                     equipment_error.innerText = "Vui lòng chọn thiết bị cần xuất";
@@ -747,6 +915,7 @@
                 formData.append(
                     'export_type', export_type);
                 formData.append('export_date', export_date);
+                formData.append('required_date', required_date_create);
                 formData.append('note',
                     note);
                 formData.append('exportStatus', exportStatus);
@@ -756,6 +925,123 @@
                 fetch('{{ $action }}', {
                         method: 'POST',
                         body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            toastr.success(data.message);
+                            window.location.href = "{{ route('warehouse.export') }}";
+                        } else {
+                            toastr.error(data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error))
+                    .finally(() => {
+                        document.getElementById('loading').style.display = 'none';
+                        document.getElementById('loading-overlay').style.display = 'none';
+                        this.disabled = false;
+                    });
+
+            }, 500);
+        }
+
+        // Lấy sự kiện click
+        document.getElementById('export_browse').addEventListener('click', function(event) {
+            event.preventDefault();
+            handleImportEquipmentRequestBrowse();
+        });
+
+        function handleImportEquipmentRequestBrowse() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loading-overlay').style.display = 'block';
+            this.disabled = true;
+
+            setTimeout(async () => {
+                let department_code_export_request = document.getElementById('department_code').value.trim();
+                let export_type_export_request = document.getElementById('export_type').value.trim();
+                let required_date_export_request = document.getElementById('required_date').value.trim();
+                let note_export_request = document.getElementById('note').value.trim();
+
+                let equipmentListExportRequest = getEquipmentListExportRequest();
+
+                let hasError = false;
+
+                let equipmentTotals = {};
+
+                equipmentListExportRequest.forEach((item) => {
+                    let currentQuantityExportRequest = parseInt(document.getElementById(
+                            `current_quantity_${item.batch_number}_${item.equipment_code}`)
+                        .value
+                        .trim(), 10);
+
+                    if (item.quantity < 0 || item.quantity >
+                        currentQuantityExportRequest) {
+                        document.getElementById(
+                                `quantity_list_${item.batch_number}_${item.equipment_code}`)
+                            .classList
+                            .remove(
+                                'd-none');
+                        hasError = true;
+                    } else {
+                        document.getElementById(
+                                `quantity_list_${item.batch_number}_${item.equipment_code}`)
+                            .classList
+                            .add(
+                                'd-none');
+                    }
+
+                    if (!equipmentTotals[item.equipment_code]) {
+                        equipmentTotals[item.equipment_code] = 0;
+                    }
+
+                    equipmentTotals[item.equipment_code] += parseInt(item.quantity, 10);
+                });
+
+                Object.keys(equipmentTotals).forEach((equipmentCode) => {
+                    let totalQuantity = equipmentTotals[equipmentCode];
+                    let requestedQuantity = parseInt(document.getElementById(
+                            `quantity_current_by_batch_${equipmentCode}`).innerText
+                        .trim(), 10);
+
+                    if (totalQuantity !== requestedQuantity) {
+                        document.getElementById(
+                                `quantity_export_request_error_${equipmentCode}`).classList
+                            .remove('d-none');
+                        hasError = true;
+                    } else {
+                        document.getElementById(
+                                `quantity_export_request_error_${equipmentCode}`).classList
+                            .add('d-none');
+                    }
+                });
+
+                if (hasError) {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    this.disabled = false;
+                    return;
+                }
+
+                let formDataExportRequest = new FormData();
+                formDataExportRequest.append('department_code',
+                    department_code_export_request);
+                formDataExportRequest.append('export_type',
+                    export_type_export_request);
+                formDataExportRequest.append('required_date',
+                    required_date_export_request);
+                formDataExportRequest.append('note',
+                    note_export_request);
+                formDataExportRequest.append('export_request_code',
+                    '{{ request('cd') }}');
+                formDataExportRequest.append('equipment_list_export_request', JSON.stringify(
+                    equipmentListExportRequest));
+
+                fetch('{{ route('warehouse.export_equipment_request') }}', {
+                        method: 'POST',
+                        body: formDataExportRequest,
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         }
@@ -832,7 +1118,6 @@
                             hasError = true;
                         } else {
                             quantity_error.innerText = '';
-                            hasError = false;
                         }
                     }
                 }
@@ -974,23 +1259,7 @@
                     document.getElementById('noDataAlert').classList.remove('d-none');
                 }
 
-                // Bỏ ẩn các tùy chọn thiết bị đã thêm trong danh sách
-                let equipmentOptions = document.querySelectorAll('#batch_number option');
-                equipmentOptions.forEach(option => {
-                    const batchExistsInAdded = addedEquipmentBatchs.some(
-                        item =>
-                        item.equipment_code === equipmentCode &&
-                        item.batch_number === option.value
-                    );
-
-                    if (!batchExistsInAdded) {
-                        option.classList.remove(
-                            'd-none');
-                    }
-                });
-
                 // Cập nhật lại mảng thiết bị đã thêm
-                // Lọc addedEquipmentBatchs để loại bỏ phần tử có cả equipment_code và batch_number
                 addedEquipmentBatchs = addedEquipmentBatchs.filter(item =>
                     !(item.equipment_code === equipmentCode && item.batch_number === batchNumber)
                 );
@@ -1000,6 +1269,20 @@
                     !(item.equipment_code === equipmentCode && item.batch_number === batchNumber)
                 );
 
+                // Bỏ ẩn các tùy chọn thiết bị đã thêm trong danh sách
+                let equipmentOptions = document.querySelectorAll('#batch_number option');
+                equipmentOptions.forEach(option => {
+                    // Kiểm tra xem tùy chọn có còn trong mảng addedEquipmentBatchs hay không
+                    const batchExistsInAdded = addedEquipmentBatchs.some(item =>
+                        item.equipment_code === equipmentCode && item.batch_number === option.value
+                    );
+
+                    // Nếu không tồn tại trong mảng thì bỏ lớp 'd-none' để hiện lại
+                    if (!batchExistsInAdded) {
+                        option.classList.remove('d-none');
+                    }
+                });
+
                 toastr.success("Đã xóa thiết bị khỏi danh sách");
 
                 document.getElementById('loading').style.display = 'none';
@@ -1007,6 +1290,7 @@
                 this.disabled = false;
             }, 500);
         }
+
 
         // Thêm phòng ban
         document.getElementById('submit_department_type').addEventListener('click', function(event) {

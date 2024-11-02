@@ -100,9 +100,9 @@
 
                     <div class="col-md-6 fv-row">
                         <label class="required fs-5 fw-bold mb-3">Ngày Cần Thiết</label>
-                        <input type="date" class="form-control form-control-sm border border-success rounded-pill"
+                        <input type="datetime-local" class="form-control form-control-sm border border-success rounded-pill"
                             name="required_date" id="required_date"
-                            value="{{ old('required_date', !empty($editForm->required_date) ? \Carbon\Carbon::parse($editForm->required_date)->format('Y-m-d') : '') }}" />
+                            value="{{ old('required_date', !empty($editForm->required_date) ? \Carbon\Carbon::parse($editForm->required_date)->format('Y-m-d H:i:s') : '') }}" />
                         <div class="message_error" id="required_date_error"></div>
                     </div>
                 </div>
@@ -361,6 +361,16 @@
                 return !addedEquipments.includes(equipment); // Loại bỏ các thiết bị đã thêm
             });
 
+            let date = new Date(new Date().setDate(new Date().getDate() + 4));
+            // Lấy các thành phần giờ, phút, giây
+            let year = date.getFullYear();
+            let month = ('0' + (date.getMonth() + 1)).slice(-2); // Tháng từ 0-11, cần +1
+            let day = ('0' + date.getDate()).slice(-2);
+            let hours = ('0' + date.getHours()).slice(-2);
+            let minutes = ('0' + date.getMinutes()).slice(-2);
+            let seconds = ('0' + date.getSeconds()).slice(-2);
+            let formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+
             // Nếu còn thiết bị để random
             if (availableEquipments.length > 0) {
                 const randomDepartmnet = getRandomArr(allDepartments);
@@ -370,10 +380,7 @@
                 document.getElementById('department_code').value = randomDepartmnet;
                 document.getElementById('note').value = 'Cạn Kiệt Thiết Bị';
                 document.getElementById('reason_export').value = 'Thay đổi thiết bị';
-                document.getElementById('required_date').value = new Date(new Date().setDate(new Date().getDate() +
-                        4))
-                    .toISOString()
-                    .split('T')[0];
+                document.getElementById('required_date').value = formattedDateTime;
                 document.getElementById('equipment').value = randomEquipment;
                 document.getElementById('quantity').value = getRandomNumber(50, 300);
             }

@@ -668,7 +668,7 @@ class EquipmentRequestController extends Controller
                 'user_code' => session('user_code'),
                 'department_code' => $departmentCode,
                 'reason_export' => $reasonExport,
-                'note' => $note ?? '',
+                'note' => $note ?? null,
                 'status' => $request->input('exportEquipmentStatus') == 4 ? 0 : $request->input('exportEquipmentStatus'),
                 'request_date' => now(),
                 'required_date' => $requiredDate,

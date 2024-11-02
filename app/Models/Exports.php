@@ -23,6 +23,7 @@ class Exports extends Model
         'note',
         'status',
         'export_date',
+        'required_date',
         'export_type',
         'department_code',
         'supplier_code',

@@ -44,9 +44,10 @@
                                     <input type="checkbox" id="selectAll" />
                                 </th>
                                 <th style="width: 15%;">Mã</th>
-                                <th class="" style="width: 25%;">Loại Xuất</th>
-                                <th class="" style="width: 20%;">Tạo Bởi</th>
-                                <th class="" style="width: 15%;">Ngày Xuất</th>
+                                <th class="" style="width: 17%;">Loại Xuất</th>
+                                <th class="" style="width: 16%;">Tạo Bởi</th>
+                                <th class="" style="width: 12%;">Ngày Tạo</th>
+                                <th class="" style="width: 15%;">Ngày Cần Thiết</th>
                                 <th class="text-center" style="width: 10%;">Trạng Thái</th>
                                 <th class="pe-3 text-center" style="width: 15%;">Hành Động</th>
                             </tr>
@@ -74,8 +75,15 @@
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->export_date)->format('d/m/Y') }}
                                     </td>
+                                    <td>
+                                        {{ !empty($item->required_date) ? \Carbon\Carbon::parse($item->required_date)->format('d/m/Y H:i:s') : 'Không Có' }}
+                                    </td>
                                     <td class="text-center">
-                                        @if ($item['status'] == 3)
+                                        @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->required_date)))
+                                            <div class="label label-temp bg-warning rounded-pill text-dark px-2 py-1">
+                                                Hết Hạn
+                                            </div>
+                                        @elseif ($item->status == 3)
                                             <div class="label label-temp bg-info rounded-pill text-white px-2 py-1">
                                                 Lưu Tạm
                                             </div>
@@ -110,7 +118,11 @@
                                                         Chi tiết phiếu xuất kho
                                                     </h4>
                                                     <div class="card-toolbar">
-                                                        @if ($item->status == 3)
+                                                        @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->required_date)))
+                                                            <div class="rounded-pill px-2 py-1 text-dark bg-warning">
+                                                                Hết Hạn
+                                                            </div>
+                                                        @elseif ($item->status == 3)
                                                             <div class="rounded-pill px-2 py-1 text-white bg-info">
                                                                 Lưu Tạm
                                                             </div>
@@ -182,36 +194,53 @@
                                                                 <tbody>
                                                                     @foreach ($item->exportDetail as $detail)
                                                                         @php
-                                                                            // Tính tổng số lượng tồn kho của thiết bị
-                                                                            $totalStock = $detail->equipments->inventories->sum(
-                                                                                'current_quantity',
-                                                                            );
+                                                                            $totalBatchQuantity = 0;
+                                                                            foreach (
+                                                                                $detail->equipments->inventories
+                                                                                as $inventory
+                                                                            ) {
+                                                                                if (
+                                                                                    $inventory->batch_number ==
+                                                                                    $detail->batch_number
+                                                                                ) {
+                                                                                    $totalBatchQuantity +=
+                                                                                        $inventory->current_quantity;
+                                                                                }
+                                                                            }
 
-                                                                            // Kiểm tra nếu số lượng xuất lớn hơn số lượng tồn kho
-                                                                            if ($detail->quantity > $totalStock) {
-                                                                                $canApprove = false; // Không thể duyệt nếu có ít nhất một thiết bị vượt quá số lượng tồn
+                                                                            if (
+                                                                                $detail->quantity > $totalBatchQuantity
+                                                                            ) {
+                                                                                $canApprove = false;
                                                                             }
                                                                         @endphp
+
                                                                         <tr class="text-center">
                                                                             <td class="ps-5 text-left">
-                                                                                {{ $detail->equipments->name }}</td>
+                                                                                {{ $detail->equipments->name }}
+                                                                            </td>
                                                                             <td>{{ $detail->batch_number }}</td>
-                                                                            <td><span data-bs-toggle="tooltip"
+                                                                            <td>
+                                                                                <span data-bs-toggle="tooltip"
                                                                                     data-bs-placement="top"
                                                                                     title="Số Lượng Xuất Kho">{{ $detail->quantity }}</span>
                                                                                 @if ($item->status == 3 || $item->status == 0)
-                                                                                    /
-                                                                                    <span data-bs-toggle="tooltip"
-                                                                                        data-bs-placement="top"
-                                                                                        title="Số Lượng Tồn Kho">
-                                                                                        {{ $detail->equipments->inventories->sum('current_quantity') }}
-                                                                                    </span>
-                                                                                    @if ($detail->quantity > $detail->equipments->inventories->sum('current_quantity'))
-                                                                                        <i data-bs-toggle="tooltip"
-                                                                                            data-bs-placement="top"
-                                                                                            title="Vượt Quá Số Lượng Tồn Kho"
-                                                                                            class="fa-solid fa-triangle-exclamation text-danger"></i>
-                                                                                    @endif
+                                                                                    @foreach ($detail->equipments->inventories as $inventory)
+                                                                                        @if ($inventory->batch_number == $detail->batch_number)
+                                                                                            / <span
+                                                                                                data-bs-toggle="tooltip"
+                                                                                                data-bs-placement="top"
+                                                                                                title="Số Lượng Tồn Kho">
+                                                                                                {{ $inventory->current_quantity }}
+                                                                                            </span>
+                                                                                            @if ($detail->quantity > $inventory->current_quantity)
+                                                                                                <i data-bs-toggle="tooltip"
+                                                                                                    data-bs-placement="top"
+                                                                                                    title="Vượt Quá Số Lượng Tồn Kho"
+                                                                                                    class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                                                                            @endif
+                                                                                        @endif
+                                                                                    @endforeach
                                                                                 @endif
                                                                             </td>
                                                                         </tr>
@@ -227,7 +256,7 @@
                                             <div class="card-body py-1 text-end bg-white pb-5">
                                                 <div class="button-group">
                                                     <!-- Nút Duyệt đơn, chỉ hiển thị khi là Phiếu Tạm -->
-                                                    @if ($item->status == 0)
+                                                    @if ($item->status == 0 && now()->lt(\Carbon\Carbon::parse($item->required_date)))
                                                         @if (session('isAdmin') == 1)
                                                             @if ($canApprove)
                                                                 <button class="btn btn-sm btn-twitter rounded-pill me-2"
@@ -264,6 +293,18 @@
                                                                 phiếu
                                                             </button>
                                                         @endif
+                                                    @endif
+
+                                                    @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->required_date)))
+                                                        {{-- Quá ngày cần thiết --}}
+                                                        <!-- Nút Hủy đơn -->
+                                                        <button class="btn btn-sm rounded-pill btn-danger me-2"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#deleteModal_{{ $item->code }}"
+                                                            type="button">
+                                                            <i class="fa fa-trash" style="margin-bottom: 2px;"></i>Hủy
+                                                            Phiếu
+                                                        </button>
                                                     @endif
 
                                                     @if ($item->status == 3 && $item->created_by == session('user_code'))
@@ -413,10 +454,12 @@
                                                                                                     Tên thiết bị
                                                                                                 </th>
                                                                                                 <th style="width: 15%;"
-                                                                                                    class="text-dark">Số
+                                                                                                    class="text-dark">
+                                                                                                    Số
                                                                                                     Lô</th>
                                                                                                 <th class="text-dark pe-3"
-                                                                                                    style="width: 15%;">Số
+                                                                                                    style="width: 15%;">
+                                                                                                    Số
                                                                                                     Lượng</th>
                                                                                             </tr>
                                                                                         </thead>

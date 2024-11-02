@@ -13,6 +13,7 @@ return new class extends Migration
             $table->text('note')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamp('export_date')->nullable();
+            $table->timestamp('required_date')->nullable();
             $table->string('export_type', 20)->nullable();
             $table->char('department_code', 10)->nullable();
             $table->char('supplier_code', 10)->nullable();

@@ -257,6 +257,9 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="mt-5 ms-3">
+                                                        <i>Ghi Chú: {{ $item->note ?? '...' }}</i>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -530,7 +533,6 @@
                                                                             height: 20px;
                                                                         }
                                                                     </style>
-
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="col-8"></div>

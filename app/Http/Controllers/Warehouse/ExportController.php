@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Departments;
 use App\Models\Equipments;
 use App\Models\Export_details;
+use App\Models\Export_equipment_requests;
 use App\Models\Exports;
 use App\Models\Inventories;
 use App\Models\Suppliers;
 use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ExportController extends Controller
 {
@@ -232,8 +234,13 @@ class ExportController extends Controller
 
         $checkList = json_encode([]);
 
+        if (!empty($request->cd)) {
+            $getExportRequest = Export_equipment_requests::with(['export_equipment_request_details'])->where('code', $request->cd)->first();
+        }
+
         return view("{$this->route}.export_warehouse.create_export", [
             'action' => $action,
+            'getExportRequest' => $getExportRequest ?? [],
             'checkList' => $checkList,
             'allSupplier' => $allSupplier,
             'allDepartment' => $allDepartment,
@@ -250,6 +257,7 @@ class ExportController extends Controller
             !empty($request->reason) &&
             !empty($request->export_type) &&
             !empty($request->export_date) &&
+            !empty($request->required_date) &&
             !empty($request->exportStatus) &&
             !empty($request->equipment_list)
         ) {
@@ -257,6 +265,7 @@ class ExportController extends Controller
             $supplierCode = $request->supplier_code;
             $reason = $request->reason;
             $exportType = $request->export_type;
+            $required_date = $request->required_date;
             $note = $request->note;
             $equipmentList = json_decode($request->equipment_list, true);
 
@@ -265,6 +274,7 @@ class ExportController extends Controller
                 'note' => $note ?? '',
                 'status' => $request->exportStatus == 4 ? 0 : $request->exportStatus,
                 'export_date' => now(),
+                'required_date' => strtotime($required_date) === strtotime('01/01/2090 12:00:00') ? NULL : $required_date,
                 'export_type' => $exportType,
                 'department_code' => $departmentCode == 1 ? NULL : $departmentCode,
                 'supplier_code' => $supplierCode == 1 ? NULL : $supplierCode,
@@ -295,7 +305,64 @@ class ExportController extends Controller
     }
 
     // Tạo phiếu xuất bằng yêu cầu xuất kho
-    public function export_equipment_request(Request $request) {}
+    public function export_equipment_request(Request $request)
+    {
+        try {
+            if (
+                !empty($request->department_code) &&
+                !empty($request->export_type) &&
+                !empty($request->required_date) &&
+                !empty($request->equipment_list_export_request)
+            ) {
+                $departmentCode = $request->department_code;
+                $exportType = $request->export_type;
+                $note = $request->note;
+                $equipmentList = json_decode($request->equipment_list_export_request, true);
+
+                Export_equipment_requests::where('code', $request->export_request_code)->update([
+                    'status' => 4,
+                ]);
+
+                $record = Exports::create([
+                    'code' => 'PX' . $this->generateRandomString(8),
+                    'note' => $note ?? '',
+                    'status' => 1,
+                    'export_date' => now(),
+                    'required_date' => $request->required_date,
+                    'export_type' => $exportType,
+                    'department_code' => $departmentCode,
+                    'export_request_code' => $request->export_request_code,
+                    'created_by' => session('user_code'),
+                    'created_at' => now(),
+                    'deleted_at' => null,
+                ]);
+
+                if ($record) {
+                    foreach ($equipmentList as $equipment) {
+                        if ($equipment['quantity'] > 0) {
+                            Export_details::create([
+                                'export_code' => $record->code,
+                                'equipment_code' => $equipment['equipment_code'],
+                                'quantity' => $equipment['quantity'],
+                                'batch_number' => $equipment['batch_number'],
+                                'created_at' => now(),
+                                'updated_at' => null,
+                                'deleted_at' => null,
+                            ]);
+                        }
+                    }
+
+                    $this->updateInventories($record->code, '-');
+
+                    return response()->json(['success' => true, 'message' => 'Đã tạo phiếu xuất']);
+                }
+            }
+
+            return response()->json(['success' => false, 'message' => 'Vui lòng điền đẩy đủ các trường dữ liệu']);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => Log::info($request->all())]);
+        }
+    }
 
     public function edit_export($code)
     {
@@ -438,6 +505,10 @@ class ExportController extends Controller
 
         if ($export->status == 1) {
             $this->updateInventories($request->delete_code, '+');
+
+            Export_equipment_requests::where('code', $export->export_request_code)->update([
+                'status' => 1,
+            ]);
 
             $export->forceDelete();
 
