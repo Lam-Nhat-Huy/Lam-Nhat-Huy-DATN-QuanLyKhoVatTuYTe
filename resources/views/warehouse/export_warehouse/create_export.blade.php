@@ -620,7 +620,9 @@
 
                 supplierSelect.value = '1';
                 reasonSelect.value = '1';
-                required_date.value = '';
+                if ({{ empty(request('cd')) }}) {
+                    required_date.value = '';
+                }
 
                 supplierSelectErr.innerText = '';
                 reasonSelectErr.innerText = '';
