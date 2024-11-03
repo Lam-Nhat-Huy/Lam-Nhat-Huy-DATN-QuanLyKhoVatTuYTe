@@ -137,7 +137,7 @@
                 <div class="card card-xxl-stretch">
                     <!--begin::Header-->
                     <div class="card-header border-0 bg-danger py-5">
-                        <h3 class="card-title fw-bolder text-white">Thông Tin Thống Kê</h3>
+                        <h5 class="card-title fw-bolder text-white">THÔNG TIN THỐNG KÊ</h5>
                     </div>
                     <!--end::Header-->
                     <!--begin::Body-->
@@ -151,61 +151,40 @@
                             <!--begin::Row-->
                             <div class="d-flex justify-content-between flex-wrap">
                                 <!--begin::Col-->
-                                <div class="bg-primary px-6 py-8 rounded-2 me-7 mb-7 flex-fill col-md-3">
+                                <div class="px-6 py-8 rounded-2 me-7 mb-7 flex-fill col-md-3 shadow"
+                                    style="background-image: linear-gradient(-225deg, #FF057C 0%, #8D0B93 50%, #321575 100%);">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen032.svg-->
-                                    <span class="svg-icon svg-icon-3x svg-icon-white d-block my-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none">
-                                            <rect x="8" y="9" width="3" height="10" rx="1.5" fill="black" />
-                                            <rect opacity="0.5" x="13" y="5" width="3" height="14" rx="1.5"
-                                                fill="black" />
-                                            <rect x="18" y="11" width="3" height="8" rx="1.5"
-                                                fill="black" />
-                                            <rect x="3" y="13" width="3" height="6" rx="1.5"
-                                                fill="black" />
-                                        </svg>
+                                    <span class="svg-icon svg-icon-3x svg-icon-white d-block my-3 mb-5">
+                                        <i class="fa fa-download text-white" style="font-size: 30px;"></i>
                                     </span>
                                     <!--end::Svg Icon-->
-                                    <a class="text-white fw-bold fs-6">Số lượng nhập tháng
-                                        {{ now()->format('m') }}: <span>{{ $importTotal }} thiết bị</span></a>
+                                    <span class="text-white fw-bold fs-6">SỐ LƯỢNG NHẬP THÁNG
+                                        {{ now()->format('m') }}: <span>{{ $importTotal }}</span> THIẾT BỊ</span>
                                 </div>
                                 <!--end::Col-->
                                 <!--begin::Col-->
-                                <div class="bg-warning px-6 py-8 rounded-2 me-7 mb-7 flex-fill col-md-3">
-                                    <!--begin::Svg Icon | path: icons/duotune/abstract/abs027.svg-->
-                                    <span class="svg-icon svg-icon-3x svg-icon-white d-block my-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none">
-                                            <path opacity="0.3"
-                                                d="M21.25 18.525L13.05 21.825C12.35 22.125 11.65 22.125 10.95 21.825L2.75 18.525C1.75 18.125 1.75 16.725 2.75 16.325L4.04999 15.825L10.25 18.325C10.85 18.525 11.45 18.625 12.05 18.625C12.65 18.625 13.25 18.525 13.85 18.325L20.05 15.825L21.35 16.325C22.35 16.725 22.35 18.125 21.25 18.525ZM13.05 16.425L21.25 13.125C22.25 12.725 22.25 11.325 21.25 10.925L13.05 7.62502C12.35 7.32502 11.65 7.32502 10.95 7.62502L2.75 10.925C1.75 11.325 1.75 12.725 2.75 13.125L10.95 16.425C11.65 16.725 12.45 16.725 13.05 16.425Z"
-                                                fill="black" />
-                                            <path
-                                                d="M11.05 11.025L2.84998 7.725C1.84998 7.325 1.84998 5.925 2.84998 5.525L11.05 2.225C11.75 1.925 12.45 1.925 13.15 2.225L21.35 5.525C22.35 5.925 22.35 7.325 21.35 7.725L13.05 11.025C12.45 11.325 11.65 11.325 11.05 11.025Z"
-                                                fill="black" />
-                                        </svg>
+                                <div class="px-6 py-8 rounded-2 me-7 mb-7 flex-fill col-md-3 shadow"
+                                    style="background-image: linear-gradient(-225deg, #FF057C 0%, #8D0B93 50%, #321575 100%);">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen032.svg-->
+                                    <span class="svg-icon svg-icon-3x svg-icon-white d-block my-3 mb-5">
+                                        <i class="fa fa-upload text-white" style="font-size: 30px;"></i>
                                     </span>
                                     <!--end::Svg Icon-->
-                                    <a class="text-white fw-bold fs-6">Số lượng xuất tháng
-                                        {{ now()->format('m') }}: <span>{{ $exportTotal }}</span></a>
+                                    <span class="text-white fw-bold fs-6">SỐ LƯỢNG XUẤT THÁNG
+                                        {{ now()->format('m') }}: <span>{{ $exportTotal }}</span> THIẾT BỊ</span>
                                 </div>
 
                                 <!--end::Col-->
-                                <div class="bg-success  px-6 py-8 rounded-2 me-7 mb-7 flex-fill col-md-3">
-                                    <!--begin::Svg Icon | path: icons/duotune/communication/com010.svg-->
-                                    <span class="svg-icon svg-icon-3x svg-icon-white d-block my-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none">
-                                            <path
-                                                d="M6 8.725C6 8.125 6.4 7.725 7 7.725H14L18 11.725V12.925L22 9.725L12.6 2.225C12.2 1.925 11.7 1.925 11.4 2.225L2 9.725L6 12.925V8.725Z"
-                                                fill="black"></path>
-                                            <path opacity="0.3"
-                                                d="M22 9.72498V20.725C22 21.325 21.6 21.725 21 21.725H3C2.4 21.725 2 21.325 2 20.725V9.72498L11.4 17.225C11.8 17.525 12.3 17.525 12.6 17.225L22 9.72498ZM15 11.725H18L14 7.72498V10.725C14 11.325 14.4 11.725 15 11.725Z"
-                                                fill="black"></path>
-                                        </svg>
+                                <div class="px-6 py-8 rounded-2 me-7 mb-7 flex-fill col-md-3 shadow"
+                                    style="background-image: linear-gradient(-225deg, #FF057C 0%, #8D0B93 50%, #321575 100%);">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen032.svg-->
+                                    <span class="svg-icon svg-icon-3x svg-icon-white d-block my-3 mb-5">
+                                        <i class="fa fa-credit-card text-white" style="font-size: 30px;"></i>
                                     </span>
                                     <!--end::Svg Icon-->
-                                    <a class="text-white fw-bold fs-6">Tổng chi tháng
-                                        {{ now()->format('m') }}: {{ number_format($expenseTotal, 0, ',', '.') }} VNĐ</a>
+                                    <span class="text-white fw-bold fs-6">TỔNG CHI THÁNG
+                                        {{ now()->format('m') }}:
+                                        <span>{{ number_format($expenseTotal, 0, ',', '.') }}</span> VND</span>
                                 </div>
                             </div>
                             <!--end::Row-->
@@ -219,44 +198,68 @@
 
             <div class="mt-5 mb-5"></div>
 
-            <div class="row align-items-start">
+            <div class="row align-items-start px-14">
                 <div class="col-xxl-6 mb-5">
-                    <div class="card card-xxl-stretch h-100 shadow-sm">
+                    <div class="card card-xxl-stretch h-100 shadow">
                         <!-- Header -->
-                        <div class="card-header bg-danger border-0 rounded align-items-center">
-                            <h3 class="card-title fw-bolder text-white  fs-4 d-flex align-items-center">
-                                Nhật ký kiểm kho
-                            </h3>
+                        <div class="card-header border-0 rounded align-items-center"
+                            style="background-image: linear-gradient(-225deg, #473B7B 0%, #3584A7 51%, #30D2BE 100%);">
+                            <h5 class="card-title fw-bolder text-white fs-5 d-flex align-items-center">
+                                NHẬT KÝ KIỂM KHO
+                            </h5>
                         </div>
                         <!-- Body -->
-                        <div class="card-body pt-2 d-flex flex-column justify-content-between">
+                        <div class="card-body pt-3 d-flex flex-column justify-content-between pb-0 px-3">
                             @if ($inventoryCheckLog->isEmpty())
-                                <div class="text-center text-muted">Không có nhật ký kiểm kho</div>
+                                <div class="text-center text-muted">
+                                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4 mb-0"
+                                        role="alert"
+                                        style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                        <div class="mb-3">
+                                            <i class="fas fa-file-invoice" style="font-size: 36px; color: #6c757d;"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
+                                                Liệu
+                                            </h5>
+                                            <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                Không Có Lịch Sử Kiểm Kho Nào
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             @else
                                 @foreach ($inventoryCheckLog as $check)
-                                    <div class="d-flex align-items-center mb-4 border-bottom pb-3">
-                                        <span class="bullet bullet-vertical h-40px"></span>
+                                    <div class="d-flex align-items-center mt-1 mb-1 border-bottom pb-3">
+                                        <span
+                                            class="bullet bullet-vertical h-40px bg-{{ $loop->index % 2 == 0 ? 'warning' : 'primary' }}"></span>
                                         <div class="form-check form-check-custom form-check-solid mx-5">
                                             <i class="fa fa-check-circle text-success fs-3"></i>
                                         </div>
                                         <div class="flex-grow-1">
-                                            <a class="text-gray-800 text-hover-primary fw-bolder fs-6">
-                                                Mã kiểm kho: {{ $check->code }}
-                                            </a>
-                                            <span class="text-muted fw-bold d-block">
+                                            <h6 class="text-gray-800 text-hover-primary fw-bolder fs-6">
+                                                Mã kiểm kho: <a
+                                                    class="text-gray-800 text-hover-primary fw-bolder fs-6 mb-1 text-decoration-underline"
+                                                    href="{{ route('check_warehouse.index') }}?search={{ $check->code }}">#{{ $check->code }}</a>
+                                            </h6>
+                                            <span class="text-muted fw-bold d-block mb-1">
                                                 Ngày kiểm: {{ $check->check_date }}
                                             </span>
-                                            <span>Người kiểm: {{ $check->user->last_name ?? '' }}
-                                                {{ $check->user->first_name ?? 'Không xác định' }} </span><br>
-
+                                            <span class="text-muted fw-bold d-block mb-1">Người kiểm lần 1:
+                                                {{ $check->user->last_name ?? '' }}
+                                                {{ $check->user->first_name ?? 'Chưa kiểm lần 1' }}
+                                            </span>
+                                            <span class="text-muted fw-bold d-block">Người kiểm lần 2:
+                                                {{ $check->recheckUser->last_name ?? '' }}
+                                                {{ $check->recheckUser->first_name ?? 'Chưa kiểm lần 2' }}
+                                            </span>
                                         </div>
-                                        <span class="badge fs-8 fw-bolder">{{ $check->status }}</span>
                                     </div>
                                 @endforeach
                             @endif
 
                             <!-- Pagination -->
-                            <div class="d-flex justify-content-center mt-4">
+                            <div class="d-flex justify-content-center my-3">
                                 <ul class="pagination pagination-lg nk">
                                     {{ $inventoryCheckLog->appends(['low_inventory_page' => request('low_inventory_page')])->links('pagination::bootstrap-4') }}
                                 </ul>
@@ -266,100 +269,249 @@
                 </div>
 
                 <div class="col-xxl-6 mb-5">
-                    <div class="card card-xxl-stretch h-100 shadow-sm">
+                    <div class="card card-xxl-stretch h-100 shadow">
                         <!-- Header -->
-                        <div class="card-header bg-primary  border-0 rounded align-items-center">
-                            <h3 class="card-title fw-bolder text-white fs-4 d-flex align-items-center">
-                                Nhật ký xuất kho
-                            </h3>
+                        <div class="card-header border-0 rounded align-items-center"
+                            style="background-image: linear-gradient(-225deg, #473B7B 0%, #3584A7 51%, #30D2BE 100%);">
+                            <h5 class="card-title fw-bolder text-white fs-5 d-flex align-items-center">
+                                NHẬT KÝ XUẤT KHO
+                            </h5>
                         </div>
                         <!-- Body -->
-                        <div class="card-body pt-2 d-flex flex-column justify-content-between">
+                        <div class="card-body pt-3 d-flex flex-column justify-content-between pb-0 px-3">
                             @if ($exportLog->isEmpty())
-                                <div class="text-center text-muted">Không có nhật ký xuất kho</div>
-                            @else
-                                <div class="flex-grow-1">
-                                    @foreach ($exportLog as $export)
-                                        <div
-                                            class="d-flex align-items-center mb-4 border-bottom pb-3 {{ $loop->index % 2 == 0 ? '' : '' }}">
-                                            <span
-                                                class="bullet bullet-vertical h-40px bg-{{ $loop->index % 2 == 0 ? 'warning' : 'primary' }}"></span>
-                                            <div class="form-check form-check-custom form-check-solid mx-5">
-                                                <i class="fa fa-check-circle text-success fs-3"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <a class="text-gray-800 text-hover-primary fw-bolder fs-6">Xuất
-                                                    hàng theo đơn {{ $export->code }}</a>
-                                                <span class="text-muted fw-bold d-block">Ngày xuất:
-                                                    {{ \Carbon\Carbon::parse($export->export_date)->format('d/m/Y') }}</span>
-                                                @foreach ($export->exportDetail as $detail)
-                                                    <span>Sản phẩm: {{ $detail->equipments->name }} - <strong></strong>Số
-                                                        lượng:
-                                                        {{ $detail->quantity }}</span><br>
-                                                @endforeach
-                                            </div>
+                                <div class="text-center text-muted">
+                                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4 mb-0"
+                                        role="alert"
+                                        style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                        <div class="mb-3">
+                                            <i class="fas fa-file-invoice" style="font-size: 36px; color: #6c757d;"></i>
                                         </div>
-                                    @endforeach
+                                        <div class="text-center">
+                                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
+                                                Liệu
+                                            </h5>
+                                            <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                Không Có Lịch Sử Xuất Kho Nào
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <!-- Pagination -->
-                                <div class="d-flex justify-content-center mt-4">
-                                    <ul class="pagination pagination-lg nk">
-                                        {{ $exportLog->appends(['low_inventory_page' => request('low_inventory_page')])->links('pagination::bootstrap-4') }}
-                                    </ul>
-                                </div>
+                            @else
+                                @foreach ($exportLog as $export)
+                                    <div class="d-flex align-items-center mt-1 mb-1 border-bottom pb-3">
+                                        <span
+                                            class="bullet bullet-vertical h-40px bg-{{ $loop->index % 2 == 0 ? 'warning' : 'primary' }}"></span>
+                                        <div class="form-check form-check-custom form-check-solid mx-5">
+                                            <i class="fa fa-check-circle text-success fs-3"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h6 class="text-gray-800 fw-bolder fs-6 mb-1">
+                                                Xuất hàng theo đơn
+                                                <a class="text-gray-800 fw-bolder fs-6 mb-1 text-hover-primary text-decoration-underline"
+                                                    href="{{ route('warehouse.export') }}?kw={{ $export->code }}">#{{ $export->code }}
+                                                </a>
+                                            </h6>
+                                            <span class="text-muted fw-bold d-block mb-1">Ngày xuất:
+                                                {{ \Carbon\Carbon::parse($export->export_date)->format('d/m/Y') }}</span>
+                                            @foreach ($export->exportDetail as $key => $detail)
+                                                <span>{{ $key + 1 }}. {{ $detail->equipments->name }} -
+                                                    Số lô:
+                                                    <strong>{{ $detail->batch_number }}</strong></span> - <span>Số
+                                                    lượng:
+                                                    <strong>{{ $detail->quantity }}</strong></span><br>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endforeach
                             @endif
+                            <!-- Pagination -->
+                            <div class="d-flex justify-content-center my-3">
+                                <ul class="pagination pagination-lg nk">
+                                    {{ $exportLog->appends(['low_inventory_page' => request('low_inventory_page')])->links('pagination::bootstrap-4') }}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row align-items-start">
+            <div class="row align-items-start px-14 mt-10">
                 <div class="col-xxl-6 mb-5">
                     <div class="card card-xxl-stretch h-100 shadow-lg">
                         <!-- Header -->
-                        <div class="card-header bg-success text-white border-0 rounded align-items-center">
-                            <h3 class="card-title fw-bolder text-white fs-4 d-flex align-items-center">
-                                Thống kê nhập kho chi tiết
-                            </h3>
+                        <div class="card-header text-white border-0 rounded align-items-center"
+                            style="background-image: linear-gradient(-225deg, #473B7B 0%, #3584A7 51%, #30D2BE 100%);">
+                            <h5 class="card-title fw-bolder text-white fs-5 d-flex align-items-center">
+                                THỐNG KÊ NHẬP KHO CHI TIẾT
+                            </h5>
                         </div>
                         <!-- Body -->
-                        <div class="card-body pt-2">
+                        <div class="card-body pt-4 px-6 pb-5">
                             <!-- Summary Cards -->
                             <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <div class="bg-light-success px-6 py-8 rounded-2 shadow-sm text-center">
-                                        <i class="fa fa-box fs-2 text-success mb-3"></i>
-                                        <h4 class="fw-bold text-success">Số lượng nhập tháng {{ now()->format('m') }}</h4>
-                                        <span class="fs-5">{{ $importTotal }} thiết bị</span>
+                                    <div class="px-6 py-8 rounded-2 shadow-sm text-center"
+                                        style="background-image: linear-gradient(60deg, #3d3393 0%, #2b76b9 37%, #2cacd1 65%, #35eb93 100%);">
+                                        <i class="fa fa-box fs-2 text-white mb-3"></i>
+                                        <h4 class="fw-bold text-white">Số lượng nhập tháng {{ now()->format('m') }}</h4>
+                                        <span class="fs-5 text-white">{{ $importTotal }} thiết bị <span class="pointer"
+                                                data-bs-toggle="modal" data-bs-target="#detail_import"><i
+                                                    class="fa fa-eye text-white ms-1"></i></span></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="bg-light-info px-6 py-8 rounded-2 shadow-sm text-center">
-                                        <i class="fa fa-dollar-sign fs-2 text-info mb-3"></i>
-                                        <h4 class="fw-bold text-info">Giá trị nhập tháng {{ now()->format('m') }}</h4>
-                                        <span class="fs-5">{{ number_format($expenseTotal, 0, ',', '.') }} VNĐ</span>
+                                    <div class="px-6 py-8 rounded-2 shadow-sm text-center"
+                                        style="background-image: linear-gradient(60deg, #3d3393 0%, #2b76b9 37%, #2cacd1 65%, #35eb93 100%);">
+                                        <i class="fa fa-dollar-sign fs-2 text-white mb-3"></i>
+                                        <h4 class="fw-bold text-white">Tổng chi tháng {{ now()->format('m') }}</h4>
+                                        <span class="fs-5 text-white">{{ number_format($expenseTotal, 0, ',', '.') }}
+                                            VND</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- Modal --}}
+                            <div class="modal fade" id="detail_import" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="detail_importModal"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content border-0 shadow">
+                                        <div class="modal-header text-white"
+                                            style="background-image: linear-gradient(60deg, #3d3393 0%, #2b76b9 37%, #2cacd1 65%, #35eb93 100%);">
+                                            <h5 class="modal-title text-white" id="detail_importModal">DANH SÁCH THIẾT BỊ
+                                                NHẬP
+                                                THÁNG {{ now()->format('m') }}</h5>
+                                            <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center" style="padding-bottom: 0px;">
+                                            <table class="table table-striped table-hover border shadow-sm">
+                                                <thead class="bg-dark text-white fw-bolder">
+                                                    <tr>
+                                                        <th class="ps-5 text-center" style="width: 25%;">Thiết Bị</th>
+                                                        <th class="text-center">Lô</th>
+                                                        <th class="text-center">Giá</th>
+                                                        <th class="text-center">SL</th>
+                                                        <th class="text-center">CK</th>
+                                                        <th class="text-center">VAT</th>
+                                                        <th class="text-center pe-5">Tổng</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @php
+                                                        $total_last = 0;
+                                                    @endphp
+                                                    @forelse ($getEquipmentImportMonth as $item)
+                                                        @php
+                                                            $total_before_discount = $item->price * $item->quantity;
+                                                            $discount_amount =
+                                                                ($total_before_discount * $item->discount) / 100;
+                                                            $total_after_discount =
+                                                                $total_before_discount - $discount_amount;
+                                                            $vat_amount = ($total_after_discount * $item->VAT) / 100;
+                                                            $total_after_discount_and_vat =
+                                                                $total_after_discount + $vat_amount;
+
+                                                            $total_last += $total_after_discount_and_vat;
+                                                        @endphp
+                                                        <tr>
+                                                            <td class="ps-5 text-center">{{ $item->equipments->name }}
+                                                            </td>
+                                                            <td class="text-center">{{ $item->batch_number }}</td>
+                                                            <td class="text-center">
+                                                                {{ number_format($item->price, 0, ',', '.') }} VND</td>
+                                                            <td class="text-center">{{ $item->quantity }}</td>
+                                                            <td class="text-center">{{ $item->discount }} %</td>
+                                                            <td class="text-center">{{ $item->VAT }} %</td>
+                                                            <td class="text-center pe-5">
+                                                                {{ number_format($total_after_discount_and_vat, 0, ',', '.') }}
+                                                                VND</td>
+                                                        </tr>
+                                                    @empty
+                                                        <tr>
+                                                            <td colspan="12" class="text-center">
+                                                                <div class="text-center text-muted">
+                                                                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4 mb-0"
+                                                                        role="alert"
+                                                                        style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                                                        <div class="mb-3">
+                                                                            <i class="fas fa-file-invoice"
+                                                                                style="font-size: 36px; color: #6c757d;"></i>
+                                                                        </div>
+                                                                        <div class="text-center">
+                                                                            <h5
+                                                                                style="font-size: 16px; font-weight: 600; color: #495057;">
+                                                                                Không Có Dữ
+                                                                                Liệu
+                                                                            </h5>
+                                                                            <p
+                                                                                style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                                                Không Có Thiết Bị Nhập Nào Trong Tháng
+                                                                                {{ now()->month }}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforelse
+                                                    <tr
+                                                        class="{{ $getEquipmentImportMonth->count() == 0 ? 'd-none' : '' }}">
+                                                        <td colspan="1" class="text-center ps-5">Tổng Cộng:</td>
+                                                        <td></td>
+                                                        <td colspan="4"></td>
+                                                        <td colspan="1" class="text-center pe-5">
+                                                            {{ number_format($total_last, 0, ',', '.') }} VND
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer justify-content-center border-0">
+                                            <button type="button"
+                                                class="btn rounded-pill btn-sm btn-secondary btn-sm px-4"
+                                                data-bs-dismiss="modal">Đóng</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <!-- Data Table -->
                             @if ($importStatistics->isEmpty())
-                                <div class="text-center text-muted">Không có dữ liệu nhập kho</div>
+                                <div class="text-center text-muted">
+                                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4 mb-0"
+                                        role="alert"
+                                        style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                        <div class="mb-3">
+                                            <i class="fas fa-file-invoice" style="font-size: 36px; color: #6c757d;"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
+                                                Liệu
+                                            </h5>
+                                            <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                Không Có Lịch Sử Xuất Kho Nào
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             @else
                                 <table class="table table-striped table-hover border shadow-sm">
-                                    <thead class="bg-success text-white">
+                                    <thead class="bg-dark text-white">
                                         <tr>
-                                            <th>Tháng</th>
+                                            <th class="ps-5 text-center">Tháng</th>
                                             <th class="text-center">Số lượng</th>
-                                            <th class="text-end">Giá trị tổng (VNĐ)</th>
+                                            <th class="text-center pe-5">Giá trị tổng (VND)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($importStatistics as $stat)
                                             <tr>
-                                                <td>{{ str_pad($stat->month, 2, '0', STR_PAD_LEFT) }}</td>
-                                                <td class="text-center">{{ $stat->total_quantity }} thiết bị</td>
-                                                <td class="text-end">{{ number_format($stat->total_value, 2, ',', '.') }}
-                                                    VNĐ
+                                                <td class="ps-5 text-center">
+                                                    {{ str_pad($stat->month, 2, '0', STR_PAD_LEFT) }}</td>
+                                                <td class="text-center">{{ $stat->total_quantity }} Thiết bị</td>
+                                                <td class="text-center pe-5">
+                                                    {{ number_format($expenseTotal, 2, ',', '.') }}
+                                                    VND
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -371,43 +523,60 @@
                 </div>
 
                 <div class="col-xxl-6 mb-5">
-                    <div class="card card-xxl-stretch h-100 shadow-sm">
+                    <div class="card card-xxl-stretch h-100 shadow">
                         <!-- Header -->
-                        <div
-                            class="card-header align-items-center bg-warning border-0 rounded d-flex justify-content-between">
+                        <div class="card-header align-items-center border-0 rounded d-flex justify-content-between"
+                            style="background-image: linear-gradient(-225deg, #473B7B 0%, #3584A7 51%, #30D2BE 100%);">
                             <h3 class="card-title fw-bolder text-white fs-4 d-flex align-items-center">
-                                Cảnh bảo tồn kho thấp
+                                CẢNH BÁO TỒN KHO THẤP
                             </h3>
-                            <span class="text-danger fw-bold fs-6">{{ $warnings->total() }} sản phẩm</span>
+                            <span class="text-white fw-bold fs-6">{{ $warnings->total() }} Thiết Bị</span>
                         </div>
                         <!-- Body -->
-                        <div class="card-body pt-5 d-flex flex-column justify-content-between">
-                            <div class="timeline-label flex-grow-1">
-                                @foreach ($warnings as $warning)
-                                    <div class="timeline-item mb-3 border-bottom pb-3">
-                                        <div class="d-flex align-items-center mt-2">
-                                            <!-- Icon cảnh báo và nội dung -->
-                                            <div class="d-flex align-items-center">
-                                                <i class="fa fa-exclamation-triangle text-warning fs-3"></i>
-                                            </div>
-                                            <div class="fw-normal text-muted ps-3">
-                                                Sản phẩm {{ $warning->equipments->name }} (Mã SP: {{ $warning->code }})
-                                                chỉ
-                                                còn
-                                                {{ $warning->current_quantity }} đơn vị trong kho.
-                                                @if ($warning->current_quantity <= 0)
-                                                    <span class="text-danger">Hết hàng</span>.
-                                                @else
-                                                    <span class="text-warning">Gần hết hàng</span>.
-                                                @endif
-                                            </div>
+                        <div class="card-body pt-3 d-flex flex-column justify-content-between pb-0 px-5">
+                            @forelse ($warnings as $warning)
+                                <div class="d-flex align-items-center mt-1 mb-1 border-bottom pb-3">
+                                    <div class="d-flex align-items-center mt-2">
+                                        <!-- Icon cảnh báo và nội dung -->
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa fa-exclamation-triangle text-danger fs-3 me-1"></i>
+                                        </div>
+                                        <div class="fw-normal text-muted ps-3">
+                                            Thiết bị <strong>{{ $warning->equipments->name }}</strong> (Mã:
+                                            <strong>{{ $warning->code }}</strong>) chỉ
+                                            còn
+                                            <strong>{{ $warning->current_quantity }}</strong> đơn vị trong kho.
+                                            @if ($warning->current_quantity <= 0)
+                                                <span style="color: red; font-weight: bold;">Đã hết hàng</span>.
+                                            @else
+                                                <span style="color: rgb(0, 145, 255); font-weight: bold;">Sắp hết
+                                                    hàng</span>.
+                                            @endif
                                         </div>
                                     </div>
-                                @endforeach
-                            </div>
+                                </div>
+                            @empty
+                                <div class="text-center text-muted">
+                                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4 mb-0"
+                                        role="alert"
+                                        style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                        <div class="mb-3">
+                                            <i class="fas fa-file-invoice" style="font-size: 36px; color: #6c757d;"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
+                                                Liệu
+                                            </h5>
+                                            <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                Không Có Thiết Bị Nào Đang Tồn Kho Thấp
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforelse
                             <!-- Pagination -->
-                            <div class="d-flex justify-content-center mt-4">
-                                <ul class="pagination pagination-lg tk">
+                            <div class="d-flex justify-content-center my-3">
+                                <ul class="pagination pagination-lg nk">
                                     {{ $warnings->appends(['export_log_page' => request('export_log_page')])->links('pagination::bootstrap-4') }}
                                 </ul>
                             </div>
@@ -419,9 +588,9 @@
         <div class="row mb-5 mt-5 mb-xl-8" style="padding: 0 25px">
             <!--begin::Col-->
             <div class="col-xxl-6">
-                <div class="card mb-5 mb-xl-8 shadow-sm border-0">
+                <div class="card mb-5 mb-xl-8 border-0 shadow">
                     <div class="chart-container p-4">
-                        <h2 class="chart-title text-center mb-4">Biểu đồ tồn kho theo thời gian</h2>
+                        <h5 class="chart-title text-center mb-4 fs-5 my-3">BIỂU ĐỒ TỒN KHO THEO THỜI GIAN</h5>
                         <canvas id="inventoryChart"></canvas>
                     </div>
                 </div>
@@ -430,9 +599,9 @@
 
             <!--begin::Col-->
             <div class="col-xxl-6 mx-auto">
-                <div class="card mb-5 mb-xl-8 shadow-sm border-0">
+                <div class="card mb-5 mb-xl-8 border-0 shadow">
                     <div class="forecast-container p-4">
-                        <h2 class="forecast-title text-center mb-4">Dự Báo Tồn Kho Tương Lai</h2>
+                        <h5 class="forecast-title text-center mb-4 fs-5 my-3">DỰ BÁO TỒN KHO TRONG TƯƠNG LAI</h5>
                         <canvas id="forecastChart" width="400" height="200"></canvas>
                     </div>
                 </div>

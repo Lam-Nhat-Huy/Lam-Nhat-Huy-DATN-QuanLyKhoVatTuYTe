@@ -37,10 +37,40 @@ class DashboardController extends Controller
             ->sum('quantity');
         $exportTotal = Exports::whereMonth('export_date', now()->month)
             ->join('export_details', 'exports.code', '=', 'export_details.export_code')  // Kết hợp bảng exports và export_details
-            ->sum('export_details.quantity');  // Tính tổng số lượng từ bảng export_details
+            ->sum('export_details.quantity');  // Tính tổng số lượng từ bảng export_details\\
 
-        $expenseTotal = Receipt_details::whereMonth('created_at', now()->month)
-            ->sum(DB::raw('quantity * price'));
+        $allReceiptDetail = Receipt_details::whereMonth('created_at', now()->month)->get();
+
+        $totalPrice = 0;
+        $totalDiscount = 0;
+        $totalVAT = 0;
+
+        foreach ($allReceiptDetail as $detail) {
+            $price = $detail->price ?? 0;
+            $quantity = $detail->quantity;
+            $discount = $detail->discount ?? 0;
+            $vat = $detail->VAT ?? 0;
+
+            // Tính giá trước chiết khấu
+            $itemPrice = $quantity * $price;
+
+            // Tính tổng giá trị chiết khấu cho từng mặt hàng
+            $itemDiscount = $itemPrice * ($discount / 100);
+
+            // Tính giá sau chiết khấu
+            $itemPriceAfterDiscount = $itemPrice - $itemDiscount;
+
+            // Tính VAT dựa trên giá sau chiết khấu
+            $itemVAT = $itemPriceAfterDiscount * ($vat / 100);
+
+            // Cộng dồn tổng giá trị, chiết khấu và VAT
+            $totalPrice += $itemPrice;
+            $totalDiscount += $itemDiscount;
+            $totalVAT += $itemVAT;
+        }
+
+        $expenseTotal = $totalPrice - $totalDiscount + $totalVAT;
+
         // Lấy dữ liệu tồn kho theo tháng
         $inventoryData = Inventories::select(
             DB::raw('MONTH(created_at) as month'),
@@ -48,7 +78,22 @@ class DashboardController extends Controller
         )->groupBy('month')->get();
         $importStatistics = $this->getImportStatistics(now()->month);
         $inventoryCheckLog = $this->getInventoryCheckLog();
-        return view("admin.{$this->route}.index", compact('title', 'inventoryCheckLog', 'importStatistics', 'forecastData', 'forecastTrendData', 'importantNotification', 'warnings', 'exportLog', 'importTotal', 'exportTotal', 'expenseTotal', 'inventoryData'));
+        $getEquipmentImportMonth = $this->getEquipmentImportMonth();
+        return view("admin.{$this->route}.index", compact(
+            'title',
+            'getEquipmentImportMonth',
+            'inventoryCheckLog',
+            'importStatistics',
+            'forecastData',
+            'forecastTrendData',
+            'importantNotification',
+            'warnings',
+            'exportLog',
+            'importTotal',
+            'exportTotal',
+            'expenseTotal',
+            'inventoryData'
+        ));
     }
 
     private function calculateForecast()
@@ -72,7 +117,7 @@ class DashboardController extends Controller
     {
         $lowInventories = Inventories::where('current_quantity', '<=', $threshold)
             ->whereNull('deleted_at')
-            ->paginate(5, ['*'], 'low_inventory_page');  // Đặt tên cho phân trang
+            ->paginate(2, ['*'], 'low_inventory_page');  // Đặt tên cho phân trang
 
         return $lowInventories;
     }
@@ -139,6 +184,7 @@ class DashboardController extends Controller
 
         return $importStatistics;
     }
+
     public function getInventoryCheckLog()
     {
         // Lấy dữ liệu từ bảng Inventory_checks và các bảng liên quan
@@ -148,5 +194,12 @@ class DashboardController extends Controller
             ->paginate(5, ['*'], 'inventory_check_page'); // Số lượng bản ghi trên một trang
 
         return $inventoryChecks;
+    }
+
+    public function getEquipmentImportMonth()
+    {
+        $query = Receipt_details::whereMonth('created_at', now()->month)->get();
+
+        return $query;
     }
 }

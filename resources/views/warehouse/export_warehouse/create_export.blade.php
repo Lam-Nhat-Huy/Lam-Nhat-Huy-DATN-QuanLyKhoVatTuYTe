@@ -420,6 +420,8 @@
         </div>
     </div>
 
+    <input type="hidden" name="cd" value="{{ request('cd') ?? '' }}" id="cd">
+
     <!-- Form thêm phòng ban -->
     <div class="modal fade" id="add_department" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="add_modalLabel" aria-hidden="true">
@@ -595,6 +597,7 @@
             var export_dateSelect = document.getElementById('export_date_div');
             var required_date = document.getElementById('required_date');
             var required_date_div = document.getElementById('required_date_div');
+            var cd = document.getElementById('cd').value;
 
             var supplierSelectErr = document.getElementById('supplier_code_error');
             var departmentSelectErr = document.getElementById('department_code_error');
@@ -620,7 +623,8 @@
 
                 supplierSelect.value = '1';
                 reasonSelect.value = '1';
-                if ({{ empty(request('cd')) }}) {
+
+                if (!cd) {
                     required_date.value = '';
                 }
 

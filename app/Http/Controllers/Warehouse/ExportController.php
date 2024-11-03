@@ -56,7 +56,7 @@ class ExportController extends Controller
         if (isset($kw)) {
             $exports = $exports->where(function ($q) use ($kw) {
                 $q->where('code', 'LIKE', '%' . $kw . '%')
-                    ->orWhere('receipt_no', 'LIKE', "%{$kw}%");
+                    ->orWhere('export_request_code', 'LIKE', "%{$kw}%");
             });
         }
 
