@@ -59,8 +59,8 @@
                         <thead class="{{ $department->count() == 0 ? 'd-none' : '' }}">
                             <tr class="fw-bolder bg-success">
                                 <th class="ps-3"><input type="checkbox" id="selectAll" /></th>
-                                <th style="width: 25%;">Phòng Ban</th>
-                                <th style="width: 30%;">Mô tả</th>
+                                <th style="width: 20%;">Phòng Ban</th>
+                                <th style="width: 35%;">Mô tả</th>
                                 <th style="width: 25%;">Vị trí</th>
                                 <th style="width: 20%;" class="pe-3 text-center">Hành Động</th>
                             </tr>

@@ -75,9 +75,11 @@
                                     </td>
                                     <td>
                                         @if ($item['status'] == 0)
-                                            <span class="text-danger">Không hoạt động</span>
+                                            <span class=" text-white bg-danger py-1 px-2 rounded-pill">Không hoạt
+                                                động</span>
                                         @elseif($item['status'] == 1)
-                                            <span class="text-success">Hoạt động</span>
+                                            <span class=" text-white bg-success py-1 px-2 rounded-pill">Hoạt
+                                                động</span>
                                         @endif
                                     </td>
                                     <td class="text-center" data-bs-toggle="collapse"
@@ -163,7 +165,8 @@
                                                                                         <td class="fw-semibold">Vai Trò:
                                                                                         </td>
                                                                                         <td class="text-dark">
-                                                                                            {{ $item->isAdmin == 1 ? 'Admin' : 'Nhân Viên' }}</td>
+                                                                                            {{ $item->isAdmin == 1 ? 'Admin' : 'Nhân Viên' }}
+                                                                                        </td>
                                                                                     </tr>
                                                                                     <tr>
                                                                                         <td class="fw-semibold">Ngày Xóa

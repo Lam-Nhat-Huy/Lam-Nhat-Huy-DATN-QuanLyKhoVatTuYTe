@@ -29,7 +29,6 @@ class AppServiceProvider extends ServiceProvider
             $getNotifications = Notifications::with('users')
                 ->orderBy('created_at', 'DESC')
                 ->where('created_at', '>', now()->subDays(7))
-                ->where('status', 1)
                 ->where('important', 0)
                 ->whereNull('deleted_at')
                 ->get();
@@ -40,7 +39,6 @@ class AppServiceProvider extends ServiceProvider
             // Lấy thông báo quan trọng
             $getImportantNotification = Notifications::with('users')
                 ->where('important', 1)
-                ->where('status', 1)
                 ->whereNull('deleted_at')
                 ->first();
 

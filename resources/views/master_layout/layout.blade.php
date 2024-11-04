@@ -48,16 +48,14 @@
 
     @if (
         $firstLockWarehouse == 1 &&
-            (Route::currentRouteName() == 'warehouse.import' ||
-                Route::currentRouteName() == 'warehouse.export' ||
-                Route::currentRouteName() == 'warehouse.trash' ||
-                Route::currentRouteName() == 'warehouse.create_import' ||
+            (Route::currentRouteName() == 'warehouse.create_import' ||
+                Route::currentRouteName() == 'warehouse.update_import' ||
                 Route::currentRouteName() == 'warehouse.create_export' ||
-                Route::currentRouteName() == 'equipment_request.import' ||
-                Route::currentRouteName() == 'equipment_request.export' ||
-                Route::currentRouteName() == 'equipment_request.equipments_trash' ||
-                Route::currentRouteName() == 'equipment_request.insert_equipments' ||
-                Route::currentRouteName() == 'equipment_request.update_equipments'))
+                Route::currentRouteName() == 'warehouse.update_export' ||
+                Route::currentRouteName() == 'equipment_request.create_import' ||
+                Route::currentRouteName() == 'equipment_request.update_import' ||
+                Route::currentRouteName() == 'equipment_request.create_export' ||
+                Route::currentRouteName() == 'equipment_request.update_export'))
         {{ abort(404) }}
     @else
         <div class="d-flex flex-column flex-root">

@@ -170,11 +170,12 @@
                         <tr class="fw-bolder bg-success">
                             @if (!empty(request('status') === 'update_quote'))
                                 <th class="ps-10" style="width: 20%;">Thiết bị</th>
-                                <th class="" style="width: 10%;">Đơn vị</th>
-                                <th class="" style="width: 15%;">Số lượng ban đầu</th>
-                                <th class="" style="width: 15%;">Số lượng báo giá</th>
+                                <th class="" style="width: 5%;">ĐV</th>
+                                <th class="" style="width: 12.5%;">SLYC</th>
+                                <th class="" style="width: 12.5%;">SLBG</th>
                                 <th class="" style="width: 10%;">Lệch</th>
                                 <th class="" style="width: 15%;">Giá tiền</th>
+                                <th class="" style="width: 10%;">VAT</th>
                                 <th class="" style="width: 15%;">Tổng cộng</th>
                             @else
                                 <th class="ps-10" style="width: 45%;">Thiết bị</th>
@@ -196,7 +197,7 @@
                                                 <input type="num" id="quantity_change_{{ $item->equipment_code }}"
                                                     value="{{ $item->quantity }}" disabled
                                                     class="form-control form-control-sm border border-success rounded-pill"
-                                                    style="width: 30%;">
+                                                    style="width: 50%;">
                                                 <div class="message_error d-none ms-2 m-0 p-0"
                                                     id="quantity_error_{{ $item->equipment_code }}">
                                                 </div>
@@ -207,6 +208,7 @@
                                                 <input type="number"
                                                     id="quantity_quote_change_{{ $item->equipment_code }}"
                                                     value="{{ $item->quantity_quote ?? 0 }}" min="0"
+                                                    data-vat="{{ $item->equipments->vat }}"
                                                     oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
                                                     class="form-control form-control-sm border border-success rounded-pill"
                                                     style="width: 50%;">
@@ -236,8 +238,8 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td id="total_price_{{ $item->equipment_code }}">
-                                            {{ number_format($item->quantity * $item->price, 0, ',', '.') . ' VND' }}</td>
+                                        <td>{{ $item->equipments->vat }}%</td>
+                                        <td id="total_price_{{ $item->equipment_code }}">0 VND</td>
                                     @else
                                         <td>{{ $item->equipments->name }}</td>
                                         <td>{{ $item->equipments->units->name }}</td>
@@ -246,7 +248,7 @@
                                                 <input type="number" id="quantity_change_{{ $item->equipment_code }}"
                                                     value="{{ $item->quantity }}" min="0"
                                                     class="form-control form-control-sm border border-success rounded-pill"
-                                                    style="width: 30%;">
+                                                    style="width: 50%;">
                                                 <div class="message_error d-none ms-2 m-0 p-0"
                                                     id="quantity_error_{{ $item->equipment_code }}">
                                                 </div>
@@ -257,6 +259,7 @@
                                                 <input type="number"
                                                     id="quantity_quote_change_{{ $item->equipment_code }}"
                                                     value="{{ $item->quantity_quote ?? 1 }}" min="0"
+                                                    data-vat="{{ $item->equipments->vat }}"
                                                     oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
                                                     class="form-control form-control-sm border border-success rounded-pill"
                                                     style="width: 50%;">
@@ -319,13 +322,6 @@
                     </tbody>
                 </table>
             </div>
-
-            {{-- <div class="d-none mb-3" id="important_error"><strong class="text-danger">Lưu ý: </strong><span
-                    class="ms-1 fw-bolder">Các thiết bị được đánh dấu <span class="text-warning bg-dark">màu
-                        vàng</span>
-                    đã tồn tại trong lịch sử yêu cầu hoặc phiếu tạm của người khác, hoặc đã bị đưa vào thùng rác (trong
-                    3
-                    ngày gần đây). Vui lòng kiểm tra và thử lại.. (<span id="countdown">20</span>)</div> --}}
 
             <div class="modal-footer flex-right pe-0 py-5">
                 <button type="button" class="btn btn-info btn-sm {{ $d_none_temp }} rounded-pill"
@@ -706,7 +702,7 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <input type="number" id="quantity_change_${data.equipment_code}"
-                                            value="${parseInt(data.quantity, 10)}" oninput="chanQuantityTr('${data.equipment_code}'); calculateTotalPriceTr('${data.equipment_code}');"
+                                            value="${parseInt(data.quantity, 10)}" oninput="chanQuantityTr('${data.equipment_code}');"
                                             class="form-control form-control-sm border border-success rounded-pill" style="width: 30%;">
                                         <div class="message_error d-none ms-2 m-0 p-0"
                                             id="quantity_error_${data.equipment_code}">
@@ -719,6 +715,7 @@
                                         <input type="number"
                                             id="quantity_quote_change_${data.equipment_code}"
                                             value="1" min="0"
+                                            data-vat="${data.equipment_vat}"
                                             oninput="calculateTotalPriceQuoteTr('${data.equipment_code}');"
                                             class="form-control form-control-sm border border-success rounded-pill"
                                             style="width: 50%;">
@@ -1010,29 +1007,6 @@
             }
         }
 
-        function calculateTotalPriceTr(equipment_code) {
-            const price = parseFloat(document.getElementById(`price_change_${equipment_code}`).value.replace(/,/g, '')) ||
-                0;
-
-            const quantity = parseFloat(document.getElementById(`quantity_change_${equipment_code}`).value.replace(/,/g,
-                '')) || 0;
-
-            // Tính toán thành tiền
-            const totalPrice = price * quantity;
-
-            // Định dạng lại thành tiền
-            const formattedTotalPrice = totalPrice.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND',
-                    minimumFractionDigits: 0
-                })
-                .replace("₫", "VND")
-                .replace(",00", "");
-
-            // Cập nhật thành tiền trong HTML
-            document.getElementById(`total_price_${equipment_code}`).innerText = formattedTotalPrice;
-        }
-
         function calculateTotalPriceQuoteTr(equipment_code) {
             const price_quote = parseFloat(document.getElementById(`price_change_${equipment_code}`).value.replace(
                     /,/g, '')) ||
@@ -1043,6 +1017,11 @@
             const quantity_quote = parseFloat(document.getElementById(`quantity_quote_change_${equipment_code}`).value
                 .replace(/,/g,
                     '')) || 0;
+
+            const vatValue = parseFloat(document.getElementById(`quantity_quote_change_${equipment_code}`).getAttribute(
+                    'data-vat')
+                .replace(/,/g,
+                    '')) || 0;;
 
             if (quantity_quote >= 0) {
                 const quantityAfterQuote = quantity_quote - quantityQ;
@@ -1059,7 +1038,13 @@
             }
 
             // Tính toán thành tiền
-            const totalPrice_quote = price_quote * quantity_quote;
+            const totalPriceTr = price_quote * quantity_quote;
+
+            // Tính tổng giá sau VAT
+            const totalPriceAmount = totalPriceTr * (1 + (vatValue / 100));
+
+            // Nếu bạn cần tổng giá quote, có thể sử dụng tổng giá đã tính
+            const totalPrice_quote = totalPriceAmount;
 
             // Định dạng lại thành tiền
             const formattedTotalPrice = totalPrice_quote.toLocaleString('vi-VN', {

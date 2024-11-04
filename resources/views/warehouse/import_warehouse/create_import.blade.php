@@ -259,11 +259,15 @@
                                 @if (!empty($getListIERD))
                                     @foreach ($getListIERD as $item)
                                         @php
+                                            // Tính tổng tiền trước chiết khấu
+                                            $subtotal = $item->price * $item->quantity_quote;
+
+                                            // Tính tổng tiền sau khi trừ chiết khấu
+                                            $subtotal_after_discount = $subtotal * (1 - $item->discount / 100);
+
+                                            // Tính tổng tiền sau khi cộng VAT
                                             $total_price =
-                                                $item->price *
-                                                $item->quantity_quote *
-                                                (1 - $item->discount / 100) *
-                                                (1 + $item->equipments->vat / 100);
+                                                $subtotal_after_discount * (1 + $item->equipments->vat / 100);
                                         @endphp
                                         <tr id="equipment-row-{{ $item->equipment_code }}">
                                             <td class="ps-5">{{ $item->equipments->name }}</td>
@@ -333,12 +337,17 @@
                                 @if (!empty($getList))
                                     @foreach ($getList as $item)
                                         @php
+                                            // Tính tổng tiền trước chiết khấu
+                                            $subtotal = $item->price * $item->quantity_quote;
+
+                                            // Tính tổng tiền sau khi trừ chiết khấu
+                                            $subtotal_after_discount = $subtotal * (1 - $item->discount / 100);
+
+                                            // Tính tổng tiền sau khi cộng VAT
                                             $total_price =
-                                                $item->price *
-                                                $item->quantity *
-                                                (1 - $item->discount / 100) *
-                                                (1 + $item->equipments->vat / 100);
+                                                $subtotal_after_discount * (1 + $item->equipments->vat / 100);
                                         @endphp
+
                                         <tr id="equipment-row-{{ $item->equipment_code }}">
                                             <td class="ps-5">{{ $item->equipments->name }}</td>
                                             <td class="">
@@ -508,32 +517,6 @@
                         <i class="fas fa-info-circle me-2 text-primary"></i> THỐNG KÊ PHIẾU NHẬP
                     </h6>
 
-                    @if (!empty($getList))
-                        {{-- Lấy để kiểm tra số hóa đơn --}}
-                        <input type="hidden" name="request_code" id="request_code" value="{{ request('code') }}">
-
-                        @php
-                            $totalPrice = 0;
-                            $totalDiscount = 0;
-                            $totalVAT = 0;
-
-                            foreach ($getList as $detail) {
-                                $price = $detail->price ?? 0;
-                                $quantity = $detail->quantity;
-                                $discount = $detail->discount ?? 0;
-                                $vat = $detail->equipments->vat ?? 0;
-
-                                $totalPrice += $quantity * $price;
-
-                                $totalDiscount += $totalPrice * ($discount / 100);
-
-                                $totalVAT += $totalPrice * ($vat / 100);
-                            }
-
-                            $totalAmount = $totalPrice - $totalDiscount + $totalVAT;
-                        @endphp
-                    @endif
-
                     @if (!empty($getListIERD))
                         @php
                             $totalPriceIerd = 0;
@@ -546,14 +529,18 @@
                                 $discountIerd = $detail->discount ?? 0;
                                 $vatIerd = $detail->equipments->vat ?? 0;
 
-                                $totalPriceIerd += $quantityIerd * $priceIerd;
+                                $subTotalIerd = $quantityIerd * $priceIerd;
 
-                                $totalDiscountIerd += $totalPriceIerd * ($discountIerd / 100);
+                                $totalPriceIerd += $subTotalIerd;
 
-                                $totalVATIerd += $totalPriceIerd * ($vatIerd / 100);
+                                $totalDiscountIerd += $subTotalIerd * ($discountIerd / 100);
+
+                                $totalVATIerd +=
+                                    ($subTotalIerd - $subTotalIerd * ($discountIerd / 100)) * ($vatIerd / 100);
                             }
 
-                            $totalAmount = $totalPriceIerd - $totalDiscountIerd + $totalVATIerd;
+                            // Tính tổng cuối cùng (sau khi trừ chiết khấu và cộng VAT)
+                            $totalAmountIerd = $totalPriceIerd - $totalDiscountIerd + $totalVATIerd;
                         @endphp
                         <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
                             <span class="fw-semibold">Tổng Đầu</span>
@@ -578,9 +565,35 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fw-semibold">Tổng Cuối</span>
                             <span id="totalAmount"
-                                class="fw-bolder text-danger">{{ number_format($totalAmount, 0, ',', '.') }} VND</span>
+                                class="fw-bolder text-danger">{{ number_format($totalAmountIerd, 0, ',', '.') }}
+                                VND</span>
                         </div>
                     @else
+                        @if (!empty($getList))
+                            <input type="hidden" name="request_code" id="request_code" value="{{ request('code') }}">
+                            @php
+                                $totalPrice = 0;
+                                $totalDiscount = 0;
+                                $totalVAT = 0;
+
+                                foreach ($getList as $detail) {
+                                    $price = $detail->price ?? 0;
+                                    $quantity = $detail->quantity;
+                                    $discount = $detail->discount ?? 0;
+                                    $vat = $detail->equipments->vat ?? 0;
+
+                                    $subTotal = $quantity * $price;
+
+                                    $totalPrice += $subTotal;
+
+                                    $totalDiscount += $subTotal * ($discount / 100);
+
+                                    $totalVAT += ($subTotal - $subTotal * ($discount / 100)) * ($vat / 100);
+                                }
+
+                                $totalAmount = $totalPrice - $totalDiscount + $totalVAT;
+                            @endphp
+                        @endif
                         <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
                             <span class="fw-semibold">Tổng Đầu</span>
                             <span id="totalPrice"
@@ -992,8 +1005,16 @@
                     }).then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            const total_price = (data.price * data.quantity) - (data
-                                .discount_rate / 100) + (data.vat / 100);
+                            const subtotal = data.price * data
+                                .quantity; // Tổng trước chiết khấu
+                            const discountAmount = subtotal * (data.discount_rate /
+                                100); // Số tiền chiết khấu
+                            const subtotalAfterDiscount = subtotal -
+                                discountAmount; // Tổng sau chiết khấu
+                            const vatAmount = subtotalAfterDiscount * (data.vat /
+                                100); // Số tiền VAT
+                            const total_price = subtotalAfterDiscount +
+                                vatAmount; // Tổng cuối cùng sau chiết khấu và VAT
 
                             // Kiểm tra xem thiết bị đã được thêm chưa
                             if (!addedEquipments.includes(data.equipment_code)) {
@@ -1153,61 +1174,52 @@
             let totalAmount = 0;
             let getEquipmentLists = getEquipmentList();
 
-            getEquipmentLists.forEach((equipmentCalculateTotals) => {
-                const total_price = equipmentCalculateTotals.price * equipmentCalculateTotals.quantity;
-                const total_price_calculate = equipmentCalculateTotals.price * equipmentCalculateTotals
-                    .quantity * (
-                        1 - equipmentCalculateTotals.discount_rate / 100) * (1 + equipmentCalculateTotals
-                        .vat / 100);
-                const itemDiscount =
-                    (equipmentCalculateTotals.price * equipmentCalculateTotals.quantity *
-                        equipmentCalculateTotals
-                        .discount_rate) / 100;
-                const itemVAT =
-                    ((equipmentCalculateTotals.price * equipmentCalculateTotals.quantity - itemDiscount) *
-                        equipmentCalculateTotals.vat) /
-                    100;
-                const itemTotal = parseFloat(total_price_calculate);
+            getEquipmentLists.forEach((equipment) => {
+                // Tính tổng giá chưa có chiết khấu và VAT
+                const subTotal = equipment.price * equipment.quantity;
 
-                totalPrice += total_price;
+                // Tính chiết khấu cho từng sản phẩm
+                const itemDiscount = subTotal * (equipment.discount_rate / 100);
+
+                // Tính VAT cho từng sản phẩm dựa trên giá sau khi trừ chiết khấu
+                const itemVAT = (subTotal - itemDiscount) * (equipment.vat / 100);
+
+                // Tổng tiền sau khi trừ chiết khấu và cộng VAT cho từng sản phẩm
+                const itemTotal = subTotal - itemDiscount + itemVAT;
+
+                // Cộng dần các giá trị vào tổng
+                totalPrice += subTotal;
                 totalDiscount += itemDiscount;
                 totalVAT += itemVAT;
                 totalAmount += itemTotal;
             });
 
+            // Hiển thị tổng giá trị
             document.getElementById("totalPrice").textContent =
                 totalPrice.toLocaleString("vi-VN", {
                     style: "currency",
                     currency: "VND",
-                })
-                .replace("₫", "VND")
-                .replace(",00", "");
+                }).replace("₫", "VND").replace(",00", "");
 
             document.getElementById("totalDiscount").textContent =
                 totalDiscount.toLocaleString("vi-VN", {
                     style: "currency",
                     currency: "VND",
-                })
-                .replace("₫", "VND")
-                .replace(",00", "");
+                }).replace("₫", "VND").replace(",00", "");
 
-            document.getElementById("totalVAT").textContent = totalVAT.toLocaleString(
-                    "vi-VN", {
-                        style: "currency",
-                        currency: "VND"
-                    }
-                )
-                .replace("₫", "VND")
-                .replace(",00", "");
+            document.getElementById("totalVAT").textContent =
+                totalVAT.toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                }).replace("₫", "VND").replace(",00", "");
 
             document.getElementById("totalAmount").textContent =
                 totalAmount.toLocaleString("vi-VN", {
                     style: "currency",
                     currency: "VND",
-                })
-                .replace("₫", "VND")
-                .replace(",00", "");
+                }).replace("₫", "VND").replace(",00", "");
         }
+
 
         // Lấy dữ liệu từ danh sách thiết bị
         function getEquipmentList() {
@@ -1343,18 +1355,18 @@
         }
 
         function calculateTotalPriceTop(equipment_code) {
-            // Lấy giá trị từ các trường 
+            // Lấy giá trị từ các trường, thay thế dấu phẩy và chuyển về số
             const price = parseFloat(document.getElementById(`price_change_${equipment_code}`).value.replace(/,/g, '')) ||
                 0;
-            const quantity_quote = parseFloat(document.getElementById(`quantity_quote_${equipment_code}`).value
-                .replace(/,/g,
-                    '')) || 0;
+            const quantity_quote = parseFloat(document.getElementById(`quantity_quote_${equipment_code}`).value.replace(
+                /,/g, '')) || 0;
             const quantity = parseFloat(document.getElementById(`quantity_change_${equipment_code}`).value.replace(/,/g,
                 '')) || 0;
             const discount = parseFloat(document.getElementById(`discount_rate_change_${equipment_code}`).value.replace(
                 /,/g, '')) || 0;
             const vat = parseFloat(document.getElementById(`vat_change_${equipment_code}`).value.replace(/,/g, '')) || 0;
 
+            // Tính toán sự lệch giữa số lượng sau khi nhập và số lượng đề xuất
             if (quantity >= 0) {
                 const quantityAfterImport = quantity - quantity_quote;
 
@@ -1369,20 +1381,18 @@
                 }
             }
 
-            // Tính toán thành tiền
+            // Tính toán tổng giá sau khi áp dụng chiết khấu và VAT
             const discountedPrice = price * quantity * (1 - discount / 100);
             const totalPrice = discountedPrice * (1 + vat / 100);
 
-            // Định dạng lại thành tiền
+            // Định dạng lại thành tiền để hiển thị trong HTML
             const formattedTotalPrice = totalPrice.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND',
-                    minimumFractionDigits: 0
-                })
-                .replace("₫", "VND")
-                .replace(",00", "");
+                style: 'currency',
+                currency: 'VND',
+                minimumFractionDigits: 0
+            }).replace("₫", "VND").replace(",00", "");
 
-            // Cập nhật thành tiền trong HTML
+            // Cập nhật thành tiền đã tính vào phần tử HTML tương ứng
             document.getElementById(`total_price_${equipment_code}`).innerText = formattedTotalPrice;
         }
 
@@ -1404,40 +1414,37 @@
                 const vat = parseFloat(document.getElementById(`vat_change_${equipment_code}`).value.replace(/,/g,
                     '')) || 0;
 
-                const discountedPrice = price * quantity * (discount / 100); // Chiết khấu
-                const subtotal = price * quantity - discountedPrice; // Sau chiết khấu
-                const vatAmount = subtotal * (vat / 100); // VAT
+                const totalItemPrice = price * quantity; // Tổng tiền trước chiết khấu và VAT
+                const discountedPrice = totalItemPrice * (discount / 100); // Số tiền chiết khấu
+                const subtotal = totalItemPrice - discountedPrice; // Sau chiết khấu
+                const vatAmount = subtotal * (vat / 100); // Số tiền VAT
 
-                totalPrice += price * quantity; // Tổng đầu (trước chiết khấu và VAT)
+                totalPrice += totalItemPrice; // Tổng tiền gốc (trước chiết khấu và VAT)
                 totalDiscount += discountedPrice; // Tổng chiết khấu
                 totalVAT += vatAmount; // Tổng VAT
-                totalAmount += subtotal + vatAmount; // Tổng cuối (sau chiết khấu và VAT)
+                totalAmount += subtotal + vatAmount; // Tổng tiền cuối cùng (sau chiết khấu và VAT)
             });
 
             // Định dạng và cập nhật các giá trị vào HTML
             document.getElementById('totalPrice').innerText = totalPrice.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND'
-                }).replace("₫", "VND")
-                .replace(",00", "");
+                style: 'currency',
+                currency: 'VND'
+            }).replace("₫", "VND").replace(",00", "");
+
             document.getElementById('totalDiscount').innerText = totalDiscount.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND'
-                })
-                .replace("₫", "VND")
-                .replace(",00", "");
+                style: 'currency',
+                currency: 'VND'
+            }).replace("₫", "VND").replace(",00", "");
+
             document.getElementById('totalVAT').innerText = totalVAT.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND'
-                })
-                .replace("₫", "VND")
-                .replace(",00", "");
+                style: 'currency',
+                currency: 'VND'
+            }).replace("₫", "VND").replace(",00", "");
+
             document.getElementById('totalAmount').innerText = totalAmount.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND'
-                })
-                .replace("₫", "VND")
-                .replace(",00", "");
+                style: 'currency',
+                currency: 'VND'
+            }).replace("₫", "VND").replace(",00", "");
         }
 
         function cSupplier() {

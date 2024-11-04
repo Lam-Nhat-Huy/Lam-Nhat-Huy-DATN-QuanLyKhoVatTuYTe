@@ -124,10 +124,10 @@
                         <div class="message_error" id="reason_error"></div>
                     </div>
 
-                    <div class="mb-3 col-md-6 {{ !empty($getExportRequest) ? 'd-none' : '' }}">
+                    <div class="mb-3 col-md-6">
                         <label for="export_type" class="required form-label fw-semibold">Loại Xuất</label>
                         <div class="d-flex align-items-center">
-                            <select name="export_type" id="export_type"
+                            <select name="export_type" id="export_type" {{ !empty($getExportRequest) ? 'disabled' : '' }}
                                 class="form-select form-select-sm border border-success rounded-pill">
                                 <option value="Xuất Sử Dụng"
                                     {{ !empty($editExport) && $editExport->export_type === 'Xuất Sử Dụng' ? 'selected' : '' }}>

@@ -134,12 +134,16 @@
                                         <div class="btn-group">
                                             <div class="btn-group">
                                                 @if ($item->status == 0)
-                                                    <button type="button" class="btn btn-sm btn-info rounded-pill me-2"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#browse_{{ $item->code }}">
-                                                        <i class="fa fa-clipboard-check" style="margin-bottom: 2px;"></i>
-                                                        Duyệt
-                                                    </button>
+                                                    @if (session('isAdmin') == 1)
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-info rounded-pill me-2"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#browse_{{ $item->code }}">
+                                                            <i class="fa fa-clipboard-check"
+                                                                style="margin-bottom: 2px;"></i>
+                                                            Duyệt
+                                                        </button>
+                                                    @endif
                                                     <a href="{{ route('report.update_report', $item->code) }}"
                                                         class="btn btn-sm btn-twitter me-2 rounded-pill">
                                                         <i class="fa fa-edit" style="margin-bottom: 2px;"></i> Sửa
@@ -147,6 +151,7 @@
                                                 @endif
                                                 <button type="button" class="btn btn-sm btn-danger rounded-pill"
                                                     data-bs-toggle="modal"
+                                                    {{ session('isAdmin') !== 1 ? 'disabled' : '' }}
                                                     data-bs-target="#deleteModal_{{ $item->code }}">
                                                     <i class="fa fa-trash" style="margin-bottom: 2px;"></i> Xóa
                                                 </button>

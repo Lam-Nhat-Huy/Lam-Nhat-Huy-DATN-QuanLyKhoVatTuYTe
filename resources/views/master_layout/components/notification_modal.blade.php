@@ -51,12 +51,25 @@
                         </div>
                     @empty
                         <div class="notification-container d-flex justify-content-center align-items-center">
-                            <h6 class="notification-text">Không có thông báo</h6>
+                            <div class="alert d-flex flex-column align-items-center justify-content-center"
+                                role="alert">
+                                <div class="mb-3">
+                                    <i class="fa fa-bell-slash" style="font-size: 36px; color: #6c757d;"></i>
+                                </div>
+                                <div class="text-center">
+                                    <h5 style="font-size: 16px; font-weight: 600; color: #495057;">
+                                        Không Có Thông Báo
+                                    </h5>
+                                    <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                        Hiện Không Có Thông Báo Nào
+                                    </p>
+                                </div>
+                            </div>
                         </div>
 
                         <style>
                             .notification-text {
-                                color: #6c757d;
+                                color: #ff0000;
                                 font-size: 1rem;
                                 font-weight: 500;
                                 margin: 0;

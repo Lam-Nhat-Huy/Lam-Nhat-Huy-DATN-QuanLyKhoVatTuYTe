@@ -60,14 +60,14 @@
             @csrf
             <div class="card-body py-3">
                 <div class="table-responsive rounded">
-                    <table class="table table-hover table-bordered align-middle">
+                    <table class="table align-middle">
                         <thead class="{{ $AllEquipmentGroup->count() == 0 ? 'd-none' : '' }}">
                             <tr class="bg-success">
                                 <th class="ps-3" style="width: 5%;"><input type="checkbox" id="selectAll" /></th>
                                 <th class="" style="width: 10%;">Mã</th>
                                 <th class="" style="width: 25%;">Tên</th>
-                                <th class="" style="width: 25%;">Mô Tả</th>
-                                <th class="text-center" style="width: 15%;">Trạng Thái</th>
+                                <th class="" style="width: 30%;">Mô Tả</th>
+                                <th class="text-center" style="width: 10%;">Trạng Thái</th>
                                 <th class="text-center" style="width: 20%;">Hành Động</th>
                             </tr>
                         </thead>

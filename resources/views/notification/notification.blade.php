@@ -33,7 +33,7 @@
         </div>
         <div class="card-body py-1">
             <form action="{{ route('notification.index') }}" method="GET" class="row align-items-center">
-                <div class="col-lg-2 col-md-4 col-sm-12">
+                <div class="col-lg-3 col-md-4 col-sm-12">
                     <select name="ur" id="ur"
                         class="mt-2 mb-2 form-select form-select-sm rounded-pill border border-success setupSelect2 w-100">
                         <option value="" selected>--Theo Người Tạo--</option>
@@ -43,19 +43,12 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-lg-2 col-md-4 col-sm-12">
+                <div class="col-lg-3 col-md-4 col-sm-12">
                     <select name="rt" id="rt"
                         class="mt-2 mb-2 form-select form-select-sm rounded-pill border border-success setupSelect2 w-100">
                         <option value="" {{ request()->rt == '' ? 'selected' : '' }}>--Theo Loại Báo Cáo--</option>
                         <option value="0" {{ request()->rt == '0' ? 'selected' : '' }}>Mặc Định</option>
                         <option value="1" {{ request()->rt == '1' ? 'selected' : '' }}>Kiểm Kho - Khóa Kho</option>
-                    </select>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-12">
-                    <select name="st" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2 w-100">
-                        <option value="" {{ request()->st == '' ? 'selected' : '' }}>--Theo Trạng Thái--</option>
-                        <option value="1" {{ request()->st == '1' ? 'selected' : '' }}>Hiển Thị</option>
-                        <option value="0" {{ request()->st == '0' ? 'selected' : '' }}>Không Hiển Thị</option>
                     </select>
                 </div>
                 <div class="col-lg-6 col-md-12 col-sm-12">
@@ -81,20 +74,19 @@
             <input type="hidden" name="action_type" id="action_type" value="">
             <div class="card-body py-3">
                 <div class="table-responsive rounded">
-                    <table class="table table-hover table-bordered align-middle">
+                    <table class="table align-middle gs-0 gy-4">
                         <thead class="{{ $AllNotification->count() == 0 ? 'd-none' : '' }}">
                             <tr class="fw-bolder bg-success">
                                 <th class="ps-4">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
                                 <th class="" style="width: 10%">Mã</th>
-                                <th class="" style="width: 10%">Người Tạo</th>
-                                <th class="" style="width: 8%">Nội Dung</th>
-                                <th class="" style="width: 12%">Loại</th>
+                                <th class="" style="width: 15%">Người Tạo</th>
+                                <th class="" style="width: 10%">Nội Dung</th>
+                                <th class="" style="width: 15%">Loại</th>
                                 <th class="" style="width: 10%">Ngày Tạo</th>
-                                <th class="text-center" style="width: 12%">Trạng Thái</th>
-                                <th class="text-center" style="width: 9%">Quan Trọng</th>
-                                <th class="text-center" style="width: 9%">Khóa Kho</th>
+                                <th class="text-center" style="width: 10%">Quan Trọng</th>
+                                <th class="text-center" style="width: 10%">Khóa Kho</th>
                                 <th class="pe-3 text-center" style="width: 20%">Hành Động</th>
                             </tr>
                         </thead>
@@ -121,17 +113,6 @@
                                     </td>
                                     <td>
                                         {{ $item->created_at->format('d-m-Y') }}
-                                    </td>
-                                    <td class="text-center">
-                                        @if ($item->status == 1)
-                                            <div class="rounded-pill px-2 py-1 text-white bg-success">
-                                                Hiển thị
-                                            </div>
-                                        @else
-                                            <div class="rounded-pill px-2 py-1 text-white bg-danger">
-                                                Không hiển thị
-                                            </div>
-                                        @endif
                                     </td>
 
                                     <td class="text-center">
@@ -261,11 +242,6 @@
                         </span>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li>
-                                <a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#browseAll">
-                                    <i class="fas fa-clipboard-check me-2 text-success"></i>Duyệt
-                                </a>
-                            </li>
-                            <li>
                                 <a class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#deleteAll">
                                     <i class="fas fa-trash me-2 text-danger"></i>Xóa
                                 </a>
@@ -278,29 +254,6 @@
                     </ul>
                 </div>
             @endif
-            {{-- Modal Duyệt Tất Cả --}}
-            <div class="modal fade" id="browseAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                aria-labelledby="browseAllLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-md">
-                    <div class="modal-content border-0 shadow">
-                        <div class="modal-header bg-primary text-white">
-                            <h5 class="modal-title text-white" id="browseAllLabel">Duyệt Thông Báo</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body text-center" style="padding-bottom: 0px;">
-                            <p class="text-danger mb-4">Bạn có chắc chắn muốn duyệt thông báo đã chọn?</p>
-                        </div>
-                        <div class="modal-footer justify-content-center border-0">
-                            <button type="button" class="btn rounded-pill btn-sm btn-secondary btn-sm px-4"
-                                data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">
-                                Duyệt</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             {{-- Modal Xác Nhận Xóa Tất Cả --}}
             <div class="modal fade" id="deleteAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                 aria-labelledby="deleteAllLabel" aria-hidden="true">

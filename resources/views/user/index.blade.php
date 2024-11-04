@@ -78,7 +78,7 @@
             @csrf
             <div class="card-body py-3">
                 <div class="table-responsive rounded">
-                    <table class="table table-hover table-bordered align-middle">
+                    <table class="table align-middle gy-4 gs-0">
                         <thead class="{{ $allUser->count() == 0 ? 'd-none' : '' }}">
                             <tr class="fw-bolder bg-success">
                                 <th class="ps-3">
@@ -92,7 +92,7 @@
                                 <th class="" style="width: 8% !important;">Giới tính</th>
                                 <th class="" style="width: 8% !important;">Vai trò</th>
                                 <th class="" style="width: 11% !important;">Trạng thái</th>
-                                <th class="pe-3 text-center" style="width: 20% !important;">Hành động</th>
+                                <th class="pe-5 text-center" style="width: 20% !important;">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -127,16 +127,14 @@
                                     </td>
                                     <td>
                                         @if ($item['status'] == 0)
-                                            <span class=" text-white bg-danger py-1 px-2 rounded-pill"
-                                                style="font-size: 10px;">Không hoạt
+                                            <span class=" text-white bg-danger py-1 px-2 rounded-pill">Không hoạt
                                                 động</span>
                                         @elseif($item['status'] == 1)
-                                            <span class=" text-white bg-success py-1 px-2 rounded-pill"
-                                                style="font-size: 10px;">Hoạt
+                                            <span class=" text-white bg-success py-1 px-2 rounded-pill">Hoạt
                                                 động</span>
                                         @endif
                                     </td>
-                                    <td class="text-center" data-bs-toggle="collapse"
+                                    <td class="text-center pe-5" data-bs-toggle="collapse"
                                         data-bs-target="#collapse_{{ $item->code }}" aria-expanded="false"
                                         aria-controls="collapse_{{ $item->code }}">
                                         Chi Tiết<i class="fa fa-caret-right pointer ms-2"></i>
@@ -155,7 +153,7 @@
                                                         <div class="row px-5 w-100">
                                                             <div class="col-md-12 my-3">
                                                                 <h4
-                                                                    class="fw-bold m-0 text-uppercase fw-bolder text-center">
+                                                                    class="fw-bold m-0 text-uppercase fw-bolder text-center my-3">
                                                                     Thông tin người dùng
                                                                 </h4>
                                                             </div>

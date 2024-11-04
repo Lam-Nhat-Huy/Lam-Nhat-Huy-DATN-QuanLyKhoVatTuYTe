@@ -234,6 +234,7 @@ class EquipmentRequestController extends Controller
                 return response()->json([
                     'success' => true,
                     'equipment_name' => $equipment->name,
+                    'equipment_vat' => $equipment->VAT,
                     'inventory' => $equipment->inventories->sum('current_quantity'),
                     'unit' => $equipment->units->name,
                     'quantity' => $request->quantity,

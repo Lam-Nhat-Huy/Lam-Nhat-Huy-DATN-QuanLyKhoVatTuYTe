@@ -338,6 +338,68 @@
 
             <div class="row align-items-start px-14 mt-10">
                 <div class="col-xxl-6 mb-5">
+                    <div class="card card-xxl-stretch h-100 shadow">
+                        <!-- Header -->
+                        <div class="card-header align-items-center border-0 rounded d-flex justify-content-between"
+                            style="background-image: linear-gradient(-225deg, #473B7B 0%, #3584A7 51%, #30D2BE 100%);">
+                            <h5 class="card-title fw-bolder text-white fs-5 d-flex align-items-center">
+                                CẢNH BÁO TỒN KHO THẤP
+                            </h5>
+                            <span class="text-white fw-bold fs-6"><strong>{{ $warnings->total() }}</strong> Thiết
+                                Bị</span>
+                        </div>
+                        <!-- Body -->
+                        <div class="card-body pt-3 d-flex flex-column justify-content-between pb-0 px-5">
+                            @forelse ($warnings as $warning)
+                                <div class="d-flex align-items-center mt-1 mb-1 border-bottom pb-3">
+                                    <div class="d-flex align-items-center mt-2">
+                                        <!-- Icon cảnh báo và nội dung -->
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa fa-exclamation-triangle text-danger fs-3 me-1"></i>
+                                        </div>
+                                        <div class="fw-normal text-muted ps-3">
+                                            Thiết bị <strong>{{ $warning->equipments->name }}</strong> (Mã:
+                                            <strong>{{ $warning->code }}</strong>) chỉ
+                                            còn
+                                            <strong>{{ $warning->current_quantity }}</strong> đơn vị trong kho.
+                                            @if ($warning->current_quantity <= 0)
+                                                <span style="color: red; font-weight: bold;">Đã hết hàng</span>.
+                                            @else
+                                                <span style="color: rgb(0, 145, 255); font-weight: bold;">Sắp hết
+                                                    hàng</span>.
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="text-center text-muted">
+                                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4 mb-0"
+                                        role="alert"
+                                        style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                        <div class="mb-3">
+                                            <i class="fas fa-file-invoice" style="font-size: 36px; color: #6c757d;"></i>
+                                        </div>
+                                        <div class="text-center">
+                                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
+                                                Liệu
+                                            </h5>
+                                            <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                Không Có Thiết Bị Nào Đang Tồn Kho Thấp
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforelse
+                            <!-- Pagination -->
+                            <div class="d-flex justify-content-center my-3">
+                                <ul class="pagination pagination-lg nk">
+                                    {{ $warnings->appends(['export_log_page' => request('export_log_page')])->links('pagination::bootstrap-4') }}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-6 mb-5">
                     <div class="card card-xxl-stretch h-100 shadow-lg">
                         <!-- Header -->
                         <div class="card-header text-white border-0 rounded align-items-center"
@@ -347,9 +409,9 @@
                             </h5>
                         </div>
                         <!-- Body -->
-                        <div class="card-body pt-4 px-6 pb-5">
+                        <div class="card-body pt-4 px-6 pb-4">
                             <!-- Summary Cards -->
-                            <div class="row mb-4">
+                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="px-6 py-8 rounded-2 shadow-sm text-center"
                                         style="background-image: linear-gradient(60deg, #3d3393 0%, #2b76b9 37%, #2cacd1 65%, #35eb93 100%);">
@@ -474,111 +536,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- Data Table -->
-                            @if ($importStatistics->isEmpty())
-                                <div class="text-center text-muted">
-                                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4 mb-0"
-                                        role="alert"
-                                        style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
-                                        <div class="mb-3">
-                                            <i class="fas fa-file-invoice" style="font-size: 36px; color: #6c757d;"></i>
-                                        </div>
-                                        <div class="text-center">
-                                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
-                                                Liệu
-                                            </h5>
-                                            <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                                Không Có Lịch Sử Xuất Kho Nào
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            @else
-                                <table class="table table-striped table-hover border shadow-sm">
-                                    <thead class="bg-dark text-white">
-                                        <tr>
-                                            <th class="ps-5 text-center">Tháng</th>
-                                            <th class="text-center">Số lượng</th>
-                                            <th class="text-center pe-5">Giá trị tổng (VND)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($importStatistics as $stat)
-                                            <tr>
-                                                <td class="ps-5 text-center">
-                                                    {{ str_pad($stat->month, 2, '0', STR_PAD_LEFT) }}</td>
-                                                <td class="text-center">{{ $stat->total_quantity }} Thiết bị</td>
-                                                <td class="text-center pe-5">
-                                                    {{ number_format($expenseTotal, 2, ',', '.') }}
-                                                    VND
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xxl-6 mb-5">
-                    <div class="card card-xxl-stretch h-100 shadow">
-                        <!-- Header -->
-                        <div class="card-header align-items-center border-0 rounded d-flex justify-content-between"
-                            style="background-image: linear-gradient(-225deg, #473B7B 0%, #3584A7 51%, #30D2BE 100%);">
-                            <h3 class="card-title fw-bolder text-white fs-4 d-flex align-items-center">
-                                CẢNH BÁO TỒN KHO THẤP
-                            </h3>
-                            <span class="text-white fw-bold fs-6">{{ $warnings->total() }} Thiết Bị</span>
-                        </div>
-                        <!-- Body -->
-                        <div class="card-body pt-3 d-flex flex-column justify-content-between pb-0 px-5">
-                            @forelse ($warnings as $warning)
-                                <div class="d-flex align-items-center mt-1 mb-1 border-bottom pb-3">
-                                    <div class="d-flex align-items-center mt-2">
-                                        <!-- Icon cảnh báo và nội dung -->
-                                        <div class="d-flex align-items-center">
-                                            <i class="fa fa-exclamation-triangle text-danger fs-3 me-1"></i>
-                                        </div>
-                                        <div class="fw-normal text-muted ps-3">
-                                            Thiết bị <strong>{{ $warning->equipments->name }}</strong> (Mã:
-                                            <strong>{{ $warning->code }}</strong>) chỉ
-                                            còn
-                                            <strong>{{ $warning->current_quantity }}</strong> đơn vị trong kho.
-                                            @if ($warning->current_quantity <= 0)
-                                                <span style="color: red; font-weight: bold;">Đã hết hàng</span>.
-                                            @else
-                                                <span style="color: rgb(0, 145, 255); font-weight: bold;">Sắp hết
-                                                    hàng</span>.
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="text-center text-muted">
-                                    <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4 mb-0"
-                                        role="alert"
-                                        style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
-                                        <div class="mb-3">
-                                            <i class="fas fa-file-invoice" style="font-size: 36px; color: #6c757d;"></i>
-                                        </div>
-                                        <div class="text-center">
-                                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
-                                                Liệu
-                                            </h5>
-                                            <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                                Không Có Thiết Bị Nào Đang Tồn Kho Thấp
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforelse
-                            <!-- Pagination -->
-                            <div class="d-flex justify-content-center my-3">
-                                <ul class="pagination pagination-lg nk">
-                                    {{ $warnings->appends(['export_log_page' => request('export_log_page')])->links('pagination::bootstrap-4') }}
-                                </ul>
                             </div>
                         </div>
                     </div>

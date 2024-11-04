@@ -117,7 +117,7 @@ class DashboardController extends Controller
     {
         $lowInventories = Inventories::where('current_quantity', '<=', $threshold)
             ->whereNull('deleted_at')
-            ->paginate(2, ['*'], 'low_inventory_page');  // Đặt tên cho phân trang
+            ->paginate(5, ['*'], 'low_inventory_page');  // Đặt tên cho phân trang
 
         return $lowInventories;
     }

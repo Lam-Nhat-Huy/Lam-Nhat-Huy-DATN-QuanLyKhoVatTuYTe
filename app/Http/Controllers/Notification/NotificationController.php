@@ -28,7 +28,6 @@ class NotificationController extends Controller
 
         $AllNotification = $this->callModel::with(['users'])
             ->orderBy('created_at', 'DESC')
-            ->whereIn('status', [0, 1])
             ->where('deleted_at', null);
 
         if (isset($request->ur)) {
@@ -37,10 +36,6 @@ class NotificationController extends Controller
 
         if (isset($request->rt)) {
             $AllNotification = $AllNotification->where("notification_type", $request->rt);
-        }
-
-        if (isset($request->st)) {
-            $AllNotification = $AllNotification->where("status", $request->st);
         }
 
         if (isset($request->kw)) {
@@ -54,14 +49,7 @@ class NotificationController extends Controller
 
         if (isset($request->notification_codes)) {
 
-            if ($request->action_type === 'browse') {
-
-                $this->callModel::whereIn('code', $request->notification_codes)->update(['status' => 1]);
-
-                toastr()->success('Duyệt thành công');
-
-                return redirect()->back();
-            } elseif ($request->action_type === 'delete') {
+            if ($request->action_type === 'delete') {
 
                 $this->callModel::whereIn('code', $request->notification_codes)->delete();
 
@@ -69,15 +57,6 @@ class NotificationController extends Controller
 
                 return redirect()->back();
             }
-        }
-
-        if (!empty($request->browse_notification)) {
-
-            $this->callModel::where('code', $request->browse_notification)->update(['status' => 1]);
-
-            toastr()->success('Đã duyệt');
-
-            return redirect()->route('notification.index');
         }
 
         if (!empty($request->delete_notification)) {
@@ -184,8 +163,6 @@ class NotificationController extends Controller
 
             $data['important'] = $request->has('important') ? 1 : 0;
 
-            $data['status'] = $request->has('status') ? 1 : 0;
-
             $data['lock_warehouse'] = $data['notification_type'];
 
             if ($request->important == 1) {
@@ -213,8 +190,6 @@ class NotificationController extends Controller
             $data['updated_at'] = now();
 
             $data['important'] = $request->has('important') ? 1 : 0;
-
-            $data['status'] = $request->has('status') ? 1 : 0;
 
             $data['notification_type'] = $request->notification_type;
 

@@ -101,21 +101,12 @@
                     </div>
 
                     <div class="action d-flex">
-                        <div class="form-group me-20">
+                        <div class="form-group me-20 d-none">
                             <label class="fs-5 fw-bold mb-2">Thông Báo Quan Trọng</label>
                             <div class="checkbox-wrapper-6">
                                 <input class="tgl tgl-light" id="cb1-6" type="checkbox" value="1" name="important"
                                     {{ (isset($firstNotification) && $firstNotification->important == 1) || old('important') == 1 ? 'checked' : '' }} />
                                 <label class="tgl-btn" for="cb1-6"></label>
-                            </div>
-                        </div>
-
-                        <div class="form-group me-20">
-                            <label class="fs-5 fw-bold mb-2">Trạng thái</label>
-                            <div class="checkbox-wrapper-6">
-                                <input class="tgl tgl-light" id="cb1-7" type="checkbox" value="1" name="status"
-                                    {{ (isset($firstNotification) && $firstNotification->status == 1) || old('status') == 1 ? 'checked' : '' }} />
-                                <label class="tgl-btn" for="cb1-7"></label>
                             </div>
                         </div>
                     </div>
