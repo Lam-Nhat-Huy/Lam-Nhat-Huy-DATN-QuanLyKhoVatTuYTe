@@ -10,6 +10,7 @@ use App\Models\Export_equipment_requests;
 use App\Models\Exports;
 use App\Models\Inventories;
 use App\Models\Inventory_checks;
+use App\Models\Notifications;
 use App\Models\Suppliers;
 use App\Models\Users;
 use Illuminate\Http\Request;
@@ -19,6 +20,17 @@ use Illuminate\Support\Facades\Log;
 class ExportController extends Controller
 {
     protected $route = 'warehouse';
+
+    protected $Notifications;
+
+    public function __construct()
+    {
+        $this->Notifications = new Notifications();
+
+        if ($this->Notifications->firstLockWarehouse() == 1) {
+            return abort(403);
+        }
+    }
 
     public function export(Request $request)
     {

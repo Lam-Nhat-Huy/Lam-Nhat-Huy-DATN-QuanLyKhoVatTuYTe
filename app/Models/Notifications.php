@@ -22,8 +22,6 @@ class Notifications extends Model
         'code',
         'user_code',
         'notification_type',
-        'important',
-        'status',
         'lock_warehouse',
         'is_read',
         'content',
@@ -31,6 +29,15 @@ class Notifications extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function firstLockWarehouse()
+    {
+        $data = Notifications::where('lock_warehouse', 1)
+            ->whereNull('deleted_at')
+            ->count();
+
+        return $data;
+    }
 
     public function users()
     {

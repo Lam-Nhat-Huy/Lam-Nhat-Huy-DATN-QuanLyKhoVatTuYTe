@@ -8,7 +8,6 @@ use App\Models\Inventories;
 use App\Models\Inventory_checks;
 use App\Models\Notifications;
 use App\Models\Receipt_details;
-use App\Models\Receipts;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -21,8 +20,7 @@ class DashboardController extends Controller
     {
         $title = 'Thống Kê';
 
-        $importantNotification = Notifications::where('important', 1)
-            ->where('status', 1)
+        $importantNotification = Notifications::where('lock_warehouse', 1)
             ->whereNull('deleted_at')
             ->first();
 

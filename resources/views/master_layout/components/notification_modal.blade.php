@@ -43,7 +43,7 @@
                                     <div class="d-flex align-items-center mt-1 fs-6">
                                         <div class="text-muted me-2 fs-7">Tạo lúc
                                             <strong> {{ $item->created_at->format('d-m-Y') }}</strong> Bởi
-                                            <strong>{{ $item->users->last_name . ' ' . $item->users->first_name . ' - ' . $item->users->position }}</strong>
+                                            <strong>{{ $item->users->last_name . ' ' . $item->users->first_name . ' - ' . ($item->users->isAdmin == 1 ? 'Admin' : 'Nhân Viên') }}</strong>
                                         </div>
                                     </div>
                                 </div>

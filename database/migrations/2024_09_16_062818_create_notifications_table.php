@@ -11,10 +11,7 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->char('code', 10)->primary();
             $table->char('user_code', 10)->nullable();
-            $table->boolean('notification_type')->nullable();
             $table->text('content');
-            $table->boolean('important')->default(0)->nullable();
-            $table->boolean('status')->default(0);
             $table->boolean('lock_warehouse')->default(0);
             $table->boolean('is_read')->default(false);
             $table->timestamps();

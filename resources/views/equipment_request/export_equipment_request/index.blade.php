@@ -10,25 +10,6 @@
 @section('scripts')
 @endsection
 
-@php
-    $canCreate = true;
-    if (
-        $firstLockWarehouse == 1 &&
-        (Route::currentRouteName() == 'warehouse.import' ||
-            Route::currentRouteName() == 'warehouse.export' ||
-            Route::currentRouteName() == 'warehouse.trash' ||
-            Route::currentRouteName() == 'warehouse.create_import' ||
-            Route::currentRouteName() == 'warehouse.create_export' ||
-            Route::currentRouteName() == 'equipment_request.import' ||
-            Route::currentRouteName() == 'equipment_request.export' ||
-            Route::currentRouteName() == 'equipment_request.equipments_trash' ||
-            Route::currentRouteName() == 'equipment_request.insert_equipments' ||
-            Route::currentRouteName() == 'equipment_request.update_equipments')
-    ) {
-        $canCreate = false;
-    }
-@endphp
-
 @section('content')
     <div class="card mb-5 pb-5 mb-xl-8 shadow">
         <div class="card-header border-0 pt-5">
@@ -43,15 +24,9 @@
                         Thùng Rác
                     </span>
                 </a>
-                @if ($canCreate === true)
-                    <a href="{{ route('equipment_request.create_export') }}" class="btn btn-success btn-sm rounded-pill">
-                        <i class="fa fa-plus me-1" style="margin-bottom: 2px;"></i>Tạo Phiếu
-                    </a>
-                @else
-                    <button class="btn btn-secondary btn-sm rounded-pill" data-bs-toggle="tooltip" data-bs-placement="top"
-                        title="Kho Đang Bị Khóa, Không Thể Tạo Phiếu Lúc Này"><i class="fa fa-plus me-1"
-                            style="margin-bottom: 2px;"></i>Tạo Phiếu</button>
-                @endif
+                <a href="{{ route('equipment_request.create_export') }}" class="btn btn-success btn-sm rounded-pill">
+                    <i class="fa fa-plus me-1" style="margin-bottom: 2px;"></i>Tạo Phiếu
+                </a>
             </div>
         </div>
         <div class="card-body py-1">
@@ -366,23 +341,11 @@
 
                                                         @if ($item->user_code == session('user_code') || session('isAdmin') == 1)
                                                             <!-- Nút Sửa đơn -->
-                                                            @if ($canCreate === true)
-                                                                <a href="{{ route('equipment_request.update_export', $item->code) }}"
-                                                                    class="btn btn-dark btn-sm me-2 rounded-pill">
-                                                                    <i class="fa fa-edit"
-                                                                        style="margin-bottom: 2px;"></i>Sửa
-                                                                    Phiếu
-                                                                </a>
-                                                            @else
-                                                                <a href=""
-                                                                    class="btn btn-secondary btn-sm me-2 rounded-pill"
-                                                                    data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                    title="Kho Đang Bị Khóa, Không Thể Sửa Phiếu Lúc Này">
-                                                                    <i class="fa fa-edit"
-                                                                        style="margin-bottom: 2px;"></i>Sửa
-                                                                    Phiếu
-                                                                </a>
-                                                            @endif
+                                                            <a href="{{ route('equipment_request.update_export', $item->code) }}"
+                                                                class="btn btn-dark btn-sm me-2 rounded-pill">
+                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
+                                                                Phiếu
+                                                            </a>
 
                                                             <!-- Nút Hủy đơn -->
                                                             <button class="btn btn-sm rounded-pill btn-danger me-2"
@@ -431,21 +394,11 @@
                                                         @endif
 
                                                         <!-- Nút Sửa đơn -->
-                                                        @if ($canCreate === true)
-                                                            <a href="{{ route('equipment_request.update_export', $item->code) }}"
-                                                                class="btn btn-dark btn-sm me-2 rounded-pill">
-                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                                Phiếu
-                                                            </a>
-                                                        @else
-                                                            <a href=""
-                                                                class="btn btn-secondary btn-sm me-2 rounded-pill"
-                                                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                title="Kho Đang Bị Khóa, Không Thể Sửa Phiếu Lúc Này">
-                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                                Phiếu
-                                                            </a>
-                                                        @endif
+                                                        <a href="{{ route('equipment_request.update_export', $item->code) }}"
+                                                            class="btn btn-dark btn-sm me-2 rounded-pill">
+                                                            <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
+                                                            Phiếu
+                                                        </a>
 
                                                         <!-- Nút Hủy đơn -->
                                                         <button class="btn btn-sm rounded-pill btn-danger me-2"

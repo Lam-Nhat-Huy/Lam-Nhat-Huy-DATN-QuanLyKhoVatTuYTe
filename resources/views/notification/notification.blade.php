@@ -43,15 +43,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-12">
-                    <select name="rt" id="rt"
-                        class="mt-2 mb-2 form-select form-select-sm rounded-pill border border-success setupSelect2 w-100">
-                        <option value="" {{ request()->rt == '' ? 'selected' : '' }}>--Theo Loại Báo Cáo--</option>
-                        <option value="0" {{ request()->rt == '0' ? 'selected' : '' }}>Mặc Định</option>
-                        <option value="1" {{ request()->rt == '1' ? 'selected' : '' }}>Kiểm Kho - Khóa Kho</option>
-                    </select>
-                </div>
-                <div class="col-lg-6 col-md-12 col-sm-12">
+                <div class="col-lg-9 col-md-12 col-sm-12">
                     <div class="row align-items-center">
                         <div class="col-7">
                             <input type="search" name="kw" placeholder="Tìm kiếm mã thông báo.."
@@ -81,12 +73,9 @@
                                     <input type="checkbox" id="selectAll" />
                                 </th>
                                 <th class="" style="width: 10%">Mã</th>
-                                <th class="" style="width: 15%">Người Tạo</th>
-                                <th class="" style="width: 10%">Nội Dung</th>
-                                <th class="" style="width: 15%">Loại</th>
-                                <th class="" style="width: 10%">Ngày Tạo</th>
-                                <th class="text-center" style="width: 10%">Quan Trọng</th>
-                                <th class="text-center" style="width: 10%">Khóa Kho</th>
+                                <th class="" style="width: 25%">Người Tạo</th>
+                                <th class="" style="width: 25%">Nội Dung</th>
+                                <th class="" style="width: 20%">Ngày Tạo</th>
                                 <th class="pe-3 text-center" style="width: 20%">Hành Động</th>
                             </tr>
                         </thead>
@@ -109,34 +98,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        {{ $item->notification_type == 0 ? 'Mặc Định' : 'Kiểm Kho - Khóa Kho' }}
-                                    </td>
-                                    <td>
                                         {{ $item->created_at->format('d-m-Y') }}
-                                    </td>
-
-                                    <td class="text-center">
-                                        @if ($item->important == 1)
-                                            <div class="rounded-pill px-2 py-1 text-white bg-success">
-                                                Có
-                                            </div>
-                                        @else
-                                            <div class="rounded-pill px-2 py-1 text-white bg-danger">
-                                                Không
-                                            </div>
-                                        @endif
-                                    </td>
-
-                                    <td class="text-center">
-                                        @if ($item->lock_warehouse == 1)
-                                            <div class="rounded-pill px-2 py-1 text-white bg-warning">
-                                                Khóa
-                                            </div>
-                                        @else
-                                            <div class="rounded-pill px-2 py-1 text-white bg-danger">
-                                                Không
-                                            </div>
-                                        @endif
                                     </td>
 
                                     <td class="text-center">

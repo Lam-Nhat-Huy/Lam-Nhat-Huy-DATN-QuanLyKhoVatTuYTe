@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>404 Không Tìm Thấy Trang</title>
+    <title>403 Không Tìm Thấy Trang</title>
 </head>
 
 <style>
@@ -72,8 +72,8 @@
 
 <body>
     <div class="section">
-        <h1 class="error">404</h1>
-        <div class="page">Không Tìm Thấy Trang, Vui Lòng Kiểm Tra Lại!</div>
+        <h1 class="error">403</h1>
+        <div class="page">Kho Tạm Thời Bị Khóa Để Thực Thi Kiểm Kho, Không Thể Truy Cập Lúc Này!</div>
         <a class="back-home" href="{{ route('home') }}">Trang Chủ</a>
     </div>
 </body>

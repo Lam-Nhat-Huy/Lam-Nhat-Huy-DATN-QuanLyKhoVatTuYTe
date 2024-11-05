@@ -46,138 +46,126 @@
     class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
     style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
 
-    @if (
-        $firstLockWarehouse == 1 &&
-            (Route::currentRouteName() == 'warehouse.create_import' ||
-                Route::currentRouteName() == 'warehouse.update_import' ||
-                Route::currentRouteName() == 'warehouse.create_export' ||
-                Route::currentRouteName() == 'warehouse.update_export' ||
-                Route::currentRouteName() == 'equipment_request.create_import' ||
-                Route::currentRouteName() == 'equipment_request.update_import' ||
-                Route::currentRouteName() == 'equipment_request.create_export' ||
-                Route::currentRouteName() == 'equipment_request.update_export'))
-        {{ abort(404) }}
-    @else
-        <div class="d-flex flex-column flex-root">
+    <div class="d-flex flex-column flex-root">
 
-            <div class="page d-flex flex-row flex-column-fluid">
+        <div class="page d-flex flex-row flex-column-fluid">
 
-                <navbar>
-                    @include('master_layout.components.navbar')
-                </navbar>
+            <navbar>
+                @include('master_layout.components.navbar')
+            </navbar>
 
-                <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+            <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
-                    <sidebar>
-                        @include('master_layout.components.sidebar')
-                    </sidebar>
+                <sidebar>
+                    @include('master_layout.components.sidebar')
+                </sidebar>
 
-                    <main>
-                        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-                            <div class="toolbar" id="kt_toolbar">
-                                <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-                                    <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
-                                        data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-                                        class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                                        <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">
-                                            @yield('title', 'BeeSoft')
-                                        </h1>
-                                    </div>
+                <main>
+                    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                        <div class="toolbar" id="kt_toolbar">
+                            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                                <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                                    data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                                    class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                                    <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">
+                                        @yield('title', 'BeeSoft')
+                                    </h1>
                                 </div>
                             </div>
-                            <div class="post d-flex flex-column-fluid" id="kt_post">
-                                <div id="kt_content_container" class="container-xxl">
-                                    <div class="row gy-5 g-xl-8">
-                                        <div class="col-xxl-12">
-                                            @yield('content')
-                                        </div>
+                        </div>
+                        <div class="post d-flex flex-column-fluid" id="kt_post">
+                            <div id="kt_content_container" class="container-xxl">
+                                <div class="row gy-5 g-xl-8">
+                                    <div class="col-xxl-12">
+                                        @yield('content')
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </main>
+                    </div>
+                </main>
 
-                    <footer>
-                        @include('master_layout.components.footer')
-                    </footer>
+                <footer>
+                    @include('master_layout.components.footer')
+                </footer>
 
-                    <notification>
-                        @include('master_layout.components.notification_modal')
-                    </notification>
+                <notification>
+                    @include('master_layout.components.notification_modal')
+                </notification>
 
-                    <scrolltop>
-                        @include('master_layout.components.scroll_top')
-                    </scrolltop>
-
-                </div>
+                <scrolltop>
+                    @include('master_layout.components.scroll_top')
+                </scrolltop>
 
             </div>
 
         </div>
 
-        <div id="loading">
-            <div aria-live="assertive" role="alert" class="loader"></div>
+    </div>
+
+    <div id="loading">
+        <div aria-live="assertive" role="alert" class="loader"></div>
+    </div>
+
+    <div id="loading-overlay" class="loading-overlay"></div>
+
+    <div class="chatbox" id="chatbox">
+        <div class="chatbox-header">
+            <h3 class="text-white p-0 m-0">Chat</h3>
+            <button id="chatbox-close" style="font-size: 20px;" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Đóng Đoạn Chat">&times;</button>
         </div>
-
-        <div id="loading-overlay" class="loading-overlay"></div>
-
-        <div class="chatbox" id="chatbox">
-            <div class="chatbox-header">
-                <h3 class="text-white p-0 m-0">Chat</h3>
-                <button id="chatbox-close" style="font-size: 20px;" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Đóng Đoạn Chat">&times;</button>
-            </div>
-            <div class="chatbox-body">
-                <div class="messages">
-                    <div class="d-flex justify-content-start mb-4">
-                        <div class="me-3">
-                            <img class="border-dark border rounded-circle"
-                                style="width: 35px !important; height: 35px !important;"
-                                src="https://images.g2crowd.com/uploads/product/image/large_detail/large_detail_b541e326e0acd44b1ef931c92154c6b9/ai-chat.png"
-                                alt="">
-                        </div>
-                        <div class="text-left">
-                            <h6 class="mb-1">Bot</h6>
-                            <span>Xin Chào, Bạn Cần Gì?</span>
-                        </div>
+        <div class="chatbox-body">
+            <div class="messages">
+                <div class="d-flex justify-content-start mb-4">
+                    <div class="me-3">
+                        <img class="border-dark border rounded-circle"
+                            style="width: 35px !important; height: 35px !important;"
+                            src="https://images.g2crowd.com/uploads/product/image/large_detail/large_detail_b541e326e0acd44b1ef931c92154c6b9/ai-chat.png"
+                            alt="">
+                    </div>
+                    <div class="text-left">
+                        <h6 class="mb-1">Bot</h6>
+                        <span>Xin Chào, Bạn Cần Gì?</span>
                     </div>
                 </div>
             </div>
-            <div class="chatbox-footer mb-4">
-                <input type="text" id="chatbox-input" class="form-control form-control-sm me-2" style="height: 30px;"
-                    placeholder="Nhập tin nhắn...">
-                <button id="chatbox-send" class="btn btn-success btn-sm" style="height: 30px;">Gửi</button>
-            </div>
         </div>
+        <div class="chatbox-footer mb-4">
+            <input type="text" id="chatbox-input" class="form-control form-control-sm me-2" style="height: 30px;"
+                placeholder="Nhập tin nhắn...">
+            <button id="chatbox-send" class="btn btn-success btn-sm" style="height: 30px;">Gửi</button>
+        </div>
+    </div>
 
-        <img class="open-chatbox-btn rounded-circle shadow" style="width: 50px; height: 50px;" id="open-chatbox-btn"
-            src="https://images.g2crowd.com/uploads/product/image/large_detail/large_detail_b541e326e0acd44b1ef931c92154c6b9/ai-chat.png"
-            alt="">
+    <img class="open-chatbox-btn rounded-circle shadow" style="width: 50px; height: 50px;" id="open-chatbox-btn"
+        src="https://images.g2crowd.com/uploads/product/image/large_detail/large_detail_b541e326e0acd44b1ef931c92154c6b9/ai-chat.png"
+        alt="">
 
-        <script>
-            const chatbox = document.getElementById('chatbox');
-            const openChatboxBtn = document.getElementById('open-chatbox-btn');
+    <script>
+        const chatbox = document.getElementById('chatbox');
+        const openChatboxBtn = document.getElementById('open-chatbox-btn');
 
-            // Hiển thị chatbox khi nhấn vào nút và ẩn nút mở chatbox
-            openChatboxBtn.addEventListener('click', function() {
-                chatbox.classList.add('show');
-                openChatboxBtn.classList.add('hide');
-            });
+        // Hiển thị chatbox khi nhấn vào nút và ẩn nút mở chatbox
+        openChatboxBtn.addEventListener('click', function() {
+            chatbox.classList.add('show');
+            openChatboxBtn.classList.add('hide');
+        });
 
-            // Đóng chatbox khi nhấn vào nút close và hiển thị lại nút mở chatbox
-            document.getElementById('chatbox-close').addEventListener('click', function() {
-                chatbox.classList.remove('show');
-                openChatboxBtn.classList.remove('hide');
-            });
+        // Đóng chatbox khi nhấn vào nút close và hiển thị lại nút mở chatbox
+        document.getElementById('chatbox-close').addEventListener('click', function() {
+            chatbox.classList.remove('show');
+            openChatboxBtn.classList.remove('hide');
+        });
 
-            // Gửi tin nhắn
-            document.querySelector('#chatbox-send').addEventListener('click', function() {
-                const input = document.querySelector('#chatbox-input');
-                const message = input.value.trim();
-                if (message) {
-                    const messageElement = document.createElement('div');
-                    messageElement.classList.add('mb-4', 'd-flex', 'justify-content-end', 'ms-20');
-                    messageElement.innerHTML = `
+        // Gửi tin nhắn
+        document.querySelector('#chatbox-send').addEventListener('click', function() {
+            const input = document.querySelector('#chatbox-input');
+            const message = input.value.trim();
+            if (message) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('mb-4', 'd-flex', 'justify-content-end', 'ms-20');
+                messageElement.innerHTML = `
                         <div class="text-left">
                             <h6 class="mb-1 text-right">{{ session('fullname') }}</h6>
                             <span style="word-break: break-word;">${message}</span>
@@ -188,21 +176,20 @@
                                 alt="">
                         </div>
                     `;
-                    document.querySelector('.messages').appendChild(messageElement);
-                    input.value = ''; // Clear input field
-                    document.querySelector('.chatbox-body').scrollTop = document.querySelector('.chatbox-body')
-                        .scrollHeight;
-                }
-            });
+                document.querySelector('.messages').appendChild(messageElement);
+                input.value = ''; // Clear input field
+                document.querySelector('.chatbox-body').scrollTop = document.querySelector('.chatbox-body')
+                    .scrollHeight;
+            }
+        });
 
-            const container = document.querySelector('.chatbox-body');
+        const container = document.querySelector('.chatbox-body');
 
-            container.addEventListener('wheel', function(event) {
-                event.preventDefault();
-                container.scrollTop += event.deltaY;
-            });
-        </script>
-    @endif
+        container.addEventListener('wheel', function(event) {
+            event.preventDefault();
+            container.scrollTop += event.deltaY;
+        });
+    </script>
 
     {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
 

@@ -25,9 +25,18 @@ class CheckWarehouseController extends Controller
 {
     protected $route = 'check_warehouse';
 
-    public function index()
+    protected $notification;
+
+    public function __construct()
+    {
+        $this->notification = new Notifications();
+    }
+
+    public function index(Request $request)
     {
         $title = 'Kiểm Kho';
+
+        $checkLockWarehouse = $this->notification->firstLockWarehouse();
 
         $inventoryChecks = Inventory_checks::with([
             'details' => function ($query) {
@@ -48,6 +57,7 @@ class CheckWarehouseController extends Controller
         return view("{$this->route}.check", compact(
             'title',
             'inventoryChecks',
+            'checkLockWarehouse',
             'users',
             'countAll',
             'countBalanced',
@@ -56,6 +66,31 @@ class CheckWarehouseController extends Controller
         ));
     }
 
+    public function createNotification(Request $request)
+    {
+        if (!empty($request->lock_warehouse)) {
+            if ($this->notification->firstLockWarehouse() == 1) {
+                Notifications::where('lock_warehouse', 1)
+                    ->forceDelete();
+
+                return response()->json(['success' => true, 'message' => 'Đã mở khóa kho']);
+            } else {
+                Notifications::create([
+                    'code' => 'TB' . $this->generateRandomString(8),
+                    'user_code' => session('user_code'),
+                    'content' => '<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                        <p style="text-align: left;">Kính gửi các phòng ban và nhân viên,</p>
+                        <p style="text-align: left;">Chúng tôi xin thông báo rằng kho sẽ được <strong>khóa</strong> từ ngày <strong>' . now() . '</strong> đến ngày <strong>' . now()->addDays(1) . '</strong> để tiến hành kiểm kê và bảo trì định kỳ. Trong thời gian này, tất cả các hoạt động nhập xuất kho sẽ <strong>tạm ngừng</strong>.</p>
+                        <p style="text-align: left;">Mọi thắc mắc vui lòng liên hệ phòng quản lý kho để được hỗ trợ.</p>
+                        <p style="text-align: left;">Trân trọng<br>
+                    </div>',
+                    'lock_warehouse' => 1,
+                ]);
+
+                return response()->json(['success' => true, 'message' => 'Đã khóa kho']);
+            }
+        }
+    }
 
     public function create()
     {
@@ -483,6 +518,9 @@ class CheckWarehouseController extends Controller
             $inventoryCheck->check_date = now();
             $inventoryCheck->save();
 
+            Notifications::where('lock_warehouse', 1)
+                ->forceDelete();
+
             $inventoryCheckDetails = Inventory_check_details::where('inventory_check_code', $code)
                 ->where('check_round', 2)
                 ->get();
@@ -653,23 +691,6 @@ class CheckWarehouseController extends Controller
 
         toastr()->success('Phiếu kiểm kho đã được xóa thành công.');
         return redirect()->route('check_warehouse.index');
-    }
-
-    public function createNotificationAfterUpdateInventory($inventoryCheckCode, $userCode)
-    {
-        $notificationContent = "Kho đã được cân bằng thành công với mã phiếu kiểm kho: {$inventoryCheckCode}";
-
-        $payload = [
-            'code' => 'TB' . $this->generateRandomString(8),
-            'user_code' => $userCode,
-            'content' => $notificationContent,
-            'created_at' => now(),
-            'updated_at' => null,
-            'important' => 0,
-            'status' => 2
-        ];
-
-        Notifications::create($payload);
     }
 
     public function checkInventoryAgain($code)

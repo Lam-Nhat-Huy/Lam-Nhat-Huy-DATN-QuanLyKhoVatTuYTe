@@ -11,6 +11,7 @@ use App\Models\Export_equipment_requests;
 use App\Models\Exports;
 use App\Models\Import_equipment_request_details;
 use App\Models\Import_equipment_requests;
+use App\Models\Notifications;
 use App\Models\Receipts;
 use App\Models\Suppliers;
 use App\Models\Users;
@@ -24,8 +25,16 @@ class EquipmentRequestController extends Controller
 
     protected $callModel;
 
+    protected $Notifications;
+
     public function __construct()
     {
+        $this->Notifications = new Notifications();
+
+        if ($this->Notifications->firstLockWarehouse() == 1) {
+            return abort(403);
+        }
+
         $this->callModel = new Import_equipment_requests();
     }
 

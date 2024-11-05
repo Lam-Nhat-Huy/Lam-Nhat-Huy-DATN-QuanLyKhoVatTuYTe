@@ -10,6 +10,7 @@ use App\Models\Import_equipment_request_details;
 use App\Models\Import_equipment_requests;
 use App\Models\Inventories;
 use App\Models\Inventory_checks;
+use App\Models\Notifications;
 use App\Models\Receipt_details;
 use App\Models\Receipts;
 use App\Models\Suppliers;
@@ -20,6 +21,17 @@ use Maatwebsite\Excel\Facades\Excel;
 class ImportController extends Controller
 {
     protected $route = 'warehouse';
+
+    protected $Notifications;
+
+    public function __construct()
+    {
+        $this->Notifications = new Notifications();
+
+        if ($this->Notifications->firstLockWarehouse() == 1) {
+            return abort(403);
+        }
+    }
 
     public function import(Request $request)
     {

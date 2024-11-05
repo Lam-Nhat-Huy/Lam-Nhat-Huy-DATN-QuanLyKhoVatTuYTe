@@ -17,25 +17,6 @@
     {{ $title }}
 @endsection
 
-@php
-    $canCreate = true;
-    if (
-        $firstLockWarehouse == 1 &&
-        (Route::currentRouteName() == 'warehouse.import' ||
-            Route::currentRouteName() == 'warehouse.export' ||
-            Route::currentRouteName() == 'warehouse.trash' ||
-            Route::currentRouteName() == 'warehouse.create_import' ||
-            Route::currentRouteName() == 'warehouse.create_export' ||
-            Route::currentRouteName() == 'equipment_request.import' ||
-            Route::currentRouteName() == 'equipment_request.export' ||
-            Route::currentRouteName() == 'equipment_request.equipments_trash' ||
-            Route::currentRouteName() == 'equipment_request.insert_equipments' ||
-            Route::currentRouteName() == 'equipment_request.update_equipments')
-    ) {
-        $canCreate = false;
-    }
-@endphp
-
 @section('content')
     <div class="card mb-5 pb-5 mb-xl-8 shadow">
         @include('warehouse.import_warehouse.filter')
@@ -359,23 +340,11 @@
                                                         @endif
 
                                                         @if ($item->created_by == session('user_code') || session('isAdmin') == 1)
-                                                            @if ($canCreate === true)
-                                                                <a href="{{ route('warehouse.edit_import', $item->code) }}"
-                                                                    class="btn btn-dark btn-sm me-2 rounded-pill">
-                                                                    <i class="fa fa-edit"
-                                                                        style="margin-bottom: 2px;"></i>Sửa
-                                                                    Phiếu
-                                                                </a>
-                                                            @else
-                                                                <a href=""
-                                                                    class="btn btn-secondary btn-sm me-2 rounded-pill"
-                                                                    data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                    title="Kho Đang Bị Khóa, Không Thể Sửa Phiếu Lúc Này">
-                                                                    <i class="fa fa-edit"
-                                                                        style="margin-bottom: 2px;"></i>Sửa
-                                                                    Phiếu
-                                                                </a>
-                                                            @endif
+                                                            <a href="{{ route('warehouse.edit_import', $item->code) }}"
+                                                                class="btn btn-dark btn-sm me-2 rounded-pill">
+                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
+                                                                Phiếu
+                                                            </a>
 
                                                             <button type="button"
                                                                 class="btn btn-danger btn-sm rounded-pill"
@@ -395,21 +364,11 @@
                                                             Phiếu
                                                         </button>
 
-                                                        @if ($canCreate === true)
-                                                            <a href="{{ route('warehouse.edit_import', $item->code) }}"
-                                                                class="btn btn-dark btn-sm me-2 rounded-pill">
-                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                                Phiếu
-                                                            </a>
-                                                        @else
-                                                            <a href=""
-                                                                class="btn btn-secondary btn-sm me-2 rounded-pill"
-                                                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                title="Kho Đang Bị Khóa, Không Thể Sửa Phiếu Lúc Này">
-                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                                Phiếu
-                                                            </a>
-                                                        @endif
+                                                        <a href="{{ route('warehouse.edit_import', $item->code) }}"
+                                                            class="btn btn-dark btn-sm me-2 rounded-pill">
+                                                            <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
+                                                            Phiếu
+                                                        </a>
 
                                                         <button type="button" class="btn btn-danger btn-sm rounded-pill"
                                                             data-bs-toggle="modal"

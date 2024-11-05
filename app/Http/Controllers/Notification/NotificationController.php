@@ -26,16 +26,13 @@ class NotificationController extends Controller
 
         $AllUser = Users::all();
 
-        $AllNotification = $this->callModel::with(['users'])
+        $AllNotification = $this->callModel::with('users')
             ->orderBy('created_at', 'DESC')
-            ->where('deleted_at', null);
+            ->where('lock_warehouse', 0)
+            ->whereNull('deleted_at');
 
         if (isset($request->ur)) {
             $AllNotification = $AllNotification->where("user_code", $request->ur);
-        }
-
-        if (isset($request->rt)) {
-            $AllNotification = $AllNotification->where("notification_type", $request->rt);
         }
 
         if (isset($request->kw)) {
@@ -84,13 +81,6 @@ class NotificationController extends Controller
 
             if ($request->action_type === 'restore') {
 
-                $this->callModel::onlyTrashed()
-                    ->whereIn('code', $request->notification_codes)
-                    ->update([
-                        'important' => 0,
-                        'lock_warehouse' => 0,
-                    ]);
-
                 $this->callModel::whereIn('code', $request->notification_codes)->restore();
 
                 toastr()->success('Khôi phục thành công');
@@ -107,14 +97,6 @@ class NotificationController extends Controller
         }
 
         if (isset($request->restore_notification)) {
-
-            $this->callModel::onlyTrashed()
-                ->where('code', $request->restore_notification)
-                ->update([
-                    'important' => 0,
-                    'lock_warehouse' => 0,
-                ]);
-
 
             $this->callModel::where('code', $request->restore_notification)->restore();
 
@@ -159,22 +141,6 @@ class NotificationController extends Controller
 
             $data['updated_at'] = null;
 
-            $data['notification_type'] = $request->notification_type;
-
-            $data['important'] = $request->has('important') ? 1 : 0;
-
-            $data['lock_warehouse'] = $data['notification_type'];
-
-            if ($request->important == 1) {
-                $this->callModel::where('important', 1)
-                    ->update(['important' => 0]);
-            }
-
-            if ($data['notification_type'] == 1) {
-                $this->callModel::where('lock_warehouse', 1)
-                    ->update(['lock_warehouse' => 0]);
-            }
-
             $this->callModel::create($data);
 
             toastr()->success('Đã thêm thông báo');
@@ -189,22 +155,6 @@ class NotificationController extends Controller
         if ($data) {
             $data['updated_at'] = now();
 
-            $data['important'] = $request->has('important') ? 1 : 0;
-
-            $data['notification_type'] = $request->notification_type;
-
-            $data['lock_warehouse'] = $data['notification_type'];
-
-            if ($request->important == 1) {
-                $this->callModel::where('important', 1)
-                    ->update(['important' => 0]);
-            }
-
-            if ($data['notification_type'] == 1) {
-                $this->callModel::where('lock_warehouse', 1)
-                    ->update(['lock_warehouse' => 0]);
-            }
-
             $rs = $this->callModel::where('code', $code)->update($data);
 
             if ($rs) {
@@ -216,7 +166,6 @@ class NotificationController extends Controller
             return redirect()->route('notification.index');
         }
     }
-
 
     public function notification_edit($code)
     {
@@ -251,6 +200,7 @@ class NotificationController extends Controller
     {
         // Lấy số lượng thông báo mới cho người dùng hiện tại
         $count = $this->callModel::where('user_code', session('user_code'))
+            ->where('lock_warehouse', 0)
             ->where('is_read', false) // Chưa đọc (cột is_read là false)
             ->count();
 
@@ -260,6 +210,7 @@ class NotificationController extends Controller
     public function markNotificationsAsRead(Request $request)
     {
         $this->callModel::where('user_code', session('user_code'))
+            ->where('lock_warehouse', 0)
             ->where('is_read', false) // Các thông báo chưa đọc
             ->update(['is_read' => true]); // Đánh dấu là đã đọc
 
