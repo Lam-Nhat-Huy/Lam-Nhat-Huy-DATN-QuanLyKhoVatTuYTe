@@ -161,6 +161,12 @@
                                                             @endif
                                                         </div>
                                                     </div>
+                                                    <div class="mb-3">
+                                                        <span class="me-5">
+                                                            Người Xóa:
+                                                            {{ $item->deletedByUser ? $item->deletedByUser->last_name . ' ' . $item->deletedByUser->first_name : 'N/A' }}
+                                                        </span>
+                                                    </div>
                                                     <div class="card-body p-0" style="padding-top: 0px !important">
                                                         <!-- Begin::Receipt Items (Right column) -->
                                                         <div class="col-md-12">

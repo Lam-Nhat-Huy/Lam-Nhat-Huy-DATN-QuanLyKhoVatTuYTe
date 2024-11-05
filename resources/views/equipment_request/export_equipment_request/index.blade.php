@@ -220,6 +220,16 @@
                                                             @endif
                                                         </div>
                                                     </div>
+                                                    <div class="mb-3">
+                                                        <span class="me-5">
+                                                            Người Sửa:
+                                                            {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                        </span>
+                                                        <span class="me-5">
+                                                            Người Duyệt:
+                                                            {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
+                                                        </span>
+                                                    </div>
                                                     @php
                                                         $canApprove = true;
                                                     @endphp

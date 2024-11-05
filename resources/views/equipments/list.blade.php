@@ -33,7 +33,7 @@
         {{-- Bộ lọc thiết bị --}}
         <div class="card-body py-1">
             <form action="" method="GET" class="row align-items-center">
-                <div class="col-md-4">
+                <div class="col-lg-3 col-md-4 col-sm-12">
                     <select name="et" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" selected>--Theo Nhóm Thiết Bị--</option>
                         @foreach ($equipmentTypes as $item)
@@ -44,7 +44,7 @@
                     </select>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-lg-3 col-md-4 col-sm-12">
                     <select name="un" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
                         <option value="" selected>--Theo Đơn Vị--</option>
                         @foreach ($units as $item)
@@ -55,25 +55,14 @@
                     </select>
                 </div>
 
-                <div class="col-md-4">
-                    <select name="ct" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
-                        <option value="" selected>--Theo Quốc Gia--</option>
-                        @foreach (config('apps.country') as $value)
-                            <option value="{{ $value }}" {{ request()->ct == $value ? 'selected' : '' }}>
-                                {{ $value }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="col-md-12">
+                <div class="col-lg-6 col-md-4 col-sm-12">
                     <div class="row align-items-center">
-                        <div class="col-9">
+                        <div class="col-md-6">
                             <input type="search" name="kw" placeholder="Tìm Kiếm Theo Mã, Tên.."
                                 class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success"
                                 value="{{ request()->kw }}">
                         </div>
-                        <div class="col-3 d-flex justify-content-between">
+                        <div class="col-md-6 d-flex">
                             <a class="btn rounded-pill btn-info btn-sm mt-2 mb-2 w-100 me-2"
                                 href="{{ route('equipments.index') }}"><i class="fas fa-times-circle"
                                     style="margin-bottom: 2px;"></i>Bỏ Lọc</a>

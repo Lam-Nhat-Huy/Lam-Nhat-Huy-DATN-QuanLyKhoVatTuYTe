@@ -20,19 +20,37 @@ class Import_equipment_requests extends Model
 
     protected $fillable = [
         'code',
-        'user_code',
         'supplier_code',
         'note',
         'status',
         'request_date',
         'created_at',
+        'user_code',
         'updated_at',
+        'updated_by',
         'deleted_at',
+        'deleted_by',
+        'browse_by',
     ];
 
     public function users()
     {
         return $this->belongsTo(Users::class, 'user_code', 'code');
+    }
+
+    public function updatedByUser()
+    {
+        return $this->belongsTo(Users::class, 'updated_by', 'code');
+    }
+
+    public function deletedByUser()
+    {
+        return $this->belongsTo(Users::class, 'deleted_by', 'code');
+    }
+
+    public function browseByUser()
+    {
+        return $this->belongsTo(Users::class, 'browse_by', 'code');
     }
 
     public function suppliers()

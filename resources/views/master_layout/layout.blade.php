@@ -96,11 +96,8 @@
                 <scrolltop>
                     @include('master_layout.components.scroll_top')
                 </scrolltop>
-
             </div>
-
         </div>
-
     </div>
 
     <div id="loading">
@@ -109,7 +106,7 @@
 
     <div id="loading-overlay" class="loading-overlay"></div>
 
-    <div class="chatbox" id="chatbox">
+    <div class="chatbox" style="z-index: 9999; margin-right: -10px;" id="chatbox">
         <div class="chatbox-header">
             <h3 class="text-white p-0 m-0">Chat</h3>
             <button id="chatbox-close" style="font-size: 20px;" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -138,7 +135,8 @@
         </div>
     </div>
 
-    <img class="open-chatbox-btn rounded-circle shadow" style="width: 50px; height: 50px;" id="open-chatbox-btn"
+    <img class="open-chatbox-btn rounded-circle shadow" style="width: 50px; height: 50px; z-index: 9999;"
+        id="open-chatbox-btn"
         src="https://images.g2crowd.com/uploads/product/image/large_detail/large_detail_b541e326e0acd44b1ef931c92154c6b9/ai-chat.png"
         alt="">
 

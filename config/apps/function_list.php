@@ -66,6 +66,18 @@ return [
             'route' => 'equipments.equipments_group',
         ],
         [
+            'name' => 'Thêm Mới Nhóm Thiết Bị',
+            'route' => 'equipments.add_equipments_group',
+        ],
+        [
+            'name' => 'Quản Lý Đơn Vị',
+            'route' => 'units.index',
+        ],
+        [
+            'name' => 'Thêm Mới Đơn Vị',
+            'route' => 'units.create',
+        ],
+        [
             'name' => 'Quản Lý Yêu Cầu Mua Hàng',
             'route' => 'equipment_request.import',
         ],
@@ -88,6 +100,14 @@ return [
         [
             'name' => 'Thêm Mới Nhà Cung Cấp',
             'route' => 'supplier.create',
+        ],
+        [
+            'name' => 'Quản Lý Phòng Ban',
+            'route' => 'department.index',
+        ],
+        [
+            'name' => 'Thêm Mới Phòng Ban',
+            'route' => 'department.add',
         ],
         [
             'name' => 'Quản Lý Thông Báo',

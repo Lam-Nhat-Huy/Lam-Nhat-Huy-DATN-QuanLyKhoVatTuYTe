@@ -208,6 +208,16 @@
                                                             @endif
                                                         </div>
                                                     </div>
+                                                    <div class="mb-3">
+                                                        <span class="me-5">
+                                                            Người Sửa:
+                                                            {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                        </span>
+                                                        <span class="me-5">
+                                                            Người Duyệt:
+                                                            {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
+                                                        </span>
+                                                    </div>
                                                     <div class="card-body p-0" style="padding-top: 0px !important">
                                                         <!-- Begin::Receipt Items (Right column) -->
                                                         <div class="col-md-12">
@@ -289,23 +299,21 @@
                                                             </button>
                                                         @endif
 
-                                                        @if ($item->user_code == session('user_code') || session('isAdmin') == 1)
-                                                            <!-- Nút Sửa đơn -->
-                                                            <a href="{{ route('equipment_request.update_import', $item->code) }}"
-                                                                class="btn btn-dark btn-sm me-2 rounded-pill">
-                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                                Phiếu
-                                                            </a>
+                                                        <!-- Nút Sửa đơn -->
+                                                        <a href="{{ route('equipment_request.update_import', $item->code) }}"
+                                                            class="btn btn-dark btn-sm me-2 rounded-pill">
+                                                            <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
+                                                            Phiếu
+                                                        </a>
 
-                                                            <!-- Nút Hủy đơn -->
-                                                            <button class="btn btn-sm rounded-pill btn-danger me-2"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deleteModal_{{ $item->code }}"
-                                                                type="button">
-                                                                <i class="fa fa-trash" style="margin-bottom: 2px;"></i>Hủy
-                                                                Phiếu
-                                                            </button>
-                                                        @endif
+                                                        <!-- Nút Hủy đơn -->
+                                                        <button class="btn btn-sm rounded-pill btn-danger me-2"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#deleteModal_{{ $item->code }}"
+                                                            type="button">
+                                                            <i class="fa fa-trash" style="margin-bottom: 2px;"></i>Hủy
+                                                            Phiếu
+                                                        </button>
                                                     @elseif (
                                                         $item->status == 3 &&
                                                             now()->lt(\Carbon\Carbon::parse($item->request_date)->addDays(3)) &&

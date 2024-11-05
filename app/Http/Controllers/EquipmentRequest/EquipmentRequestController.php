@@ -110,8 +110,13 @@ class EquipmentRequestController extends Controller
         }
 
         if (!empty($request->delete_request)) {
-            $this->callModel::where('code', $request->delete_request)
-                ->delete();
+            $record_delete_request = $this->callModel::where('code', $request->delete_request);
+
+            $record_delete_request->update([
+                'deleted_by' => session('user_code'),
+            ]);
+
+            $record_delete_request->delete();
 
             toastr()->success('Đã hủy yêu cầu mua hàng');
 
@@ -122,6 +127,7 @@ class EquipmentRequestController extends Controller
             $this->callModel::where('code', $request->browse_request)
                 ->where('status', 0)
                 ->update([
+                    'browse_by' => session('user_code'),
                     'status' => 2,
                 ]);
 
@@ -134,14 +140,22 @@ class EquipmentRequestController extends Controller
 
             if ($request->action_type === 'browse') {
 
-                $this->callModel::whereIn('code', $request->import_reqest_codes)->where('status', 0)->update(['status' => 2]);
+                $this->callModel::whereIn('code', $request->import_reqest_codes)->where('status', 0)->update([
+                    'status' => 2,
+                    'browse_by' => session('user_code'),
+                ]);
 
                 toastr()->success('Duyệt phiếu chờ thành công');
 
                 return redirect()->back();
             } elseif ($request->action_type === 'delete') {
+                $record_delete_requests = $this->callModel::whereIn('code', $request->import_reqest_codes);
 
-                $this->callModel::whereIn('code', $request->import_reqest_codes)->delete();
+                $record_delete_requests->update([
+                    'deleted_by' => session('user_code'),
+                ]);
+
+                $record_delete_requests->delete();
 
                 toastr()->success('Hủy thành công');
 
@@ -192,7 +206,6 @@ class EquipmentRequestController extends Controller
         if (!empty($request->import_reqest_codes)) {
 
             if ($request->action_type === 'restore') {
-
                 $this->callModel::whereIn('code', $request->import_reqest_codes)->restore();
 
                 toastr()->success('Khôi phục thành công');
@@ -339,8 +352,7 @@ class EquipmentRequestController extends Controller
 
     public function edit_import_equipment_request(Request $request, $code)
     {
-        if (!empty($request->input('supplier_code')) && !empty($request->input('equipment_list'))) {
-            $supplierCode = $request->input('supplier_code');
+        if (!empty($request->input('equipment_list'))) {
             $note = $request->input('note');
             $equipmentList = json_decode($request->input('equipment_list'), true);
 
@@ -364,6 +376,7 @@ class EquipmentRequestController extends Controller
                 'note' => $note ?? $record->note,
                 'status' => $record->status,
                 'updated_at' => now(),
+                'updated_by' => session('user_code'),
             ]);
 
             foreach ($equipmentList as $equipment) {
@@ -401,6 +414,7 @@ class EquipmentRequestController extends Controller
                 'note' => $note,
                 'status' => 1,
                 'updated_at' => now(),
+                'updated_by' => session('user_code'),
             ]);
 
             foreach ($equipmentList as $equipment) {
@@ -502,8 +516,13 @@ class EquipmentRequestController extends Controller
         }
 
         if (!empty($request->delete_request)) {
-            Export_equipment_requests::where('code', $request->delete_request)
-                ->delete();
+            $record_delete_request_export = Export_equipment_requests::where('code', $request->delete_request);
+
+            $record_delete_request_export->update([
+                'deleted_by' => session('user_code'),
+            ]);
+
+            $record_delete_request_export->delete();
 
             toastr()->success('Đã hủy yêu cầu xuất kho');
 
@@ -514,11 +533,9 @@ class EquipmentRequestController extends Controller
             Export_equipment_requests::where('code', $request->browse_request)
                 ->where('status', 0)
                 ->update([
+                    'browse_by' => session('user_code'),
                     'status' => 1,
                 ]);
-
-            Export_equipment_request_details::where('export_request_code', $request->browse_request)
-                ->update(['status' => 1]);
 
             toastr()->success('Đã duyệt phiếu yêu cầu mua hàng');
 
@@ -529,17 +546,23 @@ class EquipmentRequestController extends Controller
 
             if ($request->action_type === 'browse') {
 
-                Export_equipment_requests::whereIn('code', $request->export_reqest_codes)->where('status', 0)->update(['status' => 1]);
-
-                Export_equipment_request_details::whereIn('export_request_code', $request->export_reqest_codes)
-                    ->update(['status' => 1]);
+                Export_equipment_requests::whereIn('code', $request->export_reqest_codes)->where('status', 0)->update([
+                    'status' => 1,
+                    'browse_by' => session('user_code'),
+                ]);
 
                 toastr()->success('Duyệt phiếu chờ thành công');
 
                 return redirect()->back();
             } elseif ($request->action_type === 'delete') {
 
-                Export_equipment_requests::whereIn('code', $request->export_reqest_codes)->delete();
+                $record_delete_requests = Export_equipment_requests::whereIn('code', $request->export_reqest_codes);
+
+                $record_delete_requests->update([
+                    'deleted_by' => session('user_code'),
+                ]);
+
+                $record_delete_requests->delete();
 
                 toastr()->success('Hủy thành công');
 
@@ -653,25 +676,6 @@ class EquipmentRequestController extends Controller
             $note = $request->input('note');
             $equipmentList = json_decode($request->input('equipment_list'), true);
 
-            $existingEquipment = Export_equipment_request_details::whereIn('equipment_code', array_column($equipmentList, 'equipment_code'))
-                ->where(function ($query) {
-                    $query->where('status', 0)
-                        ->orWhere('status', 3);
-                })
-                ->where('created_at', '>', now()->subDays(3))
-                ->whereHas('exportEquipmentRequests', function ($query) use ($departmentCode) {
-                    $query->where('department_code', $departmentCode);
-                })
-                ->get(['equipment_code']);
-
-            if ($existingEquipment->isNotEmpty()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Thiết bị yêu cầu xuất kho trong danh sách đã tồn tại trong lịch sử yêu cầu hoặc thùng rác, vui lòng kiểm tra lại',
-                    'list_duplicated' => $existingEquipment->pluck('equipment_code')->toArray(),
-                ]);
-            }
-
             // Tạo yêu cầu nhập thiết bị
             $insertExportEquipmentRequest = Export_equipment_requests::create([
                 'code' => 'YCXK' . $this->generateRandomString(6),
@@ -692,7 +696,6 @@ class EquipmentRequestController extends Controller
                         'export_request_code' => $insertExportEquipmentRequest->code,
                         'equipment_code' => $equipment['equipment_code'],
                         'quantity' => $equipment['quantity'],
-                        'status' => $request->input('exportEquipmentStatus') == 4 ? 0 : $request->input('exportEquipmentStatus'),
                         'created_at' => $insertExportEquipmentRequest->request_date,
                         'updated_at' => null,
                     ]);
@@ -738,26 +741,6 @@ class EquipmentRequestController extends Controller
             $note = $request->input('note');
             $equipmentList = json_decode($request->input('equipment_list'), true);
 
-            $existingEquipment = Export_equipment_request_details::whereIn('equipment_code', array_column($equipmentList, 'equipment_code'))
-                ->where('export_request_code', '!=', $code)
-                ->where(function ($query) {
-                    $query->where('status', 0)
-                        ->orWhere('status', 3);
-                })
-                ->where('created_at', '>', now()->subDays(3))
-                ->whereHas('exportEquipmentRequests', function ($query) use ($departmentCode) {
-                    $query->where('department_code', $departmentCode);
-                })
-                ->get(['equipment_code']);
-
-            if ($existingEquipment->isNotEmpty()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Thiết bị yêu cầu xuất kho trong danh sách đã tồn tại trong lịch sử yêu cầu hoặc thùng rác, vui lòng kiểm tra lại',
-                    'list_duplicated' => $existingEquipment->pluck('equipment_code')->toArray(),
-                ]);
-            }
-
             // Tìm các bản ghi không có mã trong $equipmentList và thuộc về export_request_code
             $equipmentToDelete = Export_equipment_request_details::whereNotIn('equipment_code', array_column($equipmentList, 'equipment_code'))
                 ->where('export_request_code', $code)
@@ -781,6 +764,7 @@ class EquipmentRequestController extends Controller
                 'request_date' => now(),
                 'required_date' => $requiredDate,
                 'updated_at' => now(),
+                'updated_by' => session('user_code'),
             ]);
 
             foreach ($equipmentList as $equipment) {
@@ -791,7 +775,6 @@ class EquipmentRequestController extends Controller
                     ],
                     [
                         'quantity' => $equipment['quantity'],
-                        'status' => $record->status,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]

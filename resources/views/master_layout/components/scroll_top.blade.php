@@ -1,4 +1,4 @@
-<div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
+{{-- <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
     <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
     <span class="svg-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -11,4 +11,4 @@
         </svg>
     </span>
     <!--end::Svg Icon-->
-</div>
+</div> --}}
