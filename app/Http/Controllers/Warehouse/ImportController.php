@@ -9,6 +9,7 @@ use App\Models\Equipments;
 use App\Models\Import_equipment_request_details;
 use App\Models\Import_equipment_requests;
 use App\Models\Inventories;
+use App\Models\Inventory_checks;
 use App\Models\Receipt_details;
 use App\Models\Receipts;
 use App\Models\Suppliers;
@@ -554,33 +555,40 @@ class ImportController extends Controller
     {
         $receipt = Receipts::where('code', $request->delete_code)->first();
 
-        if ($receipt->status == 1) {
-            $canCancel = true; // Biến để kiểm tra nếu có thể hủy phiếu
+        if (!$receipt) {
+            toastr()->error('Phiếu nhập không tồn tại.');
+            return redirect()->back();
+        }
 
-            // Lấy danh sách chi tiết của phiếu nhập
+        if ($receipt->status == 1) {
+            $canCancel = true;
+
+            $latestInventoryCheck = Inventory_checks::latest('created_at')->first();
+
+            if ($latestInventoryCheck && $latestInventoryCheck->created_at > $receipt->created_at) {
+                toastr()->error('Không thể xóa phiếu nhập vì có phiếu kiểm kho mới hơn.');
+                return redirect()->back();
+            }
+
             $receiptDetails = $receipt->details;
 
-            // Lặp qua từng chi tiết phiếu nhập và kiểm tra số lượng tồn kho
             foreach ($receiptDetails as $detail) {
                 $inventory = Inventories::where('equipment_code', $detail->equipment_code)
                     ->where('batch_number', $detail->batch_number)
                     ->first();
 
-                // Kiểm tra nếu số lượng nhập lớn hơn số lượng tồn kho
-                if ($detail->quantity > $inventory->current_quantity) {
+                if ($inventory && $detail->quantity > $inventory->current_quantity) {
                     $canCancel = false;
-                    break; // Dừng vòng lặp nếu phát hiện điều kiện không thỏa mãn
+                    break;
                 }
             }
 
-            // Nếu có thể hủy phiếu, thực hiện hành động hủy
             if ($canCancel) {
                 $this->updateInventories($request->delete_code, '-');
 
                 $receipt->forceDelete();
 
                 toastr()->success('Đã xóa phiếu nhập kho.');
-
                 return redirect()->back();
             } else {
                 toastr()->error('Không thể hủy phiếu vì số lượng nhập đang lớn hơn số lượng tồn kho.');
@@ -591,9 +599,9 @@ class ImportController extends Controller
         $receipt->delete();
 
         toastr()->success('Đã hủy phiếu nhập kho.');
-
         return redirect()->back();
     }
+
 
     public function exportExcel()
     {

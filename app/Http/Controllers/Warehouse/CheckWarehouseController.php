@@ -408,6 +408,7 @@ class CheckWarehouseController extends Controller
             'status' => true,
             'created_by' => session('user_code'),
             'export_date' => now(),
+            'export_type' => 'Xuất cân bằng kho',
             'department_code' => $materials[0]['department_code'] ?? null,
         ]);
 
@@ -811,14 +812,6 @@ class CheckWarehouseController extends Controller
                 ->where('created_at', '>', $inventoryCheck->created_at)
                 ->where('code', 'not like', 'PN-KK%')
                 ->exists();
-
-            // dd(
-            //     [
-            //         'receipt_date' => $hasApprovedReceipt,
-            //         'export_date' => $hasApprovedExport,
-            //         'check_date' => $inventoryCheck->created_at
-            //     ]
-            // );
 
             if ($hasApprovedExport || $hasApprovedReceipt) {
                 toastr()->error('Không thể hủy phiếu kiểm kho vì đã có hoạt động xuất hoặc nhập hàng sau thời điểm kiểm kho này.');

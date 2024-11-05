@@ -141,13 +141,13 @@
                                                                 <button type="button"
                                                                     class="btn btn-danger px-2 py-1 btn-sm rounded-pill me-2"
                                                                     data-bs-toggle="modal"
-                                                                    {{ $item->no_action == 1 ? 'disabled' : '' }}
-                                                                    data-bs-target="#delete-{{ $item->code }}">
+                                                                    data-bs-target="#delete-{{ $item->code }}"
+                                                                    {{ $item->no_action == 1 || str_contains($item->code, 'PN-KK') ? 'disabled' : '' }}>
                                                                     <i class="fa fa-trash"
-                                                                        style="margin-bottom: 2px;"></i>Xóa
-                                                                    phiếu
+                                                                        style="margin-bottom: 2px;"></i>Xóa phiếu
                                                                 </button>
                                                             @endif
+
                                                             <div class="rounded-pill px-2 py-1 text-white bg-success">
                                                                 Đã Duyệt
                                                             </div>

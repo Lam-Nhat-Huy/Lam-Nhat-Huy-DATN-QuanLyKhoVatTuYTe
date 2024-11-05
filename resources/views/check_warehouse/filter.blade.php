@@ -3,11 +3,8 @@
         <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Kiểm Kho</span>
     </h3>
     <div class="card-toolbar">
-        <a href="{{ route('check_warehouse.create') }}" class="btn btn-sm rounded-pill"
-            style="background: linear-gradient(45deg, #4caf50, #81c784); color: white; border: none; transition: background 0.3s;"
-            onmouseover="this.style.background='linear-gradient(45deg, #388e3c, #66bb6a)';"
-            onmouseout="this.style.background='linear-gradient(45deg, #4caf50, #81c784)';">
-            Kiểm Kho
+        <a href="{{ route('check_warehouse.create') }}" class="btn btn-success btn-sm rounded-pill">
+            <i class="fa fa-plus me-1" style="margin-bottom: 2px;"></i>Tạo Phiếu
         </a>
     </div>
 

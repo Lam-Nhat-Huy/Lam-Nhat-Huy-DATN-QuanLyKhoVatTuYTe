@@ -45,7 +45,7 @@
                     <i class="fas fa-trash" style="margin-bottom: 2px;"></i> Thùng Rác
                 </a>
                 @if ($canCreate === true)
-                    <a href="{{ route('warehouse.create_import') }}" class="btn btn-success btn-sm rounded-pill">
+                    <a href="{{ route('warehouse.create_export') }}" class="btn btn-success btn-sm rounded-pill">
                         <i class="fa fa-plus me-1" style="margin-bottom: 2px;"></i>Tạo Phiếu
                     </a>
                 @else
@@ -161,13 +161,13 @@
                                                                 <button type="button"
                                                                     class="btn btn-danger px-2 py-1 btn-sm rounded-pill me-2"
                                                                     data-bs-toggle="modal"
-                                                                    {{ $item->no_action == 1 ? 'disabled' : '' }}
-                                                                    data-bs-target="#delete-{{ $item->code }}">
+                                                                    data-bs-target="#delete-{{ $item->code }}"
+                                                                    {{ $item->no_action == 1 || str_contains($item->code, 'PX-KK') ? 'disabled' : '' }}>
                                                                     <i class="fa fa-trash"
-                                                                        style="margin-bottom: 2px;"></i>Xóa
-                                                                    phiếu
+                                                                        style="margin-bottom: 2px;"></i>Xóa phiếu
                                                                 </button>
                                                             @endif
+
                                                             <div class="rounded-pill px-2 py-1 text-white bg-success">
                                                                 Đã Duyệt
                                                             </div>

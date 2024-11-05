@@ -9,6 +9,7 @@ use App\Models\Export_details;
 use App\Models\Export_equipment_requests;
 use App\Models\Exports;
 use App\Models\Inventories;
+use App\Models\Inventory_checks;
 use App\Models\Suppliers;
 use App\Models\Users;
 use Illuminate\Http\Request;
@@ -503,7 +504,19 @@ class ExportController extends Controller
     {
         $export = Exports::where('code', $request->delete_code)->first();
 
+        if (!$export) {
+            toastr()->error('Phiếu xuất kho không tồn tại.');
+            return redirect()->back();
+        }
+
         if ($export->status == 1) {
+
+            $latestInventoryCheck = Inventory_checks::latest('created_at')->first();
+            if ($latestInventoryCheck && $latestInventoryCheck->created_at > $export->created_at) {
+                toastr()->error('Không thể xóa phiếu xuất vì có phiếu kiểm kho mới hơn.');
+                return redirect()->back();
+            }
+
             $this->updateInventories($request->delete_code, '+');
 
             Export_equipment_requests::where('code', $export->export_request_code)->update([
@@ -513,35 +526,31 @@ class ExportController extends Controller
             $export->forceDelete();
 
             toastr()->success('Đã xóa phiếu xuất kho.');
-
             return redirect()->back();
         }
 
         $export->delete();
 
-        toastr()->success('Đã hủy phiếu nhập kho.');
+        toastr()->success('Đã hủy phiếu xuất kho.');
         return redirect()->back();
     }
 
+
     private function updateInventories($export_code, $operation)
     {
-        // Insert inventories
         $receiptDetails = Export_details::where('export_code', $export_code)->get();
 
         foreach ($receiptDetails as $item) {
-            // Tìm bản ghi inventory theo batch_number và equipment_code từ $item
             $countQuantityInventoryWhere = Inventories::where('batch_number', $item->batch_number)
                 ->where('equipment_code', $item->equipment_code)
                 ->first();
 
-            // Nếu tìm thấy trong Inventories thì cộng số lượng
             if ($operation === '+') {
                 $current_quantity = $countQuantityInventoryWhere->current_quantity + $item->quantity;
             } elseif ($operation === '-') {
                 $current_quantity = $countQuantityInventoryWhere->current_quantity - $item->quantity;
             }
 
-            // Cập nhật hoặc tạo mới Inventory
             $inventoryCode = $countQuantityInventoryWhere ? $countQuantityInventoryWhere->code : 'TK' . $this->generateRandomString(8);
 
             Inventories::updateOrCreate(
