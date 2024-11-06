@@ -97,6 +97,11 @@
             outline: 0;
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
         }
+
+        .loading-overlay,
+        #loading {
+            display: none !important;
+        }
     </style>
 @endsection
 
@@ -108,123 +113,59 @@
     <div class="card mb-5 mb-xl-8">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Danh Sách Thiết Bị</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Danh sách thiết bị</span>
             </h3>
         </div>
 
-        <div class="card-body py-1">
-            <form action="" method="GET" class="row align-items-center d-flex justify-content-between">
-                <div class="col-4 pe-8">
-                    <select name="equipment_id"
-                        class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success setupSelect2">
-                        <option value="">Chọn thiết bị</option>
-                        <option value="1" {{ request()->equipment_id == 1 ? 'selected' : '' }}>Thiết bị A</option>
-                        <option value="2" {{ request()->equipment_id == 2 ? 'selected' : '' }}>Thiết bị B</option>
-                        <option value="3" {{ request()->equipment_id == 3 ? 'selected' : '' }}>Thiết bị C</option>
-                        <option value="4" {{ request()->equipment_id == 4 ? 'selected' : '' }}>Thiết bị D</option>
-                    </select>
-                </div>
-
-
-                <div class="col-4">
-                    <div class="row align-items-center">
-                        <div class="col-5 pe-0">
-                            <input type="date" name="start_date"
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
-                                value="{{ request()->start_date ?? \Carbon\Carbon::now()->subMonths(3)->format('Y-m-d') }}">
-                        </div>
-                        <div class="col-2 text-center">
-                            Đến
-                        </div>
-                        <div class="col-5 ps-0">
-                            <input type="date" name="end_date"
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid border border-success"
-                                value="{{ request()->end_date ?? \Carbon\Carbon::now()->format('Y-m-d') }}">
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+        @include('warehouse.card_warehouse.filter')
 
         <div class="card-body py-3">
-            @if ($items->isNotEmpty())
-                <div class="table-responsive rounded">
-                    <table class="table table-striped align-middle gs-0 gy-4">
-                        <thead>
-                            <tr class="fw-bolder bg-success text-white">
-                                <th class="ps-3">STT</th>
-                                <th>Số lô</th>
-                                <th>Tồn đầu kỳ</th>
-                                <th>Nhập</th>
-                                <th>Xuất</th>
-                                <th>Tồn cuối kỳ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="text-center hover-table" data-bs-toggle="collapse"
-                                data-bs-target="#collapseDetails1">
-                                <td>1</td>
-                                <td>001</td>
-                                <td>100</td>
-                                <td>20</td>
-                                <td>10</td>
-                                <td>110</td>
-                            </tr>
-                            <tr class="collapse" id="collapseDetails1">
-                                <td colspan="6" class="collapse-content">
-                                    <div class="row">
-                                        <div class="col-md-4 detail-box">
-                                            <h5>Thông tin cơ bản</h5>
-                                            <p><strong>Số lô:</strong> 001</p>
-                                            <p><strong>Ngày sản xuất:</strong> 2024-01-01</p>
-                                            <p><strong>Hạn sử dụng:</strong> 2025-01-01</p>
-                                        </div>
-                                        <div class="col-md-4 detail-box">
-                                            <h5>Trạng thái lô hàng</h5>
-                                            <p><strong>Tồn đầu kỳ:</strong> 100</p>
-                                            <p><strong>Nhập:</strong> 20</p>
-                                            <p><strong>Xuất:</strong> 10</p>
-                                            <p><strong>Tồn cuối kỳ:</strong> 110</p>
-                                        </div>
-                                        <div class="col-md-4 detail-box">
-                                            <h5>Thông tin bổ sung</h5>
-                                            <p><strong>Nhà cung cấp:</strong> Công ty ABC</p>
-                                            <p><strong>Địa chỉ kho:</strong> 123 Đường XYZ</p>
-                                            <p><strong>Ghi chú:</strong> Ghi chú về thiết bị.</p>
-                                        </div>
+            <div class="table-responsive rounded">
+                <table class="table align-middle table-striped table-hover gs-0 gy-4"
+                    style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    <thead class="bg-success text-white" style="position: sticky; top: 0; z-index: 10;">
+                        <tr class="fw-bolder">
+                            <th class="ps-4" style="width: 15%; text-align: left;">Mã</th>
+                            <th style="width: 15%; text-align: left;">Thời gian</th>
+                            <th style="width: 15%; text-align: left;">Loại giao dịch</th>
+                            <th style="width: 15%; text-align: left;">NCC/Phòng ban</th>
+                            <th style="width: 15%; text-align: left;">Tồn đầu kì</th>
+                            <th class="text-center" style="width: 10%; white-space: nowrap;">Số lượng</th>
+                            <th class="text-center pe-4" style="width: 15%; white-space: nowrap;">Tồn cuối kì</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="noDataAlert">
+                            <td colspan="12" class="text-center">
+                                <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                    role="alert"
+                                    style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                    <div class="mb-3">
+                                        <i class="fas fa-clipboard-check" style="font-size: 36px; color: #6c757d;"></i>
                                     </div>
-                                </td>
-                            </tr>
-
-
-                        </tbody>
-                    </table>
-                </div>
-            @else
-                <div class="col-md-12">
-                    <p class="text-danger text-center">Không có dữ liệu để hiển thị, vui lòng chọn thông tin để thống kê</p>
-                </div>
-            @endif
+                                    <div class="text-center">
+                                        <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin thiết
+                                            bị
+                                            trống</h5>
+                                        <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                            Hãy chọn thiết bị để xem thông tin thẻ kho.
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+
     </div>
 @endsection
 
 @section('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var toggleElements = document.querySelectorAll('tr[data-bs-toggle="collapse"]');
-
-            toggleElements.forEach(function(element) {
-                element.addEventListener('click', function(event) {
-                    // Prevent Bootstrap's default collapse behavior
-                    event.preventDefault();
-
-                    var target = document.querySelector(this.getAttribute('data-bs-target'));
-
-                    // Toggle the 'show' class on the target element
-                    target.classList.toggle('show');
-                });
-            });
-        });
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('loading-overlay').style.display = 'none';
+        this.disabled = true;
     </script>
 @endsection

@@ -3,56 +3,120 @@
 namespace App\Http\Controllers\Warehouse;
 
 use App\Http\Controllers\Controller;
+use App\Models\Equipments;
+use App\Models\Exports;
+use App\Models\Inventories;
+use App\Models\Receipts;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CardWarehouseController extends Controller
 {
     protected $route = 'warehouse';
 
-    public function index()
+    public function index(Request $request)
     {
         $title = "Thẻ kho";
+        $equipments = Equipments::all();
 
-        $items = collect([
-            [
-                'batch_number' => 'Batch001',
-                'opening_stock' => 100,
-                'stock_in' => 50,
-                'stock_out' => 20,
-                'closing_stock' => 130,
-                'manufacture_date' => '2024-01-01',
-                'expiry_date' => '2025-01-01',
-                'supplier_name' => 'Supplier A',
-                'warehouse_address' => '123 Warehouse St.',
-                'notes' => 'First batch of products',
-            ],
-            [
-                'batch_number' => 'Batch002',
-                'opening_stock' => 200,
-                'stock_in' => 30,
-                'stock_out' => 40,
-                'closing_stock' => 190,
-                'manufacture_date' => '2024-02-01',
-                'expiry_date' => '2025-02-01',
-                'supplier_name' => 'Supplier B',
-                'warehouse_address' => '456 Warehouse Ave.',
-                'notes' => 'Second batch of products',
-            ],
-            [
-                'batch_number' => 'Batch003',
-                'opening_stock' => 150,
-                'stock_in' => 70,
-                'stock_out' => 30,
-                'closing_stock' => 190,
-                'manufacture_date' => '2024-03-01',
-                'expiry_date' => '2025-03-01',
-                'supplier_name' => 'Supplier C',
-                'warehouse_address' => '789 Warehouse Blvd.',
-                'notes' => 'Third batch of products',
-            ],
-            // Thêm nhiều dữ liệu mẫu khác nếu cần
-        ]);
+        $start_date = $request->session()->get('start_date', Carbon::now()->subMonths(3)->format('Y-m-d'));
+        $end_date = $request->session()->get('end_date', Carbon::now()->format('Y-m-d'));
+        $equipment_code = $request->session()->get('equipment_code', '');
 
-        return view("{$this->route}.card_warehouse.card", compact('title', 'items'));
+        return view("{$this->route}.card_warehouse.card", compact('title', 'equipments', 'start_date', 'end_date', 'equipment_code'));
+    }
+    public function search(Request $request)
+    {
+        $title = "Thẻ kho";
+        $equipments = Equipments::all();
+
+        $request->session()->put('start_date', $request->input('start_date'));
+        $request->session()->put('end_date', $request->input('end_date'));
+        $request->session()->put('equipment_code', $request->input('equipment_code'));
+
+        $equipment_code = $request->input('equipment_code');
+        $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
+        $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
+
+        $initial_inventory = 0;
+
+        $total_previous_imports = Receipts::with('details')
+            ->whereHas('details', function ($query) use ($equipment_code) {
+                $query->where('equipment_code', $equipment_code);
+            })
+            ->where('receipt_date', '<', $start_date)
+            ->get()
+            ->sum(function ($import) {
+                return $import->details->sum('quantity');
+            });
+
+        $total_previous_exports = Exports::with('exportDetail')
+            ->whereHas('exportDetail', function ($query) use ($equipment_code) {
+                $query->where('equipment_code', $equipment_code);
+            })
+            ->where('export_date', '<', $start_date)
+            ->get()
+            ->sum(function ($export) {
+                return $export->exportDetail->sum('quantity');
+            });
+
+        $beginning_inventory = $initial_inventory + $total_previous_imports - $total_previous_exports;
+
+        $imports = Receipts::with(['details', 'supplier', 'user'])
+            ->whereHas('details', function ($query) use ($equipment_code) {
+                $query->where('equipment_code', $equipment_code);
+            })
+            ->whereBetween('receipt_date', [$start_date, $end_date])
+            ->where('status', '=', 1)
+            ->get()
+            ->map(function ($import) {
+                return [
+                    'type' => 'import',
+                    'code' => $import->code,
+                    'date' => $import->receipt_date,
+                    'transaction_type' => 'Nhập kho',
+                    'receipt_no' => $import->receipt_no,
+                    'status' => $import->status,
+                    'create_by' => $import->user->last_name . " " . $import->user->first_name,
+                    'supplier' => $import->supplier->name,
+                    'details' => $import->details,
+                    'quantity' => $import->details->sum('quantity')
+                ];
+            });
+
+        $exports = Exports::with(['exportDetail', 'departments'])
+            ->whereHas('exportDetail', function ($query) use ($equipment_code) {
+                $query->where('equipment_code', $equipment_code);
+            })
+            ->whereBetween('export_date', [$start_date, $end_date])
+            ->where('status', '=', 1)
+            ->get()
+            ->map(function ($export) {
+                return [
+                    'type' => 'export',
+                    'code' => $export->code,
+                    'date' => $export->export_date,
+                    'transaction_type' => 'Xuất kho',
+                    'department' => $export->departments->name,
+                    'status' => $export->status,
+                    'create_by' => $export->user->last_name . " " . $export->user->first_name,
+                    'details' => $export->exportDetail,
+                    'quantity' => $export->exportDetail->sum('quantity')
+                ];
+            });
+
+        $transactions = $imports->concat($exports)->sortBy('date')->values();
+
+        $transactions = $transactions->map(function ($transaction) use (&$beginning_inventory) {
+            $transaction['begin_stock'] = $beginning_inventory;
+            if ($transaction['type'] === 'import') {
+                $beginning_inventory += $transaction['quantity'];
+            } else {
+                $beginning_inventory -= $transaction['quantity'];
+            }
+            $transaction['end_stock'] = $beginning_inventory;
+            return $transaction;
+        })->sortByDesc('date');
+        return view("{$this->route}.card_warehouse.search", compact('title', 'equipments', 'transactions'));
     }
 }
