@@ -63,15 +63,15 @@
                                             <div class="card-body p-3 pt-0">
                                                 <div class="table-responsive rounded">
                                                     <table class="table table-striped table-sm table-hover">
-                                                        <thead class="fw-bolder bg-dark">
+                                                        <thead class=" bg-dark">
                                                             <tr class="text-center">
                                                                 <th class="ps-3" style="width: 10%;">Mã Phiếu</th>
-                                                                <th style="width: 10%;">Số Lô</th>
-                                                                <th style="width: 10%;">Số Lượng</th>
                                                                 <th style="width: 10%;">Giá</th>
                                                                 <th style="width: 9%;">Chiết Khấu(%)</th>
                                                                 <th style="width: 9%;">VAT(%)</th>
                                                                 <th style="width: 15%;">Ngày Nhập</th>
+                                                                <th style="width: 10%;">Số Lô</th>
+                                                                <th style="width: 10%;">Số Lượng</th>
                                                                 <th class="pe-3" style="width: 12%;">
                                                                     Tổng
                                                                 </th>
@@ -103,8 +103,6 @@
                                                                             #{{ $item->receipt_code }}
                                                                         </a>
                                                                     </td>
-                                                                    <td>{{ $item->batch_number }}</td>
-                                                                    <td>{{ $item->quantity }}</td>
                                                                     <td>{{ number_format($item->price, '0', ',', '.') }}
                                                                         VND
                                                                     </td>
@@ -113,6 +111,8 @@
                                                                     <td>{{ number_format($item->VAT, '0', ',', '.') }}%
                                                                     </td>
                                                                     <td>{{ $item->created_at->format('d-m-Y H:i:s') }}</td>
+                                                                    <td>{{ $item->batch_number }}</td>
+                                                                    <td>{{ $item->quantity }}</td>
                                                                     <td>{{ number_format($totalPriceWithVAT, '0', ',', '.') }}
                                                                         VND</td>
                                                                 </tr>
@@ -144,13 +144,12 @@
                                                                 </tr>
                                                             @endforelse
                                                             @if ($getImportBetweenDate->count() > 1)
-                                                                <tr class="text-center">
-                                                                    <td colspan="2" class="text-left ps-7">Tổng Cộng</td>
+                                                                <tr class="text-center"
+                                                                    style="font-weight: bold; background-color: #f8f9fa; border-top: 2px solid #000;">
+                                                                    <td colspan="6" class="text-left ps-7">Tổng Cộng</td>
                                                                     <td>{{ $itemQuantity }}</td>
-                                                                    <td colspan="4"></td>
                                                                     <td>{{ number_format($totalPrice2, '0', ',', '.') }}
-                                                                        VND
-                                                                    </td>
+                                                                        VND</td>
                                                                 </tr>
                                                             @endif
                                                         </tbody>
@@ -179,7 +178,7 @@
                                             <div class="card-body p-3 pt-0">
                                                 <div class="table-responsive rounded">
                                                     <table class="table table-striped table-sm table-hover">
-                                                        <thead class="fw-bolder bg-dark">
+                                                        <thead class="bg-dark">
                                                             <tr class="text-center">
                                                                 <th class="ps-3" style="width: 10%;">Mã Phiếu</th>
                                                                 <th style="width: 15%;">Loại Xuất</th>
@@ -240,7 +239,8 @@
                                                                 </tr>
                                                             @endforelse
                                                             @if ($getExportBetweenDate->count() > 1)
-                                                                <tr class="text-center">
+                                                                <tr class="text-center"
+                                                                    style="font-weight: bold; background-color: #f8f9fa; border-top: 2px solid #000;">
                                                                     <td colspan="4" class="text-left ps-5">Tổng Cộng
                                                                     </td>
                                                                     <td>{{ $totalQuantityExport }}</td>
