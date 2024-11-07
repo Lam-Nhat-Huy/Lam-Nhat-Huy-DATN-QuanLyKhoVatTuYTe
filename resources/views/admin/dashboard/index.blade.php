@@ -243,7 +243,7 @@
                                                     href="{{ route('check_warehouse.index') }}?search={{ $check->code }}">#{{ $check->code }}</a>
                                             </h6>
                                             <span class="text-muted fw-bold d-block mb-1">
-                                                Ngày kiểm: {{ $check->check_date }}
+                                                Ngày kiểm: {{ $check->created_at->format('d-m-Y H:i:s') }}
                                             </span>
                                             <span class="text-muted fw-bold d-block mb-1">Người kiểm lần 1:
                                                 {{ $check->user->last_name ?? '' }}
@@ -313,7 +313,7 @@
                                                 </a>
                                             </h6>
                                             <span class="text-muted fw-bold d-block mb-1">Ngày xuất:
-                                                {{ \Carbon\Carbon::parse($export->export_date)->format('d/m/Y') }}</span>
+                                                {{ \Carbon\Carbon::parse($export->created_at)->format('d/m/Y H:i:s') }}</span>
                                             @foreach ($export->exportDetail as $key => $detail)
                                                 <span>{{ $key + 1 }}. {{ $detail->equipments->name }} -
                                                     Số lô:

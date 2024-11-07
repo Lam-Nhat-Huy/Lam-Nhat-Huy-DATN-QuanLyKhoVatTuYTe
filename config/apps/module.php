@@ -54,6 +54,7 @@ return [
                 'warehouse.create_export',
                 'check_warehouse.create',
                 'check_warehouse.edit',
+                'card_warehouse.search',
             ],
             'subModule' => [
                 [
@@ -87,7 +88,7 @@ return [
                 [
                     'title' => 'Thẻ Kho',
                     'route' => 'card_warehouse.index',
-                    'route_action' => [],
+                    'route_action' => ['card_warehouse.search'],
                     'icon' => 'fa fa-clipboard',
                     'user_role' => [0, 1],
                 ]

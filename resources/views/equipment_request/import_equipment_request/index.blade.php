@@ -244,6 +244,16 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         @foreach ($item->import_equipment_request_details as $key => $detail)
+                                                                            @php
+                                                                                $price = $detail->price ?? 0;
+                                                                                $quantity = $detail->quantity_quote;
+                                                                                $vat = $detail->equipments->vat ?? 0;
+
+                                                                                $totalPriceWithVAT =
+                                                                                    $quantity *
+                                                                                    $price *
+                                                                                    (1 + $vat / 100);
+                                                                            @endphp
                                                                             <tr class="">
                                                                                 <td>{{ $key + 1 }}</td>
                                                                                 <td>{{ $detail->equipments->name }}
@@ -256,7 +266,7 @@
                                                                                     <td>{{ $detail->deviation_quote }}</td>
                                                                                     <td>{{ number_format($detail->price, 0, ',', '.') }}
                                                                                         VND</td>
-                                                                                    <td>{{ number_format($detail->quantity_quote * $detail->price, 0, ',', '.') }}
+                                                                                    <td>{{ number_format($totalPriceWithVAT, 0, ',', '.') }}
                                                                                         VND
                                                                                     </td>
                                                                                 @endif

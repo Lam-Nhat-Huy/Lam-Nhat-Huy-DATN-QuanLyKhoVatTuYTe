@@ -188,6 +188,14 @@
                     <tbody>
                         @if (!empty($getList))
                             @foreach ($getList as $item)
+                                @php
+                                    $price = $item->price ?? 0;
+                                    $quantity = $item->quantity_quote;
+                                    $vat = $item->equipments->vat ?? 0;
+
+                                    $itemPrice = $quantity * $price;
+                                    $totalPriceWithVAT = $itemPrice * (1 + $vat / 100);
+                                @endphp
                                 <tr id="equipment-row-{{ $item->equipment_code }}">
                                     @if (!empty(request('status') === 'update_quote'))
                                         <td>{{ $item->equipments->name }}</td>
@@ -207,7 +215,7 @@
                                             <div class="d-flex align-items-center">
                                                 <input type="number"
                                                     id="quantity_quote_change_{{ $item->equipment_code }}"
-                                                    value="{{ $item->quantity_quote ?? 0 }}" min="0"
+                                                    value="{{ $item->quantity_quote ?? $item->quantity }}" min="0"
                                                     data-vat="{{ $item->equipments->vat }}"
                                                     oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
                                                     class="form-control form-control-sm border border-success rounded-pill"
@@ -239,7 +247,9 @@
                                             </div>
                                         </td>
                                         <td>{{ $item->equipments->vat }}%</td>
-                                        <td id="total_price_{{ $item->equipment_code }}">0 VND</td>
+                                        <td id="total_price_{{ $item->equipment_code }}">
+                                            {{ number_format($totalPriceWithVAT, 0, ',', '.') ?? 0 }}
+                                            VND</td>
                                     @else
                                         <td>{{ $item->equipments->name }}</td>
                                         <td>{{ $item->equipments->units->name }}</td>

@@ -1,103 +1,6 @@
 @extends('master_layout.layout')
 
 @section('styles')
-    <style>
-        .hover-table {
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .hover-table:hover {
-            background-color: #e9ecef;
-        }
-
-        .collapse {
-            display: none;
-        }
-
-        .collapse.show {
-            display: table-row;
-        }
-
-        .collapse-content {
-            padding: 20px;
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 0.375rem;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .detail-box {
-            margin-bottom: 15px;
-            padding: 10px;
-            background-color: #f7f7f7;
-            border-radius: 5px;
-        }
-
-        .detail-box h5 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            color: #333;
-            border-bottom: 2px solid #dee2e6;
-            padding-bottom: 5px;
-        }
-
-        .detail-box p {
-            font-size: 0.95rem;
-            color: #555;
-            margin-bottom: 8px;
-        }
-
-        .btn-close-detail {
-            margin-top: 10px;
-            background-color: #dc3545;
-            color: white;
-            border-radius: 0.375rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-close-detail:hover {
-            background-color: #c82333;
-        }
-
-        .card-header {
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .form-control {
-            border-radius: 0.375rem;
-        }
-
-        .form-control-sm {
-            height: 2rem;
-            padding: 0.25rem 0.5rem;
-        }
-
-        .table-search {
-            width: 100%;
-            margin-top: 15px;
-        }
-
-        .table-search input {
-            width: 100%;
-            padding: 0.375rem 0.75rem;
-            border-radius: 0.375rem;
-            border: 1px solid #ced4da;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-            transition: border-color 0.3s ease;
-        }
-
-        .table-search input:focus {
-            border-color: #80bdff;
-            outline: 0;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
-    </style>
 @endsection
 
 @section('title')
@@ -105,56 +8,262 @@
 @endsection
 
 @section('content')
-    <div class="card mb-5 mb-xl-8">
+    <div class="card mb-5 mb-xl-8 shadow">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Danh sách thiết bị</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Danh sách lô</span>
             </h3>
         </div>
 
         @include('warehouse.card_warehouse.filter')
 
-        <div class="card-body py-3">
+        <div class="card-body py-3 pb-10">
             <div class="table-responsive rounded">
-                <table class="table align-middle table-striped table-hover gs-0 gy-4"
-                    style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                    <thead class="bg-success text-white" style="position: sticky; top: 0; z-index: 10;">
+                <table class="table align-middle gs-0 gy-4">
+                    <thead class="bg-success">
                         <tr class="fw-bolder">
-                            <th class="ps-4" style="width: 10%; text-align: left;">Mã</th>
-                            <th style="width: 15%; text-align: left;">Thời gian</th>
-                            <th style="width: 15%; text-align: left;">Loại giao dịch</th>
-                            <th style="width: 35%; text-align: left; white-space: nowrap;">NCC/Phòng ban</th>
-                            <th style="width: 10%; text-align: center;">Tồn đầu kỳ</th>
-                            <th class="text-center" style="width: 7%; white-space: nowrap;">Số lượng</th>
-                            <th class="text-center pe-4" style="width: 7%; white-space: nowrap;">Tồn cuối kỳ</th>
+                            <th class="ps-5" style="width: 40%;">Thiết Bị</th>
+                            <th style="width: 20%;" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Tổng số lượng nhập, xuất trước ngày {{ \Carbon\Carbon::parse(request('start_date'))->format('d-m-Y H:i:s') }}">
+                                Tồn Đầu
+                            </th>
+                            <th style="width: 20%; white-space: nowrap;" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Tổng số lượng nhập, xuất trong khoảng từ ngày {{ \Carbon\Carbon::parse(request('start_date'))->format('d-m-Y H:i:s') }} đến ngày {{ \Carbon\Carbon::parse(request('end_date'))->format('d-m-Y H:i:s') }}">
+                                Tồn Cuối</th>
+                            <th class="pe-5 text-center" style="width: 20%;">Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($transactions as $transaction)
+                        @if (!empty($nameEquipment->name))
                             <tr class="hover-table">
-                                <td class="ps-4"><a href="" data-bs-toggle="modal"
-                                        class="text-decoration-underline""
-                                        data-bs-target="#modal{{ $transaction['code'] }}">{{ $transaction['code'] }}</a>
+                                <td class="ps-5">{{ $nameEquipment->name }}</td>
+                                <td>{{ $beginning_balance_total }} {{ $nameEquipment->units->name }}</td>
+                                <td>{{ $ending_balance_total }} {{ $nameEquipment->units->name }}</td>
+                                <td class="text-center pointer" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse_{{ $nameEquipment->code }}" aria-expanded="false"
+                                    aria-controls="collapse_{{ $nameEquipment->code }}">
+                                    Chi Tiết<i class="fa fa-caret-right pointer ms-2"></i>
                                 </td>
-                                <td>{{ $transaction['date'] }}</td>
-                                <td>{{ $transaction['transaction_type'] }}</td>
-                                <td style="white-space: nowrap;">
-                                    {{ $transaction['type'] === 'import' ? $transaction['supplier'] : $transaction['department'] }}
-                                </td>
-                                <td class="text-center">{{ $transaction['begin_stock'] }}</td>
-                                <td class="text-center">
-                                    {{ $transaction['type'] === 'export' ? -$transaction['quantity'] : $transaction['quantity'] }}
-                                </td>
-                                <td class="text-center pe-4">{{ $transaction['end_stock'] }}</td>
                             </tr>
-                        @empty
+
+                            <!-- Collapse content -->
+                            <tr>
+                                <td class="p-0" colspan="12"
+                                    style="background-color: #fafafa; padding-top: 0 !important;">
+                                    <div class="flex-lg-row-fluid border-2 border-lg-1 border-bottom-0 collapse multi-collapse"
+                                        id="collapse_{{ $nameEquipment->code }}">
+                                        <div class="card card-flush p-2"
+                                            style="padding-top: 0px !important; padding-bottom: 0px !important;">
+                                            <div class="card-header d-flex justify-content-between align-items-center p-3 pb-0"
+                                                style="padding-top: 0 !important; padding-bottom: 0px !important;">
+                                                <h4 class="fw-bold m-0 text-uppercase fw-bolder">
+                                                    Chi tiết phiếu nhập
+                                                </h4>
+                                            </div>
+                                            <div class="card-body p-3 pt-0">
+                                                <div class="table-responsive rounded">
+                                                    <table class="table table-striped table-sm table-hover">
+                                                        <thead class="fw-bolder bg-dark">
+                                                            <tr class="text-center">
+                                                                <th class="ps-3" style="width: 10%;">Mã Phiếu</th>
+                                                                <th style="width: 10%;">Số Lô</th>
+                                                                <th style="width: 10%;">Số Lượng</th>
+                                                                <th style="width: 10%;">Giá</th>
+                                                                <th style="width: 9%;">Chiết Khấu(%)</th>
+                                                                <th style="width: 9%;">VAT(%)</th>
+                                                                <th style="width: 15%;">Ngày Nhập</th>
+                                                                <th class="pe-3" style="width: 12%;">
+                                                                    Tổng
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        @php
+                                                            $totalPrice2 = 0;
+                                                            $itemQuantity = 0;
+                                                        @endphp
+                                                        <tbody>
+                                                            @forelse ($getImportBetweenDate as $item)
+                                                                @php
+                                                                    $price = $item->price ?? 0;
+                                                                    $quantity = $item->quantity;
+                                                                    $discount = $item->discount ?? 0;
+                                                                    $vat = $item->VAT ?? 0;
+
+                                                                    $itemQuantity += $quantity;
+                                                                    $itemPrice = $quantity * $price;
+                                                                    $itemDiscount = $itemPrice * ($discount / 100);
+                                                                    $totalPrice = $itemPrice - $itemDiscount;
+                                                                    $totalPriceWithVAT = $totalPrice * (1 + $vat / 100);
+                                                                @endphp
+                                                                <tr class="text-center">
+                                                                    <td>
+                                                                        <a class="text-decoration-underline"
+                                                                            href="{{ route('warehouse.import') }}?kw={{ $item->receipt_code }}"
+                                                                            target="_blank">
+                                                                            #{{ $item->receipt_code }}
+                                                                        </a>
+                                                                    </td>
+                                                                    <td>{{ $item->batch_number }}</td>
+                                                                    <td>{{ $item->quantity }}</td>
+                                                                    <td>{{ number_format($item->price, '0', ',', '.') }}
+                                                                        VND
+                                                                    </td>
+                                                                    <td>{{ number_format($item->discount, '0', ',', '.') }}%
+                                                                    </td>
+                                                                    <td>{{ number_format($item->VAT, '0', ',', '.') }}%
+                                                                    </td>
+                                                                    <td>{{ $item->created_at->format('d-m-Y H:i:s') }}</td>
+                                                                    <td>{{ number_format($totalPriceWithVAT, '0', ',', '.') }}
+                                                                        VND</td>
+                                                                </tr>
+                                                                @php
+                                                                    $totalPrice2 += $totalPriceWithVAT;
+                                                                @endphp
+                                                            @empty
+                                                                <tr id="noDataAlert">
+                                                                    <td colspan="12" class="text-center">
+                                                                        <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                                                            role="alert"
+                                                                            style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                                                            <div class="mb-3">
+                                                                                <i class="fas fa-file-invoice"
+                                                                                    style="font-size: 36px; color: #6c757d;"></i>
+                                                                            </div>
+                                                                            <div class="text-center">
+                                                                                <h5
+                                                                                    style="font-size: 16px; font-weight: 600; color: #495057;">
+                                                                                    Không Có Dữ Liệu</h5>
+                                                                                <p
+                                                                                    style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                                                    Không Có Dữ Liệu Nhập Kho Của
+                                                                                    Thiết Bị Này
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforelse
+                                                            @if ($getImportBetweenDate->count() > 1)
+                                                                <tr class="text-center">
+                                                                    <td colspan="2" class="text-left ps-7">Tổng Cộng</td>
+                                                                    <td>{{ $itemQuantity }}</td>
+                                                                    <td colspan="4"></td>
+                                                                    <td>{{ number_format($totalPrice2, '0', ',', '.') }}
+                                                                        VND
+                                                                    </td>
+                                                                </tr>
+                                                            @endif
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Collapse content -->
+                            <tr>
+                                <td class="p-0" colspan="12"
+                                    style="background-color: #fafafa; padding-top: 0 !important;">
+                                    <div class="flex-lg-row-fluid border-2 border-lg-1 border-top-0 collapse multi-collapse"
+                                        id="collapse_{{ $nameEquipment->code }}">
+                                        <div class="card card-flush p-2"
+                                            style="padding-top: 0px !important; padding-bottom: 0px !important;">
+                                            <div class="card-header d-flex justify-content-between align-items-center p-3 pb-0"
+                                                style="padding-top: 0 !important; padding-bottom: 0px !important;">
+                                                <h4 class="fw-bold m-0 text-uppercase fw-bolder">
+                                                    Chi tiết phiếu xuất
+                                                </h4>
+                                            </div>
+                                            <div class="card-body p-3 pt-0">
+                                                <div class="table-responsive rounded">
+                                                    <table class="table table-striped table-sm table-hover">
+                                                        <thead class="fw-bolder bg-dark">
+                                                            <tr class="text-center">
+                                                                <th class="ps-3" style="width: 10%;">Mã Phiếu</th>
+                                                                <th style="width: 15%;">Loại Xuất</th>
+                                                                <th style="width: 40%;">
+                                                                    Nhà Cung Cấp / Phòng Ban / Lý Do Hủy
+                                                                </th>
+                                                                <th style="width: 10%;">Số Lô</th>
+                                                                <th style="width: 10%;">Số Lượng</th>
+                                                                <th class="pe-3" style="width: 15%;">Ngày Xuất</th>
+                                                            </tr>
+                                                        </thead>
+                                                        @php
+                                                            $totalQuantityExport = 0;
+                                                        @endphp
+                                                        <tbody>
+                                                            @forelse ($getExportBetweenDate as $item)
+                                                                @php
+                                                                    $totalQuantityExport += $item->quantity;
+                                                                @endphp
+                                                                <tr class="text-center">
+                                                                    <td>
+                                                                        <a class="text-decoration-underline"
+                                                                            href="{{ route('warehouse.export') }}?kw={{ $item->export_code }}"
+                                                                            target="_blank">
+                                                                            #{{ $item->export_code }}
+                                                                        </a>
+                                                                    </td>
+                                                                    <td>{{ $item->export->export_type }}</td>
+                                                                    <td>
+                                                                        {{ $item->export->department_code ? $item->export->departments->name : ($item->export->supplier_code ? $item->export->suppliers->name : $item->export->reason ?? '') }}
+                                                                    </td>
+                                                                    <td>{{ $item->batch_number }}</td>
+                                                                    <td>{{ $item->quantity }}</td>
+                                                                    <td>{{ $item->created_at->format('d-m-Y H:i:s') }}</td>
+                                                                </tr>
+                                                            @empty
+                                                                <tr id="noDataAlert">
+                                                                    <td colspan="12" class="text-center">
+                                                                        <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                                                            role="alert"
+                                                                            style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                                                            <div class="mb-3">
+                                                                                <i class="fas fa-file-invoice"
+                                                                                    style="font-size: 36px; color: #6c757d;"></i>
+                                                                            </div>
+                                                                            <div class="text-center">
+                                                                                <h5
+                                                                                    style="font-size: 16px; font-weight: 600; color: #495057;">
+                                                                                    Không Có Dữ Liệu</h5>
+                                                                                <p
+                                                                                    style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                                                    Không Có Dữ Liệu Xuất Kho Của
+                                                                                    Thiết Bị Này
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforelse
+                                                            @if ($getExportBetweenDate->count() > 1)
+                                                                <tr class="text-center">
+                                                                    <td colspan="4" class="text-left ps-5">Tổng Cộng
+                                                                    </td>
+                                                                    <td>{{ $totalQuantityExport }}</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            @endif
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @else
                             <tr id="noDataAlert">
                                 <td colspan="7" class="text-center">
                                     <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
                                         role="alert"
                                         style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                         <div class="mb-3">
-                                            <i class="fas fa-clipboard-check" style="font-size: 36px; color: #6c757d;"></i>
+                                            <i class="fas fa-clipboard-check"
+                                                style="font-size: 36px; color: #6c757d;"></i>
                                         </div>
                                         <div class="text-center">
                                             <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin thiết
@@ -166,286 +275,13 @@
                                     </div>
                                 </td>
                             </tr>
-                        @endforelse
+                        @endif
                     </tbody>
                 </table>
-
-                @php
-                    $totalPrice = 0;
-                    $totalDiscount = 0;
-                    $totalVAT = 0;
-                @endphp
-
-                @foreach ($transactions as $item)
-                    @if ($item['type'] === 'import')
-                        <div class="modal fade" id="modal{{ $item['code'] }}" data-bs-backdrop="static"
-                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="add_modalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-xl">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h3 class="modal-title" id="add_modalLabel">
-                                            {{ $item['type'] === 'import' ? 'Phiếu nhập' : 'Phiếu xuất' }}</h3>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body pb-0">
-                                        <!-- Thông tin chung -->
-                                        <div class="row">
-                                            <!-- Thông tin chung -->
-                                            <div class="col-lg-6">
-                                                <table class="table table-flush gy-1">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Mã phiếu nhập:</td>
-                                                            <td class="text-dark"><strong>{{ $item['code'] }}</strong></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Số hóa đơn:</td>
-                                                            <td class="text-dark">
-                                                                <strong>{{ $item['receipt_no'] ?? '' }}</strong>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Nhà cung cấp:</td>
-                                                            <td><a style="color: #0070f4"
-                                                                    href="">{{ $item['supplier'] }}</a></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Ngày nhập:</td>
-                                                            <td class="text-dark">{{ $item['date'] }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <table class="table table-flush gy-1">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Trạng thái:</td>
-                                                            <td class="text-dark">
-                                                                {{ $item['status'] == 1 ? 'Đã nhập hàng' : 'Chưa hoàn thành' }}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Người tạo:</td>
-                                                            <td class="text-dark">{{ $item['create_by'] }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                        <!-- Chi tiết phiếu nhập -->
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="table-responsive rounded">
-                                                    <table class="table table-striped table-sm table-hover">
-                                                        <thead class="fw-bolder bg-dark">
-                                                            <tr class="text-center">
-                                                                <th class="ps-3">Tên thiết bị</th>
-                                                                <th>SLYC</th>
-                                                                <th>SL nhập</th>
-                                                                <th>Lệch</th>
-                                                                <th>Giá nhập</th>
-                                                                <th>Số lô</th>
-                                                                <th>Chiết khấu(%)</th>
-                                                                <th>VAT(%)</th>
-                                                                <th class="pe-3">Tổng</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($item['details'] as $detail)
-                                                                @php
-                                                                    $price = $detail->price ?? 0;
-                                                                    $quantity = $detail->quantity;
-                                                                    $discount = $detail->discount ?? 0;
-                                                                    $vat = $detail->VAT ?? 0;
-
-                                                                    // Giá trước chiết khấu
-                                                                    $itemPrice = $quantity * $price;
-
-                                                                    // Tổng chiết khấu
-                                                                    $itemDiscount = $itemPrice * ($discount / 100);
-
-                                                                    // Giá sau chiết khấu
-                                                                    $itemPriceAfterDiscount =
-                                                                        $itemPrice - $itemDiscount;
-
-                                                                    // Tính VAT
-                                                                    $itemVAT = $itemPriceAfterDiscount * ($vat / 100);
-
-                                                                    // Tổng cộng cho mặt hàng
-                                                                    $totalAmount = $itemPriceAfterDiscount + $itemVAT;
-
-                                                                    // Cộng vào tổng các giá trị
-                                                                    $totalPrice += $itemPrice;
-                                                                    $totalDiscount += $itemDiscount;
-                                                                    $totalVAT += $itemVAT;
-                                                                @endphp
-                                                                <tr class="text-center">
-                                                                    <td>{{ $detail->equipments->name }}</td>
-                                                                    <td>{{ $detail->quantity_quote ?? 'Không có' }}</td>
-                                                                    <td>{{ $detail->quantity }}</td>
-                                                                    <td>{{ $detail->deviation_quote ?? 'Không có' }}</td>
-                                                                    <td>{{ number_format($price, 0, ',', '.') }} VND</td>
-                                                                    <td>{{ $detail->batch_number ?? 'Không có' }}</td>
-                                                                    <td>{{ $discount . '%' ?? 'Không có' }}</td>
-                                                                    <td>{{ $vat . '%' ?? 'Không có' }}</td>
-                                                                    <td>{{ number_format($totalAmount, 0, ',', '.') }} VND
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                        <tfoot>
-                                                            <tr class="fw-bold">
-                                                                <td colspan="7"></td>
-                                                                <td><strong>Tổng đầu:</strong></td>
-                                                                <td>
-                                                                    {{ number_format($totalPrice, 0, ',', '.') }} VND</td>
-                                                            </tr>
-                                                            <tr class="fw-bold">
-                                                                <td colspan="7"></td>
-                                                                <td><strong>Tổng chiết khấu:</strong></td>
-                                                                <td>
-                                                                    {{ number_format($totalDiscount, 0, ',', '.') }} VND
-                                                                </td>
-                                                            </tr>
-                                                            <tr class="fw-bold">
-                                                                <td colspan="7"></td>
-                                                                <td><strong>Tổng VAT:</strong></td>
-                                                                <td>
-                                                                    {{ number_format($totalVAT, 0, ',', '.') }} VND</td>
-                                                            </tr>
-                                                            <tr class="fw-bold">
-                                                                <td colspan="7"></td>
-                                                                <td><strong>Tổng cộng:</strong></td>
-                                                                <td>
-                                                                    {{ number_format($totalPrice - $totalDiscount + $totalVAT, 0, ',', '.') }}
-                                                                    VND</td>
-                                                            </tr>
-                                                        </tfoot>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-sm btn-secondary rounded-pill"
-                                            data-bs-dismiss="modal">Đóng</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @else
-                        <div class="modal fade" id="modal{{ $item['code'] }}" data-bs-backdrop="static"
-                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="add_modalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-xl">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h3 class="modal-title" id="add_modalLabel">
-                                            {{ $item['type'] === 'import' ? 'Phiếu nhập' : 'Phiếu xuất' }}</h3>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body pb-0">
-                                        <!-- Thông tin chung -->
-                                        <div class="row">
-                                            <!-- Thông tin chung -->
-                                            <div class="col-lg-6">
-                                                <table class="table table-flush gy-1">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Mã phiếu xuất:</td>
-                                                            <td class="text-dark"><strong>{{ $item['code'] }}</strong>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Phòng ban:</td>
-                                                            <td><a style="color: #0070f4"
-                                                                    href="">{{ $item['department'] }}</a></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Ngày xuất:</td>
-                                                            <td class="text-dark">{{ $item['date'] }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <table class="table table-flush gy-1">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Trạng thái:</td>
-                                                            <td class="text-dark">
-                                                                {{ $item['status'] == 1 ? 'Đã xuất' : 'Chưa hoàn thành' }}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Người tạo:</td>
-                                                            <td class="text-dark">{{ $item['create_by'] }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                        <!-- Chi tiết phiếu xuất -->
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="table-responsive rounded">
-                                                    <table class="table table-striped table-sm table-hover">
-                                                        <thead class="fw-bolder bg-dark">
-                                                            <tr class="text-center">
-                                                                <th class="ps-5 text-left" style="width: 50%;">
-                                                                    Tên thiết bị
-                                                                </th>
-                                                                <th style="width: 25%;">Số Lô</th>
-                                                                <th class="pe-3" style="width: 25%;">Số Lượng</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($item['details'] as $detail)
-                                                            <tr class="text-center">
-                                                                <td class="ps-5 text-left">
-                                                                    {{$detail->equipments->name}}</td>
-                                                                <td>{{$detail->batch_number}}</td>
-                                                                <td><span data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                        title=""
-                                                                        data-bs-original-title="Số Lượng Xuất Kho">{{$detail->quantity}}</span>
-                                                                </td>
-                                                            </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-sm btn-secondary rounded-pill"
-                                            data-bs-dismiss="modal">Đóng</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                @endforeach
-
-
-
             </div>
-
         </div>
-
     </div>
 @endsection
 
 @section('scripts')
-    <script>
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('loading-overlay').style.display = 'none';
-        this.disabled = true;
-    </script>
 @endsection

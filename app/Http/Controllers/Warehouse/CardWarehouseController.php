@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Warehouse;
 
 use App\Http\Controllers\Controller;
 use App\Models\Equipments;
-use App\Models\Exports;
-use App\Models\Inventories;
-use App\Models\Receipts;
+use App\Models\Export_details;
+use App\Models\Receipt_details;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -17,106 +16,84 @@ class CardWarehouseController extends Controller
     public function index(Request $request)
     {
         $title = "Thẻ kho";
+
         $equipments = Equipments::all();
 
-        $start_date = $request->session()->get('start_date', Carbon::now()->subMonths(3)->format('Y-m-d'));
-        $end_date = $request->session()->get('end_date', Carbon::now()->format('Y-m-d'));
-        $equipment_code = $request->session()->get('equipment_code', '');
-
-        return view("{$this->route}.card_warehouse.card", compact('title', 'equipments', 'start_date', 'end_date', 'equipment_code'));
+        return view("{$this->route}.card_warehouse.card", compact('title', 'equipments'));
     }
+
     public function search(Request $request)
     {
         $title = "Thẻ kho";
+
         $equipments = Equipments::all();
 
-        $request->session()->put('start_date', $request->input('start_date'));
-        $request->session()->put('end_date', $request->input('end_date'));
-        $request->session()->put('equipment_code', $request->input('equipment_code'));
-
         $equipment_code = $request->input('equipment_code');
-        $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
-        $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
+        $start_date = Carbon::parse($request->input('start_date'));
+        $end_date = Carbon::parse($request->input('end_date'));
 
-        $initial_inventory = 0;
+        // Lấy tên thiết bị
+        $nameEquipment = Equipments::with('units')
+            ->where('code', $equipment_code)
+            ->first();
 
-        $total_previous_imports = Receipts::with('details')
-            ->whereHas('details', function ($query) use ($equipment_code) {
-                $query->where('equipment_code', $equipment_code);
-            })
-            ->where('receipt_date', '<', $start_date)
-            ->get()
-            ->sum(function ($import) {
-                return $import->details->sum('quantity');
-            });
+        $receiptsBeforeStart = Receipt_details::where('equipment_code', $equipment_code)
+            ->where('created_at', '<=', $start_date)
+            ->get(['batch_number', 'quantity']);
 
-        $total_previous_exports = Exports::with('exportDetail')
-            ->whereHas('exportDetail', function ($query) use ($equipment_code) {
-                $query->where('equipment_code', $equipment_code);
-            })
-            ->where('export_date', '<', $start_date)
-            ->get()
-            ->sum(function ($export) {
-                return $export->exportDetail->sum('quantity');
-            });
+        $beginning_balance_total = 0;
 
-        $beginning_inventory = $initial_inventory + $total_previous_imports - $total_previous_exports;
+        foreach ($receiptsBeforeStart as $receipt) {
+            $batch_number = $receipt->batch_number;
 
-        $imports = Receipts::with(['details', 'supplier', 'user'])
-            ->whereHas('details', function ($query) use ($equipment_code) {
-                $query->where('equipment_code', $equipment_code);
-            })
-            ->whereBetween('receipt_date', [$start_date, $end_date])
-            ->where('status', '=', 1)
-            ->get()
-            ->map(function ($import) {
-                return [
-                    'type' => 'import',
-                    'code' => $import->code,
-                    'date' => $import->receipt_date,
-                    'transaction_type' => 'Nhập kho',
-                    'receipt_no' => $import->receipt_no,
-                    'status' => $import->status,
-                    'create_by' => $import->user->last_name . " " . $import->user->first_name,
-                    'supplier' => $import->supplier->name,
-                    'details' => $import->details,
-                    'quantity' => $import->details->sum('quantity')
-                ];
-            });
+            $totalImportBeforeStart = Receipt_details::where('equipment_code', $equipment_code)
+                ->where('batch_number', $batch_number)
+                ->where('created_at', '<=', $start_date)
+                ->sum('quantity');
 
-        $exports = Exports::with(['exportDetail', 'departments'])
-            ->whereHas('exportDetail', function ($query) use ($equipment_code) {
-                $query->where('equipment_code', $equipment_code);
-            })
-            ->whereBetween('export_date', [$start_date, $end_date])
-            ->where('status', '=', 1)
-            ->get()
-            ->map(function ($export) {
-                return [
-                    'type' => 'export',
-                    'code' => $export->code,
-                    'date' => $export->export_date,
-                    'transaction_type' => 'Xuất kho',
-                    'department' => $export->departments->name,
-                    'status' => $export->status,
-                    'create_by' => $export->user->last_name . " " . $export->user->first_name,
-                    'details' => $export->exportDetail,
-                    'quantity' => $export->exportDetail->sum('quantity')
-                ];
-            });
+            $totalExportBeforeStart = Export_details::where('equipment_code', $equipment_code)
+                ->where('batch_number', $batch_number)
+                ->where('created_at', '<=', $start_date)
+                ->sum('quantity');
 
-        $transactions = $imports->concat($exports)->sortBy('date')->values();
+            $beginning_balance_batch = $totalImportBeforeStart - $totalExportBeforeStart;
 
-        $transactions = $transactions->map(function ($transaction) use (&$beginning_inventory) {
-            $transaction['begin_stock'] = $beginning_inventory;
-            if ($transaction['type'] === 'import') {
-                $beginning_inventory += $transaction['quantity'];
-            } else {
-                $beginning_inventory -= $transaction['quantity'];
-            }
-            $transaction['end_stock'] = $beginning_inventory;
-            return $transaction;
-        })->sortByDesc('date');
-        return view("{$this->route}.card_warehouse.search", compact('title', 'equipments', 'transactions'));
+            $beginning_balance_total += $beginning_balance_batch;
+        }
+
+        $ending_balance_total = $beginning_balance_total;
+
+        $receiptsInPeriod = Receipt_details::where('equipment_code', $equipment_code)
+            ->whereBetween('created_at', [$start_date, $end_date])
+            ->get(['batch_number', 'quantity']);
+
+        foreach ($receiptsInPeriod as $receipt) {
+            $batch_number = $receipt->batch_number;
+
+            $totalImportInPeriod = Receipt_details::where('equipment_code', $equipment_code)
+                ->where('batch_number', $batch_number)
+                ->whereBetween('created_at', [$start_date, $end_date])
+                ->sum('quantity');
+
+            $totalExportInPeriod = Export_details::where('equipment_code', $equipment_code)
+                ->where('batch_number', $batch_number)
+                ->whereBetween('created_at', [$start_date, $end_date])
+                ->sum('quantity');
+
+            $ending_balance_batch = $totalImportInPeriod - $totalExportInPeriod;
+
+            $ending_balance_total += $ending_balance_batch;
+        }
+
+        $getImportBetweenDate = Receipt_details::where('equipment_code', $equipment_code)
+            ->whereBetween('created_at', [$start_date, $end_date])
+            ->get();
+
+        $getExportBetweenDate = Export_details::with(['export'])
+            ->where('equipment_code', $equipment_code)
+            ->whereBetween('created_at', [$start_date, $end_date])
+            ->get();
+
+        return view("{$this->route}.card_warehouse.search", compact('title', 'equipments', 'nameEquipment', 'beginning_balance_total', 'ending_balance_total', 'getImportBetweenDate', 'getExportBetweenDate'));
     }
 }

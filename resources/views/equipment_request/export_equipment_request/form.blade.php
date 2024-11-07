@@ -163,9 +163,9 @@
                 <table class="table table-striped align-middle gs-0 gy-4" id="table_list_equipment">
                     <thead class="table-dark">
                         <tr class="fw-bolder bg-success">
-                            <th class="ps-10" style="width: 35%;">Thiết Bị</th>
-                            <th class="" style="width: 20%;">Đơn Vị</th>
-                            <th class="" style="width: 25%;">Số Lượng</th>
+                            <th class="ps-10" style="width: 45%;">Thiết Bị</th>
+                            <th class="" style="width: 15%;">Đơn Vị</th>
+                            <th class="" style="width: 20%;">Số Lượng</th>
                             <th class="pe-3 text-center" style="width: 20%;">Hành Động</th>
                         </tr>
                     </thead>
@@ -173,7 +173,9 @@
                         @if (!empty($getList))
                             @foreach ($getList as $item)
                                 <tr id="equipment-row-{{ $item->equipment_code }}">
-                                    <td>{{ $item->equipments->name }}</td>
+                                    <td>{{ $item->equipments->name }} -
+                                        (Tồn Kho: {{ $item->equipments->inventories->sum('current_quantity') }})
+                                    </td>
                                     <td>{{ $item->equipments->units->name }}</td>
                                     <td>
                                         <div class="d-flex align-items-center">

@@ -1,8 +1,7 @@
 <div class="card-body py-1">
-    <form action="{{ route('card_warehouse.search') }}" method="POST"
+    <form action="{{ route('card_warehouse.search') }}" method="GET"
         class="row align-items-center d-flex justify-content-between">
-        @csrf
-        <div class="col-4">
+        <div class="col-lg-4 col-md-4 col-sm-12">
             <div class="row align-items-center">
                 <div class="col-5 pe-0">
                     <input type="datetime-local" name="start_date"
@@ -20,21 +19,27 @@
             </div>
 
         </div>
-        <div class="col-7">
+        <div class="col-lg-5 col-md-4 col-sm-12">
             <select name="equipment_code" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2 w-100">
                 <option value="">-- Chọn thiết bị --</option>
                 @foreach ($equipments as $equipment)
                     <option value="{{ $equipment->code }}"
                         {{ old('equipment_code') == $equipment->code || request('equipment_code') == $equipment->code ? 'selected' : '' }}>
-                        {{ $equipment->name }}
+                        {{ $equipment->name }} - (Tồn Kho: {{ $equipment->inventories->sum('current_quantity') }}
+                        {{ $equipment->units->name }})
                     </option>
                 @endforeach
             </select>
         </div>
-        <div class="col-1">
-            <button class="btn rounded-pill btn-dark btn-sm mt-2 mb-2 w-100 load_animation" type="submit">
-                <i class="fa fa-search" style="margin-bottom: 2px;"></i>Tìm
-            </button>
+        <div class="col-lg-3 col-md-3 col-sm-3">
+            <div class="d-flex">
+                <a class="btn rounded-pill btn-info btn-sm mt-2 mb-2 w-100 me-2"
+                    href="{{ route('card_warehouse.index') }}"><i class="fas fa-times-circle"
+                        style="margin-bottom: 2px;"></i> Bỏ
+                    Lọc</a>
+                <button class="btn rounded-pill btn-dark btn-sm mt-2 mb-2 w-100 load_animation" type="submit"><i
+                        class="fa fa-search" style="margin-bottom: 2px;"></i>Tìm</button>
+            </div>
         </div>
     </form>
 </div>
