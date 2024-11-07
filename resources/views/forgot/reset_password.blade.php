@@ -23,6 +23,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
     <link rel="shortcut icon" href="{{ asset('image/logo_warehouse.png') }}" />
+
+    <style>
+        body,
+        input,
+        select,
+        textarea,
+        button {
+            font-family: 'Noto Sans', sans-serif;
+        }
+    </style>
 </head>
 
 <body class="d-flex flex-column flex-root">
@@ -41,7 +51,7 @@
                     </div>
                     <div class="fv-row mb-7">
                         <label class="required form-label fw-bolder text-gray-900 fs-6">Mật khẩu mới</label>
-                        <input class="form-control form-control-sm border border-success" type="password"
+                        <input class="form-control form-control-sm border border-success rounded-pill" type="password"
                             name="new_password" placeholder="Nhập mật khẩu mới..." />
                         @error('new_password')
                             <div class="message_error">{{ $message }}</div>
@@ -49,15 +59,15 @@
                     </div>
                     <div class="fv-row mb-7">
                         <label class="required form-label fw-bolder text-gray-900 fs-6">Xác nhận mật khẩu mới</label>
-                        <input class="form-control form-control-sm border border-success" type="password"
+                        <input class="form-control form-control-sm border border-success rounded-pill" type="password"
                             name="new_password_confirmation" placeholder="Xác nhận mật khẩu mới..." />
                         @error('new_password_confirmation')
                             <div class="message_error">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="d-flex flex-wrap justify-content-center">
-                        <button type="submit" class="btn btn-dark btn-sm fw-bolder load_animation">
-                            <span>Thay đổi</span>
+                        <button type="submit" class="btn btn-success btn-sm fw-bolder load_animation rounded-pill">
+                            <span>Hoàn thành</span>
                         </button>
                     </div>
                 </form>
