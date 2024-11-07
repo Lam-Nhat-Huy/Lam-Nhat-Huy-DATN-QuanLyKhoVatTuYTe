@@ -227,7 +227,7 @@ class CheckWarehouseController extends Controller
     {
         $title = 'Chỉnh sửa Phiếu Kiểm';
         $action = 'edit';
-        $statusMessage = 'Đang sửa phiếu';
+        $statusMessage = 'Đang sửa';
 
         $userCode = session('user_code');
         $user = Users::where('code', $userCode)->first();
@@ -242,9 +242,11 @@ class CheckWarehouseController extends Controller
             $query->where('check_round', '<=', 2);
         })
             ->with(['inventories' => function ($query) {
-                $query->select('equipment_code', 'current_quantity', 'batch_number')
-                    ->where('current_quantity', '>', 0);
-            }])->get();
+                $query->select('equipment_code', 'current_quantity', 'batch_number');
+            }])
+            ->select('code', 'name') // Bao gồm 'name' của thiết bị trong select
+            ->get();
+
 
         $equipmentsWithJson = $this->showInventoryCheckEdits($code, $checkRound);
 
@@ -258,6 +260,22 @@ class CheckWarehouseController extends Controller
             'userName',
             'note'
         ));
+    }
+
+    public function showInventoryCheckEdits($code, $checkRound = 1)
+    {
+        $inventoryCheckEdit = Inventory_check_details::where('inventory_check_code', $code)
+            ->where('check_round', $checkRound)
+            ->with(['equipment' => function ($query) {
+                $query->select('code', 'name');
+            }])
+            ->get();
+
+        if ($inventoryCheckEdit->isEmpty()) {
+            return response()->json(['message' => 'Không tìm thấy chi tiết cho phiếu kiểm kho này.'], 404);
+        }
+
+        return response()->json($inventoryCheckEdit);
     }
 
     public function update(Request $request, $code)
@@ -327,20 +345,6 @@ class CheckWarehouseController extends Controller
 
         toastr()->success('Đã cập nhật phiếu kiểm kho thành công với mã ' . $inventoryCheck->code);
         return redirect()->route('check_warehouse.index');
-    }
-
-    public function showInventoryCheckEdits($code, $checkRound = 1)
-    {
-        $inventoryCheckEdit = Inventory_check_details::where('inventory_check_code', $code)
-            ->where('check_round', $checkRound)
-            ->with('equipment')
-            ->get();
-
-        if ($inventoryCheckEdit->isEmpty()) {
-            return response()->json(['message' => 'Không tìm thấy chi tiết cho phiếu kiểm kho này.'], 404);
-        }
-
-        return response()->json($inventoryCheckEdit);
     }
 
     public function store(Request $request)

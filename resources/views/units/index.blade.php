@@ -117,11 +117,15 @@
                                             role="alert"
                                             style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                             <div class="mb-3">
-                                                <i class="fas fa-medkit" style="font-size: 36px; color: #6c757d;"></i>
+                                                <i class="fas fa-cogs" style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
-                                            <div class="text-center mt-1">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không có dữ
-                                                    liệu về đơn vị </h5>
+                                            <div class="text-center">
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Chưa có đơn
+                                                    vị nào được tạo</h5>
+                                                <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                    Hiện tại chưa có đơn vị nào được tạo trong hệ thống. Vui lòng kiểm tra
+                                                    lại hoặc tạo đơn vị mới.
+                                                </p>
                                             </div>
                                         </div>
                                     </td>

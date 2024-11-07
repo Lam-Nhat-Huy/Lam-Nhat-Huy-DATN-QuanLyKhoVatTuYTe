@@ -97,18 +97,25 @@
                         </div>
                     @elseif ($AllEquipment->isEmpty())
                         {{-- Thông báo khi danh sách trống mà không có tìm kiếm --}}
-                        <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
-                            role="alert" style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
-                            <div class="mb-3">
-                                <i class="fas fa-clipboard-check" style="font-size: 36px; color: #6c757d;"></i>
-                            </div>
-                            <div class="text-center">
-                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Danh sách thiết bị trống</h5>
-                                <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                    Hiện tại chưa có thiết bị nào được tạo. Vui lòng thêm mới thiết bị.
-                                </p>
-                            </div>
-                        </div>
+                        <tr id="noDataAlert">
+                            <td colspan="12" class="text-center">
+                                <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                    role="alert"
+                                    style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                    <div class="mb-3">
+                                        <i class="fas fa-boxes" style="font-size: 36px; color: #6c757d;"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Chưa có thiết bị nào
+                                            được tạo</h5>
+                                        <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                            Hiện tại chưa có thiết bị nào trong danh sách. Vui lòng kiểm tra lại hoặc tạo
+                                            thiết bị mới.
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                     @else
                         <div class="d-flex justify-content-end mb-3 me-3">
                             <label class="me-2 pointer" for="selectAll">Chọn Tất Cả</label>

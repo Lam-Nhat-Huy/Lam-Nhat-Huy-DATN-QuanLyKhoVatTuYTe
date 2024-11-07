@@ -486,6 +486,7 @@
     @elseif ($action === 'edit')
         <script>
             var products = @json($equipmentsWithStock);
+
             var productDetails = @json($equipmentsWithJson).original;
             console.log(productDetails);
         </script>

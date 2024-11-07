@@ -36,14 +36,14 @@
                     class="btn rounded-pill btn-sm btn-success me-2">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-clock-rotate-left me-1"></i>
-                        Lịch Sử Báo Giá
+                        Lịch sử báo giá
                     </span>
                 </a>
                 <a href="{{ route('supplier.trash') }}?{{ request()->getQueryString() }}"
                     class="btn rounded-pill btn-sm btn-danger me-2">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-trash me-1"></i>
-                        Thùng Rác
+                        Thùng rác
                     </span>
                 </a>
                 <a href="{{ route('supplier.add') }}?{{ request()->getQueryString() }}"
@@ -85,8 +85,8 @@
                                 <th class="ps-3"><input type="checkbox" id="selectAll" /></th>
                                 <th style="width: 47%;">Nhà cung cấp</th>
                                 <th style="width: 23%;">Email</th>
-                                <th style="width: 15%;">Đại Diện</th>
-                                <th style="width: 15%;" class="pe-3 text-center">Hành Động</th>
+                                <th style="width: 15%;">Đại diện</th>
+                                <th style="width: 15%;" class="pe-3 text-center">Hành động</th>
                             </tr>
                         </thead>
                         <tbody id="supplierTableBody">
@@ -108,7 +108,7 @@
                                     <td class="text-center" data-bs-toggle="collapse"
                                         data-bs-target="#collapse_{{ $item->code }}" aria-expanded="false"
                                         aria-controls="collapse_{{ $item->code }}">
-                                        Chi Tiết<i class="fa fa-caret-right pointer ms-2"></i>
+                                        Chi tiết<i class="fa fa-caret-right pointer ms-2"></i>
                                     </td>
                                 </tr>
 
@@ -123,7 +123,10 @@
                                                         style="padding-top: 0 !important; padding-bottom: 0px !important;">
                                                         <div class="row px-5">
                                                             <div class="col-12 mt-3">
-                                                                <h4 class="fw-bold mt-3">Chi tiết</h4>
+                                                                <h4
+                                                                    class="fw-bold m-0 text-uppercase fw-bolder text-center my-3">
+                                                                    Thông tin nhà cung cấp
+                                                                </h4>
                                                             </div>
 
                                                             <!-- Left column: Supplier Info -->
@@ -200,9 +203,13 @@
                                             <div class="mb-3">
                                                 <i class="fas fa-truck" style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
-                                            <div class="text-center mt-1">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không có nhà
-                                                    cung cấp </h5>
+                                            <div class="text-center">
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Chưa có nhà
+                                                    cung cấp nào được tạo</h5>
+                                                <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                    Hiện tại chưa có nhà cung cấp nào được tạo trong hệ thống. Vui lòng kiểm
+                                                    tra lại hoặc tạo nhà cung cấp mới.
+                                                </p>
                                             </div>
                                         </div>
                                     </td>

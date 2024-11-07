@@ -28,7 +28,7 @@
                     class="btn rounded-pill btn-sm btn-twitter">
                     <span class="align-items-center d-flex">
                         <i class="fa fa-plus me-1"></i>
-                        Thêm Phòng Ban
+                        Thêm phòng ban
                     </span>
                 </a>
             </div>
@@ -59,10 +59,10 @@
                         <thead class="{{ $department->count() == 0 ? 'd-none' : '' }}">
                             <tr class="fw-bolder bg-success">
                                 <th class="ps-3"><input type="checkbox" id="selectAll" /></th>
-                                <th style="width: 20%;">Phòng Ban</th>
+                                <th style="width: 20%;">Phòng ban</th>
                                 <th style="width: 35%;">Mô tả</th>
                                 <th style="width: 25%;">Vị trí</th>
-                                <th style="width: 20%;" class="pe-3 text-center">Hành Động</th>
+                                <th style="width: 20%;" class="pe-3 text-center">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -103,9 +103,13 @@
                                             <div class="mb-3">
                                                 <i class="fas fa-building" style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
-                                            <div class="text-center mt-1">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không có
-                                                    phòng ban </h5>
+                                            <div class="text-center">
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Chưa có phòng
+                                                    ban nào được tạo</h5>
+                                                <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                    Hiện tại chưa có phòng ban nào được tạo trong hệ thống. Vui lòng kiểm
+                                                    tra lại hoặc tạo phòng ban mới.
+                                                </p>
                                             </div>
                                         </div>
                                     </td>

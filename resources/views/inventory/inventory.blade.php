@@ -31,7 +31,7 @@
                 <table class="table table-hover table-bordered align-middle text-center"
                     style="width: 100%; border-collapse: collapse;">
                     <thead>
-                        <tr class="fw-bolder bg-success text-white" style="background-color: #28a745;">
+                        <tr class="bg-success text-white" style="background-color: #28a745;">
                             <th style="width: 5%;">
                                 STT
                             </th>

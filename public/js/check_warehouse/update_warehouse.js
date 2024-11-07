@@ -132,9 +132,17 @@ function populateTableWithProducts() {
     materialData = [];
 
     productDetails.forEach((product, index) => {
-        var row = generateTableRow(index, product);
-        tableBody.insertAdjacentHTML("beforeend", row);
+        var row = generateTableRow(index, {
+            name: product.equipment.name || "Không có tên",
+            equipment_code: product.equipment_code,
+            current_quantity: product.current_quantity,
+            actual_quantity: product.actual_quantity || 0,
+            unequal: product.unequal || 0,
+            batch_number: product.batch_number,
+            equipment_note: "",
+        });
 
+        tableBody.insertAdjacentHTML("beforeend", row);
         materialData.push({
             equipment_code: product.equipment_code,
             current_quantity: product.current_quantity,
@@ -181,9 +189,9 @@ function generateTableRow(index, product) {
                     style="width: 70px; height: 40px; border-radius: 8px;" 
                      />
             </td>
-            <td class="unequal-count" id="unequal-count-${index}">
-                ${product.unequal || 0}
-            </td>
+            <td class="unequal-count" id="unequal-count-${index}">${
+        product.unequal || 0
+    }</td>
             <td>
                 <textarea class="equipment_note rounded-3" 
                     name="equipment_note_${index}" 

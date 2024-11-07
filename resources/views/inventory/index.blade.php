@@ -6,7 +6,7 @@
         </td>
         <td>{{ $equipment->code }}</td>
         <td style="text-align: left;">{{ $equipment->name }}</td>
-        <td>{{ $equipment->equipmentType->name }}</td>
+        <td class="text-left">{{ $equipment->equipmentType->name }}</td>
         <td>
             <div style="display: flex; justify-content: space-evenly; align-items: center;">
                 @php

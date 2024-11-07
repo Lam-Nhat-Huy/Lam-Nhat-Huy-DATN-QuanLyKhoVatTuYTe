@@ -175,16 +175,19 @@
                                 </tr>
                             @empty
                                 <tr id="noDataAlert">
-                                    <td colspan="10" class="text-center">
+                                    <td colspan="12" class="text-center">
                                         <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
                                             role="alert"
                                             style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                             <div class="mb-3">
-                                                <i class="fas fa-ban" style="font-size: 36px; color: #6c757d;"></i>
+                                                <i class="fas fa-bell" style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
                                             <div class="text-center">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
-                                                    Liệu</h5>
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Chưa có
+                                                    thông báo</h5>
+                                                <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                    Hiện tại chưa có thông báo nào được tạo. Vui lòng kiểm tra lại sau hoặc
+                                                    tạo thông báo mới.
                                                 </p>
                                             </div>
                                         </div>

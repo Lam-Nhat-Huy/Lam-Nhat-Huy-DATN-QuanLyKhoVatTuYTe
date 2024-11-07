@@ -518,15 +518,14 @@
                                             role="alert"
                                             style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                             <div class="mb-3">
-                                                <i class="fas fa-file-invoice"
-                                                    style="font-size: 36px; color: #6c757d;"></i>
+                                                <i class="fas fa-arrow-up" style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
                                             <div class="text-center">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
-                                                    Liệu
-                                                </h5>
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Chưa có
+                                                    phiếu xuất nào</h5>
                                                 <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                                    Không Tìm Thấy Dữ Liệu Nào Về Phiếu Nhập
+                                                    Hiện tại chưa có phiếu xuất nào được tạo. Vui lòng kiểm tra lại hoặc tạo
+                                                    phiếu xuất mới.
                                                 </p>
                                             </div>
                                         </div>

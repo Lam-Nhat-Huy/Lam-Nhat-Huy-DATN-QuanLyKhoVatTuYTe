@@ -47,7 +47,7 @@
                     <div class="row mb-5">
                         <div class="mb-5 col-6">
 
-                            <label class="{{ $required }} fs-6 fw-bold mb-3">Tên Phòng Ban</label>
+                            <label class="{{ $required }} fs-6 fw-bold mb-3">Tên phòng ban</label>
 
                             <input type="text" class="form-control form-control-sm border border-success rounded-pill"
                                 placeholder="Tên phòng ban.." name="name"
