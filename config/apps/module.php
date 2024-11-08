@@ -191,7 +191,7 @@ return [
         ],
         [
             'user_role' => [0, 1],
-            'title' => 'Phòng ban',
+            'title' => 'Phòng Ban',
             'icon' => 'fas fa-building',
             'route' => ['department.index', 'department.add', 'department.edit'],
             'subModule' => [
@@ -208,7 +208,7 @@ return [
             ]
         ],
         [
-            'user_role' => [0, 1],
+            'user_role' => [1],
             'title' => 'Thông Báo',
             'icon' => 'fa fa-bell',
             'route' => [
@@ -230,7 +230,7 @@ return [
                         'notification.notification_trash',
                     ],
                     'icon' => 'fas fa-check-square',
-                    'user_role' => [0, 1],
+                    'user_role' => [1],
                 ],
             ],
         ],

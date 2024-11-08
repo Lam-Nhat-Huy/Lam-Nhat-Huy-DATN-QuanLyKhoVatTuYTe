@@ -7,71 +7,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        .hover-table:hover {
-            background: #ccc;
-        }
-
-        .btn-group button {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .selected-row {
-            background: #ddd;
-        }
-
-        .active-row {
-            background: #d1c4e9;
-            /* Màu nền khi hàng được nhấp vào */
-        }
-
-        .pagination .page-link {
-            background-color: #50cd89;
-            /* Màu xanh chủ đề */
-            color: white;
-            border-radius: 5px;
-            /* Bo tròn góc */
-            border: none;
-            margin: 0 4px;
-            /* Tạo khoảng cách giữa các nút */
-            transition: all 0.3s ease;
-            /* Hiệu ứng chuyển động mượt */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            /* Đổ bóng nhẹ */
-        }
-
-        .pagination .page-link:hover {
-            background-color: #45b07c;
-            /* Chuyển sang màu nhạt hơn khi hover */
-            color: white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            /* Tăng cường đổ bóng khi hover */
-            transform: translateY(-2px);
-            /* Tạo hiệu ứng nâng nút khi hover */
-        }
-
-        .pagination .page-item.active .page-link {
-            background-color: #3aa06d;
-            /* Màu xanh đậm hơn cho trang hiện tại */
-            border-color: #3aa06d;
-            color: white;
-            font-weight: bold;
-            /* Làm đậm chữ cho trang hiện tại */
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-            /* Đổ bóng mạnh hơn */
-        }
-
-        .pagination {
-            justify-content: center;
-            /* Canh giữa các nút phân trang */
-            padding: 10px 0;
-            /* Tạo không gian trên dưới */
-        }
-
-        .hover-table:hover {
-            background-color: #d1e7dd;
-            /* Màu khi hover */
-            transition: background-color 0.3s;
-        }
     </style>
 @endsection
 
@@ -86,11 +21,10 @@
 
         <div class="card-body py-3">
             <div class="table-responsive rounded">
-                <table class="table table-hover table-bordered align-middle">
+                <table class="table align-middle gs-0 gy-4">
                     <!-- Trong phần <thead> của bảng -->
                     <thead>
-                        <tr class="bg-success text-center">
-                            <th class="ps-3" style="width: 5%;"></th>
+                        <tr class="bg-success text-center fw-bolder">
                             <th style="width: 8%;" class="ps-3">Mã kiểm kho</th>
                             <th style="width: 10%;">Ngày cân bằng</th>
                             <th style="width: 10%;">Tổng chênh lệch</th>
@@ -99,6 +33,7 @@
                             <th style="width: 10%;">Lần kiểm</th>
                             <th style="width: 15%;">Ghi chú</th>
                             <th style="width: 10%;">Trạng thái</th>
+                            <th class="pe-3" style="width: 5%;"></th>
                         </tr>
                     </thead>
 
@@ -129,17 +64,12 @@
                                 );
                             @endphp
 
-                            <tr class="text-center hover-table pointer" data-bs-toggle="collapse"
-                                data-bs-target="#collapse{{ $item['code'] }}" aria-expanded="false"
-                                aria-controls="collapse{{ $item['code'] }}">
-                                <td>
-                                    <i class="row-icon fa fa-chevron-right"></i>
-                                </td>
-                                <td>{{ $item['code'] }}</td>
+                            <tr class="text-center hover-table pointer">
+                                <td>#{{ $item['code'] }}</td>
                                 <td>{{ \Carbon\Carbon::parse($item['check_date'])->format('d/m/Y') }}</td>
                                 <td>
                                     @if ($totalUnequal == 0)
-                                        <span style="color: #6c757d;">Không lệch</span>
+                                        <span>Không lệch</span>
                                     @else
                                         <span style="color: #dc3545; font-weight: bold;">{{ $totalUnequal }}</span>
                                         <i class="fa fa-arrow-right-arrow-left" style="color: #dc3545;"
@@ -152,7 +82,7 @@
                                         <span style="color: #dc3545; font-weight: bold;">-{{ $unequalPositive }}</span>
                                         <i class="fa fa-arrow-down" style="color: #dc3545;" title="Giảm"></i>
                                     @else
-                                        <span style="color: #6c757d;">Không lệch</span>
+                                        <span>Không lệch</span>
                                     @endif
                                 </td>
                                 <td>
@@ -160,7 +90,7 @@
                                         <span style="color: #28a745; font-weight: bold;">+{{ $unequalNegative }}</span>
                                         <i class="fa fa-arrow-up" style="color: #28a745;" title="Tăng"></i>
                                     @else
-                                        <span style="color: #6c757d;">Không lệch</span>
+                                        <span>Không lệch</span>
                                     @endif
                                 </td>
 
@@ -176,37 +106,49 @@
                                         </span>
                                     @else
                                         <span class="text-center">
-                                            Không có ghi chú
+                                            Trống
                                         </span>
                                     @endif
                                 </td>
 
-
                                 <td>
-                                    @if ($item['status'] == 0)
-                                        <span class="label label-temp text-danger">Chưa duyệt</span>
-                                    @elseif ($item['status'] == 1)
-                                        <span class="label label-final text-success">Đã duyệt</span>
+                                    @if ($item->status == 0)
+                                        <div class="label label-temp bg-danger rounded-pill text-white px-2 py-1"
+                                            style="font-size: 12px;">
+                                            Chờ Duyệt
+                                        </div>
+                                    @elseif ($item->status == 1)
+                                        <div class="label label-final bg-success rounded-pill text-white px-2 py-1"
+                                            style="font-size: 12px;">
+                                            Đã duyệt
+                                        </div>
                                     @else
-                                        <span class="label label-temp text-danger">Phiếu đã hủy</span>
+                                        <div class="label label-temp bg-info rounded-pill text-white px-2 py-1"
+                                            style="font-size: 12px;">
+                                            Phiếu hủy
+                                        </div>
                                     @endif
+                                </td>
+                                <td data-bs-toggle="collapse" data-bs-target="#collapse_{{ $item->code }}"
+                                    aria-expanded="false" aria-controls="collapse_{{ $item->code }}">
+                                    <i class="row-icon fa fa-chevron-right"></i>
                                 </td>
                             </tr>
 
-                            <!-- Collapse content -->
-                            <tr class="collapse multi-collapse" id="collapse{{ $item['code'] }}">
+                            <tr>
                                 <td class="p-0" colspan="12"
-                                    style="border: 1px solid #dcdcdc; background-color: #fafafa; padding-top: 0 !important;">
-                                    <div class="flex-lg-row-fluid border-2 border-lg-1">
-                                        <div class="card card-flush p-2 mb-3"
+                                    style="background-color: #fafafa; padding-top: 0 !important;">
+                                    <div class="flex-lg-row-fluid border-2 border-lg-1 collapse multi-collapse"
+                                        id="collapse_{{ $item->code }}">
+                                        <div class="card card-flush p-2"
                                             style="padding-top: 0px !important; padding-bottom: 0px !important;">
-                                            <div class="card-header d-flex justify-content-between align-items-center p-2"
+                                            <div class="card-header d-flex justify-content-between align-items-center p-3 pb-0"
                                                 style="padding-top: 0 !important; padding-bottom: 0px !important;">
-                                                <h4 class="fw-bold m-0 text-uppercase fw-bolder">Chi tiết phiếu
-                                                    kiểm kho
+                                                <h4 class="fw-bold m-0 text-uppercase fw-bolder">
+                                                    Chi tiết phiếu kiểm kho
                                                 </h4>
                                             </div>
-                                            <div class="card-body p-2" style="padding-top: 0px !important">
+                                            <div class="card-body mb-0 pb-0 mx-3 px-3" style="padding-top: 0px !important">
                                                 <div class="row py-5" style="padding-top: 0px !important">
                                                     <!-- Begin::Receipt Info (Left column) -->
                                                     <div class="col-md-4">
@@ -215,7 +157,7 @@
                                                                 <tr>
                                                                     <td class="" style="width: 150px;"><strong>Mã kiểm
                                                                             kho</strong></td>
-                                                                    <td class="text-gray-800">{{ $item['code'] }}</td>
+                                                                    <td class="text-gray-800">#{{ $item['code'] }}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td class=""><strong>Thời gian</strong></td>
@@ -250,7 +192,7 @@
                                                                     <td class=""><strong>Trạng thái</strong></td>
                                                                     <td class="text-gray-800">
                                                                         @if ($item['status'] == 0)
-                                                                            <span class="text-danger">Chưa duyệt</span>
+                                                                            <span class="text-danger">Chờ duyệt</span>
                                                                         @elseif($item['status'] == 1)
                                                                             <span class="text-success">Đã duyệt</span>
                                                                         @else
@@ -277,9 +219,6 @@
                                                                         @endif
                                                                     </td>
                                                                 </tr>
-
-
-
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -288,11 +227,11 @@
                                                 <!-- Lần kiểm 1 -->
                                                 <div class="col-md-12">
                                                     <div class="d-flex justify-content-between align-items-center">
-                                                        <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-2">Lần kiểm đầu
+                                                        <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-3">Lần kiểm đầu
                                                         </h6>
 
                                                         @if ($item['check_count'] == 1 && session('user_code') === $item['user_code'])
-                                                            <a class="text-dark"
+                                                            <a class="text-dark mb-3"
                                                                 href="{{ route('inventory_check.editByCheckround', ['code' => $item->code, 'check_round' => 1]) }}">
                                                                 <i class="fa fa-edit"></i> Chỉnh sửa phiếu 1
                                                             </a>
@@ -300,29 +239,29 @@
                                                     </div>
 
 
-                                                    <div class="table-responsive rounded">
+                                                    <div class="rounded">
                                                         <table class="table table-striped table-sm table-hover">
                                                             <thead style="background-color: #FFA500;">
-                                                                <tr class="text-center">
-                                                                    <th style="width: 15%;" class="ps-3">Mã thiết bị</th>
-                                                                    <th style="width: 15%;">Tên thiết bị</th>
-                                                                    <th style="width: 15%;">Số lô</th>
-                                                                    <th style="width: 10%;">Tồn kho</th>
-                                                                    <th style="width: 10%;">Số lượng thực tế</th>
+                                                                <tr class="fw-bolder">
+                                                                    <th style="width: 10%;" class="ps-5">Mã thiết bị</th>
+                                                                    <th style="width: 25%;">Tên thiết bị</th>
+                                                                    <th style="width: 10%;" class="text-center">Số lô</th>
+                                                                    <th style="width: 10%;" class="text-center">Tồn kho
+                                                                    </th>
+                                                                    <th style="width: 15%;" class="text-center">Số lượng
+                                                                        thực tế</th>
                                                                     <th style="width: 10%;">Số lượng lệch</th>
-                                                                    <th style="width: 20%;">Ghi chú thiết bị</th>
+                                                                    <th style="width: 15%;" class="text-center pe-5">Ghi
+                                                                        chú
+                                                                        thiết bị</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 @foreach ($item['details'] as $detail)
                                                                     @if ($detail['check_round'] == 1)
-                                                                        <tr class="text-center hover-table pointer"
-                                                                            data-bs-toggle="collapse"
-                                                                            data-bs-target="#collapse{{ $detail['equipment_code'] }}"
-                                                                            aria-expanded="false"
-                                                                            aria-controls="collapse{{ $detail['equipment_code'] }}">
+                                                                        <tr class="hover-table pointer">
                                                                             <td class="ps-4 text-left">
-                                                                                {{ $detail['equipment_code'] }}
+                                                                                #{{ $detail['equipment_code'] }}
                                                                             </td>
                                                                             <td data-bs-toggle="tooltip"
                                                                                 data-bs-placement="top"
@@ -330,9 +269,12 @@
                                                                                 style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                                                 {{ $detail->equipment->name }}
                                                                             </td>
-                                                                            <td>{{ $detail['batch_number'] }}</td>
-                                                                            <td>{{ $detail['current_quantity'] }}</td>
-                                                                            <td>{{ $detail['actual_quantity'] }}</td>
+                                                                            <td class="text-center">
+                                                                                {{ $detail['batch_number'] }}</td>
+                                                                            <td class="text-center">
+                                                                                {{ $detail['current_quantity'] }}</td>
+                                                                            <td class="text-center">
+                                                                                {{ $detail['actual_quantity'] }}</td>
                                                                             <td>
                                                                                 @php
                                                                                     // Calculate unequal values
@@ -346,11 +288,12 @@
                                                                                 @elseif ($unequal < 0)
                                                                                     +{{ abs($unequal) }}
                                                                                 @else
-                                                                                    <span style="color: #6c757d;">Không
-                                                                                        lệch</span>
+                                                                                    <span>
+                                                                                        Không lệch
+                                                                                    </span>
                                                                                 @endif
                                                                             </td>
-                                                                            <td>
+                                                                            <td class="text-center">
                                                                                 <span class="text-gray">
                                                                                     @if (!empty($detail['equipment_note']))
                                                                                         {{ $detail['equipment_note'] }}
@@ -362,17 +305,15 @@
                                                                         </tr>
                                                                     @endif
                                                                 @endforeach
-
-
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
 
                                                 <!-- Lần kiểm 2 -->
-                                                <div class="col-md-12">
+                                                <div class="col-md-12 mt-10">
                                                     <div class="d-flex justify-content-between align-items-center">
-                                                        <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-2">Lần kiểm cuối
+                                                        <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-3">Lần kiểm cuối
                                                         </h6>
 
                                                         @if (
@@ -380,7 +321,7 @@
                                                                 isset($item['recheck_user_code']) &&
                                                                 session('user_code') == $item['recheck_user_code'] &&
                                                                 $item['status'] === 0)
-                                                            <a class="text-dark"
+                                                            <a class="text-dark mb-3"
                                                                 href="{{ route('inventory_check.editByCheckround', ['code' => $item->code, 'check_round' => 2]) }}">
                                                                 <i class="fa fa-edit"></i> Chỉnh sửa phiếu 2
                                                             </a>
@@ -388,7 +329,7 @@
 
 
                                                     </div>
-                                                    <div class="table-responsive rounded">
+                                                    <div class="rounded">
                                                         @php
                                                             $hasSecondCheck = false;
                                                             foreach ($item['details'] as $detail) {
@@ -399,37 +340,52 @@
                                                             }
                                                         @endphp
 
-                                                        @if (!$hasSecondCheck)
-                                                            <div class="alert alert-warning d-flex align-items-center shadow-sm border border-warning rounded-3"
-                                                                role="alert">
-                                                                <i class="fas fa-exclamation-triangle me-3"
-                                                                    style="font-size: 1.75rem; color: #856404;"></i>
-                                                                <div>
-                                                                    <h6 class="alert-heading fw-bold m-0">Thông báo!</h6>
-                                                                    <hr class="my-1"
-                                                                        style="border-top: 1px solid rgba(0, 0, 0, 0.1);">
-                                                                    <p class="mb-0 small text-muted">Vui lòng
-                                                                        tiến hành kiểm kho lần 2.</p>
-                                                                </div>
-                                                            </div>
-                                                        @else
-                                                            <table class="table table-striped table-sm table-hover">
-                                                                <thead style="background-color: #FFA500;">
-                                                                    <tr class="text-center">
-                                                                        <th style="width: 15%;" class="ps-3">Mã thiết bị
-                                                                        </th>
-                                                                        <th style="width: 15%;">Tên thiết bị</th>
-                                                                        <th style="width: 15%;">Số lô</th>
-                                                                        <th style="width: 10%;">Tồn kho</th>
-                                                                        <th style="width: 10%;">Số lượng thực tế</th>
-                                                                        <th style="width: 10%;">Số lượng lệch</th>
-                                                                        <th style="width: 20%;">Ghi chú thiết bị</th>
+                                                        <table class="table table-striped table-sm table-hover">
+                                                            <thead style="background-color: #FFA500;">
+                                                                <tr class="fw-bolder">
+                                                                    <th style="width: 10%;" class="ps-5">Mã thiết bị
+                                                                    </th>
+                                                                    <th style="width: 25%;">Tên thiết bị</th>
+                                                                    <th style="width: 10%;" class="text-center">Số lô</th>
+                                                                    <th style="width: 10%;" class="text-center">Tồn kho
+                                                                    </th>
+                                                                    <th style="width: 15%;" class="text-center">Số lượng
+                                                                        thực tế</th>
+                                                                    <th style="width: 10%;">Số lượng lệch</th>
+                                                                    <th style="width: 15%;" class="text-center pe-5">Ghi
+                                                                        chú
+                                                                        thiết bị</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (!$hasSecondCheck)
+                                                                    <tr id="noDataAlert">
+                                                                        <td colspan="12" class="text-center">
+                                                                            <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                                                                role="alert"
+                                                                                style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                                                                <div class="mb-3">
+                                                                                    <i class="fas fa-file-invoice"
+                                                                                        style="font-size: 36px; color: #6c757d;"></i>
+                                                                                </div>
+                                                                                <div class="text-center">
+                                                                                    <h5
+                                                                                        style="font-size: 16px; font-weight: 600; color: #495057;">
+                                                                                        Phiếu Chưa Được Kiểm Lại
+                                                                                    </h5>
+                                                                                    <p
+                                                                                        style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                                                        Hiện Phiếu Kiểm Này Chưa Được Kiểm
+                                                                                        Lần 2
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
                                                                     </tr>
-                                                                </thead>
-                                                                <tbody>
+                                                                @else
                                                                     @foreach ($item['details'] as $detail)
                                                                         @if ($detail['check_round'] == 2)
-                                                                            <tr class="text-center hover-table pointer"
+                                                                            <tr class=" hover-table pointer"
                                                                                 data-bs-toggle="collapse"
                                                                                 data-bs-target="#collapse{{ $detail['equipment_code'] }}"
                                                                                 aria-expanded="false"
@@ -443,9 +399,12 @@
                                                                                     style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                                                     {{ $detail->equipment->name }}
                                                                                 </td>
-                                                                                <td>{{ $detail['batch_number'] }}</td>
-                                                                                <td>{{ $detail['current_quantity'] }}</td>
-                                                                                <td>{{ $detail['actual_quantity'] }}</td>
+                                                                                <td class="text-center">
+                                                                                    {{ $detail['batch_number'] }}</td>
+                                                                                <td class="text-center">
+                                                                                    {{ $detail['current_quantity'] }}</td>
+                                                                                <td class="text-center">
+                                                                                    {{ $detail['actual_quantity'] }}</td>
                                                                                 <td>
                                                                                     @php
                                                                                         $unequal =
@@ -464,11 +423,11 @@
                                                                                             +{{ abs($unequal) }}
                                                                                         </span>
                                                                                     @else
-                                                                                        <span style="color: #6c757d;">Không
+                                                                                        <span>Không
                                                                                             lệch</span>
                                                                                     @endif
                                                                                 </td>
-                                                                                <td>
+                                                                                <td class="text-center">
                                                                                     <span class="text-gray">
                                                                                         @if (!empty($detail['equipment_note']))
                                                                                             {{ $detail['equipment_note'] }}
@@ -480,191 +439,203 @@
                                                                             </tr>
                                                                         @endif
                                                                     @endforeach
-                                                                </tbody>
-                                                            </table>
-                                                        @endif
+                                                                @endif
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 </div>
                                             </div> <!-- End card-body -->
-                                        </div> <!-- End card -->
 
-                                        <div class="card-body py-3 text-end">
-                                            <div class="button-group">
-                                                @if ($item['status'] == 0)
-                                                    @if (session('isAdmin') == true)
-                                                        @if ($item->check_count == 2)
+                                            <div class="card-body py-3 mb-3 text-end">
+                                                <div class="button-group">
+                                                    @if ($item['status'] == 0)
+                                                        @if (session('isAdmin') == true)
+                                                            @if ($item->check_count == 2)
+                                                                <button class="btn btn-sm rounded-pill me-2"
+                                                                    style="background: linear-gradient(45deg, #4CAF50, #76FF03); color: white;"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#browse-{{ $item->code }}"
+                                                                    type="button">
+                                                                    <i class="fas fa-clipboard-check"
+                                                                        style="color: white;"></i>
+                                                                    Duyệt phiếu
+                                                                </button>
+                                                            @endif
+                                                        @endif
+
+                                                        @if (session('isAdmin') == true || ($item['check_count'] != 2 && $item['user_code'] == session('user_code')))
                                                             <button class="btn btn-sm rounded-pill me-2"
-                                                                style="background: linear-gradient(45deg, #4CAF50, #76FF03); color: white;"
+                                                                style="background: linear-gradient(45deg, #FF5252, #FF1744); color: white;"
                                                                 data-bs-toggle="modal"
-                                                                data-bs-target="#browse-{{ $item->code }}"
-                                                                type="button">
-                                                                <i class="fas fa-clipboard-check"
-                                                                    style="color: white;"></i>
-                                                                Duyệt phiếu
+                                                                data-bs-target="#delete-{{ $item->code }}">
+                                                                <i class="fa fa-trash" style="color: white;"></i> Xóa
+                                                                Phiếu
                                                             </button>
                                                         @endif
                                                     @endif
 
-                                                    @if (session('isAdmin') == true || ($item['check_count'] != 2 && $item['user_code'] == session('user_code')))
-                                                        <button class="btn btn-sm rounded-pill me-2"
-                                                            style="background: linear-gradient(45deg, #FF5252, #FF1744); color: white;"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#delete-{{ $item->code }}">
-                                                            <i class="fa fa-trash" style="color: white;"></i> Xóa Phiếu
-                                                        </button>
+                                                    @if ($item['check_count'] == 1 && $item['user_code'] != session('user_code'))
+                                                        <a href="{{ route('inventory_check.check', $item->code) }}"
+                                                            class="btn btn-sm rounded-pill me-2"
+                                                            style="background: linear-gradient(45deg, #00B0FF, #0091EA); color: white;">
+                                                            <i class="fa fa-check" style="color: white;"></i> Kiểm phiếu
+                                                            lại
+                                                        </a>
                                                     @endif
-                                                @endif
 
-                                                @if ($item['check_count'] == 1 && $item['user_code'] != session('user_code'))
-                                                    <a href="{{ route('inventory_check.check', $item->code) }}"
-                                                        class="btn btn-sm rounded-pill me-2"
-                                                        style="background: linear-gradient(45deg, #00B0FF, #0091EA); color: white;">
-                                                        <i class="fa fa-check" style="color: white;"></i> Kiểm phiếu lại
-                                                    </a>
-                                                @endif
+                                                    @if (session('isAdmin') == true && $item['status'] == 1)
+                                                        <a class="btn btn-sm rounded-pill me-2"
+                                                            style="background: linear-gradient(45deg, #FF4081, #F50057); color: white;"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#cancel-{{ $item['code'] }}">
+                                                            <i class="fa fa-times" style="color: white;"></i>
+                                                            Hủy phiếu kiểm kho
+                                                        </a>
+                                                    @endif
 
-                                                @if (session('isAdmin') == true && $item['status'] == 1)
-                                                    <a class="btn btn-sm rounded-pill me-2"
-                                                        style="background: linear-gradient(45deg, #FF4081, #F50057); color: white;"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#cancel-{{ $item['code'] }}">
-                                                        <i class="fa fa-times" style="color: white;"></i> Hủy phiếu kiểm
-                                                        kho
-                                                    </a>
-                                                @endif
+                                                    @if (session('isAdmin') == true && $item['status'] == 1)
+                                                        <button class="btn btn-sm btn-dark me-2 rounded-pill"
+                                                            type="button" onclick="printInvoice('{{ $item->code }}')">
+                                                            <i class="fa fa-print" style="margin-bottom: 2px;"></i>
+                                                            In Phiếu
+                                                        </button>
 
+                                                        @include('check_warehouse.print')
+                                                    @endif
 
-                                                @if (session('isAdmin') == true && $item['status'] == 1)
-                                                    <button class="btn btn-sm btn-dark me-2 rounded-pill" type="button"
-                                                        onclick="printInvoice('{{ $item->code }}')">
-                                                        <i class="fa fa-print" style="margin-bottom: 2px;"></i>
-                                                        In Phiếu
-                                                    </button>
-
-                                                    @include('check_warehouse.print')
-                                                @endif
-
-
-
-                                                <!-- Modal Duyệt Phiếu -->
-                                                <div class="modal fade" id="browse-{{ $item['code'] }}"
-                                                    data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                                    aria-labelledby="browseLabel-{{ $item['code'] }}" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered modal-md">
-                                                        <div class="modal-content border-0 shadow">
-                                                            <div class="modal-header bg-success text-white">
-                                                                <h5 class="modal-title text-white"
-                                                                    id="browseLabel-{{ $item['code'] }}">
-                                                                    Duyệt Phiếu Kiểm Kho
-                                                                </h5>
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <!-- Modal Duyệt Phiếu -->
+                                                    <div class="modal fade" id="browse-{{ $item['code'] }}"
+                                                        data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                                        aria-labelledby="browseLabel-{{ $item['code'] }}"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered modal-md">
+                                                            <div class="modal-content border-0 shadow">
+                                                                <div class="modal-header bg-success text-white">
+                                                                    <h5 class="modal-title text-white"
+                                                                        id="browseLabel-{{ $item['code'] }}">
+                                                                        Duyệt Phiếu Kiểm Kho
+                                                                    </h5>
+                                                                    <button type="button"
+                                                                        class="btn-close btn-close-white"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body text-center pb-0">
+                                                                    <form
+                                                                        action="{{ route('check_warehouse.approve', $item['code']) }}"
+                                                                        method="POST"
+                                                                        id="approveForm-{{ $item['code'] }}">
+                                                                        @csrf
+                                                                        <p class="text-dark mb-4">Bạn có chắc chắn muốn
+                                                                            duyệt
+                                                                            phiếu kiểm kho này?</p>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer justify-content-center border-0">
+                                                                    <button type="button"
+                                                                        class="btn btn-secondary btn-sm rounded-pill"
+                                                                        data-bs-dismiss="modal">
+                                                                        Đóng
+                                                                    </button>
+                                                                    <button type="button"
+                                                                        class="btn btn-success btn-sm rounded-pill load_animation"
+                                                                        onclick="event.preventDefault(); document.getElementById('approveForm-{{ $item['code'] }}').submit();">
+                                                                        Duyệt
+                                                                    </button>
+                                                                </div>
                                                             </div>
-                                                            <div class="modal-body text-center pb-0">
-                                                                <form
-                                                                    action="{{ route('check_warehouse.approve', $item['code']) }}"
-                                                                    method="POST" id="approveForm-{{ $item['code'] }}">
-                                                                    @csrf
-                                                                    <p class="text-dark mb-4">Bạn có chắc chắn muốn duyệt
-                                                                        phiếu kiểm kho này?</p>
-                                                                </form>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Modal Hủy Phiếu -->
+                                                    <div class="modal fade" id="cancel-{{ $item['code'] }}"
+                                                        data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                                        aria-labelledby="cancelLabel-{{ $item['code'] }}"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered modal-md">
+                                                            <div class="modal-content border-0 shadow">
+                                                                <div class="modal-header bg-danger text-white">
+                                                                    <h5 class="modal-title text-white"
+                                                                        id="cancelLabel-{{ $item['code'] }}">
+                                                                        Hủy Phiếu Kiểm Kho
+                                                                    </h5>
+                                                                    <button type="button"
+                                                                        class="btn-close btn-close-white"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body text-center pb-0">
+                                                                    <form
+                                                                        action="{{ route('check_warehouse.cancel', $item['code']) }}"
+                                                                        method="POST"
+                                                                        id="cancelForm-{{ $item['code'] }}">
+                                                                        @csrf
+                                                                        <p class="text-danger mb-4">
+                                                                            Bạn có chắc chắn muốn hủy phiếu kiểm kho này?
+                                                                            Số lượng vật tư sẽ được trả về trạng thái trước
+                                                                            khi
+                                                                            kiểm.
+                                                                        </p>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer justify-content-center border-0">
+                                                                    <button type="button"
+                                                                        class="btn btn-secondary btn-sm rounded-pill"
+                                                                        data-bs-dismiss="modal">Đóng</button>
+                                                                    <button type="button"
+                                                                        class="btn btn-danger btn-sm rounded-pill load_animation"
+                                                                        onclick="event.preventDefault(); document.getElementById('cancelForm-{{ $item['code'] }}').submit();">
+                                                                        Hủy Phiếu
+                                                                    </button>
+                                                                </div>
                                                             </div>
-                                                            <div class="modal-footer justify-content-center">
-                                                                <button type="button"
-                                                                    class="btn btn-secondary btn-sm rounded-pill"
-                                                                    data-bs-dismiss="modal">
-                                                                    Đóng
-                                                                </button>
-                                                                <button type="button"
-                                                                    class="btn btn-success btn-sm rounded-pill"
-                                                                    onclick="event.preventDefault(); document.getElementById('approveForm-{{ $item['code'] }}').submit();">
-                                                                    Duyệt
-                                                                </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Modal Xóa Phiếu -->
+                                                    <div class="modal fade" id="delete-{{ $item['code'] }}"
+                                                        data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                                        aria-labelledby="deleteLabel-{{ $item['code'] }}"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered modal-md">
+                                                            <div class="modal-content border-0 shadow">
+                                                                <div class="modal-header bg-danger text-white">
+                                                                    <h5 class="modal-title text-white"
+                                                                        id="deleteLabel-{{ $item['code'] }}">
+                                                                        Xóa Phiếu Kiểm Kho
+                                                                    </h5>
+                                                                    <button type="button"
+                                                                        class="btn-close btn-close-white"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body text-center pb-0">
+                                                                    <form
+                                                                        action="{{ route('check_warehouse.delete', $item['code']) }}"
+                                                                        method="POST"
+                                                                        id="deleteForm-{{ $item['code'] }}">
+                                                                        @csrf
+                                                                        <p class="text-danger mb-4">Bạn có chắc chắn muốn
+                                                                            xóa
+                                                                            phiếu kiểm kho này?</p>
+                                                                    </form>
+                                                                </div>
+                                                                <div class="modal-footer justify-content-center border-0">
+                                                                    <button type="button"
+                                                                        class="btn btn-secondary btn-sm rounded-pill load_animation"
+                                                                        data-bs-dismiss="modal">Đóng</button>
+                                                                    <button type="button"
+                                                                        class="btn btn-danger btn-sm rounded-pill"
+                                                                        onclick="event.preventDefault(); document.getElementById('deleteForm-{{ $item['code'] }}').submit();">
+                                                                        Xóa Phiếu
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <!-- Modal Hủy Phiếu -->
-                                                <div class="modal fade" id="cancel-{{ $item['code'] }}"
-                                                    data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                                    aria-labelledby="cancelLabel-{{ $item['code'] }}" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered modal-md">
-                                                        <div class="modal-content border-0 shadow">
-                                                            <div class="modal-header bg-danger text-white">
-                                                                <h5 class="modal-title text-white"
-                                                                    id="cancelLabel-{{ $item['code'] }}">
-                                                                    Hủy Phiếu Kiểm Kho
-                                                                </h5>
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body text-center pb-0">
-                                                                <form
-                                                                    action="{{ route('check_warehouse.cancel', $item['code']) }}"
-                                                                    method="POST" id="cancelForm-{{ $item['code'] }}">
-                                                                    @csrf
-                                                                    <p class="text-danger mb-4">
-                                                                        Bạn có chắc chắn muốn hủy phiếu kiểm kho này?
-                                                                        Số lượng vật tư sẽ được trả về trạng thái trước khi
-                                                                        kiểm.
-                                                                    </p>
-                                                                </form>
-                                                            </div>
-                                                            <div class="modal-footer justify-content-center">
-                                                                <button type="button"
-                                                                    class="btn btn-secondary btn-sm rounded-pill"
-                                                                    data-bs-dismiss="modal">Đóng</button>
-                                                                <button type="button"
-                                                                    class="btn btn-danger btn-sm rounded-pill"
-                                                                    onclick="event.preventDefault(); document.getElementById('cancelForm-{{ $item['code'] }}').submit();">
-                                                                    Hủy Phiếu
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Modal Xóa Phiếu -->
-                                                <div class="modal fade" id="delete-{{ $item['code'] }}"
-                                                    data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                                    aria-labelledby="deleteLabel-{{ $item['code'] }}" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered modal-md">
-                                                        <div class="modal-content border-0 shadow">
-                                                            <div class="modal-header bg-danger text-white">
-                                                                <h5 class="modal-title text-white"
-                                                                    id="deleteLabel-{{ $item['code'] }}">
-                                                                    Xóa Phiếu Kiểm Kho
-                                                                </h5>
-                                                                <button type="button" class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body text-center pb-0">
-                                                                <form
-                                                                    action="{{ route('check_warehouse.delete', $item['code']) }}"
-                                                                    method="POST" id="deleteForm-{{ $item['code'] }}">
-                                                                    @csrf
-                                                                    <p class="text-danger mb-4">Bạn có chắc chắn muốn xóa
-                                                                        phiếu kiểm kho này?</p>
-                                                                </form>
-                                                            </div>
-                                                            <div class="modal-footer justify-content-center">
-                                                                <button type="button"
-                                                                    class="btn btn-secondary btn-sm rounded-pill"
-                                                                    data-bs-dismiss="modal">Đóng</button>
-                                                                <button type="button"
-                                                                    class="btn btn-danger btn-sm rounded-pill"
-                                                                    onclick="event.preventDefault(); document.getElementById('deleteForm-{{ $item['code'] }}').submit();">
-                                                                    Xóa Phiếu
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
                                             </div>
                                         </div>
-                                    </div> <!-- End flex-lg-row-fluid -->
                                 </td>
                             </tr>
                         @empty
@@ -694,27 +665,23 @@
             </div> <!-- End table-responsive -->
         </div> <!-- End card-body -->
 
-        <div class="card-body py-3">
-
-        </div>
-
         @if ($inventoryChecks->count() > 0)
-            <div class="card-body py-3 d-flex justify-content-between align-items-center">
+            <div class="card-body py-3 mt-0 pt-0 d-flex justify-content-between align-items-center">
                 <div class="filter-bar">
                     <ul class="nav nav-pills">
                         <li class="nav-item" style="font-size: 11px;">
-                            <p class="nav-link text-dark rounded-pill" style="background-color: #f2f4f7; color: #333;">
+                            <p class="nav-link text-white bg-primary rounded-pill">
                                 Tất cả <span>({{ $countAll }})</span>
                             </p>
                         </li>
                         <li class="nav-item" style="font-size: 11px;">
-                            <p class="nav-link rounded-pill" style="background-color: #e0f7e9; color: #2a9d8f;">
+                            <p class="nav-link text-white bg-success rounded-pill">
                                 Đã duyệt <span>({{ $countBalanced }})</span>
                             </p>
                         </li>
                         <li class="nav-item" style="font-size: 11px;">
-                            <p class="nav-link rounded-pill" style="background-color: #f8e0e0; color: #d9534f;">
-                                Chưa duyệt <span>({{ $countDraft }})</span>
+                            <p class="nav-link text-white bg-danger rounded-pill">
+                                Chờ duyệt <span>({{ $countDraft }})</span>
                             </p>
                         </li>
                     </ul>

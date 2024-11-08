@@ -478,32 +478,27 @@ function addAllProducts() {
                     <tr data-index="${materialData.length}" class="unchecked">
                         <td>${materialData.length + 1}</td>
                         <td class="text-left">${inventory.equipment_code}</td>
-                        <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${
-                            product.name
-                        }</td>
+                        <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${product.name
+                    }</td>
                         <td>${inventory.batch_number}</td>
                         <td>${inventory.current_quantity}</td>
                         <td>
                             <input type="number" min="0" class="actual-quantity-input" 
                                 style="width: 70px; height: 40px; border-radius: 8px;" 
-                                oninput="validateQuantity(this, ${
-                                    materialData.length
-                                }); checkInputs()">
+                                oninput="validateQuantity(this, ${materialData.length
+                    }); checkInputs()">
                         </td>
-                        <td class="unequal-count" id="unequal-count-${
-                            materialData.length
-                        }">0</td>
+                        <td class="unequal-count" id="unequal-count-${materialData.length
+                    }">0</td>
                         <td>
                             <textarea class="equipment_note rounded-3" 
-                                placeholder="" name="equipment_note_${
-                                    materialData.length
-                                }"
+                                placeholder="" name="equipment_note_${materialData.length
+                    }"
                                 style="width: 150px; height: 40px; border-radius: 8px; padding: 5px; font-size: 12px;"></textarea>
                         </td>
                         <td>
-                            <a href="#" class="text-dark" title="Xóa thiết bị" onclick="removeProduct(${
-                                materialData.length
-                            })">
+                            <a href="#" class="text-dark" title="Xóa thiết bị" onclick="removeProduct(${materialData.length
+                    })">
                                 <i class="fa fa-trash"></i>
                             </a>
                         </td>

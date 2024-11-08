@@ -494,6 +494,15 @@
                                                                 {{ number_format($total_after_discount_and_vat, 0, ',', '.') }}
                                                                 VND</td>
                                                         </tr>
+                                                        <tr class="text-center"
+                                                            style="font-weight: bold; background-color: #f8f9fa;">
+                                                            <td colspan="1" class="text-left ps-5">Tổng Cộng:</td>
+                                                            <td></td>
+                                                            <td colspan="4"></td>
+                                                            <td colspan="1" class="text-center pe-5">
+                                                                {{ number_format($total_last, 0, ',', '.') }} VND
+                                                            </td>
+                                                        </tr>
                                                     @empty
                                                         <tr>
                                                             <td colspan="12" class="text-center">
@@ -522,16 +531,6 @@
                                                             </td>
                                                         </tr>
                                                     @endforelse
-                                                    <tr class="text-center"
-                                                        style="font-weight: bold; background-color: #f8f9fa;">
-                                                        <td colspan="1" class="text-left ps-5">Tổng Cộng:</td>
-                                                        <td></td>
-                                                        <td colspan="4"></td>
-                                                        <td colspan="1" class="text-center pe-5">
-                                                            {{ number_format($total_last, 0, ',', '.') }} VND
-                                                        </td>
-                                                    </tr>
-
                                                 </tbody>
                                             </table>
                                         </div>

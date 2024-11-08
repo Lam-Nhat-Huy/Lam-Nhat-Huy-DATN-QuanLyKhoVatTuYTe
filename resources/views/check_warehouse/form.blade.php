@@ -199,8 +199,6 @@
                         : route('check_warehouse.store'));
         @endphp
 
-
-
         <form action="{{ $route }}" method="POST">
             @csrf
             <div class="row">
@@ -415,7 +413,8 @@
                         <!-- Buttons -->
                         <div class="d-grid gap-3">
                             <button name="status" value="0" onclick="submitMaterials()" type="submit"
-                                class="btn btn-lg rounded-pill text-white" style="background-color: #66CC00;">Lưu phiếu
+                                class="btn btn-lg rounded-pill text-white load_animation"
+                                style="background-color: #66CC00;">Lưu phiếu
                             </button>
 
                             <!-- Modal Hoàn thành -->
@@ -488,7 +487,6 @@
             var products = @json($equipmentsWithStock);
 
             var productDetails = @json($equipmentsWithJson).original;
-            console.log(productDetails);
         </script>
         <script src="{{ asset('js/check_warehouse/update_warehouse.js') }}"></script>
     @elseif ($action === 'excel')

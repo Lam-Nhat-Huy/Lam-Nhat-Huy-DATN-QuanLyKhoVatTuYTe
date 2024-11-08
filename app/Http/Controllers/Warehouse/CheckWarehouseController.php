@@ -45,7 +45,7 @@ class CheckWarehouseController extends Controller
             'details.equipment',
             'user',
             'recheckUser'
-        ])->orderBy('created_at', 'DESC')->paginate(10);
+        ])->orderBy('created_at', 'DESC');
 
         $countAll = Inventory_checks::count();
         $countBalanced = Inventory_checks::where('status', 1)->count();
@@ -53,6 +53,35 @@ class CheckWarehouseController extends Controller
         $countCanceled = Inventory_checks::where('status', 3)->count();
 
         $users = Users::all();
+
+        $kw = $request->input('kw');
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+        $userCode = $request->input('us');
+        $status = $request->input('stt');
+
+        $inventoryChecks = $inventoryChecks
+            ->where(function ($q) use ($kw) {
+                if (!is_null($kw)) {
+                    $q->where('code', 'LIKE', "%{$kw}%")
+                        ->orWhere('note', 'LIKE', "%{$kw}%");
+                }
+            })
+            ->when($startDate, function ($q) use ($startDate) {
+                return $q->whereDate('check_date', '>=', $startDate);
+            })
+            ->when($endDate, function ($q) use ($endDate) {
+                return $q->whereDate('check_date', '<=', $endDate);
+            })
+            ->when(!is_null($status), function ($q) use ($status) {
+                return $q->where('status', $status);
+            })
+            ->when($userCode, function ($q) use ($userCode) {
+                return $q->where('user_code', $userCode)
+                    ->orWhere('recheck_user_code', $userCode);
+            })
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10);
 
         return view("{$this->route}.check", compact(
             'title',
@@ -618,43 +647,6 @@ class CheckWarehouseController extends Controller
             ]);
         }
     }
-
-    public function search(Request $request)
-    {
-        $title = 'Kiểm Kho';
-
-        $query = $request->input('search');
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
-        $userCode = $request->input('user_code');
-        $status = $request->input('status');
-
-        $inventoryChecks = Inventory_checks::with(['user'])
-            ->where(function ($q) use ($query) {
-                $q->where('code', 'LIKE', "%{$query}%")
-                    ->orWhere('note', 'LIKE', "%{$query}%");
-            })
-            ->when($startDate, function ($q) use ($startDate) {
-                return $q->whereDate('check_date', '>=', $startDate);
-            })
-            ->when($endDate, function ($q) use ($endDate) {
-                return $q->whereDate('check_date', '<=', $endDate);
-            })
-            ->when(!is_null($status), function ($q) use ($status) {
-                return $q->where('status', $status);
-            })
-            ->when($userCode, function ($q) use ($userCode) {
-                return $q->where('user_code', $userCode);
-            })
-            ->orderBy('created_at', 'DESC')
-            ->get();
-
-        return view("{$this->route}.search", [
-            'title' => $title,
-            'inventoryChecks' => $inventoryChecks,
-        ]);
-    }
-
 
     function generateRandomString($length = 9)
     {
