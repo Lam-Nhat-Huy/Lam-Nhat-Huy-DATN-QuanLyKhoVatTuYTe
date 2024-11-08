@@ -3,44 +3,21 @@
 
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>@yield('title', 'BeeSoft')</title>
-
-    <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
-
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('css/fullcalendar.bundle.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('css/plugins.bundle.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
-    <link rel="shortcut icon" href="{{ asset('image/logo_warehouse.png') }}" />
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
-
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
-
-    {{-- Link css riêng cho mỗi view blade --}}
-    @yield('styles')
-
+    <title>Chatbot Kiểm tra Tồn kho</title>
     <style>
-        body,
-        input,
-        select,
-        textarea,
-        button {
-            font-family: 'Noto Sans', sans-serif;
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
         }
 
         .chat-container {
+            width: 750px;
             /* Dài thêm chiều ngang */
             max-width: 100%;
             background-color: #ffffff;
@@ -57,7 +34,7 @@
             color: #fff;
             padding: 15px;
             text-align: center;
-            font-size: 16px;
+            font-size: 20px;
             /* Kích thước font lớn hơn */
             border-bottom: 2px solid #ddd;
         }
@@ -93,11 +70,15 @@
             color: #333;
         }
 
+        .suggestions {
+            padding: 10px;
+        }
+
         .suggestion {
             background-color: #4CAF50;
             /* Màu xanh lá cho gợi ý */
             color: white;
-            padding: 4px;
+            padding: 10px 15px;
             /* Thay đổi padding để gợi ý lớn hơn */
             margin: 5px;
             border-radius: 20px;
@@ -157,125 +138,37 @@
     </style>
 </head>
 
-<body id="kt_body" data-is-admin="{{ session('isAdmin', false) ? 'true' : 'false' }}"
-    class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
-    style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
-
-    <div class="d-flex flex-column flex-root">
-
-        <div class="page d-flex flex-row flex-column-fluid">
-
-            <navbar>
-                @include('master_layout.components.navbar')
-            </navbar>
-
-            <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-
-                <sidebar>
-                    @include('master_layout.components.sidebar')
-                </sidebar>
-
-                <main>
-                    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-                        <div class="toolbar" id="kt_toolbar">
-                            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-                                <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
-                                    data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-                                    class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                                    <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">
-                                        @yield('title', 'BeeSoft')
-                                    </h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="post d-flex flex-column-fluid" id="kt_post">
-                            <div id="kt_content_container" class="container-xxl">
-                                <div class="row gy-5 g-xl-8">
-                                    <div class="col-xxl-12">
-                                        @yield('content')
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-
-                <footer>
-                    @include('master_layout.components.footer')
-                </footer>
-
-                <notification>
-                    @include('master_layout.components.notification_modal')
-                </notification>
-
-                <scrolltop>
-                    @include('master_layout.components.scroll_top')
-                </scrolltop>
-            </div>
+<body>
+    <!-- Chat Container -->
+    <div id="chatContainer" class="chat-container" style="display: none;">
+        <div class="chat-header">Chatbot Kiểm tra Tồn kho</div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-bubble bot">Bạn cần tra cứu tồn kho của thiết bị nào ạ?</div>
         </div>
-    </div>
 
-    <div id="loading">
-        <div aria-live="assertive" role="alert" class="loader"></div>
-    </div>
-
-    <div id="loading-overlay" class="loading-overlay"></div>
-
-    <img class="open-chatbox-btn rounded-circle shadow" style="width: 50px; height: 50px; z-index: 9999;"
-        id="open-chatbox-btn" data-bs-toggle="modal" data-bs-target="#browse"
-        src="https://images.g2crowd.com/uploads/product/image/large_detail/large_detail_b541e326e0acd44b1ef931c92154c6b9/ai-chat.png"
-        alt="">
-
-    <!-- Modal Duyệt Phiếu -->
-    <div class="modal fade" id="browse" data-bs-backdrop="true" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="browseLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content border-0 shadow">
-                <!-- Chat Container -->
-                <div id="chatContainer" class="chat-container" style="display: block;">
-                    <div class="chat-header">Chatbot kiểm tra tồn kho</div>
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="chat-bubble bot">Bạn cần tra cứu tồn kho của thiết bị nào ạ?</div>
-                    </div>
-
-                    <div class="suggestions container text-center">
-                        <div class="row">
-                            <div class="col">
-                                <div class="suggestion" style="font-size: 12px;"
-                                    onclick="sendPredefinedMessage('Tồn kho của cân điện tử?')">
-                                    Tồn kho của cân
-                                    điện tử?</div>
-                            </div>
-                            <div class="col">
-                                <div class="suggestion" style="font-size: 12px;"
-                                    onclick="sendPredefinedMessage('Số lượng của tủ y tế?')">
-                                    Số lượng của tủ y
-                                    tế?</div>
-                            </div>
-                            <div class="col">
-                                <div class="suggestion" style="font-size: 12px;"
-                                    onclick="sendPredefinedMessage('Thiết bị nào gần hết hàng?')">
-                                    Thiết bị nào
-                                    gần hết hàng?</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chat-footer">
-                        <input type="text" style="font-size: 12px;" id="promptInput" placeholder="Hỏi về tồn kho..."
-                            class="form-control">
-                        <button class="btn btn-primary" style="font-size: 12px;" onclick="sendMessage()">Gửi</button>
-                    </div>
+        <div class="suggestions container text-center">
+            <div class="row">
+                <div class="col">
+                    <div class="suggestion" onclick="sendPredefinedMessage('Tồn kho của cân điện tử?')">Tồn kho của cân
+                        điện tử?</div>
                 </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm rounded-pill" data-bs-dismiss="modal">
-                        Đóng
-                    </button>
+                <div class="col">
+                    <div class="suggestion" onclick="sendPredefinedMessage('Số lượng của tủ y tế?')">Số lượng của tủ y
+                        tế?</div>
+                </div>
+                <div class="col">
+                    <div class="suggestion" onclick="sendPredefinedMessage('Thiết bị nào gần hết hàng?')">Thiết bị nào
+                        gần hết hàng?</div>
                 </div>
             </div>
         </div>
+
+        <div class="chat-footer">
+            <input type="text" id="promptInput" placeholder="Hỏi về tồn kho..." class="form-control">
+            <button class="btn btn-primary" onclick="sendMessage()">Gửi</button>
+        </div>
     </div>
+
 
     <script>
         function addMessage(content, sender = 'bot') {
@@ -287,7 +180,7 @@
 
             if (sender === 'bot') {
                 let index = 0;
-                const typingSpeed = Math.max(5, 20 - content.length * 0.15); // Tăng độ mượt mà với tốc độ điều chỉnh
+                const typingSpeed = Math.max(5, 30 - content.length * 0.15); // Tăng độ mượt mà với tốc độ điều chỉnh
 
                 function typeEffect() {
                     if (index < content.length) {
@@ -380,33 +273,6 @@
             sendMessage();
         }
     </script>
-
-    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
-
-    <script src="{{ asset('js/cancelVoice.js') }}"></script>
-
-    <script src="{{ asset('js/main.js') }}"></script>
-
-    <script src="{{ asset('js/plugins.bundle.js') }}"></script>
-
-    <script src="{{ asset('js/scripts.bundle.js') }}"></script>
-
-    <script src="{{ asset('js/fullcalender.bundle.js') }}"></script>
-
-    <script src="{{ asset('js/widgets.js') }}"></script>
-
-    <script src="{{ asset('js/chat.js') }}"></script>
-
-    <script src="{{ asset('js/create-app.js') }}"></script>
-
-    <script src="{{ asset('js/upgrade-plan.js') }}"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-    <script src="{{ asset('lib/library.js') }}"></script>
-
-    {{-- Link js riêng cho mỗi view blade --}}
-    @yield('scripts')
 </body>
 
 </html>
