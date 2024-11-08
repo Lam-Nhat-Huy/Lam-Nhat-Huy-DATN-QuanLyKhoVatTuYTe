@@ -523,7 +523,7 @@
                                                         </tr>
                                                     @endforelse
                                                     <tr class="text-center"
-                                                        style="font-weight: bold; background-color: #f8f9fa; border-top: 2px solid #000;">
+                                                        style="font-weight: bold; background-color: #f8f9fa;">
                                                         <td colspan="1" class="text-left ps-5">Tổng Cộng:</td>
                                                         <td></td>
                                                         <td colspan="4"></td>

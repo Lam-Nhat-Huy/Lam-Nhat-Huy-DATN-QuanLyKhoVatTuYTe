@@ -145,7 +145,7 @@
                                                             @endforelse
                                                             @if ($getImportBetweenDate->count() > 1)
                                                                 <tr class="text-center"
-                                                                    style="font-weight: bold; background-color: #f8f9fa; border-top: 2px solid #000;">
+                                                                    style="font-weight: bold; background-color: #f8f9fa;">
                                                                     <td colspan="6" class="text-left ps-7">Tổng Cộng</td>
                                                                     <td>{{ $itemQuantity }}</td>
                                                                     <td>{{ number_format($totalPrice2, '0', ',', '.') }}
@@ -240,7 +240,7 @@
                                                             @endforelse
                                                             @if ($getExportBetweenDate->count() > 1)
                                                                 <tr class="text-center"
-                                                                    style="font-weight: bold; background-color: #f8f9fa; border-top: 2px solid #000;">
+                                                                    style="font-weight: bold; background-color: #f8f9fa;">
                                                                     <td colspan="4" class="text-left ps-5">Tổng Cộng
                                                                     </td>
                                                                     <td>{{ $totalQuantityExport }}</td>
