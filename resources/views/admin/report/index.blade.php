@@ -186,16 +186,19 @@
                                 </tr>
                             @empty
                                 <tr id="noDataAlert">
-                                    <td colspan="10" class="text-center">
+                                    <td colspan="7" class="text-center">
                                         <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
                                             role="alert"
                                             style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
                                             <div class="mb-3">
-                                                <i class="fas fa-ban" style="font-size: 36px; color: #6c757d;"></i>
+                                                <i class="fas fa-clipboard-check"
+                                                    style="font-size: 36px; color: #6c757d;"></i>
                                             </div>
                                             <div class="text-center">
-                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Không Có Dữ
-                                                    Liệu</h5>
+                                                <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Báo cáo
+                                                    trống</h5>
+                                                <p style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                    Không có dữ liệu nào cho báo cáo trong khoảng thời gian đã chọn.
                                                 </p>
                                             </div>
                                         </div>

@@ -24,20 +24,21 @@ class DashboardController extends Controller
             ->whereNull('deleted_at')
             ->first();
 
-        // Example forecast data (replace with actual logic)
         $forecastData = $this->calculateForecast();
         $forecastTrendData = $this->calculateTrendForecast();
 
-        $threshold = 10; // Ngưỡng cảnh báo tồn kho (ví dụ 10)
+        $threshold = 10;
         $warnings = $this->getLowInventoryWarnings($threshold);
         $exportLog = $this->getExportLog();
         $importTotal = Receipt_details::whereMonth('created_at', now()->month)
             ->sum('quantity');
         $exportTotal = Exports::whereMonth('export_date', now()->month)
-            ->join('export_details', 'exports.code', '=', 'export_details.export_code')  // Kết hợp bảng exports và export_details
-            ->sum('export_details.quantity');  // Tính tổng số lượng từ bảng export_details\\
+            ->join('export_details', 'exports.code', '=', 'export_details.export_code')
+            ->sum('export_details.quantity');
 
         $allReceiptDetail = Receipt_details::whereMonth('created_at', now()->month)->get();
+
+        $monthlyImportExpenses = $this->getMonthlyImportExpenses();
 
         $totalPrice = 0;
         $totalDiscount = 0;
@@ -90,15 +91,15 @@ class DashboardController extends Controller
             'importTotal',
             'exportTotal',
             'expenseTotal',
-            'inventoryData'
+            'inventoryData',
+            'monthlyImportExpenses'
         ));
     }
 
     private function calculateForecast()
     {
-        // Example logic: generate dummy forecast data for the next 5 months
-        $currentInventory = 20; // Example current inventory
-        $monthlyReduction = 3; // Example reduction per month
+        $currentInventory = 20;
+        $monthlyReduction = 3;
 
         $forecast = [];
         for ($i = 1; $i <= 5; $i++) {
@@ -115,7 +116,7 @@ class DashboardController extends Controller
     {
         $lowInventories = Inventories::where('current_quantity', '<=', $threshold)
             ->whereNull('deleted_at')
-            ->paginate(5, ['*'], 'low_inventory_page');  // Đặt tên cho phân trang
+            ->paginate(5, ['*'], 'low_inventory_page');
 
         return $lowInventories;
     }
@@ -126,7 +127,7 @@ class DashboardController extends Controller
         $exports = Exports::with('exportDetail.equipments')
             ->whereNull('deleted_at')
             ->orderBy('export_date', 'desc')
-            ->paginate(5, ['*'], 'export_log_page');  // Đặt tên cho phân trang
+            ->paginate(5, ['*'], 'export_log_page');
 
         return $exports;
     }
@@ -199,5 +200,20 @@ class DashboardController extends Controller
         $query = Receipt_details::whereMonth('created_at', now()->month)->get();
 
         return $query;
+    }
+
+    public function getMonthlyImportExpenses()
+    {
+        // Query to calculate monthly expenses for imports
+        $monthlyExpenses = Receipt_details::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('SUM(quantity * price) as total_expense')
+        )
+            ->whereYear('created_at', now()->year)
+            ->groupBy('month')
+            ->orderBy('month', 'asc')
+            ->get();
+
+        return $monthlyExpenses;
     }
 }

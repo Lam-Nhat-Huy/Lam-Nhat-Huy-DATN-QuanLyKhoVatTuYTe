@@ -578,7 +578,7 @@ class ImportController extends Controller
             $latestInventoryCheck = Inventory_checks::latest('created_at')->first();
 
             if ($latestInventoryCheck && $latestInventoryCheck->created_at > $receipt->created_at) {
-                toastr()->error('Không thể xóa phiếu nhập vì có phiếu kiểm kho mới hơn.');
+                toastr()->error('Không thể xóa phiếu nhập vì đã có lần kiểm kê kho sau thời điểm phiếu nhập này.');
                 return redirect()->back();
             }
 
@@ -603,7 +603,7 @@ class ImportController extends Controller
                 toastr()->success('Đã xóa phiếu nhập kho.');
                 return redirect()->back();
             } else {
-                toastr()->error('Không thể hủy phiếu vì số lượng nhập đang lớn hơn số lượng tồn kho.');
+                toastr()->error('Không thể hủy phiếu nhập vì số lượng hàng nhập vượt quá số lượng tồn kho hiện có.');
                 return redirect()->back();
             }
         }

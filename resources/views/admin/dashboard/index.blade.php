@@ -245,13 +245,15 @@
                                             <span class="text-muted fw-bold d-block mb-1">
                                                 Ngày kiểm: {{ $check->created_at->format('d-m-Y H:i:s') }}
                                             </span>
-                                            <span class="text-muted fw-bold d-block mb-1">Người kiểm lần 1:
-                                                {{ $check->user->last_name ?? '' }}
-                                                {{ $check->user->first_name ?? 'Chưa kiểm lần 1' }}
+                                            <span class="text-muted fw-bold mb-1">
+                                                Người kiểm lần 1:
+                                                <strong>{{ $check->user->last_name ?? '' }}</strong>
+                                                <strong>{{ $check->user->first_name ?? 'Chưa kiểm lần 1' }}</strong>
                                             </span>
-                                            <span class="text-muted fw-bold d-block">Người kiểm lần 2:
-                                                {{ $check->recheckUser->last_name ?? '' }}
-                                                {{ $check->recheckUser->first_name ?? 'Chưa kiểm lần 2' }}
+                                            <span class="text-muted fw-bold">
+                                                - Người kiểm lần 2:
+                                                <strong>{{ $check->recheckUser->last_name ?? '' }}</strong>
+                                                <strong>{{ $check->recheckUser->first_name ?? 'Chưa kiểm lần 2' }}</strong>
                                             </span>
                                         </div>
                                     </div>
@@ -358,8 +360,11 @@
                                             <i class="fa fa-exclamation-triangle text-danger fs-3 me-1"></i>
                                         </div>
                                         <div class="fw-normal text-muted ps-3">
-                                            Thiết bị <strong>{{ $warning->equipments->name }}</strong> (Mã:
-                                            <strong>{{ $warning->code }}</strong>) chỉ
+                                            Thiết bị <strong>{{ $warning->equipments->name }}</strong>
+                                            (Mã:
+                                            <strong>{{ $warning->code }}</strong>)
+                                            số lô <strong>{{ $warning->batch_number }}</strong>
+                                            chỉ
                                             còn
                                             <strong>{{ $warning->current_quantity }}</strong> đơn vị trong kho.
                                             @if ($warning->current_quantity <= 0)
@@ -450,7 +455,7 @@
                                             <table class="table table-striped table-hover border shadow-sm">
                                                 <thead class="bg-dark text-white fw-bolder">
                                                     <tr>
-                                                        <th class="ps-5 text-center" style="width: 25%;">Thiết Bị</th>
+                                                        <th class="ps-5 text-center" style="width: 25%;">Thiết bị</th>
                                                         <th class="text-center">Lô</th>
                                                         <th class="text-center">Giá</th>
                                                         <th class="text-center">SL</th>
@@ -517,15 +522,16 @@
                                                             </td>
                                                         </tr>
                                                     @endforelse
-                                                    <tr
-                                                        class="{{ $getEquipmentImportMonth->count() == 0 ? 'd-none' : '' }}">
-                                                        <td colspan="1" class="text-center ps-5">Tổng Cộng:</td>
+                                                    <tr class="text-center"
+                                                        style="font-weight: bold; background-color: #f8f9fa; border-top: 2px solid #000;">
+                                                        <td colspan="1" class="text-left ps-5">Tổng Cộng:</td>
                                                         <td></td>
                                                         <td colspan="4"></td>
                                                         <td colspan="1" class="text-center pe-5">
                                                             {{ number_format($total_last, 0, ',', '.') }} VND
                                                         </td>
                                                     </tr>
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -558,8 +564,8 @@
             <div class="col-xxl-6 mx-auto">
                 <div class="card mb-5 mb-xl-8 border-0 shadow">
                     <div class="forecast-container p-4">
-                        <h5 class="forecast-title text-center mb-4 fs-5 my-3">DỰ BÁO TỒN KHO TRONG TƯƠNG LAI</h5>
-                        <canvas id="forecastChart" width="400" height="200"></canvas>
+                        <h5 class="forecast-title text-center mb-4 fs-5 my-3">THỐNG KÊ CHI PHÍ NHẬP HÀNG THEO THÁNG</h5>
+                        <canvas id="expenseChart" width="400" height="200"></canvas>
                     </div>
                 </div>
             </div>
@@ -632,25 +638,43 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var forecastData = @json($forecastTrendData);
-            var ctx = document.getElementById('forecastChart').getContext('2d');
+            var monthlyExpenses = @json($monthlyImportExpenses);
 
+            var months = monthlyExpenses.map(item => {
+                return new Date(0, item.month - 1).toLocaleString('default', {
+                    month: 'long'
+                });
+            });
+            var expenses = monthlyExpenses.map(item => item.total_expense);
+
+            var ctx = document.getElementById('expenseChart').getContext('2d');
             new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
-                    labels: forecastData.map(item => item.month),
+                    labels: months,
                     datasets: [{
-                        label: 'Dự báo tồn kho',
-                        data: forecastData.map(item => item.inventory),
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 2,
-                        fill: false
+                        label: 'Chi phí nhập hàng theo tháng',
+                        data: expenses,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
                     }]
                 },
                 options: {
+                    responsive: true,
                     scales: {
                         y: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'VND'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Tháng'
+                            }
                         }
                     }
                 }

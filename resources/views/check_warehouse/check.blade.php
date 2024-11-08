@@ -98,7 +98,7 @@
                             <th style="width: 10%;">Lệch tăng</th>
                             <th style="width: 10%;">Lần kiểm</th>
                             <th style="width: 15%;">Ghi chú</th>
-                            <th style="width: 10%;">Trạng Thái</th>
+                            <th style="width: 10%;">Trạng thái</th>
                         </tr>
                     </thead>
 

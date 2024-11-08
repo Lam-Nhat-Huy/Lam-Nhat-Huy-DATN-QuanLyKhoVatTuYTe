@@ -525,7 +525,7 @@ class ExportController extends Controller
 
             $latestInventoryCheck = Inventory_checks::latest('created_at')->first();
             if ($latestInventoryCheck && $latestInventoryCheck->created_at > $export->created_at) {
-                toastr()->error('Không thể xóa phiếu xuất vì có phiếu kiểm kho mới hơn.');
+                toastr()->error('Không thể xóa phiếu xuất vì đã có lần kiểm kê kho sau thời điểm phiếu xuất này.');
                 return redirect()->back();
             }
 
