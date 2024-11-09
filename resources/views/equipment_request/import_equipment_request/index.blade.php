@@ -64,7 +64,7 @@
                 <div class="col-lg-5 col-md-12 col-sm-12">
                     <div class="row align-items-center">
                         <div class="col-md-6">
-                            <input type="search" name="kw" placeholder="Tìm kiếm mã phiếu nhập.."
+                            <input type="search" name="kw" placeholder="Tìm kiếm mã phiếu yêu cầu mua hàng.."
                                 class="mt-2 mb-2 form-control form-control-sm form-control-solid rounded-pill border border-success w-100"
                                 value="{{ request()->kw }}">
                         </div>

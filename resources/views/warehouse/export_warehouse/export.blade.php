@@ -170,6 +170,14 @@
                                                                                 {{ $item->suppliers->name ?? 'Không Có' }}
                                                                             </td>
                                                                         </tr>
+                                                                    @else
+                                                                        <tr>
+                                                                            <td class=""><strong>Lý Do Hủy</strong>
+                                                                            </td>
+                                                                            <td class="text-dark">
+                                                                                {{ $item->reason ?? 'Không Có' }}
+                                                                            </td>
+                                                                        </tr>
                                                                     @endif
                                                                 </tbody>
                                                             </table>
@@ -409,6 +417,16 @@
                                                                                                     {{ $item->supplier->name ?? 'Không có' }}
                                                                                                 </td>
                                                                                             </tr>
+                                                                                        @else
+                                                                                            <tr>
+                                                                                                <td class="w-25">
+                                                                                                    <strong>Lý Do
+                                                                                                        Hủy:</strong>
+                                                                                                </td>
+                                                                                                <td class="text-dark">
+                                                                                                    {{ $item->reason ?? 'Không có' }}
+                                                                                                </td>
+                                                                                            </tr>
                                                                                         @endif
                                                                                         <tr>
                                                                                             <td class="w-25">
@@ -597,12 +615,12 @@
                 <div class="modal-dialog modal-dialog-centered modal-md">
                     <div class="modal-content border-0 shadow">
                         <div class="modal-header bg-danger text-white">
-                            <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Hủy Phiếu Nhập</h5>
+                            <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Hủy Phiếu Xuất</h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-center" style="padding-bottom: 0px;">
-                            <p class="text-danger mb-4">Bạn có chắc chắn muốn hủy phiếu nhập đã chọn?</p>
+                            <p class="text-danger mb-4">Bạn có chắc chắn muốn hủy phiếu xuất đã chọn?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
@@ -625,7 +643,7 @@
                     <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title text-white" id="browseLabel-{{ $item->code }}">
                             Duyệt
-                            Phiếu Nhập Kho</h5>
+                            Phiếu Xuất Kho</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
@@ -633,7 +651,7 @@
                         @csrf
                         <input type="hidden" name="browse_code" value="{{ $item->code }}">
                         <div class="modal-body text-center" style="padding-bottom: 0px;">
-                            <p class="text-primary mb-4">Bạn có chắc chắn muốn duyệt phiếu nhập kho
+                            <p class="text-primary mb-4">Bạn có chắc chắn muốn duyệt phiếu xuất kho
                                 này?
                             </p>
                         </div>
@@ -656,7 +674,7 @@
                 <div class="modal-content border-0 shadow">
                     <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title text-white" id="createLabel-{{ $item->code }}">
-                            Tạo Phiếu Nhập Kho
+                            Tạo Phiếu Xuất Kho
                         </h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                             aria-label="Close"></button>
@@ -665,7 +683,7 @@
                         @csrf
                         <input type="hidden" name="create_code" value="{{ $item->code }}">
                         <div class="modal-body text-center" style="padding-bottom: 0px;">
-                            <p class="text-primary mb-4">Bạn có chắc chắn muốn tạo phiếu nhập kho
+                            <p class="text-primary mb-4">Bạn có chắc chắn muốn tạo phiếu xuất kho
                                 này?
                             </p>
                         </div>

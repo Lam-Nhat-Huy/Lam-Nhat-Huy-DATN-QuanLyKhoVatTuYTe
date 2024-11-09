@@ -51,8 +51,7 @@
 
                             <label class="required fs-6 fw-bold mb-3">Tên Nhà Cung Cấp</label>
 
-                            <input type="text"
-                                class="form-control form-control-sm form-control-solid border border-success rounded-pill"
+                            <input type="text" class="form-control form-control-sm border border-success rounded-pill"
                                 placeholder="Tên nhà cung cấp.." name="name"
                                 value="{{ !empty($firstSupplier->name) ? $firstSupplier->name : old('name') }}" />
                             @error('name')
@@ -65,8 +64,7 @@
 
                             <label class="required fs-6 fw-bold mb-3">Người Đại Diện</label>
 
-                            <input type="text"
-                                class="form-control form-control-sm form-control-solid border border-success rounded-pill"
+                            <input type="text" class="form-control form-control-sm border border-success rounded-pill"
                                 placeholder="Tên người đại diện.." name="contact_name"
                                 value="{{ !empty($firstSupplier->contact_name) ? $firstSupplier->contact_name : old('contact_name') }}" />
                             @error('contact_name')
@@ -78,8 +76,7 @@
 
                             <label class="required fs-6 fw-bold mb-3">Mã Số Thuế</label>
 
-                            <input type="text"
-                                class="form-control form-control-sm form-control-solid border border-success rounded-pill"
+                            <input type="text" class="form-control form-control-sm border border-success rounded-pill"
                                 placeholder="Mã số thuế.." name="tax_code"
                                 value="{{ !empty($firstSupplier->tax_code) ? $firstSupplier->tax_code : old('tax_code') }}" />
                             @error('tax_code')
@@ -91,8 +88,7 @@
 
                             <label class="required fs-6 fw-bold mb-3">Số Điện Thoại</label>
 
-                            <input type="number"
-                                class="form-control form-control-sm form-control-solid border border-success rounded-pill"
+                            <input type="number" class="form-control form-control-sm border border-success rounded-pill"
                                 placeholder="Số điện thoại.." name="phone"
                                 value="{{ !empty($firstSupplier->phone) ? $firstSupplier->phone : old('phone') }}" />
                             @error('phone')
@@ -104,8 +100,7 @@
 
                             <label class="required fs-6 fw-bold mb-3">Email</label>
 
-                            <input type="email"
-                                class="form-control form-control-sm form-control-solid border border-success rounded-pill"
+                            <input type="email" class="form-control form-control-sm border border-success rounded-pill"
                                 placeholder="Email.." name="email"
                                 value="{{ !empty($firstSupplier->email) ? $firstSupplier->email : old('email') }}" />
                             @error('email')
@@ -117,8 +112,7 @@
 
                             <label class="required fs-6 fw-bold mb-3">Địa Chỉ</label>
 
-                            <input type="text"
-                                class="form-control form-control-sm form-control-solid border border-success rounded-pill"
+                            <input type="text" class="form-control form-control-sm border border-success rounded-pill"
                                 placeholder="Địa chỉ.." name="address"
                                 value="{{ !empty($firstSupplier->address) ? $firstSupplier->address : old('address   ') }}" />
                             @error('address')

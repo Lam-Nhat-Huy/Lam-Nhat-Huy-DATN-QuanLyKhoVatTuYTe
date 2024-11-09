@@ -53,6 +53,7 @@ class ExportController extends Controller
         $endDate = $request->input('end_date');
         $supplierCode = $request->input('spl');
         $departmentCode = $request->input('dpm');
+        $rs = $request->input('rs');
         $status = $request->input('stt');
         $createdBy = $request->input('us');
         $exportType = $request->input('ept');
@@ -79,6 +80,10 @@ class ExportController extends Controller
 
         if (isset($departmentCode)) {
             $exports = $exports->where('department_code', $departmentCode);
+        }
+
+        if (isset($rs)) {
+            $exports = $exports->where('reason', $rs);
         }
 
         if (isset($status)) {

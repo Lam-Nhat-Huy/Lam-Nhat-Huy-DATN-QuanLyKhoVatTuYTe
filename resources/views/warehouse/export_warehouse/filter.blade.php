@@ -1,7 +1,7 @@
 {{-- Bộ lọc của Zy --}}
 <div class="card-body py-1">
     <form action="{{ route('warehouse.export') }}" class="row align-items-center">
-        <div class="col-lg-3 col-md-4 col-sm-12">
+        <div class="col-lg-4 col-md-4 col-sm-12">
             <div class="row align-items-center">
                 <div class="col-lg-5 col-md-5 col-sm-5 pe-0">
                     <input type="date" name="start_date"
@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-12">
+        <div class="col-lg-4 col-md-4 col-sm-12">
             <select name="spl" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2 w-100">
                 <option value="" selected>--Theo Nhà Cung Cấp--</option>
                 @foreach ($allSupplier as $supplier)
@@ -25,7 +25,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-12">
+        <div class="col-lg-4 col-md-4 col-sm-12">
             <select name="dpm" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2 w-100">
                 <option value="" selected>--Theo Phòng Ban--</option>
                 @foreach ($allDepartment as $department)
@@ -34,7 +34,27 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-12">
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <select name="rs" id="rs"
+                class="form-select form-select-sm border border-success setupSelect2 rounded-pill">
+                <option value="" {{ request()->rs == '' ? 'selected' : '' }}>--Theo Lý Do Hủy--</option>
+                <option value="Hư Hỏng" {{ request()->rs == 'Hư Hỏng' ? 'selected' : '' }}>Hư Hỏng</option>
+                <option value="Hết Hạn Sử Dụng" {{ request()->rs == 'Hết Hạn Sử Dụng' ? 'selected' : '' }}>Hết Hạn Sử
+                    Dụng</option>
+                <option value="Lỗi Sản Xuất" {{ request()->rs == 'Lỗi Sản Xuất' ? 'selected' : '' }}>Lỗi Sản Xuất
+                </option>
+                <option value="Thừa Hoặc Không Cần Thiết"
+                    {{ request()->rs == 'Thừa Hoặc Không Cần Thiết' ? 'selected' : '' }}>Thừa Hoặc Không Cần Thiết
+                </option>
+                <option value="Hàng Bị Trả Về" {{ request()->rs == 'Hàng Bị Trả Về' ? 'selected' : '' }}>Hàng Bị Trả Về
+                </option>
+                <option value="Lỗi Kỹ Thuật" {{ request()->rs == 'Lỗi Kỹ Thuật' ? 'selected' : '' }}>Lỗi Kỹ Thuật
+                </option>
+                <option value="Quyết Định Tiêu Hủy" {{ request()->rs == 'Quyết Định Tiêu Hủy' ? 'selected' : '' }}>
+                    Quyết Định Tiêu Hủy</option>
+            </select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
             <select name="us" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2 w-100">
                 <option value="" selected>--Theo Người Tạo--</option>
                 @foreach ($users as $user)
@@ -43,7 +63,7 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-12">
+        <div class="col-lg-4 col-md-4 col-sm-12">
             <select name="stt" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2 w-100">
                 <option value="" {{ request()->stt == '' ? 'selected' : '' }}>--Theo Trạng Thái--</option>
                 <option value="0" {{ request()->stt == '0' ? 'selected' : '' }}>Chờ Duyệt</option>
@@ -51,7 +71,7 @@
                 <option value="3" {{ request()->stt == '3' ? 'selected' : '' }}>Lưu Tạm</option>
             </select>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-12">
+        <div class="col-lg-4 col-md-4 col-sm-12">
             <select name="ept" id="ept"
                 class="form-select form-select-sm border border-success setupSelect2 rounded-pill">
                 <option value="" {{ request()->ept == '' ? 'selected' : '' }}>--Theo Loại Xuất--</option>
@@ -63,10 +83,10 @@
                     Xuất Hủy</option>
             </select>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-lg-8 col-md-6 col-sm-6">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <input type="search" name="kw" placeholder="Tìm kiếm mã phiếu nhập.."
+                    <input type="search" name="kw" placeholder="Tìm kiếm mã phiếu xuất.."
                         class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success w-100"
                         value="{{ request()->kw }}">
                 </div>
