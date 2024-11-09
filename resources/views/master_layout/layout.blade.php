@@ -229,7 +229,7 @@
     <!-- Modal Duyệt Phiếu -->
     <div class="modal fade" id="browse" data-bs-backdrop="true" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="browseLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content border-0 shadow">
                 <!-- Chat Container -->
                 <div id="chatContainer" class="chat-container" style="display: block;">
@@ -323,7 +323,13 @@
             addMessage(userMessage, 'user');
             promptInput.value = '';
 
-            fetch(`http://localhost:5000/api/inventory-chatbot?prompt=${encodeURIComponent(userMessage)}`)
+            const api = 'https://6af9-2402-800-6343-b657-e52c-dbad-e572-4c03.ngrok-free.app'
+
+            fetch(`${api}/api/inventory-chatbot?prompt=${encodeURIComponent(userMessage)}`, {
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true'
+                    }
+                })
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
@@ -336,7 +342,6 @@
                             "<strong>Lưu ý:</strong> Thiết bị này sắp hết, hãy đặt hàng mới!",
                             "<strong>Khuyến cáo:</strong> Nên nhập thêm hàng trước khi hết!"
                         ];
-
 
                         const lowStockResponse = data.map(item => {
                             const randomWarning = warnings[Math.floor(Math.random() * warnings.length)];
@@ -354,15 +359,7 @@
                         const botResponses = [
                             `Thông tin về thiết bị:<br><br><strong>Mã thiết bị</strong>: ${data.equipment_code}<br><strong>Tên thiết bị</strong>: ${data.equipment_name}<br><strong>Số lượng hiện tại</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô sản xuất</strong>: ${data.batch_number}`,
                             `Thông tin thiết bị:<br><br><strong>Mã</strong>: ${data.equipment_code}<br><strong>Tên</strong>: ${data.equipment_name}<br><strong>Số lượng tồn kho</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô</strong>: ${data.batch_number}`,
-                            `Chi tiết thiết bị:<br><br><strong>Mã thiết bị</strong>: ${data.equipment_code}<br><strong>Tên thiết bị</strong>: ${data.equipment_name}<br><strong>Số lượng còn lại</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô sản xuất</strong>: ${data.batch_number}`,
-                            `Chi tiết thiết bị:<br><br><strong>Mã thiết bị</strong>: ${data.equipment_code}<br><strong>Tên thiết bị</strong>: ${data.equipment_name}<br><strong>Số lượng tồn kho hiện tại</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô</strong>: ${data.batch_number}`,
-                            `Thông tin thiết bị:<br><br><strong>Mã</strong>: ${data.equipment_code}<br><strong>Tên</strong>: ${data.equipment_name}<br><strong>Số lượng hiện tại trong kho</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô sản xuất</strong>: ${data.batch_number}`,
-                            `Dữ liệu thiết bị:<br><br><strong>Mã thiết bị</strong>: ${data.equipment_code}<br><strong>Tên thiết bị</strong>: ${data.equipment_name}<br><strong>Tồn kho hiện tại</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô</strong>: ${data.batch_number}`,
-                            `Thông tin tồn kho thiết bị:<br><br><strong>Mã</strong>: ${data.equipment_code}<br><strong>Tên</strong>: ${data.equipment_name}<br><strong>Số lượng tồn kho</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô</strong>: ${data.batch_number}`,
-                            `Thông tin thiết bị:<br><br><strong>Mã thiết bị</strong>: ${data.equipment_code}<br><strong>Tên thiết bị</strong>: ${data.equipment_name}<br><strong>Số lượng trong kho</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô sản xuất</strong>: ${data.batch_number}`,
-                            `Thông tin thiết bị:<br><br><strong>Mã</strong>: ${data.equipment_code}<br><strong>Tên</strong>: ${data.equipment_name}<br><strong>Số lượng còn lại</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô</strong>: ${data.batch_number}`,
-                            `Thông tin chi tiết thiết bị:<br><br><strong>Mã thiết bị</strong>: ${data.equipment_code}<br><strong>Tên thiết bị</strong>: ${data.equipment_name}<br><strong>Tồn kho hiện tại</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô sản xuất</strong>: ${data.batch_number}`,
-                            `Thông tin thiết bị:<br><br><strong>Mã</strong>: ${data.equipment_code}<br><strong>Tên</strong>: ${data.equipment_name}<br><strong>Số lượng tồn kho hiện tại</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô</strong>: ${data.batch_number}`
+                            // Các phản hồi khác...
                         ];
 
                         const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
