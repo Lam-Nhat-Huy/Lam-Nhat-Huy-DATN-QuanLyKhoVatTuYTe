@@ -451,7 +451,7 @@
                                             <button type="button" class="btn-close btn-close-white"
                                                 data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <div class="modal-body text-center" style="padding-bottom: 0px;">
+                                        <div class="modal-body text-center" style="height: 400px; overflow-y: auto;">
                                             <table class="table table-striped table-hover border shadow-sm">
                                                 <thead class="bg-dark text-white fw-bolder">
                                                     <tr>
@@ -494,15 +494,6 @@
                                                                 {{ number_format($total_after_discount_and_vat, 0, ',', '.') }}
                                                                 VND</td>
                                                         </tr>
-                                                        <tr class="text-center"
-                                                            style="font-weight: bold; background-color: #f8f9fa;">
-                                                            <td colspan="1" class="text-left ps-5">Tổng Cộng:</td>
-                                                            <td></td>
-                                                            <td colspan="4"></td>
-                                                            <td colspan="1" class="text-center pe-5">
-                                                                {{ number_format($total_last, 0, ',', '.') }} VND
-                                                            </td>
-                                                        </tr>
                                                     @empty
                                                         <tr>
                                                             <td colspan="12" class="text-center">
@@ -531,6 +522,17 @@
                                                             </td>
                                                         </tr>
                                                     @endforelse
+                                                    @if ($getEquipmentImportMonth)
+                                                        <tr class="text-center"
+                                                            style="font-weight: bold; background-color: #f8f9fa;">
+                                                            <td colspan="1" class="text-left ps-5">Tổng Cộng:</td>
+                                                            <td></td>
+                                                            <td colspan="4"></td>
+                                                            <td colspan="1" class="text-center pe-5">
+                                                                {{ number_format($total_last, 0, ',', '.') }} VND
+                                                            </td>
+                                                        </tr>
+                                                    @endif
                                                 </tbody>
                                             </table>
                                         </div>

@@ -241,7 +241,7 @@
 
                                                     <div class="rounded">
                                                         <table class="table table-striped table-sm table-hover">
-                                                            <thead style="background-color: #FFA500;">
+                                                            <thead style="background-color: #000000;">
                                                                 <tr class="fw-bolder">
                                                                     <th style="width: 10%;" class="ps-5">Mã thiết bị</th>
                                                                     <th style="width: 25%;">Tên thiết bị</th>
@@ -341,7 +341,7 @@
                                                         @endphp
 
                                                         <table class="table table-striped table-sm table-hover">
-                                                            <thead style="background-color: #FFA500;">
+                                                            <thead style="background-color: #000000;">
                                                                 <tr class="fw-bolder">
                                                                     <th style="width: 10%;" class="ps-5">Mã thiết bị
                                                                     </th>
