@@ -173,20 +173,18 @@ class EquipmentsController extends Controller
     public function create_equipment(CreateEquipmentRequest $request)
     {
         $data = $request->validated();
-
         $data['code'] = 'EQ' . $this->generateRandomString(8);
-
         $data['barcode'] = $data['code'];
 
-        if ($request->file('equipment_image')) {
-
-            $data['image'] = $request->file('equipment_image')->store('uploads', 'public');
+        if ($request->hasFile('equipment_image')) {
+            $fileName = time() . '_' . $request->file('equipment_image')->getClientOriginalName();
+            // Lưu trực tiếp vào `public/storage/uploads`
+            $request->file('equipment_image')->move(public_path('storage/uploads'), $fileName);
+            $data['image'] = 'uploads/' . $fileName;
         }
 
         $this->equipmentModal::create($data);
-
         toastr()->success('Thiết bị đã được thêm thành công!');
-
         return redirect()->route('equipments.index');
     }
 
@@ -215,14 +213,18 @@ class EquipmentsController extends Controller
 
         $equipment = $this->equipmentModal::find($code);
 
-        if (!empty($request->file('equipment_image'))) {
-
-            if ($equipment->image) {
-
-                Storage::disk('public')->delete($equipment->image);
+        if ($request->hasFile('equipment_image')) {
+            // Kiểm tra và xóa ảnh cũ nếu tồn tại
+            if ($equipment->image && file_exists(public_path('storage/' . $equipment->image))) {
+                unlink(public_path('storage/' . $equipment->image));
             }
 
-            $data['image'] = $request->file('equipment_image')->store('uploads', 'public');
+            // Tạo tên file mới và lưu trực tiếp vào public/storage/uploads
+            $fileName = time() . '_' . $request->file('equipment_image')->getClientOriginalName();
+            $request->file('equipment_image')->move(public_path('storage/uploads'), $fileName);
+
+            // Lưu đường dẫn của ảnh vào cơ sở dữ liệu
+            $data['image'] = 'uploads/' . $fileName;
         }
 
         $data['updated_at'] = now();

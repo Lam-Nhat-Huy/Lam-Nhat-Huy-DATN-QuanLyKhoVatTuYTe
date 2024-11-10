@@ -33,46 +33,44 @@ class ProfileController extends Controller
         $data = [];
 
         if (!empty($request->input())) {
-
             $record = $this->callModel::where('code', session('user_code'));
 
-            if (!empty($request->file('avatar'))) {
-
+            if ($request->hasFile('avatar')) {
                 $user = $record->first();
 
-                if ($user->avatar) {
-
-                    Storage::disk('public')->delete($user->avatar);
+                // Kiểm tra và xóa ảnh cũ nếu tồn tại
+                if ($user->avatar && file_exists(public_path('storage/' . $user->avatar))) {
+                    unlink(public_path('storage/' . $user->avatar));
                 }
 
-                $data['avatar'] = $request->file('avatar')->store('uploads', 'public');
+                // Tạo tên file mới và lưu vào public/storage/uploads
+                $fileName = time() . '_' . $request->file('avatar')->getClientOriginalName();
+                $request->file('avatar')->move(public_path('storage/uploads'), $fileName);
 
+                // Lưu đường dẫn của avatar vào mảng data
+                $data['avatar'] = 'uploads/' . $fileName;
+
+                // Cập nhật ảnh đại diện trong session
                 session()->put('avatar', $data['avatar']);
             }
 
             $data['updated_at'] = now();
-
             $data['last_name'] = $request->last_name;
-
             $data['first_name'] = $request->first_name;
-
             $data['birth_day'] = $request->birth_day;
-
             $data['address'] = $request->address;
 
+            // Cập nhật tên đầy đủ trong session
             session()->put('fullname', $data['last_name'] . ' ' . $data['first_name']);
 
             $rs = $record->update($data);
 
             if ($rs) {
-
                 toastr()->success("Cập nhật thành công");
-
                 return redirect()->back();
             }
 
             toastr()->error('Không thể cập nhật, thử lại sau');
-
             return redirect()->back();
         }
     }

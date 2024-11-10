@@ -91,7 +91,7 @@
         </p>
 
         <div class="text-center">
-            <a href="{{ asset('storage/' . $fileExcel) }}" class="pointer button" style="color: rgb(255, 255, 255);"
+            <a href="{{ asset('/' . $fileExcel) }}" class="pointer button" style="color: rgb(255, 255, 255);"
                 download="{{ basename($fileExcel) }}">
                 <i class="fa fa-download me-1"></i>Tải Danh Sách
             </a>

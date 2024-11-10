@@ -213,21 +213,24 @@ class UserController extends Controller
 
         $data['password'] = Hash::make($data['password']);
 
-        // $data['position'] = $request->isAdmin == 1 ? 'Admin' : 'Nhân Viên';
-
+        // Thiết lập giá trị cho các trường `isAdmin` và `status`
         $data['isAdmin'] = $request->isAdmin == 1 ? 1 : 0;
-
         $data['status'] = $request->status == 1 ? 1 : 0;
 
         $data['created_at'] = now();
-
         $data['updated_at'] = null;
 
-        if ($request->file('avatar')) {
+        // Lưu avatar nếu có
+        if ($request->hasFile('avatar')) {
+            // Tạo tên file mới và lưu trực tiếp vào public/storage/uploads
+            $fileName = time() . '_' . $request->file('avatar')->getClientOriginalName();
+            $request->file('avatar')->move(public_path('storage/uploads'), $fileName);
 
-            $data['avatar'] = $request->file('avatar')->store('uploads', 'public');
+            // Lưu đường dẫn của avatar vào cơ sở dữ liệu
+            $data['avatar'] = 'uploads/' . $fileName;
         }
 
+        // Tạo bản ghi người dùng mới
         $this->callModel::create($data);
 
         toastr()->success('Thêm thành công');
@@ -266,37 +269,34 @@ class UserController extends Controller
         $record = $this->callModel::where('code', session('user_code_request'));
 
         if (!empty($request->password)) {
-
             $data['password'] = Hash::make($data['password']);
         } else {
-
             unset($data['password']);
         }
 
-        if (!empty($request->file('avatar'))) {
-
+        if ($request->hasFile('avatar')) {
             $user = $record->first();
 
-            if ($user->avatar) {
-
-                Storage::disk('public')->delete($user->avatar);
+            // Kiểm tra và xóa ảnh cũ nếu tồn tại
+            if ($user->avatar && file_exists(public_path('storage/' . $user->avatar))) {
+                unlink(public_path('storage/' . $user->avatar));
             }
 
-            $data['avatar'] = $request->file('avatar')->store('uploads', 'public');
+            // Tạo tên file mới và lưu trực tiếp vào public/storage/uploads
+            $fileName = time() . '_' . $request->file('avatar')->getClientOriginalName();
+            $request->file('avatar')->move(public_path('storage/uploads'), $fileName);
+
+            // Lưu đường dẫn của avatar vào cơ sở dữ liệu
+            $data['avatar'] = 'uploads/' . $fileName;
         }
 
-        // $data['position'] = $request->isAdmin == 1 ? 'Admin' : 'Nhân Viên';
-
         $data['isAdmin'] = $request->isAdmin == 1 ? 1 : 0;
-
         $data['status'] = $request->status == 1 ? 1 : 0;
-
         $data['updated_at'] = now();
 
         $rs = $record->update($data);
 
         if ($rs) {
-
             $nameUser = $this->callModel::where('code', session('user_code_request'))->first();
 
             if ($nameUser->code == session('user_code')) {

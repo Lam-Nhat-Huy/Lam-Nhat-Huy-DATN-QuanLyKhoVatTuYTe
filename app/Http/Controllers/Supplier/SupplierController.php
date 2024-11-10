@@ -29,41 +29,36 @@ class SupplierController extends Controller
 
         if ($request->has('supplier_codes')) {
             if ($request->action_type === 'delete') {
-                // Lấy danh sách các mã nhà cung cấp trùng với supplier_code trong Import_equipment_requests
+                // Kiểm tra các mã nhà cung cấp trùng
                 $existingSuppliers = Import_equipment_requests::whereIn('supplier_code', $request->supplier_codes)
                     ->pluck('supplier_code')
                     ->toArray();
 
-                // Tìm mã nhà cung cấp trong $request->supplier_codes không có trong danh sách $existingSuppliers
                 $nonExistingSuppliers = array_diff($request->supplier_codes, $existingSuppliers);
 
-                // Nếu có mã nhà cung cấp không tồn tại trong Import_equipment_requests, thì xóa chúng
                 if (!empty($nonExistingSuppliers)) {
-                    // Xóa các nhà cung cấp không trùng
                     $this->SupplierModel::whereIn('code', $nonExistingSuppliers)->delete();
 
                     toastr()->success('Đã xóa nhà cung cấp không tồn tại trong giao dịch của hệ thống.');
-
                     return redirect()->back();
                 }
 
                 toastr()->error('Không thể xóa, nhà cung cấp này đã tồn tại trong giao dịch của hệ thống');
-
                 return redirect()->back();
             } elseif ($request->action_type === 'browse') {
+                if ($request->hasFile('excel_file')) {
+                    $excelFile = $request->file('excel_file');
+                    $fileName = time() . '_' . $excelFile->getClientOriginalName();
 
-                if ($request->file('excel_file')) {
+                    // Lưu file vào thư mục public/storage/excelFile
+                    $filePath = 'storage/excelFile/' . $fileName;
+                    $excelFile->move(public_path('storage/excelFile'), $fileName);
 
-                    $filePath = $request->file('excel_file')->store('excelFile', 'public');
-
+                    // Gửi email cho từng nhà cung cấp
                     $getEmailSuppliers = $this->SupplierModel::whereIn('code', $request->supplier_codes)->get();
-
                     foreach ($getEmailSuppliers as $supplier) {
-
                         $data['supplier_code'] = $supplier->code;
-
                         $data['file_excel'] = $filePath;
-
                         $data['user_code'] = session('user_code');
 
                         Quote_histories::create($data);
@@ -72,59 +67,36 @@ class SupplierController extends Controller
                     }
 
                     toastr()->success('Đã gửi yêu cầu báo giá đến email của nhà cung cấp');
-
                     return redirect()->back();
                 }
             }
         }
 
+        // Xóa nhà cung cấp
         if ($request->has('supplier_code_delete')) {
-
             $checkExists = Import_equipment_requests::where('supplier_code', $request->supplier_code_delete)->first();
 
             if ($checkExists) {
-
                 toastr()->error('Không thể xóa, nhà cung cấp này đã tồn tại trong giao dịch của hệ thống');
-
                 return redirect()->back();
             }
 
             $this->SupplierModel::where('code', $request->supplier_code_delete)->delete();
-
             toastr()->success('Xóa nhà cung cấp thành công');
-
             return redirect()->back();
         }
 
-        $allSupplier = $this->SupplierModel::orderBy('created_at', 'DESC')
-            ->whereNull('deleted_at');
-
-        if (isset($request->name)) {
-            $allSupplier = $allSupplier->where("name", $request->name);
-        }
-
-        if (isset($request->contact_name)) {
-            $allSupplier = $allSupplier->where("contact_name", $request->contact_name);
-        }
-
-        if (isset($request->tax_code)) {
-            $allSupplier = $allSupplier->where("tax_code", $request->tax_code);
-        }
-
-        if (isset($request->email)) {
-            $allSupplier = $allSupplier->where("email", $request->email);
-        }
-
-        if (isset($request->phone)) {
-            $allSupplier = $allSupplier->where("phone", $request->phone);
-        }
-
-        if (isset($request->address)) {
-            $allSupplier = $allSupplier->where("address", $request->address);
-        }
+        // Tìm kiếm nhà cung cấp
+        $allSupplier = $this->SupplierModel::orderBy('created_at', 'DESC')->whereNull('deleted_at');
+        if (isset($request->name)) $allSupplier->where("name", $request->name);
+        if (isset($request->contact_name)) $allSupplier->where("contact_name", $request->contact_name);
+        if (isset($request->tax_code)) $allSupplier->where("tax_code", $request->tax_code);
+        if (isset($request->email)) $allSupplier->where("email", $request->email);
+        if (isset($request->phone)) $allSupplier->where("phone", $request->phone);
+        if (isset($request->address)) $allSupplier->where("address", $request->address);
 
         if (isset($request->keyword)) {
-            $allSupplier = $allSupplier->where(function ($query) use ($request) {
+            $allSupplier->where(function ($query) use ($request) {
                 $query->where('name', 'like', '%' . $request->keyword . '%')
                     ->orWhere('contact_name', 'like', '%' . $request->keyword . '%')
                     ->orWhere('tax_code', 'like', '%' . $request->keyword . '%')
@@ -138,6 +110,7 @@ class SupplierController extends Controller
 
         return view("{$this->route}.list", compact('title', 'allSupplier'));
     }
+
 
     public function trash(Request $request)
     {

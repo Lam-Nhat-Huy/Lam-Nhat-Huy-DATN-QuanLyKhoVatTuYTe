@@ -84,14 +84,14 @@
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 7% !important;">Mã</th>
+                                <th class="" style="width: 5% !important;">Mã</th>
                                 <th class="" style="width: 10% !important;">Ảnh</th>
-                                <th class="" style="width: 12% !important;">Họ tên</th>
-                                <th class="" style="width: 25% !important;">Email</th>
+                                <th class="" style="width: 10% !important;">Họ tên</th>
+                                <th class="" style="width: 20% !important;">Email</th>
                                 <th class="" style="width: 10% !important;">Số điện thoại</th>
                                 <th class="" style="width: 8% !important;">Giới tính</th>
-                                <th class="" style="width: 8% !important;">Vai trò</th>
-                                <th class="" style="width: 11% !important;">Trạng thái</th>
+                                <th class="" style="width: 10% !important;">Vai trò</th>
+                                <th class="" style="width: 14% !important;">Trạng thái</th>
                                 <th class="pe-5 text-center" style="width: 20% !important;">Hành động</th>
                             </tr>
                         </thead>

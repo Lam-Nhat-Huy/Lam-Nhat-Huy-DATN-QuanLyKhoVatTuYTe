@@ -93,61 +93,63 @@ class ReportController extends Controller
     {
         $title = 'Báo Cáo';
 
+        // Lấy các báo cáo đã xóa mềm
         $AllReportTrash = $this->callModel::with('users')
             ->orderBy('deleted_at', 'DESC')
             ->onlyTrashed()
             ->paginate(10);
 
+        // Xử lý các thao tác với báo cáo
         if (isset($request->report_codes)) {
-
             if ($request->action_type === 'restore') {
-
+                // Khôi phục các báo cáo
                 $this->callModel::whereIn('code', $request->report_codes)->restore();
 
                 toastr()->success('Khôi phục thành công');
-
                 return redirect()->back();
             } elseif ($request->action_type === 'delete') {
-
+                // Xóa vĩnh viễn các báo cáo và file liên quan
                 $reports = $this->callModel::onlyTrashed()->whereIn('code', $request->report_codes)->get();
 
                 foreach ($reports as $report) {
-
+                    // Xóa file báo cáo khỏi thư mục
                     Storage::disk('public')->delete('reports/' . $report->file);
 
+                    // Xóa báo cáo vĩnh viễn
                     $report->forceDelete();
                 }
 
                 toastr()->success('Xóa thành công');
-
                 return redirect()->back();
             }
         }
 
+        // Xử lý khôi phục báo cáo theo mã
         if (isset($request->restore_report)) {
-
             $this->callModel::where('code', $request->restore_report)->restore();
 
             toastr()->success('Khôi phục thành công');
-
             return redirect()->back();
         }
 
+        // Xử lý xóa vĩnh viễn báo cáo theo mã
         if (isset($request->delete_report)) {
-
             $report = $this->callModel::onlyTrashed()->where('code', $request->delete_report)->first();
 
+            // Xóa file báo cáo khỏi thư mục
             Storage::disk('public')->delete('reports/' . $report->file);
 
+            // Xóa báo cáo vĩnh viễn
             $report->forceDelete();
 
             toastr()->success('Xóa vĩnh viễn thành công');
-
             return redirect()->back();
         }
 
+        // Trả về view danh sách báo cáo đã xóa
         return view("admin.{$this->route}.trash", compact('title', 'AllReportTrash'));
     }
+
 
     public function insert_report()
     {
@@ -162,26 +164,27 @@ class ReportController extends Controller
 
     public function create(CreateReportRequest $request)
     {
+        // Lấy dữ liệu đã được xác thực từ request
         $data = $request->validated();
 
         if ($data) {
-
+            // Đặt tên file với timestamp để đảm bảo tính duy nhất
             $fileName = time() . '.pdf';
 
-            $request->file->storeAs('public/reports', $fileName);
+            // Lưu file PDF vào thư mục storage/app/public/reports
+            $request->file('file')->storeAs('public/reports', $fileName);
 
+            // Cập nhật đường dẫn file vào dữ liệu báo cáo
             $data['file'] = $fileName;
 
+            // Gán loại báo cáo và các thông tin bổ sung
             $data['report_type'] = $request->report_type;
-
-            $data['code'] = 'RP' . $this->generateRandomString(8);
-
+            $data['code'] = 'RP' . $this->generateRandomString(8); // Tạo mã báo cáo ngẫu nhiên
             $data['user_code'] = session('user_code');
-
             $data['created_at'] = now();
-
             $data['updated_at'] = null;
 
+            // Tạo mới báo cáo trong cơ sở dữ liệu
             $this->callModel::create($data);
         }
 
@@ -189,6 +192,7 @@ class ReportController extends Controller
 
         return redirect()->route('report.index');
     }
+
 
     public function update_report($code)
     {
@@ -205,48 +209,50 @@ class ReportController extends Controller
 
     public function edit(UpdateReportRequest $request, $code)
     {
+        // Lấy dữ liệu đã được xác thực từ request
         $data = $request->validated();
 
+        // Tìm báo cáo theo mã code
         $record = $this->callModel::where('code', $code)->first();
 
-        if ($data) {
-
-            if ($record) {
-
-                if (!empty($request->file)) {
-
-                    if ($record->file) {
-
-                        Storage::disk('public')->delete('reports/' . $record->file);
-                    }
-
-                    $fileName = time() . '.pdf';
-
-                    $request->file->storeAs('public/reports', $fileName);
-
-                    $data['file'] = $fileName;
-                } else {
-
-                    unset($data['file']);
+        if ($record) {
+            // Kiểm tra nếu có file mới được tải lên
+            if (!empty($request->file)) {
+                // Xóa file cũ nếu có
+                if ($record->file) {
+                    Storage::disk('public')->delete('reports/' . $record->file);
                 }
 
-                $data['report_type'] = $request->report_type;
+                // Lưu file mới
+                $fileName = time() . '.pdf';
+                $request->file->storeAs('public/reports', $fileName);
 
-                $data['updated_at'] = now();
-
-                $record->update($data);
-
-                toastr()->success('Đã cập nhật báo cáo');
-
-                return redirect()->route('report.index');
+                // Cập nhật tên file vào dữ liệu
+                $data['file'] = $fileName;
+            } else {
+                // Nếu không có file mới, xóa dữ liệu file khỏi request
+                unset($data['file']);
             }
 
+            // Cập nhật loại báo cáo và thời gian cập nhật
+            $data['report_type'] = $request->report_type;
+            $data['updated_at'] = now();
 
-            toastr()->error('Không thể cập nhật, thử lại sau');
+            // Cập nhật dữ liệu báo cáo trong cơ sở dữ liệu
+            $record->update($data);
+
+            // Hiển thị thông báo thành công
+            toastr()->success('Đã cập nhật báo cáo');
 
             return redirect()->route('report.index');
         }
+
+        // Nếu không tìm thấy báo cáo, hiển thị thông báo lỗi
+        toastr()->error('Không thể cập nhật, thử lại sau');
+
+        return redirect()->route('report.index');
     }
+
 
     function generateRandomString($length = 9)
     {
