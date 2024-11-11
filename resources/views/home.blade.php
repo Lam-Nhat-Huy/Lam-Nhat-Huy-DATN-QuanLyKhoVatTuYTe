@@ -75,7 +75,7 @@
             <!--begin::Body-->
             <div class="d-flex flex-column flex-lg-row-fluid py-10">
                 <div class="d-flex flex-center flex-column flex-column-fluid">
-                    <div class="w-lg-500px p-10 p-lg-15 mx-auto">
+                    <div class="w-lg-500px p-10 p-lg-15 mx-auto w-100">
                         <form method="POST" class="form w-100" action="{{ route('home.handleLogin') }}">
                             @csrf
                             <div class="text-center mb-10">
@@ -118,7 +118,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="d-flex flex-center flex-wrap fs-6 p-5 pb-0">
+                <div class="d-flex flex-center flex-wrap fs-6 p-5 pb-0 text-center">
                     Một Sản Phẩm Của Nhóm BeeSoft • Hotline: 09455670xx - Phát Huy
                 </div>
             </div>

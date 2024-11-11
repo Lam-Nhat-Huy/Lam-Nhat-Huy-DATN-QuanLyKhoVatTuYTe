@@ -30,47 +30,93 @@
         select,
         textarea,
         button {
-            font-family: 'Noto Sans', sans-serif;
+            font-family: 'Roboto', 'Montserrat', sans-serif;
+            font-weight: 400;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
         }
     </style>
 </head>
 
-<body class="d-flex flex-column flex-root">
-    <div
-        class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed w-100">
-        <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
-            <a href="{{ route('home') }}" class="mb-7">
-                <img alt="Logo" src="{{ asset('image/logo_warehouse.png') }}" class="h-100px" />
-            </a>
-            <div class="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
-                <form method="POST" action="{{ route('home.reset_password') }}" class="form w-100"
-                    novalidate="novalidate" id="kt_password_reset_form">
-                    @csrf
-                    <div class="text-center mb-10">
-                        <h2 class="text-dark mb-3">Nhập mật khẩu mới</h2>
+<body id="kt_body" class="bg-body">
+    <div class="d-flex flex-column flex-root">
+        <!--begin::Authentication - Sign-in -->
+        <div class="d-flex flex-column flex-lg-row flex-column-fluid">
+            <!--begin::Aside-->
+            <div class="d-flex flex-column flex-lg-row-auto w-xl-600px positon-xl-relative"
+                style="background-color: #F2C98A">
+                <!--begin::Wrapper-->
+                <div class="d-flex flex-column position-xl-fixed top-0 bottom-0 w-xl-600px">
+                    <!--begin::Content-->
+                    <div class="d-flex flex-row-fluid flex-column text-center p-10 pt-lg-20">
+                        <!--begin::Logo-->
+                        <a href="#" class="py-9 mb-5 d-flex justify-content-center">
+                            <img alt="Logo" src="{{ asset('image/logo_warehouse.png') }}" class="h-100px" />
+                        </a>
+                        <!--end::Logo-->
+                        <!--begin::Title-->
+                        <h1 class="fw-bolder fs-2qx" style="color: #000000;">Chào Mừng Đến Với</h1>
+                        <h1 class="fw-bolder fs-2qx pb-5 pb-md-10" style="color: #128833;">BeeSoft</h1>
+                        <!--end::Title-->
+                        <!--begin::Description-->
+                        <p class="fw-bold fs-2" style="color: #000000;">Kho thiết bị y tế - Nơi lưu trữ và cung cấp các
+                            thiết bị chất lượng, đảm bảo an toàn, chính xác, giúp nâng cao hiệu quả chăm sóc sức khỏe và
+                            sự tin cậy cho mọi bệnh viện.
+                        </p>
+                        <!--end::Description-->
                     </div>
-                    <div class="fv-row mb-7">
-                        <label class="required form-label fw-bolder text-gray-900 fs-6">Mật khẩu mới</label>
-                        <input class="form-control form-control-sm border border-success rounded-pill" type="password"
-                            name="new_password" placeholder="Nhập mật khẩu mới..." />
-                        @error('new_password')
-                            <div class="message_error">{{ $message }}</div>
-                        @enderror
+                </div>
+            </div>
+            <!--end::Aside-->
+            <!--begin::Body-->
+            <div class="d-flex flex-column flex-lg-row-fluid py-10">
+                <div class="d-flex flex-center flex-column flex-column-fluid">
+                    <div class="w-lg-500px p-10 p-lg-15 mx-auto w-100">
+                        <form method="POST" class="form w-100" action="{{ route('home.reset_password') }}">
+                            @csrf
+                            <div class="text-center mb-10">
+                                <h1 class="text-dark mb-3">Thay Đổi Mật Khẩu</h1>
+                            </div>
+
+                            <div class="fv-row mb-10">
+                                <label class="required form-label fs-6 fw-bolder text-dark">Mật Khẩu Mới</label>
+                                <input class="form-control form-control-lg form-control-solid" type="password"
+                                    name="new_password" autocomplete="off" value="{{ old('new_password') }}" />
+                                @error('new_password')
+                                    <div class="message_error">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="fv-row mb-10">
+                                <label class="required form-label fs-6 fw-bolder text-dark">Xác Nhận Mật Khẩu Mới</label>
+                                <input class="form-control form-control-lg form-control-solid" type="password"
+                                    name="new_password_confirmation" autocomplete="off"
+                                    value="{{ old('new_password_confirmation') }}" />
+                                @error('new_password_confirmation')
+                                    <div class="message_error">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" id="kt_sign_in_submit"
+                                    class="btn btn-lg btn-twitter w-100 mb-5 load_animation">
+                                    <span class="indicator-label">Thay Đổi</span>
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="fv-row mb-7">
-                        <label class="required form-label fw-bolder text-gray-900 fs-6">Xác nhận mật khẩu mới</label>
-                        <input class="form-control form-control-sm border border-success rounded-pill" type="password"
-                            name="new_password_confirmation" placeholder="Xác nhận mật khẩu mới..." />
-                        @error('new_password_confirmation')
-                            <div class="message_error">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="d-flex flex-wrap justify-content-center">
-                        <button type="submit" class="btn btn-success btn-sm fw-bolder load_animation rounded-pill">
-                            <span>Hoàn thành</span>
-                        </button>
-                    </div>
-                </form>
+                </div>
+                <div class="d-flex flex-center flex-wrap fs-6 p-5 pb-0 text-center">
+                    Một Sản Phẩm Của Nhóm BeeSoft • Hotline: 09455670xx - Phát Huy
+                </div>
             </div>
         </div>
     </div>
@@ -82,6 +128,14 @@
     <div id="loading-overlay" class="loading-overlay"></div>
 
     <script src="{{ asset('js/main.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/plugins.bundle.js') }}"></script>
+    <script src="{{ asset('js/scripts.bundle.js') }}"></script>
+    <script src="{{ asset('js/fullcalender.bundle.js') }}"></script>
+    <script src="{{ asset('js/widgets.js') }}"></script>
+    <script src="{{ asset('js/chat.js') }}"></script>
+    <script src="{{ asset('js/create-app.js') }}"></script>
+    <script src="{{ asset('js/upgrade-plan.js') }}"></script>
 </body>
 
 </html>

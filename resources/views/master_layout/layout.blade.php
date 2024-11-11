@@ -161,6 +161,24 @@
     class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
     style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
 
+    <div class="modal fade" id="createImport" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="DetailModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center" style="background-color: rgb(255, 45, 45);">
+                    <h3 class="modal-title text-white" id="DetailModal">BEESOFT THÔNG BÁO</h3>
+                </div>
+                <div class="modal-body text-center pt-0">
+                    <div class="d-flex justify-content-center">
+                        <img src="https://cdnl.iconscout.com/lottie/premium/thumb/rotate-phone-9207016-7517787.gif"
+                            width="150" height="150" class="d-flex justify-content-center" alt="">
+                    </div>
+                    <h6>Vui lòng xoay ngang màn hình</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="d-flex flex-column flex-root">
 
         <div class="page d-flex flex-row flex-column-fluid">
@@ -262,8 +280,8 @@
                     </div>
 
                     <div class="chat-footer">
-                        <input type="text" style="font-size: 12px;" id="promptInput" placeholder="Hỏi về tồn kho..."
-                            class="form-control">
+                        <input type="text" style="font-size: 12px;" id="promptInput"
+                            placeholder="Hỏi về tồn kho..." class="form-control">
                         <button class="btn btn-primary" style="font-size: 12px;" onclick="sendMessage()">Gửi</button>
                     </div>
                 </div>
@@ -278,6 +296,17 @@
     </div>
 
     <script>
+        function checkOrientation() {
+            if (window.innerHeight > window.innerWidth) {
+                $("#createImport").modal("show");
+            } else {
+                $("#createImport").modal("hide");
+            }
+        }
+
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('load', checkOrientation);
+
         function addMessage(content, sender = 'bot') {
             const chatMessages = document.getElementById('chatMessages');
             const messageBubble = document.createElement('div');

@@ -130,7 +130,7 @@
         </script>
     @endif
     <div class="card mb-5 mb-xl-8">
-        <div class="row gy-5 g-xl-8">
+        <div class="gy-5 g-xl-8">
 
             <div class="col-xxl-12">
                 <!--begin::Mixed Widget 2-->
@@ -151,7 +151,7 @@
                             <!--begin::Row-->
                             <div class="d-flex justify-content-between flex-wrap">
                                 <!--begin::Col-->
-                                <div class="px-6 py-8 rounded-2 me-7 mb-7 flex-fill col-md-3 shadow"
+                                <div class="px-6 py-8 rounded-2 mx-2 mb-5 flex-fill col-md-3 shadow"
                                     style="background-image: linear-gradient(-225deg, #FF057C 0%, #8D0B93 50%, #321575 100%);">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen032.svg-->
                                     <span class="svg-icon svg-icon-3x svg-icon-white d-block my-3 mb-5">
@@ -163,7 +163,7 @@
                                 </div>
                                 <!--end::Col-->
                                 <!--begin::Col-->
-                                <div class="px-6 py-8 rounded-2 me-7 mb-7 flex-fill col-md-3 shadow"
+                                <div class="px-6 py-8 rounded-2 mx-2 mb-5 flex-fill col-md-3 shadow"
                                     style="background-image: linear-gradient(-225deg, #FF057C 0%, #8D0B93 50%, #321575 100%);">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen032.svg-->
                                     <span class="svg-icon svg-icon-3x svg-icon-white d-block my-3 mb-5">
@@ -175,7 +175,7 @@
                                 </div>
 
                                 <!--end::Col-->
-                                <div class="px-6 py-8 rounded-2 me-7 mb-7 flex-fill col-md-3 shadow"
+                                <div class="px-6 py-8 rounded-2 mx-2 mb-5 flex-fill col-md-3 shadow"
                                     style="background-image: linear-gradient(-225deg, #FF057C 0%, #8D0B93 50%, #321575 100%);">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen032.svg-->
                                     <span class="svg-icon svg-icon-3x svg-icon-white d-block my-3 mb-5">
@@ -196,10 +196,8 @@
                 <!--end::Mixed Widget 2-->
             </div>
 
-            <div class="mt-5 mb-5"></div>
-
             <div class="row align-items-start px-14">
-                <div class="col-xxl-6 mb-5">
+                <div class="col-md-6 col-lg-6 col-sm-12 mb-5">
                     <div class="card card-xxl-stretch h-100 shadow">
                         <!-- Header -->
                         <div class="card-header border-0 rounded align-items-center"
@@ -240,7 +238,7 @@
                                             <h6 class="text-gray-800 text-hover-primary fw-bolder fs-6">
                                                 Mã kiểm kho: <a
                                                     class="text-gray-800 text-hover-primary fw-bolder fs-6 mb-1 text-decoration-underline"
-                                                    href="{{ route('check_warehouse.index') }}?search={{ $check->code }}">#{{ $check->code }}</a>
+                                                    href="{{ route('check_warehouse.index') }}?kw={{ $check->code }}">#{{ $check->code }}</a>
                                             </h6>
                                             <span class="text-muted fw-bold d-block mb-1">
                                                 Ngày kiểm: {{ $check->created_at->format('d-m-Y H:i:s') }}
@@ -270,7 +268,7 @@
                     </div>
                 </div>
 
-                <div class="col-xxl-6 mb-5">
+                <div class="col-md-6 col-lg-6 col-sm-12 mb-5">
                     <div class="card card-xxl-stretch h-100 shadow">
                         <!-- Header -->
                         <div class="card-header border-0 rounded align-items-center"
@@ -338,8 +336,8 @@
                 </div>
             </div>
 
-            <div class="row align-items-start px-14 mt-10">
-                <div class="col-xxl-6 mb-5">
+            <div class="row align-items-start px-14">
+                <div class="col-md-6 col-lg-6 col-sm-12 mb-3">
                     <div class="card card-xxl-stretch h-100 shadow">
                         <!-- Header -->
                         <div class="card-header align-items-center border-0 rounded d-flex justify-content-between"
@@ -404,7 +402,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xxl-6 mb-5">
+                <div class="col-lg-6 col-md-6 col-sm-12 mb-5">
                     <div class="card card-xxl-stretch h-100 shadow-lg">
                         <!-- Header -->
                         <div class="card-header text-white border-0 rounded align-items-center"
@@ -414,10 +412,10 @@
                             </h5>
                         </div>
                         <!-- Body -->
-                        <div class="card-body pt-4 px-6 pb-4">
+                        <div class="card-body py-2 px-4">
                             <!-- Summary Cards -->
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-lg-6 col-md-6 col-sm-12 my-1">
                                     <div class="px-6 py-8 rounded-2 shadow-sm text-center"
                                         style="background-image: linear-gradient(60deg, #3d3393 0%, #2b76b9 37%, #2cacd1 65%, #35eb93 100%);">
                                         <i class="fa fa-box fs-2 text-white mb-3"></i>
@@ -427,7 +425,7 @@
                                                     class="fa fa-eye text-white ms-1"></i></span></span>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-lg-6 col-md-6 col-sm-12 my-1">
                                     <div class="px-6 py-8 rounded-2 shadow-sm text-center"
                                         style="background-image: linear-gradient(60deg, #3d3393 0%, #2b76b9 37%, #2cacd1 65%, #35eb93 100%);">
                                         <i class="fa fa-dollar-sign fs-2 text-white mb-3"></i>
@@ -549,9 +547,9 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-5 mt-5 mb-xl-8" style="padding: 0 25px">
+        <div class="row mb-5 mb-xl-8" style="padding: 0 25px">
             <!--begin::Col-->
-            <div class="col-xxl-6">
+            <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="card mb-5 mb-xl-8 border-0 shadow">
                     <div class="chart-container p-4">
                         <h5 class="chart-title text-center mb-4 fs-5 my-3">BIỂU ĐỒ TỒN KHO THEO THỜI GIAN</h5>
@@ -562,7 +560,7 @@
             <!--end::Col-->
 
             <!--begin::Col-->
-            <div class="col-xxl-6 mx-auto">
+            <div class="col-lg-6 col-md-6 col-sm-12 mx-auto">
                 <div class="card mb-5 mb-xl-8 border-0 shadow">
                     <div class="forecast-container p-4">
                         <h5 class="forecast-title text-center mb-4 fs-5 my-3">THỐNG KÊ CHI PHÍ NHẬP HÀNG THEO THÁNG</h5>
