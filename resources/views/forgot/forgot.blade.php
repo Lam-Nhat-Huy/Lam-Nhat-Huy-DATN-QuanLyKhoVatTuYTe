@@ -77,7 +77,7 @@
                                 <h1 class="text-dark mb-4">Quên Mật Khẩu</h1>
                             </div>
 
-                            <div class="fv-row mb-5">
+                            <div class="fv-row mb-3">
                                 <label class="required form-label fs-6 fw-bolder text-dark">Số Điện Thoại</label>
                                 <input class="form-control form-control-lg form-control-solid" type="text"
                                     name="phone_forgot" autocomplete="off" value="{{ old('phone_forgot') }}"
@@ -89,9 +89,12 @@
 
                             <div class="text-center">
                                 <button type="submit" id="kt_sign_in_submit"
-                                    class="btn btn-lg btn-twitter w-100 my-5 load_animation">
+                                    class="btn btn-lg btn-twitter w-100 mt-3 load_animation">
                                     <span class="indicator-label">Gửi</span>
                                 </button>
+                                <a href="{{ route('home') }}" class="btn btn-lg btn-dark w-100 mt-3">
+                                    <span>Trở Lại</span>
+                                </a>
                             </div>
                         </form>
                     </div>
