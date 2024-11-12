@@ -338,7 +338,7 @@
                                     @foreach ($getList as $item)
                                         @php
                                             // Tính tổng tiền trước chiết khấu
-                                            $subtotal = $item->price * $item->quantity_quote;
+                                            $subtotal = $item->price * $item->quantity;
 
                                             // Tính tổng tiền sau khi trừ chiết khấu
                                             $subtotal_after_discount = $subtotal * (1 - $item->discount / 100);
@@ -383,6 +383,7 @@
                                                     <input type="number"
                                                         id="quantity_change_{{ $item->equipment_code }}"
                                                         value="{{ $item->quantity }}" min="0"
+                                                        oninput="calculateTotalPriceTop('{{ $item->equipment_code }}'); calculateTotalPriceBottom();"
                                                         class="form-control form-control-sm border border-success rounded-pill">
                                                 </div>
                                             </td>

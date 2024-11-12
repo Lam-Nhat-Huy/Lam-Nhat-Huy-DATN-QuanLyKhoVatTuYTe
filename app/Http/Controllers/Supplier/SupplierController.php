@@ -163,6 +163,7 @@ class SupplierController extends Controller
 
         return view("{$this->route}.form", compact('title', 'title_form', 'config'));
     }
+
     public function create(CreateSupplierRequest $request)
     {
         $data = $request->validated();
@@ -191,6 +192,7 @@ class SupplierController extends Controller
 
         return redirect()->route('supplier.list');
     }
+
     public function edit(Request $request, $code)
     {
         $firstSupplier = $this->SupplierModel::where('code', $code)->first();

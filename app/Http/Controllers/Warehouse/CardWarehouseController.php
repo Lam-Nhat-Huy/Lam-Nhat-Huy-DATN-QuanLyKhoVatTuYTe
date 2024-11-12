@@ -35,10 +35,14 @@ class CardWarehouseController extends Controller
         // Lấy tên thiết bị
         $nameEquipment = Equipments::with('units')
             ->where('code', $equipment_code)
+            ->whereNull('deleted_at')
             ->first();
 
         $receiptsBeforeStart = Receipt_details::where('equipment_code', $equipment_code)
             ->where('created_at', '<=', $start_date)
+            ->whereHas('receipt', function ($subReceipt) {
+                $subReceipt->whereNull('deleted_at');
+            })
             ->get(['batch_number', 'quantity']);
 
         $beginning_balance_total = 0;
@@ -49,11 +53,19 @@ class CardWarehouseController extends Controller
             $totalImportBeforeStart = Receipt_details::where('equipment_code', $equipment_code)
                 ->where('batch_number', $batch_number)
                 ->where('created_at', '<=', $start_date)
+
+                ->whereHas('receipt', function ($subReceipt) {
+                    $subReceipt->whereNull('deleted_at');
+                })
                 ->sum('quantity');
 
             $totalExportBeforeStart = Export_details::where('equipment_code', $equipment_code)
                 ->where('batch_number', $batch_number)
                 ->where('created_at', '<=', $start_date)
+
+                ->whereHas('export', function ($subReceipt) {
+                    $subReceipt->whereNull('deleted_at');
+                })
                 ->sum('quantity');
 
             $beginning_balance_batch = $totalImportBeforeStart - $totalExportBeforeStart;
@@ -65,6 +77,10 @@ class CardWarehouseController extends Controller
 
         $receiptsInPeriod = Receipt_details::where('equipment_code', $equipment_code)
             ->whereBetween('created_at', [$start_date, $end_date])
+
+            ->whereHas('receipt', function ($subReceipt) {
+                $subReceipt->whereNull('deleted_at');
+            })
             ->get(['batch_number', 'quantity']);
 
         foreach ($receiptsInPeriod as $receipt) {
@@ -73,11 +89,19 @@ class CardWarehouseController extends Controller
             $totalImportInPeriod = Receipt_details::where('equipment_code', $equipment_code)
                 ->where('batch_number', $batch_number)
                 ->whereBetween('created_at', [$start_date, $end_date])
+
+                ->whereHas('receipt', function ($subReceipt) {
+                    $subReceipt->whereNull('deleted_at');
+                })
                 ->sum('quantity');
 
             $totalExportInPeriod = Export_details::where('equipment_code', $equipment_code)
                 ->where('batch_number', $batch_number)
                 ->whereBetween('created_at', [$start_date, $end_date])
+
+                ->whereHas('export', function ($subReceipt) {
+                    $subReceipt->whereNull('deleted_at');
+                })
                 ->sum('quantity');
 
             $ending_balance_batch = $totalImportInPeriod - $totalExportInPeriod;
@@ -87,11 +111,19 @@ class CardWarehouseController extends Controller
 
         $getImportBetweenDate = Receipt_details::where('equipment_code', $equipment_code)
             ->whereBetween('created_at', [$start_date, $end_date])
+
+            ->whereHas('receipt', function ($subReceipt) {
+                $subReceipt->whereNull('deleted_at');
+            })
             ->get();
 
         $getExportBetweenDate = Export_details::with(['export'])
             ->where('equipment_code', $equipment_code)
             ->whereBetween('created_at', [$start_date, $end_date])
+
+            ->whereHas('export', function ($subReceipt) {
+                $subReceipt->whereNull('deleted_at');
+            })
             ->get();
 
         return view("{$this->route}.card_warehouse.search", compact('title', 'equipments', 'nameEquipment', 'beginning_balance_total', 'ending_balance_total', 'getImportBetweenDate', 'getExportBetweenDate'));

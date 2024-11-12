@@ -151,13 +151,16 @@
                         <div class="message_error"></div>
                     </div>
 
-                    @if (!empty($getExportRequest) || $action == route('warehouse.store_export'))
+                    @if (
+                        !empty($getExportRequest) ||
+                            $action == route('warehouse.store_export') ||
+                            $action == route('warehouse.update_export', request('code')))
                         <div class="mb-3 col-md-6" id="required_date_div">
                             <label for="" class="form-label fw-semibold">Ngày Cần Thiết</label>
                             <input type="datetime-local" name="required_date" id="required_date"
                                 {{ !empty($getExportRequest) ? 'disabled' : '' }}
                                 class="form-control form-control-sm border-success rounded-pill"
-                                value="{{ !empty($getExportRequest) && $getExportRequest->required_date ? \Carbon\Carbon::parse($getExportRequest->required_date)->format('Y-m-d H:i:s') : '' }}">
+                                value="{{ !empty($getExportRequest) && $getExportRequest->required_date ? \Carbon\Carbon::parse($getExportRequest->required_date)->format('Y-m-d H:i:s') : (!empty($editExport->required_date) ? \Carbon\Carbon::parse($editExport->required_date)->format('Y-m-d H:i:s') : '') }}">
                             <div class="message_error" id="required_date_error"></div>
                         </div>
                     @endif
@@ -420,8 +423,6 @@
         </div>
     </div>
 
-    <input type="hidden" name="cd" value="{{ request('cd') ?? '' }}" id="cd">
-
     <!-- Form thêm phòng ban -->
     <div class="modal fade" id="add_department" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="add_modalLabel" aria-hidden="true">
@@ -597,7 +598,6 @@
             var export_dateSelect = document.getElementById('export_date_div');
             var required_date = document.getElementById('required_date');
             var required_date_div = document.getElementById('required_date_div');
-            var cd = document.getElementById('cd').value;
 
             var supplierSelectErr = document.getElementById('supplier_code_error');
             var departmentSelectErr = document.getElementById('department_code_error');
@@ -624,7 +624,7 @@
                 supplierSelect.value = '1';
                 reasonSelect.value = '1';
 
-                if (!cd) {
+                if ("{{ $action }}" === "{{ route('warehouse.store_import') }}") {
                     required_date.value = '';
                 }
 

@@ -32,7 +32,7 @@
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script>
-        function openExcel(url) {
+        function openExcel(url, previewId) {
             fetch(url)
                 .then(response => {
                     if (!response.ok) throw new Error('Network response was not ok');
@@ -47,13 +47,44 @@
                         });
                         const firstSheetName = workbook.SheetNames[0];
                         const worksheet = workbook.Sheets[firstSheetName];
+
+                        // Bỏ 2 cột cuối
+                        removeLastTwoColumns(worksheet);
+
+                        // Chuyển đổi worksheet thành HTML
                         const html = XLSX.utils.sheet_to_html(worksheet);
-                        document.getElementById('excelPreview').innerHTML = html;
-                        document.getElementById('excelPreview').style.display = 'block';
+
+                        // Cập nhật nội dung vào modal với ID duy nhất
+                        const excelPreviewElement = document.getElementById(previewId);
+                        excelPreviewElement.innerHTML = html;
+                        excelPreviewElement.style.display = 'block';
                     };
                     reader.readAsArrayBuffer(blob);
                 })
                 .catch(error => console.error('Error fetching the Excel file:', error));
+        }
+
+        // Hàm để loại bỏ 2 cột cuối cùng
+        function removeLastTwoColumns(worksheet) {
+            const range = XLSX.utils.decode_range(worksheet['!ref']); // Lấy phạm vi của dữ liệu trong sheet
+            const maxCol = range.e.c; // Cột cuối cùng
+
+            // Duyệt qua tất cả các hàng
+            for (let row = range.s.r; row <= range.e.r; row++) {
+                // Xóa hai cột cuối cùng bằng cách xóa ô từ worksheet
+                delete worksheet[XLSX.utils.encode_cell({
+                    r: row,
+                    c: maxCol
+                })]; // Cột cuối cùng
+                delete worksheet[XLSX.utils.encode_cell({
+                    r: row,
+                    c: maxCol - 1
+                })]; // Cột kế cuối
+            }
+
+            // Cập nhật phạm vi của worksheet để không bao gồm hai cột cuối cùng
+            range.e.c = maxCol - 2; // Giảm số cột cuối đi 2
+            worksheet['!ref'] = XLSX.utils.encode_range(range); // Cập nhật phạm vi (range) mới
         }
     </script>
 @endsection
@@ -92,8 +123,8 @@
                                 </td>
                                 <td class="text-xl-start text-truncate" style="max-width: 150px;">
                                     <a href="#" class="pointer" style="color: rgb(33, 64, 178);"
-                                        data-bs-toggle="modal" data-bs-target="#openExcel"
-                                        onclick="openExcel('{{ asset('storage/' . $item->file_excel) }}'); return false;">
+                                        data-bs-toggle="modal" data-bs-target="#openExcel_{{ $item->id }}"
+                                        onclick="openExcel('{{ asset($item->file_excel) }}', 'excelPreview_{{ $item->id }}'); return false;">
                                         <i class="fa fa-eye me-1"></i>Xem
                                     </a>
                                 </td>
@@ -128,25 +159,28 @@
             </div>
         </div>
 
-        <div class="modal fade" id="openExcel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="openExcelLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-md">
-                <div class="modal-content border-0 shadow">
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title text-white" id="openExcelLabel">Danh Sách</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center" style="padding-bottom: 0px;">
-                        <div id="excelPreview" style="display:none;"></div>
-                    </div>
-                    <div class="modal-footer justify-content-center border-0">
-                        <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
-                            data-bs-dismiss="modal">Đóng</button>
+        @foreach ($allQuoteHistory as $item)
+            <div class="modal fade" id="openExcel_{{ $item->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+                tabindex="-1" aria-labelledby="openExcelLabel_{{ $item->id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-md">
+                    <div class="modal-content border-0 shadow">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title text-white" id="openExcelLabel_{{ $item->id }}">Danh Sách</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center" style="padding-bottom: 0px;">
+                            <div id="excelPreview_{{ $item->id }}" style="display:none;"></div>
+                            <!-- Unique ID for each modal -->
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endforeach
 
         @if ($allQuoteHistory->count() > 0)
             <div class="card-body py-3 d-flex justify-content-between align-items-center">
