@@ -70,8 +70,7 @@ class CardWarehouseController extends Controller
                 ->sum('quantity');
 
             $beginning_balance_batch = $totalImportBeforeStart - $totalExportBeforeStart;
-
-            $beginning_balance_total += $beginning_balance_batch;
+            $beginning_balance_total = $beginning_balance_batch;
         }
 
         $ending_balance_total = $beginning_balance_total;
@@ -106,8 +105,7 @@ class CardWarehouseController extends Controller
                 ->sum('quantity');
 
             $ending_balance_batch = $totalImportInPeriod - $totalExportInPeriod;
-
-            $ending_balance_total += $ending_balance_batch;
+            $ending_balance_total = $ending_balance_batch;
         }
 
         $getImportBetweenDate = Receipt_details::where('equipment_code', $equipment_code)
@@ -127,6 +125,6 @@ class CardWarehouseController extends Controller
             })
             ->get();
 
-        return view("{$this->route}.card_warehouse.search", compact('title', 'equipments', 'nameEquipment', 'beginning_balance_total', 'ending_balance_total', 'getImportBetweenDate', 'getExportBetweenDate'));
+        return view("{$this->route}.card_warehouse.search", compact('title', 'equipments', 'nameEquipment', 'beginning_balance_total', 'ending_balance_total', 'getImportBetweenDate', 'getExportBetweenDate', 'ending_balance_batch'));
     }
 }
