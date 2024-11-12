@@ -17,7 +17,6 @@
                         value="{{ request()->end_date ? \Carbon\Carbon::parse(request()->end_date)->format('Y-m-d\TH:i') : \Carbon\Carbon::now()->format('Y-m-d\TH:i') }}">
                 </div>
             </div>
-
         </div>
         <div class="col-lg-5 col-md-4 col-sm-12">
             <select name="equipment_code" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2 w-100">

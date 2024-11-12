@@ -64,7 +64,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-6">
                             <input type="search" name="kw" placeholder="Tìm kiếm mã phiếu yêu cầu xuất kho.."
-                                class="mt-2 mb-2 form-control form-control-sm form-control-solid rounded-pill border border-success w-100"
+                                class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success w-100"
                                 value="{{ request()->kw }}">
                         </div>
                         <div class="col-md-6 d-flex">
@@ -106,9 +106,12 @@
                                 <tr class="hover-table pointer">
                                     <td>
                                         {{-- Phiếu tạm => ẩn hết, phiếu chờ duyệt thì hiện, phiếu đã duyệt chưa tạo thì hiện icon, phiếu đã duyệt tạo rồi thì ẩn --}}
-                                        @if (($item->status == 3 || $item->status == 0) && $item->user_code == session('user_code'))
+                                        @if ($item->status == 0 && $item->user_code == session('user_code'))
                                             <input type="checkbox" name="export_reqest_codes[]" value="{{ $item->code }}"
                                                 class="row-checkbox" />
+                                        @elseif ($item->status == 3)
+                                            <i class="fa fa-clock text-dark" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Lưu Tạm"></i>
                                         @elseif ($item->status == 5)
                                             <i class="fa fa-truck-medical" data-bs-toggle="tooltip" data-bs-placement="top"
                                                 title="Đang Vận Chuyển"></i>

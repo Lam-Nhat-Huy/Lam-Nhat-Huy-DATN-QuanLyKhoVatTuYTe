@@ -136,11 +136,11 @@ class EquipmentRequestController extends Controller
             return redirect()->back();
         }
 
-        if (!empty($request->import_reqest_codes)) {
+        if (!empty($request->import_request_codes)) {
 
             if ($request->action_type === 'browse') {
 
-                $this->callModel::whereIn('code', $request->import_reqest_codes)->where('status', 0)->update([
+                $this->callModel::whereIn('code', $request->import_request_codes)->where('status', 0)->update([
                     'status' => 2,
                     'browse_by' => session('user_code'),
                 ]);
@@ -149,7 +149,7 @@ class EquipmentRequestController extends Controller
 
                 return redirect()->back();
             } elseif ($request->action_type === 'delete') {
-                $record_delete_requests = $this->callModel::whereIn('code', $request->import_reqest_codes);
+                $record_delete_requests = $this->callModel::whereIn('code', $request->import_request_codes);
 
                 $record_delete_requests->update([
                     'deleted_by' => session('user_code'),
@@ -203,17 +203,17 @@ class EquipmentRequestController extends Controller
             return redirect()->back();
         }
 
-        if (!empty($request->import_reqest_codes)) {
+        if (!empty($request->import_request_codes)) {
 
             if ($request->action_type === 'restore') {
-                $this->callModel::whereIn('code', $request->import_reqest_codes)->restore();
+                $this->callModel::whereIn('code', $request->import_request_codes)->restore();
 
                 toastr()->success('Khôi phục thành công');
 
                 return redirect()->back();
             } elseif ($request->action_type === 'delete') {
 
-                $this->callModel::whereIn('code', $request->import_reqest_codes)->forceDelete();
+                $this->callModel::whereIn('code', $request->import_request_codes)->forceDelete();
 
                 toastr()->success('Xóa vĩnh viễn thành công');
 

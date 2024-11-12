@@ -48,7 +48,7 @@
                             @forelse ($AllEquipmentRequestTrash as $item)
                                 <tr class="hover-table pointer">
                                     <td>
-                                        <input type="checkbox" name="import_reqest_codes[]" value="{{ $item->code }}"
+                                        <input type="checkbox" name="import_request_codes[]" value="{{ $item->code }}"
                                             class="row-checkbox" />
                                     </td>
                                     <td>

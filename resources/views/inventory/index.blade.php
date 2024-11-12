@@ -57,19 +57,21 @@
                                     <th>Số lượng</th>
                                     <th>Ngày nhập gần nhất</th>
                                     <th>Ngày xuất gần nhất</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody id="modalItemsTableBody">
                                 @forelse ($inventories[$equipment->code]['inventories'] as $index => $inventory)
                                     @php
-                                        $last_import_date = App\Models\Receipt_details::orderBy('created_at', 'DESC')
+                                        $getReceiptDetail = App\Models\Receipt_details::orderBy('created_at', 'DESC')
                                             ->where('equipment_code', $inventory->equipment_code)
                                             ->where('batch_number', $inventory->batch_number)
-                                            ->first();
-                                        $last_export_date = App\Models\Export_details::orderBy('created_at', 'DESC')
+                                            ->get();
+
+                                        $getExportDetail = App\Models\Export_details::orderBy('created_at', 'DESC')
                                             ->where('equipment_code', $inventory->equipment_code)
                                             ->where('batch_number', $inventory->batch_number)
-                                            ->first();
+                                            ->get();
                                     @endphp
                                     <tr class="text-center"
                                         style="background-color: {{ $inventory->current_quantity < 1 ? 'rgba(255, 0, 0, 0.1)' : ($inventory->current_quantity <= 10 ? 'rgba(255, 165, 0, 0.1)' : 'rgba(40, 167, 69, 0.1)') }};">
@@ -83,10 +85,232 @@
                                             @endif
                                         </td>
                                         <td>
-                                            {{ !empty($last_import_date->created_at) ? \Carbon\Carbon::parse($last_import_date->created_at)->format('d-m-Y H:i:s') : 'Chưa Nhập' }}
+                                            {{ !empty($getReceiptDetail[0]['created_at']) ? \Carbon\Carbon::parse($getReceiptDetail[0]['created_at'])->format('d-m-Y H:i:s') : 'Chưa Nhập' }}
                                         </td>
                                         <td>
-                                            {{ !empty($last_export_date->created_at) ? \Carbon\Carbon::parse($last_export_date->created_at)->format('d-m-Y H:i:s') : 'Chưa Xuất' }}
+                                            {{ !empty($getExportDetail[0]['created_at']) ? \Carbon\Carbon::parse($getExportDetail[0]['created_at'])->format('d-m-Y H:i:s') : 'Chưa Xuất' }}
+                                        </td>
+                                        <td class="text-center pointer" data-bs-toggle="collapse"
+                                            data-bs-target="#collapse_{{ $inventory->code }}" aria-expanded="false"
+                                            aria-controls="collapse_{{ $inventory->code }}">
+                                            Chi Tiết<i class="fa fa-caret-right pointer ms-2"></i>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="p-0" colspan="12"
+                                            style="background-color: #fafafa; padding-top: 0 !important;">
+                                            <div class="flex-lg-row-fluid border-2 border-lg-1 border-bottom-0 collapse multi-collapse"
+                                                id="collapse_{{ $inventory->code }}">
+                                                <div class="card card-flush p-2"
+                                                    style="padding-top: 0px !important; padding-bottom: 0px !important;">
+                                                    <div class="card-header d-flex justify-content-between align-items-center p-3 pb-0"
+                                                        style="padding-top: 0 !important; padding-bottom: 0px !important;">
+                                                        <h4 class="fw-bold m-0 text-uppercase fw-bolder">
+                                                            phiếu nhập
+                                                        </h4>
+                                                    </div>
+                                                    <div class="card-body p-3 pt-0">
+                                                        <div class="table-responsive rounded">
+                                                            <table class="table table-striped table-sm table-hover">
+                                                                <thead class=" bg-dark">
+                                                                    <tr class="text-center">
+                                                                        <th class="ps-3" style="width: 10%;">Mã Phiếu
+                                                                        </th>
+                                                                        <th style="width: 10%;">Giá</th>
+                                                                        <th style="width: 9%;">Chiết Khấu(%)</th>
+                                                                        <th style="width: 9%;">VAT(%)</th>
+                                                                        <th style="width: 15%;">Ngày Nhập</th>
+                                                                        <th style="width: 10%;">Số Lô</th>
+                                                                        <th style="width: 10%;">Số Lượng</th>
+                                                                        <th class="pe-3" style="width: 12%;">
+                                                                            Tổng
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                @php
+                                                                    $totalPrice2 = 0;
+                                                                    $itemQuantity = 0;
+                                                                @endphp
+                                                                <tbody>
+                                                                    @forelse ($getReceiptDetail as $item)
+                                                                        @php
+                                                                            $price = $item->price ?? 0;
+                                                                            $quantity = $item->quantity;
+                                                                            $discount = $item->discount ?? 0;
+                                                                            $vat = $item->VAT ?? 0;
+
+                                                                            $itemQuantity += $quantity;
+                                                                            $itemPrice = $quantity * $price;
+                                                                            $itemDiscount =
+                                                                                $itemPrice * ($discount / 100);
+                                                                            $totalPrice = $itemPrice - $itemDiscount;
+                                                                            $totalPriceWithVAT =
+                                                                                $totalPrice * (1 + $vat / 100);
+                                                                        @endphp
+                                                                        <tr class="text-center">
+                                                                            <td>
+                                                                                <a class="text-decoration-underline"
+                                                                                    href="{{ route('warehouse.import') }}?kw={{ $item->receipt_code }}"
+                                                                                    target="_blank">
+                                                                                    #{{ $item->receipt_code }}
+                                                                                </a>
+                                                                            </td>
+                                                                            <td>{{ number_format($item->price, '0', ',', '.') }}
+                                                                                VND
+                                                                            </td>
+                                                                            <td>{{ number_format($item->discount, '0', ',', '.') }}%
+                                                                            </td>
+                                                                            <td>{{ number_format($item->VAT, '0', ',', '.') }}%
+                                                                            </td>
+                                                                            <td>{{ $item->created_at->format('d-m-Y H:i:s') }}
+                                                                            </td>
+                                                                            <td>{{ $item->batch_number }}</td>
+                                                                            <td>{{ $item->quantity }}</td>
+                                                                            <td>{{ number_format($totalPriceWithVAT, '0', ',', '.') }}
+                                                                                VND</td>
+                                                                        </tr>
+                                                                        @php
+                                                                            $totalPrice2 += $totalPriceWithVAT;
+                                                                        @endphp
+                                                                    @empty
+                                                                        <tr id="noDataAlert">
+                                                                            <td colspan="12" class="text-center">
+                                                                                <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                                                                    role="alert"
+                                                                                    style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                                                                    <div class="mb-3">
+                                                                                        <i class="fas fa-file-invoice"
+                                                                                            style="font-size: 36px; color: #6c757d;"></i>
+                                                                                    </div>
+                                                                                    <div class="text-center">
+                                                                                        <h5
+                                                                                            style="font-size: 16px; font-weight: 600; color: #495057;">
+                                                                                            Không Có Dữ Liệu</h5>
+                                                                                        <p
+                                                                                            style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                                                            Không Có Dữ Liệu Nhập Kho
+                                                                                            Của Lô Thiết Bị Này
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforelse
+                                                                    @if ($getReceiptDetail->count() > 1)
+                                                                        <tr class="text-center"
+                                                                            style="font-weight: bold; background-color: #f8f9fa;">
+                                                                            <td colspan="6" class="text-left ps-7">
+                                                                                Tổng Cộng</td>
+                                                                            <td>{{ $itemQuantity }}</td>
+                                                                            <td>{{ number_format($totalPrice2, '0', ',', '.') }}
+                                                                                VND</td>
+                                                                        </tr>
+                                                                    @endif
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="p-0" colspan="12"
+                                            style="background-color: #fafafa; padding-top: 0 !important;">
+                                            <div class="flex-lg-row-fluid border-2 border-lg-1 border-top-0 collapse multi-collapse"
+                                                id="collapse_{{ $inventory->code }}">
+                                                <div class="card card-flush p-2"
+                                                    style="padding-top: 0px !important; padding-bottom: 0px !important;">
+                                                    <div class="card-header d-flex justify-content-between align-items-center p-3 pb-0"
+                                                        style="padding-top: 0 !important; padding-bottom: 0px !important;">
+                                                        <h4 class="fw-bold m-0 text-uppercase fw-bolder">
+                                                            phiếu xuất
+                                                        </h4>
+                                                    </div>
+                                                    <div class="card-body p-3 pt-0">
+                                                        <div class="table-responsive rounded">
+                                                            <table class="table table-striped table-sm table-hover">
+                                                                <thead class="bg-dark">
+                                                                    <tr class="text-center">
+                                                                        <th class="ps-3" style="width: 10%;">Mã Phiếu
+                                                                        </th>
+                                                                        <th style="width: 15%;">Loại Xuất</th>
+                                                                        <th style="width: 40%;">
+                                                                            Nhà Cung Cấp / Phòng Ban / Lý Do Hủy
+                                                                        </th>
+                                                                        <th style="width: 10%;">Số Lô</th>
+                                                                        <th style="width: 10%;">Số Lượng</th>
+                                                                        <th class="pe-3" style="width: 15%;">Ngày Xuất
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                @php
+                                                                    $totalQuantityExport = 0;
+                                                                @endphp
+                                                                <tbody>
+                                                                    @forelse ($getExportDetail as $item)
+                                                                        @php
+                                                                            $totalQuantityExport += $item->quantity;
+                                                                        @endphp
+                                                                        <tr class="text-center">
+                                                                            <td>
+                                                                                <a class="text-decoration-underline"
+                                                                                    href="{{ route('warehouse.export') }}?kw={{ $item->export_code }}"
+                                                                                    target="_blank">
+                                                                                    #{{ $item->export_code }}
+                                                                                </a>
+                                                                            </td>
+                                                                            <td>{{ $item->export->export_type }}</td>
+                                                                            <td>
+                                                                                {{ $item->export->department_code ? $item->export->departments->name : ($item->export->supplier_code ? $item->export->suppliers->name : $item->export->reason ?? '') }}
+                                                                            </td>
+                                                                            <td>{{ $item->batch_number }}</td>
+                                                                            <td>{{ $item->quantity }}</td>
+                                                                            <td>{{ $item->created_at->format('d-m-Y H:i:s') }}
+                                                                            </td>
+                                                                        </tr>
+                                                                    @empty
+                                                                        <tr id="noDataAlert">
+                                                                            <td colspan="12" class="text-center">
+                                                                                <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
+                                                                                    role="alert"
+                                                                                    style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                                                                    <div class="mb-3">
+                                                                                        <i class="fas fa-file-invoice"
+                                                                                            style="font-size: 36px; color: #6c757d;"></i>
+                                                                                    </div>
+                                                                                    <div class="text-center">
+                                                                                        <h5
+                                                                                            style="font-size: 16px; font-weight: 600; color: #495057;">
+                                                                                            Không Có Dữ Liệu</h5>
+                                                                                        <p
+                                                                                            style="font-size: 14px; color: #6c757d; margin: 0;">
+                                                                                            Không Có Dữ Liệu Xuất Kho
+                                                                                            Của Lô Thiết Bị Này
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforelse
+                                                                    @if ($getExportDetail->count() > 1)
+                                                                        <tr class="text-center"
+                                                                            style="font-weight: bold; background-color: #f8f9fa;">
+                                                                            <td colspan="4" class="text-left ps-5">
+                                                                                Tổng Cộng
+                                                                            </td>
+                                                                            <td>{{ $totalQuantityExport }}</td>
+                                                                            <td></td>
+                                                                        </tr>
+                                                                    @endif
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty

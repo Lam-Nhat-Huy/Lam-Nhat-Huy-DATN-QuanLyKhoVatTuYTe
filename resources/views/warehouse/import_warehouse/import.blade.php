@@ -49,9 +49,18 @@
                             @forelse ($receipts as $item)
                                 <tr class="hover-table pointer">
                                     <td>
-                                        @if (($item->status == 3 || $item->status == 0) && $item->created_by == session('user_code'))
+                                        @if ($item->status == 0 && $item->created_by == session('user_code'))
                                             <input type="checkbox" name="import_codes[]" value="{{ $item->code }}"
                                                 class="row-checkbox" />
+                                        @elseif ($item->status == 3)
+                                            <i class="fa fa-clock text-dark" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Lưu Tạm"></i>
+                                        @elseif ($item->status == 1 && $item->receipt_type === 'Nhập Từ Nhà Cung Cấp')
+                                            <i class="fa fa-truck text-dark" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Nhập từ nhà cung cấp"></i>
+                                        @elseif ($item->status == 1 && $item->receipt_type === 'Nhập cân bằng kho')
+                                            <i class="fa-solid fa-scale-balanced text-dark" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Nhập cân bằng kho"></i>
                                         @endif
                                     </td>
                                     <td>

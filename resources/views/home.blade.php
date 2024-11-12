@@ -84,7 +84,7 @@
 
                             <div class="fv-row mb-10">
                                 <label class="form-label fs-6 fw-bolder text-dark">Số Điện Thoại</label>
-                                <input class="form-control form-control-lg form-control-solid" type="text"
+                                <input class="form-control form-control-lg" type="text"
                                     name="phone" autocomplete="off" value="{{ old('phone') }}" />
                                 @error('phone')
                                     <div class="message_error">{{ $message }}</div>
@@ -97,7 +97,7 @@
                                     <a href="{{ route('home.forgot') }}" class="link-primary fs-6 fw-bolder">Quên Mật
                                         Khẩu?</a>
                                 </div>
-                                <input class="form-control form-control-lg form-control-solid" type="password"
+                                <input class="form-control form-control-lg" type="password"
                                     name="password" id="password" autocomplete="off" />
                                 @error('password')
                                     <div class="message_error">{{ $message }}</div>

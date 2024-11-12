@@ -20,7 +20,6 @@ class CheckLogin
 
         $user = Users::where('code', $userCode)
             ->where('status', 0)
-            ->onlyTrashed()
             ->first();
 
         if ($userCode && $user) {
