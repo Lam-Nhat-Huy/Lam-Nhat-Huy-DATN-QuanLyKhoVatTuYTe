@@ -63,7 +63,7 @@
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Phòng Ban</label>
                         <div class="d-flex align-items-center">
                             <select name="department_code" id="department_code" onchange="changeSupplier()"
-                                class="form-select form-select-sm border border-success rounded-pill ps-5">
+                                class="form-select form-select-sm setupSelect2 border border-success rounded-pill">
                                 <option value="0">Chọn Phòng Ban...</option>
                                 @foreach ($AllDepartment as $item)
                                     <option value="{{ $item->code }}" id="option_department_{{ $item->code }}"
@@ -122,7 +122,7 @@
                     <div class="col-md-6 fv-row">
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Thiết Bị</label>
                         <select name="equipment" id="equipment" onchange="changeEquipment()"
-                            class="form-select form-select-sm border border-success rounded-pill ps-5">
+                            class="form-select form-select-sm setupSelect2 border border-success rounded-pill">
                             <option value="" selected>Chọn Thiết Bị...</option>
                             @foreach ($AllEquipment as $item)
                                 @if ($item->inventories->sum('current_quantity') <= 25)

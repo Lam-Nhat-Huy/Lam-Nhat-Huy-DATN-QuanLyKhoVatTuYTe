@@ -79,7 +79,7 @@
 
                             <div class="fv-row mb-3">
                                 <label class="required form-label fs-6 fw-bolder text-dark">Số Điện Thoại</label>
-                                <input class="form-control form-control-lg form-control-solid" type="text"
+                                <input class="form-control form-control-lg" type="text"
                                     name="phone_forgot" autocomplete="off" value="{{ old('phone_forgot') }}"
                                     placeholder="Nhập số điện thoại của tài khoản.." />
                                 @error('phone_forgot')

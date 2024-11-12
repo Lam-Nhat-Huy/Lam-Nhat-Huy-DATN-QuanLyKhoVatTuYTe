@@ -19,7 +19,7 @@ class InventoryController extends Controller
         $units = Units::all();
         $totalEquipments = Equipments::with('inventories')->count();
 
-        $query = Equipments::with('inventories')->orderBy('created_at', 'desc');
+        $query = Equipments::with(['inventories', 'receipt_detail', 'export_detail'])->orderBy('created_at', 'desc');
 
         $category = $request->input('category');
         $quantity = $request->input('quantity');
@@ -59,12 +59,19 @@ class InventoryController extends Controller
         $totalInventories = [];
 
         foreach ($initialEquipments as $equipment) {
-            $totalQuantity = $equipment->inventories->sum('current_quantity');
+            // Đếm tổng số lượng nhập và xuất
+            $totalIncoming = $equipment->receipt_detail->sum('quantity');  // Tổng số lượng nhập
+            $totalOutgoing = $equipment->export_detail->sum('quantity');  // Tổng số lượng xuất
+
+            // Tính tồn kho = tổng nhập - tổng xuất
+            $totalQuantity = $totalIncoming - $totalOutgoing;
+
             $totalInventories[$equipment->code] = [
-                'inventories' => $equipment->inventories,
+                'inventories' => $equipment->inventories, // Có thể giữ lại nếu cần thông tin chi tiết về các phiếu nhập, xuất
                 'total_quantity' => $totalQuantity,
             ];
 
+            // Đếm số lượng theo tình trạng tồn kho
             if ($totalQuantity < 1) {
                 $outOfStockCount++;
             } elseif ($totalQuantity <= 10) {

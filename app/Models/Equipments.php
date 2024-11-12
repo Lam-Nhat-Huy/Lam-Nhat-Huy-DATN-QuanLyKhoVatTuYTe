@@ -85,4 +85,20 @@ class Equipments extends Model
     {
         return $this->hasMany(Inventory_check_details::class, 'equipment_code', 'code');
     }
+
+    public function receipt_detail()
+    {
+        return $this->hasMany(Receipt_details::class, 'equipment_code', 'code')
+            ->whereHas('receipt', function ($query) {
+                $query->where('status', 1);
+            });
+    }
+
+    public function export_detail()
+    {
+        return $this->hasMany(Export_details::class, 'equipment_code', 'code')
+            ->whereHas('export', function ($query) {
+                $query->where('status', 1);
+            });
+    }
 }

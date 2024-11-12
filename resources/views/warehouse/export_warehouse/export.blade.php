@@ -58,9 +58,24 @@
                             @forelse ($exports as $item)
                                 <tr class="hover-table pointer">
                                     <td>
-                                        @if (($item->status == 3 || $item->status == 0) && $item->created_by == session('user_code'))
+                                        @if ($item->status == 0 && $item->created_by == session('user_code'))
                                             <input type="checkbox" name="import_codes[]" value="{{ $item->code }}"
                                                 class="row-checkbox" />
+                                        @elseif ($item->status == 3)
+                                            <i class="fa fa-clock text-dark" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Lưu Tạm"></i>
+                                        @elseif ($item->status == 1 && $item->export_type === 'Xuất Sử Dụng')
+                                            <i class="fas fa-building text-dark" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Xuất sử dụng"></i>
+                                        @elseif ($item->status == 1 && $item->export_type === 'Xuất Trả')
+                                            <i class="fa fa-truck text-dark" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Xuất trả"></i>
+                                        @elseif ($item->status == 1 && $item->export_type === 'Xuất Hủy')
+                                            <i class="fa fa-trash text-dark" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Xuất hủy"></i>
+                                        @elseif ($item->status == 1 && $item->export_type === 'Xuất cân bằng kho')
+                                            <i class="fa-solid fa-scale-balanced text-dark" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Xuất cân bằng kho"></i>
                                         @endif
                                     </td>
                                     <td>
@@ -164,7 +179,8 @@
                                                                         </tr>
                                                                     @elseif($item->export_type === 'Xuất Trả')
                                                                         <tr>
-                                                                            <td class=""><strong>Nhà Cung Cấp</strong>
+                                                                            <td class=""><strong>Nhà Cung
+                                                                                    Cấp</strong>
                                                                             </td>
                                                                             <td class="text-dark">
                                                                                 {{ $item->suppliers->name ?? 'Không Có' }}

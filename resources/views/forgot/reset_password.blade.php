@@ -88,7 +88,7 @@
 
                             <div class="fv-row mb-10">
                                 <label class="required form-label fs-6 fw-bolder text-dark">Mật Khẩu Mới</label>
-                                <input class="form-control form-control-lg form-control-solid" type="password"
+                                <input class="form-control form-control-lg" type="password"
                                     name="new_password" autocomplete="off" value="{{ old('new_password') }}" />
                                 @error('new_password')
                                     <div class="message_error">{{ $message }}</div>
@@ -97,7 +97,7 @@
 
                             <div class="fv-row mb-10">
                                 <label class="required form-label fs-6 fw-bolder text-dark">Xác Nhận Mật Khẩu Mới</label>
-                                <input class="form-control form-control-lg form-control-solid" type="password"
+                                <input class="form-control form-control-lg" type="password"
                                     name="new_password_confirmation" autocomplete="off"
                                     value="{{ old('new_password_confirmation') }}" />
                                 @error('new_password_confirmation')
