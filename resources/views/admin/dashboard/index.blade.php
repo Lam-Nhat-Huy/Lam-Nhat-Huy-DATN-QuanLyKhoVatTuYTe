@@ -547,7 +547,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-5 mb-xl-8" style="padding: 0 25px">
+        <div class="row mb-5 mb-xl-8 mx-11">
             <!--begin::Col-->
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="card mb-5 mb-xl-8 border-0 shadow">
@@ -583,7 +583,7 @@
             data: {
                 labels: [
                     @foreach ($inventoryData as $data)
-                        "{{ date('F', mktime(0, 0, 0, $data->month, 10)) }}",
+                        "Tháng {{ $data->month }}",
                     @endforeach
                 ],
                 datasets: [{
@@ -612,7 +612,7 @@
                         enabled: true,
                         callbacks: {
                             label: function(context) {
-                                return `Số lượng: ${context.raw}`;
+                                return ` Số lượng: ${context.raw}`;
                             }
                         }
                     }
@@ -622,7 +622,7 @@
                         title: {
                             display: true,
                             text: 'Tháng'
-                        }
+                        },
                     },
                     y: {
                         beginAtZero: true,
@@ -640,7 +640,7 @@
             var monthlyExpenses = @json($monthlyImportExpenses);
 
             var months = monthlyExpenses.map(item => {
-                return new Date(0, item.month - 1).toLocaleString('default', {
+                return new Date(0, item.month - 1).toLocaleString('vi-VN', {
                     month: 'long'
                 });
             });

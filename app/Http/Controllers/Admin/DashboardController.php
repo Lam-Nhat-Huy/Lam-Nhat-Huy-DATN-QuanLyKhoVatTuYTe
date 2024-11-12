@@ -8,7 +8,6 @@ use App\Models\Inventories;
 use App\Models\Inventory_checks;
 use App\Models\Notifications;
 use App\Models\Receipt_details;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -31,12 +30,23 @@ class DashboardController extends Controller
         $warnings = $this->getLowInventoryWarnings($threshold);
         $exportLog = $this->getExportLog();
         $importTotal = Receipt_details::whereMonth('created_at', now()->month)
+            ->whereHas('receipt', function ($subReceipt) {
+                $subReceipt->whereNull('deleted_at')
+                    ->where('status', 1);
+            })
             ->sum('quantity');
+
         $exportTotal = Exports::whereMonth('export_date', now()->month)
             ->join('export_details', 'exports.code', '=', 'export_details.export_code')
+            ->whereNull('exports.deleted_at')
+            ->where('exports.status', 1)
             ->sum('export_details.quantity');
 
-        $allReceiptDetail = Receipt_details::whereMonth('created_at', now()->month)->get();
+        $allReceiptDetail = Receipt_details::whereMonth('created_at', now()->month)->whereHas('receipt', function ($subReceipt) {
+            $subReceipt->whereNull('deleted_at')
+                ->where('status', 1);
+        })
+            ->get();
 
         $monthlyImportExpenses = $this->getMonthlyImportExpenses();
 
@@ -74,7 +84,10 @@ class DashboardController extends Controller
         $inventoryData = Inventories::select(
             DB::raw('MONTH(created_at) as month'),
             DB::raw('SUM(current_quantity) as total_quantity')
-        )->groupBy('month')->get();
+        )
+            ->groupBy('month')
+            ->get();
+
         $importStatistics = $this->getImportStatistics(now()->month);
         $inventoryCheckLog = $this->getInventoryCheckLog();
         $getEquipmentImportMonth = $this->getEquipmentImportMonth();
@@ -171,7 +184,11 @@ class DashboardController extends Controller
             DB::raw('MONTH(created_at) as month'),
             DB::raw('SUM(quantity) as total_quantity'),
             DB::raw('SUM(quantity * price) as total_value')
-        );
+        )
+            ->whereHas('receipt', function ($subReceipt) {
+                $subReceipt->whereNull('deleted_at')
+                    ->where('status', 1);
+            });
 
         if ($month) {
             $query->whereMonth('created_at', $month);
@@ -197,19 +214,31 @@ class DashboardController extends Controller
 
     public function getEquipmentImportMonth()
     {
-        $query = Receipt_details::whereMonth('created_at', now()->month)->get();
+        $query = Receipt_details::whereMonth('created_at', now()->month)
+            ->whereHas('receipt', function ($subReceipt) {
+                $subReceipt->whereNull('deleted_at')
+                    ->where('status', 1);
+            })
+            ->get();
 
         return $query;
     }
 
     public function getMonthlyImportExpenses()
     {
-        // Query to calculate monthly expenses for imports
+        // Query to calculate monthly expenses for imports considering discount and VAT
         $monthlyExpenses = Receipt_details::select(
             DB::raw('MONTH(created_at) as month'),
-            DB::raw('SUM(quantity * price) as total_expense')
+            DB::raw('SUM(
+                        quantity * 
+                        ((price * (1 - discount / 100)) * (1 + vat / 100))
+                    ) as total_expense')
         )
-            ->whereYear('created_at', now()->year)
+            ->whereHas('receipt', function ($subReceipt) {
+                $subReceipt->whereNull('deleted_at')
+                    ->where('status', 1);
+            })
+            ->whereYear('created_at', now()->year)  // Filter for the current year
             ->groupBy('month')
             ->orderBy('month', 'asc')
             ->get();

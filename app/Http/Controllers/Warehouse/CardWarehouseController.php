@@ -41,7 +41,8 @@ class CardWarehouseController extends Controller
         $receiptsBeforeStart = Receipt_details::where('equipment_code', $equipment_code)
             ->where('created_at', '<=', $start_date)
             ->whereHas('receipt', function ($subReceipt) {
-                $subReceipt->whereNull('deleted_at');
+                $subReceipt->whereNull('deleted_at')
+                    ->where('status', 1);
             })
             ->get(['batch_number', 'quantity']);
 
@@ -53,18 +54,18 @@ class CardWarehouseController extends Controller
             $totalImportBeforeStart = Receipt_details::where('equipment_code', $equipment_code)
                 ->where('batch_number', $batch_number)
                 ->where('created_at', '<=', $start_date)
-
                 ->whereHas('receipt', function ($subReceipt) {
-                    $subReceipt->whereNull('deleted_at');
+                    $subReceipt->whereNull('deleted_at')
+                        ->where('status', 1);
                 })
                 ->sum('quantity');
 
             $totalExportBeforeStart = Export_details::where('equipment_code', $equipment_code)
                 ->where('batch_number', $batch_number)
                 ->where('created_at', '<=', $start_date)
-
                 ->whereHas('export', function ($subReceipt) {
-                    $subReceipt->whereNull('deleted_at');
+                    $subReceipt->whereNull('deleted_at')
+                        ->where('status', 1);
                 })
                 ->sum('quantity');
 
@@ -77,9 +78,9 @@ class CardWarehouseController extends Controller
 
         $receiptsInPeriod = Receipt_details::where('equipment_code', $equipment_code)
             ->whereBetween('created_at', [$start_date, $end_date])
-
             ->whereHas('receipt', function ($subReceipt) {
-                $subReceipt->whereNull('deleted_at');
+                $subReceipt->whereNull('deleted_at')
+                    ->where('status', 1);
             })
             ->get(['batch_number', 'quantity']);
 
@@ -89,18 +90,18 @@ class CardWarehouseController extends Controller
             $totalImportInPeriod = Receipt_details::where('equipment_code', $equipment_code)
                 ->where('batch_number', $batch_number)
                 ->whereBetween('created_at', [$start_date, $end_date])
-
                 ->whereHas('receipt', function ($subReceipt) {
-                    $subReceipt->whereNull('deleted_at');
+                    $subReceipt->whereNull('deleted_at')
+                        ->where('status', 1);
                 })
                 ->sum('quantity');
 
             $totalExportInPeriod = Export_details::where('equipment_code', $equipment_code)
                 ->where('batch_number', $batch_number)
                 ->whereBetween('created_at', [$start_date, $end_date])
-
                 ->whereHas('export', function ($subReceipt) {
-                    $subReceipt->whereNull('deleted_at');
+                    $subReceipt->whereNull('deleted_at')
+                        ->where('status', 1);
                 })
                 ->sum('quantity');
 
@@ -111,18 +112,18 @@ class CardWarehouseController extends Controller
 
         $getImportBetweenDate = Receipt_details::where('equipment_code', $equipment_code)
             ->whereBetween('created_at', [$start_date, $end_date])
-
             ->whereHas('receipt', function ($subReceipt) {
-                $subReceipt->whereNull('deleted_at');
+                $subReceipt->whereNull('deleted_at')
+                    ->where('status', 1);
             })
             ->get();
 
         $getExportBetweenDate = Export_details::with(['export'])
             ->where('equipment_code', $equipment_code)
             ->whereBetween('created_at', [$start_date, $end_date])
-
             ->whereHas('export', function ($subReceipt) {
-                $subReceipt->whereNull('deleted_at');
+                $subReceipt->whereNull('deleted_at')
+                    ->where('status', 1);
             })
             ->get();
 

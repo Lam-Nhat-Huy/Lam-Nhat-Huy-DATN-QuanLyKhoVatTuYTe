@@ -29,7 +29,9 @@ class Exports extends Model
         'supplier_code',
         'reason',
         'export_request_code',
-        'created_by'
+        'created_by',
+        'updated_at',
+        'deleted_at'
     ];
 
     public function exportDetail()
