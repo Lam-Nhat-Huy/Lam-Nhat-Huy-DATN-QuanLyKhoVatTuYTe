@@ -401,7 +401,8 @@ class ExportController extends Controller
         $equipmentBatches = [];
 
         foreach ($getBatchWithQuantity as $inventory) {
-            $equipmentBatches[$inventory->equipment_code][] = [
+            $equipmentBatches[] = [
+                'equipment_code' => $inventory->equipment_code,
                 'batch_number' => $inventory->batch_number,
                 'total_quantity' => $inventory->total_quantity,
             ];
@@ -409,7 +410,16 @@ class ExportController extends Controller
 
         $jsonEquipmentBatches = json_encode($equipmentBatches);
 
-        $checkList = Export_details::where('export_code', $code)->pluck('batch_number')->toArray();
+        $checkList = Export_details::where('export_code', $code)
+            ->select('equipment_code', 'batch_number')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'equipment_code' => $item->equipment_code,
+                    'batch_number' => $item->batch_number,
+                ];
+            })
+            ->toArray();
 
         $checkList = json_encode($checkList);
 

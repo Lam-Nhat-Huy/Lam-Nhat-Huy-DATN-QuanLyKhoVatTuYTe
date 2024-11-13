@@ -256,11 +256,11 @@
                                                 <div class="d-flex align-items-center"
                                                     id="batch_number_change_{{ $item->batch_number }}">
                                                     {{ $item->batch_number }} - (Tồn Kho:
-                                                    {{ $item->equipments->inventories->sum('current_quantity') }}
+                                                    {{ $item->equipments->inventories->where('batch_number', $item->batch_number)->where('equipment_code', $item->equipment_code)->first()->current_quantity ?? 0 }}
                                                     {{ $item->equipments->units->name }})
                                                 </div>
                                                 <input type="hidden" id="current_quantity_{{ $item->batch_number }}"
-                                                    value="{{ $item->equipments->inventories->sum('current_quantity') }}" />
+                                                    value="{{ $item->equipments->inventories->where('batch_number', $item->batch_number)->where('equipment_code', $item->equipment_code)->first()->current_quantity ?? 0 }}" />
                                             </td>
                                             <td class="">
                                                 <div class="d-flex align-items-center">
@@ -269,7 +269,7 @@
                                                         class="form-control form-control-sm border border-success rounded-pill">
                                                     <div class="message_error d-none ms-2 m-0 p-0 pointer"
                                                         data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Số lượng không được vượt quá {{ $item->equipments->inventories->sum('current_quantity') }}"
+                                                        title="Số lượng không được vượt quá {{ $item->equipments->inventories->where('batch_number', $item->batch_number)->where('equipment_code', $item->equipment_code)->first()->current_quantity ?? 0 }}"
                                                         id="quantity_list_{{ $item->batch_number }}">
                                                         <i class="fa-solid fa-triangle-exclamation text-danger"></i>
                                                     </div>
