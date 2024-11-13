@@ -38,78 +38,73 @@ class CardWarehouseController extends Controller
             ->whereNull('deleted_at')
             ->first();
 
+        // Lấy tất cả dữ liệu nhập trước ngày bắt đầu, gom theo batch_number
         $receiptsBeforeStart = Receipt_details::where('equipment_code', $equipment_code)
             ->where('created_at', '<=', $start_date)
             ->whereHas('receipt', function ($subReceipt) {
                 $subReceipt->whereNull('deleted_at')
                     ->where('status', 1);
             })
-            ->get(['batch_number', 'quantity']);
+            ->groupBy('batch_number')
+            ->selectRaw('batch_number, SUM(quantity) as total_import')
+            ->get();
 
+        // Lấy tất cả dữ liệu xuất trước ngày bắt đầu, gom theo batch_number
+        $exportsBeforeStart = Export_details::where('equipment_code', $equipment_code)
+            ->where('created_at', '<=', $start_date)
+            ->whereHas('export', function ($subReceipt) {
+                $subReceipt->whereNull('deleted_at')
+                    ->where('status', 1);
+            })
+            ->groupBy('batch_number')
+            ->selectRaw('batch_number, SUM(quantity) as total_export')
+            ->get()->keyBy('batch_number');
+
+        // Tính toán số dư đầu kỳ
         $beginning_balance_total = 0;
-
         foreach ($receiptsBeforeStart as $receipt) {
             $batch_number = $receipt->batch_number;
+            $totalImportBeforeStart = $receipt->total_import;
+            $totalExportBeforeStart = $exportsBeforeStart[$batch_number]->total_export ?? 0;
 
-            $totalImportBeforeStart = Receipt_details::where('equipment_code', $equipment_code)
-                ->where('batch_number', $batch_number)
-                ->where('created_at', '<=', $start_date)
-                ->whereHas('receipt', function ($subReceipt) {
-                    $subReceipt->whereNull('deleted_at')
-                        ->where('status', 1);
-                })
-                ->sum('quantity');
-
-            $totalExportBeforeStart = Export_details::where('equipment_code', $equipment_code)
-                ->where('batch_number', $batch_number)
-                ->where('created_at', '<=', $start_date)
-                ->whereHas('export', function ($subReceipt) {
-                    $subReceipt->whereNull('deleted_at')
-                        ->where('status', 1);
-                })
-                ->sum('quantity');
-
-            $beginning_balance_batch = $totalImportBeforeStart - $totalExportBeforeStart;
-
-            $beginning_balance_total += $beginning_balance_batch;
+            $beginning_balance_total += ($totalImportBeforeStart - $totalExportBeforeStart);
         }
 
+        // Tính toán số dư cuối kỳ, khởi đầu bằng số dư đầu kỳ
         $ending_balance_total = $beginning_balance_total;
 
+        // Lấy tất cả dữ liệu nhập trong khoảng thời gian giữa start_date và end_date, gom theo batch_number
         $receiptsInPeriod = Receipt_details::where('equipment_code', $equipment_code)
             ->whereBetween('created_at', [$start_date, $end_date])
             ->whereHas('receipt', function ($subReceipt) {
                 $subReceipt->whereNull('deleted_at')
                     ->where('status', 1);
             })
-            ->get(['batch_number', 'quantity']);
+            ->groupBy('batch_number')
+            ->selectRaw('batch_number, SUM(quantity) as total_import')
+            ->get();
 
+        // Lấy tất cả dữ liệu xuất trong khoảng thời gian giữa start_date và end_date, gom theo batch_number
+        $exportsInPeriod = Export_details::where('equipment_code', $equipment_code)
+            ->whereBetween('created_at', [$start_date, $end_date])
+            ->whereHas('export', function ($subReceipt) {
+                $subReceipt->whereNull('deleted_at')
+                    ->where('status', 1);
+            })
+            ->groupBy('batch_number')
+            ->selectRaw('batch_number, SUM(quantity) as total_export')
+            ->get()->keyBy('batch_number');
+
+        // Tính toán số dư cuối kỳ
         foreach ($receiptsInPeriod as $receipt) {
             $batch_number = $receipt->batch_number;
+            $totalImportInPeriod = $receipt->total_import;
+            $totalExportInPeriod = $exportsInPeriod[$batch_number]->total_export ?? 0;
 
-            $totalImportInPeriod = Receipt_details::where('equipment_code', $equipment_code)
-                ->where('batch_number', $batch_number)
-                ->whereBetween('created_at', [$start_date, $end_date])
-                ->whereHas('receipt', function ($subReceipt) {
-                    $subReceipt->whereNull('deleted_at')
-                        ->where('status', 1);
-                })
-                ->sum('quantity');
-
-            $totalExportInPeriod = Export_details::where('equipment_code', $equipment_code)
-                ->where('batch_number', $batch_number)
-                ->whereBetween('created_at', [$start_date, $end_date])
-                ->whereHas('export', function ($subReceipt) {
-                    $subReceipt->whereNull('deleted_at')
-                        ->where('status', 1);
-                })
-                ->sum('quantity');
-
-            $ending_balance_batch = $totalImportInPeriod - $totalExportInPeriod;
-
-            $ending_balance_total += $ending_balance_batch;
+            $ending_balance_total += ($totalImportInPeriod - $totalExportInPeriod);
         }
 
+        // Lấy tất cả các phiếu nhập trong khoảng thời gian giữa start_date và end_date
         $getImportBetweenDate = Receipt_details::where('equipment_code', $equipment_code)
             ->whereBetween('created_at', [$start_date, $end_date])
             ->whereHas('receipt', function ($subReceipt) {
@@ -118,8 +113,8 @@ class CardWarehouseController extends Controller
             })
             ->get();
 
-        $getExportBetweenDate = Export_details::with(['export'])
-            ->where('equipment_code', $equipment_code)
+        // Lấy tất cả các phiếu xuất trong khoảng thời gian giữa start_date và end_date
+        $getExportBetweenDate = Export_details::where('equipment_code', $equipment_code)
             ->whereBetween('created_at', [$start_date, $end_date])
             ->whereHas('export', function ($subReceipt) {
                 $subReceipt->whereNull('deleted_at')

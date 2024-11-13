@@ -66,11 +66,17 @@
                                         $getReceiptDetail = App\Models\Receipt_details::orderBy('created_at', 'DESC')
                                             ->where('equipment_code', $inventory->equipment_code)
                                             ->where('batch_number', $inventory->batch_number)
+                                            ->whereHas('receipt', function ($subReceipt) {
+                                                $subReceipt->whereNull('deleted_at')->where('status', 1);
+                                            })
                                             ->get();
 
                                         $getExportDetail = App\Models\Export_details::orderBy('created_at', 'DESC')
                                             ->where('equipment_code', $inventory->equipment_code)
                                             ->where('batch_number', $inventory->batch_number)
+                                            ->whereHas('export', function ($subReceipt) {
+                                                $subReceipt->whereNull('deleted_at')->where('status', 1);
+                                            })
                                             ->get();
                                     @endphp
                                     <tr class="text-center"
