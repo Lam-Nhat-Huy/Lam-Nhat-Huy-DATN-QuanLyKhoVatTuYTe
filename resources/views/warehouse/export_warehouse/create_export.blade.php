@@ -62,7 +62,7 @@
                         <div class="d-flex align-items-center">
                             <select name="department_code" id="department_code"
                                 {{ !empty($getExportRequest) ? 'disabled' : '' }}
-                                class="form-select form-select-sm border border-success rounded-pill setupSelect2">
+                                class="form-select form-select-sm border border-success rounded-pill">
                                 <option value="0">Chọn Phòng Ban...</option>
                                 <option value="1" class="d-none">Chọn Phòng Ban...</option>
                                 @foreach ($allDepartment as $item)
@@ -88,7 +88,7 @@
                         <label for="supplier_code" class="required form-label fw-semibold">Nhà Cung Cấp</label>
                         <div class="d-flex align-items-center">
                             <select name="supplier_code" id="supplier_code"
-                                class="form-select form-select-sm border border-success rounded-pill setupSelect2">
+                                class="form-select form-select-sm border border-success rounded-pill">
                                 <option value="0">Chọn Nhà Cung Cấp...</option>
                                 <option value="1" class="d-none">Chọn Nhà Cung Cấp...</option>
                                 @foreach ($allSupplier as $item)
@@ -110,7 +110,7 @@
                     <div class="col-md-6 mb-3 fv-row d-none" id="cancel_reason">
                         <label for="reason" class="required form-label fw-semibold">Lý Do Hủy</label>
                         <select name="reason" id="reason"
-                            class="form-select form-select-sm border border-success rounded-pill setupSelect2">
+                            class="form-select form-select-sm border border-success rounded-pill">
                             <option value="0">Chọn Lý Do...</option>
                             <option value="1" class="d-none">Chọn Lý Do...</option>
                             <option value="Hư Hỏng">Hư Hỏng</option>
@@ -128,7 +128,7 @@
                         <label for="export_type" class="required form-label fw-semibold">Loại Xuất</label>
                         <div class="d-flex align-items-center">
                             <select name="export_type" id="export_type" {{ !empty($getExportRequest) ? 'disabled' : '' }}
-                                class="form-select form-select-sm border border-success rounded-pill setupSelect2">
+                                class="form-select form-select-sm border border-success rounded-pill">
                                 <option value="Xuất Sử Dụng"
                                     {{ !empty($editExport) && $editExport->export_type === 'Xuất Sử Dụng' ? 'selected' : '' }}>
                                     Xuất Sử Dụng</option>
