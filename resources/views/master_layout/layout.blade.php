@@ -171,47 +171,23 @@
             overflow: hidden;
             background: #f9fafb;
             border: 1px solid #e2e8f0;
-            border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .slider-content {
             display: flex;
             white-space: nowrap;
-            padding-left: 100%;
-            animation: scroll-left 15s linear infinite;
-            font-size: 1rem;
-            color: #333;
+            position: relative;
         }
 
         .notification-item {
             margin-right: 40px;
             padding: 8px 12px;
-            border-radius: 5px;
             display: inline-block;
+            color: #333;
+            font-size: 1rem;
         }
 
-        .slider-content span {
-            margin: 0 10px;
-            color: #1a202c;
-        }
-
-        .highlight {
-            color: #0073e6;
-            font-weight: 500;
-        }
-
-        @keyframes scroll-left {
-            from {
-                transform: translateX(0%);
-            }
-
-            to {
-                transform: translateX(-100%);
-            }
-        }
-
-        /* Hide the slider on mobile screens (max-width 768px) */
         @media (max-width: 768px) {
             .align-items-stretch {
                 display: none;
@@ -252,19 +228,23 @@
 
             <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
-                <div id="kt_header" style="" class="align-items-stretch">
-                    <div class="container-fluid d-flex align-items-stretch justify-content-between p-0">
-                        <div class="slider-container">
-                            <div class="slider-content justify-between">
-                                @foreach ($getNotification as $notification)
-                                    <div class="notification-item">
-                                        {!! $notification->content !!}
-                                    </div>
-                                @endforeach
+                @if (request()->is('system'))
+                    <div id="kt_header" class="align-items-stretch">
+                        <div class="container-fluid d-flex align-items-stretch justify-content-between p-0">
+                            <div class="slider-container">
+                                <div id="sliderContent" class="slider-content">
+                                    @foreach ($getNotification as $notification)
+                                        <div class="notification-item">
+                                            <strong>{!! $notification->content !!}</strong>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+
+                @endif
+
 
 
                 <sidebar>
@@ -374,6 +354,40 @@
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const sliderContent = document.getElementById("sliderContent");
+            const originalContent = sliderContent.innerHTML;
+
+            // Duplicate content to create infinite loop effect
+            sliderContent.innerHTML += originalContent;
+
+            // Initial position of the slider (start from right outside the view)
+            sliderContent.style.transform = `translateX(${sliderContent.offsetWidth}px)`;
+
+            function startScrolling() {
+                const contentWidth = sliderContent.offsetWidth / 1; // Half because content is duplicated
+
+                let position = contentWidth; // Start from the right of the first half
+
+                function scroll() {
+                    position -= 2; // Move left by 1 pixel per frame
+
+                    if (position <= -contentWidth) {
+                        position = contentWidth; // Reset to right position
+                    }
+
+                    sliderContent.style.transform = `translateX(${position}px)`;
+                    requestAnimationFrame(scroll);
+                }
+
+                scroll();
+            }
+
+            startScrolling();
+        });
+
+
+
         function checkOrientation() {
             if (window.innerHeight > window.innerWidth) {
                 $("#createImport").modal("show");
