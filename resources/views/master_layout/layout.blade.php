@@ -154,6 +154,69 @@
                 transform: translateY(0);
             }
         }
+
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
+        /* Existing styles for the notification slider */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .slider-container {
+            width: 100%;
+            overflow: hidden;
+            background: #f9fafb;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider-content {
+            display: flex;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: scroll-left 15s linear infinite;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .notification-item {
+            margin-right: 40px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .slider-content span {
+            margin: 0 10px;
+            color: #1a202c;
+        }
+
+        .highlight {
+            color: #0073e6;
+            font-weight: 500;
+        }
+
+        @keyframes scroll-left {
+            from {
+                transform: translateX(0%);
+            }
+
+            to {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Hide the slider on mobile screens (max-width 768px) */
+        @media (max-width: 768px) {
+            .align-items-stretch {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -188,6 +251,21 @@
             </navbar>
 
             <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+
+                <div id="kt_header" style="" class="align-items-stretch">
+                    <div class="container-fluid d-flex align-items-stretch justify-content-between p-0">
+                        <div class="slider-container">
+                            <div class="slider-content justify-between">
+                                @foreach ($getNotification as $notification)
+                                    <div class="notification-item">
+                                        {!! $notification->content !!}
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <sidebar>
                     @include('master_layout.components.sidebar')
