@@ -624,7 +624,7 @@
                 supplierSelect.value = '1';
                 reasonSelect.value = '1';
 
-                if ("{{ $action }}" === "{{ route('warehouse.store_import') }}") {
+                if ("{{ $action }}" === "{{ route('warehouse.store_export') }}") {
                     required_date.value = '';
                 }
 
