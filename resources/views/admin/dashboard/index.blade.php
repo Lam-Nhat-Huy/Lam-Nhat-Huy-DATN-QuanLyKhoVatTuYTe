@@ -311,6 +311,29 @@
                                                 <a class="text-gray-800 fw-bolder fs-6 mb-1 text-hover-primary text-decoration-underline"
                                                     href="{{ route('warehouse.export') }}?kw={{ $export->code }}">#{{ $export->code }}
                                                 </a>
+                                                @if ($export->export_type == 'Xuất Hủy')
+                                                    <span class="float-end"
+                                                        style="color: #FF4D4D; font-weight: normal; font-size: 12px;">Xuất
+                                                        hủy</span>
+                                                    {{-- Màu đỏ đậm --}}
+                                                @elseif ($export->export_type == 'Xuất Trả')
+                                                    <span class="float-end"
+                                                        style="color: #4D79FF; font-weight: normal; font-size: 12px;">Xuất
+                                                        trả</span>
+                                                    {{-- Màu xanh dương nhạt --}}
+                                                @elseif ($export->export_type == 'Xuất Sử Dụng')
+                                                    <span class="float-end"
+                                                        style="color: #4CAF50; font-weight: normal; font-size: 12px;">Xuất
+                                                        sử dụng</span>
+                                                    {{-- Màu xanh lá --}}
+                                                @elseif ($export->export_type == 'Xuất cân bằng kho')
+                                                    <span class="float-end"
+                                                        style="color: #FF9800; font-weight: normal; font-size: 12px;">Xuất
+                                                        cân bằng
+                                                    </span> {{-- Màu cam --}}
+                                                @endif
+
+
                                             </h6>
                                             <span class="text-muted fw-bold d-block mb-1">Ngày xuất:
                                                 {{ \Carbon\Carbon::parse($export->created_at)->format('d/m/Y H:i:s') }}</span>

@@ -216,27 +216,44 @@
                                                             <div class="col-md-7">
                                                                 <table class="table table-borderless">
                                                                     <tbody>
-                                                                        <tr>
-                                                                            <td><strong>Mã:</strong></td>
-                                                                            <td class="text-dark">#{{ $item->code }}
+                                                                        <tr
+                                                                            style="display: flex; justify-content: space-between; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                                                            <td><strong>Tên:</strong></td>
+                                                                            <td class="text-dark"
+                                                                                style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                                                {{ $item->name }}
                                                                             </td>
                                                                         </tr>
-                                                                        <tr>
+                                                                        <tr
+                                                                            style="display: flex; justify-content: space-between; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                                                            <td><strong>Mã:</strong></td>
+                                                                            <td class="text-dark"
+                                                                                style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                                                #{{ $item->code }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr
+                                                                            style="display: flex; justify-content: space-between; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
                                                                             <td><strong>Nhóm:</strong></td>
-                                                                            <td class="text-dark">
+                                                                            <td class="text-dark"
+                                                                                style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                                                                 {{ $item->equipmentType->name ?? 'Không có dữ liệu' }}
                                                                             </td>
                                                                         </tr>
-                                                                        <tr>
-                                                                            <td><strong>Mã vạch:</strong></td>
-                                                                            <td class="text-dark">
-                                                                                @if ($item->barcode)
-                                                                                    <img src="{{ asset('storage/' . $item->barcode) }}"
-                                                                                        alt="Barcode" width="100%">
-                                                                                    <div class="text-center mt-2">
-                                                                                        {{ $item->code }}
-                                                                                    </div>
-                                                                                @endif
+                                                                        <tr
+                                                                            style="display: flex; justify-content: space-between; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                                                            <td><strong>Đơn vị:</strong></td>
+                                                                            <td class="text-dark"
+                                                                                style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                                                {{ $item->units->name }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr
+                                                                            style="display: flex; justify-content: space-between; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                                                            <td><strong>VAT:</strong></td>
+                                                                            <td class="text-dark"
+                                                                                style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                                                {{ $item->vat }}%
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -245,21 +262,11 @@
                                                             <div class="col-md-5">
                                                                 <table class="table table-borderless">
                                                                     <tbody>
-                                                                        <tr>
-                                                                            <td><strong>Đơn vị:</strong></td>
-                                                                            <td class="text-dark">
-                                                                                {{ $item->units->name }}
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td><strong>VAT:</strong></td>
-                                                                            <td class="text-dark">
-                                                                                {{ $item->vat }}%
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
+                                                                        <tr
+                                                                            style="display: flex; justify-content: space-between;">
                                                                             <td><strong>Mô tả:</strong></td>
-                                                                            <td class="text-dark">
+                                                                            <td class="text-dark"
+                                                                                style="max-width: 100%; white-space: normal; overflow: visible;">
                                                                                 {{ $item->description }}
                                                                             </td>
                                                                         </tr>
@@ -267,6 +274,8 @@
                                                                 </table>
                                                             </div>
                                                         </div>
+
+
                                                         <div class="text-end mt-4">
                                                             <div class="button-group">
                                                                 <a href="{{ route('equipments.update_equipments', $item->code) }}"

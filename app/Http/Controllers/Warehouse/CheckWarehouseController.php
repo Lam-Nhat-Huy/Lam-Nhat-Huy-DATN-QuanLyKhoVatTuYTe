@@ -549,6 +549,7 @@ class CheckWarehouseController extends Controller
         if ($inventoryCheck && $inventoryCheck->status == 0 && session('isAdmin') == true) {
             $inventoryCheck->status = 1;
             $inventoryCheck->check_date = now();
+            $inventoryCheck->approved_by = session('user_code');
             $inventoryCheck->save();
 
             Notifications::where('lock_warehouse', 1)

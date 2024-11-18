@@ -12,6 +12,7 @@ return new class extends Migration
             $table->char('code', 10)->primary();
             $table->char('user_code', 10)->nullable();
             $table->char('recheck_user_code', 20)->nullable();
+            $table->char('approved_by', 10)->nullable();
             $table->date('check_date')->nullable();
             $table->text('note')->nullable();
             $table->boolean('status')->default(true);

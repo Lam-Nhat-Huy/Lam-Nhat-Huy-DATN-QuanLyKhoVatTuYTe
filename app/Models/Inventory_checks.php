@@ -48,4 +48,9 @@ class Inventory_checks extends Model
     {
         return $this->belongsTo(Users::class, 'recheck_user_code', 'code');
     }
+
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by', 'code');
+    }
 }

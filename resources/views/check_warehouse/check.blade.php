@@ -219,6 +219,17 @@
                                                                         @endif
                                                                     </td>
                                                                 </tr>
+                                                                <tr>
+                                                                    <td class="">
+                                                                        <strong>Người duyệt phiếu
+                                                                            (Admin)
+                                                                        </strong>
+                                                                    </td>
+                                                                    <td class="text-gray-800">
+                                                                        {{ $item->approvedBy ? $item->approvedBy->last_name . ' ' . $item->approvedBy->first_name : 'Chưa duyệt' }}
+                                                                    </td>
+                                                                </tr>
+
                                                             </tbody>
                                                         </table>
                                                     </div>
