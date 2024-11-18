@@ -107,13 +107,13 @@
                                         {{ $item->report_type }}
                                     </td>
                                     <td class="noPpg">
-                                        @if ($item->status == 0 && file_exists(storage_path('app/public/reports/' . $item->file)))
-                                            <a href="{{ asset('storage/reports/' . $item->file) }}" class="pointer"
+                                        @if ($item->status == 0 && file_exists(public_path($item->file)))
+                                            <a href="{{ asset($item->file) }}" class="pointer"
                                                 style="color: rgb(33, 64, 178);" target="_blank">
                                                 <i class="fa fa-eye me-1"></i>Xem Trước
                                             </a>
-                                        @elseif(file_exists(storage_path('app/public/reports/' . $item->file)))
-                                            <a href="{{ asset('storage/reports/' . $item->file) }}" class="pointer"
+                                        @elseif (file_exists(public_path($item->file)))
+                                            <a href="{{ asset($item->file) }}" class="pointer"
                                                 style="color: rgb(33, 64, 178);" download="{{ basename($item->file) }}">
                                                 <i class="fa fa-download me-1"></i>Tải Xuống
                                             </a>
@@ -151,7 +151,7 @@
                                                 @endif
                                                 <button type="button" class="btn btn-sm btn-danger rounded-pill"
                                                     data-bs-toggle="modal"
-                                                    {{ session('isAdmin') !== 1 ? 'disabled' : '' }}
+                                                    {{ session('isAdmin') == true ? '' : 'disabled' }}
                                                     data-bs-target="#deleteModal_{{ $item->code }}">
                                                     <i class="fa fa-trash" style="margin-bottom: 2px;"></i> Xóa
                                                 </button>

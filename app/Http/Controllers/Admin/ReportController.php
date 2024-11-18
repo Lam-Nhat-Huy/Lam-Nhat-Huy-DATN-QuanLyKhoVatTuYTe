@@ -168,14 +168,16 @@ class ReportController extends Controller
         $data = $request->validated();
 
         if ($data) {
-            // Đặt tên file với timestamp để đảm bảo tính duy nhất
-            $fileName = time() . '.pdf';
+            // Đặt tên file với timestamp và tên gốc của file để đảm bảo tính duy nhất
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
 
-            // Lưu file PDF vào thư mục storage/app/public/reports
-            $request->file('file')->storeAs('public/reports', $fileName);
+            // Lưu file vào thư mục public/storage/reports
+            $filePath = 'storage/reports/' . $fileName;
+            $file->move(public_path('storage/reports'), $fileName);
 
             // Cập nhật đường dẫn file vào dữ liệu báo cáo
-            $data['file'] = $fileName;
+            $data['file'] = $filePath;
 
             // Gán loại báo cáo và các thông tin bổ sung
             $data['report_type'] = $request->report_type;
@@ -192,6 +194,7 @@ class ReportController extends Controller
 
         return redirect()->route('report.index');
     }
+
 
 
     public function update_report($code)
@@ -217,20 +220,25 @@ class ReportController extends Controller
 
         if ($record) {
             // Kiểm tra nếu có file mới được tải lên
-            if (!empty($request->file)) {
-                // Xóa file cũ nếu có
+            if ($request->hasFile('file')) {
+                // Xóa file cũ nếu tồn tại
                 if ($record->file) {
-                    Storage::disk('public')->delete('reports/' . $record->file);
+                    $oldFilePath = public_path($record->file);
+                    if (file_exists($oldFilePath)) {
+                        unlink($oldFilePath);
+                    }
                 }
 
-                // Lưu file mới
-                $fileName = time() . '.pdf';
-                $request->file->storeAs('public/reports', $fileName);
+                // Lưu file mới vào thư mục public/storage/reports
+                $file = $request->file('file');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = 'storage/reports/' . $fileName;
+                $file->move(public_path('storage/reports'), $fileName);
 
-                // Cập nhật tên file vào dữ liệu
-                $data['file'] = $fileName;
+                // Cập nhật đường dẫn file vào dữ liệu
+                $data['file'] = $filePath;
             } else {
-                // Nếu không có file mới, xóa dữ liệu file khỏi request
+                // Nếu không có file mới, giữ nguyên file cũ
                 unset($data['file']);
             }
 
@@ -243,15 +251,14 @@ class ReportController extends Controller
 
             // Hiển thị thông báo thành công
             toastr()->success('Đã cập nhật báo cáo');
-
             return redirect()->route('report.index');
         }
 
         // Nếu không tìm thấy báo cáo, hiển thị thông báo lỗi
         toastr()->error('Không thể cập nhật, thử lại sau');
-
         return redirect()->route('report.index');
     }
+
 
 
     function generateRandomString($length = 9)
