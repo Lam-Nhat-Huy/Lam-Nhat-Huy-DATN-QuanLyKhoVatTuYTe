@@ -3,7 +3,7 @@ return [
     'module' => [
         [
             'user_role' => [0, 1],
-            'title' => 'Báo Cáo Và Thống Kê',
+            'title' => 'Thống Kê',
             'icon' => 'fa fa-chart-line',
             'route' => ['system.index', 'report.index', 'report.insert_report', 'report.update_report'],
             'subModule' => [
@@ -19,7 +19,7 @@ return [
                     'route' => 'report.index',
                     'route_action' => ['report.insert_report', 'report.update_report'],
                     'icon' => 'fa fa-flag',
-                    'user_role' => [0, 1],
+                    'user_role' => [],
                 ]
             ]
         ],
