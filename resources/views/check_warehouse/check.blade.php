@@ -327,11 +327,7 @@
                                                         <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-3">Lần kiểm cuối
                                                         </h6>
 
-                                                        @if (
-                                                            $item['check_count'] == 2 &&
-                                                                isset($item['recheck_user_code']) &&
-                                                                session('user_code') == $item['recheck_user_code'] &&
-                                                                $item['status'] === 0)
+                                                        @if ($item['check_count'] == 2 && session('user_code') == $item['recheck_user_code'])
                                                             <a class="text-dark mb-3"
                                                                 href="{{ route('inventory_check.editByCheckround', ['code' => $item->code, 'check_round' => 2]) }}">
                                                                 <i class="fa fa-edit"></i> Chỉnh sửa phiếu 2
