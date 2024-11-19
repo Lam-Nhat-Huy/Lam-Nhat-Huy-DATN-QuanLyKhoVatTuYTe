@@ -19,7 +19,7 @@ return [
                     'route' => 'report.index',
                     'route_action' => ['report.insert_report', 'report.update_report'],
                     'icon' => 'fa fa-flag',
-                    'user_role' => [],
+                    'user_role' => [0, 1],
                 ]
             ]
         ],
