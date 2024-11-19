@@ -49,8 +49,7 @@
 
                 <div class="col-3">
                     <label class="fs-5 fw-bold mb-3">{{ $title_filed }}</label>
-                    <iframe id="preview-pdf"
-                        src="{{ !empty($FirstReport->file) ? asset('storage/reports/' . $FirstReport->file) : '' }}"
+                    <iframe id="preview-pdf" src="{{ !empty($FirstReport->file) ? asset($FirstReport->file) : '' }}"
                         width="100%" height="400px">
                     </iframe>
                 </div>

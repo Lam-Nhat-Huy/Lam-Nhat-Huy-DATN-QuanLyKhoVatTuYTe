@@ -151,7 +151,7 @@
                                                 @endif
                                                 <button type="button" class="btn btn-sm btn-danger rounded-pill"
                                                     data-bs-toggle="modal"
-                                                    {{ session('isAdmin') == true ? '' : 'disabled' }}
+                                                    {{ session('isAdmin') == true || session('user_code') == $item['user_code'] ? '' : 'disabled' }}
                                                     data-bs-target="#deleteModal_{{ $item->code }}">
                                                     <i class="fa fa-trash" style="margin-bottom: 2px;"></i> Xóa
                                                 </button>
@@ -198,7 +198,7 @@
                                                 <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Báo cáo
                                                     trống</h5>
                                                 <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                                    Không có dữ liệu nào cho báo cáo trong khoảng thời gian đã chọn.
+                                                    Không có dữ liệu nào được tìm thấy.
                                                 </p>
                                             </div>
                                         </div>

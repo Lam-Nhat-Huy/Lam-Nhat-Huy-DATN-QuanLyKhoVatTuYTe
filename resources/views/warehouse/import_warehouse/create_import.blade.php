@@ -213,9 +213,6 @@
                 </div>
 
                 <div class="mb-3">
-                    <button style="font-size: 11px;" type="button" class="btn btn-sm btn-info rounded-pill me-2">
-                        <i class="fa fa-file-excel" style="margin-bottom: 2px;"></i>Nhập Excel
-                    </button>
                     <button style="font-size: 11px;" type="button" class="btn btn-sm btn-danger rounded-pill"
                         id="add_equipment_import">
                         <i class="fa fa-plus" style="margin-bottom: 2px;"></i> Thêm Thiết Bị

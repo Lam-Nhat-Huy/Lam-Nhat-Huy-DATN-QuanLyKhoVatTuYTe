@@ -49,7 +49,7 @@ class HomeController extends Controller
             return redirect()->route('system.index');
         } else {
 
-            toastr()->error('Tài Khoản Không Tồn Tại Hoặc Bị Khóa');
+            toastr()->error('Số điện thoại hoặc mật khẩu không đúng.');
 
             return back();
         }
@@ -84,7 +84,7 @@ class HomeController extends Controller
             return redirect()->route('home');
         } else {
             toastr()->error('Số điện thoại không tồn tại.');
-            
+
             return redirect()->back();
         }
     }
@@ -112,7 +112,6 @@ class HomeController extends Controller
 
                 toastr()->success('Mật khẩu đã được thay đổi');
             }
-
         } else {
 
             toastr()->error('Số điện thoại không tồn tại.');
