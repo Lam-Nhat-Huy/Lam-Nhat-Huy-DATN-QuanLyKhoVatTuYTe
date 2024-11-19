@@ -25,12 +25,12 @@
                             <th class="ps-5" style="width: 40%;">Thiết Bị</th>
                             <th style="width: 20%;" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Tổng số lượng nhập, xuất trước ngày {{ \Carbon\Carbon::parse(request('start_date'))->format('d-m-Y H:i:s') }}">
-                                Tồn Đầu
+                                Tồn đầu
                             </th>
                             <th style="width: 20%; white-space: nowrap;" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Tổng số lượng nhập, xuất trong khoảng từ ngày {{ \Carbon\Carbon::parse(request('start_date'))->format('d-m-Y H:i:s') }} đến ngày {{ \Carbon\Carbon::parse(request('end_date'))->format('d-m-Y H:i:s') }}">
-                                Tồn Cuối</th>
-                            <th class="pe-5 text-center" style="width: 20%;">Hành Động</th>
+                                Tồn cuối</th>
+                            <th class="pe-5 text-center" style="width: 20%;">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -65,13 +65,13 @@
                                                     <table class="table table-striped table-sm table-hover">
                                                         <thead class=" bg-dark">
                                                             <tr class="text-center">
-                                                                <th class="ps-3" style="width: 10%;">Mã Phiếu</th>
+                                                                <th class="ps-3" style="width: 10%;">Mã phiếu</th>
                                                                 <th style="width: 10%;">Giá</th>
-                                                                <th style="width: 9%;">Chiết Khấu(%)</th>
+                                                                <th style="width: 9%;">Chiết khấu(%)</th>
                                                                 <th style="width: 9%;">VAT(%)</th>
-                                                                <th style="width: 15%;">Ngày Nhập</th>
-                                                                <th style="width: 10%;">Số Lô</th>
-                                                                <th style="width: 10%;">Số Lượng</th>
+                                                                <th style="width: 15%;">Ngày nhập</th>
+                                                                <th style="width: 10%;">Số lô</th>
+                                                                <th style="width: 10%;">Số lượng</th>
                                                                 <th class="pe-3" style="width: 12%;">
                                                                     Tổng
                                                                 </th>
@@ -180,14 +180,14 @@
                                                     <table class="table table-striped table-sm table-hover">
                                                         <thead class="bg-dark">
                                                             <tr class="text-center">
-                                                                <th class="ps-3" style="width: 10%;">Mã Phiếu</th>
-                                                                <th style="width: 15%;">Loại Xuất</th>
+                                                                <th class="ps-3" style="width: 10%;">Mã phiếu</th>
+                                                                <th style="width: 15%;">Loại xuất</th>
                                                                 <th style="width: 40%;">
-                                                                    Nhà Cung Cấp / Phòng Ban / Lý Do Hủy
+                                                                    Nhà cung cấp / Phòng ban / Lý do hủy
                                                                 </th>
-                                                                <th style="width: 10%;">Số Lô</th>
-                                                                <th style="width: 10%;">Số Lượng</th>
-                                                                <th class="pe-3" style="width: 15%;">Ngày Xuất</th>
+                                                                <th style="width: 10%;">Số lô</th>
+                                                                <th style="width: 10%;">Số lượng</th>
+                                                                <th class="pe-3" style="width: 15%;">Ngày xuất</th>
                                                             </tr>
                                                         </thead>
                                                         @php

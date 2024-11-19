@@ -98,7 +98,8 @@
                                     Lần thứ {{ $item['check_count'] }}
                                 </td>
 
-                                <td title="{{ $item['note'] }}"
+                                <td title="{{ $item['note'] }}" class="text-start" data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
                                     style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                     @if (!empty($item['note']))
                                         <span class="text-start">
@@ -106,7 +107,7 @@
                                         </span>
                                     @else
                                         <span class="text-center">
-                                            Trống
+                                            Ghi chú trống
                                         </span>
                                     @endif
                                 </td>
@@ -295,14 +296,19 @@
                                                                                 @endphp
 
                                                                                 @if ($unequal > 0)
-                                                                                    -{{ $unequal }}
-                                                                                @elseif ($unequal < 0)
-                                                                                    +{{ abs($unequal) }}
-                                                                                @else
-                                                                                    <span>
-                                                                                        Không lệch
+                                                                                    <span class="text-danger">
+                                                                                        -{{ $unequal }}
                                                                                     </span>
+                                                                                @elseif($unequal < 0)
+                                                                                    <span class="text-success">
+                                                                                        +{{ abs($unequal) }}
+                                                                                    </span>
+                                                                                @else
+                                                                                    <span>Không
+                                                                                        lệch</span>
                                                                                 @endif
+
+
                                                                             </td>
                                                                             <td class="text-center">
                                                                                 <span class="text-gray">

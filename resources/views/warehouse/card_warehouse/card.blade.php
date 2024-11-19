@@ -22,10 +22,10 @@
                 <table class="table align-middle gs-0 gy-4">
                     <thead class="bg-success">
                         <tr class="fw-bolder">
-                            <th class="ps-3" style="width: 40%;">Thiết Bị</th>
-                            <th style="width: 20%;">Tồn Đầu</th>
-                            <th style="width: 20%; white-space: nowrap;">Tồn Cuối</th>
-                            <th class="pe-3 text-center" style="width: 20%;">Hành Động</th>
+                            <th class="ps-3" style="width: 40%;">Thiết bị</th>
+                            <th style="width: 20%;">Tồn đầu</th>
+                            <th style="width: 20%; white-space: nowrap;">Tồn cuối</th>
+                            <th class="pe-3 text-center" style="width: 20%;">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>

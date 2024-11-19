@@ -44,12 +44,12 @@
                                     <input type="checkbox" id="selectAll" />
                                 </th>
                                 <th style="width: 15%;">Mã</th>
-                                <th class="" style="width: 17%;">Loại Xuất</th>
-                                <th class="" style="width: 16%;">Tạo Bởi</th>
-                                <th class="" style="width: 12%;">Ngày Tạo</th>
-                                <th class="" style="width: 15%;">Ngày Cần Thiết</th>
-                                <th class="text-center" style="width: 10%;">Trạng Thái</th>
-                                <th class="pe-3 text-center" style="width: 15%;">Hành Động</th>
+                                <th class="" style="width: 17%;">Loại xuất</th>
+                                <th class="" style="width: 16%;">Tạo bởi</th>
+                                <th class="" style="width: 12%;">Ngày tạo</th>
+                                <th class="" style="width: 15%;">Ngày cần thiết</th>
+                                <th class="text-center" style="width: 10%;">Trạng thái</th>
+                                <th class="pe-3 text-center" style="width: 15%;">Hành động</th>
                             </tr>
                         </thead>
 
@@ -82,7 +82,7 @@
                                         #{{ $item->code }}
                                     </td>
                                     <td>
-                                        {{ $item->export_type ?? 'Không Có' }}
+                                        {{ $item->export_type ?? 'Không có' }}
                                     </td>
                                     <td>
                                         {{ $item->user->last_name . ' ' . $item->user->first_name }}
@@ -91,20 +91,20 @@
                                         {{ \Carbon\Carbon::parse($item->export_date)->format('d/m/Y') }}
                                     </td>
                                     <td>
-                                        {{ !empty($item->required_date) ? \Carbon\Carbon::parse($item->required_date)->format('d/m/Y H:i:s') : 'Không Có' }}
+                                        {{ !empty($item->required_date) ? \Carbon\Carbon::parse($item->required_date)->format('d/m/Y H:i:s') : 'Không xó' }}
                                     </td>
                                     <td class="text-center">
                                         @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->required_date)))
                                             <div class="label label-temp bg-warning rounded-pill text-dark px-2 py-1">
-                                                Hết Hạn
+                                                Hết hạn
                                             </div>
                                         @elseif ($item->status == 3)
                                             <div class="label label-temp bg-info rounded-pill text-white px-2 py-1">
-                                                Lưu Tạm
+                                                Lưu tạm
                                             </div>
                                         @elseif ($item->status == 0)
                                             <div class="label label-temp bg-danger rounded-pill text-white px-2 py-1">
-                                                Chờ Duyệt
+                                                Chờ duyệt
                                             </div>
                                         @elseif ($item->status == 1)
                                             <div class="label label-final bg-success rounded-pill text-white px-2 py-1">
@@ -135,18 +135,31 @@
                                                     <div class="card-toolbar">
                                                         @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->required_date)))
                                                             <div class="rounded-pill px-2 py-1 text-dark bg-warning">
-                                                                Hết Hạn
+                                                                Hết hạn
                                                             </div>
                                                         @elseif ($item->status == 3)
                                                             <div class="rounded-pill px-2 py-1 text-white bg-info">
-                                                                Lưu Tạm
+                                                                Lưu tạm
                                                             </div>
                                                         @elseif($item->status == 0)
                                                             <div class="rounded-pill px-2 py-1 text-white bg-danger">
                                                                 Chờ
-                                                                Duyệt
+                                                                duyệt
                                                             </div>
                                                         @elseif($item->status == 1)
+                                                            <!--@if (session('isAdmin') == 1)
+    -->
+                                                            <!--    <button type="button"-->
+                                                            <!--        class="btn btn-danger px-2 py-1 btn-sm rounded-pill me-2"-->
+                                                            <!--        data-bs-toggle="modal"-->
+                                                            <!--        data-bs-target="#delete-{{ $item->code }}"-->
+                                                            <!--        {{ $item->no_action == 1 || str_contains($item->code, 'PX-KK') ? 'disabled' : '' }}>-->
+                                                            <!--        <i class="fa fa-trash"-->
+                                                            <!--            style="margin-bottom: 2px;"></i>Xóa phiếu-->
+                                                            <!--    </button>-->
+                                                            <!--
+    @endif-->
+
                                                             @if (session('isAdmin') == 1)
                                                                 <button type="button"
                                                                     class="btn btn-danger px-2 py-1 btn-sm rounded-pill me-2"
@@ -154,12 +167,16 @@
                                                                     data-bs-target="#delete-{{ $item->code }}"
                                                                     {{ $item->no_action == 1 || str_contains($item->code, 'PX-KK') ? 'disabled' : '' }}>
                                                                     <i class="fa fa-trash"
-                                                                        style="margin-bottom: 2px;"></i>Xóa phiếu
+                                                                        style="margin-bottom: 2px;"></i>
+                                                                    Xóa phiếu
                                                                 </button>
                                                             @endif
 
-                                                            <div class="rounded-pill px-2 py-1 text-white bg-success">
-                                                                Đã Duyệt
+                                                            <div class="rounded-pill px-2 py-1 text-white bg-success me-2">
+                                                                <i class="fa fa-check text-white"
+                                                                    style="margin-bottom: 4px; margin-right: 3px; font-size: 10px;"></i>
+                                                                Đã
+                                                                duyệt
                                                             </div>
                                                         @endif
                                                     </div>
@@ -171,27 +188,27 @@
                                                                 <tbody>
                                                                     @if ($item->export_type === 'Xuất Sử Dụng')
                                                                         <tr>
-                                                                            <td class=""><strong>Phòng Ban</strong>
+                                                                            <td class=""><strong>Phòng ban</strong>
                                                                             </td>
                                                                             <td class="text-dark">
-                                                                                {{ $item->departments->name ?? 'Không Có' }}
+                                                                                {{ $item->departments->name ?? 'Không có' }}
                                                                             </td>
                                                                         </tr>
                                                                     @elseif($item->export_type === 'Xuất Trả')
                                                                         <tr>
-                                                                            <td class=""><strong>Nhà Cung
-                                                                                    Cấp</strong>
+                                                                            <td class=""><strong>Nhà cung
+                                                                                    cấp</strong>
                                                                             </td>
                                                                             <td class="text-dark">
-                                                                                {{ $item->suppliers->name ?? 'Không Có' }}
+                                                                                {{ $item->suppliers->name ?? 'Không có' }}
                                                                             </td>
                                                                         </tr>
                                                                     @else
                                                                         <tr>
-                                                                            <td class=""><strong>Lý Do Hủy</strong>
+                                                                            <td class=""><strong>Lý do hủy</strong>
                                                                             </td>
                                                                             <td class="text-dark">
-                                                                                {{ $item->reason ?? 'Không Có' }}
+                                                                                {{ $item->reason ?? 'Không có' }}
                                                                             </td>
                                                                         </tr>
                                                                     @endif
@@ -211,8 +228,8 @@
                                                                         <th class="ps-5 text-left" style="width: 50%;">
                                                                             Tên thiết bị
                                                                         </th>
-                                                                        <th style="width: 25%;">Số Lô</th>
-                                                                        <th class="pe-3" style="width: 25%;">Số Lượng
+                                                                        <th style="width: 25%;">Số lô</th>
+                                                                        <th class="pe-3" style="width: 25%;">Số lượng
                                                                         </th>
                                                                     </tr>
                                                                 </thead>
@@ -289,7 +306,7 @@
                                                                     data-bs-target="#browse-{{ $item->code }}"
                                                                     type="button">
                                                                     <i class="fas fa-clipboard-check"
-                                                                        style="margin-bottom: 2px;"></i> Duyệt Phiếu
+                                                                        style="margin-bottom: 2px;"></i> Duyệt phiếu
                                                                 </button>
                                                             @else
                                                                 <button class="btn btn-sm btn-secondary rounded-pill me-2"
@@ -307,7 +324,7 @@
                                                             <a href="{{ route('warehouse.edit_export', $item->code) }}"
                                                                 class="btn btn-dark btn-sm me-2 rounded-pill">
                                                                 <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                                Phiếu
+                                                                phiếu
                                                             </a>
 
                                                             <button type="button"
@@ -328,7 +345,7 @@
                                                             data-bs-target="#deleteModal_{{ $item->code }}"
                                                             type="button">
                                                             <i class="fa fa-trash" style="margin-bottom: 2px;"></i>Hủy
-                                                            Phiếu
+                                                            phiếu
                                                         </button>
                                                     @endif
 
@@ -355,7 +372,7 @@
                                                         <a href="{{ route('warehouse.edit_export', $item->code) }}"
                                                             class="btn btn-dark btn-sm me-2 rounded-pill">
                                                             <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                            Phiếu
+                                                            phiếu
                                                         </a>
 
                                                         <button type="button" class="btn btn-danger btn-sm rounded-pill"
@@ -371,7 +388,7 @@
                                                         <button class="btn btn-sm btn-dark me-2 rounded-pill"
                                                             type="button" onclick="printInvoice('{{ $item->code }}')">
                                                             <i class="fa fa-print" style="margin-bottom: 2px;"></i>
-                                                            In Phiếu
+                                                            In phiếu
                                                         </button>
 
                                                         {{-- In --}}
@@ -491,11 +508,11 @@
                                                                                                 <th style="width: 15%;"
                                                                                                     class="text-dark">
                                                                                                     Số
-                                                                                                    Lô</th>
+                                                                                                    lô</th>
                                                                                                 <th class="text-dark pe-3"
                                                                                                     style="width: 15%;">
                                                                                                     Số
-                                                                                                    Lượng</th>
+                                                                                                    lượng</th>
                                                                                             </tr>
                                                                                         </thead>
                                                                                         <tbody>

@@ -256,7 +256,8 @@
                                                 <div class="button-group">
                                                     <a href="{{ route('user.edit', $item->code) }}?{{ request()->getQueryString() }}"
                                                         class="btn btn-sm btn-info me-2 rounded-pill"><i
-                                                            class="fa fa-edit me-1"></i>Sửa</a></li>
+                                                            class="fa fa-edit me-1"
+                                                            style="margin-bottom: 2px;"></i>Sửa</a></li>
 
                                                     <button type="button" class="btn btn-sm btn-danger rounded-pill"
                                                         data-bs-toggle="modal"

@@ -117,7 +117,7 @@
                                             <div class="btn-group">
                                                 <a href="{{ route('equipments.update_equipments_group', $item->code) }}"
                                                     class="btn btn-sm btn-info me-2 rounded-pill">
-                                                    <i class="fa fa-edit"></i> Sửa
+                                                    <i class="fa fa-edit" style="margin-bottom: 2px;"></i> Sửa
                                                 </a>
 
                                                 @php
@@ -132,14 +132,14 @@
                                                     <button type="button" class="btn btn-sm btn-danger rounded-pill"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#deleteConfirmModal{{ $item->code }}">
-                                                        <i class="fa fa-trash"></i> Xóa
+                                                        <i class="fa fa-trash" style="margin-bottom: 2px;"></i> Xóa
                                                     </button>
                                                 @else
                                                     <!-- Hiển thị nút không thể xóa nếu có liên kết -->
                                                     <button type="button" class="btn btn-sm btn-secondary rounded-pill"
                                                         disabled
                                                         title="Nhóm thiết bị này đang liên kết với thiết bị, không thể xóa.">
-                                                        <i class="fa fa-lock"></i> Xóa
+                                                        <i class="fa fa-lock" style="margin-bottom: 2px;"></i> Xóa
                                                     </button>
                                                 @endif
                                             </div>

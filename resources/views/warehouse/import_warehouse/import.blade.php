@@ -35,12 +35,12 @@
                                 </th>
                                 <th style="width: 10%;">Mã</th>
                                 <th class="" style="width: 10%;">Số ĐĐH</th>
-                                <th class="" style="width: 10%;">Số Hóa Đơn</th>
-                                <th class="" style="width: 20%;">Loại Nhập</th>
-                                <th class="" style="width: 15%;">Tạo Bởi</th>
-                                <th class="" style="width: 10%;">Ngày Nhập</th>
-                                <th class="text-center" style="width: 10%;">Trạng Thái</th>
-                                <th class="pe-3 text-center" style="width: 15%;">Hành Động</th>
+                                <th class="" style="width: 10%;">Số hóa đơn</th>
+                                <th class="" style="width: 20%;">Loại nhập</th>
+                                <th class="" style="width: 15%;">Tạo bởi</th>
+                                <th class="" style="width: 10%;">Ngày nhập</th>
+                                <th class="text-center" style="width: 10%;">Trạng thái</th>
+                                <th class="pe-3 text-center" style="width: 15%;">Hành động</th>
                             </tr>
                         </thead>
 
@@ -84,11 +84,11 @@
                                     <td class="text-center">
                                         @if ($item['status'] == 3)
                                             <div class="label label-temp bg-info rounded-pill text-white px-2 py-1">
-                                                Lưu Tạm
+                                                Lưu tạm
                                             </div>
                                         @elseif ($item->status == 0)
                                             <div class="label label-temp bg-danger rounded-pill text-white px-2 py-1">
-                                                Chờ Duyệt
+                                                Chờ duyệt
                                             </div>
                                         @elseif ($item->status == 1)
                                             <div class="label label-final bg-success rounded-pill text-white px-2 py-1">
@@ -119,12 +119,12 @@
                                                     <div class="card-toolbar">
                                                         @if ($item->status == 3)
                                                             <div class="rounded-pill px-2 py-1 text-white bg-info">
-                                                                Lưu Tạm
+                                                                Lưu tạm
                                                             </div>
                                                         @elseif ($item->status == 0)
                                                             <div class="rounded-pill px-2 py-1 text-white bg-danger">
                                                                 Chờ
-                                                                Duyệt
+                                                                duyệt
                                                             </div>
                                                         @elseif ($item->status == 1)
                                                             @if (session('isAdmin') == 1)
@@ -133,13 +133,15 @@
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#delete-{{ $item->code }}"
                                                                     {{ $item->no_action == 1 || str_contains($item->code, 'PN-KK') ? 'disabled' : '' }}>
-                                                                    <i class="fa fa-trash"
-                                                                        style="margin-bottom: 2px;"></i>Xóa phiếu
+                                                                    <i class="fa fa-trash" style="margin-bottom: 2px;"></i>
+                                                                    Xóa phiếu
                                                                 </button>
                                                             @endif
 
-                                                            <div class="rounded-pill px-2 py-1 text-white bg-success">
-                                                                Đã Duyệt
+                                                            <div class="rounded-pill px-2 py-1 text-white bg-success me-2">
+                                                                <i class="fa fa-check text-white"
+                                                                    style="margin-bottom: 4px; margin-right: 3px;"></i> Đã
+                                                                duyệt
                                                             </div>
                                                         @endif
                                                     </div>
@@ -344,7 +346,7 @@
                                                                 data-bs-target="#browse-{{ $item->code }}"
                                                                 type="button">
                                                                 <i class="fas fa-clipboard-check"
-                                                                    style="margin-bottom: 2px;"></i>Duyệt Phiếu
+                                                                    style="margin-bottom: 2px;"></i>Duyệt phiếu
                                                             </button>
                                                         @endif
 
@@ -352,7 +354,7 @@
                                                             <a href="{{ route('warehouse.edit_import', $item->code) }}"
                                                                 class="btn btn-dark btn-sm me-2 rounded-pill">
                                                                 <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                                Phiếu
+                                                                phiếu
                                                             </a>
 
                                                             <button type="button"
@@ -370,13 +372,13 @@
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#create-{{ $item->code }}" type="button">
                                                             <i class="fas fa-save" style="margin-bottom: 2px;"></i>Tạo
-                                                            Phiếu
+                                                            phiếu
                                                         </button>
 
                                                         <a href="{{ route('warehouse.edit_import', $item->code) }}"
                                                             class="btn btn-dark btn-sm me-2 rounded-pill">
                                                             <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                            Phiếu
+                                                            phiếu
                                                         </a>
 
                                                         <button type="button" class="btn btn-danger btn-sm rounded-pill"
@@ -392,7 +394,7 @@
                                                         <button class="btn btn-sm btn-dark me-2 rounded-pill"
                                                             type="button" onclick="printInvoice('{{ $item->code }}')">
                                                             <i class="fa fa-print" style="margin-bottom: 2px;"></i>
-                                                            In Phiếu
+                                                            In phiếu
                                                         </button>
 
                                                         {{-- In --}}
@@ -400,14 +402,14 @@
                                                             <span class="link-primary position-absolute"
                                                                 style="top: 5%; right: 4%;">
                                                                 <strong class="text-danger">
-                                                                    Số Đơn Đặt Hàng:
+                                                                    Số đơn đặt hàng:
                                                                 </strong>
                                                                 {{ $item->order_number }}
                                                             </span>
                                                             <span class="link-primary position-absolute"
                                                                 style="top: 7%; right: 10.5%;">
                                                                 <strong class="text-danger">
-                                                                    Số Hóa Đơn:
+                                                                    Số hóa đơn:
                                                                 </strong>
                                                                 {{ $item->receipt_no }}
                                                             </span>
@@ -429,7 +431,7 @@
                                                                         THÔNG TIN PHIẾU NHẬP
                                                                     </h1>
                                                                     <div class="text-muted fs-30">
-                                                                        Ngày Tạo
+                                                                        Ngày tạo
                                                                         {{ \Carbon\Carbon::parse($item->request_date)->format('d-m-Y') }}
                                                                     </div>
                                                                 </div>
@@ -575,7 +577,7 @@
                                                                                             class="bg-success border border-dark text-center">
                                                                                             <tr class="text-center">
                                                                                                 <th class="text-dark ps-3">
-                                                                                                    Thiết Bị
+                                                                                                    Thiết bị
                                                                                                 </th>
                                                                                                 <th class="text-dark">
                                                                                                     SLYC</th>
