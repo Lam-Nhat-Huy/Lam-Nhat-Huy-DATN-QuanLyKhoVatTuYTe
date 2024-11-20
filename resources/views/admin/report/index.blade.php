@@ -76,13 +76,13 @@
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 8%;">Mã</th>
-                                <th class="" style="width: 12%;">Người Báo Cáo</th>
-                                <th class="" style="width: 15%;">Nội Dung</th>
-                                <th class="" style="width: 15%;">Loại Báo Cáo</th>
-                                <th class="" style="width: 15%;">File Báo Cáo</th>
-                                <th class="" style="width: 10%;">Trạng Thái</th>
-                                <th class="pe-3 text-center" style="width: 25%;">Hành Động</th>
+                                <th class="text-center" style="width: 8%;">Mã</th>
+                                <th class="text-center" style="width: 12%;">Người báo cáo</th>
+                                <th class="text-center" style="width: 15%;">Nội dung</th>
+                                <th class="text-center" style="width: 15%;">Loại báo cáo</th>
+                                <th class="text-center" style="width: 15%;">File báo cáo</th>
+                                <th class="text-center" style="width: 10%;">Trạng thái</th>
+                                <th class="pe-3 text-center" style="width: 25%;">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -95,27 +95,28 @@
                                     <td>
                                         #{{ $item->code }}
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         {{ !empty($item->users->last_name && $item->users->first_name) ? $item->users->last_name . ' ' . $item->users->first_name : 'N/A' }}
                                     </td>
-                                    <td class="noPpg">
+                                    <td class="noPpg text-center">
                                         <span class="text-primary pointer" data-bs-toggle="modal"
-                                            data-bs-target="#detail_{{ $item->code }}">Xem Nội Dung
+                                            data-bs-target="#detail_{{ $item->code }}">Xem nội dung
                                         </span>
                                     </td>
                                     <td>
                                         {{ $item->report_type }}
                                     </td>
-                                    <td class="noPpg">
+                                    <td class="noPpg text-center">
                                         @if ($item->status == 0 && file_exists(public_path($item->file)))
                                             <a href="{{ asset($item->file) }}" class="pointer"
                                                 style="color: rgb(33, 64, 178);" target="_blank">
-                                                <i class="fa fa-eye me-1"></i>Xem Trước
+                                                <i class="fa fa-eye me-1" style="color: rgb(33, 64, 178);"></i>Xem trước
                                             </a>
                                         @elseif (file_exists(public_path($item->file)))
                                             <a href="{{ asset($item->file) }}" class="pointer"
                                                 style="color: rgb(33, 64, 178);" download="{{ basename($item->file) }}">
-                                                <i class="fa fa-download me-1"></i>Tải Xuống
+                                                <i class="fa fa-download me-1" style="color: rgb(33, 64, 178);"></i>Tải
+                                                xuống
                                             </a>
                                         @else
                                             <span class="text-danger">File không khả dụng.</span>
@@ -123,10 +124,10 @@
                                     </td>
                                     <td>
                                         @if ($item['status'] == 0)
-                                            <div class="rounded-pill px-2 py-1 text-white bg-danger text-center">Chưa Duyệt
+                                            <div class="rounded-pill px-2 py-1 text-white bg-danger text-center">Chưa duyệt
                                             </div>
                                         @else
-                                            <div class="rounded-pill px-2 py-1 text-white bg-success  text-center">Đã Duyệt
+                                            <div class="rounded-pill px-2 py-1 text-white bg-success  text-center">Đã duyệt
                                             </div>
                                         @endif
                                     </td>

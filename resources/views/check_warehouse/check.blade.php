@@ -67,36 +67,65 @@
                             <tr class="text-center hover-table pointer">
                                 <td>#{{ $item['code'] }}</td>
                                 <td>{{ \Carbon\Carbon::parse($item['check_date'])->format('d/m/Y') }}</td>
-                                <td>
+                                <td style="text-align: center;">
                                     @if ($totalUnequal == 0)
-                                        <span>Không lệch</span>
+                                        <span style="color: #6c757d; font-weight: 500;">
+                                            <i class="fa fa-balance-scale" style="color: #6c757d;" title="Cân bằng"></i>
+                                            Không lệch
+                                        </span>
                                     @else
-                                        <span style="color: #dc3545; font-weight: bold;">{{ $totalUnequal }}</span>
+                                        <span style="color: #dc3545; font-weight: 500; font-size: 14px;">
+                                            {{ $totalUnequal }}
+                                        </span>
                                         <i class="fa fa-arrow-right-arrow-left" style="color: #dc3545;"
                                             title="Tổng chênh lệch"></i>
                                     @endif
                                 </td>
 
-                                <td>
+                                <td style="text-align: center;">
                                     @if ($unequalPositive > 0)
-                                        <span style="color: #dc3545; font-weight: bold;">-{{ $unequalPositive }}</span>
+                                        <span
+                                            style="color: #dc3545; font-weight: 500; font-size: 14px;">-{{ $unequalPositive }}</span>
                                         <i class="fa fa-arrow-down" style="color: #dc3545;" title="Giảm"></i>
                                     @else
-                                        <span>Không lệch</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($unequalNegative > 0)
-                                        <span style="color: #28a745; font-weight: bold;">+{{ $unequalNegative }}</span>
-                                        <i class="fa fa-arrow-up" style="color: #28a745;" title="Tăng"></i>
-                                    @else
-                                        <span>Không lệch</span>
+                                        <span style="color: #6c757d; font-weight: 500;">
+                                            <i class="fa fa-balance-scale" style="color: #6c757d;" title="Cân bằng"></i>
+                                            Không lệch
+                                        </span>
                                     @endif
                                 </td>
 
-                                <td>
-                                    Lần thứ {{ $item['check_count'] }}
+                                <td style="text-align: center;">
+                                    @if ($unequalNegative > 0)
+                                        <span
+                                            style="color: #28a745; font-weight: 500; font-size: 14px;">+{{ $unequalNegative }}</span>
+                                        <i class="fa fa-arrow-up" style="color: #28a745;" title="Tăng"></i>
+                                    @else
+                                        <span style="color: #6c757d; font-weight: 500;">
+                                            <i class="fa fa-balance-scale" style="color: #6c757d;" title="Cân bằng"></i>
+                                            Không lệch
+                                        </span>
+                                    @endif
                                 </td>
+
+
+
+                                <td style="text-align: center;">
+                                    @if ($item['check_count'] == 1)
+                                        <span
+                                            style="display: inline-block; background-color: #f8d7da; color: #721c24; font-weight: 500; border: 1px solid #f5c6cb; border-radius: 3px; padding: 3px 8px; font-size: 12px;">
+                                            Lần kiểm đầu
+                                        </span>
+                                    @elseif ($item['check_count'] == 2)
+                                        <span
+                                            style="display: inline-block; background-color: #d1ecf1; color: #0c5460; font-weight: 500; border: 1px solid #bee5eb; border-radius: 3px; padding: 3px 8px; font-size: 12px;">
+                                            Lần kiểm cuối
+                                        </span>
+                                    @endif
+                                </td>
+
+
+
 
                                 <td title="{{ $item['note'] }}" class="text-start" data-bs-toggle="tooltip"
                                     data-bs-placement="top"
@@ -114,18 +143,15 @@
 
                                 <td>
                                     @if ($item->status == 0)
-                                        <div class="label label-temp bg-danger rounded-pill text-white px-2 py-1"
-                                            style="font-size: 12px;">
-                                            Chờ Duyệt
+                                        <div class="label label-final bg-warning rounded-pill text-white px-2 py-1">
+                                            Chờ duyệt
                                         </div>
                                     @elseif ($item->status == 1)
-                                        <div class="label label-final bg-success rounded-pill text-white px-2 py-1"
-                                            style="font-size: 12px;">
+                                        <div class="label label-final bg-success rounded-pill text-white px-2 py-1">
                                             Đã duyệt
                                         </div>
                                     @else
-                                        <div class="label label-temp bg-info rounded-pill text-white px-2 py-1"
-                                            style="font-size: 12px;">
+                                        <div class="label label-final bg-danger rounded-pill text-white px-2 py-1">
                                             Phiếu hủy
                                         </div>
                                     @endif
@@ -255,7 +281,8 @@
                                                         <table class="table table-striped table-sm table-hover">
                                                             <thead style="background-color: #000000;">
                                                                 <tr class="fw-bolder">
-                                                                    <th style="width: 10%;" class="ps-5">Mã thiết bị</th>
+                                                                    <th style="width: 10%;" class="ps-5">Mã thiết bị
+                                                                    </th>
                                                                     <th style="width: 25%;">Tên thiết bị</th>
                                                                     <th style="width: 10%;" class="text-center">Số lô</th>
                                                                     <th style="width: 10%;" class="text-center">Tồn kho
@@ -304,8 +331,13 @@
                                                                                         +{{ abs($unequal) }}
                                                                                     </span>
                                                                                 @else
-                                                                                    <span>Không
-                                                                                        lệch</span>
+                                                                                    <span
+                                                                                        style="color: #6c757d; font-weight: bold;">
+                                                                                        <i class="fa fa-balance-scale"
+                                                                                            style="color: #6c757d;"
+                                                                                            title="Cân bằng"></i>
+                                                                                        Không lệch
+                                                                                    </span>
                                                                                 @endif
 
 
@@ -382,8 +414,8 @@
                                                                                         style="font-size: 36px; color: #6c757d;"></i>
                                                                                 </div>
                                                                                 <div class="text-center">
-                                                                                    <h5
-                                                                                        style="font-size: 16px; font-weight: 600; color: #495057;">
+                                                                                    <h5 style=font-weight: 600; color:
+                                                                                        #495057;">
                                                                                         Phiếu Chưa Được Kiểm Lại
                                                                                     </h5>
                                                                                     <p
@@ -436,8 +468,13 @@
                                                                                             +{{ abs($unequal) }}
                                                                                         </span>
                                                                                     @else
-                                                                                        <span>Không
-                                                                                            lệch</span>
+                                                                                        <span
+                                                                                            style="color: #6c757d; font-weight: bold;">
+                                                                                            <i class="fa fa-balance-scale"
+                                                                                                style="color: #6c757d;"
+                                                                                                title="Cân bằng"></i>
+                                                                                            Không lệch
+                                                                                        </span>
                                                                                     @endif
                                                                                 </td>
                                                                                 <td class="text-center">
@@ -526,7 +563,7 @@
                                                                 <div class="modal-header bg-success text-white">
                                                                     <h5 class="modal-title text-white"
                                                                         id="browseLabel-{{ $item['code'] }}">
-                                                                        Duyệt Phiếu Kiểm Kho
+                                                                        Duyệt phiếu kiểm kho
                                                                     </h5>
                                                                     <button type="button"
                                                                         class="btn-close btn-close-white"
@@ -553,14 +590,14 @@
                                                                     <button type="button"
                                                                         class="btn btn-success btn-sm rounded-pill load_animation"
                                                                         onclick="event.preventDefault(); document.getElementById('approveForm-{{ $item['code'] }}').submit();">
-                                                                        Duyệt
+                                                                        Duyệt phiếu
                                                                     </button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <!-- Modal Hủy Phiếu -->
+                                                    <!-- Modal Hủy phiếu -->
                                                     <div class="modal fade" id="cancel-{{ $item['code'] }}"
                                                         data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                                                         aria-labelledby="cancelLabel-{{ $item['code'] }}"
@@ -570,7 +607,7 @@
                                                                 <div class="modal-header bg-danger text-white">
                                                                     <h5 class="modal-title text-white"
                                                                         id="cancelLabel-{{ $item['code'] }}">
-                                                                        Hủy Phiếu Kiểm Kho
+                                                                        Hủy phiếu Kiểm Kho
                                                                     </h5>
                                                                     <button type="button"
                                                                         class="btn-close btn-close-white"
@@ -598,14 +635,14 @@
                                                                     <button type="button"
                                                                         class="btn btn-danger btn-sm rounded-pill load_animation"
                                                                         onclick="event.preventDefault(); document.getElementById('cancelForm-{{ $item['code'] }}').submit();">
-                                                                        Hủy Phiếu
+                                                                        Hủy phiếu
                                                                     </button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <!-- Modal Xóa Phiếu -->
+                                                    <!-- Modal Xóa phiếu -->
                                                     <div class="modal fade" id="delete-{{ $item['code'] }}"
                                                         data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                                                         aria-labelledby="deleteLabel-{{ $item['code'] }}"
@@ -615,7 +652,7 @@
                                                                 <div class="modal-header bg-danger text-white">
                                                                     <h5 class="modal-title text-white"
                                                                         id="deleteLabel-{{ $item['code'] }}">
-                                                                        Xóa Phiếu Kiểm Kho
+                                                                        Xóa phiếu kiểm kho
                                                                     </h5>
                                                                     <button type="button"
                                                                         class="btn-close btn-close-white"
@@ -640,7 +677,7 @@
                                                                     <button type="button"
                                                                         class="btn btn-danger btn-sm rounded-pill"
                                                                         onclick="event.preventDefault(); document.getElementById('deleteForm-{{ $item['code'] }}').submit();">
-                                                                        Xóa Phiếu
+                                                                        Xóa phiếu
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -662,7 +699,7 @@
                                                 style="font-size: 36px; color: #6c757d;"></i>
                                         </div>
                                         <div class="text-center">
-                                            <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin phiếu
+                                            <h5 style=font-weight: 600; color: #495057;">Thông tin phiếu
                                                 kiểm kho trống</h5>
                                             <p style="font-size: 14px; color: #6c757d; margin: 0;">
                                                 Hiện tại chưa có phiếu kiểm kho nào được tạo. Vui lòng kiểm tra lại hoặc tạo

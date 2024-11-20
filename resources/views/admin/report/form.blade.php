@@ -50,16 +50,25 @@
                 <div class="col-3">
                     <label class="fs-5 fw-bold mb-3">{{ $title_filed }}</label>
                     <iframe id="preview-pdf" src="{{ !empty($FirstReport->file) ? asset($FirstReport->file) : '' }}"
-                        width="100%" height="400px">
-                    </iframe>
+                        width="100%" height="400px"
+                        style="border: none; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); {{ empty($FirstReport->file) ? 'display: none;' : '' }}"></iframe>
+                    <div id="no-report-alert" class="alert alert-light text-center rounded shadow-sm p-4"
+                        style="background-color: #f8f9fa; {{ !empty($FirstReport->file) ? 'display: none;' : '' }}">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="fas fa-file-pdf fs-3 me-3 text-warning"></i>
+                            <span class="fs-5 fw-bold text-muted">Hiện tại chưa có báo cáo</span>
+                        </div>
+                        <small class="text-muted d-block mt-2">Báo cáo sẽ được cập nhật sau khi có dữ liệu.</small>
+                    </div>
                 </div>
+
 
                 <div class="me-n7 pe-7 col-9">
 
                     <div class="row mb-5">
 
                         <div class="col-md-6 fv-row">
-                            <label class="{{ $required }} fs-5 fw-bold mb-2">File Báo Cáo (PDF)</label>
+                            <label class="{{ $required }} fs-5 fw-bold mb-2">File báo cáo (PDF)</label>
 
                             <input type="file" class="form-control form-control-sm rounded-pill border border-success"
                                 id="pdf-input" name="file" accept="application/pdf" />
@@ -72,7 +81,7 @@
 
                         <div class="col-md-6 fv-row">
 
-                            <label class="{{ $required }} fs-5 fw-bold mb-2">Loại Báo Cáo</label>
+                            <label class="{{ $required }} fs-5 fw-bold mb-2">Loại báo cáo</label>
 
                             <div class="d-flex align-items-center">
                                 <input type="text" name="report_type"
@@ -90,7 +99,7 @@
 
 
                     <div class="d-flex flex-column mb-5 fv-row">
-                        <label class="{{ $required }} fs-5 fw-bold mb-2">Nội Dung Báo Cáo</label>
+                        <label class="{{ $required }} fs-5 fw-bold mb-2">Nộ dung báo cáo</label>
 
                         <textarea name="content" class="form-control form-control-sm border border-success" cols="30" rows="5"
                             placeholder="Nhập Nội Dung Báo Cáo..">{{ !empty($FirstReport['content']) ? $FirstReport['content'] : old('content') }}</textarea>
@@ -117,9 +126,18 @@
     <script>
         document.getElementById('pdf-input').addEventListener('change', function(event) {
             const file = event.target.files[0];
+            const preview = document.getElementById('preview-pdf');
+            const noReportAlert = document.getElementById('no-report-alert');
+
             if (file && file.type === 'application/pdf') {
-                const preview = document.getElementById('preview-pdf');
+                // Hiển thị file PDF
                 preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+                noReportAlert.style.display = 'none';
+            } else {
+                // Hiển thị cảnh báo nếu file không hợp lệ
+                preview.style.display = 'none';
+                noReportAlert.style.display = 'block';
             }
         });
     </script>

@@ -4,7 +4,7 @@
         <td>
             {{ $loop->iteration }}
         </td>
-        <td>{{ $equipment->code }}</td>
+        <td>#{{ $equipment->code }}</td>
         <td style="text-align: left;">{{ $equipment->name }}</td>
         <td class="text-left">{{ $equipment->equipmentType->name }}</td>
         <td>

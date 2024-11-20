@@ -139,7 +139,7 @@ function populateTableWithProducts() {
             actual_quantity: product.actual_quantity || 0,
             unequal: product.unequal || 0,
             batch_number: product.batch_number,
-            equipment_note: "",
+            equipment_note: product.equipment_note || "", // Đảm bảo trường này được xử lý
         });
 
         tableBody.insertAdjacentHTML("beforeend", row);
@@ -149,7 +149,7 @@ function populateTableWithProducts() {
             actual_quantity: product.actual_quantity || 0,
             unequal: product.unequal || 0,
             batch_number: product.batch_number,
-            equipment_note: "",
+            equipment_note: product.equipment_note || "", // Đảm bảo trường này được lưu
         });
     });
 
@@ -177,7 +177,7 @@ function generateTableRow(index, product) {
         <tr data-index="${index}" class="unchecked" style="background-color: ${rowColor};">
             <td>${index + 1}</td>
             <td class="text-left">${product.equipment_code}</td>
-            <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${productName}" data-bs-toggle="tooltip" data-bs-placement="top">
                 ${productName}
             </td>
             <td>${product.batch_number || ""}</td>
@@ -192,13 +192,14 @@ function generateTableRow(index, product) {
             <td class="unequal-count" id="unequal-count-${index}">${
         product.unequal || 0
     }</td>
-            <td>
+           <td>
                 <textarea class="equipment_note rounded-3" 
                     name="equipment_note_${index}" 
                     style="width: 150px; height: 40px; border-radius: 8px; padding: 5px; font-size: 12px;">${
                         product.equipment_note || ""
                     }</textarea>
             </td>
+
             <td>
                 <a href="#" class="text-dark" title="Xóa thiết bị" onclick="removeProduct(${index})">
                     <i class="fa fa-trash"></i>

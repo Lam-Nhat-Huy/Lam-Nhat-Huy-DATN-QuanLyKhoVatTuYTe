@@ -87,16 +87,16 @@
                 <div class="table-responsive rounded">
                     <table class="table align-middle gs-0 gy-4">
                         <thead class="{{ $AllEquipmentRequest->count() == 0 ? 'd-none' : '' }}">
-                            <tr class="bg-success">
+                            <tr class="bg-success fw-bolder">
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 10%;">Mã Yêu Cầu</th>
-                                <th class="" style="width: 43%;">Nhà Cung Cấp</th>
-                                <th class="" style="width: 12%;">Người Tạo</th>
-                                <th class="" style="width: 10%;">Ngày Yêu Cầu</th>
-                                <th class="text-center" style="width: 10%;">Trạng Thái</th>
-                                <th class="pe-3 text-center" style="width: 15%;">Hành Động</th>
+                                <th class="" style="width: 10%;">Mã yêu cầu</th>
+                                <th class="" style="width: 43%;">Nhà cung cấp</th>
+                                <th class="" style="width: 12%;">Người tạo</th>
+                                <th class="" style="width: 10%;">Ngày yêu cầu</th>
+                                <th class="text-center" style="width: 10%;">Trạng thái</th>
+                                <th class="pe-3 text-center" style="width: 15%;">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -126,7 +126,7 @@
                                         #{{ $item->code }}
                                     </td>
                                     <td>
-                                        {{ !empty($item->supplier_code) ? $item->suppliers->name : 'Chưa Có' }}
+                                        {{ !empty($item->supplier_code) ? $item->suppliers->name : 'Chưa có' }}
                                     </td>
                                     <td>
                                         {{ $item->users->last_name . ' ' . $item->users->first_name ?? 'N/A' }}
@@ -137,34 +137,34 @@
                                     <td class="text-center">
                                         @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->request_date)->addDays(3)))
                                             <div class="rounded-pill px-2 py-1 text-dark bg-warning">
-                                                Hết Hạn
+                                                Hết hạn
                                             </div>
                                         @elseif ($item->status == 3)
                                             <div class="rounded-pill px-2 py-1 text-white bg-info">
-                                                Lưu Tạm
+                                                Lưu tạm
                                             </div>
                                         @elseif ($item->status == 0)
                                             <div class="rounded-pill px-2 py-1 text-white bg-danger">
-                                                Chờ Duyệt
+                                                Chờ duyệt
                                             </div>
                                         @elseif ($item->status == 2)
                                             <div class="rounded-pill px-2 py-1 text-white bg-dark">
-                                                Chờ Báo Giá
+                                                Chờ báo giá
                                             </div>
                                         @elseif ($item->status == 1)
                                             <div class="rounded-pill px-2 py-1 text-white bg-primary">
-                                                Đang Nhập
+                                                Đang nhập
                                             </div>
                                         @elseif ($item->status == 4)
                                             <div class="rounded-pill px-2 py-1 text-white bg-success">
-                                                Hoàn Thành
+                                                Hoàn thành
                                             </div>
                                         @endif
                                     </td>
                                     <td class="text-center" data-bs-toggle="collapse"
                                         data-bs-target="#collapse_{{ $item->code }}" aria-expanded="false"
                                         aria-controls="collapse_{{ $item->code }}">
-                                        Chi Tiết<i class="fa fa-caret-right pointer ms-2"></i>
+                                        Chi tiết<i class="fa fa-caret-right pointer ms-2"></i>
                                     </td>
                                 </tr>
 
@@ -186,38 +186,38 @@
                                                         <div class="card-toolbar">
                                                             @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->request_date)->addDays(3)))
                                                                 <div class="rounded-pill px-2 py-1 text-dark bg-warning">
-                                                                    Hết Hạn
+                                                                    Hết hạn
                                                                 </div>
                                                             @elseif ($item->status == 3)
                                                                 <div class="rounded-pill px-2 py-1 text-white bg-info">
-                                                                    Lưu Tạm
+                                                                    Lưu tạm
                                                                 </div>
                                                             @elseif ($item->status == 0)
                                                                 <div class="rounded-pill px-2 py-1 text-white bg-danger">
-                                                                    Chờ Duyệt
+                                                                    Chờ duyệt
                                                                 </div>
                                                             @elseif ($item->status == 2)
                                                                 <div class="rounded-pill px-2 py-1 text-white bg-dark">
-                                                                    Chờ Báo Giá
+                                                                    Chờ báo giá
                                                                 </div>
                                                             @elseif ($item->status == 1)
                                                                 <div class="rounded-pill px-2 py-1 text-white bg-primary">
-                                                                    Đang Nhập
+                                                                    Đang nhập
                                                                 </div>
                                                             @elseif ($item->status == 4)
                                                                 <div class="rounded-pill px-2 py-1 text-white bg-success">
-                                                                    Hoàn Thành
+                                                                    Hoàn thành
                                                                 </div>
                                                             @endif
                                                         </div>
                                                     </div>
                                                     <div class="mb-3">
                                                         <span class="me-5">
-                                                            Người Sửa:
+                                                            Người sửa:
                                                             {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
                                                         </span>
                                                         <span class="me-5">
-                                                            Người Duyệt:
+                                                            Người duyệt:
                                                             {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
                                                         </span>
                                                     </div>
@@ -296,7 +296,7 @@
                                                             data-bs-target="#deleteModal_{{ $item->code }}"
                                                             type="button">
                                                             <i class="fa fa-trash" style="margin-bottom: 2px;"></i>Hủy
-                                                            Phiếu
+                                                            phiếu
                                                         </button>
                                                     @elseif ($item->status == 0 && now()->lt(\Carbon\Carbon::parse($item->request_date)->addDays(3)))
                                                         {{-- Chưa duyệt và ngày yêu cầu trong 3 ngày gần đây --}}
@@ -308,7 +308,7 @@
                                                                 data-bs-target="#browse_{{ $item->code }}"
                                                                 type="button">
                                                                 <i class="fas fa-clipboard-check"
-                                                                    style="margin-bottom: 2px;"></i>Duyệt Phiếu
+                                                                    style="margin-bottom: 2px;"></i>Duyệt phiếu
                                                             </button>
                                                         @endif
 
@@ -316,7 +316,7 @@
                                                         <a href="{{ route('equipment_request.update_import', $item->code) }}"
                                                             class="btn btn-dark btn-sm me-2 rounded-pill">
                                                             <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                            Phiếu
+                                                            phiếu
                                                         </a>
 
                                                         <!-- Nút Hủy đơn -->
@@ -325,7 +325,7 @@
                                                             data-bs-target="#deleteModal_{{ $item->code }}"
                                                             type="button">
                                                             <i class="fa fa-trash" style="margin-bottom: 2px;"></i>Hủy
-                                                            Phiếu
+                                                            phiếu
                                                         </button>
                                                     @elseif (
                                                         $item->status == 3 &&
@@ -338,14 +338,14 @@
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#save_{{ $item->code }}" type="button">
                                                             <i class="fa fa-save" style="margin-bottom: 2px;"></i>Tạo
-                                                            Phiếu
+                                                            phiếu
                                                         </button>
 
                                                         <!-- Nút Sửa đơn -->
                                                         <a href="{{ route('equipment_request.update_import', $item->code) }}"
                                                             class="btn btn-dark btn-sm me-2 rounded-pill">
                                                             <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                            Phiếu
+                                                            phiếu
                                                         </a>
 
                                                         <!-- Nút Hủy đơn -->
@@ -354,7 +354,7 @@
                                                             data-bs-target="#deleteModal_{{ $item->code }}"
                                                             type="button">
                                                             <i class="fa fa-trash" style="margin-bottom: 2px;"></i>Hủy
-                                                            Phiếu
+                                                            phiếu
                                                         </button>
                                                     @elseif ($item->status == 1)
                                                         {{-- Đang chuẩn bị --}}
@@ -365,37 +365,37 @@
                                                                 data-bs-target="#deleteModal_{{ $item->code }}"
                                                                 type="button">
                                                                 <i class="fa fa-trash" style="margin-bottom: 2px;"></i>Hủy
-                                                                Phiếu
+                                                                phiếu
                                                             </button>
                                                             <a href="{{ route('equipment_request.update_import', ['code' => $item->code, 'status' => 'update_quote']) }}"
                                                                 class="btn btn-sm rounded-pill btn-info me-2">
                                                                 <i class="fas fa-edit" style="margin-bottom: 2px;"></i>
-                                                                Cập Nhật
+                                                                Cập nhật
                                                             </a>
                                                         @endif
                                                         <!-- Nút Tạo Phiếu Nhập -->
                                                         <a href="{{ route('warehouse.create_import') }}?cd={{ $item->code }}"
                                                             class="btn btn-sm rounded-pill btn-dark me-2">
                                                             <i class="fas fa-file-import" style="margin-bottom: 2px;"></i>
-                                                            Tạo Phiếu Nhập
+                                                            Tạo phiếu nhập
                                                         </a>
 
                                                         <!-- Nút In Phiếu -->
                                                         <button class="btn btn-sm rounded-pill btn-twitter me-2"
                                                             onclick="printInvoice('{{ $item->code }}')" type="button">
                                                             <i class="fa fa-print" style="margin-bottom: 2px;"></i> In
-                                                            Phiếu
+                                                            phiếu
                                                         </button>
                                                     @elseif ($item->status == 2)
                                                         <a href="{{ route('equipment_request.update_import', ['code' => $item->code, 'status' => 'update_quote']) }}"
                                                             class="btn btn-sm rounded-pill btn-dark me-2">
                                                             <i class="fas fa-edit" style="margin-bottom: 2px;"></i>
-                                                            Cập Nhật Giá
+                                                            Cập nhật giá
                                                         </a>
                                                         <a href="{{ route('equipment_request.exportExcelEquipmentRequestList', $item->code) }}"
                                                             class="btn btn-sm rounded-pill btn-twitter me-2">
                                                             <i class="fas fa-file-excel" style="margin-bottom: 2px;"></i>
-                                                            Xuất Danh Sách
+                                                            Xuất danh sách
                                                         </a>
                                                     @endif
                                                 </div>
@@ -404,8 +404,8 @@
                                             {{-- In --}}
                                             <div class="fade modal" id="printArea_{{ $item->code }}">
                                                 <span class="link-primary position-absolute"
-                                                    style="top: 5%; right: 4%;"><strong class="text-danger">Số Đơn Đặt
-                                                        Hàng:
+                                                    style="top: 5%; right: 4%;"><strong class="text-danger">Số đơn đặt
+                                                        hàng:
                                                     </strong>{{ $item->code }}</span>
                                                 <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
                                                     <div class="d-flex mb-5">
@@ -423,7 +423,7 @@
                                                             <h1 class="mb-3 text-uppercase text-primary">ĐƠN ĐẶT HÀNG
                                                             </h1>
                                                             <div class="text-muted fs-30">
-                                                                Ngày Lập
+                                                                Ngày lập
                                                                 {{ \Carbon\Carbon::parse($item->request_date)->format('d-m-Y') }}
                                                             </div>
                                                         </div>
@@ -459,15 +459,15 @@
                                                                                     STT
                                                                                 </th>
                                                                                 <th style="width: 30%;" class="text-dark">
-                                                                                    Thiết Bị
+                                                                                    Thiết bị
                                                                                 </th>
                                                                                 <th style="width: 10%;" class="text-dark">
                                                                                     Đơn
-                                                                                    Vị
+                                                                                    vị
                                                                                 </th>
                                                                                 <th style="width: 15%;" class="text-dark">
                                                                                     Số
-                                                                                    Lượng
+                                                                                    lượng
                                                                                 </th>
                                                                                 <th style="width: 20%;" class="text-dark">
                                                                                     Đơn
@@ -514,7 +514,7 @@
                                                                             @endforeach
                                                                             <tr class=" border border-dark">
                                                                                 <td colspan="3" class="text-center">
-                                                                                    Tổng Cộng
+                                                                                    Tổng cộng
                                                                                 </td>
                                                                                 <td colspan="3" class="text-center"
                                                                                     style="height: 30px; min-height: 30px;">
@@ -569,12 +569,12 @@
                                                                     <div class="col-1"></div>
                                                                     <div class="col-7">
                                                                         <p class="m-0 p-0">
-                                                                            <strong>Người Lập Phiếu</strong>
+                                                                            <strong>Người lập phiếu</strong>
                                                                         </p>
                                                                     </div>
                                                                     <div class="col-4 text-center">
                                                                         <p class="m-0 p-0">
-                                                                            <strong>Trưởng Bộ Phận</strong>
+                                                                            <strong>Trưởng bộ phận</strong>
                                                                         </p>
                                                                     </div>
                                                                 </div>

@@ -29,7 +29,7 @@
                     <table class="table align-middle gs-0 gy-4">
                         <!-- Trong phần <thead> của bảng -->
                         <thead class="{{ $receipts->count() == 0 ? 'd-none' : '' }}">
-                            <tr class="bg-success">
+                            <tr class="bg-success fw-bolder">
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
@@ -128,7 +128,7 @@
                                                             </div>
                                                         @elseif ($item->status == 1)
                                                             @if (session('isAdmin') == 1)
-                                                                <button type="button"
+                                                                <button type="button" style="font-size: 12px !important"
                                                                     class="btn btn-danger px-2 py-1 btn-sm rounded-pill me-2"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#delete-{{ $item->code }}"
@@ -138,8 +138,10 @@
                                                                 </button>
                                                             @endif
 
-                                                            <div class="rounded-pill px-2 py-1 text-white bg-success me-2">
+                                                            <div class="rounded-pill px-2 py-1 text-white bg-success me-2"
+                                                                style="font-size: 12px !important">
                                                                 <i class="fa fa-check text-white"
+                                                                    style="font-size: 12px !important"
                                                                     style="margin-bottom: 4px; margin-right: 3px;"></i> Đã
                                                                 duyệt
                                                             </div>

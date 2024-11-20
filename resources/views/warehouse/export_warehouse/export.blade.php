@@ -39,7 +39,7 @@
                 <div class="table-responsive rounded">
                     <table class="table align-middle gs-0 gy-4">
                         <thead class="{{ $exports->count() == 0 ? 'd-none' : '' }}">
-                            <tr class="bg-success">
+                            <tr class="bg-success fw-bolder">
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
@@ -91,7 +91,7 @@
                                         {{ \Carbon\Carbon::parse($item->export_date)->format('d/m/Y') }}
                                     </td>
                                     <td>
-                                        {{ !empty($item->required_date) ? \Carbon\Carbon::parse($item->required_date)->format('d/m/Y H:i:s') : 'Không xó' }}
+                                        {{ !empty($item->required_date) ? \Carbon\Carbon::parse($item->required_date)->format('d/m/Y H:i:s') : 'Không có' }}
                                     </td>
                                     <td class="text-center">
                                         @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->required_date)))
@@ -147,33 +147,22 @@
                                                                 duyệt
                                                             </div>
                                                         @elseif($item->status == 1)
-                                                            <!--@if (session('isAdmin') == 1)
-    -->
-                                                            <!--    <button type="button"-->
-                                                            <!--        class="btn btn-danger px-2 py-1 btn-sm rounded-pill me-2"-->
-                                                            <!--        data-bs-toggle="modal"-->
-                                                            <!--        data-bs-target="#delete-{{ $item->code }}"-->
-                                                            <!--        {{ $item->no_action == 1 || str_contains($item->code, 'PX-KK') ? 'disabled' : '' }}>-->
-                                                            <!--        <i class="fa fa-trash"-->
-                                                            <!--            style="margin-bottom: 2px;"></i>Xóa phiếu-->
-                                                            <!--    </button>-->
-                                                            <!--
-    @endif-->
-
                                                             @if (session('isAdmin') == 1)
-                                                                <button type="button"
+                                                                <button type="button" style="font-size: 12px !important"
                                                                     class="btn btn-danger px-2 py-1 btn-sm rounded-pill me-2"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#delete-{{ $item->code }}"
                                                                     {{ $item->no_action == 1 || str_contains($item->code, 'PX-KK') ? 'disabled' : '' }}>
                                                                     <i class="fa fa-trash"
-                                                                        style="margin-bottom: 2px;"></i>
+                                                                        style="margin-bottom: 2px; font-size: 12px !important;"></i>
                                                                     Xóa phiếu
                                                                 </button>
                                                             @endif
 
-                                                            <div class="rounded-pill px-2 py-1 text-white bg-success me-2">
+                                                            <div class="rounded-pill px-2 py-1 text-white bg-success me-2"
+                                                                style="font-size: 12px !important">
                                                                 <i class="fa fa-check text-white"
+                                                                    style="font-size: 12px !important"
                                                                     style="margin-bottom: 4px; margin-right: 3px; font-size: 10px;"></i>
                                                                 Đã
                                                                 duyệt
@@ -203,7 +192,7 @@
                                                                                 {{ $item->suppliers->name ?? 'Không có' }}
                                                                             </td>
                                                                         </tr>
-                                                                    @else
+                                                                    @elseif ($item->export_type === 'Xuất Hủy')
                                                                         <tr>
                                                                             <td class=""><strong>Lý do hủy</strong>
                                                                             </td>
@@ -211,7 +200,24 @@
                                                                                 {{ $item->reason ?? 'Không có' }}
                                                                             </td>
                                                                         </tr>
+                                                                    @else
+                                                                        <tr>
+                                                                            <td class=""><strong>Phiếu xuất cân bằng
+                                                                                    kho</strong>
+                                                                            </td>
+                                                                            <td class="text-dark">
+                                                                                Phiếu này chỉ có khi cân bằng kho
+                                                                            </td>
+                                                                        </tr>
                                                                     @endif
+
+                                                                    <tr>
+                                                                        <td class=""><strong>Ghi chú</strong>
+                                                                        </td>
+                                                                        <td class="text-dark">
+                                                                            {{ $item->note ? $item->note : 'Không có ghi chú' }}
+                                                                        </td>
+                                                                    </tr>
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -225,11 +231,12 @@
                                                             <table class="table table-striped table-sm table-hover">
                                                                 <thead class="fw-bolder bg-dark">
                                                                     <tr class="text-center">
+                                                                        <th style="width: 10%;">Mã thiết bị</th>
                                                                         <th class="ps-5 text-left" style="width: 50%;">
                                                                             Tên thiết bị
                                                                         </th>
-                                                                        <th style="width: 25%;">Số lô</th>
-                                                                        <th class="pe-3" style="width: 25%;">Số lượng
+                                                                        <th style="width: 20%;">Số lô</th>
+                                                                        <th class="pe-3" style="width: 20%;">Số lượng
                                                                         </th>
                                                                     </tr>
                                                                 </thead>
@@ -258,6 +265,9 @@
                                                                         @endphp
 
                                                                         <tr class="text-center">
+                                                                            <td class="ps-5 text-left">
+                                                                                {{ $detail->equipments->code }}
+                                                                            </td>
                                                                             <td class="ps-5 text-left">
                                                                                 {{ $detail->equipments->name }}
                                                                             </td>

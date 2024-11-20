@@ -163,7 +163,7 @@ function generateTableRow(index, product) {
         <tr data-index="${index}" class="unchecked">
             <td>${index + 1}</td>
             <td class="text-left equipment-code">${product.equipment_code}</td>
-            <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${productName}">
+              <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${productName}" data-bs-toggle="tooltip" data-bs-placement="top">
                 ${productName}
             </td>
             <td>${product.batch_number || ""}</td>
