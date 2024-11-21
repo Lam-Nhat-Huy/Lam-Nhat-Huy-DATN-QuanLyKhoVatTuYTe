@@ -99,7 +99,7 @@
 
 
                     <div class="d-flex flex-column mb-5 fv-row">
-                        <label class="{{ $required }} fs-5 fw-bold mb-2">Nộ dung báo cáo</label>
+                        <label class="{{ $required }} fs-5 fw-bold mb-2">Nội dung báo cáo</label>
 
                         <textarea name="content" class="form-control form-control-sm border border-success" cols="30" rows="5"
                             placeholder="Nhập Nội Dung Báo Cáo..">{{ !empty($FirstReport['content']) ? $FirstReport['content'] : old('content') }}</textarea>

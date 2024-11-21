@@ -74,7 +74,7 @@
         .chat-bubble {
             background-color: #e9ecef;
             border-radius: 10px;
-            padding: 10px;
+            padding: 4px;
             margin: 5px 0;
             max-width: 80%;
             animation: fadeIn 0.3s ease-in-out;
@@ -85,6 +85,7 @@
             background-color: #4CAF50;
             /* Màu xanh lá cho tin nhắn người dùng */
             color: #fff;
+            font-size: 12px;
         }
 
         .chat-bubble.bot {
@@ -353,7 +354,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content border-0 shadow">
                 <!-- Chat Container -->
-                <div id="chatContainer" class="chat-container" style="display: block;">
+                <div id="chatContainer" class="chat-container" style="display: block; border: 4px solid #fff;">
                     <div class="chat-header">Chatbot kiểm tra tồn kho</div>
                     <div class="chat-messages" id="chatMessages">
                         <div class="chat-bubble bot">Bạn cần tra cứu tồn kho của thiết bị nào ạ?</div>
