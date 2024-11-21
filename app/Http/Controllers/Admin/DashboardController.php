@@ -18,6 +18,29 @@ class DashboardController extends Controller
     public function index()
     {
         $title = 'Thống Kê';
+        $mostImportedEquipment = Receipt_details::select('equipment_code', DB::raw('SUM(quantity) as total_quantity'))
+            ->whereMonth('created_at', now()->month)
+            ->whereHas('receipt', function ($query) {
+                $query->whereNull('deleted_at')
+                    ->where('status', 1);
+            })
+            ->groupBy('equipment_code')
+            ->orderByDesc('total_quantity')
+            ->with('equipments')
+            ->first();
+
+        $leastImportedEquipment = Receipt_details::select('equipment_code', DB::raw('SUM(quantity) as total_quantity'))
+            ->whereMonth('created_at', now()->month)
+            ->whereHas('receipt', function ($query) {
+                $query->whereNull('deleted_at')
+                    ->where('status', 1);
+            })
+            ->groupBy('equipment_code')
+            ->orderBy('total_quantity')
+            ->with('equipments')
+            ->first();
+
+
 
         $importantNotification = Notifications::where('lock_warehouse', 1)
             ->whereNull('deleted_at')
@@ -105,7 +128,9 @@ class DashboardController extends Controller
             'exportTotal',
             'expenseTotal',
             'inventoryData',
-            'monthlyImportExpenses'
+            'monthlyImportExpenses',
+            'mostImportedEquipment',
+            'leastImportedEquipment'
         ));
     }
 

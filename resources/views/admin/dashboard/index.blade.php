@@ -7,51 +7,89 @@
         }
 
         /* Áp dụng chỉ cho phân trang có class nk (Nhật ký xuất kho) */
-        .pagination.nk .page-link {
+        .custom-pagination .page-item {
+            margin: 0 4px;
+            /* Giảm khoảng cách giữa các nút để tạo cảm giác gọn gàng hơn */
+        }
+
+        .custom-pagination .page-item .page-link {
+            border: 1px solid #ddd;
+            /* Thêm viền nhẹ để phân biệt rõ nút */
+            border-radius: 4px;
+            /* Giảm bo tròn để trông hiện đại hơn */
+            padding: 6px 10px;
+            /* Kích thước nhỏ gọn hơn */
+            color: #6c757d;
+            background-color: #ffffff;
+            transition: all 0.3s ease-in-out;
+            font-size: 14px;
+            /* Cỡ chữ vừa phải, dễ đọc */
+        }
+
+        .custom-pagination .page-item.active .page-link {
+            background-color: #007bff;
+            /* Màu xanh chủ đạo cho nút đang chọn */
+            color: #ffffff;
+            border-color: #007bff;
+            box-shadow: 0 2px 4px rgba(0, 123, 255, 0.4);
+            /* Hiệu ứng bóng nhẹ */
+        }
+
+        .custom-pagination .page-item .page-link:hover {
+            background-color: #0056b3;
+            /* Màu hover đậm hơn để dễ nhận biết */
+            color: #ffffff;
+            text-decoration: none;
+            border-color: #0056b3;
+        }
+
+        .custom-pagination .page-item.disabled .page-link {
+            background-color: #f8f9fa;
+            /* Màu nền xám nhạt cho trạng thái vô hiệu hóa */
+            color: #6c757d;
+            border-color: #ddd;
+            cursor: not-allowed;
+            /* Thay đổi con trỏ để biểu thị không thể bấm */
+        }
+
+        .badge-export {
+            float: right;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            /* text-transform: capitalize; */
+            display: inline-block;
+        }
+
+        .badge-export.cancel {
             color: #fff;
-            /* Màu chữ trắng */
-            background-color: #28a745;
-            /* Màu nền xanh lá */
-            border-color: #28a745;
-            /* Viền xanh lá */
+            background-color: #FF4D4D;
+            /* Đỏ đậm */
         }
 
-        .pagination.nk .page-link:hover {
-            background-color: #218838;
-            /* Màu xanh lá đậm hơn khi hover */
-            border-color: #1e7e34;
-        }
-
-        .pagination.nk .page-item.active .page-link {
-            background-color: #218838;
-            /* Màu xanh lá đậm cho nút đang được chọn */
-            border-color: #1e7e34;
+        .badge-export.return {
             color: #fff;
-            /* Màu chữ trắng */
+            background-color: #4D79FF;
+            /* Xanh dương nhạt */
         }
 
-        /* Áp dụng chỉ cho phân trang có class nk (Nhật ký xuất kho) */
-        .pagination.tk .page-link {
+        .badge-export.use {
             color: #fff;
-            /* Màu chữ trắng */
-            background-color: #a79428;
-            /* Màu nền xanh lá */
-            border-color: #a79428;
-            /* Viền xanh lá */
+            background-color: #4CAF50;
+            /* Xanh lá */
         }
 
-        .pagination.tk .page-link:hover {
-            background-color: #a79428;
-            /* Màu xanh lá đậm hơn khi hover */
-            border-color: #a79428;
-        }
-
-        .pagination.tk .page-item.active .page-link {
-            background-color: #a79428;
-            /* Màu xanh lá đậm cho nút đang được chọn */
-            border-color: #a79428;
+        .badge-export.balance {
             color: #fff;
-            /* Màu chữ trắng */
+            background-color: #FF9800;
+            /* Cam */
+        }
+
+        .badge-export:hover {
+            filter: brightness(0.9);
+            /* Hiệu ứng hover */
+            transition: all 0.2s ease-in-out;
         }
     </style>
     <!-- Tải jQuery -->
@@ -260,10 +298,11 @@
 
                             <!-- Pagination -->
                             <div class="d-flex justify-content-center my-3">
-                                <ul class="pagination pagination-lg nk">
+                                <ul class="pagination pagination-sm custom-pagination">
                                     {{ $inventoryCheckLog->appends(['low_inventory_page' => request('low_inventory_page')])->links('pagination::bootstrap-4') }}
                                 </ul>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -311,27 +350,17 @@
                                                 <a class="text-gray-800 fw-bolder fs-6 mb-1 text-hover-primary text-decoration-underline"
                                                     href="{{ route('warehouse.export') }}?kw={{ $export->code }}">#{{ $export->code }}
                                                 </a>
+
                                                 @if ($export->export_type == 'Xuất Hủy')
-                                                    <span class="float-end"
-                                                        style="color: #FF4D4D; font-weight: normal; font-size: 12px;">Xuất
-                                                        hủy</span>
-                                                    {{-- Màu đỏ đậm --}}
+                                                    <span class="badge badge-export cancel">Xuất hủy</span>
                                                 @elseif ($export->export_type == 'Xuất Trả')
-                                                    <span class="float-end"
-                                                        style="color: #4D79FF; font-weight: normal; font-size: 12px;">Xuất
-                                                        trả</span>
-                                                    {{-- Màu xanh dương nhạt --}}
+                                                    <span class="badge badge-export return">Xuất trả</span>
                                                 @elseif ($export->export_type == 'Xuất Sử Dụng')
-                                                    <span class="float-end"
-                                                        style="color: #4CAF50; font-weight: normal; font-size: 12px;">Xuất
-                                                        sử dụng</span>
-                                                    {{-- Màu xanh lá --}}
+                                                    <span class="badge badge-export use">Xuất sử dụng</span>
                                                 @elseif ($export->export_type == 'Xuất cân bằng kho')
-                                                    <span class="float-end"
-                                                        style="color: #FF9800; font-weight: normal; font-size: 12px;">Xuất
-                                                        cân bằng
-                                                    </span> {{-- Màu cam --}}
+                                                    <span class="badge badge-export balance">Xuất cân bằng</span>
                                                 @endif
+
 
 
                                             </h6>
@@ -350,7 +379,7 @@
                             @endif
                             <!-- Pagination -->
                             <div class="d-flex justify-content-center my-3">
-                                <ul class="pagination pagination-lg nk">
+                                <ul class="pagination pagination-sm custom-pagination">
                                     {{ $exportLog->appends(['low_inventory_page' => request('low_inventory_page')])->links('pagination::bootstrap-4') }}
                                 </ul>
                             </div>
@@ -368,8 +397,8 @@
                             <h5 class="card-title fw-bolder text-white fs-5 d-flex align-items-center">
                                 CẢNH BÁO TỒN KHO THẤP
                             </h5>
-                            <span class="text-white fw-bold fs-6"><strong>{{ $warnings->total() }}</strong> Thiết
-                                Bị</span>
+                            <span class="text-white fw-bold fs-6"><strong>{{ $warnings->total() }}</strong> thiết
+                                bị</span>
                         </div>
                         <!-- Body -->
                         <div class="card-body pt-3 d-flex flex-column justify-content-between pb-0 px-5">
@@ -381,9 +410,9 @@
                                             <i class="fa fa-exclamation-triangle text-danger fs-3 me-1"></i>
                                         </div>
                                         <div class="fw-normal text-muted ps-3">
-                                            Thiết bị <strong>{{ $warning->equipments->name }}</strong>
+                                            <strong>{{ $warning->equipments->name }}</strong>
                                             (Mã:
-                                            <strong>{{ $warning->code }}</strong>)
+                                            <strong>{{ $warning->equipments->code }}</strong>)
                                             số lô <strong>{{ $warning->batch_number }}</strong>
                                             chỉ
                                             còn
@@ -418,7 +447,7 @@
                             @endforelse
                             <!-- Pagination -->
                             <div class="d-flex justify-content-center my-3">
-                                <ul class="pagination pagination-lg nk">
+                                <ul class="pagination pagination-sm custom-pagination">
                                     {{ $warnings->appends(['export_log_page' => request('export_log_page')])->links('pagination::bootstrap-4') }}
                                 </ul>
                             </div>
@@ -441,22 +470,61 @@
                                 <div class="col-lg-6 col-md-6 col-sm-12 my-1">
                                     <div class="px-6 py-8 rounded-2 shadow-sm text-center"
                                         style="background-image: linear-gradient(60deg, #3d3393 0%, #2b76b9 37%, #2cacd1 65%, #35eb93 100%);">
-                                        <i class="fa fa-box fs-2 text-white mb-3"></i>
+                                        <i class="fa fa-box fs-2 text-white mb-3"
+                                            title="Số lượng nhập tháng {{ now()->format('m') }}" data-bs-toggle="tooltip"
+                                            data-bs-placement="top"></i>
                                         <h4 class="fw-bold text-white">Số lượng nhập tháng {{ now()->format('m') }}</h4>
                                         <span class="fs-5 text-white">{{ $importTotal }} thiết bị <span class="pointer"
                                                 data-bs-toggle="modal" data-bs-target="#detail_import"><i
                                                     class="fa fa-eye text-white ms-1"></i></span></span>
                                     </div>
                                 </div>
+
                                 <div class="col-lg-6 col-md-6 col-sm-12 my-1">
                                     <div class="px-6 py-8 rounded-2 shadow-sm text-center"
                                         style="background-image: linear-gradient(60deg, #3d3393 0%, #2b76b9 37%, #2cacd1 65%, #35eb93 100%);">
-                                        <i class="fa fa-dollar-sign fs-2 text-white mb-3"></i>
+                                        <i class="fa fa-dollar-sign fs-2 text-white mb-3"
+                                            title="Tổng chi tháng {{ now()->format('m') }}" data-bs-toggle="tooltip"
+                                            data-bs-placement="top"></i>
                                         <h4 class="fw-bold text-white">Tổng chi tháng {{ now()->format('m') }}</h4>
                                         <span class="fs-5 text-white">{{ number_format($expenseTotal, 0, ',', '.') }}
                                             VND</span>
                                     </div>
                                 </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12 my-1">
+                                    <div class="px-6 py-8 rounded-2 shadow-sm text-center d-flex flex-column align-items-center"
+                                        style="background-image: linear-gradient(60deg, #3d3393 0%, #2b76b9 37%, #2cacd1 65%, #35eb93 100%);">
+                                        <i class="fa fa-cubes fs-2 text-white mb-3" title="Thiết bị được nhập nhiều nhất"
+                                            data-bs-toggle="tooltip" data-bs-placement="top"></i>
+                                        <span class="fs-5 text-white"
+                                            title="{{ $mostImportedEquipment->equipments->name ?? 'Không có' }}"
+                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                            style="display: inline-block; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            {{ $mostImportedEquipment->equipments->name ?? 'Không có' }}
+                                        </span>
+                                        <p class="fs-6 text-white">Tổng SL:
+                                            {{ $mostImportedEquipment->total_quantity ?? 0 }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12 my-1">
+                                    <div class="px-6 py-8 rounded-2 shadow-sm text-center d-flex flex-column align-items-center"
+                                        style="background-image: linear-gradient(60deg, #3d3393 0%, #2b76b9 37%, #2cacd1 65%, #35eb93 100%);">
+                                        <i class="fa fa-cogs fs-2 text-white mb-3" title="Thiết bị ít được nhập nhất"
+                                            data-bs-toggle="tooltip" data-bs-placement="top"></i>
+                                        <span class="fs-5 text-white"
+                                            title="{{ $leastImportedEquipment->equipments->name ?? 'Không có' }}"
+                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                            style="display: inline-block; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            {{ $leastImportedEquipment->equipments->name ?? 'Không có' }}
+                                        </span>
+                                        <p class="fs-6 text-white">Tổng SL:
+                                            {{ $leastImportedEquipment->total_quantity ?? 0 }}</p>
+                                    </div>
+                                </div>
+
+
                             </div>
                             {{-- Modal --}}
                             <div class="modal fade" id="detail_import" data-bs-backdrop="static"

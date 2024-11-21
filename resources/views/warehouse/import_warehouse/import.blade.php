@@ -290,7 +290,7 @@
                                                                         <th style="width: 10%;">Lệch</th>
                                                                         <th style="width: 10%;">Giá nhập</th>
                                                                         <th style="width: 10%;">Số lô</th>
-                                                                        <th style="width: 10%;">Chiết khấu(%)</th>
+                                                                        <th style="width: 10%;">CK(%)</th>
                                                                         <th style="width: 10%;">VAT(%)</th>
                                                                         <th class="pe-3" style="width: 15%;">
                                                                             Tổng
@@ -313,7 +313,13 @@
                                                                                 $totalPrice * (1 + $vat / 100);
                                                                         @endphp
                                                                         <tr class="text-center">
-                                                                            <td>{{ $detail->equipments->name }}</td>
+                                                                            <td title="{{ $detail->equipments->name ?? 'Không có' }}"
+                                                                                data-bs-toggle="tooltip"
+                                                                                data-bs-placement="top"
+                                                                                style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;">
+                                                                                {{ $detail->equipments->name }}
+                                                                            </td>
+
                                                                             <td>{{ $detail->quantity_quote ?? 'Không Có' }}
                                                                             </td>
                                                                             <td>{{ $detail->quantity }}</td>
@@ -324,8 +330,7 @@
                                                                             <td>{{ $detail->batch_number }}</td>
                                                                             <td>{{ $detail->discount }}%</td>
                                                                             <td>{{ $detail->VAT }}%</td>
-                                                                            <td>{{ number_format($totalPriceWithVAT) }}
-                                                                                VND
+                                                                            <td>{{ number_format($totalPriceWithVAT) }} VND
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -755,9 +760,13 @@
                         </ul>
                     </div>
                     <div class="DayNganCach"></div>
-                    <ul class="pagination">
-                        {{ $receipts->links('pagination::bootstrap-5') }}
-                    </ul>
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-center my-3">
+                        <ul class="pagination pagination-sm custom-pagination">
+                            {{ $receipts->links('pagination::bootstrap-5') }}
+                        </ul>
+                    </div>
+
                 </div>
             @endif
 

@@ -193,6 +193,51 @@
                 display: none;
             }
         }
+
+        .custom-pagination .page-item {
+            margin: 0 4px;
+            /* Giảm khoảng cách giữa các nút để tạo cảm giác gọn gàng hơn */
+        }
+
+        .custom-pagination .page-item .page-link {
+            border: 1px solid #ddd;
+            /* Thêm viền nhẹ để phân biệt rõ nút */
+            border-radius: 4px;
+            /* Giảm bo tròn để trông hiện đại hơn */
+            padding: 6px 10px;
+            /* Kích thước nhỏ gọn hơn */
+            color: #6c757d;
+            background-color: #ffffff;
+            transition: all 0.3s ease-in-out;
+            font-size: 14px;
+            /* Cỡ chữ vừa phải, dễ đọc */
+        }
+
+        .custom-pagination .page-item.active .page-link {
+            background-color: #007bff;
+            /* Màu xanh chủ đạo cho nút đang chọn */
+            color: #ffffff;
+            border-color: #007bff;
+            box-shadow: 0 2px 4px rgba(0, 123, 255, 0.4);
+            /* Hiệu ứng bóng nhẹ */
+        }
+
+        .custom-pagination .page-item .page-link:hover {
+            background-color: #0056b3;
+            /* Màu hover đậm hơn để dễ nhận biết */
+            color: #ffffff;
+            text-decoration: none;
+            border-color: #0056b3;
+        }
+
+        .custom-pagination .page-item.disabled .page-link {
+            background-color: #f8f9fa;
+            /* Màu nền xám nhạt cho trạng thái vô hiệu hóa */
+            color: #6c757d;
+            border-color: #ddd;
+            cursor: not-allowed;
+            /* Thay đổi con trỏ để biểu thị không thể bấm */
+        }
     </style>
 </head>
 

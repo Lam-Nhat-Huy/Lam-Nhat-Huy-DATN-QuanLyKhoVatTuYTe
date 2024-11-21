@@ -268,7 +268,10 @@
                                                                             <td class="ps-5 text-left">
                                                                                 {{ $detail->equipments->code }}
                                                                             </td>
-                                                                            <td class="ps-5 text-left">
+                                                                            <td title="{{ $detail->equipments->name ?? 'Không có' }}"
+                                                                                data-bs-toggle="tooltip"
+                                                                                data-bs-placement="top"
+                                                                                style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;">
                                                                                 {{ $detail->equipments->name }}
                                                                             </td>
                                                                             <td>{{ $detail->batch_number }}</td>
@@ -646,9 +649,12 @@
                         </ul>
                     </div>
                     <div class="DayNganCach"></div>
-                    <ul class="pagination">
-                        {{ $exports->links('pagination::bootstrap-5') }}
-                    </ul>
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-center my-3">
+                        <ul class="pagination pagination-sm custom-pagination">
+                            {{ $exports->links('pagination::bootstrap-5') }}
+                        </ul>
+                    </div>
                 </div>
             @endif
 

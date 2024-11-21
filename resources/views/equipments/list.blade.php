@@ -337,9 +337,12 @@
                         </ul>
                     </div>
                     <div class="DayNganCach"></div>
-                    <ul class="pagination">
-                        {{ $AllEquipment->links('pagination::bootstrap-5') }}
-                    </ul>
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-center my-3">
+                        <ul class="pagination pagination-sm custom-pagination">
+                            {{ $AllEquipment->links('pagination::bootstrap-5') }}
+                        </ul>
+                    </div>
                 </div>
             @endif
 

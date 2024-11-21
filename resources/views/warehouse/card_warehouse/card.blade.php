@@ -31,24 +31,29 @@
                     <tbody>
                         <tr id="noDataAlert">
                             <td colspan="12" class="text-center">
-                                <div class="alert alert-secondary d-flex flex-column align-items-center justify-content-center p-4"
-                                    role="alert"
-                                    style="border: 2px dashed #6c757d; background-color: #f8f9fa; color: #495057;">
+                                <div class="alert alert-light border border-secondary rounded-3 p-4 d-flex flex-column align-items-center justify-content-center"
+                                    role="alert" style="background-color: #ffffff;">
+                                    <!-- Icon -->
                                     <div class="mb-3">
-                                        <i class="fas fa-clipboard-check" style="font-size: 36px; color: #6c757d;"></i>
+                                        <i class="fas fa-box-open" style="font-size: 48px; color: #6c757d;"></i>
                                     </div>
-                                    <div class="text-center">
-                                        <h5 style="font-size: 16px; font-weight: 600; color: #495057;">Thông tin thiết
-                                            bị
-                                            trống</h5>
-                                        <p style="font-size: 14px; color: #6c757d; margin: 0;">
-                                            Hãy chọn thiết bị để xem thông tin thẻ kho.
-                                        </p>
-                                    </div>
+                                    <!-- Title -->
+                                    <h5 class="fw-bold text-dark" style="font-size: 18px; margin-bottom: 10px;">Không
+                                        có thông tin thiết bị</h5>
+                                    <!-- Description -->
+                                    <p class="text-muted mb-3" style="font-size: 14px; max-width: 500px;">
+                                        Hiện chưa có thiết bị nào được chọn. Hãy sử dụng thanh tìm kiếm ở trên để chọn thiết
+                                        bị, hoặc nhấp vào danh sách để bắt đầu quản lý thông tin thẻ kho.
+                                    </p>
+                                    <!-- Button -->
+                                    <span class="btn-sm fw-bolder" style="font-size: 14px;">
+                                        Hướng dẫn sử dụng thẻ kho
+                                    </span>
                                 </div>
                             </td>
                         </tr>
                     </tbody>
+
                 </table>
             </div>
         </div>
