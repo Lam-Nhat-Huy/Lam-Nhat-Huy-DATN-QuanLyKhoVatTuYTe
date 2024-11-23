@@ -22,7 +22,7 @@
                 <table class="table align-middle gs-0 gy-4">
                     <thead class="bg-success">
                         <tr class="fw-bolder">
-                            <th class="ps-5" style="width: 40%;">Thiết Bị</th>
+                            <th class="ps-5" style="width: 40%;">Thiết bị</th>
                             <th style="width: 20%;" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Tổng số lượng nhập, xuất trước ngày {{ \Carbon\Carbon::parse(request('start_date'))->format('d-m-Y H:i:s') }}">
                                 Tồn đầu

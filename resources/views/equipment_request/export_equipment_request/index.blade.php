@@ -332,7 +332,7 @@
                                                         <!-- Nút Duyệt đơn -->
                                                         @if (session('isAdmin') == 1)
                                                             @if ($canApprove)
-                                                                <button class="btn btn-sm rounded-pill btn-twitter me-2"
+                                                                <button class="btn btn-sm rounded-pill btn-success me-2"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#browse_{{ $item->code }}"
                                                                     type="button">
@@ -665,8 +665,7 @@
             @endif
 
             {{-- Modal Duyệt Tất Cả --}}
-            <div class="modal fade" id="browseAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                aria-labelledby="browseAllModal" aria-hidden="true">
+            <div class="modal fade" id="browseAll" tabindex="-1" aria-labelledby="browseAllModal" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-md">
                     <div class="modal-content border-0 shadow">
                         <div class="modal-header bg-primary text-white">
@@ -682,19 +681,18 @@
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary btn-sm px-4"
                                 data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">
-                                Duyệt</button>
+                                Duyệt tất cả</button>
                         </div>
                     </div>
                 </div>
             </div>
 
             {{-- Modal Xác Nhận Hủy Tất Cả --}}
-            <div class="modal fade" id="deleteAll" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                aria-labelledby="deleteAllLabel" aria-hidden="true">
+            <div class="modal fade" id="deleteAll" tabindex="-1" aria-labelledby="deleteAllLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-md">
                     <div class="modal-content border-0 shadow">
                         <div class="modal-header bg-danger text-white">
-                            <h5 class="modal-title text-white" id="deleteAllLabel">Xác Nhận Hủy yêu cầu xuất kho</h5>
+                            <h5 class="modal-title text-white" id="deleteAllLabel">Xác nhận hủy yêu cầu xuất kho</h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
@@ -704,8 +702,8 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit"
-                                class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Hủy</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Hủy
+                                phiếu</button>
                         </div>
                     </div>
                 </div>
@@ -715,11 +713,11 @@
 
     @foreach ($AllWarehouseExportRequest as $item)
         <!-- Modal Duyệt Yêu Cầu Xuất Kho -->
-        <div class="modal fade" id="browse_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
-            tabindex="-1" aria-labelledby="checkModalLabel" aria-hidden="true">
+        <div class="modal fade" id="browse_{{ $item->code }}" tabindex="-1" aria-labelledby="checkModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow">
-                    <div class="modal-header bg-primary">
+                    <div class="modal-header bg-success">
                         <h5 class="modal-title text-white" id="checkModalLabel">Duyệt
                             Yêu Cầu Xuất Kho</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -729,14 +727,14 @@
                         @csrf
                         <input type="hidden" name="browse_request" value="{{ $item->code }}">
                         <div class="modal-body text-center pb-0">
-                            <p class="text-primary mb-4">Bạn có chắc chắn muốn duyệt yêu cầu xuất kho này?
+                            <p class="text-dark mb-4">Bạn có chắc chắn muốn duyệt yêu cầu xuất kho này?
                             </p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit"
-                                class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Duyệt</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-success px-4 load_animation">Duyệt
+                                phiếu</button>
                         </div>
                     </form>
                 </div>
@@ -744,8 +742,8 @@
         </div>
 
         {{-- Hủy --}}
-        <div class="modal fade" id="deleteModal_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
-            tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal fade" id="deleteModal_{{ $item->code }}" tabindex="-1" aria-labelledby="deleteModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow">
                     <div class="modal-header bg-danger">
@@ -757,13 +755,13 @@
                         @csrf
                         <input type="hidden" name="delete_request" value="{{ $item->code }}">
                         <div class="modal-body pb-0 text-center">
-                            <p class="text-danger mb-4">Hủy Yêu Cầu Xuất Kho Này?</p>
+                            <p class="text-danger mb-4">Bạn có chắc chắn muốn hủy yêu cầu xuất kho này?</p>
                         </div>
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit"
-                                class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Hủy</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Hủy
+                                phiếu</button>
                         </div>
                     </form>
                 </div>
@@ -771,8 +769,8 @@
         </div>
 
         {{-- Lưu phiếu --}}
-        <div class="modal fade" id="save_{{ $item->code }}" data-bs-backdrop="static" data-bs-keyboard="false"
-            tabindex="-1" aria-labelledby="saveModalLabel" aria-hidden="true">
+        <div class="modal fade" id="save_{{ $item->code }}" tabindex="-1" aria-labelledby="saveModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow">
                     <div class="modal-header bg-primary">
@@ -792,8 +790,8 @@
                         <div class="modal-footer justify-content-center border-0">
                             <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
                                 data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit"
-                                class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Tạo</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Tạo
+                                phiếu</button>
                         </div>
                     </form>
                 </div>

@@ -177,7 +177,8 @@
 @endsection
 
 @section('content')
-    <div class="card mb-md-5 pb-15 mb-xl-10" id="kt_profile_details_view">
+    <div class="card mb-md-5" style="@if (request()->is('system/profile')) padding-bottom: 88px !important; @endif"
+        id="kt_profile_details_view">
         <div class="px-10 py-5 border-bottom d-flex justify-content-between align-items-center cursor-pointer">
             <h4 class="fw-bolder m-0">Thông tin cá nhân</h4>
             <span class="btn rounded-pill btn-dark btn-sm pointer" id="edit_form">

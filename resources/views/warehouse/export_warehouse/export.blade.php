@@ -43,13 +43,13 @@
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th style="width: 15%;">Mã</th>
+                                <th style="width: 10%;">Mã</th>
                                 <th class="" style="width: 17%;">Loại xuất</th>
-                                <th class="" style="width: 16%;">Tạo bởi</th>
+                                <th class="" style="width: 10%;">Tạo bởi</th>
                                 <th class="" style="width: 12%;">Ngày tạo</th>
                                 <th class="" style="width: 15%;">Ngày cần thiết</th>
                                 <th class="text-center" style="width: 10%;">Trạng thái</th>
-                                <th class="pe-3 text-center" style="width: 15%;">Hành động</th>
+                                <th class="pe-3 text-center" style="width: 17%;">Hành động</th>
                             </tr>
                         </thead>
 
@@ -78,7 +78,7 @@
                                                 data-bs-placement="top" title="Xuất cân bằng kho"></i>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="fw-bolder">
                                         #{{ $item->code }}
                                     </td>
                                     <td>

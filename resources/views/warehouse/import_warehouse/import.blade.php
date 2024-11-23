@@ -63,7 +63,7 @@
                                                 data-bs-placement="top" title="Nhập cân bằng kho"></i>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="fw-bolder">
                                         #{{ $item->code }}
                                     </td>
                                     <td>

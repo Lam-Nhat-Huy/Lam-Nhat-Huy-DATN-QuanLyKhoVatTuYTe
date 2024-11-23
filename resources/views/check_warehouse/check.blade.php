@@ -65,7 +65,7 @@
                             @endphp
 
                             <tr class="text-center hover-table pointer">
-                                <td>#{{ $item['code'] }}</td>
+                                <td class="fw-bolder">#{{ $item['code'] }}</td>
                                 <td>{{ \Carbon\Carbon::parse($item['check_date'])->format('d/m/Y') }}</td>
                                 <td style="text-align: center;">
                                     @if ($totalUnequal == 0)
