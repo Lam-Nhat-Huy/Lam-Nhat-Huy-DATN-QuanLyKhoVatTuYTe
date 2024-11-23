@@ -65,7 +65,7 @@
             const imgElement = document.querySelector('.image-overlay img'); // Phần tử img
             const message_error = document.querySelectorAll('.message_error');
             const defaultAvatar =
-                "{{ !empty($getUserProfile->avatar) ? asset('storage/' . $getUserProfile->avatar) : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png' }}"; // Avatar mặc định
+                "{{ !empty($getUserProfile->avatar) ? asset('storage/' . $getUserProfile->avatar) : asset('image/avatarDefault.png') }}"; // Avatar mặc định
 
             // Hàm chuyển đổi hiển thị từ span sang input
             function switchToEditMode() {
@@ -194,7 +194,7 @@
                 <div class="col-md-2 col-sm-12">
                     <div class="mt-md-7 ms-md-7 position-relative image-overlay">
                         <img class="border border-dark rounded-pill shadow mt-5 mt-md-0"
-                            src="{{ !empty($getUserProfile->avatar) ? asset('storage/' . $getUserProfile->avatar) : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png' }}"
+                            src="{{ !empty($getUserProfile->avatar) ? asset('storage/' . $getUserProfile->avatar) : asset('image/avatarDefault.png') }}"
                             alt="Image">
 
                         <div class="darken rounded-3 d-none"></div>

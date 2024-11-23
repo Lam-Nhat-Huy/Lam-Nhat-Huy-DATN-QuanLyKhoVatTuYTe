@@ -255,7 +255,7 @@
                         <div class="cursor-pointer symbol symbol-30px symbol-md-40px" data-kt-menu-trigger="click"
                             data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
                             <img class="rounded-circle border border-dark"
-                                src="{{ !empty(session('avatar')) ? asset('storage/' . session('avatar')) : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png' }}"
+                                src="{{ !empty(session('avatar')) ? asset('storage/' . session('avatar')) : asset('image/avatarDefault.png') }}"
                                 alt="user" />
                         </div>
                         <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-primary fw-bold fs-6 w-300px"
@@ -264,7 +264,7 @@
                                 <div class="menu-content d-flex align-items-center px-3">
                                     <div class="symbol symbol-50px me-5">
                                         <img class="rounded-circle border border-dark"
-                                            src="{{ !empty(session('avatar')) ? asset('storage/' . session('avatar')) : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png' }}"
+                                            src="{{ !empty(session('avatar')) ? asset('storage/' . session('avatar')) : asset('image/avatarDefault.png') }}"
                                             alt="user" />
                                     </div>
                                     <div class="d-flex flex-column">

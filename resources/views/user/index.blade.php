@@ -107,7 +107,7 @@
                                     </td>
                                     <td>
                                         <img class="rounded-circle border border-dark"
-                                            src="{{ $item->avatar ? asset('storage/' . $item->avatar) : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png' }}"
+                                            src="{{ $item->avatar ? asset('storage/' . $item->avatar) : asset('image/avatarDefault.png') }}"
                                             style="width: 70px !important; height: 70px !important;" alt="">
                                     </td>
                                     <td>
@@ -160,7 +160,7 @@
 
                                                             <div class="row mb-5 justify-content-center">
                                                                 <div class="col-md-3">
-                                                                    <img src="{{ $item->avatar ? asset('storage/' . $item->avatar) : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png' }}"
+                                                                    <img src="{{ $item->avatar ? asset('storage/' . $item->avatar) : asset('image/avatarDefault.png') }}"
                                                                         class="rounded border border-dark"
                                                                         style="width: 175px !important; height: 175px !important;"
                                                                         alt="">

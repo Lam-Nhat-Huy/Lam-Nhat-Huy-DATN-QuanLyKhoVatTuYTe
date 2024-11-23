@@ -31,8 +31,8 @@
                     <tbody>
                         <tr id="noDataAlert">
                             <td colspan="12" class="text-center">
-                                <div class="alert alert-light border border-secondary rounded-3 p-4 d-flex flex-column align-items-center justify-content-center"
-                                    role="alert" style="background-color: #ffffff;">
+                                <div class="alert alert-light rounded-3 p-4 d-flex flex-column align-items-center justify-content-center"
+                                    role="alert" style="border: 2px dashed #6c757d; background-color: #ffffff;">
                                     <!-- Icon -->
                                     <div class="mb-3">
                                         <i class="fas fa-box-open" style="font-size: 48px; color: #6c757d;"></i>
@@ -45,10 +45,6 @@
                                         Hiện chưa có thiết bị nào được chọn. Hãy sử dụng thanh tìm kiếm ở trên để chọn thiết
                                         bị, hoặc nhấp vào danh sách để bắt đầu quản lý thông tin thẻ kho.
                                     </p>
-                                    <!-- Button -->
-                                    <span class="btn-sm fw-bolder" style="font-size: 14px;">
-                                        Hướng dẫn sử dụng thẻ kho
-                                    </span>
                                 </div>
                             </td>
                         </tr>

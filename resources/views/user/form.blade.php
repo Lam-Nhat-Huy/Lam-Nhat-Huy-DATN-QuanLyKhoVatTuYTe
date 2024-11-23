@@ -60,7 +60,7 @@
                         <div class="col-2">
                             <div class="mb-5">
                                 <img id="preview-avatar" class="border border-dark rounded-circle"
-                                    src="{{ !empty($firstUser->avatar) ? asset('storage/' . $firstUser->avatar) : 'https://static-00.iconduck.com/assets.00/avatar-default-symbolic-icon-2048x1949-pq9uiebg.png' }}"
+                                    src="{{ !empty($firstUser->avatar) ? asset('storage/' . $firstUser->avatar) : asset('image/avatarDefault.png') }}"
                                     style="width: 155px !important; height: 155px !important;" alt="image">
                             </div>
 

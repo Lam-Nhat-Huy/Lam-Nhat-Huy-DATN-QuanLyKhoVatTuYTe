@@ -33,7 +33,7 @@ return [
                     'title' => 'Danh Sách',
                     'route' => 'user.index',
                     'route_action' => ['user.add', 'user.edit', 'user.user_trash'],
-                    'icon' => 'fas fa-check-square',
+                    'icon' => 'fa fa-bars',
                     'user_role' => [1],
                 ],
             ]
@@ -184,7 +184,7 @@ return [
                     'title' => 'Danh sách',
                     'route' => 'supplier.list',
                     'route_action' => ['supplier.create', 'supplier.edit', 'supplier.trash'],
-                    'icon' => 'fas fa-check-square',
+                    'icon' => 'fa fa-bars',
                     'user_role' => [0, 1],
                 ],
             ]
@@ -202,7 +202,7 @@ return [
                         'department.add',
                         'department.edit',
                     ],
-                    'icon' => 'fas fa-check-square',
+                    'icon' => 'fa fa-bars',
                     'user_role' => [0, 1],
                 ],
             ]
@@ -229,7 +229,7 @@ return [
                         'notification.notification_edit',
                         'notification.notification_trash',
                     ],
-                    'icon' => 'fas fa-check-square',
+                    'icon' => 'fa fa-bars',
                     'user_role' => [1],
                 ],
             ],
