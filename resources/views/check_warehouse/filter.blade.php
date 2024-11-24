@@ -5,7 +5,7 @@
     <div class="card-toolbar">
         @if (session('isAdmin') == 1)
             <div class="checkbox-wrapper-6 d-flex me-2 btn btn-sm btn-dark rounded-pill">
-                <span class="me-3 fw-bolder">Khóa Kho</span>
+                <span class="me-3 fw-bolder text-uppercase">Khóa Kho</span>
                 <input class="tgl tgl-light" id="lock_warehouse" type="checkbox" value="1" name="lock_warehouse"
                     {{ !empty($checkLockWarehouse) && $checkLockWarehouse == 1 ? 'checked' : '' }} />
                 <label class="tgl-btn" for="lock_warehouse"></label>

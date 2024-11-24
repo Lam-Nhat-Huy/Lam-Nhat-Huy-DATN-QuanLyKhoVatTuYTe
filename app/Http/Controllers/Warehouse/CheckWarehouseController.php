@@ -32,6 +32,7 @@ class CheckWarehouseController extends Controller
         $this->notification = new Notifications();
     }
 
+    // Hiển thị thông tin phiếu kiểm
     public function index(Request $request)
     {
         $title = 'Kiểm Kho';
@@ -95,6 +96,7 @@ class CheckWarehouseController extends Controller
         ));
     }
 
+    // Hàm tạo thông báo khóa kho
     public function createNotification(Request $request)
     {
         if (!empty($request->lock_warehouse)) {
@@ -121,6 +123,7 @@ class CheckWarehouseController extends Controller
         }
     }
 
+    // Hàm tạo phiếu kiểm kho
     public function create()
     {
         $title = 'Kiểm Kho';
@@ -141,7 +144,7 @@ class CheckWarehouseController extends Controller
         return view("{$this->route}.form", compact('title', 'action', 'equipmentsWithStock', 'statusMessage', 'userName'));
     }
 
-
+    // Hàm xuất file excel tất cả thiết bị
     public function exportCheckWarehouseExcel()
     {
         $equipmentsWithStock = Equipments::whereHas('inventories', function ($query) {
@@ -154,6 +157,7 @@ class CheckWarehouseController extends Controller
         return Excel::download(new CheckWarehouseExport($equipmentsWithStock), 'FileKiemKhoTatCaThietBi.xlsx');
     }
 
+    // Hàm nhập file excel vào danh sách kiểm kho
     public function importCheckWarehouseExcel(Request $request)
     {
         $title = 'Excel';
@@ -215,6 +219,7 @@ class CheckWarehouseController extends Controller
         return view("{$this->route}.form", compact('title', 'action', 'equipmentsWithExcel', 'equipmentsWithStock', 'statusMessage', 'userName'));
     }
 
+    // Hàm sửa phiếu kiểm kho
     public function edit($code)
     {
         $title = 'Chỉnh sửa';
@@ -252,6 +257,7 @@ class CheckWarehouseController extends Controller
         return view("{$this->route}.form", compact('title', 'action', 'equipmentsWithJson', 'inventoryCheck', 'equipmentsWithStock', 'statusMessage', 'userName', 'note'));
     }
 
+    // Hàm sửa phiếu kiểm kho theo lần kiểm lần 1 và lần 2
     public function editByCheckround($code)
     {
         $title = 'Chỉnh sửa Phiếu Kiểm';
@@ -291,6 +297,7 @@ class CheckWarehouseController extends Controller
         ));
     }
 
+    // Hàm hiển thị danh sách thiết bị cần chỉnh sửa theo lần kiểm
     public function showInventoryCheckEdits($code, $checkRound = 1)
     {
         $inventoryCheckEdit = Inventory_check_details::where('inventory_check_code', $code)
@@ -307,6 +314,7 @@ class CheckWarehouseController extends Controller
         return response()->json($inventoryCheckEdit);
     }
 
+    // Hàm thay đổi data update vào db
     public function update(Request $request, $code)
     {
         $inventoryCheck = Inventory_checks::where('code', $code)->firstOrFail();
@@ -376,6 +384,7 @@ class CheckWarehouseController extends Controller
         return redirect()->route('check_warehouse.index');
     }
 
+    // Hàm thực hiện thêm phiếu kiểm kho vào db
     public function store(Request $request)
     {
         $materialData = json_decode($request->input('materialData'), true);
@@ -444,6 +453,7 @@ class CheckWarehouseController extends Controller
         return redirect()->route('check_warehouse.index');
     }
 
+    // Hàm so sánh số lượng tồn kho và số lượng thực tế
     private function handleStockDiscrepancy($material, &$materialsForExport, &$materialsForImport)
     {
         $difference = $material['actual_quantity'] - $material['current_quantity'];
@@ -466,6 +476,7 @@ class CheckWarehouseController extends Controller
         }
     }
 
+    // Hàm tạo phiếu xuất cân bằng khi có tồn âm
     private function createExportReceipt($materials)
     {
         $exportCode = 'PX-KK' . $this->generateRandomString(5);
@@ -501,6 +512,7 @@ class CheckWarehouseController extends Controller
         toastr()->info("Phiếu xuất kho {$exportCode} đã được tạo cho các vật tư thiếu.");
     }
 
+    // Hàm tạo phiếu nhập cân bằng khi có tồn dương
     private function createImportReceipt($materials)
     {
         $receiptCode = 'PN-KK' . $this->generateRandomString(5);
@@ -542,6 +554,7 @@ class CheckWarehouseController extends Controller
         toastr()->info("Phiếu nhập kho {$receiptCode} đã được tạo.");
     }
 
+    // Hàm duyệt phiếu kiểm kho
     public function approveCheck($code)
     {
         $inventoryCheck = Inventory_checks::where('code', $code)->first();
@@ -626,6 +639,7 @@ class CheckWarehouseController extends Controller
         return redirect()->back();
     }
 
+    // Hàm cập nhật thông tin tồn khi dựa vào kết quả kiểm kho
     private function updateInventoryByCheck($material)
     {
         $inventory = Inventories::where('equipment_code', $material['equipment_code'])
@@ -649,6 +663,7 @@ class CheckWarehouseController extends Controller
         }
     }
 
+    // Hàm tạo ramdon mã phiếu kiểm kho
     function generateRandomString($length = 9)
     {
         $characters = '0123456789';
@@ -665,6 +680,7 @@ class CheckWarehouseController extends Controller
         return $randomString;
     }
 
+    // Hàm xóa phiếu kiểm
     public function deleteCheck($code)
     {
         $check = Inventory_checks::where('code', $code)->first();
@@ -690,6 +706,7 @@ class CheckWarehouseController extends Controller
         return redirect()->route('check_warehouse.index');
     }
 
+    // Hàm hiển thị thông tin của lần kiểm cuối
     public function checkInventoryAgain($code)
     {
         $title = 'Kiểm phiếu lại';
@@ -722,6 +739,7 @@ class CheckWarehouseController extends Controller
         ));
     }
 
+    // Hàm update lần kiểm lần cuối
     public function updateCheckAgain(Request $request, $code)
     {
         $inventoryCheck = Inventory_checks::where('code', $code)->firstOrFail();
@@ -780,7 +798,7 @@ class CheckWarehouseController extends Controller
         return redirect()->route('check_warehouse.index');
     }
 
-
+    // Hàm hiển thị thiết bị vào lần kiểm cuối
     public function showInventoryCheckAgain($code)
     {
         $inventoryCheckEdit = Inventory_check_details::where('inventory_check_code', $code)
@@ -794,6 +812,7 @@ class CheckWarehouseController extends Controller
         return response()->json($inventoryCheckEdit);
     }
 
+    // Hàm hủy phiếu kiểm kho
     public function cancelCheck($code)
     {
         $inventoryCheck = Inventory_checks::where('code', $code)->first();

@@ -160,13 +160,13 @@
                                 @if ($item->inventories->sum('current_quantity') <= 25)
                                     <option value="{{ $item->code }}"
                                         class="text-danger {{ in_array($item->code, $checkList ?? []) ? 'd-none' : '' }}">
-                                        {{ $item->name }} - (Tổng Tồn:
+                                        {{ $item->name }} - (Tổng tồn:
                                         {{ $item->inventories->sum('current_quantity') ?? 0 }})
                                     </option>
                                 @else
                                     <option value="{{ $item->code }}"
                                         class="{{ in_array($item->code, $checkList ?? []) ? 'd-none' : '' }}">
-                                        {{ $item->name }} - (Tổng Tồn:
+                                        {{ $item->name }} - (Tổng tồn:
                                         {{ $item->inventories->sum('current_quantity') ?? 0 }})
                                     </option>
                                 @endif
@@ -215,7 +215,7 @@
                 <div class="mb-3">
                     <button style="font-size: 11px;" type="button" class="btn btn-sm btn-danger rounded-pill"
                         id="add_equipment_import">
-                        <i class="fa fa-plus" style="margin-bottom: 2px;"></i> Thêm Thiết Bị
+                        <i class="fa fa-plus" style="margin-bottom: 2px;"></i> Thêm thiết bị
                     </button>
                 </div>
             </div>
@@ -248,7 +248,7 @@
                                         <th style="width: 9%;">CK</th>
                                         <th style="width: 9%;">VAT</th>
                                         <th style="width: 14%;">Thành tiền</th>
-                                        <th class="" style="width: 10%;" class="pe-5">Hành Động</th>
+                                        <th class="" style="width: 10%;" class="pe-5">Hành động</th>
                                     @endif
                                 </tr>
                             </thead>
@@ -541,14 +541,14 @@
                             $totalAmountIerd = $totalPriceIerd - $totalDiscountIerd + $totalVATIerd;
                         @endphp
                         <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
-                            <span class="fw-semibold">Tổng Đầu</span>
+                            <span class="fw-semibold">Tổng đầu</span>
                             <span id="totalPrice"
                                 class="fw-bolder text-danger">{{ number_format($totalPriceIerd, 0, ',', '.') }}
                                 VND</span>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="fw-semibold">Tổng Chiết Khấu</span>
+                            <span class="fw-semibold">Tổng chiết khấu</span>
                             <span id="totalDiscount"
                                 class="fw-bolder text-danger">{{ number_format($totalDiscountIerd, 0, ',', '.') }}
                                 VND</span>
@@ -561,7 +561,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="fw-semibold">Tổng Cuối</span>
+                            <span class="fw-semibold">Tổng cuối</span>
                             <span id="totalAmount"
                                 class="fw-bolder text-danger">{{ number_format($totalAmountIerd, 0, ',', '.') }}
                                 VND</span>
@@ -593,14 +593,14 @@
                             @endphp
                         @endif
                         <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
-                            <span class="fw-semibold">Tổng Đầu</span>
+                            <span class="fw-semibold">Tổng đầu</span>
                             <span id="totalPrice"
                                 class="fw-bolder text-danger">{{ !empty($totalPrice) ? number_format($totalPrice, 0, ',', '.') : 0 }}
                                 VND</span>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="fw-semibold">Tổng Chiết Khấu</span>
+                            <span class="fw-semibold">Tổng chiết khấu</span>
                             <span id="totalDiscount"
                                 class="fw-bolder text-danger">{{ !empty($totalDiscount) ? number_format($totalDiscount, 0, ',', '.') : 0 }}
                                 VND</span>
@@ -614,7 +614,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="fw-semibold">Tổng Cuối</span>
+                            <span class="fw-semibold">Tổng cuối</span>
                             <span id="totalAmount"
                                 class="fw-bolder text-danger">{{ !empty($totalAmount) ? number_format($totalAmount, 0, ',', '.') : 0 }}
                                 VND</span>
@@ -627,25 +627,25 @@
                         <button type="button"
                             class="btn btn-sm btn-twitter w-100 d-flex align-items-center justify-content-center rounded-pill"
                             id="import_equipment_request_create">
-                            <i class="fas fa-save me-1"></i>Duyệt Phiếu
+                            <i class="fas fa-save me-1"></i>Duyệt phiếu
                         </button>
                     @else
                         <button type="button" name="status" value="0"
                             class="btn btn-sm btn-info w-100 mb-2 d-flex align-items-center justify-content-center rounded-pill {{ $d_none_temp }}"
                             id="import_equipment_request_temp">
-                            <i class="fas fa-cloud-arrow-down me-1"></i>Lưu Tạm
+                            <i class="fas fa-cloud-arrow-down me-1"></i>Lưu tạm
                         </button>
 
                         <button type="button"
                             class="btn btn-sm btn-twitter w-100 d-flex align-items-center justify-content-center rounded-pill {{ $d_none_save }}"
                             id="import_equipment_request_save">
-                            <i class="fas fa-save me-1"></i>Tạo Phiếu
+                            <i class="fas fa-save me-1"></i>Tạo phiếu
                         </button>
 
                         <button type="button"
                             class="btn btn-sm btn-twitter w-100 d-flex align-items-center justify-content-center rounded-pill {{ $d_none_update }}"
                             id="import_equipment_request_update">
-                            <i class="fas fa-save me-1"></i>Cập Nhật
+                            <i class="fas fa-save me-1"></i>Cập nhật
                         </button>
                     @endif
 
@@ -665,7 +665,7 @@
                 </div>
                 <div class="modal-body pb-0">
                     <div class="mb-3">
-                        <label class="required fs-5 er mb-2">Tên Nhà Cung Cấp</label>
+                        <label class="required fs-5 er mb-2">Tên nhà cung cấp</label>
                         <input type="text" class="form-control form-control-sm border border-success rounded-pill"
                             placeholder="Tên nhà cung cấp.." name="name" id="supplier_type_name" />
                         <div class="message_error" id="show-err-supplier-type"></div>
@@ -676,8 +676,8 @@
                         <table class="table table-striped align-middle">
                             <thead>
                                 <tr class="erer bg-success">
-                                    <th class="ps-3" style="width: 70%;">Tên Nhà Cung Cấp</th>
-                                    <th class="pe-3 text-center" style="width: 30%;">Hành Động</th>
+                                    <th class="ps-3" style="width: 70%;">Tên nhà cung cấp</th>
+                                    <th class="pe-3 text-center" style="width: 30%;">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody id="supplier-list">
@@ -713,7 +713,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title" id="deleteModalLabel">Xóa Nhà Cung Cấp</h3>
+                    <h3 class="modal-title" id="deleteModalLabel">Xóa nhà cung cấp</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
@@ -721,7 +721,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-secondary rounded-pill" data-bs-toggle="modal"
-                        data-bs-target="#add_modal_ncc">Trở Lại</button>
+                        data-bs-target="#add_modal_ncc">Trở lại</button>
                     <button type="button" class="btn btn-sm btn-danger rounded-pill"
                         id="confirm-delete-supplier">Xóa</button>
                 </div>

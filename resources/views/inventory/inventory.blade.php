@@ -1,6 +1,40 @@
 @extends('master_layout.layout')
 
 @section('styles')
+    <style>
+        .nav-link {
+            padding: 2px 7px;
+            /* Giảm padding */
+            font-size: 11px;
+            /* Giữ kích thước chữ nhỏ */
+        }
+
+        .nav-link.rounded-pill {
+            border-radius: 50px;
+            /* Bo tròn dạng pill */
+        }
+
+        /* Tùy chỉnh màu sắc để dễ tái sử dụng */
+        .nav-link.bg-all {
+            background-color: #0064ff;
+            /* Xanh dương */
+        }
+
+        .nav-link.bg-in-stock {
+            background-color: #10a100;
+            /* Xanh lá */
+        }
+
+        .nav-link.bg-out-of-stock {
+            background-color: #dc3545;
+            /* Đỏ */
+        }
+
+        .nav-link.bg-low-stock {
+            background-color: #ffc107;
+            /* Vàng */
+        }
+    </style>
 @endsection
 
 @section('title')
@@ -42,23 +76,23 @@
         <div class="card-body py-3 d-flex justify-content-between align-items-center">
             <div class="filter-bar">
                 <ul class="nav nav-pills">
-                    <li class="nav-item" style="font-size: 11px;">
-                        <p class="nav-link text-white rounded-pill" style="background-color: #0064ff;">
+                    <li class="nav-item">
+                        <p class="nav-link text-white rounded-pill bg-all">
                             Tất cả <span>({{ $totalEquipments }})</span>
                         </p>
                     </li>
-                    <li class="nav-item" style="font-size: 11px;">
-                        <p class="nav-link text-white rounded-pill" style="background-color: #10a100;">
+                    <li class="nav-item">
+                        <p class="nav-link text-white rounded-pill bg-success">
                             Còn hàng <span>({{ $inStockCount }})</span>
                         </p>
                     </li>
-                    <li class="nav-item" style="font-size: 11px;">
-                        <p class="nav-link text-white rounded-pill" style="background-color: #dc3545;">
+                    <li class="nav-item">
+                        <p class="nav-link text-white rounded-pill bg-out-of-stock">
                             Hết hàng <span>({{ $outOfStockCount }})</span>
                         </p>
                     </li>
-                    <li class="nav-item" style="font-size: 11px;">
-                        <p class="nav-link text-white rounded-pill" style="background-color: #ffc107;">
+                    <li class="nav-item">
+                        <p class="nav-link text-white rounded-pill bg-low-stock">
                             Sắp hết hàng <span>({{ $lowStockCount }})</span>
                         </p>
                     </li>

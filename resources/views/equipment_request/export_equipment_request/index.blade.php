@@ -91,14 +91,14 @@
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 10%;">Mã yêu cầu</th>
-                                <th class="" style="width: 20%;">Phòng ban</th>
-                                <th class="" style="width: 13%;">Lý do xuất</th>
-                                <th class="" style="width: 12%;">Người tạo</th>
-                                <th class="" style="width: 10%;">N.Yêu cầu</th>
-                                <th class="" style="width: 15%;">N.Cần thiết</th>
+                                <th class="" style="width: 9%;">Mã yêu cầu</th>
+                                <th class="" style="width: 21%;">Phòng ban</th>
+                                <th class="" style="width: 22%;">Lý do xuất</th>
+                                <th class="" style="width: 9%;">Người tạo</th>
+                                <th class="" style="width: 8%;">N.Yêu cầu</th>
+                                <th class="" style="width: 14%;">N.Cần thiết</th>
                                 <th class="text-center" style="width: 10%;">Trạng thái</th>
-                                <th class="pe-3 text-center" style="width: 20%;">Hành động</th>
+                                <th class="pe-3 text-center" style="width: 20%;">HĐ</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -145,34 +145,34 @@
                                     <td class="text-center">
                                         @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->required_date)))
                                             <div class="label label-temp bg-warning rounded-pill text-dark px-2 py-1">
-                                                Hết Hạn
+                                                Hết hạn
                                             </div>
                                         @elseif ($item->status == 3)
                                             <div class="label label-temp bg-info rounded-pill text-white px-2 py-1">
-                                                Lưu Tạm
+                                                Lưu tạm
                                             </div>
                                         @elseif ($item->status == 0)
                                             <div class="label label-temp bg-danger rounded-pill text-white px-2 py-1">
-                                                Chờ Duyệt
+                                                Chờ duyệt
                                             </div>
                                         @elseif ($item->status == 1)
                                             <div class="label label-temp bg-primary rounded-pill text-white px-2 py-1">
-                                                Chuẩn Bị
+                                                Chuẩn bị
                                             </div>
                                         @elseif ($item->status == 5)
                                             <div class="label label-temp bg-dark rounded-pill text-white px-2 py-1">
-                                                Vận Chuyển
+                                                Vận chuyển
                                             </div>
                                         @elseif ($item->status == 4)
                                             <div class="label label-temp bg-success rounded-pill text-white px-2 py-1">
-                                                Hoàn Thành
+                                                Hoàn thành
                                             </div>
                                         @endif
                                     </td>
                                     <td class="text-center" data-bs-toggle="collapse"
                                         data-bs-target="#collapse_{{ $item->code }}" aria-expanded="false"
                                         aria-controls="collapse_{{ $item->code }}">
-                                        Chi Tiết<i class="fa fa-caret-right pointer ms-2"></i>
+                                        Chi tiết<i class="fa fa-caret-right pointer ms-2"></i>
                                     </td>
                                 </tr>
 
@@ -245,9 +245,10 @@
                                                                     <thead class="bg-dark">
                                                                         <tr class="text-center">
                                                                             <th class="ps-3">STT</th>
+                                                                            <th class="ps-3">Mã thiết bị</th>
                                                                             <th class="ps-3">Tên thiết bị</th>
-                                                                            <th>Đơn Vị Tính</th>
                                                                             <th class="pe-3">Số lượng</th>
+                                                                            <th>Đơn Vị tính</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -265,9 +266,9 @@
                                                                             @endphp
                                                                             <tr class="text-center">
                                                                                 <td>{{ $key + 1 }}</td>
-                                                                                <td>{{ $detail->equipments->name }}
-                                                                                </td>
-                                                                                <td>{{ $detail->equipments->units->name }}
+                                                                                <td>{{ $detail->equipments->code }}</td>
+                                                                                <td class="text-start">
+                                                                                    {{ $detail->equipments->name }}
                                                                                 </td>
                                                                                 <td>
                                                                                     @if ($item->status == 1 || $item->status == 4 || $item->status == 5)
@@ -312,6 +313,8 @@
                                                                                             {{ $detail->equipments->inventories->sum('current_quantity') }}
                                                                                         </span>
                                                                                     @endif
+                                                                                </td>
+                                                                                <td>{{ $detail->equipments->units->name }}
                                                                                 </td>
                                                                             </tr>
                                                                         @endforeach

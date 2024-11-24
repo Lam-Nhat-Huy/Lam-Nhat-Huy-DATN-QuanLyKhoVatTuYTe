@@ -58,7 +58,7 @@
             <div class="card border-0 px-8 mb-4 rounded-3 mt-3">
                 <div class="row">
                     <div class="col-md-6 mb-3 fv-row" id="department_show">
-                        <label for="department_code" class="required form-label fw-semibold">Phòng Ban</label>
+                        <label for="department_code" class="required form-label fw-semibold">Phòng ban</label>
                         <div class="d-flex align-items-center">
                             <select name="department_code" id="department_code"
                                 {{ !empty($getExportRequest) ? 'disabled' : '' }}
@@ -85,7 +85,7 @@
                     </div>
 
                     <div class="col-md-6 mb-3 fv-row d-none" id="supplier_show">
-                        <label for="supplier_code" class="required form-label fw-semibold">Nhà Cung Cấp</label>
+                        <label for="supplier_code" class="required form-label fw-semibold">Nhà cung cấp</label>
                         <div class="d-flex align-items-center">
                             <select name="supplier_code" id="supplier_code"
                                 class="form-select form-select-sm border border-success rounded-pill">
@@ -108,7 +108,7 @@
                     </div>
 
                     <div class="col-md-6 mb-3 fv-row d-none" id="cancel_reason">
-                        <label for="reason" class="required form-label fw-semibold">Lý Do Hủy</label>
+                        <label for="reason" class="required form-label fw-semibold">Lý do hủy</label>
                         <select name="reason" id="reason"
                             class="form-select form-select-sm border border-success rounded-pill">
                             <option value="0">Chọn Lý Do...</option>
@@ -125,7 +125,7 @@
                     </div>
 
                     <div class="mb-3 col-md-6">
-                        <label for="export_type" class="required form-label fw-semibold">Loại Xuất</label>
+                        <label for="export_type" class="required form-label fw-semibold">Loại xuất</label>
                         <div class="d-flex align-items-center">
                             <select name="export_type" id="export_type" {{ !empty($getExportRequest) ? 'disabled' : '' }}
                                 class="form-select form-select-sm border border-success rounded-pill">
@@ -144,7 +144,7 @@
                     </div>
 
                     <div class="mb-3 col-md-6 d-none" id="export_date_div">
-                        <label for="" class="form-label fw-semibold">Ngày Tạo</label>
+                        <label for="" class="form-label fw-semibold">Ngày tạo</label>
                         <input type="date" name="export_date" id="export_date" disabled
                             class="form-control form-control-sm border-success rounded-pill"
                             value="{{ !empty($editExport) && $editExport->export_date ? \Carbon\Carbon::parse($editExport->export_date)->format('Y-m-d') : \Carbon\Carbon::parse(now())->format('Y-m-d') }}">
@@ -156,7 +156,7 @@
                             $action == route('warehouse.store_export') ||
                             $action == route('warehouse.update_export', request('code')))
                         <div class="mb-3 col-md-6" id="required_date_div">
-                            <label for="" class="form-label fw-semibold">Ngày Cần Thiết</label>
+                            <label for="" class="form-label fw-semibold">Ngày cần thiết</label>
                             <input type="datetime-local" name="required_date" id="required_date"
                                 {{ !empty($getExportRequest) ? 'disabled' : '' }}
                                 class="form-control form-control-sm border-success rounded-pill"
@@ -166,7 +166,7 @@
                     @endif
 
                     <div class="mb-3 col-md-6">
-                        <label for="" class="form-label fw-semibold">Ghi Chú</label>
+                        <label for="" class="form-label fw-semibold">Ghi chú</label>
                         <input type="text" name="note" id="note"
                             value="{{ !empty($editExport) && $editExport->note ? $editExport->note : old('note') }}"
                             class="form-control form-control-sm border-success rounded-pill" placeholder="Ghi Chú..">
@@ -180,7 +180,7 @@
     <div class="card mb-5 pt-5 pb-10 mb-xl-8 shadow">
         <div class="card-header border-0">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder fs-3 mb-1">Thiết Bị Xuất</span>
+                <span class="card-label fw-bolder fs-3 mb-1">Thiết bị xuất</span>
             </h3>
         </div>
         <div class="container {{ !empty($getExportRequest) ? 'd-none' : '' }}">
@@ -241,9 +241,9 @@
                                 <tr class="">
                                     <th style="width: 50%;" class="ps-5">Thiết bị</th>
                                     <th style="width: 25%;">Số lô</th>
-                                    <th style="width: 15%;">Số Lượng</th>
+                                    <th style="width: 15%;">Số lượng</th>
                                     <th style="width: 10%;" class="pe-5 {{ !empty($getExportRequest) ? 'd-none' : '' }}">
-                                        Hành Động
+                                        Hành động
                                     </th>
                                 </tr>
                             </thead>
@@ -255,7 +255,7 @@
                                             <td class="">
                                                 <div class="d-flex align-items-center"
                                                     id="batch_number_change_{{ $item->batch_number }}">
-                                                    {{ $item->batch_number }} - (Tồn Kho:
+                                                    {{ $item->batch_number }} - (Tồn kho:
                                                     {{ $item->equipments->inventories->where('batch_number', $item->batch_number)->where('equipment_code', $item->equipment_code)->first()->current_quantity ?? 0 }}
                                                     {{ $item->equipments->units->name }})
                                                 </div>
@@ -328,7 +328,7 @@
                                                 <td>
                                                     <div class="d-flex align-ers-center"
                                                         id="batch_number_change_{{ $batchNumber->batch_number }}_{{ $batchNumber->equipment_code }}">
-                                                        {{ $batchNumber->batch_number }} - (Tồn Kho:
+                                                        {{ $batchNumber->batch_number }} - (Tồn kho:
                                                         {{ $batchNumber->current_quantity }}
                                                         {{ $batchNumber->units->name }})
                                                     </div>
@@ -399,24 +399,24 @@
                     <button type="button"
                         class="btn btn-sm btn-twitter d-flex align-items-center justify-content-center rounded-pill {{ $d_none_save_request }}"
                         id="export_browse">
-                        <i class="fas fa-save me-1"></i>Duyệt Phiếu
+                        <i class="fas fa-save me-1"></i>Duyệt phiếu
                     </button>
                     <button type="button"
                         class="btn btn-sm btn-twitter d-flex align-items-center justify-content-center rounded-pill {{ $d_none_update }}"
                         id="export_update">
-                        <i class="fas fa-save me-1"></i>Cập Nhật
+                        <i class="fas fa-save me-1"></i>Cập nhật
                     </button>
 
                     <button type="button"
                         class="btn btn-sm btn-info me-2 d-flex align-items-center justify-content-center rounded-pill {{ $d_none_temp }}"
                         id="export_temp">
-                        <i class="fas fa-cloud-arrow-down me-1"></i>Lưu Tạm
+                        <i class="fas fa-cloud-arrow-down me-1"></i>Lưu tạm
                     </button>
 
                     <button type="button"
                         class="btn btn-sm btn-twitter d-flex align-items-center justify-content-center rounded-pill {{ $d_none_save }}"
                         id="export_save">
-                        <i class="fas fa-save me-1"></i>Tạo Phiếu
+                        <i class="fas fa-save me-1"></i>Tạo phiếu
                     </button>
                 </div>
             </div>
@@ -434,13 +434,13 @@
                 </div>
                 <div class="modal-body pb-0">
                     <div>
-                        <label class="required fs-5 er mb-2">Tên Phòng Ban</label>
+                        <label class="required fs-5 er mb-2">Tên phòng ban</label>
                         <input type="text" class="form-control form-control-sm border border-success rounded-pill"
                             placeholder="Tên phòng ban.." name="name" id="department_type_name" />
                         <div class="message_error" id="show-err-department-type"></div>
                     </div>
                     <div class="mb-3">
-                        <label class="required fs-5 er mb-2">Vị Trí Phòng Ban</label>
+                        <label class="required fs-5 er mb-2">Vị trí phòng ban</label>
                         <input type="text" class="form-control form-control-sm border border-success rounded-pill"
                             placeholder="Vị trí phòng ban.." name="location" id="department_type_location" />
                         <div class="message_error" id="show-err-department-type-location"></div>
@@ -451,9 +451,9 @@
                         <table class="table table-striped align-middle">
                             <thead>
                                 <tr class="erer bg-success">
-                                    <th class="ps-3" style="width: 40%;">Tên Phòng Ban</th>
-                                    <th class="ps-3" style="width: 30%;">Vị Trí</th>
-                                    <th class="pe-3 text-center" style="width: 30%;">Hành Động</th>
+                                    <th class="ps-3" style="width: 40%;">Tên phòng ban</th>
+                                    <th class="ps-3" style="width: 30%;">Vị trí</th>
+                                    <th class="pe-3 text-center" style="width: 30%;">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody id="department-list">
@@ -490,7 +490,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title" id="deleteModalLabel1">Xóa Phòng Ban</h3>
+                    <h3 class="modal-title" id="deleteModalLabel1">Xóa phòng ban</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
@@ -498,7 +498,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-secondary rounded-pill" data-bs-toggle="modal"
-                        data-bs-target="#add_modal_pb">Trở Lại</button>
+                        data-bs-target="#add_modal_pb">Trở lại</button>
                     <button type="button" class="btn btn-sm btn-danger rounded-pill"
                         id="confirm-delete-department">Xóa</button>
                 </div>
@@ -517,7 +517,7 @@
                 </div>
                 <div class="modal-body pb-0">
                     <div class="mb-3">
-                        <label class="required fs-5 er mb-2">Tên Nhà Cung Cấp</label>
+                        <label class="required fs-5 er mb-2">Tên nhà cung cấp</label>
                         <input type="text" class="form-control form-control-sm border border-success rounded-pill"
                             placeholder="Tên nhà cung cấp.." name="name" id="supplier_type_name" />
                         <div class="message_error" id="show-err-supplier-type"></div>
@@ -528,7 +528,7 @@
                         <table class="table table-striped align-middle">
                             <thead>
                                 <tr class="erer bg-success">
-                                    <th class="ps-3" style="width: 70%;">Tên Nhà Cung Cấp</th>
+                                    <th class="ps-3" style="width: 70%;">Tên nhà cung cấp</th>
                                     <th class="pe-3 text-center" style="width: 30%;">Hành Động</th>
                                 </tr>
                             </thead>
@@ -565,7 +565,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title" id="deleteModalLabel2">Xóa Nhà Cung Cấp</h3>
+                    <h3 class="modal-title" id="deleteModalLabel2">Xóa nhà cung cấp</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">

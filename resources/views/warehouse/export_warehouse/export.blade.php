@@ -8,6 +8,40 @@
             text-overflow: ellipsis;
             max-width: 350px;
         }
+
+        .nav-pills .nav-item .nav-link {
+            padding: 2px 7px;
+            /* Giảm padding */
+            font-size: 11px;
+            /* Kích thước chữ nhỏ */
+            color: #fff;
+            /* Màu chữ trắng */
+            border-radius: 50px;
+            /* Bo tròn dạng pill */
+            text-align: center;
+            /* Canh giữa nội dung */
+        }
+
+        /* Màu sắc riêng biệt cho từng trạng thái */
+        .nav-link.bg-all {
+            background-color: #0064ff;
+            /* Xanh dương */
+        }
+
+        .nav-link.bg-approved {
+            background-color: green;
+            /* Xanh lá */
+        }
+
+        .nav-link.bg-draft {
+            background-color: red;
+            /* Đỏ */
+        }
+
+        .nav-link.bg-temp {
+            background-color: rgb(123, 0, 255);
+            /* Tím */
+        }
     </style>
 @endsection
 
@@ -115,7 +149,7 @@
                                     <td class="text-center" data-bs-toggle="collapse"
                                         data-bs-target="#collapse_{{ $item->code }}" aria-expanded="false"
                                         aria-controls="collapse_{{ $item->code }}">
-                                        Chi Tiết<i class="fa fa-caret-right pointer ms-2"></i>
+                                        Chi tiết<i class="fa fa-caret-right pointer ms-2"></i>
                                     </td>
                                 </tr>
 
@@ -154,7 +188,7 @@
                                                                     data-bs-target="#delete-{{ $item->code }}"
                                                                     {{ $item->no_action == 1 || str_contains($item->code, 'PX-KK') ? 'disabled' : '' }}>
                                                                     <i class="fa fa-trash"
-                                                                        style="margin-bottom: 2px; font-size: 12px !important;"></i>
+                                                                        style="margin-bottom: 2px; font-size: 12px;"></i>
                                                                     Xóa phiếu
                                                                 </button>
                                                             @endif
@@ -162,10 +196,8 @@
                                                             <div class="rounded-pill px-2 py-1 text-white bg-success me-2"
                                                                 style="font-size: 12px !important">
                                                                 <i class="fa fa-check text-white"
-                                                                    style="font-size: 12px !important"
-                                                                    style="margin-bottom: 4px; margin-right: 3px; font-size: 10px;"></i>
-                                                                Đã
-                                                                duyệt
+                                                                    style="margin-bottom: 4px; margin-right: 3px;"></i>
+                                                                Đã duyệt
                                                             </div>
                                                         @endif
                                                     </div>
@@ -605,25 +637,24 @@
                 <div class="card-body py-3">
                     <div class="filter-bar">
                         <ul class="nav nav-pills">
-                            <li class="nav-item" style="font-size: 11px;">
-                                <p class="nav-link text-white rounded-pill" style="background-color: #0064ff;">Tất cả
-                                    <span>({{ $allExportCount }})</span>
+                            <li class="nav-item">
+                                <p class="nav-link rounded-pill bg-all">
+                                    Tất cả <span>({{ $allExportCount }})</span>
                                 </p>
                             </li>
-                            <li class="nav-item" style="font-size: 11px;">
-                                <p class="nav-link text-white rounded-pill" style="background-color: green;">Đã duyệt
-                                    <span>({{ $approvedExportsCount }})</span>
+                            <li class="nav-item">
+                                <p class="nav-link rounded-pill bg-success">
+                                    Đã duyệt <span>({{ $approvedExportsCount }})</span>
                                 </p>
                             </li>
-                            <li class="nav-item" style="font-size: 11px;">
-                                <p class="nav-link text-white rounded-pill" style="background-color: red;">Chờ duyệt
-                                    <span>({{ $draftExportsCount }})</span>
+                            <li class="nav-item">
+                                <p class="nav-link rounded-pill bg-draft">
+                                    Chờ duyệt <span>({{ $draftExportsCount }})</span>
                                 </p>
                             </li>
-                            <li class="nav-item" style="font-size: 11px;">
-                                <p class="nav-link text-white rounded-pill" style="background-color: rgb(123, 0, 255);">
-                                    Lưu Tạm
-                                    <span>({{ $tempExportsCount }})</span>
+                            <li class="nav-item">
+                                <p class="nav-link rounded-pill bg-temp">
+                                    Lưu tạm <span>({{ $tempExportsCount }})</span>
                                 </p>
                             </li>
                         </ul>

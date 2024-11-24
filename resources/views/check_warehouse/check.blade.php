@@ -7,6 +7,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
+        .nav-link {
+            padding: 2px 7px;
+            /* Giảm padding */
+        }
     </style>
 @endsection
 
@@ -25,15 +29,16 @@
                     <!-- Trong phần <thead> của bảng -->
                     <thead>
                         <tr class="bg-success text-center fw-bolder">
-                            <th style="width: 8%;" class="ps-3">Mã kiểm kho</th>
-                            <th style="width: 10%;">Ngày cân bằng</th>
-                            <th style="width: 10%;">Tổng chênh lệch</th>
-                            <th style="width: 10%;">Lệch giảm</th>
-                            <th style="width: 10%;">Lệch tăng</th>
+                            <th style="width: 5%;" class="ps-3">Mã</th>
+                            <th style="width: 5%;">Ngày</th>
+                            <th style="width: 10%;" data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="Tổng lệch dương và tổng lệch âm">Tổng chênh lệch</th>
+                            <th style="width: 9%;">Lệch giảm</th>
+                            <th style="width: 9%;">Lệch tăng</th>
                             <th style="width: 10%;">Lần kiểm</th>
-                            <th style="width: 15%;">Ghi chú</th>
+                            <th style="width: 17%;">Ghi chú</th>
                             <th style="width: 10%;">Trạng thái</th>
-                            <th class="pe-3" style="width: 5%;"></th>
+                            <th class="pe-3" style="width: 10%;"></th>
                         </tr>
                     </thead>
 
@@ -75,17 +80,15 @@
                                         </span>
                                     @else
                                         <span style="color: #dc3545; font-weight: 500; font-size: 14px;">
-                                            {{ $totalUnequal }}
+                                            Tổng lệch {{ $totalUnequal }}
                                         </span>
-                                        <i class="fa fa-arrow-right-arrow-left" style="color: #dc3545;"
-                                            title="Tổng chênh lệch"></i>
                                     @endif
                                 </td>
 
                                 <td style="text-align: center;">
                                     @if ($unequalPositive > 0)
-                                        <span
-                                            style="color: #dc3545; font-weight: 500; font-size: 14px;">-{{ $unequalPositive }}</span>
+                                        <span style="color: #dc3545; font-weight: 500; font-size: 14px;">Lệch
+                                            {{ $unequalPositive }}</span>
                                         <i class="fa fa-arrow-down" style="color: #dc3545;" title="Giảm"></i>
                                     @else
                                         <span style="color: #6c757d; font-weight: 500;">
@@ -97,8 +100,8 @@
 
                                 <td style="text-align: center;">
                                     @if ($unequalNegative > 0)
-                                        <span
-                                            style="color: #28a745; font-weight: 500; font-size: 14px;">+{{ $unequalNegative }}</span>
+                                        <span style="color: #28a745; font-weight: 500; font-size: 14px;">Lệch
+                                            {{ $unequalNegative }}</span>
                                         <i class="fa fa-arrow-up" style="color: #28a745;" title="Tăng"></i>
                                     @else
                                         <span style="color: #6c757d; font-weight: 500;">
@@ -108,24 +111,19 @@
                                     @endif
                                 </td>
 
-
-
                                 <td style="text-align: center;">
                                     @if ($item['check_count'] == 1)
                                         <span
-                                            style="display: inline-block; background-color: #f8d7da; color: #721c24; font-weight: 500; border: 1px solid #f5c6cb; border-radius: 3px; padding: 3px 8px; font-size: 12px;">
+                                            style="display: inline-block; background-color: #ff4f5e; color: #fff; font-weight: 500; border: 1px solid #f5c6cb; border-radius: 3px; padding: 3px 8px; font-size: 12px;">
                                             Lần kiểm đầu
                                         </span>
                                     @elseif ($item['check_count'] == 2)
                                         <span
-                                            style="display: inline-block; background-color: #d1ecf1; color: #0c5460; font-weight: 500; border: 1px solid #bee5eb; border-radius: 3px; padding: 3px 8px; font-size: 12px;">
+                                            style="display: inline-block; background-color: #49ff49; color: #fff; font-weight: 500; border: 1px solid #bee5eb; border-radius: 3px; padding: 3px 8px; font-size: 12px;">
                                             Lần kiểm cuối
                                         </span>
                                     @endif
                                 </td>
-
-
-
 
                                 <td title="{{ $item['note'] }}" class="text-start" data-bs-toggle="tooltip"
                                     data-bs-placement="top"
@@ -158,7 +156,7 @@
                                 </td>
                                 <td data-bs-toggle="collapse" data-bs-target="#collapse_{{ $item->code }}"
                                     aria-expanded="false" aria-controls="collapse_{{ $item->code }}">
-                                    <i class="row-icon fa fa-chevron-right"></i>
+                                    Chi tiết<i class="fa fa-caret-right pointer ms-2"></i>
                                 </td>
                             </tr>
 
@@ -308,15 +306,14 @@
                                                                                 style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                                                 {{ $detail->equipment->name }}
                                                                             </td>
-                                                                            <td class="text-center">
+                                                                            <td class="text-center fw-bolder">
                                                                                 {{ $detail['batch_number'] }}</td>
-                                                                            <td class="text-center">
+                                                                            <td class="text-center fw-bolder">
                                                                                 {{ $detail['current_quantity'] }}</td>
-                                                                            <td class="text-center">
+                                                                            <td class="text-center fw-bolder">
                                                                                 {{ $detail['actual_quantity'] }}</td>
                                                                             <td>
                                                                                 @php
-                                                                                    // Calculate unequal values
                                                                                     $unequal =
                                                                                         $detail['current_quantity'] -
                                                                                         $detail['actual_quantity'];
@@ -324,12 +321,18 @@
 
                                                                                 @if ($unequal > 0)
                                                                                     <span class="text-danger">
-                                                                                        -{{ $unequal }}
+                                                                                        Tổng lệch {{ $unequal }}
                                                                                     </span>
+                                                                                    <i class="fa fa-arrow-down"
+                                                                                        style="color: #dc3545;"
+                                                                                        title="Giảm"></i>
                                                                                 @elseif($unequal < 0)
                                                                                     <span class="text-success">
-                                                                                        +{{ abs($unequal) }}
+                                                                                        Tổng lệch {{ abs($unequal) }}
                                                                                     </span>
+                                                                                    <i class="fa fa-arrow-up"
+                                                                                        style="color: #28a745;"
+                                                                                        title="Tăng"></i>
                                                                                 @else
                                                                                     <span
                                                                                         style="color: #6c757d; font-weight: bold;">
@@ -371,8 +374,6 @@
                                                                 <i class="fa fa-edit"></i> Chỉnh sửa phiếu 2
                                                             </a>
                                                         @endif
-
-
                                                     </div>
                                                     <div class="rounded">
                                                         @php
@@ -436,7 +437,7 @@
                                                                                 aria-expanded="false"
                                                                                 aria-controls="collapse{{ $detail['equipment_code'] }}">
                                                                                 <td class="ps-4 text-left">
-                                                                                    {{ $detail['equipment_code'] }}
+                                                                                    #{{ $detail['equipment_code'] }}
                                                                                 </td>
                                                                                 <td data-bs-toggle="tooltip"
                                                                                     data-bs-placement="top"
@@ -444,11 +445,11 @@
                                                                                     style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                                                     {{ $detail->equipment->name }}
                                                                                 </td>
-                                                                                <td class="text-center">
+                                                                                <td class="text-center fw-bolder">
                                                                                     {{ $detail['batch_number'] }}</td>
-                                                                                <td class="text-center">
+                                                                                <td class="text-center fw-bolder">
                                                                                     {{ $detail['current_quantity'] }}</td>
-                                                                                <td class="text-center">
+                                                                                <td class="text-center fw-bolder">
                                                                                     {{ $detail['actual_quantity'] }}</td>
                                                                                 <td>
                                                                                     @php
@@ -461,11 +462,17 @@
 
                                                                                     @if ($unequal > 0)
                                                                                         <span class="text-danger">
-                                                                                            -{{ $unequal }}
+                                                                                            Tổng lệch {{ $unequal }}
+                                                                                            <i class="fa fa-arrow-down"
+                                                                                                style="color: #dc3545;"
+                                                                                                title="Giảm"></i>
                                                                                         </span>
                                                                                     @elseif($unequal < 0)
                                                                                         <span class="text-success">
-                                                                                            +{{ abs($unequal) }}
+                                                                                            Tổng lệch {{ abs($unequal) }}
+                                                                                            <i class="fa fa-arrow-up"
+                                                                                                style="color: #28a745;"
+                                                                                                title="Tăng"></i>
                                                                                         </span>
                                                                                     @else
                                                                                         <span
@@ -735,6 +742,7 @@
                             </p>
                         </li>
                     </ul>
+
                 </div>
 
                 <div class="DayNganCach"></div>
