@@ -178,12 +178,12 @@ return [
             'user_role' => [0, 1],
             'title' => 'Nhà Cung Cấp',
             'icon' => 'fa fa-truck',
-            'route' => ['supplier.list', 'supplier.create', 'supplier.edit', 'supplier.trash'],
+            'route' => ['supplier.list', 'supplier.create', 'supplier.edit', 'supplier.trash', 'supplier.quote_history'],
             'subModule' => [
                 [
                     'title' => 'Danh sách',
                     'route' => 'supplier.list',
-                    'route_action' => ['supplier.create', 'supplier.edit', 'supplier.trash'],
+                    'route_action' => ['supplier.create', 'supplier.edit', 'supplier.trash', 'supplier.quote_history'],
                     'icon' => 'fa fa-bars',
                     'user_role' => [0, 1],
                 ],
