@@ -467,6 +467,7 @@
                         <div class="card-body py-2 px-4">
                             <!-- Summary Cards -->
                             <div class="row">
+                                <!-- Thẻ 1: Giữ nguyên màu sắc -->
                                 <div class="col-lg-6 col-md-6 col-sm-12 my-1">
                                     <div class="px-6 py-8 rounded-2 shadow-sm text-center"
                                         style="background-image: linear-gradient(60deg, #3d3393 0%, #2b76b9 37%, #2cacd1 65%, #35eb93 100%);">
@@ -474,15 +475,18 @@
                                             title="Số lượng nhập tháng {{ now()->format('m') }}" data-bs-toggle="tooltip"
                                             data-bs-placement="top"></i>
                                         <h4 class="fw-bold text-white">Số lượng nhập tháng {{ now()->format('m') }}</h4>
-                                        <span class="fs-5 text-white">{{ $importTotal }} thiết bị <span class="pointer"
-                                                data-bs-toggle="modal" data-bs-target="#detail_import"><i
-                                                    class="fa fa-eye text-white ms-1"></i></span></span>
+                                        <span class="fs-5 text-white">{{ $importTotal }} thiết bị
+                                            <span class="pointer" data-bs-toggle="modal" data-bs-target="#detail_import">
+                                                <i class="fa fa-eye text-white ms-1"></i>
+                                            </span>
+                                        </span>
                                     </div>
                                 </div>
 
+                                <!-- Thẻ 2: Tông màu xanh đậm -->
                                 <div class="col-lg-6 col-md-6 col-sm-12 my-1">
                                     <div class="px-6 py-8 rounded-2 shadow-sm text-center"
-                                        style="background-image: linear-gradient(60deg, #3d3393 0%, #2b76b9 37%, #2cacd1 65%, #35eb93 100%);">
+                                        style="background-image: linear-gradient(45deg, #1e3a8a 0%, #3b82f6 50%, #93c5fd 100%);">
                                         <i class="fa fa-dollar-sign fs-2 text-white mb-3"
                                             title="Tổng chi tháng {{ now()->format('m') }}" data-bs-toggle="tooltip"
                                             data-bs-placement="top"></i>
@@ -492,9 +496,10 @@
                                     </div>
                                 </div>
 
+                                <!-- Thẻ 3: Gradient xanh lá cổ điển -->
                                 <div class="col-lg-6 col-md-6 col-sm-12 my-1">
                                     <div class="px-6 py-8 rounded-2 shadow-sm text-center d-flex flex-column align-items-center"
-                                        style="background-image: linear-gradient(60deg, #3d3393 0%, #2b76b9 37%, #2cacd1 65%, #35eb93 100%);">
+                                        style="background-image: linear-gradient(45deg, #e53e3e 0%, #e53e3e 30%, #feb2b2 100%);">
                                         <i class="fa fa-cubes fs-2 text-white mb-3" title="Thiết bị được nhập nhiều nhất"
                                             data-bs-toggle="tooltip" data-bs-placement="top"></i>
                                         <span class="fs-5 text-white"
@@ -508,9 +513,10 @@
                                     </div>
                                 </div>
 
+                                <!-- Thẻ 4: Gradient đỏ rượu vang -->
                                 <div class="col-lg-6 col-md-6 col-sm-12 my-1">
                                     <div class="px-6 py-8 rounded-2 shadow-sm text-center d-flex flex-column align-items-center"
-                                        style="background-image: linear-gradient(60deg, #3d3393 0%, #2b76b9 37%, #2cacd1 65%, #35eb93 100%);">
+                                        style="background-image: linear-gradient(45deg, #ffc107 0%, #ffc107 30%, #ffecb3 100%);">
                                         <i class="fa fa-cogs fs-2 text-white mb-3" title="Thiết bị ít được nhập nhất"
                                             data-bs-toggle="tooltip" data-bs-placement="top"></i>
                                         <span class="fs-5 text-white"
@@ -523,9 +529,9 @@
                                             {{ $leastImportedEquipment->total_quantity ?? 0 }}</p>
                                     </div>
                                 </div>
-
-
                             </div>
+
+
                             {{-- Modal --}}
                             <div class="modal fade" id="detail_import" data-bs-backdrop="static"
                                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="detail_importModal"
