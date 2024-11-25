@@ -13,7 +13,7 @@ return new class extends Migration
             $table->char('user_code', 10)->nullable();
             $table->text('content');
             $table->boolean('lock_warehouse')->default(0);
-            $table->boolean('is_read')->default(false);
+            $table->json('is_read')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

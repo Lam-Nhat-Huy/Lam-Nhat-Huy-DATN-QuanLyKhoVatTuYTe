@@ -110,53 +110,60 @@
                                                         </div>
                                                         <!-- Chi tiết Thiết Bị -->
                                                         <div class="row mt-3">
-                                                            <div class="col-md-9">
+                                                            <div class="col-md-7">
                                                                 <table class="table table-borderless">
                                                                     <tbody>
-                                                                        <tr>
-                                                                            <td><strong>Mã:</strong></td>
-                                                                            <td class="text-gray-800">#{{ $item->code }}
+                                                                        <tr
+                                                                            style="display: flex; justify-content: space-between; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                                                            <td><strong>Tên:</strong></td>
+                                                                            <td class="text-dark"
+                                                                                style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                                                {{ $item->name }}
                                                                             </td>
                                                                         </tr>
-                                                                        <tr>
+                                                                        <tr
+                                                                            style="display: flex; justify-content: space-between; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                                                            <td><strong>Mã:</strong></td>
+                                                                            <td class="text-dark"
+                                                                                style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                                                #{{ $item->code }}
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr
+                                                                            style="display: flex; justify-content: space-between; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
                                                                             <td><strong>Nhóm:</strong></td>
-                                                                            <td class="text-gray-800">
+                                                                            <td class="text-dark"
+                                                                                style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                                                                 {{ $item->equipmentType->name ?? 'Không có dữ liệu' }}
                                                                             </td>
                                                                         </tr>
-                                                                        <tr>
-                                                                            <td><strong>Nhà cung cấp:</strong></td>
-                                                                            <td class="text-gray-800">
-                                                                                {{ $item->supplier->name ?? 'Không có dữ liệu' }}
+                                                                        <tr
+                                                                            style="display: flex; justify-content: space-between; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                                                            <td><strong>Đơn vị:</strong></td>
+                                                                            <td class="text-dark"
+                                                                                style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                                                {{ $item->units->name }}
                                                                             </td>
                                                                         </tr>
-                                                                        <tr>
-                                                                            <td><strong>Ngày hết hạn:</strong></td>
-                                                                            <td class="text-gray-800">
-                                                                                {{ $item->expiry_date ? \Carbon\Carbon::parse($item->expiry_date)->format('d/m/Y') : 'Không Có' }}
-                                                                                {{ $item->time_remaining ? '- ' . $item->time_remaining : '' }}
+                                                                        <tr
+                                                                            style="display: flex; justify-content: space-between; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                                                            <td><strong>VAT:</strong></td>
+                                                                            <td class="text-dark"
+                                                                                style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                                                {{ $item->vat }}%
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
                                                             </div>
-                                                            <div class="col-md-3">
+                                                            <div class="col-md-5">
                                                                 <table class="table table-borderless">
                                                                     <tbody>
-                                                                        <tr>
-                                                                            <td><strong>Giá:</strong></td>
-                                                                            <td class="text-gray-800">
-                                                                                {{ number_format($item->price) }} VNĐ</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td><strong>Đơn vị:</strong></td>
-                                                                            <td class="text-gray-800">
-                                                                                {{ $item->units->name }}
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
+                                                                        <tr
+                                                                            style="display: flex; justify-content: space-between;">
                                                                             <td><strong>Mô tả:</strong></td>
-                                                                            <td class="text-gray-800">
+                                                                            <td class="text-dark"
+                                                                                style="max-width: 100%; white-space: normal; overflow: visible;">
                                                                                 {{ $item->description }}
                                                                             </td>
                                                                         </tr>

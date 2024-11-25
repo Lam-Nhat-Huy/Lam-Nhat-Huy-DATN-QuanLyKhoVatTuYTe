@@ -196,23 +196,44 @@ class NotificationController extends Controller
         return $randomString;
     }
 
-    public function getNewNotificationCount(Request $request)
+    public function getNewNotificationCount()
     {
-        // Lấy số lượng thông báo mới cho người dùng hiện tại
-        $count = $this->callModel::where('user_code', session('user_code'))
-            ->where('lock_warehouse', 0)
-            ->where('is_read', false) // Chưa đọc (cột is_read là false)
+        $user_code = session('user_code');
+
+        // Đếm số lượng thông báo mới (chưa đọc bởi người dùng hiện tại)
+        $count = $this->callModel::where('lock_warehouse', 0)
+            ->where(function ($query) use ($user_code) {
+                $query->whereNull('is_read') // Trường hợp chưa có ai đọc
+                    ->orWhereJsonDoesntContain('is_read', $user_code); // Không chứa user_code trong JSON
+            })
             ->count();
 
         return response()->json(['count' => $count]);
     }
 
-    public function markNotificationsAsRead(Request $request)
+    public function markNotificationsAsRead()
     {
-        $this->callModel::where('user_code', session('user_code'))
-            ->where('lock_warehouse', 0)
-            ->where('is_read', false) // Các thông báo chưa đọc
-            ->update(['is_read' => true]); // Đánh dấu là đã đọc
+        $user_code = session('user_code');
+
+        $notifications = $this->callModel::where('lock_warehouse', 0)
+            ->where(function ($query) use ($user_code) {
+                $query->whereNull('is_read') // Trường hợp chưa có ai đọc
+                    ->orWhereJsonDoesntContain('is_read', $user_code); // Không chứa user_code trong JSON
+            })
+            ->get();
+
+        foreach ($notifications as $notification) {
+            $currentIsRead = json_decode($notification->is_read, true) ?? []; // Giải mã JSON hoặc khởi tạo mảng
+
+            // Nếu mã người dùng chưa có trong danh sách, thêm vào
+            if (!in_array($user_code, $currentIsRead)) {
+                $currentIsRead[] = $user_code; // Thêm mã người dùng
+            }
+
+            // Cập nhật lại cột 'is_read' với mảng mới
+            $notification->is_read = json_encode($currentIsRead);
+            $notification->save();
+        }
 
         return response()->json(['success' => true]);
     }

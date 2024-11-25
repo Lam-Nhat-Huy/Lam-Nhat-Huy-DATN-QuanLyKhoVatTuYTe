@@ -34,9 +34,8 @@
                             <tr class="fw-bolder bg-success">
                                 <th class="ps-3" style="width: 5%;"><input type="checkbox" id="selectAll" /></th>
                                 <th class="" style="width: 10%;">Mã</th>
-                                <th class="" style="width: 20%;">Tên</th>
-                                <th class="" style="width: 25%;">Mô Tả</th>
-                                <th class="text-center" style="width: 10%;">Trạng Thái</th>
+                                <th class="" style="width: 25%;">Tên</th>
+                                <th class="" style="width: 30%;">Mô Tả</th>
                                 <th class="text-center" style="width: 30%;">Hành Động</th>
                             </tr>
                         </thead>
@@ -68,17 +67,6 @@
                                         <td>#{{ $item->code }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->description ?? 'Không có mô tả' }}</td>
-                                        <td class="text-center">
-                                            @if ($item->status)
-                                                <span class="bg-success text-white rounded-pill"
-                                                    style="padding: 5px 5px; display: inline-block; min-width: 80px; font-size: 10px;">Hoạt
-                                                    động</span>
-                                            @else
-                                                <span class="bg-danger text-white rounded-pill"
-                                                    style="padding: 5px 5px; display: inline-block; min-width: 80px; font-size: 10px;">Không
-                                                    hoạt động</span>
-                                            @endif
-                                        </td>
                                         <td class="text-center">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-sm btn-twitter rounded-pill me-2"

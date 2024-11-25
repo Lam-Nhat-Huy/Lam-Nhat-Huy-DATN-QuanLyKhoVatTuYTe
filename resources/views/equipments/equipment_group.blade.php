@@ -67,7 +67,6 @@
                                 <th class="" style="width: 10%;">Mã</th>
                                 <th class="" style="width: 25%;">Tên</th>
                                 <th class="" style="width: 30%;">Mô Tả</th>
-                                <th class="text-center" style="width: 10%;">Trạng Thái</th>
                                 <th class="text-center" style="width: 20%;">Hành Động</th>
                             </tr>
                         </thead>
@@ -102,17 +101,6 @@
                                         <td>#{{ $item->code }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->description ?? 'Không có mô tả' }}</td>
-                                        <td class="text-center">
-                                            @if ($item->status)
-                                                <div class="rounded-pill px-2 py-1 text-white bg-success">
-                                                    Hoạt động
-                                                </div>
-                                            @else
-                                                <div class="rounded-pill px-2 py-1 text-white bg-danger">
-                                                    Không hoạt động
-                                                </div>
-                                            @endif
-                                        </td>
                                         <td class="text-center">
                                             <div class="btn-group">
                                                 <a href="{{ route('equipments.update_equipments_group', $item->code) }}"
