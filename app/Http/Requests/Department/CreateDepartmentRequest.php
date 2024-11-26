@@ -22,25 +22,24 @@ class CreateDepartmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name"=> "required|string|max:150",
-            "description"=> "required|string",
-            "location"=> "required|string|max:150",
+            "name" => "required|string|max:150",
+            "description" => "required|string",
+            "location" => "required|string|max:150",
         ];
     }
     public function messages(): array
-{
-    return [
-        'name.required' => 'Không được bỏ trống',
-        'name.string' => 'Không đúng định dạng',
-        'name.max' => 'Không được vượt quá 150 ký tự',
-        
-        'description.required' => 'Không được bỏ trống',
-        'description.string' => 'Không đúng định dạng',
+    {
+        return [
+            'name.required' => 'Tên phòng ban không được bỏ trống',
+            'name.string' => 'Tên phòng ban không đúng định dạng',
+            'name.max' => 'Tên phòng ban không được vượt quá 150 ký tự',
 
-        'location.required' => 'Không được bỏ trống',
-        'location.string' => 'Không đúng định dạng',
-        'location.max' => 'Không được vượt quá 150 ký tự.',
-    ];
-}
+            'description.required' => 'Mô tả không được bỏ trống',
+            'description.string' => 'Mô tả không đúng định dạng',
 
+            'location.required' => 'Vị trí không được bỏ trống',
+            'location.string' => 'Vị trí không đúng định dạng',
+            'location.max' => 'Vị trí không được vượt quá 150 ký tự.',
+        ];
+    }
 }
