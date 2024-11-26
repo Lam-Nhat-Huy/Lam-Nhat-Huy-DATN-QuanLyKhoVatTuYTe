@@ -31,17 +31,6 @@
                         placeholder="Tìm Kiếm Mã, Tên Nhóm Thiết Bị.."
                         class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success w-100">
                 </div>
-                <div class="col-md-3">
-                    <select name="stt" class="mt-2 mb-2 form-select form-select-sm rounded-pill setupSelect2">
-                        <option value="" selected>--Theo Trạng Thái--</option>
-                        <option value="1" {{ request()->stt == '1' ? 'selected' : '' }}>
-                            Hoạt Động
-                        </option>
-                        <option value="0" {{ request()->stt == '0' ? 'selected' : '' }}>
-                            Không Hoạt Động
-                        </option>
-                    </select>
-                </div>
                 <div class="col-auto">
                     <a href="{{ route('equipments.equipments_group') }}" class="btn rounded-pill btn-info btn-sm mt-2 mb-2">
                         <i class="fas fa-times-circle" style="margin-bottom: 2px;"></i>Bỏ Lọc

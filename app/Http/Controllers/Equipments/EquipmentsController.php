@@ -160,7 +160,7 @@ class EquipmentsController extends Controller
         $action = 'create';
 
         // Lấy danh sách các nhóm thiết bị có trạng thái "Có"
-        $equipmentTypes = Equipment_types::where('status', 1)->get();
+        $equipmentTypes = Equipment_types::all();
 
         // Tương tự với các đơn vị tính hoặc nhà cung cấp nếu cần thiết
         $units = Units::orderBy('name', 'ASC')->get();
@@ -373,10 +373,6 @@ class EquipmentsController extends Controller
             });
         }
 
-        if (isset($request->stt)) {
-            $query->where('status', $request->stt);
-        }
-
         $AllEquipmentGroup = $query->orderBy('created_at', 'DESC')->paginate(10);
 
         if (!empty($request->equipment_group_codes)) {
@@ -456,9 +452,7 @@ class EquipmentsController extends Controller
 
         $action = 'create';
 
-        $linkedEquipments = 0;
-
-        return view('equipments.form_group', compact('title', 'action', 'linkedEquipments'));
+        return view('equipments.form_group', compact('title', 'action'));
     }
 
     public function create_equipment_group(CreateEquipmentType $request)
@@ -469,7 +463,6 @@ class EquipmentsController extends Controller
             'code' => 'NTB' . $this->generateRandomString(7),
             'name' => $data['name'],
             'description' => $request->description,
-            'status' => $request->status ?? 0,
         ]);
 
         toastr()->success('Đã thêm nhóm thiết bị');
@@ -485,9 +478,7 @@ class EquipmentsController extends Controller
 
         $action = 'edit';
 
-        $linkedEquipments = $this->equipmentModal::where('equipment_type_code', $code)->count();
-
-        return view('equipments.form_group', compact('title', 'action', 'equipmentGroup', 'linkedEquipments'));
+        return view('equipments.form_group', compact('title', 'action', 'equipmentGroup'));
     }
 
     public function edit_equipment_group(UpdateEquipmentType $request, $code)
@@ -500,7 +491,6 @@ class EquipmentsController extends Controller
             $record->update([
                 'name' => $data['name'],
                 'description' => $request->description,
-                'status' => $request->status == null ? 0 : 1,
             ]);
 
             toastr()->success('Đã cập nhật nhóm thiết bị');

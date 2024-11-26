@@ -11,8 +11,7 @@ return new class extends Migration
         Schema::create('equipment_types', function (Blueprint $table) {
             $table->char('code', 10)->primary();
             $table->string('name', 255);
-            $table->text('description')->nullable(); // Thêm cột mô tả sau cột 'name'
-            $table->boolean('status')->default(true); // Thêm cột trạng thái sau cột 'description'
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

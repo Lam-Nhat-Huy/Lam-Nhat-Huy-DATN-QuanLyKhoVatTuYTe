@@ -8,6 +8,46 @@
 @endsection
 
 @section('scripts')
+    <script>
+        document.getElementById('random-btn').addEventListener('click', function() {
+            // Danh sách phòng ban mẫu liên quan đến bệnh viện
+            const randomDepartments = [
+                "Khoa Nội Tổng Hợp",
+                "Khoa Ngoại Chấn Thương",
+                "Khoa Gây Mê Hồi Sức",
+                "Khoa Xét Nghiệm",
+                "Khoa Chẩn Đoán Hình Ảnh"
+            ];
+
+            // Danh sách vị trí
+            const randomLocations = [
+                "Tầng 1 - Khu A",
+                "Tầng 2 - Khu B",
+                "Tầng 3 - Khu C",
+                "Tầng Hầm - Khu D",
+                "Tầng 4 - Khu E"
+            ];
+
+            // Danh sách mô tả chi tiết cho phòng ban
+            const randomDescriptions = [
+                "Phòng chịu trách nhiệm quản lý thiết bị y tế cho Khoa Nội Tổng Hợp.",
+                "Đảm bảo thiết bị phẫu thuật được lưu trữ và sử dụng đúng cho Khoa Ngoại Chấn Thương.",
+                "Cung cấp và quản lý thiết bị gây mê cho các ca phẫu thuật tại bệnh viện.",
+                "Hỗ trợ lưu trữ và quản lý máy móc, thiết bị xét nghiệm chuyên sâu.",
+                "Bảo quản các thiết bị y tế phục vụ chẩn đoán hình ảnh như máy X-quang, MRI, CT."
+            ];
+
+            // Chọn dữ liệu ngẫu nhiên
+            const name = randomDepartments[Math.floor(Math.random() * randomDepartments.length)];
+            const location = randomLocations[Math.floor(Math.random() * randomLocations.length)];
+            const description = randomDescriptions[Math.floor(Math.random() * randomDescriptions.length)];
+
+            // Điền dữ liệu vào form
+            document.querySelector('input[name="name"]').value = name;
+            document.querySelector('input[name="location"]').value = location;
+            document.querySelector('textarea[name="description"]').value = description;
+        });
+    </script>
 @endsection
 
 @php
@@ -29,6 +69,12 @@
                 <span class="card-label fw-bolder fs-3 mb-1">{{ $title_form }}</span>
             </h3>
             <div class="card-toolbar">
+                <button type="button" id="random-btn" class="btn rounded-pill btn-sm btn-info me-2">
+                    <span class="align-items-center d-flex">
+                        <i class="fa fa-random me-1"></i>
+                        Dữ Liệu Mẫu
+                    </span>
+                </button>
                 <a href="{{ route('department.index') }}?{{ request()->getQueryString() }}"
                     class="btn rounded-pill btn-sm btn-dark">
                     <span class="align-items-center d-flex" style="font-size: 10px;">

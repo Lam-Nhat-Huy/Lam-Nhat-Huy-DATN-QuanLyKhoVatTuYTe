@@ -8,6 +8,48 @@
 @endsection
 
 @section('scripts')
+    <script>
+        document.getElementById('random-btn').addEventListener('click', function() {
+            // Hàm tạo dữ liệu ngẫu nhiên
+            function generateRandomData() {
+                const randomNames = ["Công Ty TNHH ABC", "Công Ty CP XYZ", "Doanh Nghiệp DEF", "Cửa Hàng GHI"];
+                const randomContacts = ["Nguyễn Văn A", "Trần Thị B", "Lê Văn C", "Phạm Thị D"];
+                const randomTaxCodes = Array.from({
+                    length: 5
+                }, () => Math.floor(100000000 + Math.random() * 900000000).toString());
+                const randomPhones = Array.from({
+                    length: 5
+                }, () => "0" + Math.floor(100000000 + Math.random() * 900000000).toString());
+                const randomEmails = ["example@abc.com", "info@xyz.com", "contact@def.vn", "support@ghi.vn"];
+                const randomAddresses = [
+                    "123 Đường Lê Lợi, Quận 1, TP.HCM",
+                    "456 Đường Nguyễn Huệ, Quận 3, TP.HCM",
+                    "789 Đường Trần Hưng Đạo, Quận 5, TP.HCM",
+                    "101 Đường Phạm Ngũ Lão, Quận 10, TP.HCM"
+                ];
+
+                return {
+                    name: randomNames[Math.floor(Math.random() * randomNames.length)],
+                    contact_name: randomContacts[Math.floor(Math.random() * randomContacts.length)],
+                    tax_code: randomTaxCodes[Math.floor(Math.random() * randomTaxCodes.length)],
+                    phone: randomPhones[Math.floor(Math.random() * randomPhones.length)],
+                    email: randomEmails[Math.floor(Math.random() * randomEmails.length)],
+                    address: randomAddresses[Math.floor(Math.random() * randomAddresses.length)],
+                };
+            }
+
+            // Sinh dữ liệu ngẫu nhiên
+            const randomData = generateRandomData();
+
+            // Điền dữ liệu vào các trường trong form
+            document.querySelector('input[name="name"]').value = randomData.name;
+            document.querySelector('input[name="contact_name"]').value = randomData.contact_name;
+            document.querySelector('input[name="tax_code"]').value = randomData.tax_code;
+            document.querySelector('input[name="phone"]').value = randomData.phone;
+            document.querySelector('input[name="email"]').value = randomData.email;
+            document.querySelector('input[name="address"]').value = randomData.address;
+        });
+    </script>
 @endsection
 
 @php
@@ -31,6 +73,12 @@
                 <span class="card-label fw-bolder fs-3 mb-1">{{ $title_form }}</span>
             </h3>
             <div class="card-toolbar">
+                <button type="button" id="random-btn" class="btn rounded-pill btn-sm btn-info me-2">
+                    <span class="align-items-center d-flex">
+                        <i class="fa fa-random me-1"></i>
+                        Dữ Liệu Mẫu
+                    </span>
+                </button>
                 <a href="{{ route('supplier.list') }}?{{ request()->getQueryString() }}"
                     class="btn rounded-pill btn-sm btn-dark">
                     <span class="align-items-center d-flex" style="font-size: 10px;">

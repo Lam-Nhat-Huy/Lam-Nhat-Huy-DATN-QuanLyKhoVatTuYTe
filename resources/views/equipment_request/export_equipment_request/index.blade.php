@@ -91,14 +91,14 @@
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 9%;">Mã yêu cầu</th>
-                                <th class="" style="width: 21%;">Phòng ban</th>
-                                <th class="" style="width: 22%;">Lý do xuất</th>
-                                <th class="" style="width: 9%;">Người tạo</th>
-                                <th class="" style="width: 8%;">N.Yêu cầu</th>
-                                <th class="" style="width: 14%;">N.Cần thiết</th>
+                                <th class="" style="width: 10%;">Mã yêu cầu</th>
+                                <th class="" style="width: 15%;">Phòng ban</th>
+                                <th class="" style="width: 15%;">Lý do xuất</th>
+                                <th class="" style="width: 10%;">Người tạo</th>
+                                <th class="" style="width: 10%;">N.Yêu cầu</th>
+                                <th class="" style="width: 15%;">N.Cần thiết</th>
                                 <th class="text-center" style="width: 10%;">Trạng thái</th>
-                                <th class="pe-3 text-center" style="width: 20%;">HĐ</th>
+                                <th class="pe-3 text-center" style="width: 15%;">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>

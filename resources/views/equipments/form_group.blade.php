@@ -42,37 +42,21 @@
                 <div class="me-n7 pe-7">
 
                     <div class="mb-5">
-
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Tên Nhóm Thiết Bị</label>
-
                         <div class="d-flex align-items-center">
-
                             <input name="name" class="form-control form-control-sm border-success rounded-pill"
                                 value="{{ old('name', $equipmentGroup->name ?? '') }}" placeholder="Tên nhóm thiết bị..">
                         </div>
-
                         @error('name')
                             <div class="message_error">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="mb-5">
-
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Mô Tả</label>
-
-                        <textarea name="description" id="description" class="form-control form-control-sm border-success" rows="5" placeholder="Mô tả nhóm thiết bị..">{{ old('description', $equipmentGroup->description ?? '') }}</textarea>
-
+                        <textarea name="description" id="description" class="form-control form-control-sm border-success" rows="5"
+                            placeholder="Mô tả nhóm thiết bị..">{{ old('description', $equipmentGroup->description ?? '') }}</textarea>
                     </div>
-
-                    <div class="mb-5 {{ $linkedEquipments > 0 ? 'd-none' : '' }}">
-                        <label class="fs-5 fw-bold mb-2">Trạng Thái Nhóm Thiết Bị</label>
-                        <div class="checkbox-wrapper-6">
-                            <input class="tgl tgl-light" id="cb1-6" type="checkbox" value="1" name="status"
-                                {{ (!empty($equipmentGroup->status) && $equipmentGroup->status == 1) || old('status') == 1 ? 'checked' : '' }} />
-                            <label class="tgl-btn" for="cb1-6"></label>
-                        </div>
-                    </div>
-
                 </div>
             </div>
 
