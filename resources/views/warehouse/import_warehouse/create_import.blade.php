@@ -110,7 +110,8 @@
                                 đơn</label>
                             <input type="text" tabindex="3" onchange="cReceiptNo()"
                                 class="form-control form-control-sm border border-success rounded-pill" id="receipt_no"
-                                name="receipt_no" placeholder="Nhập số hóa đơn" value="{{ old('receipt_no') }}">
+                                name="receipt_no" placeholder="Nhập số hóa đơn (VD: HD123456)"
+                                value="{{ old('receipt_no') }}">
                             <div class="message_error" id="receipt_no_error"></div>
                         </div>
                     @else
@@ -125,7 +126,7 @@
                             <label for="receipt_no" class="{{ $required }} form-label fw-semibold">Số hóa đơn</label>
                             <input type="text" tabindex="3" onchange="cReceiptNo()"
                                 class="form-control form-control-sm border border-success rounded-pill" id="receipt_no"
-                                name="receipt_no" placeholder="Nhập số hóa đơn"
+                                name="receipt_no" placeholder="Nhập số hóa đơn (VD: HD123456)"
                                 value="{{ old('receipt_no', $editForm->receipt_no ?? null) }}">
                             <div class="message_error" id="receipt_no_error"></div>
                         </div>
@@ -627,7 +628,7 @@
                         <button type="button"
                             class="btn btn-sm btn-twitter w-100 d-flex align-items-center justify-content-center rounded-pill"
                             id="import_equipment_request_create">
-                            <i class="fas fa-save me-1"></i>Duyệt phiếu
+                            <i class="fas fa-save me-1"></i>Tạo phiếu
                         </button>
                     @else
                         <button type="button" name="status" value="0"

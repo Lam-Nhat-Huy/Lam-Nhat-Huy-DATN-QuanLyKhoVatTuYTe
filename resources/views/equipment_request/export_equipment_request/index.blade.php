@@ -92,8 +92,8 @@
                                     <input type="checkbox" id="selectAll" />
                                 </th>
                                 <th class="" style="width: 10%;">Mã yêu cầu</th>
-                                <th class="" style="width: 15%;">Phòng ban</th>
-                                <th class="" style="width: 15%;">Lý do xuất</th>
+                                <th class="" style="width: 17%;">Phòng ban</th>
+                                <th class="" style="width: 12%;">Lý do xuất</th>
                                 <th class="" style="width: 10%;">Người tạo</th>
                                 <th class="" style="width: 10%;">N.Yêu cầu</th>
                                 <th class="" style="width: 15%;">N.Cần thiết</th>
@@ -128,7 +128,14 @@
                                         #{{ $item->code }}
                                     </td>
                                     <td>
-                                        {{ $item->departments->name ?? 'N/A' }}
+                                        @if (!empty($item->departments->name))
+                                            <a class="text-decoration-underline fw-bolder"
+                                                href="{{ route('department.index') }}?kw={{ $item->departments->name }}">
+                                                {{ $item->departments->name }}
+                                            </a>
+                                        @else
+                                            N/A
+                                        @endif
                                     </td>
                                     <td>
                                         {{ $item->reason_export }}
@@ -641,13 +648,13 @@
                             <span>Chọn Thao Tác</span>
                         </button>
                         <ul class="dropdown-menu shadow" aria-labelledby="dropdownMenuButton1">
-                            <li>
+                            {{-- <li>
                                 <a class="dropdown-item pointer d-flex align-items-center" data-bs-toggle="modal"
                                     data-bs-target="#browseAll">
                                     <i class="fas fa-clipboard-check me-2 text-twitter"></i>
                                     <span>Duyệt phiếu</span>
                                 </a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <a class="dropdown-item pointer d-flex align-items-center" data-bs-toggle="modal"
                                     data-bs-target="#deleteAll">
@@ -668,7 +675,7 @@
             @endif
 
             {{-- Modal Duyệt Tất Cả --}}
-            <div class="modal fade" id="browseAll" tabindex="-1" aria-labelledby="browseAllModal" aria-hidden="true">
+            {{-- <div class="modal fade" id="browseAll" tabindex="-1" aria-labelledby="browseAllModal" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-md">
                     <div class="modal-content border-0 shadow">
                         <div class="modal-header bg-primary text-white">
@@ -688,7 +695,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             {{-- Modal Xác Nhận Hủy Tất Cả --}}
             <div class="modal fade" id="deleteAll" tabindex="-1" aria-labelledby="deleteAllLabel" aria-hidden="true">

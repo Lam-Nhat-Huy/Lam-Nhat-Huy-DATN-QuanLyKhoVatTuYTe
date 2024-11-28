@@ -399,7 +399,7 @@
                     <button type="button"
                         class="btn btn-sm btn-twitter d-flex align-items-center justify-content-center rounded-pill {{ $d_none_save_request }}"
                         id="export_browse">
-                        <i class="fas fa-save me-1"></i>Duyệt phiếu
+                        <i class="fas fa-save me-1"></i>Tạo phiếu
                     </button>
                     <button type="button"
                         class="btn btn-sm btn-twitter d-flex align-items-center justify-content-center rounded-pill {{ $d_none_update }}"

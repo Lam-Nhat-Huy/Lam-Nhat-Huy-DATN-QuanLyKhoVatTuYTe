@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('reason', 50)->nullable();
             $table->char('export_request_code', 10)->nullable();
             $table->char('created_by')->nullable();
+            $table->char('updated_by', 10)->nullable();
+            $table->char('deleted_by', 10)->nullable();
+            $table->char('browse_by', 10)->nullable();
             $table->timestamps();
             $table->softDeletes();
 

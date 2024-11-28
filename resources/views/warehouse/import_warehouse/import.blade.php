@@ -101,10 +101,18 @@
                                         #{{ $item->code }}
                                     </td>
                                     <td>
-                                        {{ $item->order_number ?? 'Không Có' }}
+                                        {!! $item->order_number
+                                            ? '<a class="text-decoration-underline fw-bolder" href="' .
+                                                route('equipment_request.import') .
+                                                '?kw=' .
+                                                $item->order_number .
+                                                '">#' .
+                                                $item->order_number .
+                                                '</a>'
+                                            : 'Không có' !!}
                                     </td>
                                     <td>
-                                        {{ $item->receipt_no }}
+                                        <span class="text-danger fw-bolder">#{{ $item->receipt_no }}</span>
                                     </td>
                                     <td class="custom-w">
                                         {{ $item->receipt_type ?? 'Không có' }}
@@ -212,7 +220,14 @@
                                                                                 cấp</strong>
                                                                         </td>
                                                                         <td class="text-dark" style="width: 550px;">
-                                                                            {{ $item->supplier->name ?? 'Không có' }}
+                                                                            @if (!empty($item->supplier->name))
+                                                                                <a class="text-decoration-underline fw-bolder"
+                                                                                    href="{{ route('supplier.list') }}?keyword={{ $item->supplier->name }}">
+                                                                                    {{ $item->supplier->name }}
+                                                                                </a>
+                                                                            @else
+                                                                                Không có
+                                                                            @endif
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -318,10 +333,10 @@
                                                                         <th style="width: 10%;" data-bs-toggle="tooltip"
                                                                             data-bs-placement="top"
                                                                             title="Số Lượng Yêu Cầu">SLYC</th>
-                                                                        <th style="width: 10%;" data-bs-toggle="tooltip"
+                                                                        <th style="width: 9%;" data-bs-toggle="tooltip"
                                                                             data-bs-placement="top" title="Số Lượng Nhập">
                                                                             SL nhập</th>
-                                                                        <th style="width: 10%;">Lệch</th>
+                                                                        <th style="width: 11%;">Lệch</th>
                                                                         <th style="width: 10%;">Giá nhập</th>
                                                                         <th style="width: 10%;">Số lô</th>
                                                                         <th style="width: 10%;">CK(%)</th>
@@ -357,8 +372,23 @@
                                                                             <td>{{ $detail->quantity_quote ?? 'Không Có' }}
                                                                             </td>
                                                                             <td>{{ $detail->quantity }}</td>
-                                                                            <td>{{ $detail->deviation_quote ?? 'Không Có' }}
-                                                                            </td>
+                                                                            @if ($detail->deviation_quote === 'Không lệch')
+                                                                                <td>
+                                                                                    {{ $detail->deviation_quote }}
+                                                                                    <i
+                                                                                        class="fa fa-check-circle text-success"></i>
+                                                                                </td>
+                                                                            @elseif ($detail->deviation_quote == null)
+                                                                                <td>
+                                                                                    Không có
+                                                                                </td>
+                                                                            @else
+                                                                                <td>
+                                                                                    {{ $detail->deviation_quote }}
+                                                                                    <i
+                                                                                        class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                                                                </td>
+                                                                            @endif
                                                                             <td>{{ number_format($detail->price) }} VND
                                                                             </td>
                                                                             <td>{{ $detail->batch_number }}</td>
@@ -392,11 +422,21 @@
                                                         @endif
 
                                                         @if ($item->created_by == session('user_code') || session('isAdmin') == 1)
-                                                            <a href="{{ route('warehouse.edit_import', $item->code) }}"
-                                                                class="btn btn-dark btn-sm me-2 rounded-pill">
-                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                                phiếu
-                                                            </a>
+                                                            @if (isset($item->order_number))
+                                                                <a href="{{ route('warehouse.create_import') }}?cd={{ $item->order_number }}&type=ei"
+                                                                    class="btn btn-dark btn-sm me-2 rounded-pill">
+                                                                    <i class="fa fa-edit"
+                                                                        style="margin-bottom: 2px;"></i>Sửa
+                                                                    phiếu
+                                                                </a>
+                                                            @else
+                                                                <a href="{{ route('warehouse.edit_import', $item->code) }}"
+                                                                    class="btn btn-dark btn-sm me-2 rounded-pill">
+                                                                    <i class="fa fa-edit"
+                                                                        style="margin-bottom: 2px;"></i>Sửa
+                                                                    phiếu
+                                                                </a>
+                                                            @endif
 
                                                             <button type="button"
                                                                 class="btn btn-danger btn-sm rounded-pill"
@@ -416,11 +456,19 @@
                                                             phiếu
                                                         </button>
 
-                                                        <a href="{{ route('warehouse.edit_import', $item->code) }}"
-                                                            class="btn btn-dark btn-sm me-2 rounded-pill">
-                                                            <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                            phiếu
-                                                        </a>
+                                                        @if (isset($item->order_number))
+                                                            <a href="{{ route('warehouse.create_import') }}?cd={{ $item->order_number }}&type=ei"
+                                                                class="btn btn-dark btn-sm me-2 rounded-pill">
+                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
+                                                                phiếu
+                                                            </a>
+                                                        @else
+                                                            <a href="{{ route('warehouse.edit_import', $item->code) }}"
+                                                                class="btn btn-dark btn-sm me-2 rounded-pill">
+                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
+                                                                phiếu
+                                                            </a>
+                                                        @endif
 
                                                         <button type="button" class="btn btn-danger btn-sm rounded-pill"
                                                             data-bs-toggle="modal"

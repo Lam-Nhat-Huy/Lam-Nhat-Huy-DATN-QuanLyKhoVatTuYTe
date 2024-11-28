@@ -18,6 +18,9 @@ return new class extends Migration
             $table->timestamp('receipt_date')->nullable();
             $table->string('receipt_type', 55)->nullable();
             $table->char('created_by', 10);
+            $table->char('updated_by', 10)->nullable();
+            $table->char('deleted_by', 10)->nullable();
+            $table->char('browse_by', 10)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

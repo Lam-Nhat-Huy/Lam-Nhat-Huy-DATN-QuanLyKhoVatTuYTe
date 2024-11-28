@@ -126,7 +126,14 @@
                                         #{{ $item->code }}
                                     </td>
                                     <td>
-                                        {{ !empty($item->supplier_code) ? $item->suppliers->name : 'Chưa có' }}
+                                        @if (!empty($item->supplier_code))
+                                            <a class="text-decoration-underline fw-bolder text-primary"
+                                                href="{{ route('supplier.list') }}?keyword={{ $item->suppliers->name }}">
+                                                {{ $item->suppliers->name }}
+                                            </a>
+                                        @else
+                                            Chưa có
+                                        @endif
                                     </td>
                                     <td>
                                         {{ $item->users->last_name . ' ' . $item->users->first_name ?? 'N/A' }}
@@ -266,7 +273,19 @@
                                                                                 <td>{{ $detail->quantity }}</td>
                                                                                 @if ($item->status == 1 || $item->status == 4)
                                                                                     <td>{{ $detail->quantity_quote }}</td>
-                                                                                    <td>{{ $detail->deviation_quote }}</td>
+                                                                                    @if ($detail->deviation_quote === 'Không lệch')
+                                                                                        <td>
+                                                                                            {{ $detail->deviation_quote }}
+                                                                                            <i
+                                                                                                class="fa fa-check-circle text-success"></i>
+                                                                                        </td>
+                                                                                    @else
+                                                                                        <td>
+                                                                                            {{ $detail->deviation_quote }}
+                                                                                            <i
+                                                                                                class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                                                                        </td>
+                                                                                    @endif
                                                                                     <td>{{ number_format($detail->price, 0, ',', '.') }}
                                                                                         VND</td>
                                                                                     <td>{{ number_format($totalPriceWithVAT, 0, ',', '.') }}

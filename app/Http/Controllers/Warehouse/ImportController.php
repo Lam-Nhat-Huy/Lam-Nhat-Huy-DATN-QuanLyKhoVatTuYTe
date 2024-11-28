@@ -231,6 +231,22 @@ class ImportController extends Controller
 
     public function create_import(Request $request)
     {
+        session()->forget(['ier', 'mapn']);
+
+        if (isset($request->cd) && empty($request->type)) {
+
+            $checkExportRequestCode = Receipts::where('order_number', $request->cd)->first();
+
+            if ($checkExportRequestCode) {
+                toastr()->info('Phiếu yêu cầu mua hàng này đã được tạo phiếu nhập và ở trạng thái chờ duyệt');
+                return redirect()->route('equipment_request.import');
+            }
+        } elseif (!empty($request->type)) {
+            $rs = Receipts::where('order_number', $request->cd)->first();
+            session()->put('ier', $request->cd);
+            session()->put('mapn', $rs->code);
+        }
+
         $title = 'Tạo Phiếu Nhập Kho';
 
         $action = 'create';
@@ -353,16 +369,16 @@ class ImportController extends Controller
             $note = $request->note;
             $equipmentList = json_decode($request->equipment_list, true);
 
-            Import_equipment_requests::where('code', $orderNumber)->update([
-                'status' => 4,
-            ]);
+            if (!empty(session('ier'))) {
+                Receipts::where('order_number', session('ier'))->forceDelete();
+            }
 
             // Tạo phiếu nhập
             $record = Receipts::create([
-                'code' => 'PN' . $this->generateRandomString(8),
+                'code' => !empty(session('mapn')) ? session('mapn') : 'PN' . $this->generateRandomString(8),
                 'supplier_code' => $supplierCode,
                 'note' => $note ?? '',
-                'status' => 1,
+                'status' => 0,
                 'order_number' => $orderNumber,
                 'receipt_no' => $receiptNo,
                 'receipt_date' => now(),
@@ -391,11 +407,9 @@ class ImportController extends Controller
                         'deleted_at' => null,
                     ]);
                 }
-
-                $this->updateInventories($record->code, '+');
             }
 
-            return response()->json(['success' => true, 'message' => 'Đã tạo phiếu nhập']);
+            return response()->json(['success' => true, 'message' => 'Đã tạo phiếu nhập và đang chờ duyệt']);
         }
 
         return response()->json(['success' => false, 'message' => 'Vui lòng điền đẩy đủ các trường dữ liệu']);
@@ -499,15 +513,17 @@ class ImportController extends Controller
 
     public function checkReceiptNo(Request $request)
     {
-        $existingRN = Receipts::where('receipt_no', $request->receipt_no)
-            ->where('code', '!=', $request->code)
-            ->first();
+        if (empty(session('ier'))) {
+            $existingRN = Receipts::where('receipt_no', $request->receipt_no)
+                ->where('code', '!=', $request->code)
+                ->first();
 
-        if ($existingRN) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Số hóa đơn này đã tồn tại trên hệ thống'
-            ]);
+            if ($existingRN) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Số hóa đơn này đã tồn tại trên hệ thống'
+                ]);
+            }
         }
 
         return response()->json([
@@ -518,15 +534,17 @@ class ImportController extends Controller
 
     public function checkOrderNumber(Request $request)
     {
-        $existingON = Receipts::where('order_number', $request->order_number)
-            ->where('code', '!=', $request->code)
-            ->first();
+        if (empty(session('ier'))) {
+            $existingON = Receipts::where('order_number', $request->order_number)
+                ->where('code', '!=', $request->code)
+                ->first();
 
-        if ($existingON) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Số đơn đặt hàng đã tồn tại vì đã có người tạo phiếu nhập này trước đó.'
-            ]);
+            if ($existingON) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Số đơn đặt hàng đã tồn tại vì đã có người tạo phiếu nhập này trước đó.'
+                ]);
+            }
         }
 
         return response()->json([
@@ -543,6 +561,12 @@ class ImportController extends Controller
             $existingRequest->update([
                 'status' => 1,
             ]);
+
+            if (isset($existingRequest->order_number)) {
+                Import_equipment_requests::where('code', $existingRequest->order_number)->update([
+                    'status' => 4,
+                ]);
+            }
 
             $this->updateInventories($request->browse_code, '+');
 
@@ -604,10 +628,15 @@ class ImportController extends Controller
 
                 $receipt->forceDelete();
 
+                if (isset($export->order_number)) {
+                    toastr()->success('Đã xóa phiếu nhập kho và phiếu yêu cầu nhập #' . $receipt->order_number . ' đã được trở về trạng thái chuẩn bị.');
+                    return redirect()->back();
+                }
+
                 toastr()->success('Đã xóa phiếu nhập kho.');
                 return redirect()->back();
             } else {
-                toastr()->error('Không thể hủy phiếu nhập vì số lượng hàng nhập vượt quá số lượng tồn kho hiện có.');
+                toastr()->error('Không thể hủy phiếu nhập vì số lượng nhập của lô hàng vượt quá số lượng tồn kho hiện có của thiết bị.');
                 return redirect()->back();
             }
         }

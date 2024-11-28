@@ -205,6 +205,22 @@ class ExportController extends Controller
 
     public function create_export(Request $request)
     {
+        session()->forget(['eer', 'mapx']);
+
+        if (isset($request->cd) && empty($request->type)) {
+
+            $checkExportRequestCode = Exports::where('export_request_code', $request->cd)->first();
+
+            if ($checkExportRequestCode) {
+                toastr()->info('Phiếu yêu cầu xuất kho này đã được tạo phiếu xuất và ở trạng thái chờ duyệt');
+                return redirect()->route('equipment_request.export');
+            }
+        } elseif (!empty($request->type)) {
+            $rs = Exports::where('export_request_code', $request->cd)->first();
+            session()->put('eer', $request->cd);
+            session()->put('mapx', $rs->code);
+        }
+
         $action = 'create';
 
         $allDepartment = Departments::orderBy('created_at', 'DESC')->get();
@@ -325,61 +341,59 @@ class ExportController extends Controller
     // Tạo phiếu xuất bằng yêu cầu xuất kho
     public function export_equipment_request(Request $request)
     {
-        try {
-            if (
-                !empty($request->department_code) &&
-                !empty($request->export_type) &&
-                !empty($request->required_date) &&
-                !empty($request->equipment_list_export_request)
-            ) {
-                $departmentCode = $request->department_code;
-                $exportType = $request->export_type;
-                $note = $request->note;
-                $equipmentList = json_decode($request->equipment_list_export_request, true);
+        // try {
+        if (
+            !empty($request->department_code) &&
+            !empty($request->export_type) &&
+            !empty($request->required_date) &&
+            !empty($request->equipment_list_export_request)
+        ) {
+            $departmentCode = $request->department_code;
+            $exportType = $request->export_type;
+            $note = $request->note;
+            $equipmentList = json_decode($request->equipment_list_export_request, true);
 
-                Export_equipment_requests::where('code', $request->export_request_code)->update([
-                    'status' => 4,
-                ]);
-
-                $record = Exports::create([
-                    'code' => 'PX' . $this->generateRandomString(8),
-                    'note' => $note ?? '',
-                    'status' => 1,
-                    'export_date' => now(),
-                    'required_date' => $request->required_date,
-                    'export_type' => $exportType,
-                    'department_code' => $departmentCode,
-                    'export_request_code' => $request->export_request_code,
-                    'created_by' => session('user_code'),
-                    'created_at' => now(),
-                    'deleted_at' => null,
-                ]);
-
-                if ($record) {
-                    foreach ($equipmentList as $equipment) {
-                        if ($equipment['quantity'] > 0) {
-                            Export_details::create([
-                                'export_code' => $record->code,
-                                'equipment_code' => $equipment['equipment_code'],
-                                'quantity' => $equipment['quantity'],
-                                'batch_number' => $equipment['batch_number'],
-                                'created_at' => now(),
-                                'updated_at' => null,
-                                'deleted_at' => null,
-                            ]);
-                        }
-                    }
-
-                    $this->updateInventories($record->code, '-');
-
-                    return response()->json(['success' => true, 'message' => 'Đã tạo phiếu xuất']);
-                }
+            if (!empty(session('eer'))) {
+                Exports::where('export_request_code', session('eer'))->forceDelete();
             }
 
-            return response()->json(['success' => false, 'message' => 'Vui lòng điền đẩy đủ các trường dữ liệu']);
-        } catch (\Throwable $th) {
-            return response()->json(['success' => false, 'message' => Log::info($request->all())]);
+            $record = Exports::create([
+                'code' => !empty(session('mapx')) ? session('mapx') : 'PX' . $this->generateRandomString(8),
+                'note' => $note ?? '',
+                'status' => 0,
+                'export_date' => now(),
+                'required_date' => $request->required_date,
+                'export_type' => $exportType,
+                'department_code' => $departmentCode,
+                'export_request_code' => $request->export_request_code,
+                'created_by' => session('user_code'),
+                'created_at' => now(),
+                'deleted_at' => null,
+            ]);
+
+            if ($record) {
+                foreach ($equipmentList as $equipment) {
+                    if ($equipment['quantity'] > 0) {
+                        Export_details::create([
+                            'export_code' => $record->code,
+                            'equipment_code' => $equipment['equipment_code'],
+                            'quantity' => $equipment['quantity'],
+                            'batch_number' => $equipment['batch_number'],
+                            'created_at' => now(),
+                            'updated_at' => null,
+                            'deleted_at' => null,
+                        ]);
+                    }
+                }
+
+                return response()->json(['success' => true, 'message' => 'Đã tạo phiếu xuất và đang chờ duyệt']);
+            }
         }
+
+        return response()->json(['success' => false, 'message' => 'Vui lòng điền đẩy đủ các trường dữ liệu']);
+        // } catch (\Throwable $th) {
+        //     return response()->json(['success' => false, 'message' => Log::info($request->all())]);
+        // }
     }
 
     public function edit_export($code)
@@ -504,9 +518,18 @@ class ExportController extends Controller
     public function approve(Request $request)
     {
         if (!empty($request->browse_code)) {
-            Exports::find($request->browse_code)->update([
+            $existingRequest = Exports::find($request->browse_code);
+
+            $existingRequest->update([
                 'status' => 1,
             ]);
+
+            if (isset($existingRequest->export_request_code)) {
+
+                Export_equipment_requests::where('code', $existingRequest->export_request_code)->update([
+                    'status' => 4,
+                ]);
+            }
 
             $this->updateInventories($request->browse_code, '-');
 
@@ -551,6 +574,11 @@ class ExportController extends Controller
             ]);
 
             $export->forceDelete();
+
+            if (isset($export->export_request_code)) {
+                toastr()->success('Đã xóa phiếu xuất kho và phiếu yêu cầu xuất #' . $export->export_request_code . ' đã được trở về trạng thái chuẩn bị.');
+                return redirect()->back();
+            }
 
             toastr()->success('Đã xóa phiếu xuất kho.');
             return redirect()->back();

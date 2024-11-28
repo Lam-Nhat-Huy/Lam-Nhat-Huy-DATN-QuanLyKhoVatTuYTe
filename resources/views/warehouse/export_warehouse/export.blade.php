@@ -77,10 +77,11 @@
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th style="width: 15%;">Mã</th>
-                                <th class="" style="width: 15%;">Loại xuất</th>
+                                <th style="width: 10%;">Mã</th>
+                                <th class="" style="width: 13%;">Mã Yêu Cầu</th>
+                                <th class="" style="width: 13%;">Loại xuất</th>
                                 <th class="" style="width: 15%;">Tạo bởi</th>
-                                <th class="" style="width: 15%;">Ngày tạo</th>
+                                <th class="" style="width: 10%;">Ngày tạo</th>
                                 <th class="" style="width: 15%;">Ngày cần thiết</th>
                                 <th class="text-center" style="width: 10%;">Trạng thái</th>
                                 <th class="pe-3 text-center" style="width: 15%;">Hành động</th>
@@ -114,6 +115,17 @@
                                     </td>
                                     <td class="fw-bolder">
                                         #{{ $item->code }}
+                                    </td>
+                                    <td>
+                                        {!! $item->export_request_code
+                                            ? '<a class="text-decoration-underline fw-bolder" href="' .
+                                                route('equipment_request.export') .
+                                                '?kw=' .
+                                                $item->export_request_code .
+                                                '">#' .
+                                                $item->export_request_code .
+                                                '</a>'
+                                            : 'Không có' !!}
                                     </td>
                                     <td>
                                         {{ $item->export_type ?? 'Không có' }}
@@ -212,7 +224,10 @@
                                                                             <td class=""><strong>Phòng ban</strong>
                                                                             </td>
                                                                             <td class="text-dark">
-                                                                                {{ $item->departments->name ?? 'Không có' }}
+                                                                                <a class="text-decoration-underline fw-bolder"
+                                                                                    href="{{ route('department.index') }}?kw={{ $item->departments->name }}">
+                                                                                    {{ $item->departments->name }}
+                                                                                </a>
                                                                             </td>
                                                                         </tr>
                                                                     @elseif($item->export_type === 'Xuất Trả')
@@ -221,14 +236,17 @@
                                                                                     cấp</strong>
                                                                             </td>
                                                                             <td class="text-dark">
-                                                                                {{ $item->suppliers->name ?? 'Không có' }}
+                                                                                <a class="text-decoration-underline fw-bolder text-primary"
+                                                                                    href="{{ route('supplier.list') }}?keyword={{ $item->suppliers->name }}">
+                                                                                    {{ $item->suppliers->name }}
+                                                                                </a>
                                                                             </td>
                                                                         </tr>
                                                                     @elseif ($item->export_type === 'Xuất Hủy')
                                                                         <tr>
                                                                             <td class=""><strong>Lý do hủy</strong>
                                                                             </td>
-                                                                            <td class="text-dark">
+                                                                            <td class="text-dark fw-bolder">
                                                                                 {{ $item->reason ?? 'Không có' }}
                                                                             </td>
                                                                         </tr>
@@ -366,11 +384,21 @@
                                                         @endif
 
                                                         @if ($item->created_by == session('user_code') || session('isAdmin') == 1)
-                                                            <a href="{{ route('warehouse.edit_export', $item->code) }}"
-                                                                class="btn btn-dark btn-sm me-2 rounded-pill">
-                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                                phiếu
-                                                            </a>
+                                                            @if (isset($item->export_request_code))
+                                                                <a href="{{ route('warehouse.create_export') }}?cd={{ $item->export_request_code }}&type=er"
+                                                                    class="btn btn-dark btn-sm me-2 rounded-pill">
+                                                                    <i class="fa fa-edit"
+                                                                        style="margin-bottom: 2px;"></i>Sửa
+                                                                    phiếu
+                                                                </a>
+                                                            @else
+                                                                <a href="{{ route('warehouse.edit_export', $item->code) }}"
+                                                                    class="btn btn-dark btn-sm me-2 rounded-pill">
+                                                                    <i class="fa fa-edit"
+                                                                        style="margin-bottom: 2px;"></i>Sửa
+                                                                    phiếu
+                                                                </a>
+                                                            @endif
 
                                                             <button type="button"
                                                                 class="btn btn-danger btn-sm rounded-pill"
@@ -414,11 +442,19 @@
                                                             </button>
                                                         @endif
 
-                                                        <a href="{{ route('warehouse.edit_export', $item->code) }}"
-                                                            class="btn btn-dark btn-sm me-2 rounded-pill">
-                                                            <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                            phiếu
-                                                        </a>
+                                                        @if (isset($item->export_request_code))
+                                                            <a href="{{ route('warehouse.create_export') }}?cd={{ $item->export_request_code }}&type=er"
+                                                                class="btn btn-dark btn-sm me-2 rounded-pill">
+                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
+                                                                phiếu
+                                                            </a>
+                                                        @else
+                                                            <a href="{{ route('warehouse.edit_export', $item->code) }}"
+                                                                class="btn btn-dark btn-sm me-2 rounded-pill">
+                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
+                                                                phiếu
+                                                            </a>
+                                                        @endif
 
                                                         <button type="button" class="btn btn-danger btn-sm rounded-pill"
                                                             data-bs-toggle="modal"
