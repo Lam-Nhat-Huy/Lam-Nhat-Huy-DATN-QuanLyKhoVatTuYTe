@@ -596,6 +596,10 @@ class ImportController extends Controller
             }
 
             if ($canCancel) {
+                Import_equipment_requests::where('code', $receipt->order_number)->update([
+                    'status' => 1,
+                ]);
+
                 $this->updateInventories($request->delete_code, '-');
 
                 $receipt->forceDelete();
