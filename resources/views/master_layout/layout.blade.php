@@ -500,8 +500,7 @@
     </div>
 
     <script>
-        const api = 'https://4133-27-68-136-68.ngrok-free.app';
-
+        const api = 'https://b625-2402-800-6343-ed71-141d-6c90-ff0f-3a09.ngrok-free.app'
         const promptInput = document.getElementById('promptInput');
 
         const autocompleteSuggestions = document.getElementById('autocompleteSuggestions');
@@ -692,66 +691,58 @@
 
 
         function sendMessage() {
-            const promptInput = document.getElementById('promptInput');
-            let userMessage = promptInput.value.trim();
+    const promptInput = document.getElementById('promptInput');
+    let userMessage = promptInput.value.trim();
 
-            // Thêm prompt mặc định "Tồn kho của" nếu chưa có
-            const defaultPrompt = "Tồn kho của ";
-            if (!userMessage.startsWith(defaultPrompt)) {
-                userMessage = defaultPrompt + userMessage;
-            }
+    const defaultPrompt = "Tồn kho của ";
+    if (!userMessage.startsWith(defaultPrompt)) {
+        userMessage = defaultPrompt + userMessage;
+    }
 
-            if (userMessage.trim() === defaultPrompt.trim()) return; // Không gửi nếu chỉ có prompt mặc định
+    if (userMessage.trim() === defaultPrompt.trim()) return;
 
-            addMessage(userMessage, 'user');
-            promptInput.value = ""; // Reset ô nhập với prompt mặc định
+    addMessage(userMessage, 'user');
+    promptInput.value = "";
 
-
-            fetch(`${api}/api/inventory-chatbot?prompt=${encodeURIComponent(userMessage)}`, {
-                headers: {
-                    'ngrok-skip-browser-warning': 'true'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        addMessage(data.error, 'bot');
-                    } else if (Array.isArray(data)) {
-                        const warnings = [
-                            "<strong>Cảnh báo:</strong> Cần nhập thêm hàng!",
-                            "<strong>Chú ý:</strong> Hàng sắp hết, vui lòng nhập thêm!",
-                            "<strong>Thông báo:</strong> Tồn kho dưới mức tối thiểu, cần bổ sung!",
-                            "<strong>Lưu ý:</strong> Thiết bị này sắp hết, hãy đặt hàng mới!",
-                            "<strong>Khuyến cáo:</strong> Nên nhập thêm hàng trước khi hết!"
-                        ];
-
-                        const lowStockResponse = data.map(item => {
-                            const randomWarning = warnings[Math.floor(Math.random() * warnings.length)];
-                            return `
-                        <strong>Mã thiết bị</strong>: ${item.equipment_code}<br>
-                        <strong>Tên thiết bị</strong>: ${item.equipment_name}<br>
-                        <strong>Số lượng tồn kho</strong>: ${item.current_quantity} đơn vị<br>
-                        <strong>Số lô</strong>: ${item.batch_number}<br>
-                        ${randomWarning}
-                    `;
-                        }).join('<br><br>');
-
-                        addMessage("Danh sách thiết bị gần hết:<br><br>" + lowStockResponse, 'bot');
-                    } else {
-                        const botResponses = [
-                            `Thông tin về thiết bị:<br><br><strong>Mã thiết bị</strong>: ${data.equipment_code}<br><strong>Tên thiết bị</strong>: ${data.equipment_name}<br><strong>Số lượng hiện tại</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô sản xuất</strong>: ${data.batch_number}`,
-                            `Thông tin thiết bị:<br><br><strong>Mã</strong>: ${data.equipment_code}<br><strong>Tên</strong>: ${data.equipment_name}<br><strong>Số lượng tồn kho</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô</strong>: ${data.batch_number}`,
-                        ];
-
-                        const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
-                        addMessage(randomResponse, 'bot');
-                    }
-                })
-                .catch(error => {
-                    addMessage("Lỗi khi lấy dữ liệu từ server.", 'bot');
-                    console.error("Error:", error);
-                });
+    fetch(`${api}/api/inventory-chatbot?prompt=${encodeURIComponent(userMessage)}`, {
+        headers: {
+            'ngrok-skip-browser-warning': 'true'
         }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                addMessage(data.error, 'bot');
+            } else if (Array.isArray(data)) { // Kiểm tra nếu dữ liệu là danh sách thiết bị gần hết hàng
+                let messageContent = `<strong>Danh sách thiết bị gần hết hàng:</strong><br>`;
+                data.forEach(item => {
+                    messageContent += `
+                        - <strong>Tên thiết bị:</strong> ${item.equipment_name}<br>
+                        - <strong>Mã thiết bị:</strong> ${item.equipment_code}<br>
+                        - <strong>Số lượng:</strong> ${item.current_quantity} đơn vị<br>
+                        - <strong>Số lô:</strong> ${item.batch_number}<br><br>`;
+                });
+                addMessage(messageContent, 'bot');
+            } else {
+                let messageContent = `<strong>Tên thiết bị:</strong> ${data.equipment_name}<br>
+                <strong>Mã thiết bị:</strong> ${data.equipment_code}<br>
+                <strong>Tổng số lượng:</strong> ${data.total_quantity} đơn vị<br><br>
+                <strong>Danh sách số lô:</strong><br>`;
+                data.batches.forEach(batch => {
+                    messageContent += `
+                    - <strong>Số lô:</strong> ${batch.batch_number}<br>
+                    - <strong>Số lượng:</strong> ${batch.current_quantity} đơn vị<br><br>`;
+                });
+                addMessage(messageContent, 'bot');
+            }
+        })
+        .catch(error => {
+            addMessage("Lỗi khi lấy dữ liệu từ server.", 'bot');
+            console.error("Error:", error);
+        });
+}
+
+
 
 
         function sendPredefinedMessage(message) {
