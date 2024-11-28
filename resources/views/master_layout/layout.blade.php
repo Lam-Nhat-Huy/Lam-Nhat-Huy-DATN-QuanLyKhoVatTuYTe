@@ -74,7 +74,7 @@
         .chat-bubble {
             background-color: #e9ecef;
             border-radius: 10px;
-            padding: 4px;
+            padding: 8px 12px;
             margin: 5px 0;
             max-width: 80%;
             animation: fadeIn 0.3s ease-in-out;
@@ -239,15 +239,107 @@
             cursor: not-allowed;
             /* Thay đổi con trỏ để biểu thị không thể bấm */
         }
+
+        .autocompleteSuggestions {
+            position: absolute;
+            background-color: #ffffff;
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            /* Bo góc để giao diện mềm mại hơn */
+            max-height: 200px;
+            /* Tăng chiều cao tối đa để hiển thị thêm dữ liệu */
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            /* Thêm hiệu ứng đổ bóng */
+            font-family: Arial, sans-serif;
+            /* Đặt font chữ chuyên nghiệp hơn */
+            font-size: 14px;
+        }
+
+        .autocompleteSuggestions div {
+            padding: 10px 15px;
+            /* Tăng khoảng cách padding để dễ nhìn */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            /* Thêm hiệu ứng hover */
+        }
+
+        .autocompleteSuggestions div:hover {
+            background-color: #f1f3f5;
+            /* Màu nền khi hover nhẹ nhàng */
+            transform: translateX(4px);
+            /* Hiệu ứng di chuyển nhẹ */
+            cursor: pointer;
+            /* Thêm con trỏ chuột dạng pointer */
+        }
+
+        .autocompleteSuggestions div:active {
+            background-color: #e0e0e0;
+            /* Thêm hiệu ứng khi nhấn chuột */
+        }
+
+        .result-chat {
+            list-style: none;
+            padding: 4px 6px;
+            font-size: 12px;
+            background-color: #4CAF50;
+            margin-top: 5px;
+            color: #fff;
+            border-radius: 4px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .result-chat:hover {
+            transform: scale(1.02);
+        }
+
+
+        .send-mess:hover {
+            color: #fff;
+            opacity: 0.8;
+        }
+
+        /* Animation khi trang tải */
+        /* Animation phóng to - thu nhỏ */
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+                /* Phóng to 10% */
+            }
+        }
+
+        .open-chatbox-btn {
+            animation: pulse 1.5s infinite;
+            /* Hiệu ứng phóng to - thu nhỏ lặp lại */
+            transition: transform 0.3s ease, filter 0.3s ease;
+            /* Hiệu ứng mượt khi hover */
+        }
+
+        /* Hiệu ứng hover */
+        .open-chatbox-btn:hover {
+            transform: scale(1.2);
+            /* Phóng to lớn hơn khi hover */
+            filter: brightness(1.4);
+            /* Tăng độ sáng */
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.7);
+            /* Thêm ánh sáng */
+        }
     </style>
 </head>
 
 <body id="kt_body" data-is-admin="{{ session('isAdmin', false) ? 'true' : 'false' }}"
-    class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
-    style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
+            class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
+            style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
 
     <div class="modal fade" id="createImport" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="DetailModal" aria-hidden="true">
+                aria-labelledby="DetailModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header justify-content-center" style="background-color: rgb(255, 45, 45);">
@@ -256,7 +348,7 @@
                 <div class="modal-body text-center pt-0">
                     <div class="d-flex justify-content-center">
                         <img src="https://cdnl.iconscout.com/lottie/premium/thumb/rotate-phone-9207016-7517787.gif"
-                            width="150" height="150" class="d-flex justify-content-center" alt="">
+                                    width="150" height="150" class="d-flex justify-content-center" alt="">
                     </div>
                     <h6>Vui lòng xoay ngang màn hình</h6>
                 </div>
@@ -291,8 +383,6 @@
 
                 @endif
 
-
-
                 <sidebar>
                     @include('master_layout.components.sidebar')
                 </sidebar>
@@ -302,8 +392,8 @@
                         <div class="toolbar" id="kt_toolbar">
                             <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
                                 <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
-                                    data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-                                    class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                                            data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                                            class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                     <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">
                                         @yield('title', 'BeeSoft')
                                     </h1>
@@ -344,18 +434,18 @@
     <div id="loading-overlay" class="loading-overlay"></div>
 
     <img class="open-chatbox-btn rounded-circle shadow" style="width: 50px; height: 50px; z-index: 9999;"
-        id="open-chatbox-btn" data-bs-toggle="modal" data-bs-target="#browse"
-        src="https://images.g2crowd.com/uploads/product/image/large_detail/large_detail_b541e326e0acd44b1ef931c92154c6b9/ai-chat.png"
-        alt="">
+                id="open-chatbox-btn" data-bs-toggle="modal" data-bs-target="#browse"
+                src="https://images.g2crowd.com/uploads/product/image/large_detail/large_detail_b541e326e0acd44b1ef931c92154c6b9/ai-chat.png"
+                alt="">
 
-    <!-- Modal Duyệt Phiếu -->
+    <!-- Modal Chatbot -->
     <div class="modal fade" id="browse" data-bs-backdrop="true" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="browseLabel" aria-hidden="true">
+                aria-labelledby="browseLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content border-0 shadow">
                 <!-- Chat Container -->
                 <div id="chatContainer" class="chat-container" style="display: block; border: 4px solid #fff;">
-                    <div class="chat-header">Chatbot kiểm tra tồn kho</div>
+                    <div class="chat-header text-uppercase fs-5">Chatbot kiểm tra tồn kho</div>
                     <div class="chat-messages" id="chatMessages">
                         <div class="chat-bubble bot">Bạn cần tra cứu tồn kho của thiết bị nào ạ?</div>
                     </div>
@@ -364,62 +454,181 @@
                         <div class="row">
                             <div class="col">
                                 <div class="suggestion" style="font-size: 12px;"
-                                    onclick="sendPredefinedMessage('Tồn kho của cân điện tử?')">
-                                    Tồn kho của cân
-                                    điện tử?</div>
+                                            onclick="sendPredefinedMessage('Cồn 70 độ Bidophar chai 1000ml')">
+                                    Cồn 70 độ Bidophar chai 1000ml
+                                </div>
                             </div>
                             <div class="col">
                                 <div class="suggestion" style="font-size: 12px;"
-                                    onclick="sendPredefinedMessage('Số lượng của tủ y tế?')">
-                                    Số lượng của tủ y
-                                    tế?</div>
+                                            onclick="sendPredefinedMessage('Kim lấy máu Lencet BL-28')">
+                                    Kim lấy máu Lencet BL-28
+                                </div>
                             </div>
                             <div class="col">
                                 <div class="suggestion" style="font-size: 12px;"
-                                    onclick="sendPredefinedMessage('Thiết bị nào gần hết hàng?')">
-                                    Thiết bị nào
-                                    gần hết hàng?</div>
+                                            onclick="sendPredefinedMessage('Thiết bị nào gần hết hàng?')">
+                                    Thiết bị nào gần hết hàng?
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="chat-footer">
-                        <input type="text" style="font-size: 12px;" id="promptInput"
-                            placeholder="Hỏi về tồn kho..." class="form-control">
-                        <button class="btn btn-primary" style="font-size: 12px;" onclick="sendMessage()">Gửi</button>
+                        <!-- Input với giá trị mặc định -->
+                        <input type="text" style="font-size: 12px;" id="promptInput" value=""
+                                    placeholder="Vui lòng chỉ nhập tên thiết bị" class="form-control rounded-pill"
+                                    onfocus="moveCursorToEnd(event)">
+                        <button class="btn btn-primary rounded-pill send-mess" style="font-size: 12px;"
+                                    onclick="sendMessage()">Gửi</button>
                     </div>
+
+
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm rounded-pill" data-bs-dismiss="modal">
-                        Đóng
-                    </button>
+                <div class="modal-footer pt-0" style="width: 100%; display: inline-block;">
+                    <div class="d-flex" id="titleSuggestion">
+
+                    </div>
+                    <div id="autocompleteSuggestions" style="cursor: pointer;" class="autocomplete-suggestions">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+
+    </div>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        const api = 'https://4133-27-68-136-68.ngrok-free.app';
+
+        const promptInput = document.getElementById('promptInput');
+
+        const autocompleteSuggestions = document.getElementById('autocompleteSuggestions');
+        const titleSuggestion = document.getElementById('titleSuggestion')
+
+        let currentSuggestions = [];
+
+        let selectedIndex = -1;
+
+        // Lấy danh sách tên thiết bị từ API
+        async function fetchEquipmentNames() {
+            try {
+                const response = await fetch(`${api}/api/equipment-names`, {
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true' // Bỏ qua cảnh báo của ngrok
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Lỗi HTTP! Trạng thái: ${response.status}`);
+                }
+
+                const jsonResponse = await response.json();
+                return jsonResponse.equipment_names || [];
+            } catch (error) {
+                console.error('Lỗi khi lấy tên thiết bị:', error);
+                return []; // Trả về mảng rỗng trong trường hợp lỗi
+            }
+        }
+
+        // Lọc và hiển thị gợi ý
+        async function handleInput(event) {
+            const query = event.target.value.trim();
+            const lastCharacter = query.slice(-1);
+
+
+            if (!query) {
+                autocompleteSuggestions.innerHTML = ''
+                titleSuggestion.innerHTML = ''
+                currentSuggestions.innerHTML = ''
+                return;
+            }
+
+            if (!query || (lastCharacter !== ' ' && !event.inputType?.includes('insertText'))) {
+                autocompleteSuggestions.innerHTML = '';
+                currentSuggestions = [];
+                return;
+            }
+
+            const names = await fetchEquipmentNames();
+
+            // Chuẩn hóa chuỗi nhập
+            const normalizedQuery = query
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase();
+
+
+            // Lọc tên thiết bị nếu khớp toàn bộ từ
+            currentSuggestions = names.filter(name => {
+                const normalizedName = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                return normalizedName.includes(normalizedQuery);
+            });
+
+            renderSuggestions();
+        }
+
+
+        function renderSuggestions() {
+            console.log('Đang hiển thị các gợi ý:', currentSuggestions);
+            autocompleteSuggestions.innerHTML = currentSuggestions
+                .map((suggestion, index) => `<li class="result-chat rounded-pill" data-index="${index}">${suggestion}</li>`)
+                .join('');
+
+            titleSuggestion.innerHTML = `Gợi ý <img style="width: 16px; vertical-align: middle; margin-left: 5px;"
+                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThr7qrIazsvZwJuw-uZCtLzIjaAyVW_ZrlEQ&s"
+                                    alt="">`;
+        }
+
+        function selectSuggestion(index) {
+            console.log('Gợi ý được chọn - Vị trí:', index, 'Giá trị:', currentSuggestions[index]);
+            promptInput.value = currentSuggestions[index];
+            autocompleteSuggestions.innerHTML = ''
+            titleSuggestion.innerHTML = ''
+            promptInput.focus()
+            currentSuggestions = [];
+            selectedIndex = -1;
+        }
+
+        autocompleteSuggestions.addEventListener('click', event => {
+            const index = event.target.dataset.index;
+            if (index !== undefined) selectSuggestion(index);
+        });
+
+        promptInput.addEventListener('input', handleInput);
+        promptInput.addEventListener('keydown', handleKeyDown);
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter') {
+                console.log('Phím Enter được nhấn, gửi tin nhắn.');
+                sendMessage();
+            }
+        }
+
+
+
+
+
+        // Hàm xử lí kết quả trả về từ api 
+        document.addEventListener("DOMContentLoaded", function () {
             const sliderContent = document.getElementById("sliderContent");
             const originalContent = sliderContent.innerHTML;
 
-            // Duplicate content to create infinite loop effect
             sliderContent.innerHTML += originalContent;
 
-            // Initial position of the slider (start from right outside the view)
             sliderContent.style.transform = `translateX(${sliderContent.offsetWidth}px)`;
 
             function startScrolling() {
-                const contentWidth = sliderContent.offsetWidth / 1; // Half because content is duplicated
+                const contentWidth = sliderContent.offsetWidth / 1;
 
-                let position = contentWidth; // Start from the right of the first half
+                let position = contentWidth;
 
                 function scroll() {
-                    position -= 2; // Move left by 1 pixel per frame
+                    position -= 2;
 
                     if (position <= -contentWidth) {
-                        position = contentWidth; // Reset to right position
+                        position = contentWidth;
                     }
 
                     sliderContent.style.transform = `translateX(${position}px)`;
@@ -484,19 +693,25 @@
 
         function sendMessage() {
             const promptInput = document.getElementById('promptInput');
-            const userMessage = promptInput.value.trim();
-            if (!userMessage) return;
+            let userMessage = promptInput.value.trim();
+
+            // Thêm prompt mặc định "Tồn kho của" nếu chưa có
+            const defaultPrompt = "Tồn kho của ";
+            if (!userMessage.startsWith(defaultPrompt)) {
+                userMessage = defaultPrompt + userMessage;
+            }
+
+            if (userMessage.trim() === defaultPrompt.trim()) return; // Không gửi nếu chỉ có prompt mặc định
 
             addMessage(userMessage, 'user');
-            promptInput.value = '';
+            promptInput.value = ""; // Reset ô nhập với prompt mặc định
 
-            const api = 'https://6af9-2402-800-6343-b657-e52c-dbad-e572-4c03.ngrok-free.app'
 
             fetch(`${api}/api/inventory-chatbot?prompt=${encodeURIComponent(userMessage)}`, {
-                    headers: {
-                        'ngrok-skip-browser-warning': 'true'
-                    }
-                })
+                headers: {
+                    'ngrok-skip-browser-warning': 'true'
+                }
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {
@@ -513,12 +728,12 @@
                         const lowStockResponse = data.map(item => {
                             const randomWarning = warnings[Math.floor(Math.random() * warnings.length)];
                             return `
-                                <strong>Mã thiết bị</strong>: ${item.equipment_code}<br>
-                                <strong>Tên thiết bị</strong>: ${item.equipment_name}<br>
-                                <strong>Số lượng tồn kho</strong>: ${item.current_quantity} đơn vị<br>
-                                <strong>Số lô</strong>: ${item.batch_number}<br>
-                                ${randomWarning}
-                            `;
+                        <strong>Mã thiết bị</strong>: ${item.equipment_code}<br>
+                        <strong>Tên thiết bị</strong>: ${item.equipment_name}<br>
+                        <strong>Số lượng tồn kho</strong>: ${item.current_quantity} đơn vị<br>
+                        <strong>Số lô</strong>: ${item.batch_number}<br>
+                        ${randomWarning}
+                    `;
                         }).join('<br><br>');
 
                         addMessage("Danh sách thiết bị gần hết:<br><br>" + lowStockResponse, 'bot');
@@ -526,7 +741,6 @@
                         const botResponses = [
                             `Thông tin về thiết bị:<br><br><strong>Mã thiết bị</strong>: ${data.equipment_code}<br><strong>Tên thiết bị</strong>: ${data.equipment_name}<br><strong>Số lượng hiện tại</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô sản xuất</strong>: ${data.batch_number}`,
                             `Thông tin thiết bị:<br><br><strong>Mã</strong>: ${data.equipment_code}<br><strong>Tên</strong>: ${data.equipment_name}<br><strong>Số lượng tồn kho</strong>: ${data.current_quantity} đơn vị<br><strong>Số lô</strong>: ${data.batch_number}`,
-                            // Các phản hồi khác...
                         ];
 
                         const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)];
@@ -539,13 +753,23 @@
                 });
         }
 
+
         function sendPredefinedMessage(message) {
             document.getElementById('promptInput').value = message;
             sendMessage();
         }
+
+        function moveCursorToEnd(event) {
+            const input = event.target;
+            setTimeout(() => {
+                input.setSelectionRange(input.value.length, input.value.length);
+            }, 0);
+        }
+
     </script>
 
-    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
+    {{--
+    <script src="{{ asset('js/app.js') }}"></script> --}}
 
     <script src="{{ asset('js/cancelVoice.js') }}"></script>
 
