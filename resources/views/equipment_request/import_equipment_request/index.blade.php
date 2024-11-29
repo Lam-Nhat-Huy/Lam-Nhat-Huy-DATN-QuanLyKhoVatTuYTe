@@ -127,7 +127,7 @@
                                     </td>
                                     <td>
                                         @if (!empty($item->supplier_code))
-                                            <a class="text-decoration-underline fw-bolder text-primary"
+                                            <a class="text-decoration-underline fw-bolder"
                                                 href="{{ route('supplier.list') }}?keyword={{ $item->suppliers->name }}">
                                                 {{ $item->suppliers->name }}
                                             </a>

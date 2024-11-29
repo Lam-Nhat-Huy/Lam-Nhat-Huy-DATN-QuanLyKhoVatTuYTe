@@ -28,6 +28,9 @@ class Receipts extends Model
         'receipt_date',
         'receipt_type',
         'created_by',
+        'updated_by',
+        'browse_by',
+        'deleted_by',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -46,5 +49,20 @@ class Receipts extends Model
     public function user()
     {
         return $this->belongsTo(Users::class, 'created_by', 'code');
+    }
+
+    public function updatedByUser()
+    {
+        return $this->belongsTo(Users::class, 'updated_by', 'code');
+    }
+
+    public function deletedByUser()
+    {
+        return $this->belongsTo(Users::class, 'deleted_by', 'code');
+    }
+
+    public function browseByUser()
+    {
+        return $this->belongsTo(Users::class, 'browse_by', 'code');
     }
 }

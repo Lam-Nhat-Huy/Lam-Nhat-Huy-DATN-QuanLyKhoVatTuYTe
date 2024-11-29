@@ -102,7 +102,7 @@
                             <input type="text" tabindex="3" onchange="cOrderNumber()"
                                 class="form-control form-control-sm border border-success rounded-pill" id="order_number"
                                 name="order_number" placeholder="Nhập số đơn đặt hàng" disabled
-                                value="{{ $infoIER->code }}">
+                                value="{{ !empty($infoIER->order_number) ? $infoIER->order_number : $infoIER->code }}">
                             <div class="message_error" id="order_number_error"></div>
                         </div>
                         <div class="mb-3 col-6">
@@ -111,7 +111,7 @@
                             <input type="text" tabindex="3" onchange="cReceiptNo()"
                                 class="form-control form-control-sm border border-success rounded-pill" id="receipt_no"
                                 name="receipt_no" placeholder="Nhập số hóa đơn (VD: HD123456)"
-                                value="{{ old('receipt_no') }}">
+                                value="{{ !empty($infoIER->code) ? $infoIER->receipt_no : old('receipt_no') }}">
                             <div class="message_error" id="receipt_no_error"></div>
                         </div>
                     @else
@@ -258,7 +258,7 @@
                                     @foreach ($getListIERD as $item)
                                         @php
                                             // Tính tổng tiền trước chiết khấu
-                                            $subtotal = $item->price * $item->quantity_quote;
+                                            $subtotal = $item->price * $item->quantity;
 
                                             // Tính tổng tiền sau khi trừ chiết khấu
                                             $subtotal_after_discount = $subtotal * (1 - $item->discount / 100);
@@ -272,6 +272,7 @@
                                             <td class="">
                                                 <div class="d-flex align-items-center">
                                                     <input type="text"
+                                                        value="{{ !empty($item->batch_number) ? $item->batch_number : '' }}"
                                                         id="batch_number_change_{{ $item->equipment_code }}"
                                                         class="form-control form-control-sm border border-success rounded-pill">
                                                 </div>
@@ -296,14 +297,14 @@
                                                 <div class="d-flex align-items-center">
                                                     <input type="number"
                                                         id="quantity_change_{{ $item->equipment_code }}"
-                                                        value="{{ $item->quantity_quote }}" min="0"
+                                                        value="{{ $item->quantity }}" min="0"
                                                         oninput="calculateTotalPriceTop('{{ $item->equipment_code }}'); calculateTotalPriceBottom();"
                                                         class="form-control form-control-sm border border-success rounded-pill">
                                                 </div>
                                             </td>
                                             <td>
                                                 <span id="deviation_after_quote_{{ $item->equipment_code }}">
-                                                    Không lệch
+                                                    {{ !empty($item->deviation_quote) ? $item->deviation_quote : 'Không lệch' }}
                                                 </span>
                                             </td>
                                             <td class="">

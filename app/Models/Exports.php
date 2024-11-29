@@ -30,6 +30,9 @@ class Exports extends Model
         'reason',
         'export_request_code',
         'created_by',
+        'updated_by',
+        'browse_by',
+        'deleted_by',
         'updated_at',
         'deleted_at'
     ];
@@ -52,5 +55,20 @@ class Exports extends Model
     public function suppliers()
     {
         return $this->belongsTo(Suppliers::class, 'supplier_code', 'code');
+    }
+
+    public function updatedByUser()
+    {
+        return $this->belongsTo(Users::class, 'updated_by', 'code');
+    }
+
+    public function deletedByUser()
+    {
+        return $this->belongsTo(Users::class, 'deleted_by', 'code');
+    }
+
+    public function browseByUser()
+    {
+        return $this->belongsTo(Users::class, 'browse_by', 'code');
     }
 }

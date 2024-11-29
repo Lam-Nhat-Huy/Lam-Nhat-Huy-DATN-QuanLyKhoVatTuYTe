@@ -104,7 +104,19 @@ class ExportController extends Controller
 
             if ($request->action_type === 'delete') {
 
-                Exports::whereIn('code', $request->import_codes)->where('status', 0)->orWhere('status', 3)->delete();
+                Exports::whereIn('code', $request->import_codes)
+                    ->where(function ($query) {
+                        $query->where('status', 0)
+                            ->orWhere('status', 3);
+                    })
+                    ->update(['deleted_by' => session('user_code')]);
+
+                Exports::whereIn('code', $request->import_codes)
+                    ->where(function ($query) {
+                        $query->where('status', 0)
+                            ->orWhere('status', 3);
+                    })
+                    ->delete();
 
                 toastr()->success('Hủy Phiếu Thành Công');
 
@@ -185,8 +197,12 @@ class ExportController extends Controller
 
                 return redirect()->back();
             } else if ($request->action_type === 'delete') {
-
-                Exports::whereIn('code', $request->import_codes)->where('status', 0)->orWhere('status', 3)->forceDelete();
+                Exports::whereIn('code', $request->import_codes)
+                    ->where(function ($query) {
+                        $query->where('status', 0)
+                            ->orWhere('status', 3);
+                    })
+                    ->forceDelete();
 
                 toastr()->success('Xóa vĩnh viễn phiếu thành công');
 
@@ -368,6 +384,8 @@ class ExportController extends Controller
                 'export_request_code' => $request->export_request_code,
                 'created_by' => session('user_code'),
                 'created_at' => now(),
+                'updated_by' => !empty(session('mapx')) ? session('user_code') : null,
+                'updated_at' => !empty(session('mapx')) ? now() : null,
                 'deleted_at' => null,
             ]);
 
@@ -450,69 +468,70 @@ class ExportController extends Controller
 
     public function update_export(Request $request, $code)
     {
-        try {
-            if (
-                !empty($request->department_code) &&
-                !empty($request->supplier_code) &&
-                !empty($request->reason) &&
-                !empty($request->export_type) &&
-                !empty($request->export_date) &&
-                !empty($request->exportStatus) &&
-                !empty($request->equipment_list)
-            ) {
-                $departmentCode = $request->department_code;
-                $supplierCode = $request->supplier_code;
-                $reason = $request->reason;
-                $exportType = $request->export_type;
-                $note = $request->note;
-                $equipmentList = json_decode($request->equipment_list, true);
+        // try {
+        if (
+            !empty($request->department_code) &&
+            !empty($request->supplier_code) &&
+            !empty($request->reason) &&
+            !empty($request->export_type) &&
+            !empty($request->export_date) &&
+            !empty($request->exportStatus) &&
+            !empty($request->equipment_list)
+        ) {
+            $departmentCode = $request->department_code;
+            $supplierCode = $request->supplier_code;
+            $reason = $request->reason;
+            $exportType = $request->export_type;
+            $note = $request->note;
+            $equipmentList = json_decode($request->equipment_list, true);
 
-                // Tìm các bản ghi không có mã trong $equipmentList và thuộc về receipt_code
-                $batchToDelete = Export_details::whereNotIn('batch_number', array_column($equipmentList, 'batch_number'))
-                    ->where('export_code', $code)
-                    ->get();
+            // Tìm các bản ghi không có mã trong $equipmentList và thuộc về receipt_code
+            $batchToDelete = Export_details::whereNotIn('batch_number', array_column($equipmentList, 'batch_number'))
+                ->where('export_code', $code)
+                ->get();
 
-                // Xóa các bản ghi tìm thấy
-                if ($batchToDelete->isNotEmpty()) {
-                    $batchToDelete->each(function ($item) {
-                        $item->forceDelete();
-                    });
-                }
-
-                $existingRequest = Exports::where('code', $code);
-
-                $record = $existingRequest->first();
-
-                $existingRequest->update([
-                    'department_code' => $departmentCode == 1 ? NULL : $departmentCode,
-                    'supplier_code' => $supplierCode == 1 ? NULL : $supplierCode,
-                    'reason' => $reason == 1 ? NULL : $reason,
-                    'note' => $note ?? $record->note,
-                    'export_type' => $exportType,
-                    'updated_at' => now(),
-                ]);
-
-                foreach ($equipmentList as $equipment) {
-                    Export_details::updateOrCreate(
-                        [
-                            'export_code' => $code,
-                            'batch_number' => $equipment['batch_number']
-                        ],
-                        [
-                            'quantity' => $equipment['quantity'],
-                            'equipment_code' => $equipment['equipment_code'],
-                            'quantity' => $equipment['quantity'],
-                        ]
-                    );
-                }
-
-                return response()->json(['success' => true, 'message' => 'Cập nhật phiếu xuất thành công']);
+            // Xóa các bản ghi tìm thấy
+            if ($batchToDelete->isNotEmpty()) {
+                $batchToDelete->each(function ($item) {
+                    $item->forceDelete();
+                });
             }
 
-            return response()->json(['success' => false, 'message' => 'Vui lòng điền đẩy đủ các trường dữ liệu']);
-        } catch (\Throwable $th) {
-            return response()->json(['success' => false, 'message' => $th->getMessage()]);
+            $existingRequest = Exports::where('code', $code);
+
+            $record = $existingRequest->first();
+
+            $existingRequest->update([
+                'department_code' => $departmentCode == 1 ? NULL : $departmentCode,
+                'supplier_code' => $supplierCode == 1 ? NULL : $supplierCode,
+                'reason' => $reason == 1 ? NULL : $reason,
+                'note' => $note ?? $record->note,
+                'export_type' => $exportType,
+                'updated_by' => session('user_code'),
+                'updated_at' => now(),
+            ]);
+
+            foreach ($equipmentList as $equipment) {
+                Export_details::updateOrCreate(
+                    [
+                        'export_code' => $code,
+                        'batch_number' => $equipment['batch_number']
+                    ],
+                    [
+                        'quantity' => $equipment['quantity'],
+                        'equipment_code' => $equipment['equipment_code'],
+                        'quantity' => $equipment['quantity'],
+                    ]
+                );
+            }
+
+            return response()->json(['success' => true, 'message' => 'Cập nhật phiếu xuất thành công']);
         }
+
+        return response()->json(['success' => false, 'message' => 'Vui lòng điền đẩy đủ các trường dữ liệu']);
+        // } catch (\Throwable $th) {
+        //     return response()->json(['success' => false, 'message' => $th->getMessage()]);
+        // }
     }
 
     public function approve(Request $request)
@@ -522,6 +541,7 @@ class ExportController extends Controller
 
             $existingRequest->update([
                 'status' => 1,
+                'browse_by' => session('user_code'),
             ]);
 
             if (isset($existingRequest->export_request_code)) {
@@ -583,6 +603,10 @@ class ExportController extends Controller
             toastr()->success('Đã xóa phiếu xuất kho.');
             return redirect()->back();
         }
+
+        $export->update([
+            'deleted_by' => session('user_code'),
+        ]);
 
         $export->delete();
 

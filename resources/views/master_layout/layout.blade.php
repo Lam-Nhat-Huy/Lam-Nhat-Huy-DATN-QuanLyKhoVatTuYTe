@@ -335,11 +335,11 @@
 </head>
 
 <body id="kt_body" data-is-admin="{{ session('isAdmin', false) ? 'true' : 'false' }}"
-            class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
-            style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
+    class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
+    style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
 
     <div class="modal fade" id="createImport" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                aria-labelledby="DetailModal" aria-hidden="true">
+        aria-labelledby="DetailModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header justify-content-center" style="background-color: rgb(255, 45, 45);">
@@ -348,7 +348,7 @@
                 <div class="modal-body text-center pt-0">
                     <div class="d-flex justify-content-center">
                         <img src="https://cdnl.iconscout.com/lottie/premium/thumb/rotate-phone-9207016-7517787.gif"
-                                    width="150" height="150" class="d-flex justify-content-center" alt="">
+                            width="150" height="150" class="d-flex justify-content-center" alt="">
                     </div>
                     <h6>Vui lòng xoay ngang màn hình</h6>
                 </div>
@@ -392,8 +392,8 @@
                         <div class="toolbar" id="kt_toolbar">
                             <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
                                 <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
-                                            data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-                                            class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                                    data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                                    class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                     <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">
                                         @yield('title', 'BeeSoft')
                                     </h1>
@@ -434,13 +434,13 @@
     <div id="loading-overlay" class="loading-overlay"></div>
 
     <img class="open-chatbox-btn rounded-circle shadow" style="width: 50px; height: 50px; z-index: 9999;"
-                id="open-chatbox-btn" data-bs-toggle="modal" data-bs-target="#browse"
-                src="https://images.g2crowd.com/uploads/product/image/large_detail/large_detail_b541e326e0acd44b1ef931c92154c6b9/ai-chat.png"
-                alt="">
+        id="open-chatbox-btn" data-bs-toggle="modal" data-bs-target="#browse"
+        src="https://images.g2crowd.com/uploads/product/image/large_detail/large_detail_b541e326e0acd44b1ef931c92154c6b9/ai-chat.png"
+        alt="">
 
     <!-- Modal Chatbot -->
     <div class="modal fade" id="browse" data-bs-backdrop="true" data-bs-keyboard="false" tabindex="-1"
-                aria-labelledby="browseLabel" aria-hidden="true">
+        aria-labelledby="browseLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content border-0 shadow">
                 <!-- Chat Container -->
@@ -454,19 +454,19 @@
                         <div class="row">
                             <div class="col">
                                 <div class="suggestion" style="font-size: 12px;"
-                                            onclick="sendPredefinedMessage('Cồn 70 độ Bidophar chai 1000ml')">
+                                    onclick="sendPredefinedMessage('Cồn 70 độ Bidophar chai 1000ml')">
                                     Cồn 70 độ Bidophar chai 1000ml
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="suggestion" style="font-size: 12px;"
-                                            onclick="sendPredefinedMessage('Kim lấy máu Lencet BL-28')">
+                                    onclick="sendPredefinedMessage('Kim lấy máu Lencet BL-28')">
                                     Kim lấy máu Lencet BL-28
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="suggestion" style="font-size: 12px;"
-                                            onclick="sendPredefinedMessage('Thiết bị nào gần hết hàng?')">
+                                    onclick="sendPredefinedMessage('Thiết bị nào gần hết hàng?')">
                                     Thiết bị nào gần hết hàng?
                                 </div>
                             </div>
@@ -476,17 +476,17 @@
                     <div class="chat-footer">
                         <!-- Input với giá trị mặc định -->
                         <input type="text" style="font-size: 12px;" id="promptInput" value=""
-                                    placeholder="Vui lòng chỉ nhập tên thiết bị" class="form-control rounded-pill"
-                                    onfocus="moveCursorToEnd(event)">
+                            placeholder="Vui lòng chỉ nhập tên thiết bị" class="form-control rounded-pill"
+                            onfocus="moveCursorToEnd(event)">
                         <button class="btn btn-primary rounded-pill send-mess" style="font-size: 12px;"
-                                    onclick="sendMessage()">Gửi</button>
+                            onclick="sendMessage()">Gửi</button>
                     </div>
 
 
                 </div>
 
                 <div class="modal-footer pt-0" style="width: 100%; display: inline-block;">
-                    <div class="d-flex" id="titleSuggestion">
+                    <div class="d-flex mt-4" id="titleSuggestion">
 
                     </div>
                     <div id="autocompleteSuggestions" style="cursor: pointer;" class="autocomplete-suggestions">
@@ -610,7 +610,7 @@
 
 
         // Hàm xử lí kết quả trả về từ api 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const sliderContent = document.getElementById("sliderContent");
             const originalContent = sliderContent.innerHTML;
 
@@ -691,56 +691,56 @@
 
 
         function sendMessage() {
-    const promptInput = document.getElementById('promptInput');
-    let userMessage = promptInput.value.trim();
+            const promptInput = document.getElementById('promptInput');
+            let userMessage = promptInput.value.trim();
 
-    const defaultPrompt = "Tồn kho của ";
-    if (!userMessage.startsWith(defaultPrompt)) {
-        userMessage = defaultPrompt + userMessage;
-    }
+            const defaultPrompt = "Tồn kho của ";
+            if (!userMessage.startsWith(defaultPrompt)) {
+                userMessage = defaultPrompt + userMessage;
+            }
 
-    if (userMessage.trim() === defaultPrompt.trim()) return;
+            if (userMessage.trim() === defaultPrompt.trim()) return;
 
-    addMessage(userMessage, 'user');
-    promptInput.value = "";
+            addMessage(userMessage, 'user');
+            promptInput.value = "";
 
-    fetch(`${api}/api/inventory-chatbot?prompt=${encodeURIComponent(userMessage)}`, {
-        headers: {
-            'ngrok-skip-browser-warning': 'true'
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                addMessage(data.error, 'bot');
-            } else if (Array.isArray(data)) { // Kiểm tra nếu dữ liệu là danh sách thiết bị gần hết hàng
-                let messageContent = `<strong>Danh sách thiết bị gần hết hàng:</strong><br>`;
-                data.forEach(item => {
-                    messageContent += `
+            fetch(`${api}/api/inventory-chatbot?prompt=${encodeURIComponent(userMessage)}`, {
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        addMessage(data.error, 'bot');
+                    } else if (Array.isArray(data)) { // Kiểm tra nếu dữ liệu là danh sách thiết bị gần hết hàng
+                        let messageContent = `<strong>Danh sách thiết bị gần hết hàng:</strong><br>`;
+                        data.forEach(item => {
+                            messageContent += `
                         - <strong>Tên thiết bị:</strong> ${item.equipment_name}<br>
                         - <strong>Mã thiết bị:</strong> ${item.equipment_code}<br>
                         - <strong>Số lượng:</strong> ${item.current_quantity} đơn vị<br>
                         - <strong>Số lô:</strong> ${item.batch_number}<br><br>`;
-                });
-                addMessage(messageContent, 'bot');
-            } else {
-                let messageContent = `<strong>Tên thiết bị:</strong> ${data.equipment_name}<br>
+                        });
+                        addMessage(messageContent, 'bot');
+                    } else {
+                        let messageContent = `<strong>Tên thiết bị:</strong> ${data.equipment_name}<br>
                 <strong>Mã thiết bị:</strong> ${data.equipment_code}<br>
                 <strong>Tổng số lượng:</strong> ${data.total_quantity} đơn vị<br><br>
                 <strong>Danh sách số lô:</strong><br>`;
-                data.batches.forEach(batch => {
-                    messageContent += `
+                        data.batches.forEach(batch => {
+                            messageContent += `
                     - <strong>Số lô:</strong> ${batch.batch_number}<br>
                     - <strong>Số lượng:</strong> ${batch.current_quantity} đơn vị<br><br>`;
+                        });
+                        addMessage(messageContent, 'bot');
+                    }
+                })
+                .catch(error => {
+                    addMessage("Lỗi khi lấy dữ liệu từ server.", 'bot');
+                    console.error("Error:", error);
                 });
-                addMessage(messageContent, 'bot');
-            }
-        })
-        .catch(error => {
-            addMessage("Lỗi khi lấy dữ liệu từ server.", 'bot');
-            console.error("Error:", error);
-        });
-}
+        }
 
 
 
@@ -756,7 +756,6 @@
                 input.setSelectionRange(input.value.length, input.value.length);
             }, 0);
         }
-
     </script>
 
     {{--

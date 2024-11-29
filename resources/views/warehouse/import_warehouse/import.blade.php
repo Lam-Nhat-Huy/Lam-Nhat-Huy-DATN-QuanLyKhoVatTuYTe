@@ -244,6 +244,20 @@
                                                                             {{ $item->user->last_name . ' ' . $item->user->first_name }}
                                                                         </td>
                                                                     </tr>
+                                                                    <tr>
+                                                                        <td class=""><strong>Người sửa</strong>
+                                                                        </td>
+                                                                        <td class="text-dark">
+                                                                            {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class=""><strong>Người duyệt</strong>
+                                                                        </td>
+                                                                        <td class="text-dark">
+                                                                            {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
+                                                                        </td>
+                                                                    </tr>
                                                                 </tbody>
                                                             </table>
                                                         </div>

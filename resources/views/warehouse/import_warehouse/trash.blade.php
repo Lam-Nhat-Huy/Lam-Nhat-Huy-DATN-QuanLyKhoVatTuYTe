@@ -45,7 +45,7 @@
                                 <th class="" style="width: 10%;">Số ĐĐH</th>
                                 <th class="" style="width: 10%;">Số Hóa Đơn</th>
                                 <th class="" style="width: 20%;">Loại Nhập</th>
-                                <th class="" style="width: 15%;">Tạo Bởi</th>
+                                <th class="" style="width: 15%;">Xóa Bởi</th>
                                 <th class="" style="width: 10%;">Ngày Nhập</th>
                                 <th class="text-center" style="width: 10%;">Trạng Thái</th>
                                 <th class="pe-3 text-center" style="width: 15%;">Hành Động</th>
@@ -75,7 +75,7 @@
                                         {{ $item->receipt_type ?? 'Không có' }}
                                     </td>
                                     <td>
-                                        {{ $item->user->last_name . ' ' . $item->user->first_name }}
+                                        {{ $item->deletedByUser ? $item->deletedByUser->last_name . ' ' . $item->deletedByUser->first_name : '' }}
                                     </td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->receipt_date)->format('d/m/Y') }}
@@ -177,6 +177,20 @@
                                                                         </td>
                                                                         <td class="text-dark">
                                                                             {{ $item->user->last_name . ' ' . $item->user->first_name }}
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class=""><strong>Người sửa</strong>
+                                                                        </td>
+                                                                        <td class="text-dark">
+                                                                            {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class=""><strong>Người duyệt</strong>
+                                                                        </td>
+                                                                        <td class="text-dark">
+                                                                            {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>

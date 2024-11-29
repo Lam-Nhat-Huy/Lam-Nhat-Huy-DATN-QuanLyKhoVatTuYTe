@@ -93,7 +93,7 @@ class ImportController extends Controller
 
                 $getReceipt = Receipts::whereIn('code', $request->import_codes)->where('status', 0);
 
-                $getReceipt->update(['status' => 1]);
+                $getReceipt->update(['status' => 1, 'browse_by' => session('user_code')]);
 
                 $receiptDetails = Receipt_details::whereIn('receipt_code', $request->import_codes)->get();
 
@@ -128,7 +128,19 @@ class ImportController extends Controller
                 return redirect()->back();
             } elseif ($request->action_type === 'delete') {
 
-                Receipts::whereIn('code', $request->import_codes)->where('status', 0)->orWhere('status', 3)->delete();
+                Receipts::whereIn('code', $request->import_codes)
+                    ->where(function ($query) {
+                        $query->where('status', 0)
+                            ->orWhere('status', 3);
+                    })
+                    ->update(['deleted_by' => session('user_code')]);
+
+                Receipts::whereIn('code', $request->import_codes)
+                    ->where(function ($query) {
+                        $query->where('status', 0)
+                            ->orWhere('status', 3);
+                    })
+                    ->delete();
 
                 toastr()->success('Hủy thành công');
 
@@ -283,7 +295,14 @@ class ImportController extends Controller
             }
         }
 
-        if (isset($request->cd)) {
+        if (isset($request->cd) && isset($request->type)) {
+            $infoIER = Receipts::with(['supplier', 'user', 'details'])
+                ->where('order_number', $request->cd)
+                ->whereNull('deleted_at')
+                ->first();
+
+            $getListIERD = Receipt_details::where('receipt_code', $infoIER->code)->get();
+        } elseif (isset($request->cd)) {
             $getListIERD = Import_equipment_request_details::where('import_request_code', $request->cd)->get();
 
             $infoIER = Import_equipment_requests::with(['suppliers', 'users', 'import_equipment_request_details'])
@@ -385,7 +404,8 @@ class ImportController extends Controller
                 'receipt_type' => 'Nhập Từ Nhà Cung Cấp',
                 'created_by' => session('user_code'),
                 'created_at' => now(),
-                'updated_at' => null,
+                'updated_by' => !empty(session('mapn')) ? session('user_code') : null,
+                'updated_at' => !empty(session('mapn')) ? now() : null,
                 'deleted_at' => null,
             ]);
 
@@ -483,6 +503,7 @@ class ImportController extends Controller
                 'supplier_code' => $supplierCode,
                 'note' => $note ?? $record->note,
                 'receipt_no' => $receiptNo,
+                'updated_by' => session('user_code'),
                 'updated_at' => now(),
             ]);
 
@@ -560,6 +581,7 @@ class ImportController extends Controller
 
             $existingRequest->update([
                 'status' => 1,
+                'browse_by' => session('user_code'),
             ]);
 
             if (isset($existingRequest->order_number)) {
@@ -640,6 +662,10 @@ class ImportController extends Controller
                 return redirect()->back();
             }
         }
+
+        $receipt->update([
+            'deleted_by' => session('user_code'),
+        ]);
 
         $receipt->delete();
 

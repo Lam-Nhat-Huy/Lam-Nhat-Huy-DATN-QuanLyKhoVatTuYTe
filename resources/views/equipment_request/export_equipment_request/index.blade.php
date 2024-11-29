@@ -274,7 +274,7 @@
                                                                             <tr class="text-center">
                                                                                 <td>{{ $key + 1 }}</td>
                                                                                 <td>{{ $detail->equipments->code }}</td>
-                                                                                <td class="text-start">
+                                                                                <td>
                                                                                     {{ $detail->equipments->name }}
                                                                                 </td>
                                                                                 <td>

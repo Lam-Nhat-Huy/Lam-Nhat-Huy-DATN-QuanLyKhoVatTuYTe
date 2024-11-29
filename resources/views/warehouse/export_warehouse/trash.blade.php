@@ -42,7 +42,7 @@
                                 </th>
                                 <th style="width: 15%;">Mã</th>
                                 <th class="" style="width: 25%;">Loại Xuất</th>
-                                <th class="" style="width: 20%;">Tạo Bởi</th>
+                                <th class="" style="width: 20%;">Xóa Bởi</th>
                                 <th class="" style="width: 15%;">Ngày Xuất</th>
                                 <th class="text-center" style="width: 10%;">Trạng Thái</th>
                                 <th class="pe-3 text-center" style="width: 15%;">Hành Động</th>
@@ -66,7 +66,7 @@
                                         {{ $item->export_type ?? 'Không Có' }}
                                     </td>
                                     <td>
-                                        {{ $item->user->last_name . ' ' . $item->user->first_name }}
+                                        {{ $item->deletedByUser ? $item->deletedByUser->last_name . ' ' . $item->deletedByUser->first_name : 'N/A' }}
                                     </td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->export_date)->format('d/m/Y') }}
@@ -144,7 +144,46 @@
                                                                                 {{ $item->suppliers->name ?? 'Không Có' }}
                                                                             </td>
                                                                         </tr>
+                                                                    @elseif ($item->export_type === 'Xuất Hủy')
+                                                                        <tr>
+                                                                            <td class=""><strong>Lý do hủy</strong>
+                                                                            </td>
+                                                                            <td class="text-dark fw-bolder">
+                                                                                {{ $item->reason ?? 'Không có' }}
+                                                                            </td>
+                                                                        </tr>
+                                                                    @else
+                                                                        <tr>
+                                                                            <td class=""><strong>Phiếu xuất cân bằng
+                                                                                    kho</strong>
+                                                                            </td>
+                                                                            <td class="text-dark">
+                                                                                Phiếu này chỉ có khi cân bằng kho
+                                                                            </td>
+                                                                        </tr>
                                                                     @endif
+
+                                                                    <tr>
+                                                                        <td class=""><strong>Ghi chú</strong>
+                                                                        </td>
+                                                                        <td class="text-dark">
+                                                                            {{ $item->note ? $item->note : 'Không có ghi chú' }}
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class=""><strong>Người sửa</strong>
+                                                                        </td>
+                                                                        <td class="text-dark">
+                                                                            {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class=""><strong>Người duyệt</strong>
+                                                                        </td>
+                                                                        <td class="text-dark">
+                                                                            {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
+                                                                        </td>
+                                                                    </tr>
                                                                 </tbody>
                                                             </table>
                                                         </div>
