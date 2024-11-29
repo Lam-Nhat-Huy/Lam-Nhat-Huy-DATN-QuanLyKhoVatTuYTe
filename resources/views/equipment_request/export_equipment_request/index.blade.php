@@ -784,9 +784,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow">
                     <div class="modal-header bg-primary">
-                        <h5 class="modal-title text-white" id="saveModalLabel">Tạo Phiếu Yêu Cầu
-                            Mua
-                            Hàng
+                        <h5 class="modal-title text-white" id="saveModalLabel">Tạo Phiếu Yêu Cầu Xuất Kho
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>

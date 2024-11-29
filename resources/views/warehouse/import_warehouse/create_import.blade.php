@@ -258,7 +258,7 @@
                                     @foreach ($getListIERD as $item)
                                         @php
                                             // Tính tổng tiền trước chiết khấu
-                                            $subtotal = $item->price * $item->quantity;
+                                            $subtotal = $item->price * $item->quantity_quote;
 
                                             // Tính tổng tiền sau khi trừ chiết khấu
                                             $subtotal_after_discount = $subtotal * (1 - $item->discount / 100);
@@ -297,14 +297,14 @@
                                                 <div class="d-flex align-items-center">
                                                     <input type="number"
                                                         id="quantity_change_{{ $item->equipment_code }}"
-                                                        value="{{ $item->quantity }}" min="0"
+                                                        value="{{ $item->quantity_quote }}" min="0"
                                                         oninput="calculateTotalPriceTop('{{ $item->equipment_code }}'); calculateTotalPriceBottom();"
                                                         class="form-control form-control-sm border border-success rounded-pill">
                                                 </div>
                                             </td>
                                             <td>
                                                 <span id="deviation_after_quote_{{ $item->equipment_code }}">
-                                                    {{ !empty($item->deviation_quote) ? $item->deviation_quote : 'Không lệch' }}
+                                                    {{ !empty($item->deviation_quote) && !empty(request('type')) ? $item->deviation_quote : 'Không lệch' }}
                                                 </span>
                                             </td>
                                             <td class="">
