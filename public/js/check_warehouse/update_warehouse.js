@@ -173,6 +173,10 @@ function generateTableRow(index, product) {
             ? "#ffebc8"
             : "";
 
+    // Định dạng giá trị unequal
+    const unequal =
+        product.unequal > 0 ? `+${product.unequal}` : `${product.unequal}`;
+
     return `
         <tr data-index="${index}" class="unchecked" style="background-color: ${rowColor};">
             <td>${index + 1}</td>
@@ -189,17 +193,14 @@ function generateTableRow(index, product) {
                     style="width: 70px; height: 40px; border-radius: 8px;" 
                      />
             </td>
-            <td class="unequal-count" id="unequal-count-${index}">${
-        product.unequal || 0
-    }</td>
-           <td>
+            <td class="unequal-count" id="unequal-count-${index}">${unequal}</td>
+            <td>
                 <textarea class="equipment_note rounded-3" 
                     name="equipment_note_${index}" 
                     style="width: 150px; height: 40px; border-radius: 8px; padding: 5px; font-size: 12px;">${
                         product.equipment_note || ""
                     }</textarea>
             </td>
-
             <td>
                 <a href="#" class="text-dark" title="Xóa thiết bị" onclick="removeProduct(${index})">
                     <i class="fa fa-trash"></i>
@@ -427,7 +428,11 @@ function updateProduct(index, value) {
         const unequalCountCell = document.getElementById(
             `unequal-count-${index}`
         );
-        unequalCountCell.textContent = unequal;
+        if (unequal > 0) {
+            unequalCountCell.textContent = `+${unequal}`;
+        } else {
+            unequalCountCell.textContent = `${unequal}`;
+        }
 
         const tableRow = document.querySelector(`tr[data-index="${index}"]`);
 

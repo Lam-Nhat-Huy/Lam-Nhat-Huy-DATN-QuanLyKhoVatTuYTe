@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Equipment_types;
 use App\Models\Equipments;
 use App\Models\Units;
+use DB;
 use Illuminate\Http\Request;
 
 class InventoryController extends Controller
@@ -19,7 +20,15 @@ class InventoryController extends Controller
         $units = Units::all();
         $totalEquipments = Equipments::with('inventories')->count();
 
-        $query = Equipments::with(['inventories', 'receipt_detail', 'export_detail'])->orderBy('created_at', 'desc');
+        $query = Equipments::select([
+            'equipments.*',
+            DB::raw('(SELECT SUM(current_quantity) 
+                      FROM inventories 
+                      WHERE inventories.equipment_code = equipments.code 
+                      AND inventories.deleted_at IS NULL) as total_quantity')
+        ])
+            ->with(['inventories', 'receipt_detail', 'export_detail'])
+            ->orderBy('created_at', 'desc');
 
         $category = $request->input('category');
         $quantity = $request->input('quantity');
@@ -39,19 +48,29 @@ class InventoryController extends Controller
                 ->orWhere('name', 'LIKE', "%$search%");
         }
 
+        // Điều chỉnh bộ lọc số lượng
         if (isset($quantity)) {
-            $query->whereHas('inventories', function ($subQuery) use ($quantity) {
+            $query->where(function ($subQuery) use ($quantity) {
                 if ($quantity === 'enough') {
-                    $subQuery->where('current_quantity', '>=', 25);
+                    $subQuery->where(DB::raw('(SELECT SUM(current_quantity) 
+                                                FROM inventories 
+                                                WHERE inventories.equipment_code = equipments.code 
+                                                AND inventories.deleted_at IS NULL)'), '>=', 20);
                 } elseif ($quantity === 'low') {
-                    $subQuery->where('current_quantity', '<', 25);
+                    $subQuery->where(DB::raw('(SELECT SUM(current_quantity) 
+                                                FROM inventories 
+                                                WHERE inventories.equipment_code = equipments.code 
+                                                AND inventories.deleted_at IS NULL)'), '<', 20);
                 } elseif ($quantity === 'out_stock') {
-                    $subQuery->where('current_quantity', '=', 0);
+                    $subQuery->where(DB::raw('(SELECT SUM(current_quantity) 
+                                                FROM inventories 
+                                                WHERE inventories.equipment_code = equipments.code 
+                                                AND inventories.deleted_at IS NULL)'), '=', 0);
                 }
             });
         }
 
-        $initialEquipments = $query->paginate(10);
+        $initialEquipments = $query->paginate(30);
 
         $outOfStockCount = 0;
         $inStockCount = 0;

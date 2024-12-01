@@ -398,7 +398,11 @@ function updateProduct(index, value) {
         const unequalCountCell = document.getElementById(
             `unequal-count-${index}`
         );
-        unequalCountCell.textContent = unequal;
+        if (unequal > 0) {
+            unequalCountCell.textContent = `+${unequal}`;
+        } else {
+            unequalCountCell.textContent = `${unequal}`;
+        }
 
         const tableRow = document.querySelector(`tr[data-index="${index}"]`);
 

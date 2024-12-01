@@ -39,7 +39,7 @@ class CheckWarehouseController extends Controller
 
         $checkLockWarehouse = $this->notification->firstLockWarehouse();
 
-        $inventoryChecks = Inventory_checks::with([
+        $inventoryChecksQuery = Inventory_checks::with([
             'details' => function ($query) {
                 $query->whereIn('check_round', [1, 2]);
             },
@@ -53,6 +53,9 @@ class CheckWarehouseController extends Controller
         $countDraft = Inventory_checks::where('status', 0)->count();
         $countCanceled = Inventory_checks::where('status', 3)->count();
 
+        $minCreatedAt = Inventory_checks::min('created_at') ? \Illuminate\Support\Carbon::parse(Inventory_checks::min('created_at')) : null;
+        $maxCreatedAt = Inventory_checks::max('created_at') ? \Illuminate\Support\Carbon::parse(Inventory_checks::max('created_at')) : null;
+
         $users = Users::all();
 
         $kw = $request->input('kw');
@@ -61,28 +64,30 @@ class CheckWarehouseController extends Controller
         $userCode = $request->input('us');
         $status = $request->input('stt');
 
-        $inventoryChecks = $inventoryChecks
-            ->where(function ($q) use ($kw) {
-                if (!is_null($kw)) {
+        $recheckUserCode = $request->input('recheck_us');
+
+        $inventoryChecksQuery = $inventoryChecksQuery
+            ->when($kw, function ($query, $kw) {
+                $query->where(function ($q) use ($kw) {
                     $q->where('code', 'LIKE', "%{$kw}%")
                         ->orWhere('note', 'LIKE', "%{$kw}%");
-                }
+                });
             })
-            ->when($startDate, function ($q) use ($startDate) {
-                return $q->whereDate('check_date', '>=', $startDate);
+            ->when($startDate, function ($query, $startDate) {
+                return $query->whereDate('created_at', '>=', $startDate);
             })
-            ->when($endDate, function ($q) use ($endDate) {
-                return $q->whereDate('check_date', '<=', $endDate);
+            ->when($endDate, function ($query, $endDate) {
+                return $query->whereDate('created_at', '<=', $endDate);
             })
-            ->when(!is_null($status), function ($q) use ($status) {
-                return $q->where('status', $status);
+            ->when($userCode, function ($query, $userCode) {
+                return $query->where('user_code', $userCode);
             })
-            ->when($userCode, function ($q) use ($userCode) {
-                return $q->where('user_code', $userCode)
-                    ->orWhere('recheck_user_code', $userCode);
-            })
-            ->orderBy('created_at', 'DESC')
-            ->paginate(10);
+            ->when($recheckUserCode, function ($query, $recheckUserCode) {
+                return $query->where('recheck_user_code', $recheckUserCode);
+            });
+
+
+        $inventoryChecks = $inventoryChecksQuery->paginate(10);
 
         return view("{$this->route}.check", compact(
             'title',
@@ -92,7 +97,9 @@ class CheckWarehouseController extends Controller
             'countAll',
             'countBalanced',
             'countDraft',
-            'countCanceled'
+            'countCanceled',
+            'minCreatedAt',
+            'maxCreatedAt'
         ));
     }
 
@@ -136,10 +143,12 @@ class CheckWarehouseController extends Controller
 
         $equipmentsWithStock = Equipments::whereHas('inventories', function ($query) {
             $query->where('current_quantity', '>', 0);
-        })->with(['inventories' => function ($query) {
-            $query->select('equipment_code', 'current_quantity', 'batch_number')
-                ->where('current_quantity', '>', 0);
-        }])->get();
+        })->with([
+                    'inventories' => function ($query) {
+                        $query->select('equipment_code', 'current_quantity', 'batch_number')
+                            ->where('current_quantity', '>', 0);
+                    }
+                ])->get();
 
         return view("{$this->route}.form", compact('title', 'action', 'equipmentsWithStock', 'statusMessage', 'userName'));
     }
@@ -149,10 +158,12 @@ class CheckWarehouseController extends Controller
     {
         $equipmentsWithStock = Equipments::whereHas('inventories', function ($query) {
             $query->where('current_quantity', '>', 0);
-        })->with(['inventories' => function ($query) {
-            $query->select('equipment_code', 'current_quantity', 'batch_number')
-                ->where('current_quantity', '>', 0);
-        }])->get();
+        })->with([
+                    'inventories' => function ($query) {
+                        $query->select('equipment_code', 'current_quantity', 'batch_number')
+                            ->where('current_quantity', '>', 0);
+                    }
+                ])->get();
 
         return Excel::download(new CheckWarehouseExport($equipmentsWithStock), 'FileKiemKhoTatCaThietBi.xlsx');
     }
@@ -237,19 +248,23 @@ class CheckWarehouseController extends Controller
         if ($inventoryCheck->check_count == 2) {
             $equipmentsWithStock = Equipments::whereHas('inventories', function ($query) {
                 $query->where('current_quantity', '>', 0);
-            })->with(['inventories' => function ($query) {
-                $query->select('equipment_code', 'current_quantity', 'batch_number')
-                    ->where('current_quantity', '>', 0);
-            }])->get();
+            })->with([
+                        'inventories' => function ($query) {
+                            $query->select('equipment_code', 'current_quantity', 'batch_number')
+                                ->where('current_quantity', '>', 0);
+                        }
+                    ])->get();
 
             $equipmentsWithJson = $this->showInventoryCheckEdits($code, 2);
         } else {
             $equipmentsWithStock = Equipments::whereHas('inventories', function ($query) {
                 $query->where('current_quantity', '>', 0);
-            })->with(['inventories' => function ($query) {
-                $query->select('equipment_code', 'current_quantity', 'batch_number')
-                    ->where('current_quantity', '>', 0);
-            }])->get();
+            })->with([
+                        'inventories' => function ($query) {
+                            $query->select('equipment_code', 'current_quantity', 'batch_number')
+                                ->where('current_quantity', '>', 0);
+                        }
+                    ])->get();
 
             $equipmentsWithJson = $this->showInventoryCheckEdits($code);
         }
@@ -276,9 +291,11 @@ class CheckWarehouseController extends Controller
         $equipmentsWithStock = Equipments::whereHas('inventoryCheckDetails', function ($query) use ($checkRound) {
             $query->where('check_round', '<=', 2);
         })
-            ->with(['inventories' => function ($query) {
-                $query->select('equipment_code', 'current_quantity', 'batch_number');
-            }])
+            ->with([
+                'inventories' => function ($query) {
+                    $query->select('equipment_code', 'current_quantity', 'batch_number');
+                }
+            ])
             ->select('code', 'name') // Bao gồm 'name' của thiết bị trong select
             ->get();
 
@@ -302,9 +319,11 @@ class CheckWarehouseController extends Controller
     {
         $inventoryCheckEdit = Inventory_check_details::where('inventory_check_code', $code)
             ->where('check_round', $checkRound)
-            ->with(['equipment' => function ($query) {
-                $query->select('code', 'name');
-            }])
+            ->with([
+                'equipment' => function ($query) {
+                    $query->select('code', 'name');
+                }
+            ])
             ->get();
 
         if ($inventoryCheckEdit->isEmpty()) {
@@ -721,10 +740,12 @@ class CheckWarehouseController extends Controller
 
         $equipmentsWithStock = Equipments::whereHas('inventories', function ($query) {
             $query->where('current_quantity', '>', 0);
-        })->with(['inventories' => function ($query) {
-            $query->select('equipment_code', 'current_quantity', 'batch_number')
-                ->where('current_quantity', '>', 0);
-        }])->get();
+        })->with([
+                    'inventories' => function ($query) {
+                        $query->select('equipment_code', 'current_quantity', 'batch_number')
+                            ->where('current_quantity', '>', 0);
+                    }
+                ])->get();
 
         $equipmentsWithJson = $this->showInventoryCheckAgain($code);
 

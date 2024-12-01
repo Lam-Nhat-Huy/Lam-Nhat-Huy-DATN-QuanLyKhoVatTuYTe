@@ -27,60 +27,68 @@
 {{-- Bộ lọc --}}
 <div class="card-body py-1">
     <form method="GET" class="row g-3 align-items-center">
-
+        <!-- Bộ lọc thời gian -->
         <div class="col-lg-3 col-md-4 col-sm-12">
-            <div class="row align-items-center">
+        <div class="row align-items-center">
                 <div class="col-5 pe-0">
-                    <input type="date" name="startDate"
-                        class="form-control form-control-sm border-success rounded-pill"
-                        value="{{ \Carbon\Carbon::now()->startOfMonth()->format('Y-m-d') }}">
+                    <input type="date" name="startDate" class="form-control form-control-sm border-success rounded-pill"
+                        value="{{ request()->input('startDate', optional($minCreatedAt)->format('Y-m-d')) }}">
                 </div>
                 <div class="col-2 text-center">Đến</div>
                 <div class="col-5 ps-0">
-                    <input type="date" name="endDate"
-                        class="form-control form-control-sm border-success rounded-pill"
-                        value="{{ \Carbon\Carbon::now()->endOfMonth()->format('Y-m-d') }}">
+                    <input type="date" name="endDate" class="form-control form-control-sm border-success rounded-pill"
+                        value="{{ request()->input('endDate', optional($maxCreatedAt)->format('Y-m-d')) }}">
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-2 col-md-4 col-sm-12">
-            <select name="stt" class="form-select form-select-sm border-success setupSelect2 rounded-pill">
-                <option value="" {{ request()->stt == '' ? 'selected' : '' }}>--Theo Trạng Thái--</option>
-                <option value="0" {{ request()->stt == '0' ? 'selected' : '' }}>Chưa duyệt</option>
-                <option value="1" {{ request()->stt == '1' ? 'selected' : '' }}>Đã duyệt</option>
-            </select>
-        </div>
-
+        <!-- Bộ lọc người tạo -->
         <div class="col-lg-2 col-md-4 col-sm-12">
             <select name="us" class="form-select form-select-sm border-success setupSelect2 rounded-pill">
-                <option value="" selected>--Theo Người Tạo--</option>
+                <option value="" selected>--Người Tạo--</option>
                 @foreach ($users as $user)
                     <option value="{{ $user->code }}" {{ request()->us == $user->code ? 'selected' : '' }}>
-                        {{ $user->last_name }} {{ $user->first_name }}</option>
+                        {{ $user->last_name }} {{ $user->first_name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        
+        <!-- Bộ lọc người kiểm lại -->
+        <div class="col-lg-2 col-md-4 col-sm-12">
+            <select name="recheck_us" class="form-select form-select-sm border-success setupSelect2 rounded-pill">
+                <option value="" selected>--Người Kiểm Lại--</option>
+                @foreach ($users as $user)
+                    <option value="{{ $user->code }}" {{ request()->recheck_us == $user->code ? 'selected' : '' }}>
+                        {{ $user->last_name }} {{ $user->first_name }}
+                    </option>
                 @endforeach
             </select>
         </div>
 
+
+        <!-- Tìm kiếm mã kiểm kho -->
         <div class="col-lg-5 col-md-12 col-sm-12">
             <div class="row align-items-center">
                 <div class="col-md-6 pe-0">
                     <input type="search" name="kw" placeholder="Tìm kiếm mã phiếu kiểm.."
-                        class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success w-100"
+                        class="form-control form-control-sm rounded-pill border border-success w-100"
                         value="{{ request()->kw }}">
                 </div>
                 <div class="col-md-6 d-flex">
-                    <a class="btn rounded-pill btn-info btn-sm mt-2 mb-2 w-100 me-2"
-                        href="{{ route('check_warehouse.index') }}"><i class="fas fa-times-circle"
-                            style="margin-bottom: 2px;"></i> Bỏ
-                        Lọc</a>
-                    <button class="btn rounded-pill btn-dark btn-sm mt-2 mb-2 w-100 load_animation" type="submit"><i
-                            class="fa fa-search" style="margin-bottom: 2px;"></i>Tìm</button>
+                    <a class="btn rounded-pill btn-info btn-sm w-100 me-2"
+                        href="{{ route('check_warehouse.index') }}">
+                        <i class="fas fa-times-circle"></i> Bỏ Lọc
+                    </a>
+                    <button class="btn rounded-pill btn-dark btn-sm w-100" type="submit">
+                        <i class="fa fa-search"></i> Tìm
+                    </button>
                 </div>
             </div>
         </div>
     </form>
 </div>
+
 
 <script>
     document.getElementById('lock_warehouse').addEventListener('change', function(event) {
