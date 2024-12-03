@@ -6,7 +6,7 @@
 @section('scripts')
     <script>
         function displayFileName() {
-            const fileInput = document.getElementById('excel_file');
+            const fileInput = document.getElementById('pdf_file');
             const fileNameDisplay = document.getElementById('fileName');
             const submit_quote = document.getElementById('submit_quote');
 
@@ -128,70 +128,89 @@
                                                                     Thông tin nhà cung cấp
                                                                 </h4>
                                                             </div>
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <img src="{{ $item->image ? asset('storage/' . $item->image) : 'https://st4.depositphotos.com/14953852/24787/v/380/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg' }}"
+                                                                        alt="Medical Supply Image" width="100%"
+                                                                        class="img-fluid rounded shadow">
+                                                                </div>
+                                                                <div class="col-md-9">
 
-                                                            <!-- Left column: Supplier Info -->
-                                                            <div class="col-8">
-                                                                <table class="table">
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td class="fw-bolder">Nhà cung cấp:</td>
-                                                                            <td class="text-dark">{{ $item->name }}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="fw-bolder">Địa chỉ:</td>
-                                                                            <td class="text-dark">{{ $item->address }}
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="fw-bolder">Mã số thuế:</td>
-                                                                            <td class="text-dark">{{ $item->tax_code }}
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
+                                                                    <div class="row">
+                                                                        <div class="col-8">
+                                                                            <table class="table">
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td class="fw-bolder">NCC:
+                                                                                        </td>
+                                                                                        <td class="text-dark">
+                                                                                            {{ $item->name }}</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td class="fw-bolder">Email:</td>
+                                                                                        <td class="text-dark">
+                                                                                            {{ $item->email }}</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td class="fw-bolder">ĐC:</td>
+                                                                                        <td class="text-dark">
+                                                                                            {{ $item->address }}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
 
-                                                            <!-- Right column: Additional Supplier Info -->
-                                                            <div class="col-4">
-                                                                <table class="table">
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td class="fw-bolder">Đại diện:</td>
-                                                                            <td class="text-dark">
-                                                                                {{ $item->contact_name }}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="fw-bolder">Email:</td>
-                                                                            <td class="text-dark">{{ $item->email }}</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="fw-bolder">SĐT:</td>
-                                                                            <td class="text-dark">{{ $item->phone }}</td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
+                                                                        <!-- Right column: Additional Supplier Info -->
+                                                                        <div class="col-4">
+                                                                            <table class="table">
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td class="fw-bolder">Đại diện:
+                                                                                        </td>
+                                                                                        <td class="text-dark">
+                                                                                            {{ $item->contact_name }}</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td class="fw-bolder">Mã số thuế:
+                                                                                        </td>
+                                                                                        <td class="text-dark">
+                                                                                            {{ $item->tax_code }}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td class="fw-bolder">SĐT:</td>
+                                                                                        <td class="text-dark">
+                                                                                            {{ $item->phone }}</td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="card-body py-3 border-top-0 border-2 text-end">
-                                                <div class="button-group">
-                                                    <!-- Sửa -->
-                                                    <a href="{{ route('supplier.edit', $item->code) }}?{{ request()->getQueryString() }}"
-                                                        class="btn rounded-pill btn-sm btn-twitter me-2 printPdfBtn"
-                                                        type="button">
-                                                        <i class="fa fa-edit"></i>Sửa
-                                                    </a>
-                                                    <!-- Xóa -->
-                                                    <button class="btn rounded-pill btn-sm btn-danger me-2"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteModal_{{ $item['code'] }}" type="button">
-                                                        <i class="fa fa-trash"></i>Xóa
-                                                    </button>
+                                                <div class="card-body py-3 border-top-0 border-2 text-end">
+                                                    <div class="button-group">
+                                                        <!-- Sửa -->
+                                                        <a href="{{ route('supplier.edit', $item->code) }}?{{ request()->getQueryString() }}"
+                                                            class="btn rounded-pill btn-sm btn-twitter me-2 printPdfBtn"
+                                                            type="button">
+                                                            <i class="fa fa-edit"></i>Sửa
+                                                        </a>
+                                                        <!-- Xóa -->
+                                                        <button class="btn rounded-pill btn-sm btn-danger me-2"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#deleteModal_{{ $item['code'] }}"
+                                                            type="button">
+                                                            <i class="fa fa-trash"></i>Xóa
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
                                     </td>
                                 </tr>
                             @empty
@@ -258,9 +277,9 @@
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-center" style="padding-bottom: 0px;">
-                            <label for="excel_file" class="btn btn-sm btn-twitter w-100"><i class="fa fa-upload me-1"
+                            <label for="pdf_file" class="btn btn-sm btn-twitter w-100"><i class="fa fa-upload me-1"
                                     style="margin-bottom: 2px;"></i>Tải File Lên</label>
-                            <input type="file" class="d-none" name="excel_file" id="excel_file" accept=".xls,.xlsx"
+                            <input type="file" class="d-none" name="pdf_file" id="pdf_file" accept=".pdf"
                                 onchange="displayFileName()">
                             <div id="fileName" class="mt-3 fw-semibold text-dark"></div>
                         </div>

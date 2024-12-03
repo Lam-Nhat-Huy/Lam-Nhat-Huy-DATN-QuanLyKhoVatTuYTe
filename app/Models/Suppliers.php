@@ -13,9 +13,12 @@ class Suppliers extends Model
     public $incrementing = false;
 
     protected $keyType = 'string';
+
     use HasFactory, SoftDeletes;
+
     protected $fillable = [
         'code',
+        'image',
         'name',
         'contact_name',
         'tax_code',

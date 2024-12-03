@@ -129,6 +129,7 @@ class ImportController extends Controller
             } elseif ($request->action_type === 'delete') {
 
                 Receipts::whereIn('code', $request->import_codes)
+                    ->where('created_by', session('user_code'))
                     ->where(function ($query) {
                         $query->where('status', 0)
                             ->orWhere('status', 3);
@@ -136,16 +137,49 @@ class ImportController extends Controller
                     ->update(['deleted_by' => session('user_code')]);
 
                 Receipts::whereIn('code', $request->import_codes)
+                    ->where('created_by', session('user_code'))
                     ->where(function ($query) {
                         $query->where('status', 0)
                             ->orWhere('status', 3);
                     })
                     ->delete();
 
-                toastr()->success('Hủy thành công');
+                toastr()->success('Hủy phiếu của bạn thành công');
 
                 return redirect()->back();
             }
+        }
+
+        if (!empty($request->no_browse_request)) {
+            $reason_refuse = $request->reason_refuse;
+            $user_request = $request->user_request;
+            $email_user_request = $request->email_user_request;
+
+            if (!empty($reason_refuse) && $reason_refuse === 'other') {
+                $reason_refuse = $request->reason_refuse_other;
+            }
+
+            Receipts::where('code', $request->no_browse_request)
+                ->where('status', 0)
+                ->update([
+                    'reason_refuse' => $reason_refuse,
+                    'browse_by' => session('user_code'),
+                    'status' => 5,
+                ]);
+
+            $contentNotification = '
+                <p>Phiếu nhập kho với mã <a class="text-primary fw-bolder text-decoration-underline" href="' . route('warehouse.import') . '?kw=' . $request->no_browse_request . '">#' . $request->no_browse_request . '</a> được tạo bởi <a class="text-dark fw-bolder text-decoration-underline" href="' . route('user.index') . '?kw=' . $email_user_request . '">' . $user_request . '</a> đã bị <span class="text-danger fw-bolder">từ chối</span> bởi lý do <strong>' . $reason_refuse . '</strong>, vui lòng liên hệ đến ban quản lý kho để được xử lý.</p>
+            ';
+
+            Notifications::create([
+                'code' => 'TB' . $this->generateRandomString(8),
+                'content' => $contentNotification,
+                'user_code' => session('user_code'),
+            ]);
+
+            toastr()->success('Đã từ chối phiếu nhập kho');
+
+            return redirect()->back();
         }
 
         return view("{$this->route}.import_warehouse.import", [
@@ -177,6 +211,7 @@ class ImportController extends Controller
         $users = Users::all();
 
         $receiptTrash = Receipts::with(['supplier', 'user', 'details.equipments'])
+            ->where('created_by', session('user_code'))
             ->orderBy('deleted_at', 'desc')
             ->onlyTrashed()
             ->paginate(10);
@@ -185,14 +220,20 @@ class ImportController extends Controller
 
             if ($request->action_type === 'restore') {
 
-                Receipts::whereIn('code', $request->import_codes)->onlyTrashed()->restore();
+                Receipts::whereIn('code', $request->import_codes)
+                    ->where('created_by', session('user_code'))
+                    ->onlyTrashed()
+                    ->restore();
 
                 toastr()->success('Khôi phục thành công');
 
                 return redirect()->back();
             } elseif ($request->action_type === 'delete') {
 
-                Receipts::whereIn('code', $request->import_codes)->onlyTrashed()->forceDelete();
+                Receipts::whereIn('code', $request->import_codes)
+                    ->where('created_by', session('user_code'))
+                    ->onlyTrashed()
+                    ->forceDelete();
 
                 toastr()->success('Xóa vĩnh viễn thành công');
 

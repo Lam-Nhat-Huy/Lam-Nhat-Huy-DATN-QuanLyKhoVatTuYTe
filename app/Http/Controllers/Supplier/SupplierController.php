@@ -46,19 +46,19 @@ class SupplierController extends Controller
                 toastr()->error('Không thể xóa, nhà cung cấp này đã tồn tại trong giao dịch của hệ thống');
                 return redirect()->back();
             } elseif ($request->action_type === 'browse') {
-                if ($request->hasFile('excel_file')) {
-                    $excelFile = $request->file('excel_file');
-                    $fileName = time() . '_' . $excelFile->getClientOriginalName();
+                if ($request->hasFile('pdf_file')) {
+                    $pdfFile = $request->file('pdf_file');
+                    $fileName = time() . '_' . $pdfFile->getClientOriginalName();
 
-                    // Lưu file vào thư mục public/storage/excelFile
-                    $filePath = 'storage/excelFile/' . $fileName;
-                    $excelFile->move(public_path('storage/excelFile'), $fileName);
+                    // Lưu file vào thư mục public/storage/pdfFile
+                    $filePath = 'storage/uploads/' . $fileName;
+                    $pdfFile->move(public_path('storage/uploads'), $fileName);
 
                     // Gửi email cho từng nhà cung cấp
                     $getEmailSuppliers = $this->SupplierModel::whereIn('code', $request->supplier_codes)->get();
                     foreach ($getEmailSuppliers as $supplier) {
                         $data['supplier_code'] = $supplier->code;
-                        $data['file_excel'] = $filePath;
+                        $data['file_pdf'] = $filePath;
                         $data['user_code'] = session('user_code');
 
                         Quote_histories::create($data);
@@ -170,6 +170,12 @@ class SupplierController extends Controller
 
         $data['code'] = 'SP' . $this->generateRandomString(8);
 
+        if ($request->hasFile('supplier_logo')) {
+            $fileName = time() . '_' . $request->file('supplier_logo')->getClientOriginalName();
+            $request->file('supplier_logo')->move(public_path('storage/uploads'), $fileName);
+            $data['image'] = 'uploads/' . $fileName;
+        }
+
         $data['name'] = $request->name;
 
         $data['contact_name'] = $request->contact_name;
@@ -217,6 +223,22 @@ class SupplierController extends Controller
     {
         $data = $request->validated();
 
+        $record = $this->SupplierModel::where('code', session('supplier_code'))->first();
+
+        if ($request->hasFile('supplier_logo')) {
+            // Kiểm tra và xóa ảnh cũ nếu tồn tại
+            if ($record->image && file_exists(public_path('storage/' . $record->image))) {
+                unlink(public_path('storage/' . $record->image));
+            }
+
+            // Tạo tên file mới và lưu trực tiếp vào public/storage/uploads
+            $fileName = time() . '_' . $request->file('supplier_logo')->getClientOriginalName();
+            $request->file('supplier_logo')->move(public_path('storage/uploads'), $fileName);
+
+            // Lưu đường dẫn của ảnh vào cơ sở dữ liệu
+            $data['image'] = 'uploads/' . $fileName;
+        }
+
         $data['name'] = $request->name;
 
         $data['contact_name'] = $request->contact_name;
@@ -231,7 +253,6 @@ class SupplierController extends Controller
 
         $data['updated_at'] = now();
 
-        $record = $this->SupplierModel::where('code', session('supplier_code'));
         if ($record) {
             $record->update($data);
         }

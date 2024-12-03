@@ -61091,3 +61091,11 @@ body {
     overflow-wrap: break-word;
     word-break: break-all;
 }
+
+.ellipsis {
+    white-space: nowrap;       /* Không cho phép xuống dòng */
+    overflow: hidden;          /* Ẩn phần vượt quá */
+    text-overflow: ellipsis;   /* Thay thế bằng dấu "..." */
+    width: 450px;              /* Đặt chiều rộng cố định */
+    display: inline-block;     /* Hoặc block nếu là thẻ không dòng */
+}

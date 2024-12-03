@@ -22,6 +22,8 @@
         $d_none_temp = '';
 
         $hidden = '';
+
+        $hidden_excel = 'd-none';
     } elseif (request('status') === 'update_quote') {
         $action = route('equipment_request.edit_import_price', request('code'));
 
@@ -36,6 +38,8 @@
         $d_none_temp = 'd-none';
 
         $hidden = 'd-none';
+
+        $hidden_excel = '';
     } else {
         $action = route('equipment_request.edit_import', request('code'));
 
@@ -50,6 +54,8 @@
         $d_none_temp = 'd-none';
 
         $hidden = '';
+
+        $hidden_excel = 'd-none';
     }
 @endphp
 
@@ -116,10 +122,194 @@
     </div>
 
     <div class="card mb-xl-8 pt-5 shadow">
-        <div class="card-header border-0 pt-5">
+        <div class="card-header border-0 pt-5 d-flex justify-content-between align-items-center">
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder fs-3 mb-1">Thêm Thiết Bị Yêu Cầu</span>
             </h3>
+            <div class="{{ $hidden_excel }}">
+                <button class="btn btn-sm btn-success rounded-pill" data-bs-toggle="modal" data-bs-target="#addExcel"
+                    type="button">
+                    <i class="fa fa-file-excel" style="margin-bottom: 2px;"></i>Thêm bằng excel
+                </button>
+
+                <div class="modal fade" id="addExcel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                    aria-labelledby="addExcelLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-md">
+                        <div class="modal-content border-0 shadow">
+                            <div class="modal-header bg-success text-white">
+                                <h5 class="modal-title text-white" id="addExcelLabel">Thêm từ danh sách báo giá</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center" style="padding-bottom: 0px;">
+                                <label for="excel_file" class="btn btn-sm btn-success w-100"><i class="fa fa-upload me-1"
+                                        style="margin-bottom: 2px;"></i>Tải File Báo Giá Lên</label>
+                                <input type="file" class="d-none" name="excel_file" id="excel_file" accept=".xls, .xlsx"
+                                    onchange="displayFileName()">
+                                <div id="fileName" class="mt-3 fw-semibold text-dark"></div>
+                            </div>
+                            <div class="modal-footer justify-content-center border-0">
+                                <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                                    data-bs-dismiss="modal">Đóng</button>
+                                <button type="button" class="btn rounded-pill btn-sm btn-success px-4" id="submit_quote"
+                                    disabled>
+                                    Thêm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    function displayFileName() {
+                        const fileInput = document.getElementById('excel_file');
+                        const fileNameDisplay = document.getElementById('fileName');
+                        const submit_quote = document.getElementById('submit_quote');
+
+                        if (fileInput.files.length > 0) {
+                            submit_quote.disabled = false;
+                            const fileName = fileInput.files[0].name;
+                            fileNameDisplay.textContent = `File đã tải lên: ${fileName}`;
+
+                            // Gọi uploadFile khi nhấn nút "Thêm"
+                            submit_quote.addEventListener('click', uploadFile);
+                        } else {
+                            fileNameDisplay.textContent = '';
+                            submit_quote.removeEventListener('click', uploadFile);
+                        }
+                    }
+
+                    async function uploadFile() {
+                        const fileInput = document.getElementById('excel_file');
+                        const formData = new FormData();
+                        formData.append('file', fileInput.files[0]);
+
+                        try {
+                            const response = await fetch('{{ route('equipment_request.create_import') }}', {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}', // Nếu dùng Laravel
+                                },
+                            });
+
+                            if (response.ok) {
+                                const data = await response.json();
+                                updateTable(data);
+                                toastr.success('Tải lên thành công');
+                                $('#addExcel').modal('hide');
+                            } else {
+                                toastr.error('File excel không phù hợp!');
+                            }
+                        } catch (error) {
+                            toastr.error('Không thể tải file. Vui lòng thử lại!');
+                        }
+                    }
+
+                    function updateTable(data) {
+                        const tableBody = document.querySelector('#table_list_equipment tbody'); // ID bảng
+                        const tableFoot = document.querySelector('#table_list_equipment tfoot'); // ID bảng (tfoot)
+
+                        tableBody.innerHTML = '';
+                        tableFoot.innerHTML = '';
+
+                        let totalAmount = 0;
+
+                        data.forEach(item => {
+                            const row = document.createElement('tr');
+                            row.id = `equipment-row-${item.equipment_code}`;
+                            const sll = item.quantity - item.quantity_quote;
+                            // Tính giá tiền từng thiết bị
+                            const totalPrice = item.quantity_quote * item.price * (1 - item.discount / 100) * (1 + item.vat /
+                                100);
+                            totalAmount += totalPrice; // Cộng dồn vào tổng giá tiền
+                            row.innerHTML = `
+                            <td>${item.name}</td>
+                            <td>${item.unit}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <span>
+                                        ${item.quantity}
+                                    </span>
+
+                                    <input type="hidden" id="quantity_change_${item.equipment_code}" value="${item.quantity}"/>
+
+                                    <div class="message_error d-none ms-2 m-0 p-0"
+                                        id="quantity_error_${item.equipment_code}">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <span>
+                                        ${item.quantity_quote}
+                                    </span>
+                                    <input type="hidden" id="quantity_quote_change_${item.equipment_code}" data-vat="${item.vat}" value="${item.quantity_quote}"/>
+                                    <div class="message_error d-none ms-2 m-0 p-0"
+                                        id="quantity_quote_error_${item.equipment_code}"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Vui lòng nhập số lượng">
+                                        <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span id="deviation_after_quote_${item.equipment_code}">${sll > 0 ? `Thiếu ${sll} <i class="fa fa-arrow-down text-danger"></i>` : 'Không lệch'}</span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <span>
+                                        ${(item.price)
+                                            .toFixed(0) // Làm tròn về số nguyên
+                                            .replace(/\B(?=(\d{3})+(?!\d))/g, ".")} VND
+                                    </span>
+                                    <input type="hidden" id="price_change_${item.equipment_code}" value="${item.price}"/>
+                                    <div class="message_error d-none ms-2 m-0 p-0"
+                                        id="price_change_error_${item.equipment_code}"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Vui lòng nhập giá và phải lớn hơn 0">
+                                        <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <span>
+                                        ${item.discount}
+                                    </span>
+                                    <input type="hidden" id="discount_change_${item.equipment_code}" value="${item.discount}"/>
+                                    <div class="message_error d-none ms-2 m-0 p-0"
+                                        id="discount_change_error_${item.equipment_code}"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Chiết khấu phải trong khoảng từ 1% đến 100%">
+                                        <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>${item.vat}%</td>
+                            <td id="total_price_${item.equipment_code}">
+                                ${(item.quantity_quote * item.price * (1 - item.discount / 100) * (1 + item.vat / 100))
+                                    .toFixed(0) // Làm tròn về số nguyên
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                                VND</td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+
+                        // Thêm dòng tổng cộng vào tfoot
+                        const footerRow = document.createElement('tr');
+                        footerRow.innerHTML = `
+                            <td colspan="8" class="text-start text-white fw-bolder">Tổng cộng:</td>
+                            <td class="text-white fw-bolder" id="total_amount">
+                                ${(totalAmount)
+                                    .toFixed(0)
+                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ".")} VND
+                            </td>
+                        `;
+                        tableFoot.appendChild(footerRow);
+                    }
+                </script>
+            </div>
         </div>
         <div class="py-3 px-lg-17">
             <div class="me-n7 pe-7 {{ request('status') === 'update_quote' ? 'd-none' : '' }}">
@@ -174,8 +364,9 @@
                                 <th class="" style="width: 12.5%;">SLYC</th>
                                 <th class="" style="width: 12.5%;">SLBG</th>
                                 <th class="" style="width: 10%;">Lệch</th>
-                                <th class="" style="width: 15%;">Giá tiền</th>
-                                <th class="" style="width: 10%;">VAT</th>
+                                <th class="" style="width: 10%;">Giá tiền</th>
+                                <th class="" style="width: 10%;">Chiết khấu</th>
+                                <th class="" style="width: 5%;">VAT</th>
                                 <th class="" style="width: 15%;">Tổng cộng</th>
                             @else
                                 <th class="ps-10" style="width: 45%;">Thiết bị</th>
@@ -186,15 +377,21 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $totalAmount = 0;
+                        @endphp
                         @if (!empty($getList))
                             @foreach ($getList as $item)
                                 @php
                                     $price = $item->price ?? 0;
                                     $quantity = $item->quantity_quote;
+                                    $discount = $item->discount ?? 0;
                                     $vat = $item->equipments->vat ?? 0;
 
                                     $itemPrice = $quantity * $price;
-                                    $totalPriceWithVAT = $itemPrice * (1 + $vat / 100);
+                                    $totalPriceWithDiscount = $itemPrice * (1 - $discount / 100);
+                                    $totalPriceWithVAT = $totalPriceWithDiscount * (1 + $vat / 100);
+                                    $totalAmount += $totalPriceWithVAT;
                                 @endphp
                                 <tr id="equipment-row-{{ $item->equipment_code }}">
                                     @if (!empty(request('status') === 'update_quote'))
@@ -241,7 +438,22 @@
                                                 <div class="message_error d-none ms-2 m-0 p-0"
                                                     id="price_change_error_{{ $item->equipment_code }}"
                                                     data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="Vui lòng nhập giá">
+                                                    title="Vui lòng nhập giá và phải lớn hơn 0">
+                                                    <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <input type="number" id="discount_change_{{ $item->equipment_code }}"
+                                                    value="{{ $item->discount ?? 0 }}" min="0"
+                                                    oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
+                                                    class="form-control form-control-sm border border-success rounded-pill"
+                                                    style="width: 75%;">
+                                                <div class="message_error d-none ms-2 m-0 p-0"
+                                                    id="discount_change_error_{{ $item->equipment_code }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Chiết khấu phải trong khoảng từ 1% đến 100%">
                                                     <i class="fa-solid fa-triangle-exclamation text-danger"></i>
                                                 </div>
                                             </div>
@@ -299,6 +511,21 @@
                                                 </div>
                                             </div>
                                         </td>
+                                        <td class="d-none">
+                                            <div class="d-flex align-items-center">
+                                                <input type="number" id="discount_change_{{ $item->equipment_code }}"
+                                                    value="{{ $item->discount ?? 0 }}" min="0"
+                                                    oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
+                                                    class="form-control form-control-sm border border-success rounded-pill"
+                                                    style="width: 75%;">
+                                                <div class="message_error d-none ms-2 m-0 p-0"
+                                                    id="discount_change_error_{{ $item->equipment_code }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Chiết khấu phải trong khoảng từ 1% đến 100%">
+                                                    <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td class="text-center">
                                             <span class="btn btn-sm btn-dark pointer rounded-pill"
                                                 onclick="removeEquipment('{{ $item->equipment_code }}')">
@@ -330,6 +557,13 @@
                         </tr>
 
                     </tbody>
+
+                    <tfoot class="{{ $hidden_excel }} bg-dark rounded-bottom">
+                        <td colspan="8" class="text-start text-white fw-bolder">Tổng cộng:</td>
+                        <td class="text-white fw-bolder" id="total_amount">
+                            {{ number_format($totalAmount, 0, ',', '.') }} VND
+                        </td>
+                    </tfoot>
                 </table>
             </div>
 
@@ -497,6 +731,9 @@
                 let quantityInput = document.getElementById(`quantity_change_${equipmentCode}`);
                 let quantity = quantityInput.value.trim();
 
+                let discountInput = document.getElementById(`discount_change_${equipmentCode}`);
+                let discount = discountInput.value.trim();
+
                 let quantity_quote_Input = document.getElementById(`quantity_quote_change_${equipmentCode}`);
                 let quantity_quote = quantity_quote_Input.value.trim();
 
@@ -511,6 +748,7 @@
                     equipment_code: equipmentCode,
                     unit: unit,
                     quantity: quantity,
+                    discount: discount,
                     quantity_quote: quantity_quote ?? 0,
                     deviation_quote: deviation_after_quote ?? 'Không lệch',
                     price: price ?? 0,
@@ -596,6 +834,17 @@
                             .add(
                                 'd-none');
                     }
+
+                    if (item.discount < 0 || item.discount > 100) {
+                        document.getElementById(`discount_change_error_${item.equipment_code}`).classList
+                            .remove(
+                                'd-none');
+                        hasError = true;
+                    } else {
+                        document.getElementById(`discount_change_error_${item.equipment_code}`).classList
+                            .add(
+                                'd-none');
+                    }
                 });
 
                 if (hasError) {
@@ -673,10 +922,10 @@
                     return;
                 }
 
-                let formData = new
-                FormData();
+                let formData = new FormData();
                 formData.append('equipment', equipment);
                 formData.append('quantity', quantity);
+                let canAdd = true;
 
                 fetch('{{ route('equipment_request.create_import') }}', {
                         method: 'POST',
@@ -690,93 +939,113 @@
                             // Kiểm tra xem thiết bị đã được thêm chưa
                             if (!addedEquipments.includes(data.equipment_code)) {
                                 addedEquipments.push(data.equipment_code);
+                            } else {
+                                canAdd = false;
+                                toastr.error('Thiết bị đã có trong danh sách!');
                             }
 
-                            noDataAlert.classList.add('d-none');
+                            if (canAdd) {
+                                noDataAlert.classList.add('d-none');
 
-                            // Thêm thiết bị vào danh sách trong bảng mà không cần tải lại trang
-                            let tableBody = document.querySelector('#table_list_equipment tbody');
-                            let newRow = document.createElement('tr');
-                            newRow.id = `equipment-row-${data.equipment_code}`;
-                            let totalPrice = (parseInt(data.quantity, 10) * 0)
-                                .toLocaleString('vi-VN', {
-                                    style: 'currency',
-                                    currency: 'VND',
-                                    minimumFractionDigits: 0
-                                })
-                                .replace("₫", "VND")
-                                .replace(",00", "");
-                            newRow.innerHTML = `
-                                <td>${data.equipment_name} - (Tổng tồn: ${data.inventory})</td>
-                                <td>${data.unit}</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <input type="number" id="quantity_change_${data.equipment_code}"
-                                            value="${parseInt(data.quantity, 10)}" oninput="chanQuantityTr('${data.equipment_code}');"
-                                            class="form-control form-control-sm border border-success rounded-pill" style="width: 30%;">
-                                        <div class="message_error d-none ms-2 m-0 p-0"
-                                            id="quantity_error_${data.equipment_code}">
-                                            (Số lượng phải lớn hơn 0)
+                                // Thêm thiết bị vào danh sách trong bảng mà không cần tải lại trang
+                                let tableBody = document.querySelector('#table_list_equipment tbody');
+                                let newRow = document.createElement('tr');
+                                newRow.id = `equipment-row-${data.equipment_code}`;
+                                let totalPrice = (parseInt(data.quantity, 10) * 0)
+                                    .toLocaleString('vi-VN', {
+                                        style: 'currency',
+                                        currency: 'VND',
+                                        minimumFractionDigits: 0
+                                    })
+                                    .replace("₫", "VND")
+                                    .replace(",00", "");
+                                newRow.innerHTML = `
+                                    <td>${data.equipment_name} - (Tổng tồn: ${data.inventory})</td>
+                                    <td>${data.unit}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <input type="number" id="quantity_change_${data.equipment_code}"
+                                                value="${parseInt(data.quantity, 10)}" oninput="chanQuantityTr('${data.equipment_code}');"
+                                                class="form-control form-control-sm border border-success rounded-pill" style="width: 30%;">
+                                            <div class="message_error d-none ms-2 m-0 p-0"
+                                                id="quantity_error_${data.equipment_code}">
+                                                (Số lượng phải lớn hơn 0)
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="d-none">
-                                    <div class="d-flex align-items-center">
-                                        <input type="number"
-                                            id="quantity_quote_change_${data.equipment_code}"
-                                            value="1" min="0"
-                                            data-vat="${data.equipment_vat}"
-                                            oninput="calculateTotalPriceQuoteTr('${data.equipment_code}');"
-                                            class="form-control form-control-sm border border-success rounded-pill"
-                                            style="width: 50%;">
-                                        <div class="message_error d-none ms-2 m-0 p-0"
-                                            id="quantity_quote_error_${data.equipment_code}"
-                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                            title="Vui lòng nhập số lượng">
-                                            <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                    </td>
+                                    <td class="d-none">
+                                        <div class="d-flex align-items-center">
+                                            <input type="number"
+                                                id="quantity_quote_change_${data.equipment_code}"
+                                                value="1" min="0"
+                                                data-vat="${data.equipment_vat}"
+                                                oninput="calculateTotalPriceQuoteTr('${data.equipment_code}');"
+                                                class="form-control form-control-sm border border-success rounded-pill"
+                                                style="width: 50%;">
+                                            <div class="message_error d-none ms-2 m-0 p-0"
+                                                id="quantity_quote_error_${data.equipment_code}"
+                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="Vui lòng nhập số lượng">
+                                                <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="d-none">
-                                    <span id="deviation_after_quote_${data.equipment_code}">Không lệch</span>
-                                </td>
-                                <td class="d-none">
-                                    <div class="d-flex align-items-center">
-                                        <input type="number" id="price_change_${data.equipment_code}"
-                                            value="1" min="0"
-                                            oninput="calculateTotalPriceQuoteTr('${data.equipment_code}');"
-                                            class="form-control form-control-sm border border-success rounded-pill"
-                                            style="width: 75%;">
-                                        <div class="message_error d-none ms-2 m-0 p-0"
-                                            id="price_change_error_${data.equipment_code}"
-                                            data-bs-toggle="tooltip" data-bs-placement="top"
-                                            title="Vui lòng nhập giá">
-                                            <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                    </td>
+                                    <td class="d-none">
+                                        <span id="deviation_after_quote_${data.equipment_code}">Không lệch</span>
+                                    </td>
+                                    <td class="d-none">
+                                        <div class="d-flex align-items-center">
+                                            <input type="number" id="price_change_${data.equipment_code}"
+                                                value="1" min="0"
+                                                oninput="calculateTotalPriceQuoteTr('${data.equipment_code}');"
+                                                class="form-control form-control-sm border border-success rounded-pill"
+                                                style="width: 75%;">
+                                            <div class="message_error d-none ms-2 m-0 p-0"
+                                                id="price_change_error_${data.equipment_code}"
+                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="Vui lòng nhập giá">
+                                                <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">
-                                    <span class="btn btn-sm btn-dark pointer rounded-pill" onclick="removeEquipment('${data.equipment_code}')">
-                                        <i class="fa fa-trash p-0"></i>
-                                    </span>
-                                </td>
-                                `;
-                            tableBody.appendChild(newRow);
+                                    </td>
+                                    <td class="d-none">
+                                        <div class="d-flex align-items-center">
+                                            <input type="number" id="discount_change_${data.equipment_code}"
+                                                value="0" min="0"
+                                                oninput="calculateTotalPriceQuoteTr('${data.equipment_code}');"
+                                                class="form-control form-control-sm border border-success rounded-pill"
+                                                style="width: 75%;">
+                                            <div class="message_error d-none ms-2 m-0 p-0"
+                                                id="discount_change_error_${data.equipment_code}"
+                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="Chiết khấu phải trong khoảng từ 1% đến 100%">
+                                                <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="btn btn-sm btn-dark pointer rounded-pill" onclick="removeEquipment('${data.equipment_code}')">
+                                            <i class="fa fa-trash p-0"></i>
+                                        </span>
+                                    </td>
+                                    `;
+                                tableBody.appendChild(newRow);
 
-                            // Reset form sau khi thêm thành công
-                            document.getElementById('equipment').value = "";
-                            document.getElementById('quantity').value = 0;
-                            document.getElementById('price').value = 0;
+                                // Reset form sau khi thêm thành công
+                                document.getElementById('equipment').value = "";
+                                document.getElementById('quantity').value = 0;
+                                document.getElementById('price').value = 0;
 
-                            // Ẩn các tùy chọn đã thêm trong danh sách thiết bị
-                            let equipmentOptions = document.querySelectorAll('#equipment option');
-                            equipmentOptions.forEach(option => {
-                                if (addedEquipments.includes(option.value)) {
-                                    option.classList.add('d-none');
-                                }
-                            });
+                                // Ẩn các tùy chọn đã thêm trong danh sách thiết bị
+                                let equipmentOptions = document.querySelectorAll('#equipment option');
+                                equipmentOptions.forEach(option => {
+                                    if (addedEquipments.includes(option.value)) {
+                                        option.classList.add('d-none');
+                                    }
+                                });
 
-                            toastr.success("Đã thêm thiết bị vào danh sách");
+                                toastr.success("Đã thêm thiết bị vào danh sách");
+                            }
                         } else {
                             alert('Có lỗi xảy ra');
                         }
@@ -1018,67 +1287,66 @@
         }
 
         function calculateTotalPriceQuoteTr(equipment_code) {
-            const price_quote = parseFloat(document.getElementById(`price_change_${equipment_code}`).value.replace(
-                    /,/g, '')) ||
-                0;
-            const quantityQ = parseFloat(document.getElementById(`quantity_change_${equipment_code}`).value.replace(
-                    /,/g, '')) ||
-                0;
+            // Lấy giá trị từ các input và chuyển đổi sang số
+            const price_quote = parseFloat(document.getElementById(`price_change_${equipment_code}`).value.replace(/,/g,
+                '')) || 0;
+            const quantityQ = parseFloat(document.getElementById(`quantity_change_${equipment_code}`).value.replace(/,/g,
+                '')) || 0;
             const quantity_quote = parseFloat(document.getElementById(`quantity_quote_change_${equipment_code}`).value
-                .replace(/,/g,
-                    '')) || 0;
-
+                .replace(/,/g, '')) || 0;
+            const discount = parseFloat(document.getElementById(`discount_change_${equipment_code}`).value.replace(/,/g,
+                '')) || 0;
             const vatValue = parseFloat(document.getElementById(`quantity_quote_change_${equipment_code}`).getAttribute(
-                    'data-vat')
-                .replace(/,/g,
-                    '')) || 0;;
+                'data-vat')) || 0;
 
-            if (quantity_quote >= 0) {
-                const quantityAfterQuote = quantity_quote - quantityQ;
+            // Tính lệch số lượng
+            const quantityAfterQuote = quantity_quote - quantityQ;
+            const deviationText = quantityAfterQuote > 0 ? `Dư ${Math.abs(quantityAfterQuote)}` :
+                quantityAfterQuote < 0 ? `Thiếu ${Math.abs(quantityAfterQuote)}` :
+                'Không lệch';
+            document.getElementById(`deviation_after_quote_${equipment_code}`).innerText = deviationText;
 
-                if (quantityAfterQuote > 0) {
-                    document.getElementById(`deviation_after_quote_${equipment_code}`).innerText =
-                        `Dư ${Math.abs(quantityAfterQuote)}`;
-                } else if (quantityAfterQuote < 0) {
-                    document.getElementById(`deviation_after_quote_${equipment_code}`).innerText =
-                        `Thiếu ${Math.abs(quantityAfterQuote)}`;
-                } else {
-                    document.getElementById(`deviation_after_quote_${equipment_code}`).innerText = 'Không lệch';
-                }
-            }
-
-            // Tính toán thành tiền
+            // Tính toán thành tiền cho thiết bị hiện tại
             const totalPriceTr = price_quote * quantity_quote;
+            const totalPriceAfterDiscount = totalPriceTr * (1 - (discount / 100));
+            const totalPriceAmount = totalPriceAfterDiscount * (1 + (vatValue / 100));
 
-            // Tính tổng giá sau VAT
-            const totalPriceAmount = totalPriceTr * (1 + (vatValue / 100));
+            // Định dạng thành tiền
+            const formattedTotalPrice = totalPriceAmount.toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                minimumFractionDigits: 0
+            }).replace("₫", "VND").replace(",00", "");
 
-            // Nếu bạn cần tổng giá quote, có thể sử dụng tổng giá đã tính
-            const totalPrice_quote = totalPriceAmount;
-
-            // Định dạng lại thành tiền
-            const formattedTotalPrice = totalPrice_quote.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND',
-                    minimumFractionDigits: 0
-                })
-                .replace("₫", "VND")
-                .replace(",00", "");
-
-            // Cập nhật thành tiền trong HTML
+            // Cập nhật giá trị thành tiền cho thiết bị
             document.getElementById(`total_price_${equipment_code}`).innerText = formattedTotalPrice;
+
+            // Cập nhật tổng cộng tiền
+            updateTotalAmount();
         }
 
-        function displayFileName() {
-            const fileInput = document.getElementById('excel_file');
-            const fileNameDisplay = document.getElementById('fileName');
+        // Hàm tính tổng cộng tiền từ tất cả các thiết bị
+        function updateTotalAmount() {
+            let total_amount = 0;
 
-            if (fileInput.files.length > 0) {
-                const fileName = fileInput.files[0].name; // Lấy tên file
-                fileNameDisplay.textContent = `File đã tải lên: ${fileName}`; // Hiển thị tên file
-            } else {
-                fileNameDisplay.textContent = ''; // Nếu không có file nào được chọn, xóa nội dung
-            }
+            // Lấy danh sách các thiết bị từ bảng
+            const rows = document.querySelectorAll('tr[id^="equipment-row-"]');
+            rows.forEach(row => {
+                const equipment_code = row.id.split('-').pop();
+                const totalPriceText = document.getElementById(`total_price_${equipment_code}`).innerText.replace(
+                    /[^0-9]/g, '');
+                total_amount += parseFloat(totalPriceText) || 0;
+            });
+
+            // Định dạng tổng cộng tiền
+            const formattedTotalAmount = total_amount.toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                minimumFractionDigits: 0
+            }).replace("₫", "VND").replace(",00", "");
+
+            // Cập nhật tổng cộng tiền trong HTML
+            document.getElementById('total_amount').innerText = formattedTotalAmount;
         }
     </script>
 @endsection

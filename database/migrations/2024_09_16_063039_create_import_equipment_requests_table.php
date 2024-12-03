@@ -14,6 +14,7 @@ return new class extends Migration
             $table->text('note')->nullable();
             $table->boolean('status')->default(false);
             $table->timestamp('request_date')->nullable();
+            $table->text('reason_refuse')->nullable();
             $table->char('user_code', 10)->nullable();
             $table->char('updated_by', 10)->nullable();
             $table->char('deleted_by', 10)->nullable();

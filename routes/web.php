@@ -1,16 +1,19 @@
 <?php
 
+use App\Http\Controllers\EquipmentRequest\EquipmentRequestController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Middleware\Authentication;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/')->middleware(Authentication::class)->group(function () {
-    
+
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
     Route::post('/handleLogin', [HomeController::class, 'handleLogin'])->name('home.handleLogin');
 
 });
+
+Route::get('/exportExcelEquipmentRequestList/{code}', [EquipmentRequestController::class, 'exportExcelEquipmentRequestList'])->name('equipment_request.exportExcelEquipmentRequestList');
 
 Route::get('/logout', [HomeController::class, 'logout'])->name('home.logout');
 
@@ -23,7 +26,6 @@ Route::post('/forgot', [HomeController::class, 'processForgot'])->name('home.pro
 Route::get('/reset_pass', [HomeController::class, 'resetPassword'])->name('home.resetPassword');
 
 Route::post('/reset_pass', [HomeController::class, 'updatePassword'])->name('home.reset_password');
-
 
 // Route::get('/auth/google', [LoginController::class, 'redirectToGoogle'])->name('auth.google');
 

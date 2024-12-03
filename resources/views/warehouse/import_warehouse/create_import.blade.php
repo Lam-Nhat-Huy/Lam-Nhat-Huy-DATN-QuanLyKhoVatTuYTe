@@ -255,6 +255,9 @@
                             </thead>
                             <tbody id="equipmentList">
                                 @if (!empty($getListIERD))
+                                    @php
+                                        $totalAmount = 0;
+                                    @endphp
                                     @foreach ($getListIERD as $item)
                                         @php
                                             // Tính tổng tiền trước chiết khấu
@@ -266,6 +269,8 @@
                                             // Tính tổng tiền sau khi cộng VAT
                                             $total_price =
                                                 $subtotal_after_discount * (1 + $item->equipments->vat / 100);
+
+                                            $totalAmount += $total_price;
                                         @endphp
                                         <tr id="equipment-row-{{ $item->equipment_code }}">
                                             <td class="ps-5">{{ $item->equipments->name }}</td>
@@ -297,7 +302,8 @@
                                                 <div class="d-flex align-items-center">
                                                     <input type="number"
                                                         id="quantity_change_{{ $item->equipment_code }}"
-                                                        value="{{ $item->quantity_quote }}" min="0"
+                                                        value="{{ $item->quantity_quote - $item->quantity == 0 ? $item->quantity_quote : $item->quantity }}"
+                                                        min="0"
                                                         oninput="calculateTotalPriceTop('{{ $item->equipment_code }}'); calculateTotalPriceBottom();"
                                                         class="form-control form-control-sm border border-success rounded-pill">
                                                 </div>
@@ -310,7 +316,7 @@
                                             <td class="">
                                                 <div class="d-flex align-items-center">
                                                     <input type="number"
-                                                        id="discount_rate_change_{{ $item->equipment_code }}"
+                                                        id="discount_rate_change_{{ $item->equipment_code }}" disabled
                                                         value="{{ number_format($item->discount, 0, ',', '') }}"
                                                         min="0" max="100"
                                                         class="form-control form-control-sm border border-success rounded-pill"
@@ -519,9 +525,9 @@
 
                     @if (!empty($getListIERD))
                         @php
-                            $totalPriceIerd = 0;
                             $totalDiscountIerd = 0;
                             $totalVATIerd = 0;
+                            $totalPriceIerd = 0;
 
                             foreach ($getListIERD as $detail) {
                                 $priceIerd = $detail->price ?? 0;
@@ -542,14 +548,7 @@
                             // Tính tổng cuối cùng (sau khi trừ chiết khấu và cộng VAT)
                             $totalAmountIerd = $totalPriceIerd - $totalDiscountIerd + $totalVATIerd;
                         @endphp
-                        <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
-                            <span class="fw-semibold">Tổng đầu</span>
-                            <span id="totalPrice"
-                                class="fw-bolder text-danger">{{ number_format($totalPriceIerd, 0, ',', '.') }}
-                                VND</span>
-                        </div>
-
-                        <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex justify-content-between align-items-center my-3">
                             <span class="fw-semibold">Tổng chiết khấu</span>
                             <span id="totalDiscount"
                                 class="fw-bolder text-danger">{{ number_format($totalDiscountIerd, 0, ',', '.') }}
@@ -563,7 +562,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="fw-semibold">Tổng cuối</span>
+                            <span class="fw-semibold">Tổng cộng</span>
                             <span id="totalAmount"
                                 class="fw-bolder text-danger">{{ number_format($totalAmountIerd, 0, ',', '.') }}
                                 VND</span>
@@ -594,13 +593,6 @@
                                 $totalAmount = $totalPrice - $totalDiscount + $totalVAT;
                             @endphp
                         @endif
-                        <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
-                            <span class="fw-semibold">Tổng đầu</span>
-                            <span id="totalPrice"
-                                class="fw-bolder text-danger">{{ !empty($totalPrice) ? number_format($totalPrice, 0, ',', '.') : 0 }}
-                                VND</span>
-                        </div>
-
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <span class="fw-semibold">Tổng chiết khấu</span>
                             <span id="totalDiscount"
@@ -616,7 +608,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <span class="fw-semibold">Tổng cuối</span>
+                            <span class="fw-semibold">Tổng cộng</span>
                             <span id="totalAmount"
                                 class="fw-bolder text-danger">{{ !empty($totalAmount) ? number_format($totalAmount, 0, ',', '.') : 0 }}
                                 VND</span>
@@ -1016,21 +1008,27 @@
                             const total_price = subtotalAfterDiscount +
                                 vatAmount; // Tổng cuối cùng sau chiết khấu và VAT
 
+                            const canAdd = true;
+
                             // Kiểm tra xem thiết bị đã được thêm chưa
                             if (!addedEquipments.includes(data.equipment_code)) {
                                 addedEquipments.push(data.equipment_code);
+                            } else {
+                                toastr.error('Thiết bị này đã có trong danh sách');
+                                canAdd = false;
                             }
 
-                            noDataAlert.classList.add('d-none');
+                            if (canAdd) {
+                                noDataAlert.classList.add('d-none');
 
-                            // Thêm thiết bị vào danh sách trong bảng mà không cần tải lại trang
-                            let tableBody = document.getElementById('equipmentList');
+                                // Thêm thiết bị vào danh sách trong bảng mà không cần tải lại trang
+                                let tableBody = document.getElementById('equipmentList');
 
-                            let newRow = document.createElement('tr');
+                                let newRow = document.createElement('tr');
 
-                            newRow.id = `equipment-row-${data.equipment_code}`;
+                                newRow.id = `equipment-row-${data.equipment_code}`;
 
-                            newRow.innerHTML = `
+                                newRow.innerHTML = `
                                 <td class="ps-5">${data.equipment_name}</td>
                                 <td class="">
                                     <div class="d-flex align-items-center">
@@ -1094,65 +1092,66 @@
                                 </td>
                                 `;
 
-                            tableBody.appendChild(newRow);
+                                tableBody.appendChild(newRow);
 
-                            calculateTotals();
+                                calculateTotals();
 
-                            let error_quantity_container = document.getElementById(
-                                'error_quantity_container');
+                                let error_quantity_container = document.getElementById(
+                                    'error_quantity_container');
 
-                            let quantity_Label = document.getElementById('quantity_label')
-                                .textContent;
-                            let price_Label = document.getElementById('price_label')
-                                .textContent;
-                            let batch_number_Label = document.getElementById(
-                                    'batch_number_label')
-                                .textContent;
-                            let discount_rate_Label = document.getElementById(
-                                    'discount_rate_label')
-                                .textContent;
+                                let quantity_Label = document.getElementById('quantity_label')
+                                    .textContent;
+                                let price_Label = document.getElementById('price_label')
+                                    .textContent;
+                                let batch_number_Label = document.getElementById(
+                                        'batch_number_label')
+                                    .textContent;
+                                let discount_rate_Label = document.getElementById(
+                                        'discount_rate_label')
+                                    .textContent;
 
-                            let newDivErr = document.createElement('div');
+                                let newDivErr = document.createElement('div');
 
-                            newDivErr.id = `error_quantity_card_${data.equipment_code}`;
+                                newDivErr.id = `error_quantity_card_${data.equipment_code}`;
 
-                            newDivErr.classList.add('card', 'border-0', 'p-4',
-                                'bg-light-warning',
-                                'rounded-0', 'd-none');
+                                newDivErr.classList.add('card', 'border-0', 'p-4',
+                                    'bg-light-warning',
+                                    'rounded-0', 'd-none');
 
-                            newDivErr.innerHTML = `
-                                <span class="mb-1 d-none" id="batch_number_error_${data.equipment_code}"> <i class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
-                                    <strong>${batch_number_Label}</strong> của thiết bị <strong>${data.equipment_name}</strong> là bắt buộc</span>
+                                newDivErr.innerHTML = `
+                                    <span class="mb-1 d-none" id="batch_number_error_${data.equipment_code}"> <i class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
+                                        <strong>${batch_number_Label}</strong> của thiết bị <strong>${data.equipment_name}</strong> là bắt buộc</span>
 
-                                <span class="mb-1 d-none" id="price_error_${data.equipment_code}"> <i class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
-                                    <strong>${price_Label}</strong> của thiết bị <strong>${data.equipment_name}</strong> là bắt buộc và phải lớn hơn 0</span>
+                                    <span class="mb-1 d-none" id="price_error_${data.equipment_code}"> <i class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
+                                        <strong>${price_Label}</strong> của thiết bị <strong>${data.equipment_name}</strong> là bắt buộc và phải lớn hơn 0</span>
 
-                                <span class="mt-1 mb-1 d-none" id="quantity_error_${data.equipment_code}"> <i class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
-                                    <strong>${quantity_Label}</strong> của thiết bị <strong>${data.equipment_name}</strong> là bắt buộc và phải lớn hơn 0</span>
+                                    <span class="mt-1 mb-1 d-none" id="quantity_error_${data.equipment_code}"> <i class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
+                                        <strong>${quantity_Label}</strong> của thiết bị <strong>${data.equipment_name}</strong> là bắt buộc và phải lớn hơn 0</span>
 
-                                <span class="mt-1 mb-1 d-none" id="discount_rate_error_${data.equipment_code}"> <i class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
-                                    <strong>${discount_rate_Label}</strong> của thiết bị <strong>${data.equipment_name}</strong> phải bé hơn 100</span>
-                            `;
+                                    <span class="mt-1 mb-1 d-none" id="discount_rate_error_${data.equipment_code}"> <i class ="fa fa-warning text-warning me-2" style="font-size: 18px;"></i>
+                                        <strong>${discount_rate_Label}</strong> của thiết bị <strong>${data.equipment_name}</strong> phải bé hơn 100</span>
+                                `;
 
-                            error_quantity_container.appendChild(newDivErr);
+                                error_quantity_container.appendChild(newDivErr);
 
-                            // Reset form sau khi thêm thành công
-                            document.getElementById('equipment').value = "";
-                            document.getElementById('price').value = "";
-                            document.getElementById('batch_number').value = "";
-                            document.getElementById('quantity').value = "";
-                            document.getElementById('discount_rate').value = "";
+                                // Reset form sau khi thêm thành công
+                                document.getElementById('equipment').value = "";
+                                document.getElementById('price').value = "";
+                                document.getElementById('batch_number').value = "";
+                                document.getElementById('quantity').value = "";
+                                document.getElementById('discount_rate').value = "";
 
-                            // Ẩn các tùy chọn đã thêm trong danh sách thiết bị
-                            let equipmentOptions = document.querySelectorAll(
-                                '#equipment option');
-                            equipmentOptions.forEach(option => {
-                                if (addedEquipments.includes(option.value)) {
-                                    option.classList.add('d-none');
-                                }
-                            });
+                                // Ẩn các tùy chọn đã thêm trong danh sách thiết bị
+                                let equipmentOptions = document.querySelectorAll(
+                                    '#equipment option');
+                                equipmentOptions.forEach(option => {
+                                    if (addedEquipments.includes(option.value)) {
+                                        option.classList.add('d-none');
+                                    }
+                                });
 
-                            toastr.success("Đã thêm thiết bị vào danh sách");
+                                toastr.success("Đã thêm thiết bị vào danh sách");
+                            }
                         } else {
                             alert('Có lỗi xảy ra');
                         }
@@ -1195,12 +1194,6 @@
             });
 
             // Hiển thị tổng giá trị
-            document.getElementById("totalPrice").textContent =
-                totalPrice.toLocaleString("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                }).replace("₫", "VND").replace(",00", "");
-
             document.getElementById("totalDiscount").textContent =
                 totalDiscount.toLocaleString("vi-VN", {
                     style: "currency",
@@ -1426,11 +1419,6 @@
             });
 
             // Định dạng và cập nhật các giá trị vào HTML
-            document.getElementById('totalPrice').innerText = totalPrice.toLocaleString('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            }).replace("₫", "VND").replace(",00", "");
-
             document.getElementById('totalDiscount').innerText = totalDiscount.toLocaleString('vi-VN', {
                 style: 'currency',
                 currency: 'VND'
@@ -1704,41 +1692,5 @@
                     });
             }, 500);
         });
-
-        // let notes = {}; // Object để lưu các thiết bị đã thay đổi số lượng và chênh lệch
-
-        // function showNote(equipment_code, equipment_name, equipment_quantity, noteDefault) {
-
-        //     const quantity_showNote = document.getElementById(`quantity_change_${equipment_code}`).value;
-
-        //     let quantityCalculate = equipment_quantity - quantity_showNote;
-        //     let quantityShowNote = Math.abs(quantityCalculate);
-
-        //     if (quantity_showNote == 0) {
-        //         notes[equipment_name] = `Thiết Bị "${equipment_name}" đã hết hàng`;
-        //     } else if (quantityCalculate > 0) {
-        //         notes[equipment_name] =
-        //             `Thiết Bị "${equipment_name}" thiếu "${quantityShowNote}" so với ban đầu là "${equipment_quantity}"`;
-        //     } else if (quantityCalculate < 0) {
-        //         notes[equipment_name] =
-        //             `Thiết Bị "${equipment_name}" dư "${quantityShowNote}" so với ban đầu là "${equipment_quantity}"`;
-        //     } else if (quantityCalculate === 0) {
-        //         delete notes[equipment_name];
-        //     }
-
-        //     let noteText = noteDefault ? `${noteDefault}` : ''; // Kiểm tra giá trị noteDefault
-
-        //     // Kiểm tra nếu có thiết bị chênh lệch để chèn thêm nội dung mới
-        //     if (Object.keys(notes).length > 0) {
-        //         let additionalText = Object.keys(notes).map(name => {
-        //             return `${notes[name]}`;
-        //         }).join(', ');
-
-        //         // Nếu có giá trị noteDefault, nối với additionalText; nếu không, chỉ hiển thị additionalText
-        //         noteText = noteDefault ? `${noteText}, ${additionalText}` : additionalText;
-        //     }
-
-        //     document.getElementById('note').value = noteText;
-        // }
     </script>
 @endsection

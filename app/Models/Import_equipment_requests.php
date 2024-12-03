@@ -24,6 +24,7 @@ class Import_equipment_requests extends Model
         'note',
         'status',
         'request_date',
+        'reason_refuse',
         'created_at',
         'user_code',
         'updated_at',

@@ -22,6 +22,7 @@ class UpdateSupplierRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'supplier_logo' => 'mimes:jpg,png,pdf,docx|max:2048',
             "name" => "required|string|max:100",
             "contact_name" => "required|string|max:100",
             "tax_code" => "required|digits_between:1,13",
@@ -34,6 +35,9 @@ class UpdateSupplierRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'supplier_logo.mimes' => 'Ảnh không đúng định dạng',
+            'supplier_logo.max' => 'Ảnh không được quá 2MB',
+
             "name.required" => "Tên không được bỏ trống.",
             "name.string" => "Tên phải là kiểu chữ.",
             "name.max" => "Tên không được vượt quá 100 ký tự.",

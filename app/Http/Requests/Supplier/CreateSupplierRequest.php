@@ -22,6 +22,7 @@ class CreateSupplierRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'supplier_logo' => 'required|mimes:jpg,png,pdf,docx|max:2048',
             "name" => "required|string|max:100",
             "contact_name" => "required|string|max:100",
             "tax_code" => "required|digits_between:1,13",
@@ -34,6 +35,10 @@ class CreateSupplierRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'supplier_logo.required' => 'Vui lòng thêm logo cho nhà cung cấp',
+            'supplier_logo.mimes' => 'Ảnh không đúng định dạng',
+            'supplier_logo.max' => 'Ảnh không được quá 2MB',
+
             "name.required" => "Tên nhà cung cấp không được bỏ trống.",
             "name.string" => "Tên nhà cung cấp phải là kiểu chữ.",
             "name.max" => "Tên nhà cung cấp không được vượt quá 100 ký tự.",
@@ -54,7 +59,7 @@ class CreateSupplierRequest extends FormRequest
             "phone.required" => "Số điện thoại không được bỏ trống.",
             "phone.regex" => "Số điện thoại phải là số.",
             "phone.digits_between" => "Số điện thoại phải có độ dài từ 10 đến 11 số.",
-            
+
             "address.required" => "Địa chỉ không được bỏ trống.",
             "address.string" => "Địa chỉ không đúng định dạng.",
             "address.max" => "Địa chỉ không được vượt quá 255 ký tự.",

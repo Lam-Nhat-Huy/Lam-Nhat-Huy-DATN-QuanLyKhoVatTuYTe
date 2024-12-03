@@ -12,16 +12,16 @@ class QuoteSupplierMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $fileExcel;
+    public $filePdf;
 
     public $supplierName;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($fileExcel, $supplierName)
+    public function __construct($filePdf, $supplierName)
     {
-        $this->fileExcel = $fileExcel;
+        $this->filePdf = $filePdf;
         $this->supplierName = $supplierName;
     }
 

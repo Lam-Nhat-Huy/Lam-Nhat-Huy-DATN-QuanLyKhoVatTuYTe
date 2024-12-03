@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('quote_histories', function (Blueprint $table) {
             $table->id();
             $table->char('supplier_code', 10);
-            $table->string('file_excel', 255);
+            $table->string('file_pdf', 255);
             $table->char('user_code', 10)->nullable();
             $table->timestamps();
 

@@ -12,7 +12,7 @@ class Quote_histories extends Model
     protected $fillable = [
         'id',
         'supplier_code',
-        'file_excel',
+        'file_pdf',
         'user_code',
         'created_at',
         'updated_at',

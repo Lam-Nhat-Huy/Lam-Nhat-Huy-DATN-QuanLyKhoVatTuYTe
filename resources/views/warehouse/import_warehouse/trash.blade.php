@@ -57,7 +57,7 @@
                             @forelse ($receiptTrash as $item)
                                 <tr class="hover-table pointer">
                                     <td>
-                                        @if (($item->status == 3 || $item->status == 0) && $item->created_by == session('user_code'))
+                                        @if ($item->status == 3 || $item->status == 0)
                                             <input type="checkbox" name="import_codes[]" value="{{ $item->code }}"
                                                 class="row-checkbox" />
                                         @endif
@@ -336,19 +336,21 @@
 
                                             <div class="card-body py-1 text-end bg-white pb-5">
                                                 <div class="button-group">
-                                                    <button class="btn btn-sm btn-twitter rounded-pill me-2"
-                                                        data-bs-toggle="modal"
-                                                        {{ $item->no_action == 1 ? 'disabled' : '' }}
-                                                        data-bs-target="#restore-{{ $item->code }}" type="button">
-                                                        <i class="fas fa-rotate-right"
-                                                            style="margin-bottom: 2px;"></i>Khôi Phục
-                                                    </button>
+                                                    @if ($item->created_by == session('user_code'))
+                                                        <button class="btn btn-sm btn-twitter rounded-pill me-2"
+                                                            data-bs-toggle="modal"
+                                                            {{ $item->no_action == 1 ? 'disabled' : '' }}
+                                                            data-bs-target="#restore-{{ $item->code }}" type="button">
+                                                            <i class="fas fa-rotate-right"
+                                                                style="margin-bottom: 2px;"></i>Khôi Phục
+                                                        </button>
 
-                                                    <button class="btn btn-sm btn-danger rounded-pill me-2"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#delete-{{ $item->code }}" type="button">
-                                                        <i class="fas fa-trash" style="margin-bottom: 2px;"></i>Xóa
-                                                    </button>
+                                                        <button class="btn btn-sm btn-danger rounded-pill me-2"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#delete-{{ $item->code }}" type="button">
+                                                            <i class="fas fa-trash" style="margin-bottom: 2px;"></i>Xóa
+                                                        </button>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -376,36 +378,6 @@
                     </table>
                 </div>
             </div>
-
-            @if ($allReceiptCount > 0)
-                <div class="card-body py-3">
-                    <div class="filter-bar">
-                        <ul class="nav nav-pills">
-                            <li class="nav-item" style="font-size: 11px;">
-                                <p class="nav-link text-white rounded-pill" style="background-color: #0064ff;">Tất cả
-                                    <span>({{ $allReceiptCount }})</span>
-                                </p>
-                            </li>
-                            <li class="nav-item" style="font-size: 11px;">
-                                <p class="nav-link text-white rounded-pill" style="background-color: green;">Đã duyệt
-                                    <span>({{ $approvedReceiptsCount }})</span>
-                                </p>
-                            </li>
-                            <li class="nav-item" style="font-size: 11px;">
-                                <p class="nav-link text-white rounded-pill" style="background-color: red;">Chờ duyệt
-                                    <span>({{ $draftReceiptsCount }})</span>
-                                </p>
-                            </li>
-                            <li class="nav-item" style="font-size: 11px;">
-                                <p class="nav-link text-white rounded-pill" style="background-color: rgb(123, 0, 255);">
-                                    Lưu Tạm
-                                    <span>({{ $tempReceiptsCount }})</span>
-                                </p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            @endif
 
             @if ($receiptTrash->count() > 0)
                 <div class="card-body py-3 d-flex justify-content-between align-items-center">

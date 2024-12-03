@@ -20,6 +20,7 @@ class Import_equipment_request_details extends Model
         'quantity_quote',
         'deviation_quote',
         'price',
+        'discount',
         'status',
         'created_at',
         'updated_at',

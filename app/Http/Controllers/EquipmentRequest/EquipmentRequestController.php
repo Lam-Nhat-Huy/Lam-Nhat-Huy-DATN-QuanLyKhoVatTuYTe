@@ -15,9 +15,11 @@ use App\Models\Notifications;
 use App\Models\Receipts;
 use App\Models\Suppliers;
 use App\Models\Users;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class EquipmentRequestController extends Controller
 {
@@ -62,29 +64,16 @@ class EquipmentRequestController extends Controller
 
         if (isset($request->stt)) {
             if ($request->stt == 2) {
-
-                $AllEquipmentRequest = $AllEquipmentRequest
-                    ->where(function ($query) {
-                        $query->where('status', 0)
-                            ->orWhere('status', 3);
-                    })
-                    ->where("request_date", '<', now()->subDays(3));
+                $AllEquipmentRequest = $AllEquipmentRequest->where("status", 2);
             } elseif ($request->stt == 3) {
-
-                $AllEquipmentRequest = $AllEquipmentRequest->where("status", 3)
-                    ->where("request_date", '>', now()->subDays(3));
+                $AllEquipmentRequest = $AllEquipmentRequest->where("status", 3);
             } elseif ($request->stt == 0) {
-
-                $AllEquipmentRequest = $AllEquipmentRequest->where("status", 0)
-                    ->where("request_date", '>', now()->subDays(3));
+                $AllEquipmentRequest = $AllEquipmentRequest->where("status", 0);
             } elseif ($request->stt == 4) {
-
                 $AllEquipmentRequest = $AllEquipmentRequest->where("status", 4);
             } elseif ($request->stt == 5) {
-
                 $AllEquipmentRequest = $AllEquipmentRequest->where("status", 5);
             } else {
-
                 $AllEquipmentRequest = $AllEquipmentRequest->where("status", 1);
             }
         }
@@ -136,6 +125,38 @@ class EquipmentRequestController extends Controller
             return redirect()->back();
         }
 
+        if (!empty($request->no_browse_request)) {
+            $reason_refuse = $request->reason_refuse;
+            $user_request = $request->user_request;
+            $email_user_request = $request->email_user_request;
+
+            if (!empty($reason_refuse) && $reason_refuse === 'other') {
+                $reason_refuse = $request->reason_refuse_other;
+            }
+
+            $this->callModel::where('code', $request->no_browse_request)
+                ->where('status', 0)
+                ->update([
+                    'reason_refuse' => $reason_refuse,
+                    'browse_by' => session('user_code'),
+                    'status' => 5,
+                ]);
+
+            $contentNotification = '
+                <p>Phiếu yêu cầu mua hàng với mã <a class="text-primary fw-bolder text-decoration-underline" href="' . route('equipment_request.import') . '?kw=' . $request->no_browse_request . '">#' . $request->no_browse_request . '</a> được tạo bởi <a class="text-dark fw-bolder text-decoration-underline" href="' . route('user.index') . '?kw=' . $email_user_request . '">' . $user_request . '</a> đã bị <span class="text-danger fw-bolder">từ chối</span> bởi lý do <strong>' . $reason_refuse . '</strong>, vui lòng liên hệ đến ban quản lý kho để được xử lý.</p>
+            ';
+
+            Notifications::create([
+                'code' => 'TB' . $this->generateRandomString(8),
+                'content' => $contentNotification,
+                'user_code' => session('user_code'),
+            ]);
+
+            toastr()->success('Đã từ chối phiếu yêu cầu mua hàng');
+
+            return redirect()->back();
+        }
+
         if (!empty($request->import_request_codes)) {
 
             if ($request->action_type === 'browse') {
@@ -145,11 +166,12 @@ class EquipmentRequestController extends Controller
                     'browse_by' => session('user_code'),
                 ]);
 
-                toastr()->success('Duyệt phiếu chờ thành công');
+                toastr()->success('Duyệt phiếu thành công');
 
                 return redirect()->back();
             } elseif ($request->action_type === 'delete') {
-                $record_delete_requests = $this->callModel::whereIn('code', $request->import_request_codes);
+                $record_delete_requests = $this->callModel::whereIn('code', $request->import_request_codes)
+                    ->where('user_code', session('user_code'));
 
                 $record_delete_requests->update([
                     'deleted_by' => session('user_code'),
@@ -157,7 +179,7 @@ class EquipmentRequestController extends Controller
 
                 $record_delete_requests->delete();
 
-                toastr()->success('Hủy thành công');
+                toastr()->success('Hủy phiếu của bạn thành công');
 
                 return redirect()->back();
             }
@@ -168,13 +190,37 @@ class EquipmentRequestController extends Controller
         return view("{$this->route}.import_equipment_request.index", compact('title', 'AllEquipmentRequest', 'AllSupplier', 'AllUser', 'allReceiptNo'));
     }
 
+    public function exportPdfEquipmentRequestList($code)
+    {
+        $user_create = Import_equipment_requests::with('users')
+            ->where('code', $code)
+            ->first();
+
+        $equipmentRequestList = Import_equipment_request_details::with(['equipments'])
+            ->where('import_request_code', $code)
+            ->get();
+
+        // Chuẩn bị dữ liệu cho view PDF
+        $data = [
+            'equipmentRequestList' => $equipmentRequestList,
+            'user_create' =>  $user_create->users->last_name . ' ' . $user_create->users->first_name,
+            'code' => $code
+        ];
+
+        // Render view HTML ra PDF
+        $pdf = Pdf::loadView('exports.equipment-request-pdf', $data);
+
+        // Tải file PDF xuống
+        return $pdf->download('YeuCauBaoGiaThietBi_' . now()->format('YmdHis') . '.pdf');
+    }
+
     public function exportExcelEquipmentRequestList($code)
     {
         $equipmentRequestList = Import_equipment_request_details::with(['equipments'])
             ->where('import_request_code', $code)
             ->get();
 
-        return Excel::download(new EquipmentRequest($equipmentRequestList), 'YeuCauBaoGiaThietBi_' . now() . '.xlsx');
+        return Excel::download(new EquipmentRequest($equipmentRequestList), 'MauExcelYeuCauBaoGiaThietBi' . now() . '.xlsx');
     }
 
     public function import_equipment_request_trash(Request $request)
@@ -182,6 +228,7 @@ class EquipmentRequestController extends Controller
         $title = 'Yêu Cầu Mua Hàng';
 
         $AllEquipmentRequestTrash = $this->callModel::with(['suppliers', 'users', 'import_equipment_request_details'])
+            ->where('user_code', session('user_code'))
             ->orderBy('deleted_at', 'DESC')
             ->onlyTrashed()
             ->paginate(10);
@@ -263,6 +310,46 @@ class EquipmentRequestController extends Controller
                     'equipment_code' => $equipment->code,
                 ]);
             }
+        }
+
+        if ($request->hasFile('file') && $request->file('file')->isValid()) {
+            $file = $request->file('file');
+            $spreadsheet = IOFactory::load($file->getPathname());
+            $sheet = $spreadsheet->getActiveSheet();
+
+            // Lấy dữ liệu từ hàng 10 đến hàng cuối, chỉ các cột cần thiết
+            $startRow = 10;
+            $endRow = $sheet->getHighestRow(); // Xác định hàng cuối cùng
+            $data = [];
+
+            for ($row = $startRow; $row <= $endRow; $row++) {
+                $equipment_code = $sheet->getCell('B' . $row)->getValue();
+                $name = $sheet->getCell('C' . $row)->getValue();
+                $unit = $sheet->getCell('D' . $row)->getValue();
+                $quantity = $sheet->getCell('E' . $row)->getValue();
+                $quantity_quote = $sheet->getCell('F' . $row)->getValue();
+                $price = $sheet->getCell('G' . $row)->getValue();
+                $discount = $sheet->getCell('H' . $row)->getValue();
+                $vat = $sheet->getCell('I' . $row)->getValue();
+
+                // Bỏ qua dòng trống hoặc không có STT
+                if (empty($unit)) {
+                    continue;
+                }
+
+                $data[] = [
+                    'equipment_code' => $equipment_code,
+                    'name' => $name,
+                    'unit' => $unit,
+                    'quantity' => (int) $quantity,
+                    'quantity_quote' => (int) $quantity_quote,
+                    'price' => (float) $price,
+                    'discount' => (float) $discount,
+                    'vat' => (float) $vat,
+                ];
+            }
+
+            return response()->json($data, 200);
         }
 
         return view("{$this->route}.import_equipment_request.form", compact('title', 'action', 'AllSupplier', 'AllEquipment'));
@@ -425,6 +512,7 @@ class EquipmentRequestController extends Controller
                     ],
                     [
                         'quantity' => $equipment['quantity'],
+                        'discount' => $equipment['discount'],
                         'quantity_quote' => $equipment['quantity_quote'],
                         'deviation_quote' => $equipment['deviation_quote'],
                         'price' => $equipment['price'],

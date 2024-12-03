@@ -91,9 +91,9 @@
         </p>
 
         <div class="text-center">
-            <a href="{{ asset('/' . $fileExcel) }}" class="pointer button" style="color: rgb(255, 255, 255);"
-                download="{{ basename($fileExcel) }}">
-                <i class="fa fa-download me-1"></i>Tải Danh Sách
+            <a href="{{ asset('/' . $filePdf) }}" class="pointer button" style="color: rgb(255, 255, 255);"
+                download="{{ basename($filePdf) }}">
+                <i class="fa fa-download me-1"></i>Xem Danh Sách Yêu Cầu Báo Giá
             </a>
         </div>
 

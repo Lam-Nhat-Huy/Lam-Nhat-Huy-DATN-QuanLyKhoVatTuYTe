@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->char('code', 10)->primary();
+            $table->string('image', 255)->nullable();
             $table->string('name', 255);
             $table->string('contact_name', 255)->nullable();
             $table->string('tax_code', 255)->nullable();
