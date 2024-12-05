@@ -131,7 +131,7 @@
                                     </td>
                                     <td>
                                         @if (!empty($item->supplier_code))
-                                            <a class="text-decoration-underline fw-bolder ellipsis"
+                                            <a class="text-decoration-underline fw-bolder"
                                                 href="{{ route('supplier.list') }}?keyword={{ $item->suppliers->name }}">
                                                 {{ $item->suppliers->name }}
                                             </a>
@@ -140,7 +140,13 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {{ $item->users->last_name . ' ' . $item->users->first_name ?? 'N/A' }}
+                                        @if ($item->user_code == session('user_code'))
+                                            {{ $item->users->last_name . ' ' . $item->users->first_name }} <i
+                                                class="fa fa-user" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="Tôi"></i>
+                                        @else
+                                            {{ $item->users->last_name . ' ' . $item->users->first_name }}
+                                        @endif
                                     </td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->request_date)->format('d-m-Y') }}
@@ -406,9 +412,17 @@
                                                             phiếu
                                                         </button>
                                                     @elseif ($item->status == 1)
+                                                        @if (session('isAdmin') == 1)
+                                                            <a href="{{ route('equipment_request.update_import', ['code' => $item->code, 'status' => 'update_quote']) }}"
+                                                                class="btn btn-sm rounded-pill btn-dark me-2">
+                                                                <i class="fas fa-edit" style="margin-bottom: 2px;"></i>
+                                                                Cập nhật giá
+                                                            </a>
+                                                        @endif
+
                                                         <!-- Nút Tạo Phiếu Nhập -->
                                                         <a href="{{ route('warehouse.create_import') }}?cd={{ $item->code }}"
-                                                            class="btn btn-sm rounded-pill btn-dark me-2">
+                                                            class="btn btn-sm rounded-pill btn-youtube me-2">
                                                             <i class="fas fa-file-import" style="margin-bottom: 2px;"></i>
                                                             Tạo phiếu nhập
                                                         </a>
@@ -420,16 +434,87 @@
                                                             phiếu
                                                         </button>
                                                     @elseif ($item->status == 2)
-                                                        <a href="{{ route('equipment_request.update_import', ['code' => $item->code, 'status' => 'update_quote']) }}"
-                                                            class="btn btn-sm rounded-pill btn-dark me-2">
-                                                            <i class="fas fa-edit" style="margin-bottom: 2px;"></i>
-                                                            Cập nhật giá
-                                                        </a>
-                                                        <a href="{{ route('equipment_request.exportPdfEquipmentRequestList', $item->code) }}"
-                                                            class="btn btn-sm rounded-pill btn-twitter me-2">
-                                                            <i class="fas fa-file-pdf" style="margin-bottom: 2px;"></i>
-                                                            Tải yêu cầu báo giá
-                                                        </a>
+                                                        @if (session('isAdmin') == 1)
+                                                            <button type="button"
+                                                                class="checkbox-wrapper-6 me-2 btn btn-sm btn-dark rounded-pill">
+                                                                <div class="d-flex align-items-center">
+                                                                    Cho phép sửa
+                                                                    <input class="tgl tgl-light" id="allow_to_edit"
+                                                                        type="checkbox" value="1"
+                                                                        name="allow_to_edit"
+                                                                        {{ !empty($item->allow_to_edit) && $item->allow_to_edit == 1 ? 'checked' : '' }} />
+                                                                    <label class="tgl-btn ms-2" for="allow_to_edit"
+                                                                        style="width: 30px; height: 18px;"></label>
+                                                                </div>
+                                                            </button>
+
+                                                            <script>
+                                                                document.getElementById('allow_to_edit').addEventListener('change', function(event) {
+                                                                    event.preventDefault();
+
+                                                                    document.getElementById('loading').style.display = 'block';
+                                                                    document.getElementById('loading-overlay').style.display = 'block';
+                                                                    this.disabled = true;
+
+                                                                    setTimeout(() => {
+                                                                        const allow_to_edit = document.getElementById('allow_to_edit').checked ? 1 : 2;
+
+                                                                        let formData = new FormData();
+                                                                        formData.append('allow_to_edit', allow_to_edit);
+
+                                                                        fetch('{{ route('equipment_request.allowToEdit', $item->code) }}', {
+                                                                                method: 'POST',
+                                                                                body: formData,
+                                                                                headers: {
+                                                                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                                                }
+                                                                            }).then(response => response.json())
+                                                                            .then(data => {
+                                                                                if (data.success) {
+                                                                                    toastr.success(data.message);
+                                                                                }
+
+                                                                                if (data.hide == 1) {
+                                                                                    document.getElementById('action_update_price').classList.add('d-none');
+                                                                                } else {
+                                                                                    document.getElementById('action_update_price').classList.remove(
+                                                                                        'd-none');
+                                                                                }
+                                                                            })
+                                                                            .catch(error => console.error('Error:', error))
+                                                                            .finally(() => {
+                                                                                document.getElementById('loading').style.display = 'none';
+                                                                                document.getElementById('loading-overlay').style.display = 'none';
+                                                                                this.disabled = false;
+                                                                            });
+                                                                    }, 500);
+                                                                });
+                                                            </script>
+                                                        @endif
+
+                                                        <span id="action_update_price"
+                                                            class="{{ $item->allow_to_edit == 0 ? '' : 'd-none' }}">
+                                                            <a href="{{ route('equipment_request.update_import', ['code' => $item->code, 'status' => 'update_quote']) }}"
+                                                                class="btn btn-sm rounded-pill btn-youtube me-2">
+                                                                <i class="fas fa-edit" style="margin-bottom: 2px;"></i>
+                                                                Cập nhật giá
+                                                            </a>
+                                                            <a href="{{ route('equipment_request.exportPdfEquipmentRequestList', $item->code) }}"
+                                                                class="btn btn-sm rounded-pill btn-twitter me-2">
+                                                                <i class="fas fa-file-pdf"
+                                                                    style="margin-bottom: 2px;"></i>
+                                                                Tải yêu cầu báo giá
+                                                            </a>
+                                                        </span>
+
+                                                        @if ($item->allow_to_edit == 1 && $item->user_code == session('user_code'))
+                                                            <!-- Nút Sửa đơn -->
+                                                            <a href="{{ route('equipment_request.update_import', $item->code) }}"
+                                                                class="btn btn-twitter btn-sm me-2 rounded-pill">
+                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
+                                                                phiếu
+                                                            </a>
+                                                        @endif
                                                     @endif
                                                 </div>
                                             </div>

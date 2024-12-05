@@ -531,7 +531,7 @@
 
                             foreach ($getListIERD as $detail) {
                                 $priceIerd = $detail->price ?? 0;
-                                $quantityIerd = $detail->quantity_quote;
+                                $quantityIerd = $detail->quantity;
                                 $discountIerd = $detail->discount ?? 0;
                                 $vatIerd = $detail->equipments->vat ?? 0;
 
@@ -729,6 +729,16 @@
 @section('scripts')
     <script>
         let addedEquipments = [];
+        
+        const checkList = @json($checkList ?? []);
+
+        if (checkList.length > 0) {
+            checkList.forEach(item => {
+                if (!addedEquipments.includes(item)) {
+                    addedEquipments.push(item);
+                }
+            });
+        }
 
         if (document.getElementById('import_equipment_request_temp') && document.getElementById(
                 'import_equipment_request_save') && document.getElementById('import_equipment_request_update')) {

@@ -62,14 +62,14 @@
                                                 class="row-checkbox" />
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="fw-bolder">
                                         #{{ $item->code }}
                                     </td>
                                     <td>
                                         {{ $item->order_number ?? 'Không Có' }}
                                     </td>
                                     <td>
-                                        {{ $item->receipt_no }}
+                                        <span class="text-danger fw-bolder">#{{ $item->receipt_no }}</span>
                                     </td>
                                     <td class="custom-w">
                                         {{ $item->receipt_type ?? 'Không có' }}
@@ -232,31 +232,27 @@
                                                             <table class="table table-flush gy-1">
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td class=""><strong>Tổng đầu</strong>
-                                                                        </td>
-                                                                        <td class="text-dark">
-                                                                            {{ number_format($totalPrice, 0) }} VND
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
                                                                         <td class=""><strong>Tổng chiết
                                                                                 khấu</strong>
                                                                         </td>
                                                                         <td class="text-dark">
-                                                                            {{ number_format($totalDiscount, 0) }} VND
+                                                                            {{ number_format($totalDiscount, 0, ',', '.') }}
+                                                                            VND
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td class=""><strong>Tổng VAT</strong>
                                                                         </td>
                                                                         <td class="text-dark">
-                                                                            {{ number_format($totalVAT, 0) }} VND</td>
+                                                                            {{ number_format($totalVAT, 0, ',', '.') }} VND
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td class=""><strong>Tổng cộng</strong>
                                                                         </td>
                                                                         <td class="text-dark">
-                                                                            {{ number_format($totalAmount, 0) }} VND
+                                                                            {{ number_format($totalAmount, 0, ',', '.') }}
+                                                                            VND
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -290,7 +286,10 @@
                                                                         <th style="width: 10%;">Số lô</th>
                                                                         <th style="width: 10%;">Chiết khấu(%)</th>
                                                                         <th style="width: 10%;">VAT(%)</th>
-                                                                        <th class="pe-3" style="width: 15%;">
+                                                                        <th class="pe-3" style="width: 15%;"
+                                                                            data-bs-toggle="tooltip"
+                                                                            data-bs-placement="top"
+                                                                            title="Bao gồm chiết khấu và thuế VAT">
                                                                             Tổng
                                                                         </th>
                                                                     </tr>
@@ -303,8 +302,10 @@
                                                                             $discount = $detail->discount ?? 0;
                                                                             $vat = $detail->VAT ?? 0;
 
-                                                                            $totalPrice =
-                                                                                $quantity * ($price - $discount);
+                                                                            $itemPrice = $quantity * $price;
+                                                                            $itemDiscount =
+                                                                                $itemPrice * ($discount / 100);
+                                                                            $totalPrice = $itemPrice - $itemDiscount;
                                                                             $totalPriceWithVAT =
                                                                                 $totalPrice * (1 + $vat / 100);
                                                                         @endphp
@@ -315,12 +316,16 @@
                                                                             <td>{{ $detail->quantity }}</td>
                                                                             <td>{{ $detail->deviation_quote ?? 'Không Có' }}
                                                                             </td>
-                                                                            <td>{{ number_format($detail->price) }} VND
+                                                                            <td>{{ number_format($detail->price, 0, ',', '.') }}
+                                                                                VND
                                                                             </td>
                                                                             <td>{{ $detail->batch_number }}</td>
-                                                                            <td>{{ $detail->discount }}%</td>
-                                                                            <td>{{ $detail->VAT }}%</td>
-                                                                            <td>{{ number_format($totalPriceWithVAT) }}
+                                                                            <td>{{ number_format($detail->discount, 0, ',', '.') }}%
+                                                                            </td>
+                                                                            <td>{{ number_format($detail->VAT, 0, ',', '.') }}%
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ number_format($totalPriceWithVAT, 0, ',', '.') }}
                                                                                 VND
                                                                             </td>
                                                                         </tr>

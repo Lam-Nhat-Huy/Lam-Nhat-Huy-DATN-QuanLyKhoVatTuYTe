@@ -102,16 +102,19 @@
                                     </td>
 
                                     <td class="text-center">
-                                        <div class="btn-group">
-                                            <a href="{{ route('notification.notification_edit', $item->code) }}"
-                                                class="btn btn-sm btn-info me-2 rounded-pill">
-                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i> Sửa
-                                            </a>
-                                            <button type="button" class="btn btn-sm btn-danger rounded-pill"
-                                                data-bs-toggle="modal" data-bs-target="#deleteModal_{{ $item->code }}">
-                                                <i class="fa fa-trash" style="margin-bottom: 2px;"></i> Xóa
-                                            </button>
-                                        </div>
+                                        @if ($item->user_code == session('user_code'))
+                                            <div class="btn-group">
+                                                <a href="{{ route('notification.notification_edit', $item->code) }}"
+                                                    class="btn btn-sm btn-info me-2 rounded-pill">
+                                                    <i class="fa fa-edit" style="margin-bottom: 2px;"></i> Sửa
+                                                </a>
+                                                <button type="button" class="btn btn-sm btn-danger rounded-pill"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal_{{ $item->code }}">
+                                                    <i class="fa fa-trash" style="margin-bottom: 2px;"></i> Xóa
+                                                </button>
+                                            </div>
+                                        @endif
                                     </td>
 
 

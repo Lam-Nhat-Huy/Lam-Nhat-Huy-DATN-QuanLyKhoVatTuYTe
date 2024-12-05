@@ -10,12 +10,14 @@ return new class extends Migration
     {
         Schema::create('export_equipment_requests', function (Blueprint $table) {
             $table->char('code', 10)->primary();
-            $table->char('department_code', 20)->nullable();
+            $table->char('department_code', 10)->nullable();
             $table->text('reason_export')->nullable();
             $table->text('note')->nullable();
             $table->boolean('status')->default(false);
             $table->timestamp('request_date')->nullable();
             $table->timestamp('required_date')->nullable();
+            $table->text('reason_refuse')->nullable();
+            $table->boolean('allow_to_edit')->default(false);
             $table->char('user_code', 10)->nullable();
             $table->char('updated_by', 10)->nullable();
             $table->char('deleted_by', 10)->nullable();

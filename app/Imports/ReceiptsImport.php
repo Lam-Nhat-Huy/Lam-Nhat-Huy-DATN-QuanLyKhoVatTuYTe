@@ -27,7 +27,7 @@ class ReceiptsImport implements ToModel, WithHeadingRow
             'supplier_code' => $row['supplier_code'],
             'receipt_no' => $row['receipt_no'],
             'receipt_date' => \Carbon\Carbon::parse($row['receipt_date']),
-            'created_by' => 'U001',
+            'created_by' => 'USER121204',
             'status' => 'active',
         ]);
 

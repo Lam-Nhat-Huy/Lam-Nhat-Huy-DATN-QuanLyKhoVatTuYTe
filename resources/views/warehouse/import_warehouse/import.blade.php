@@ -121,7 +121,13 @@
                                         {{ $item->receipt_type ?? 'Không có' }}
                                     </td>
                                     <td>
-                                        {{ $item->user->last_name . ' ' . $item->user->first_name }}
+                                        @if ($item->created_by == session('user_code'))
+                                            {{ $item->user->last_name . ' ' . $item->user->first_name }} <i
+                                                class="fa fa-user" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="Tôi"></i>
+                                        @else
+                                            {{ $item->user->last_name . ' ' . $item->user->first_name }}
+                                        @endif
                                     </td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->receipt_date)->format('d/m/Y') }}
@@ -223,7 +229,7 @@
                                                                     {{ $item->no_action == 1 || str_contains($item->code, 'PN-KK') ? 'disabled' : '' }}>
                                                                     <i class="fa fa-trash"
                                                                         style="margin-bottom: 2px; font-size: 12px;"></i>
-                                                                    Xóa phiếu
+                                                                    Hủy phiếu
                                                                 </button>
                                                             @endif
 
@@ -348,20 +354,23 @@
                                                                                 khấu</strong>
                                                                         </td>
                                                                         <td class="text-dark">
-                                                                            {{ number_format($totalDiscount, 0) }} VND
+                                                                            {{ number_format($totalDiscount, 0, ',', '.') }}
+                                                                            VND
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td class=""><strong>Tổng VAT</strong>
                                                                         </td>
                                                                         <td class="text-dark">
-                                                                            {{ number_format($totalVAT, 0) }} VND</td>
+                                                                            {{ number_format($totalVAT, 0, ',', '.') }} VND
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td class=""><strong>Tổng cộng</strong>
                                                                         </td>
                                                                         <td class="text-dark">
-                                                                            {{ number_format($totalAmount, 0) }} VND
+                                                                            {{ number_format($totalAmount, 0, ',', '.') }}
+                                                                            VND
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -395,7 +404,10 @@
                                                                         <th style="width: 10%;">Số lô</th>
                                                                         <th style="width: 10%;">CK(%)</th>
                                                                         <th style="width: 10%;">VAT(%)</th>
-                                                                        <th class="pe-3" style="width: 15%;">
+                                                                        <th class="pe-3" style="width: 15%;"
+                                                                            data-bs-toggle="tooltip"
+                                                                            data-bs-placement="top"
+                                                                            title="Bao gồm chiết khấu và thuế VAT">
                                                                             Tổng
                                                                         </th>
                                                                     </tr>
@@ -443,12 +455,17 @@
                                                                                         class="fa-solid fa-triangle-exclamation text-danger"></i>
                                                                                 </td>
                                                                             @endif
-                                                                            <td>{{ number_format($detail->price) }} VND
+                                                                            <td>{{ number_format($detail->price, 0, ',', '.') }}
+                                                                                VND
                                                                             </td>
                                                                             <td>{{ $detail->batch_number }}</td>
-                                                                            <td>{{ $detail->discount }}%</td>
-                                                                            <td>{{ $detail->VAT }}%</td>
-                                                                            <td>{{ number_format($totalPriceWithVAT) }} VND
+                                                                            <td>{{ number_format($detail->discount, 0, ',', '.') }}%
+                                                                            </td>
+                                                                            <td>{{ number_format($detail->VAT, 0, ',', '.') }}%
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ number_format($totalPriceWithVAT, 0, ',', '.') }}
+                                                                                VND
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -506,7 +523,8 @@
                                                                 class="btn btn-danger btn-sm rounded-pill"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#delete-{{ $item->code }}">
-                                                                <i class="fa fa-trash" style="margin-bottom: 2px;"></i>Hủy
+                                                                <i class="fa fa-trash"
+                                                                    style="margin-bottom: 2px;"></i>{{ isset($item->order_number) ? 'Xóa' : 'Hủy' }}
                                                                 phiếu
                                                             </button>
                                                         @endif

@@ -47,7 +47,7 @@
 
             <div class="py-5 px-lg-17 row">
 
-                <div class="col-3">
+                <div class="col-4">
                     <label class="fs-5 fw-bold mb-3">{{ $title_filed }}</label>
                     <iframe id="preview-pdf" src="{{ !empty($FirstReport->file) ? asset($FirstReport->file) : '' }}"
                         width="100%" height="400px"
@@ -63,11 +63,11 @@
                 </div>
 
 
-                <div class="me-n7 pe-7 col-9">
+                <div class="me-n7 pe-7 col-8">
 
                     <div class="row mb-5">
 
-                        <div class="col-md-6 fv-row">
+                        <div class="col-md-12 fv-row">
                             <label class="{{ $required }} fs-5 fw-bold mb-2">File báo cáo (PDF)</label>
 
                             <input type="file" class="form-control form-control-sm rounded-pill border border-success"
@@ -77,22 +77,6 @@
                                 <div class="message_error">{{ $message }}</div>
                             @enderror
 
-                        </div>
-
-                        <div class="col-md-6 fv-row">
-
-                            <label class="{{ $required }} fs-5 fw-bold mb-2">Loại báo cáo</label>
-
-                            <div class="d-flex align-items-center">
-                                <input type="text" name="report_type"
-                                    value="{{ !empty($FirstReport->report_type) ? $FirstReport->report_type : old('report_type') }}"
-                                    class="form-control form-control-sm border-success rounded-pill"
-                                    placeholder="Loại thông báo..">
-                            </div>
-
-                            @error('report_type')
-                                <div class="message_error">{{ $message }}</div>
-                            @enderror
                         </div>
 
                     </div>

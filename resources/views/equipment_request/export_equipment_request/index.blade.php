@@ -55,7 +55,7 @@
                         <option value="0" {{ request()->stt == '0' ? 'selected' : '' }}>Chờ Duyệt</option>
                         <option value="1" {{ request()->stt == '1' ? 'selected' : '' }}>Đang Chuẩn Bị</option>
                         <option value="5" {{ request()->stt == '5' ? 'selected' : '' }}>Đang Vận Chuyển</option>
-                        <option value="2" {{ request()->stt == '2' ? 'selected' : '' }}>Hết Hạn</option>
+                        <option value="2" {{ request()->stt == '2' ? 'selected' : '' }}>Bị Từ Chối</option>
                         <option value="3" {{ request()->stt == '3' ? 'selected' : '' }}>Lưu Tạm</option>
                         <option value="4" {{ request()->stt == '4' ? 'selected' : '' }}>Hoàn Thành</option>
                     </select>
@@ -106,7 +106,7 @@
                                 <tr class="hover-table pointer">
                                     <td>
                                         {{-- Phiếu tạm => ẩn hết, phiếu chờ duyệt thì hiện, phiếu đã duyệt chưa tạo thì hiện icon, phiếu đã duyệt tạo rồi thì ẩn --}}
-                                        @if ($item->status == 0 && $item->user_code == session('user_code'))
+                                        @if ($item->status == 0)
                                             <input type="checkbox" name="export_reqest_codes[]" value="{{ $item->code }}"
                                                 class="row-checkbox" />
                                         @elseif ($item->status == 3)
@@ -118,6 +118,9 @@
                                         @elseif ($item->status == 4)
                                             <i class="fa fa-check text-success" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title="Hoàn Thành"></i>
+                                        @elseif ($item->status == 2)
+                                            <i class="fas fa-times-circle text-danger" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Bị từ chối"></i>
                                         @elseif ($item->status == 1)
                                             <i class="fa-solid fa-circle-exclamation text-danger" style="font-size: 13px;"
                                                 data-bs-toggle="tooltip" data-bs-placement="top"
@@ -141,7 +144,13 @@
                                         {{ $item->reason_export }}
                                     </td>
                                     <td>
-                                        {{ $item->users->last_name . ' ' . $item->users->first_name ?? 'N/A' }}
+                                        @if ($item->user_code == session('user_code'))
+                                            {{ $item->users->last_name . ' ' . $item->users->first_name }} <i
+                                                class="fa fa-user" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="Tôi"></i>
+                                        @else
+                                            {{ $item->users->last_name . ' ' . $item->users->first_name }}
+                                        @endif
                                     </td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->request_date)->format('d-m-Y') }}
@@ -150,17 +159,17 @@
                                         {{ \Carbon\Carbon::parse($item->required_date)->format('d-m-Y H:i:s') }}
                                     </td>
                                     <td class="text-center">
-                                        @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->required_date)))
-                                            <div class="label label-temp bg-warning rounded-pill text-dark px-2 py-1">
-                                                Hết hạn
-                                            </div>
-                                        @elseif ($item->status == 3)
+                                        @if ($item->status == 3)
                                             <div class="label label-temp bg-info rounded-pill text-white px-2 py-1">
                                                 Lưu tạm
                                             </div>
                                         @elseif ($item->status == 0)
                                             <div class="label label-temp bg-danger rounded-pill text-white px-2 py-1">
                                                 Chờ duyệt
+                                            </div>
+                                        @elseif ($item->status == 2)
+                                            <div class="rounded-pill px-2 py-1 text-dark bg-warning">
+                                                Bị Từ Chối
                                             </div>
                                         @elseif ($item->status == 1)
                                             <div class="label label-temp bg-primary rounded-pill text-white px-2 py-1">
@@ -197,12 +206,7 @@
                                                             Danh Sách Thiết Bị Yêu Cầu
                                                         </h4>
                                                         <div class="card-toolbar">
-                                                            @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->required_date)))
-                                                                <div
-                                                                    class="label label-temp bg-warning rounded-pill text-dark px-2 py-1">
-                                                                    Hết hạn
-                                                                </div>
-                                                            @elseif ($item->status == 3)
+                                                            @if ($item->status == 3)
                                                                 <div
                                                                     class="label label-temp bg-info rounded-pill text-white px-2 py-1">
                                                                     Lưu tạm
@@ -216,6 +220,15 @@
                                                                 <div
                                                                     class="label label-temp bg-primary rounded-pill text-white px-2 py-1">
                                                                     Chuẩn bị
+                                                                </div>
+                                                            @elseif ($item->status == 2)
+                                                                <button type="button" data-bs-toggle="modal"
+                                                                    data-bs-target="#detail_reason_{{ $item->code }}"
+                                                                    class="rounded-pill px-2 py-1 btn btn-dark btn-sm me-2">
+                                                                    Xem Lý Do
+                                                                </button>
+                                                                <div class="rounded-pill px-2 py-1 text-dark bg-warning">
+                                                                    Bị Từ Chối
                                                                 </div>
                                                             @elseif ($item->status == 5)
                                                                 <div
@@ -236,7 +249,7 @@
                                                             {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
                                                         </span>
                                                         <span class="me-5">
-                                                            Người duyệt:
+                                                            Người {{ isset($item->reason_refuse) ? 'từ chối' : 'duyệt' }}:
                                                             {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
                                                         </span>
                                                     </div>
@@ -252,10 +265,11 @@
                                                                     <thead class="bg-dark">
                                                                         <tr class="text-center">
                                                                             <th class="ps-3">STT</th>
-                                                                            <th class="ps-3">Mã thiết bị</th>
-                                                                            <th class="ps-3">Tên thiết bị</th>
-                                                                            <th class="pe-3">Số lượng</th>
-                                                                            <th>Đơn Vị tính</th>
+                                                                            <th class="">Mã thiết bị</th>
+                                                                            <th class="">Tên thiết bị</th>
+                                                                            <th class="">Đơn Vị tính</th>
+                                                                            <th class="">Số lượng yêu cầu</th>
+                                                                            <th class="pe-3">Số lượng tồn kho</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -277,51 +291,13 @@
                                                                                 <td>
                                                                                     {{ $detail->equipments->name }}
                                                                                 </td>
-                                                                                <td>
-                                                                                    @if ($item->status == 1 || $item->status == 4 || $item->status == 5)
-                                                                                        <span class="pointer"
-                                                                                            data-bs-toggle="tooltip"
-                                                                                            data-bs-placement="top"
-                                                                                            title="Số lượng yêu cầu">
-                                                                                            {{ $detail->quantity }}
-                                                                                        </span>
-                                                                                    @elseif($detail->quantity > $detail->equipments->inventories->sum('current_quantity'))
-                                                                                        <span class="pointer"
-                                                                                            data-bs-toggle="tooltip"
-                                                                                            data-bs-placement="top"
-                                                                                            title="Số lượng yêu cầu">
-                                                                                            {{ $detail->quantity }}
-                                                                                        </span>
-                                                                                        /
-                                                                                        <span class="pointer"
-                                                                                            data-bs-toggle="tooltip"
-                                                                                            data-bs-placement="top"
-                                                                                            title="Số lượng tồn">
-                                                                                            {{ $detail->equipments->inventories->sum('current_quantity') }}
-                                                                                        </span>
-                                                                                        <i class="fa-solid fa-triangle-exclamation pointer
-                                                                                            text-danger"
-                                                                                            data-bs-toggle="tooltip"
-                                                                                            data-bs-placement="top"
-                                                                                            title="Vượt quá số lượng tồn kho">
-                                                                                        </i>
-                                                                                    @else
-                                                                                        <span class="pointer"
-                                                                                            data-bs-toggle="tooltip"
-                                                                                            data-bs-placement="top"
-                                                                                            title="Số lượng yêu cầu">
-                                                                                            {{ $detail->quantity }}
-                                                                                        </span>
-                                                                                        /
-                                                                                        <span class="pointer"
-                                                                                            data-bs-toggle="tooltip"
-                                                                                            data-bs-placement="top"
-                                                                                            title="Số lượng tồn">
-                                                                                            {{ $detail->equipments->inventories->sum('current_quantity') }}
-                                                                                        </span>
-                                                                                    @endif
-                                                                                </td>
                                                                                 <td>{{ $detail->equipments->units->name }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $detail->quantity }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $detail->equipments->inventories->sum('current_quantity') }}
                                                                                 </td>
                                                                             </tr>
                                                                         @endforeach
@@ -341,6 +317,14 @@
                                                     @if ($item->status == 0 && now()->lt(\Carbon\Carbon::parse($item->required_date)))
                                                         <!-- Nút Duyệt đơn -->
                                                         @if (session('isAdmin') == 1)
+                                                            {{-- Nút từ chối --}}
+                                                            <button class="btn btn-sm rounded-pill btn-danger me-2"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#noBrowse_{{ $item->code }}"
+                                                                type="button">
+                                                                <i class="fas fa-times-circle"
+                                                                    style="margin-bottom: 2px;"></i>Từ Chối
+                                                            </button>
                                                             @if ($canApprove)
                                                                 <button class="btn btn-sm rounded-pill btn-success me-2"
                                                                     data-bs-toggle="modal"
@@ -362,7 +346,7 @@
                                                             @endif
                                                         @endif
 
-                                                        @if ($item->user_code == session('user_code') || session('isAdmin') == 1)
+                                                        @if ($item->user_code == session('user_code'))
                                                             <!-- Nút Sửa đơn -->
                                                             <a href="{{ route('equipment_request.update_export', $item->code) }}"
                                                                 class="btn btn-dark btn-sm me-2 rounded-pill">
@@ -379,21 +363,7 @@
                                                                 phiếu
                                                             </button>
                                                         @endif
-                                                    @elseif (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->required_date)))
-                                                        {{-- Quá ngày cần thiết --}}
-
-                                                        <!-- Nút Hủy đơn -->
-                                                        <button class="btn btn-sm rounded-pill btn-danger me-2"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#deleteModal_{{ $item->code }}"
-                                                            type="button">
-                                                            <i class="fa fa-trash" style="margin-bottom: 2px;"></i>Hủy
-                                                            phiếu
-                                                        </button>
-                                                    @elseif (
-                                                        $item->status == 3 &&
-                                                            now()->lt(\Carbon\Carbon::parse($item->required_date)->addDays(1)) &&
-                                                            $item->user_code == session('user_code'))
+                                                    @elseif ($item->status == 3 && $item->user_code == session('user_code'))
                                                         {{-- Lưu tạm và ngày yêu cầu trong 3 ngày gần nhất --}}
 
                                                         @if ($canApprove)
@@ -410,7 +380,7 @@
                                                                 type="button" data-bs-toggle="tooltip"
                                                                 data-bs-placement="top"
                                                                 title="Trong danh sách có thiết bị chứa số
-                                                            lượng yêu cầu xuất vượt quá số lượng tồn">
+                                                                lượng yêu cầu xuất vượt quá số lượng tồn">
                                                                 <i class="fas fa-save" style="margin-bottom: 2px;"></i>
                                                                 Không thể tạo
                                                             </button>
@@ -435,35 +405,102 @@
                                                         {{-- Đã duyệt --}}
                                                         @if ($item->status == 1)
                                                             @if (session('isAdmin') == 1)
-                                                                <!-- Nút Hủy đơn -->
-                                                                <button class="btn btn-sm rounded-pill btn-danger me-2"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#deleteModal_{{ $item->code }}"
+                                                                <button type="button"
+                                                                    class="checkbox-wrapper-6 me-2 btn btn-sm btn-dark rounded-pill">
+                                                                    <div class="d-flex align-items-center">
+                                                                        Cho phép sửa
+                                                                        <input class="tgl tgl-light" id="allow_to_edit"
+                                                                            type="checkbox" value="1"
+                                                                            name="allow_to_edit"
+                                                                            {{ !empty($item->allow_to_edit) && $item->allow_to_edit == 1 ? 'checked' : '' }} />
+                                                                        <label class="tgl-btn ms-2" for="allow_to_edit"
+                                                                            style="width: 30px; height: 18px;"></label>
+                                                                    </div>
+                                                                </button>
+
+                                                                <script>
+                                                                    document.getElementById('allow_to_edit').addEventListener('change', function(event) {
+                                                                        event.preventDefault();
+
+                                                                        document.getElementById('loading').style.display = 'block';
+                                                                        document.getElementById('loading-overlay').style.display = 'block';
+                                                                        this.disabled = true;
+
+                                                                        setTimeout(() => {
+                                                                            const allow_to_edit = document.getElementById('allow_to_edit').checked ? 1 : 2;
+
+                                                                            let formData = new FormData();
+                                                                            formData.append('allow_to_edit', allow_to_edit);
+
+                                                                            fetch('{{ route('equipment_request.allowToEditExport', $item->code) }}', {
+                                                                                    method: 'POST',
+                                                                                    body: formData,
+                                                                                    headers: {
+                                                                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                                                    }
+                                                                                }).then(response => response.json())
+                                                                                .then(data => {
+                                                                                    if (data.success) {
+                                                                                        toastr.success(data.message);
+
+                                                                                        if (data.hide == 1) {
+                                                                                            document.getElementById('action_update_price').classList.add('d-none');
+                                                                                        } else {
+                                                                                            document.getElementById('action_update_price').classList.remove(
+                                                                                                'd-none');
+                                                                                        }
+                                                                                    } else {
+                                                                                        document.getElementById('allow_to_edit').checked = false;
+                                                                                        toastr.info(data.message);
+                                                                                    }
+                                                                                })
+                                                                                .catch(error => console.error('Error:', error))
+                                                                                .finally(() => {
+                                                                                    document.getElementById('loading').style.display = 'none';
+                                                                                    document.getElementById('loading-overlay').style.display = 'none';
+                                                                                    this.disabled = false;
+                                                                                });
+                                                                        }, 500);
+                                                                    });
+                                                                </script>
+                                                            @endif
+
+                                                            <span id="action_create"
+                                                                class="{{ $item->allow_to_edit == 0 ? '' : 'd-none' }}">
+                                                                <!-- Nút Tạo Phiếu Xuất -->
+                                                                <a href="{{ route('warehouse.create_export') }}?cd={{ $item->code }}"
+                                                                    class="btn btn-sm rounded-pill btn-youtube me-2">
+                                                                    <i class="fas fa-file-import"
+                                                                        style="margin-bottom: 2px;"></i> Tạo phiếu xuất
+                                                                </a>
+
+                                                                <!-- Nút In Phiếu -->
+                                                                <button class="btn btn-sm rounded-pill btn-twitter me-2"
+                                                                    onclick="printInvoice('{{ $item->code }}')"
                                                                     type="button">
-                                                                    <i class="fa fa-trash"
-                                                                        style="margin-bottom: 2px;"></i>Hủy
+                                                                    <i class="fa fa-print"
+                                                                        style="margin-bottom: 2px;"></i> In
                                                                     phiếu
                                                                 </button>
+                                                            </span>
+
+                                                            @if ($item->allow_to_edit == 1 && $item->user_code == session('user_code'))
+                                                                <!-- Nút Sửa đơn -->
                                                                 <a href="{{ route('equipment_request.update_export', $item->code) }}"
-                                                                    class="btn btn-sm rounded-pill btn-info me-2">
-                                                                    <i class="fas fa-edit"
-                                                                        style="margin-bottom: 2px;"></i>
-                                                                    Cập nhật
+                                                                    class="btn btn-twitter btn-sm me-2 rounded-pill">
+                                                                    <i class="fa fa-edit"
+                                                                        style="margin-bottom: 2px;"></i>Sửa
+                                                                    phiếu
                                                                 </a>
                                                             @endif
-                                                            <!-- Nút Tạo Phiếu Xuất -->
-                                                            <a href="{{ route('warehouse.create_export') }}?cd={{ $item->code }}"
-                                                                class="btn btn-sm rounded-pill btn-dark me-2">
-                                                                <i class="fas fa-file-import"
-                                                                    style="margin-bottom: 2px;"></i> Tạo phiếu xuất
-                                                            </a>
-
-                                                            <!-- Nút In Phiếu -->
-                                                            <button class="btn btn-sm rounded-pill btn-twitter me-2"
-                                                                onclick="printInvoice('{{ $item->code }}')"
+                                                        @elseif(!empty($item->status == 2) && $item->user_code == session('user_code'))
+                                                            <!-- Nút xóa vĩnh viễn đơn -->
+                                                            <button class="btn btn-sm rounded-pill btn-danger"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#deletedModal_{{ $item->code }}"
                                                                 type="button">
-                                                                <i class="fa fa-print" style="margin-bottom: 2px;"></i> In
-                                                                phiếu
+                                                                <i class="fa fa-trash" style="margin-bottom: 2px;"></i>
+                                                                Xóa vĩnh viễn
                                                             </button>
                                                         @endif
                                                     @endif
@@ -722,6 +759,136 @@
     </div>
 
     @foreach ($AllWarehouseExportRequest as $item)
+        <!-- Modal Xem Lý Do Từ Chối -->
+        <div class="modal fade" id="detail_reason_{{ $item->code }}" tabindex="-1" aria-labelledby="checkModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-success">
+                        <h5 class="modal-title text-white" id="checkModalLabel">Lý do từ chối</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center pb-0">
+                        <h6 class="text-dark">
+                            {{ $item->reason_refuse }}
+                        </h6>
+                    </div>
+                    <div class="modal-footer justify-content-center border-0">
+                        <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                            data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Từ Chối Duyệt Yêu Cầu Xuất Kho -->
+        <div class="modal fade" id="noBrowse_{{ $item->code }}" tabindex="-1" aria-labelledby="checkModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title text-white" id="checkModalLabel">Từ Chối Yêu Cầu Xuất Kho</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('equipment_request.export') }}" id="form_refuse" method="POST">
+                        @csrf
+                        <input type="hidden" name="no_browse_request" value="{{ $item->code }}">
+                        <div class="modal-body pb-0">
+                            <select name="reason_refuse" id="reason_refuse"
+                                class="form-select form-select-sm rounded-pill">
+                                <option value="">-- Chọn lý do từ chối --</option>
+                                <option value="Yêu cầu không hợp lệ hoặc thiếu thông tin">Yêu cầu không hợp lệ hoặc thiếu
+                                    thông tin</option>
+                                <option value="Không có đủ tồn kho">Không có đủ tồn kho</option>
+                                <option value="Thời điểm không phù hợp">Thời điểm không phù hợp</option>
+                                <option value="Lỗi hệ thống hoặc yêu cầu bị trùng lặp">Lỗi hệ thống hoặc yêu cầu bị trùng
+                                    lặp</option>
+                                <option value="Không đáp ứng quy định xuất kho hoặc chính sách nội bộ">Không đáp ứng quy
+                                    định xuất kho hoặc chính sách nội bộ</option>
+                                <option value="Vật tư đã hết hạn hoặc không đạt tiêu chuẩn">Vật tư đã hết hạn hoặc không
+                                    đạt tiêu chuẩn</option>
+                                <option value="Thiết bị/vật tư không còn trong danh mục sử dụng">Thiết bị/vật tư không còn
+                                    trong danh mục sử dụng</option>
+                                <option value="other">Khác</option>
+                            </select>
+                            <span id="reason_refuse_error" class="message_error pt-2 ps-2 d-none">Vui lòng chọn lý do từ
+                                chối.</span>
+
+                            <input type="text" name="reason_refuse_other" id="other_reason_refuse"
+                                class="form-control form-control-sm rounded-pill mt-3 d-none"
+                                placeholder="Nhập lý do từ chối..">
+                            <span id="other_reason_refuse_error" class="message_error pt-2 ps-2 d-none">Vui lòng nhập lý
+                                do</span>
+
+                            <input type="hidden" name="user_request"
+                                value="{{ $item->users->last_name . ' ' . $item->users->first_name }}">
+
+                            <input type="hidden" name="email_user_request" value="{{ $item->users->email }}">
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4"
+                                id="refuseForm">Gửi</button>
+                        </div>
+
+                        <script>
+                            const reasonRefuseSelect = document.getElementById('reason_refuse');
+                            const otherReasonInput = document.getElementById('other_reason_refuse');
+                            const reasonRefuseError = document.getElementById('reason_refuse_error');
+                            const otherReasonError = document.getElementById('other_reason_refuse_error');
+                            const refuseForm = document.getElementById('refuseForm');
+                            const form_refuse = document.getElementById('form_refuse');
+
+                            reasonRefuseSelect.addEventListener('change', function() {
+                                if (this.value === 'other') {
+                                    otherReasonInput.classList.remove('d-none');
+                                } else {
+                                    otherReasonInput.classList.add('d-none');
+                                    otherReasonInput.value = '';
+                                }
+
+                                reasonRefuseError.classList.add('d-none');
+                                otherReasonError.classList.add('d-none');
+                            });
+
+                            refuseForm.addEventListener('click', function(event) {
+                                event.preventDefault();
+
+                                document.getElementById('loading').style.display = 'block';
+                                document.getElementById('loading-overlay').style.display = 'block';
+                                this.disabled = true;
+
+                                setTimeout(() => {
+                                    let isValid = true;
+
+                                    if (reasonRefuseSelect.value === '') {
+                                        reasonRefuseError.classList.remove('d-none');
+                                        isValid = false;
+                                    }
+
+                                    if (reasonRefuseSelect.value === 'other' && otherReasonInput.value.trim() === '') {
+                                        otherReasonError.classList.remove('d-none');
+                                        isValid = false;
+                                    }
+
+                                    if (isValid) {
+                                        form_refuse.submit();
+                                    }
+
+                                    document.getElementById('loading').style.display = 'none';
+                                    document.getElementById('loading-overlay').style.display = 'none';
+                                    this.disabled = false;
+                                }, 1000);
+                            });
+                        </script>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <!-- Modal Duyệt Yêu Cầu Xuất Kho -->
         <div class="modal fade" id="browse_{{ $item->code }}" tabindex="-1" aria-labelledby="checkModalLabel"
             aria-hidden="true">
@@ -745,6 +912,33 @@
                                 data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" class="btn rounded-pill btn-sm btn-success px-4 load_animation">Duyệt
                                 phiếu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- Xóa vĩnh viễn --}}
+        <div class="modal fade" id="deletedModal_{{ $item->code }}" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title text-white" id="deleteModalLabel">Xóa Vĩnh Viễn Yêu Cầu Xuất Kho
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('equipment_request.export_trash') }}" id="form-4" method="POST">
+                        @csrf
+                        <input type="hidden" name="delete_request" value="{{ $item->code }}">
+                        <div class="modal-body pb-0 text-center">
+                            <p class="text-danger mb-4">Xóa vĩnh viễn Yêu Cầu Xuất Kho Này?</p>
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa Vĩnh
+                                Viễn</button>
                         </div>
                     </form>
                 </div>

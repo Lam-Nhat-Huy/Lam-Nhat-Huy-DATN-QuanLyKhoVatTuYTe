@@ -130,6 +130,7 @@ class ImportController extends Controller
 
                 Receipts::whereIn('code', $request->import_codes)
                     ->where('created_by', session('user_code'))
+                    ->whereNull('order_number')
                     ->where(function ($query) {
                         $query->where('status', 0)
                             ->orWhere('status', 3);
@@ -138,13 +139,14 @@ class ImportController extends Controller
 
                 Receipts::whereIn('code', $request->import_codes)
                     ->where('created_by', session('user_code'))
+                    ->whereNull('order_number')
                     ->where(function ($query) {
                         $query->where('status', 0)
                             ->orWhere('status', 3);
                     })
                     ->delete();
 
-                toastr()->success('Hủy phiếu của bạn thành công');
+                toastr()->success('Hủy phiếu nhập thường của bạn thành công');
 
                 return redirect()->back();
             }
@@ -659,7 +661,13 @@ class ImportController extends Controller
             return redirect()->back();
         }
 
-        if ($receipt->status == 1) {
+        if ($receipt->status == 0 && isset($receipt->order_number)) {
+            $receipt->forceDelete();
+
+            toastr('Đã xóa phiếu nhập');
+
+            return redirect()->back();
+        } elseif ($receipt->status == 1) {
             $canCancel = true;
 
             $latestInventoryCheck = Inventory_checks::latest('created_at')->first();
@@ -689,17 +697,18 @@ class ImportController extends Controller
 
                 $this->updateInventories($request->delete_code, '-');
 
-                $receipt->forceDelete();
+                $receipt->update([
+                    'browse_by' => NULL,
+                    'status' => 0,
+                ]);
 
-                if (isset($export->order_number)) {
-                    toastr()->success('Đã xóa phiếu nhập kho và phiếu yêu cầu nhập #' . $receipt->order_number . ' đã được trở về trạng thái chuẩn bị.');
-                    return redirect()->back();
-                }
+                toastr()->success('Phiếu nhập với mã #' . $request->delete_code . ' đã được trở về trạng thái chờ duyệt');
 
-                toastr()->success('Đã xóa phiếu nhập kho.');
+                toastr()->info('Phiếu yêu cầu nhập với mã <a href="' . route('equipment_request.import', ['kw' => $receipt->order_number]) . '">#' . $receipt->order_number . '</a> đã được trở về trạng thái chuẩn bị.');
+
                 return redirect()->back();
             } else {
-                toastr()->error('Không thể hủy phiếu nhập vì số lượng nhập của lô hàng vượt quá số lượng tồn kho hiện có của thiết bị.');
+                toastr()->error('Không thể hủy phiếu nhập này vì đã có lần xuất số lô thiết bị trong danh sách.');
                 return redirect()->back();
             }
         }

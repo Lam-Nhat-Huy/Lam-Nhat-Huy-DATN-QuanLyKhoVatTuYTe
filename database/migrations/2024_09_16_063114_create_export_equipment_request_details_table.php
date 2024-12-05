@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('export_equipment_request_details', function (Blueprint $table) {
             $table->id();
-            $table->char('export_request_code', 20)->nullable();
-            $table->char('equipment_code', 20)->nullable();
+            $table->char('export_request_code', 10)->nullable();
+            $table->char('equipment_code', 10)->nullable();
             $table->integer('quantity');
             $table->timestamps();
             $table->softDeletes();

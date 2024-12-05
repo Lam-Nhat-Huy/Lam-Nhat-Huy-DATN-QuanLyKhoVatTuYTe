@@ -190,6 +190,62 @@ class EquipmentRequestController extends Controller
         return view("{$this->route}.import_equipment_request.index", compact('title', 'AllEquipmentRequest', 'AllSupplier', 'AllUser', 'allReceiptNo'));
     }
 
+    public function allowToEdit(Request $request, $code)
+    {
+        if (!empty($request->allow_to_edit)) {
+
+            $a = Import_equipment_requests::where('code', $code)->first();
+
+
+            if ($a->allow_to_edit == 0) {
+
+                if (isset($b->order_number)) {
+
+                    return response()->json(['success' => false, 'message' => 'Phiếu yêu cầu này đã được tạo phiếu nhập và ở trạng thái chờ duyệt']);
+                } else {
+                    $a->update([
+                        'allow_to_edit' => 1,
+                    ]);
+
+                    return response()->json(['success' => true, 'message' => 'Đã cấp phép sửa phiếu cho người tạo phiếu', 'hide' => 1]);
+                }
+            } else {
+                $a->update([
+                    'allow_to_edit' => 0,
+                ]);
+
+                return response()->json(['success' => true, 'message' => 'Đã tắt', 'hide' => 0]);
+            }
+        }
+    }
+
+    public function allowToEditExport(Request $request, $code)
+    {
+        if (!empty($request->allow_to_edit)) {
+
+            $a = Export_equipment_requests::where('code', $code)->first();
+
+            if ($a->allow_to_edit == 0) {
+                if (Exports::where('export_request_code', $code)->count() > 0) {
+
+                    return response()->json(['success' => false, 'message' => 'Phiếu yêu cầu xuất kho này đã được tạo phiếu xuất và ở trạng thái chờ duyệt, không thể cấp quyền sửa']);
+                } else {
+                    $a->update([
+                        'allow_to_edit' => 1,
+                    ]);
+
+                    return response()->json(['success' => true, 'message' => 'Đã cấp phép sửa phiếu cho người tạo phiếu', 'hide' => 1]);
+                }
+            } else {
+                $a->update([
+                    'allow_to_edit' => 0,
+                ]);
+
+                return response()->json(['success' => true, 'message' => 'Đã tắt', 'hide' => 2]);
+            }
+        }
+    }
+
     public function exportPdfEquipmentRequestList($code)
     {
         $user_create = Import_equipment_requests::with('users')
@@ -281,6 +337,22 @@ class EquipmentRequestController extends Controller
 
         $AllEquipment = Equipments::orderBy('created_at', 'DESC')->get();
 
+        $getList = [];
+        if (isset($request->eq)) {
+            $equipment = Equipments::where('code', $request->eq)->first();
+
+            if ($equipment) {
+                $getList[] = [
+                    'equipment_code' => $equipment->code,
+                    'equipment_name' => $equipment->name,
+                    'equipment_vat' => $equipment->VAT,
+                    'inventory' => $equipment->inventories->sum('current_quantity'),
+                    'unit' => $equipment->units->name,
+                    'quantity' => $request->quantity,
+                ];
+            }
+        }
+
         if (!empty($request->name)) {
             $supplier = Suppliers::create([
                 'code' => 'SUP' . $this->generateRandomString(7),
@@ -302,12 +374,12 @@ class EquipmentRequestController extends Controller
             if ($equipment) {
                 return response()->json([
                     'success' => true,
+                    'equipment_code' => $equipment->code,
                     'equipment_name' => $equipment->name,
                     'equipment_vat' => $equipment->VAT,
                     'inventory' => $equipment->inventories->sum('current_quantity'),
                     'unit' => $equipment->units->name,
                     'quantity' => $request->quantity,
-                    'equipment_code' => $equipment->code,
                 ]);
             }
         }
@@ -352,7 +424,7 @@ class EquipmentRequestController extends Controller
             return response()->json($data, 200);
         }
 
-        return view("{$this->route}.import_equipment_request.form", compact('title', 'action', 'AllSupplier', 'AllEquipment'));
+        return view("{$this->route}.import_equipment_request.form", compact('title', 'action', 'AllSupplier', 'AllEquipment', 'getList'));
     }
 
     public function store_import_equipment_request(Request $request)
@@ -557,20 +629,13 @@ class EquipmentRequestController extends Controller
         if (isset($request->stt)) {
             if ($request->stt == 2) {
 
-                $AllWarehouseExportRequest = $AllWarehouseExportRequest
-                    ->where(function ($query) {
-                        $query->where('status', 0)
-                            ->orWhere('status', 3);
-                    })
-                    ->where("required_date", '<', now());
+                $AllWarehouseExportRequest = $AllWarehouseExportRequest->where("status", 2);
             } elseif ($request->stt == 3) {
 
-                $AllWarehouseExportRequest = $AllWarehouseExportRequest->where("status", 3)
-                    ->where("required_date", '>', now());
+                $AllWarehouseExportRequest = $AllWarehouseExportRequest->where("status", 3);
             } elseif ($request->stt == 0) {
 
-                $AllWarehouseExportRequest = $AllWarehouseExportRequest->where("status", 0)
-                    ->where("required_date", '>', now());
+                $AllWarehouseExportRequest = $AllWarehouseExportRequest->where("status", 0);
             } elseif ($request->stt == 4) {
 
                 $AllWarehouseExportRequest = $AllWarehouseExportRequest->where("status", 4);
@@ -656,6 +721,38 @@ class EquipmentRequestController extends Controller
 
                 return redirect()->back();
             }
+        }
+
+        if (!empty($request->no_browse_request)) {
+            $reason_refuse = $request->reason_refuse;
+            $user_request = $request->user_request;
+            $email_user_request = $request->email_user_request;
+
+            if (!empty($reason_refuse) && $reason_refuse === 'other') {
+                $reason_refuse = $request->reason_refuse_other;
+            }
+
+            Export_equipment_requests::where('code', $request->no_browse_request)
+                ->where('status', 0)
+                ->update([
+                    'reason_refuse' => $reason_refuse,
+                    'browse_by' => session('user_code'),
+                    'status' => 2,
+                ]);
+
+            $contentNotification = '
+                <p>Phiếu yêu cầu xuất kho với mã <a class="text-primary fw-bolder text-decoration-underline" href="' . route('equipment_request.export') . '?kw=' . $request->no_browse_request . '">#' . $request->no_browse_request . '</a> được tạo bởi <a class="text-dark fw-bolder text-decoration-underline" href="' . route('user.index') . '?kw=' . $email_user_request . '">' . $user_request . '</a> đã bị <span class="text-danger fw-bolder">từ chối</span> bởi lý do <strong>' . $reason_refuse . '</strong>, vui lòng liên hệ đến ban quản lý kho để được xử lý.</p>
+            ';
+
+            Notifications::create([
+                'code' => 'TB' . $this->generateRandomString(8),
+                'content' => $contentNotification,
+                'user_code' => session('user_code'),
+            ]);
+
+            toastr()->success('Đã từ chối phiếu yêu cầu xuất kho');
+
+            return redirect()->back();
         }
 
         return view("{$this->route}.export_equipment_request.index", compact('title', 'AllWarehouseExportRequest', 'AllDepartment', 'AllUser'));

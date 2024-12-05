@@ -10,11 +10,11 @@ return new class extends Migration
     {
         Schema::create('receipts', function (Blueprint $table) {
             $table->char('code', 10)->primary();
-            $table->char('supplier_code', 20);
+            $table->char('supplier_code', 10);
             $table->text('note')->nullable();
             $table->boolean('status')->default(false);
             $table->char('order_number', 10)->nullable();
-            $table->char('receipt_no', 8);
+            $table->string('receipt_no', 20);
             $table->timestamp('receipt_date')->nullable();
             $table->string('receipt_type', 55)->nullable();
             $table->text('reason_refuse')->nullable();

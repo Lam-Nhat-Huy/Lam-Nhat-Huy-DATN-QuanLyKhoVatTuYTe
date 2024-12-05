@@ -64,11 +64,7 @@
                                         {{ \Carbon\Carbon::parse($item->request_date)->format('d-m-Y') }}
                                     </td>
                                     <td class="text-center">
-                                        @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->request_date)->addDays(3)))
-                                            <div class="rounded-pill px-2 py-1 text-dark bg-warning">
-                                                Hết Hạn
-                                            </div>
-                                        @elseif ($item->status == 3)
+                                        @if ($item->status == 3)
                                             <div class="rounded-pill px-2 py-1 text-white bg-info">
                                                 Lưu Tạm
                                             </div>
@@ -108,11 +104,7 @@
                                                             Yêu Cầu
                                                         </h4>
                                                         <div class="card-toolbar">
-                                                            @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->request_date)->addDays(3)))
-                                                                <div class="rounded-pill px-2 py-1 text-dark bg-warning">
-                                                                    Hết Hạn
-                                                                </div>
-                                                            @elseif ($item->status == 3)
+                                                            @if ($item->status == 3)
                                                                 <div class="rounded-pill px-2 py-1 text-white bg-info">
                                                                     Lưu Tạm
                                                                 </div>
@@ -131,12 +123,6 @@
                                                             @endif
                                                         </div>
                                                     </div>
-                                                    <div class="mb-3">
-                                                        <span class="me-5">
-                                                            Người Xóa:
-                                                            {{ $item->deletedByUser ? $item->deletedByUser->last_name . ' ' . $item->deletedByUser->first_name : 'N/A' }}
-                                                        </span>
-                                                    </div>
                                                     <div class="card-body p-0" style="padding-top: 0px !important">
                                                         <!-- Begin::Receipt Items (Right column) -->
                                                         <div class="col-md-12">
@@ -148,9 +134,7 @@
                                                                             <th class="ps-3">STT</th>
                                                                             <th class="">Tên thiết bị</th>
                                                                             <th>Đơn Vị Tính</th>
-                                                                            <th class="">Số lượng</th>
-                                                                            <th class="">Đơn Giá</th>
-                                                                            <th class="pe-3">Thành Tiền</th>
+                                                                            <th class="pe-3">Số lượng</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -162,11 +146,6 @@
                                                                                 <td>{{ $detail->equipments->units->name }}
                                                                                 </td>
                                                                                 <td>{{ $detail->quantity }}</td>
-                                                                                <td>{{ number_format($detail->price, 0, ',', '.') }}
-                                                                                    VND</td>
-                                                                                <td>{{ number_format($detail->quantity * $detail->price, 0, ',', '.') }}
-                                                                                    VND
-                                                                                </td>
                                                                             </tr>
                                                                         @endforeach
                                                                     </tbody>

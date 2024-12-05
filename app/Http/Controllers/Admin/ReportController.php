@@ -42,8 +42,7 @@ class ReportController extends Controller
         if (isset($request->kw)) {
             $AllReport = $AllReport->where(function ($query) use ($request) {
                 $query->where('content', 'like', '%' . $request->kw . '%')
-                    ->orWhere('code', 'like', '%' . $request->kw . '%')
-                    ->orWhere('report_type', 'like', '%' . $request->kw . '%');
+                    ->orWhere('code', 'like', '%' . $request->kw . '%');
             });
         }
 
@@ -180,7 +179,6 @@ class ReportController extends Controller
             $data['file'] = $filePath;
 
             // Gán loại báo cáo và các thông tin bổ sung
-            $data['report_type'] = $request->report_type;
             $data['code'] = 'RP' . $this->generateRandomString(8); // Tạo mã báo cáo ngẫu nhiên
             $data['user_code'] = session('user_code');
             $data['created_at'] = now();
@@ -243,7 +241,6 @@ class ReportController extends Controller
             }
 
             // Cập nhật loại báo cáo và thời gian cập nhật
-            $data['report_type'] = $request->report_type;
             $data['updated_at'] = now();
 
             // Cập nhật dữ liệu báo cáo trong cơ sở dữ liệu

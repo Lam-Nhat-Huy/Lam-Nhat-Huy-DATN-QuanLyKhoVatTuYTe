@@ -383,18 +383,92 @@
                         @if (!empty($getList))
                             @foreach ($getList as $item)
                                 @php
-                                    $price = $item->price ?? 0;
-                                    $quantity = $item->quantity_quote;
-                                    $discount = $item->discount ?? 0;
-                                    $vat = $item->equipments->vat ?? 0;
+                                    $price = $item['price'] ?? 0; // Sử dụng cú pháp mảng
+                                    $quantity = $item['quantity'] ?? 0;
+                                    $discount = $item['discount'] ?? 0;
+                                    $vat = $item['equipment_vat'] ?? 0;
 
                                     $itemPrice = $quantity * $price;
                                     $totalPriceWithDiscount = $itemPrice * (1 - $discount / 100);
                                     $totalPriceWithVAT = $totalPriceWithDiscount * (1 + $vat / 100);
                                     $totalAmount += $totalPriceWithVAT;
                                 @endphp
-                                <tr id="equipment-row-{{ $item->equipment_code }}">
-                                    @if (!empty(request('status') === 'update_quote'))
+                                <tr id="equipment-row-{{ $item['equipment_code'] }}">
+                                    @if (!empty(request('eq')))
+                                        <td>{{ $item['equipment_name'] }}</td>
+                                        <td>{{ $item['unit'] }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <input type="number" id="quantity_change_{{ $item['equipment_code'] }}"
+                                                    value="0" min="0"
+                                                    class="form-control form-control-sm border border-success rounded-pill"
+                                                    style="width: 50%;">
+                                                <div class="message_error ms-2 d-none pointer m-0 p-0"
+                                                    id="quantity_error_{{ $item['equipment_code'] }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Vui lòng nhập số lượng">
+                                                    <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="d-none">
+                                            <div class="d-flex align-items-center">
+                                                <input type="number"
+                                                    id="quantity_quote_change_{{ $item['equipment_code'] }}"
+                                                    value="1" min="0"
+                                                    data-vat="{{ $item['equipment_vat'] }}"
+                                                    oninput="calculateTotalPriceQuoteTr('{{ $item['equipment_code'] }}');"
+                                                    class="form-control form-control-sm border border-success rounded-pill"
+                                                    style="width: 50%;">
+                                                <div class="message_error d-none ms-2 m-0 p-0"
+                                                    id="quantity_quote_error_{{ $item['equipment_code'] }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Vui lòng nhập số lượng">
+                                                    <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="d-none">
+                                            <span id="deviation_after_quote_{{ $item['equipment_code'] }}">Không
+                                                lệch</span>
+                                        </td>
+                                        <td class="d-none">
+                                            <div class="d-flex align-items-center">
+                                                <input type="number" id="price_change_{{ $item['equipment_code'] }}"
+                                                    value="1" min="0"
+                                                    oninput="calculateTotalPriceQuoteTr('{{ $item['equipment_code'] }}');"
+                                                    class="form-control form-control-sm border border-success rounded-pill"
+                                                    style="width: 75%;">
+                                                <div class="message_error d-none ms-2 m-0 p-0"
+                                                    id="price_change_error_{{ $item['equipment_code'] }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Vui lòng nhập giá">
+                                                    <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="d-none">
+                                            <div class="d-flex align-items-center">
+                                                <input type="number" id="discount_change_{{ $item['equipment_code'] }}"
+                                                    value="0" min="0"
+                                                    oninput="calculateTotalPriceQuoteTr('{{ $item['equipment_code'] }}');"
+                                                    class="form-control form-control-sm border border-success rounded-pill"
+                                                    style="width: 75%;">
+                                                <div class="message_error d-none ms-2 m-0 p-0"
+                                                    id="discount_change_error_{{ $item['equipment_code'] }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Chiết khấu phải trong khoảng từ 1% đến 100%">
+                                                    <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-sm btn-dark pointer rounded-pill"
+                                                disabled>
+                                                <i class="fa fa-trash p-0"></i>
+                                            </button>
+                                        </td>
+                                    @elseif (!empty(request('status') === 'update_quote'))
                                         <td>{{ $item->equipments->name }}</td>
                                         <td>{{ $item->equipments->units->name }}</td>
                                         <td>
@@ -417,7 +491,7 @@
                                                     oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
                                                     class="form-control form-control-sm border border-success rounded-pill"
                                                     style="width: 50%;">
-                                                <div class="message_error d-none ms-2 m-0 p-0"
+                                                <div class="message_error d-none pointer ms-2 m-0 p-0"
                                                     id="quantity_quote_error_{{ $item->equipment_code }}"
                                                     data-bs-toggle="tooltip" data-bs-placement="top"
                                                     title="Vui lòng nhập số lượng">
@@ -431,11 +505,12 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <input type="number" id="price_change_{{ $item->equipment_code }}"
-                                                    value="{{ $item->price ?? 0 }}" min="0"
+                                                    value="{{ number_format($item->price, 0, ',', '.') ?? 0 }}"
+                                                    min="0"
                                                     oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
                                                     class="form-control form-control-sm border border-success rounded-pill"
                                                     style="width: 75%;">
-                                                <div class="message_error d-none ms-2 m-0 p-0"
+                                                <div class="message_error d-none pointer ms-2 m-0 p-0"
                                                     id="price_change_error_{{ $item->equipment_code }}"
                                                     data-bs-toggle="tooltip" data-bs-placement="top"
                                                     title="Vui lòng nhập giá và phải lớn hơn 0">
@@ -446,11 +521,12 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <input type="number" id="discount_change_{{ $item->equipment_code }}"
-                                                    value="{{ $item->discount ?? 0 }}" min="0"
+                                                    value="{{ number_format($item->discount, 0, ',', '.') ?? 0 }}"
+                                                    min="0"
                                                     oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
                                                     class="form-control form-control-sm border border-success rounded-pill"
                                                     style="width: 75%;">
-                                                <div class="message_error d-none ms-2 m-0 p-0"
+                                                <div class="message_error d-none pointer ms-2 m-0 p-0"
                                                     id="discount_change_error_{{ $item->equipment_code }}"
                                                     data-bs-toggle="tooltip" data-bs-placement="top"
                                                     title="Chiết khấu phải trong khoảng từ 1% đến 100%">
@@ -471,8 +547,11 @@
                                                     value="{{ $item->quantity }}" min="0"
                                                     class="form-control form-control-sm border border-success rounded-pill"
                                                     style="width: 50%;">
-                                                <div class="message_error d-none ms-2 m-0 p-0"
-                                                    id="quantity_error_{{ $item->equipment_code }}">
+                                                <div class="message_error d-none pointer ms-2 m-0 p-0"
+                                                    id="quantity_error_{{ $item->equipment_code }}"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Vui lòng nhập số lượng">
+                                                    <i class="fa-solid fa-triangle-exclamation text-danger"></i>
                                                 </div>
                                             </div>
                                         </td>
@@ -725,7 +804,7 @@
             rows.forEach((row, index) => {
                 if (row.id === "noDataAlert") return;
 
-                let equipmentCode = row.id.split('-')[2]; // Lấy mã thiết bị từ ID của hàng
+                let equipmentCode = row.id.split('-')[2];
                 let unit = row.cells[1].innerText.trim();
 
                 let quantityInput = document.getElementById(`quantity_change_${equipmentCode}`);
@@ -888,6 +967,25 @@
 
         let addedEquipments = [];
 
+        const checkList = @json($checkList ?? []);
+        const eq = @json($getList ?? []);
+
+        if (checkList.length > 0) {
+            checkList.forEach(item => {
+                if (!addedEquipments.includes(item)) {
+                    addedEquipments.push(item);
+                }
+            });
+        }
+
+        if (eq.length > 0) {
+            eq.forEach(item => {
+                if (!addedEquipments.includes(item)) {
+                    addedEquipments.push(item.equipment_code);
+                }
+            });
+        }
+
         // Thêm thiết bị yêu cầu
         document.getElementById('btn_add_equipment').addEventListener('click', function(event) {
             event.preventDefault();
@@ -966,7 +1064,7 @@
                                         <div class="d-flex align-items-center">
                                             <input type="number" id="quantity_change_${data.equipment_code}"
                                                 value="${parseInt(data.quantity, 10)}" oninput="chanQuantityTr('${data.equipment_code}');"
-                                                class="form-control form-control-sm border border-success rounded-pill" style="width: 30%;">
+                                                class="form-control form-control-sm border border-success rounded-pill" style="width: 50%;">
                                             <div class="message_error d-none ms-2 m-0 p-0"
                                                 id="quantity_error_${data.equipment_code}">
                                                 (Số lượng phải lớn hơn 0)

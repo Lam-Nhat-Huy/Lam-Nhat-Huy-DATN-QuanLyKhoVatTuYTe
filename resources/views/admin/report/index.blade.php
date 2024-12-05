@@ -50,7 +50,7 @@
                 <div class="col-lg-6 col-md-12 col-sm-12">
                     <div class="row align-items-center">
                         <div class="col-7">
-                            <input type="search" name="kw" placeholder="Tìm kiếm mã, loại báo cáo.."
+                            <input type="search" name="kw" placeholder="Tìm kiếm mã báo cáo.."
                                 class="mt-2 mb-2 form-control form-control-sm rounded-pill border border-success w-100"
                                 value="{{ request()->kw }}">
                         </div>
@@ -76,11 +76,10 @@
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="text-center" style="width: 8%;">Mã</th>
-                                <th class="text-center" style="width: 12%;">Người báo cáo</th>
-                                <th class="text-center" style="width: 15%;">Nội dung</th>
-                                <th class="text-center" style="width: 15%;">Loại báo cáo</th>
-                                <th class="text-center" style="width: 15%;">File báo cáo</th>
+                                <th class="text-center" style="width: 10%;">Mã</th>
+                                <th class="text-center" style="width: 15%;">Người báo cáo</th>
+                                <th class="text-center" style="width: 20%;">Nội dung</th>
+                                <th class="text-center" style="width: 20%;">File báo cáo</th>
                                 <th class="text-center" style="width: 10%;">Trạng thái</th>
                                 <th class="pe-3 text-center" style="width: 25%;">Hành động</th>
                             </tr>
@@ -102,9 +101,6 @@
                                         <span class="text-primary pointer" data-bs-toggle="modal"
                                             data-bs-target="#detail_{{ $item->code }}">Xem nội dung
                                         </span>
-                                    </td>
-                                    <td>
-                                        {{ $item->report_type }}
                                     </td>
                                     <td class="noPpg text-center">
                                         @if ($item->status == 0 && file_exists(public_path($item->file)))
@@ -145,17 +141,18 @@
                                                             Duyệt
                                                         </button>
                                                     @endif
-                                                    <a href="{{ route('report.update_report', $item->code) }}"
-                                                        class="btn btn-sm btn-twitter me-2 rounded-pill">
-                                                        <i class="fa fa-edit" style="margin-bottom: 2px;"></i> Sửa
-                                                    </a>
+                                                    @if ($item->user_code == session('user_code'))
+                                                        <a href="{{ route('report.update_report', $item->code) }}"
+                                                            class="btn btn-sm btn-twitter me-2 rounded-pill">
+                                                            <i class="fa fa-edit" style="margin-bottom: 2px;"></i> Sửa
+                                                        </a>
+                                                        <button type="button" class="btn btn-sm btn-danger rounded-pill"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#deleteModal_{{ $item->code }}">
+                                                            <i class="fa fa-trash" style="margin-bottom: 2px;"></i> Xóa
+                                                        </button>
+                                                    @endif
                                                 @endif
-                                                <button type="button" class="btn btn-sm btn-danger rounded-pill"
-                                                    data-bs-toggle="modal"
-                                                    {{ session('isAdmin') == true || session('user_code') == $item['user_code'] ? '' : 'disabled' }}
-                                                    data-bs-target="#deleteModal_{{ $item->code }}">
-                                                    <i class="fa fa-trash" style="margin-bottom: 2px;"></i> Xóa
-                                                </button>
                                             </div>
                                         </div>
 

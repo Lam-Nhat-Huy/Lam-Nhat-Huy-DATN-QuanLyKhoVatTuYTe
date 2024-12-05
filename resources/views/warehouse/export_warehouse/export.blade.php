@@ -93,7 +93,7 @@
                             @forelse ($exports as $item)
                                 <tr class="hover-table pointer">
                                     <td>
-                                        @if ($item->status == 0 && $item->created_by == session('user_code'))
+                                        @if ($item->status == 0)
                                             <input type="checkbox" name="import_codes[]" value="{{ $item->code }}"
                                                 class="row-checkbox" />
                                         @elseif ($item->status == 3)
@@ -131,7 +131,13 @@
                                         {{ $item->export_type ?? 'Không có' }}
                                     </td>
                                     <td>
-                                        {{ $item->user->last_name . ' ' . $item->user->first_name }}
+                                        @if ($item->created_by == session('user_code'))
+                                            {{ $item->user->last_name . ' ' . $item->user->first_name }} <i
+                                                class="fa fa-user" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="Tôi"></i>
+                                        @else
+                                            {{ $item->user->last_name . ' ' . $item->user->first_name }}
+                                        @endif
                                     </td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->export_date)->format('d/m/Y') }}
@@ -418,7 +424,7 @@
                                                                 class="btn btn-danger btn-sm rounded-pill"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#delete-{{ $item->code }}">
-                                                                <i class="fa fa-trash" style="margin-bottom: 2px;"></i>Hủy
+                                                                <i class="fa fa-trash" style="margin-bottom: 2px;"></i>{{ isset($item->export_request_code) ? 'Xóa' : 'Hủy' }}
                                                                 phiếu
                                                             </button>
                                                         @endif

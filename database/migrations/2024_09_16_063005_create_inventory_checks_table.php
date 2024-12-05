@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('inventory_checks', function (Blueprint $table) {
             $table->char('code', 10)->primary();
             $table->char('user_code', 10)->nullable();
-            $table->char('recheck_user_code', 20)->nullable();
+            $table->char('recheck_user_code', 10)->nullable();
             $table->char('approved_by', 10)->nullable();
             $table->date('check_date')->nullable();
             $table->text('note')->nullable();

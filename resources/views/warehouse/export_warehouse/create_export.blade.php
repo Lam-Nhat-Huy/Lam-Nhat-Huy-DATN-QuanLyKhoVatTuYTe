@@ -259,7 +259,8 @@
                                                     {{ $item->equipments->inventories->where('batch_number', $item->batch_number)->where('equipment_code', $item->equipment_code)->first()->current_quantity ?? 0 }}
                                                     {{ $item->equipments->units->name }})
                                                 </div>
-                                                <input type="hidden" id="current_quantity_{{ $item->batch_number }}"
+                                                <input type="hidden"
+                                                    id="current_quantity_{{ $item->batch_number }}_{{ $item->equipment_code }}"
                                                     value="{{ $item->equipments->inventories->where('batch_number', $item->batch_number)->where('equipment_code', $item->equipment_code)->first()->current_quantity ?? 0 }}" />
                                             </td>
                                             <td class="">
@@ -895,7 +896,9 @@
 
                 equipmentList.forEach((item) => {
                     let currentQuantity = parseInt(document.getElementById(
-                        `current_quantity_${item.batch_number}`).value.trim(), 10);
+                            `current_quantity_${item.batch_number}_${item.equipment_code}`).value
+                        .trim(),
+                        10);
 
                     if (!item.quantity || item.quantity <= 0 || item.quantity > currentQuantity) {
                         document.getElementById(`quantity_list_${item.batch_number}`).classList.remove(
@@ -1177,7 +1180,7 @@
                                     <div class="d-flex align-items-center" id="batch_number_change_${data.batch_number}">
                                         ${data.batch_number} - (Tồn Kho: ${data.equipment_current_quantity} ${data.unit_name})
                                     </div>
-                                    <input type="hidden" id="current_quantity_${data.batch_number}" value="${data.equipment_current_quantity}" />
+                                    <input type="hidden" id="current_quantity_${data.batch_number}_${data.equipment_code}" value="${data.equipment_current_quantity}" />
                                 </td>
                                 <td class="">
                                     <div class="d-flex align-items-center">

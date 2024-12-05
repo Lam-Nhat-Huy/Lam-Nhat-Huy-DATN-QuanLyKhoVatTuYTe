@@ -83,27 +83,25 @@
                     </div>
 
                     <div class="col-md-6 fv-row">
-                        <label class="fs-5 fw-bold mb-3">Ghi Chú</label>
-                        <input type="text" class="form-control form-control-sm border border-success rounded-pill"
-                            placeholder="Nhập ghi chú cho phiếu yêu cầu nhập.." name="note" id="note"
-                            value="{{ old('note', $editForm->note ?? '') }}" />
-                        <div class="message_error"></div>
-                    </div>
-
-                    <div class="col-md-6 fv-row">
-                        <label class="required fs-5 fw-bold mb-3">Lý Do Xuất</label>
-                        <input type="text" class="form-control form-control-sm border border-success rounded-pill"
-                            placeholder="Lý do xuất kho.." name="reason_export" id="reason_export"
-                            value="{{ old('reason_export', $editForm->reason_export ?? '') }}" />
-                        <div class="message_error" id="reason_export_error"></div>
-                    </div>
-
-                    <div class="col-md-6 fv-row">
                         <label class="required fs-5 fw-bold mb-3">Ngày Cần Thiết</label>
                         <input type="datetime-local" class="form-control form-control-sm border border-success rounded-pill"
                             name="required_date" id="required_date"
                             value="{{ old('required_date', !empty($editForm->required_date) ? \Carbon\Carbon::parse($editForm->required_date)->format('Y-m-d H:i:s') : '') }}" />
                         <div class="message_error" id="required_date_error"></div>
+                    </div>
+
+                    <div class="col-md-6 fv-row">
+                        <label class="required fs-5 fw-bold mb-3">Lý Do Xuất</label>
+                        <textarea class="form-control form-control-sm border border-success" placeholder="Lý do xuất kho.." name="reason_export"
+                            id="reason_export">{{ old('reason_export', $editForm->reason_export ?? '') }}</textarea>
+                        <div class="message_error" id="reason_export_error"></div>
+                    </div>
+
+                    <div class="col-md-6 fv-row">
+                        <label class="fs-5 fw-bold mb-3">Ghi Chú</label>
+                        <textarea class="form-control form-control-sm border border-success" placeholder="Nhập ghi chú cho phiếu yêu cầu nhập.."
+                            name="note" id="note">{{ old('note', $editForm->note ?? '') }}</textarea>
+                        <div class="message_error"></div>
                     </div>
                 </div>
             </div>
@@ -140,6 +138,10 @@
                                 @endif
                             @endforeach
                         </select>
+                        @foreach ($AllEquipment as $item)
+                            <span class="d-none"
+                                id="sum_current_quantity_{{ $item->code }}">{{ $item->inventories->sum('current_quantity') }}</span>
+                        @endforeach
                         <div class="message_error" id="equipment_error"></div>
                     </div>
 
@@ -183,10 +185,13 @@
                                                 value="{{ $item->quantity }}"
                                                 class="form-control form-control-sm border border-success rounded-pill"
                                                 style="width: 30%;">
-                                            <div class="message_error d-none ms-2 m-0 p-0"
+                                            <input type="hidden" id="current_quantity_{{ $item->equipment_code }}"
+                                                value="{{ $item->equipments->inventories->sum('current_quantity') }}" />
+                                            <div class="message_error d-none ms-2 m-0 p-0 pointer"
+                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="Số lượng phải lớn hơn 0 và nhỏ hơn hoặc bằng {{ $item->equipments->inventories->sum('current_quantity') }}"
                                                 id="quantity_error_{{ $item->equipment_code }}">
-                                                (Số lượng
-                                                phải lớn hơn 0)
+                                                <i class="fa-solid fa-triangle-exclamation text-danger"></i>
                                             </div>
                                         </div>
                                     </td>
@@ -508,7 +513,12 @@
                 }
 
                 equipmentList.forEach((item) => {
-                    if (item.quantity <= 0) {
+                    let currentQuantity = parseInt(document.getElementById(
+                            `current_quantity_${item.equipment_code}`).value
+                        .trim(),
+                        10);
+
+                    if (item.quantity <= 0 || item.quantity > currentQuantity) {
                         document.getElementById('quantity_error').innerText = '';
                         document.getElementById(`quantity_error_${item.equipment_code}`).classList.remove(
                             'd-none');
@@ -569,6 +579,15 @@
         }
 
         let addedEquipments = [];
+        const checkList = @json($checkList ?? []);
+
+        if (checkList.length > 0) {
+            checkList.forEach(item => {
+                if (!addedEquipments.includes(item)) {
+                    addedEquipments.push(item);
+                }
+            });
+        }
 
         // Thêm thiết bị yêu cầu
         document.getElementById('btn_add_equipment').addEventListener('click', function(event) {
@@ -582,27 +601,46 @@
                 // Lấy dữ liệu từ form con
                 let noDataAlert = document.getElementById('noDataAlert');
                 let equipment = document.getElementById('equipment').value;
-                let quantity = document.getElementById('quantity').value;
+                let quantity = parseFloat(document.getElementById('quantity')
+                    .value); // Chuyển đổi giá trị nhập thành số
                 let equipment_error = document.getElementById('equipment_error');
                 let quantity_error = document.getElementById('quantity_error');
+                let sum_current_quantity_element = document.getElementById(
+                    `sum_current_quantity_${equipment}`);
+                let sum_current_quantity = sum_current_quantity_element ? parseFloat(
+                        sum_current_quantity_element.innerText) :
+                    0; // Lấy giá trị trong span và chuyển đổi thành số
 
+                // Xóa thông báo lỗi trước đó
                 equipment_error.innerText = '';
                 quantity_error.innerText = '';
 
+                // Kiểm tra lỗi thiết bị
                 if (!equipment) {
                     equipment_error.innerText = "Vui lòng chọn thiết bị yêu cầu";
+                } else {
+                    // Kiểm tra lỗi số lượng
+                    if (sum_current_quantity == 0) {
+                        quantity_error.innerHTML = `
+                        Số lượng thiết bị hiện không đáp ứng yêu cầu, hãy
+                        <a href="{{ route('equipment_request.create_import') }}?eq=${equipment}" class="fw-bolder text-primary" target="_blank">
+                            tạo yêu cầu nhập
+                        </a> cho thiết bị này!
+                    `;
+                    } else if (isNaN(quantity) || quantity <= 0 || quantity > sum_current_quantity) {
+                        quantity_error.innerText =
+                            `Vui lòng nhập số lượng và phải từ 0 đến ${sum_current_quantity}`;
+                    }
                 }
 
-                if (quantity <= 0) {
-                    quantity_error.innerText = "Vui lòng nhập số lượng yêu cầu và phải lớn hơn 0";
-                }
-                if (!equipment ||
-                    quantity <= 0) {
+                // Ngừng xử lý nếu có lỗi
+                if (!equipment || isNaN(quantity) || quantity <= 0 || quantity > sum_current_quantity) {
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('loading-overlay').style.display = 'none';
                     this.disabled = false;
                     return;
                 }
+
 
                 let formData = new
                 FormData();
@@ -618,19 +656,24 @@
                     }).then(response => response.json())
                     .then(data => {
                         if (data.success) {
+                            const canAdd = true;
                             // Kiểm tra xem thiết bị đã được thêm chưa
                             if (!addedEquipments.includes(data.equipment_code)) {
                                 addedEquipments.push(data.equipment_code);
+                            } else {
+                                toastr.error('Thiết bị yêu cầu đã có trong danh sách');
+                                canAdd = false;
                             }
 
-                            noDataAlert.classList.add('d-none');
+                            if (canAdd) {
+                                noDataAlert.classList.add('d-none');
 
-                            // Thêm thiết bị vào danh sách trong bảng mà không cần tải lại trang
-                            let tableBody = document.querySelector('#table_list_equipment tbody');
-                            let newRow = document.createElement('tr');
-                            newRow.id = `equipment-row-${data.equipment_code}`;
+                                // Thêm thiết bị vào danh sách trong bảng mà không cần tải lại trang
+                                let tableBody = document.querySelector('#table_list_equipment tbody');
+                                let newRow = document.createElement('tr');
+                                newRow.id = `equipment-row-${data.equipment_code}`;
 
-                            newRow.innerHTML = `
+                                newRow.innerHTML = `
                                 <td>${data.equipment_name} - (Tổng tồn: ${data.inventory})</td>
                                 <td>${data.unit}</td>
                                 <td>
@@ -638,10 +681,13 @@
                                         <input type="number" id="quantity_change_${data.equipment_code}"
                                             value="${parseInt(data.quantity, 10)}"
                                             class="form-control form-control-sm border border-success rounded-pill" style="width: 30%;">
-                                        <div class="message_error d-none ms-2 m-0 p-0"
+                                        <input type="hidden" id="current_quantity_${data.equipment_code}"
+                                            value="${data.inventory}" />
+                                        <div class="message_error d-none ms-2 m-0 p-0 pointer"
+                                            data-bs-toggle="tooltip" data-bs-placement="top"
+                                            title="Số lượng phải lớn hơn 0 và nhỏ hơn hoặc bằng ${data.inventory}"
                                             id="quantity_error_${data.equipment_code}">
-                                            (Số lượng
-                                            phải lớn hơn 0)
+                                            <i class="fa-solid fa-triangle-exclamation text-danger"></i>
                                         </div>
                                     </div>
                                 </td>
@@ -651,21 +697,22 @@
                                     </span>
                                 </td>
                                 `;
-                            tableBody.appendChild(newRow);
+                                tableBody.appendChild(newRow);
 
-                            // Reset form sau khi thêm thành công
-                            document.getElementById('equipment').value = "";
-                            document.getElementById('quantity').value = 0;
+                                // Reset form sau khi thêm thành công
+                                document.getElementById('equipment').value = "";
+                                document.getElementById('quantity').value = 0;
 
-                            // Ẩn các tùy chọn đã thêm trong danh sách thiết bị
-                            let equipmentOptions = document.querySelectorAll('#equipment option');
-                            equipmentOptions.forEach(option => {
-                                if (addedEquipments.includes(option.value)) {
-                                    option.classList.add('d-none');
-                                }
-                            });
+                                // Ẩn các tùy chọn đã thêm trong danh sách thiết bị
+                                let equipmentOptions = document.querySelectorAll('#equipment option');
+                                equipmentOptions.forEach(option => {
+                                    if (addedEquipments.includes(option.value)) {
+                                        option.classList.add('d-none');
+                                    }
+                                });
 
-                            toastr.success("Đã thêm thiết bị vào danh sách");
+                                toastr.success("Đã thêm thiết bị vào danh sách");
+                            }
                         } else {
                             toastr.error("Số lượng bạn yêu cầu đã vượt quá mức quy định");
                         }

@@ -21,7 +21,6 @@ class Reports extends Model
     protected $fillable = [
         'code',
         'user_code',
-        'report_type',
         'content',
         'file',
         'created_at',

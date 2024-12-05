@@ -29,18 +29,18 @@
                 <div class="table-responsive rounded">
                     <table class="table align-middle gs-0 gy-4">
                         <thead class="{{ $AllWarehouseExportRequestTrash->count() == 0 ? 'd-none' : '' }}">
-                            <tr class="bg-success">
+                            <tr class="bg-success fw-bolder">
                                 <th class="ps-3">
                                     <input type="checkbox" id="selectAll" />
                                 </th>
-                                <th class="" style="width: 10%;">Mã Yêu Cầu</th>
-                                <th class="" style="width: 13%;">Phòng Ban</th>
-                                <th class="" style="width: 13%;">Lý Do Xuất</th>
-                                <th class="" style="width: 15%;">Người Tạo</th>
-                                <th class="" style="width: 12%;">Ngày Yêu Cầu</th>
-                                <th class="" style="width: 12%;">Ngày Cần Thiết</th>
-                                <th class="text-center" style="width: 10%;">Trạng Thái</th>
-                                <th class="pe-3 text-center" style="width: 25%;">Hành Động</th>
+                                <th class="" style="width: 10%;">Mã yêu cầu</th>
+                                <th class="" style="width: 17%;">Phòng ban</th>
+                                <th class="" style="width: 12%;">Lý do xuất</th>
+                                <th class="" style="width: 10%;">Người tạo</th>
+                                <th class="" style="width: 10%;">N.Yêu cầu</th>
+                                <th class="" style="width: 15%;">N.Cần thiết</th>
+                                <th class="text-center" style="width: 10%;">Trạng thái</th>
+                                <th class="pe-3 text-center" style="width: 15%;">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,69 +48,89 @@
                                 <tr class="hover-table pointer">
                                     <td>
                                         {{-- Phiếu tạm => ẩn hết, phiếu chờ duyệt thì hiện, phiếu đã duyệt chưa tạo thì hiện icon, phiếu đã duyệt tạo rồi thì ẩn --}}
-                                        @if (($item->status == 3 || $item->status == 0) && $item->user_code == session('user_code'))
+                                        @if ($item->status == 0)
                                             <input type="checkbox" name="export_reqest_codes[]" value="{{ $item->code }}"
                                                 class="row-checkbox" />
+                                        @elseif ($item->status == 3)
+                                            <i class="fa fa-clock text-dark" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Lưu Tạm"></i>
                                         @elseif ($item->status == 5)
-                                            <i class="fa fa-truck-medical" title="Đang vận chuyển"></i>
+                                            <i class="fa fa-truck-medical" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="Đang Vận Chuyển"></i>
                                         @elseif ($item->status == 4)
-                                            <i class="fa fa-check" title="Hoàn Thành"></i>
+                                            <i class="fa fa-check text-success" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Hoàn Thành"></i>
+                                        @elseif ($item->status == 2)
+                                            <i class="fas fa-times-circle text-danger" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Bị từ chối"></i>
                                         @elseif ($item->status == 1)
-                                            <i class="fa-solid fa-circle-exclamation"
-                                                title="Phiếu Yêu Cầu Xuất Chưa Được Vận Chuyển" style="font-size: 13px;"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#exclamation_{{ $item->code }}"></i>
+                                            <i class="fa-solid fa-circle-exclamation text-danger" style="font-size: 13px;"
+                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="Phiếu Yêu Cầu Chưa Được Vận Chuyển"></i>
                                         @endif
                                     </td>
                                     <td>
                                         #{{ $item->code }}
                                     </td>
                                     <td>
-                                        {{ $item->departments->name ?? 'N/A' }}
+                                        @if (!empty($item->departments->name))
+                                            <a class="text-decoration-underline fw-bolder"
+                                                href="{{ route('department.index') }}?kw={{ $item->departments->name }}">
+                                                {{ $item->departments->name }}
+                                            </a>
+                                        @else
+                                            N/A
+                                        @endif
                                     </td>
                                     <td>
                                         {{ $item->reason_export }}
                                     </td>
                                     <td>
-                                        {{ $item->users->last_name . ' ' . $item->users->first_name ?? 'N/A' }}
+                                        @if ($item->user_code == session('user_code'))
+                                            {{ $item->users->last_name . ' ' . $item->users->first_name }} <i
+                                                class="fa fa-user" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="Tôi"></i>
+                                        @else
+                                            {{ $item->users->last_name . ' ' . $item->users->first_name }}
+                                        @endif
                                     </td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->request_date)->format('d-m-Y') }}
                                     </td>
                                     <td>
-                                        {{ \Carbon\Carbon::parse($item->required_date)->format('d-m-Y') }}
+                                        {{ \Carbon\Carbon::parse($item->required_date)->format('d-m-Y H:i:s') }}
                                     </td>
                                     <td class="text-center">
-                                        @if (($item->status == 0 || $item->status == 3) && now()->gt(\Carbon\Carbon::parse($item->required_date)))
-                                            <div class="label label-temp bg-warning rounded-pill text-dark px-2 py-1">
-                                                Hết Hạn
-                                            </div>
-                                        @elseif ($item->status == 3)
+                                        @if ($item->status == 3)
                                             <div class="label label-temp bg-info rounded-pill text-white px-2 py-1">
-                                                Lưu Tạm
+                                                Lưu tạm
                                             </div>
                                         @elseif ($item->status == 0)
                                             <div class="label label-temp bg-danger rounded-pill text-white px-2 py-1">
-                                                Chờ Duyệt
+                                                Chờ duyệt
+                                            </div>
+                                        @elseif ($item->status == 2)
+                                            <div class="rounded-pill px-2 py-1 text-dark bg-warning">
+                                                Bị Từ Chối
                                             </div>
                                         @elseif ($item->status == 1)
                                             <div class="label label-temp bg-primary rounded-pill text-white px-2 py-1">
-                                                Chuẩn Bị
+                                                Chuẩn bị
                                             </div>
                                         @elseif ($item->status == 5)
                                             <div class="label label-temp bg-dark rounded-pill text-white px-2 py-1">
-                                                Vận Chuyển
+                                                Vận chuyển
                                             </div>
                                         @elseif ($item->status == 4)
                                             <div class="label label-temp bg-success rounded-pill text-white px-2 py-1">
-                                                Hoàn Thành
+                                                Hoàn thành
                                             </div>
                                         @endif
                                     </td>
                                     <td class="text-center" data-bs-toggle="collapse"
                                         data-bs-target="#collapse_{{ $item->code }}" aria-expanded="false"
                                         aria-controls="collapse_{{ $item->code }}">
-                                        Chi Tiết<i class="fa fa-caret-right pointer ms-2"></i>
+                                        Chi tiết<i class="fa fa-caret-right pointer ms-2"></i>
                                     </td>
                                 </tr>
 

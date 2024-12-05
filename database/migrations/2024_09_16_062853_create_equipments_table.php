@@ -12,12 +12,12 @@ return new class extends Migration
             $table->char('code', 10)->primary();
             $table->string('name', 255);
             $table->string('image', 255)->nullable();
-            $table->char('barcode', 255)->nullable();
+            $table->char('barcode', 10)->nullable();
             $table->text('description')->nullable();
             $table->integer('vat')->nullable();
             $table->string('country', 255)->nullable();
-            $table->char('equipment_type_code', 20)->nullable();
-            $table->char('unit_code', 20)->nullable();
+            $table->char('equipment_type_code', 10)->nullable();
+            $table->char('unit_code', 10)->nullable();
             $table->timestamps();
             $table->softDeletes();
 

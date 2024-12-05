@@ -20,7 +20,8 @@ Route::prefix('equipment_request')->middleware(CheckLogin::class)->name('equipme
     Route::post('/edit_import/{code}', [EquipmentRequestController::class, 'edit_import_equipment_request'])->name('edit_import');
     Route::post('/edit_price/{code}', [EquipmentRequestController::class, 'edit_import_equipment_request_price'])->name('edit_import_price');
     Route::get('/exportPdfEquipmentRequestList/{code}', [EquipmentRequestController::class, 'exportPdfEquipmentRequestList'])->name('exportPdfEquipmentRequestList');
-
+    Route::post('/allowToEdit/{code}', [EquipmentRequestController::class, 'allowToEdit'])->name('allowToEdit');
+    
     // Xuất
     Route::get('/export', [EquipmentRequestController::class, 'export_equipment_request'])->name('export');
     Route::post('/export', [EquipmentRequestController::class, 'export_equipment_request'])->name('export');
@@ -32,4 +33,5 @@ Route::prefix('equipment_request')->middleware(CheckLogin::class)->name('equipme
     Route::post('/store_export', [EquipmentRequestController::class, 'store_export_equipment_request'])->name('store_export');
     Route::get('/update_export/{code}', [EquipmentRequestController::class, 'update_export_equipment_request'])->name('update_export');
     Route::post('/edit_export/{code}', [EquipmentRequestController::class, 'edit_export_equipment_request'])->name('edit_export');
+    Route::post('/allowToEditExport/{code}', [EquipmentRequestController::class, 'allowToEditExport'])->name('allowToEditExport');
 });

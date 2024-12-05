@@ -25,6 +25,7 @@ class Import_equipment_requests extends Model
         'status',
         'request_date',
         'reason_refuse',
+        'allow_to_edit',
         'created_at',
         'user_code',
         'updated_at',

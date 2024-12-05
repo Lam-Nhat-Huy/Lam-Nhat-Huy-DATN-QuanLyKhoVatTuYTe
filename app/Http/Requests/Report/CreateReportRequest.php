@@ -22,8 +22,7 @@ class CreateReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|file|mimes:pdf|max:2048',
-            'report_type' => 'required',
+            'file' => 'required|max:2048',
             'content' => 'required',
         ];
     }
@@ -32,10 +31,7 @@ class CreateReportRequest extends FormRequest
     {
         return [
             'file.required' => 'File báo cáo không được để trống',
-            'file.file' => 'File báo cáo sai định dạng',
-            'file.mimes' => 'File báo cáo sai định dạng',
             'file.max' => 'File báo cáo không vượt quá 2MB',
-            'report_type.required' => 'Vui lòng chọn loại báo cáo',
             'content.required' => 'Nội dung báo cáo không được để trống',
         ];
     }

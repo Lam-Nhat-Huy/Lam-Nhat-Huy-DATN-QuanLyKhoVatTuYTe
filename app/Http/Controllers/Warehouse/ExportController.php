@@ -105,6 +105,8 @@ class ExportController extends Controller
             if ($request->action_type === 'delete') {
 
                 Exports::whereIn('code', $request->import_codes)
+                    ->where('created_by', session('user_code'))
+                    ->whereNull('export_request_code')
                     ->where(function ($query) {
                         $query->where('status', 0)
                             ->orWhere('status', 3);
@@ -112,13 +114,15 @@ class ExportController extends Controller
                     ->update(['deleted_by' => session('user_code')]);
 
                 Exports::whereIn('code', $request->import_codes)
+                    ->where('created_by', session('user_code'))
+                    ->whereNull('export_request_code')
                     ->where(function ($query) {
                         $query->where('status', 0)
                             ->orWhere('status', 3);
                     })
                     ->delete();
 
-                toastr()->success('Hủy Phiếu Thành Công');
+                toastr()->success('Hủy phiếu xuất thường thành công');
 
                 return redirect()->back();
             }
@@ -579,7 +583,13 @@ class ExportController extends Controller
             return redirect()->back();
         }
 
-        if ($export->status == 1) {
+        if ($export->status == 0 && isset($export->export_request_code)) {
+            $export->forceDelete();
+
+            toastr('Đã xóa phiếu xuất');
+
+            return redirect()->back();
+        } elseif ($export->status == 1) {
 
             $latestInventoryCheck = Inventory_checks::latest('created_at')->first();
             if ($latestInventoryCheck && $latestInventoryCheck->created_at > $export->created_at) {
