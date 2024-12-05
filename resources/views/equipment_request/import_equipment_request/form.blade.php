@@ -84,13 +84,13 @@
             <div class="me-n7 pe-7">
                 <div class="row align-items-center">
                     <div
-                        class="col-md-12 fv-row {{ !empty($editForm) && (!empty($editForm->status == 1) || !empty($editForm->status == 2)) ? '' : 'd-none' }}">
+                        class="col-md-12 fv-row {{ !empty($editForm) && (!empty($editForm->status == 1) || !empty($editForm->status == 2)) && empty(request('tp')) ? '' : 'd-none' }}">
                         <label class="{{ $required }} fs-5 fw-bold mb-3">Nhà Cung Cấp</label>
                         <div class="d-flex align-items-center">
                             <select name="supplier_code" id="supplier_code" onchange="changeSupplier()"
                                 class="form-select form-select-sm border border-success rounded-pill setupSelect2">
                                 <option
-                                    value="{{ !empty($editForm) && (!empty($editForm->status == 1) || !empty($editForm->status == 2)) ? '0' : 'SPDEFAULT' }}">
+                                    value="{{ !empty($editForm) && (!empty($editForm->status == 1) || !empty($editForm->status == 2)) && empty(request('tp')) ? '0' : 'SPDEFAULT' }}">
                                     Chọn Nhà Cung Cấp...
                                 </option>
                                 @foreach ($AllSupplier as $item)
@@ -383,14 +383,24 @@
                         @if (!empty($getList))
                             @foreach ($getList as $item)
                                 @php
-                                    $price = $item['price'] ?? 0; // Sử dụng cú pháp mảng
-                                    $quantity = $item['quantity'] ?? 0;
-                                    $discount = $item['discount'] ?? 0;
-                                    $vat = $item['equipment_vat'] ?? 0;
+                                    // Gán giá trị với kiểm tra hợp lệ
+                                    $price = max($item['price'] ?? 0, 0);
+                                    $quantity = max($item['quantity'] ?? 0, 0);
+                                    $quantity_quote = max($item['quantity_quote'] ?? 0, 0);
+                                    $discount = max($item['discount'] ?? 0, 0);
+                                    $vat = max(
+                                        !empty($item->equipments->vat)
+                                            ? $item->equipments->vat
+                                            : $item['equipment_vat'],
+                                        0,
+                                    );
 
-                                    $itemPrice = $quantity * $price;
+                                    // Tính toán
+                                    $itemPrice = (!empty($quantity_quote) > 0 ? $quantity_quote : $quantity) * $price;
                                     $totalPriceWithDiscount = $itemPrice * (1 - $discount / 100);
                                     $totalPriceWithVAT = $totalPriceWithDiscount * (1 + $vat / 100);
+
+                                    // Cộng dồn vào tổng
                                     $totalAmount += $totalPriceWithVAT;
                                 @endphp
                                 <tr id="equipment-row-{{ $item['equipment_code'] }}">
@@ -400,7 +410,7 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <input type="number" id="quantity_change_{{ $item['equipment_code'] }}"
-                                                    value="0" min="0"
+                                                    value="{{ request('qt') ?? 0 }}" min="0"
                                                     class="form-control form-control-sm border border-success rounded-pill"
                                                     style="width: 50%;">
                                                 <div class="message_error ms-2 d-none pointer m-0 p-0"
@@ -486,7 +496,7 @@
                                             <div class="d-flex align-items-center">
                                                 <input type="number"
                                                     id="quantity_quote_change_{{ $item->equipment_code }}"
-                                                    value="{{ $item->quantity_quote ?? $item->quantity }}" min="0"
+                                                    value="{{ $item->quantity_quote }}" min="0"
                                                     data-vat="{{ $item->equipments->vat }}"
                                                     oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
                                                     class="form-control form-control-sm border border-success rounded-pill"
@@ -500,13 +510,13 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span id="deviation_after_quote_{{ $item->equipment_code }}">Không lệch</span>
+                                            <span
+                                                id="deviation_after_quote_{{ $item->equipment_code }}">{{ !empty($item->deviation_quote) ? $item->deviation_quote : 'Không lệch' }}</span>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <input type="number" id="price_change_{{ $item->equipment_code }}"
-                                                    value="{{ number_format($item->price, 0, ',', '.') ?? 0 }}"
-                                                    min="0"
+                                                    value="{{ $item->price ?? 0 }}" min="0"
                                                     oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
                                                     class="form-control form-control-sm border border-success rounded-pill"
                                                     style="width: 75%;">

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->char('updated_by', 10)->nullable();
             $table->char('deleted_by', 10)->nullable();
             $table->char('browse_by', 10)->nullable();
+            $table->char('update_quote_by', 10)->nullable();
             $table->timestamps();
             $table->softDeletes();
 

@@ -628,8 +628,13 @@
                         </a> cho thiết bị này!
                     `;
                     } else if (isNaN(quantity) || quantity <= 0 || quantity > sum_current_quantity) {
-                        quantity_error.innerText =
-                            `Vui lòng nhập số lượng và phải từ 0 đến ${sum_current_quantity}`;
+                        const rs = quantity - sum_current_quantity;
+                        quantity_error.innerHTML = `
+                        Số lượng thiết bị đang thiếu ${rs} so với yêu cầu, hãy
+                        <a href="{{ route('equipment_request.create_import') }}?eq=${equipment}&qt=${rs}" class="fw-bolder text-primary" target="_blank">
+                            tạo yêu cầu nhập
+                        </a> cho thiết bị này!
+                    `;
                     }
                 }
 

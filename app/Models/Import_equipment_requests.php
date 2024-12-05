@@ -33,6 +33,7 @@ class Import_equipment_requests extends Model
         'deleted_at',
         'deleted_by',
         'browse_by',
+        'update_quote_by'
     ];
 
     public function users()
@@ -53,6 +54,11 @@ class Import_equipment_requests extends Model
     public function browseByUser()
     {
         return $this->belongsTo(Users::class, 'browse_by', 'code');
+    }
+
+    public function updateQuoteByUser()
+    {
+        return $this->belongsTo(Users::class, 'update_quote_by', 'code');
     }
 
     public function suppliers()

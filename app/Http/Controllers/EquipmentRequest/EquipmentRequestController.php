@@ -573,7 +573,7 @@ class EquipmentRequestController extends Controller
                 'note' => $note,
                 'status' => 1,
                 'updated_at' => now(),
-                'updated_by' => session('user_code'),
+                'update_quote_by' => session('user_code'),
             ]);
 
             foreach ($equipmentList as $equipment) {

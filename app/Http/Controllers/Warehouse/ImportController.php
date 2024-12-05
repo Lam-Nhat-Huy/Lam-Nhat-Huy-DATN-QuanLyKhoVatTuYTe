@@ -290,7 +290,7 @@ class ImportController extends Controller
 
         if (isset($request->cd) && empty($request->type)) {
 
-            $checkExportRequestCode = Receipts::where('order_number', $request->cd)->first();
+            $checkExportRequestCode = Receipts::where('order_number', $request->cd)->where('status', '!=', 5)->first();
 
             if ($checkExportRequestCode) {
                 toastr()->info('Phiếu yêu cầu mua hàng này đã được tạo phiếu nhập và ở trạng thái chờ duyệt');
@@ -580,6 +580,7 @@ class ImportController extends Controller
         if (empty(session('ier'))) {
             $existingRN = Receipts::where('receipt_no', $request->receipt_no)
                 ->where('code', '!=', $request->code)
+                ->where('status', '!=', 5)
                 ->first();
 
             if ($existingRN) {
@@ -601,6 +602,7 @@ class ImportController extends Controller
         if (empty(session('ier'))) {
             $existingON = Receipts::where('order_number', $request->order_number)
                 ->where('code', '!=', $request->code)
+                ->where('status', '!=', 5)
                 ->first();
 
             if ($existingON) {
@@ -661,7 +663,13 @@ class ImportController extends Controller
             return redirect()->back();
         }
 
-        if ($receipt->status == 0 && isset($receipt->order_number)) {
+        if ($receipt->status == 5) {
+            $receipt->forceDelete();
+
+            toastr('Đã xóa phiếu nhập');
+
+            return redirect()->back();
+        } elseif ($receipt->status == 0 && isset($receipt->order_number)) {
             $receipt->forceDelete();
 
             toastr('Đã xóa phiếu nhập');

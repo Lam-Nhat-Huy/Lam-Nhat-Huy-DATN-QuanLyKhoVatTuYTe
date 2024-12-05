@@ -242,6 +242,12 @@
                                                             Người {{ isset($item->reason_refuse) ? 'từ chối' : 'duyệt' }}:
                                                             {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
                                                         </span>
+                                                        @if (empty($item->reason_refuse))
+                                                            <span class="me-5">
+                                                                Người cập nhật giá:
+                                                                {{ $item->updateQuoteByUser ? $item->updateQuoteByUser->last_name . ' ' . $item->updateQuoteByUser->first_name : 'N/A' }}
+                                                            </span>
+                                                        @endif
                                                     </div>
                                                     <div class="card-body p-0" style="padding-top: 0px !important">
                                                         <!-- Begin::Receipt Items (Right column) -->
@@ -413,26 +419,91 @@
                                                         </button>
                                                     @elseif ($item->status == 1)
                                                         @if (session('isAdmin') == 1)
+                                                            <button type="button"
+                                                                class="checkbox-wrapper-6 me-2 btn btn-sm btn-dark rounded-pill">
+                                                                <div class="d-flex align-items-center">
+                                                                    Cho phép sửa
+                                                                    <input class="tgl tgl-light" id="allow_to_edit"
+                                                                        type="checkbox" value="1"
+                                                                        name="allow_to_edit"
+                                                                        {{ !empty($item->allow_to_edit) && $item->allow_to_edit == 1 ? 'checked' : '' }} />
+                                                                    <label class="tgl-btn ms-2" for="allow_to_edit"
+                                                                        style="width: 30px; height: 18px;"></label>
+                                                                </div>
+                                                            </button>
+
+                                                            <script>
+                                                                document.getElementById('allow_to_edit').addEventListener('change', function(event) {
+                                                                    event.preventDefault();
+
+                                                                    document.getElementById('loading').style.display = 'block';
+                                                                    document.getElementById('loading-overlay').style.display = 'block';
+                                                                    this.disabled = true;
+
+                                                                    setTimeout(() => {
+                                                                        const allow_to_edit = document.getElementById('allow_to_edit').checked ? 1 : 2;
+
+                                                                        let formData = new FormData();
+                                                                        formData.append('allow_to_edit', allow_to_edit);
+
+                                                                        fetch('{{ route('equipment_request.allowToEdit', $item->code) }}', {
+                                                                                method: 'POST',
+                                                                                body: formData,
+                                                                                headers: {
+                                                                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                                                }
+                                                                            }).then(response => response.json())
+                                                                            .then(data => {
+                                                                                if (data.success) {
+                                                                                    toastr.success(data.message);
+                                                                                }
+
+                                                                                if (data.hide == 1) {
+                                                                                    document.getElementById('action_update_price').classList.add('d-none');
+                                                                                } else {
+                                                                                    document.getElementById('action_update_price').classList.remove(
+                                                                                        'd-none');
+                                                                                }
+                                                                            })
+                                                                            .catch(error => console.error('Error:', error))
+                                                                            .finally(() => {
+                                                                                document.getElementById('loading').style.display = 'none';
+                                                                                document.getElementById('loading-overlay').style.display = 'none';
+                                                                                this.disabled = false;
+                                                                            });
+                                                                    }, 500);
+                                                                });
+                                                            </script>
+                                                        @endif
+
+                                                        <span id="action_update_price"
+                                                            class="{{ $item->allow_to_edit == 0 ? '' : 'd-none' }}">
+                                                            @if ($item->update_quote_by == session('user_code'))
+                                                                <!-- Nút Tạo Phiếu Nhập -->
+                                                                <a href="{{ route('warehouse.create_import') }}?cd={{ $item->code }}"
+                                                                    class="btn btn-sm rounded-pill btn-youtube me-2">
+                                                                    <i class="fas fa-file-import"
+                                                                        style="margin-bottom: 2px;"></i>
+                                                                    Tạo phiếu nhập
+                                                                </a>
+                                                            @endif
+
+                                                            <!-- Nút In Phiếu -->
+                                                            <button class="btn btn-sm rounded-pill btn-twitter me-2"
+                                                                onclick="printInvoice('{{ $item->code }}')"
+                                                                type="button">
+                                                                <i class="fa fa-print" style="margin-bottom: 2px;"></i> In
+                                                                phiếu
+                                                            </button>
+                                                        </span>
+
+                                                        @if ($item->allow_to_edit == 1 && $item->update_quote_by == session('user_code'))
                                                             <a href="{{ route('equipment_request.update_import', ['code' => $item->code, 'status' => 'update_quote']) }}"
                                                                 class="btn btn-sm rounded-pill btn-dark me-2">
                                                                 <i class="fas fa-edit" style="margin-bottom: 2px;"></i>
                                                                 Cập nhật giá
                                                             </a>
                                                         @endif
-
-                                                        <!-- Nút Tạo Phiếu Nhập -->
-                                                        <a href="{{ route('warehouse.create_import') }}?cd={{ $item->code }}"
-                                                            class="btn btn-sm rounded-pill btn-youtube me-2">
-                                                            <i class="fas fa-file-import" style="margin-bottom: 2px;"></i>
-                                                            Tạo phiếu nhập
-                                                        </a>
-
-                                                        <!-- Nút In Phiếu -->
-                                                        <button class="btn btn-sm rounded-pill btn-twitter me-2"
-                                                            onclick="printInvoice('{{ $item->code }}')" type="button">
-                                                            <i class="fa fa-print" style="margin-bottom: 2px;"></i> In
-                                                            phiếu
-                                                        </button>
                                                     @elseif ($item->status == 2)
                                                         @if (session('isAdmin') == 1)
                                                             <button type="button"
@@ -509,7 +580,7 @@
 
                                                         @if ($item->allow_to_edit == 1 && $item->user_code == session('user_code'))
                                                             <!-- Nút Sửa đơn -->
-                                                            <a href="{{ route('equipment_request.update_import', $item->code) }}"
+                                                            <a href="{{ route('equipment_request.update_import', $item->code) }}?tp={{ md5($item->user_code) }}"
                                                                 class="btn btn-twitter btn-sm me-2 rounded-pill">
                                                                 <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
                                                                 phiếu

@@ -302,7 +302,7 @@
                                                 <div class="d-flex align-items-center">
                                                     <input type="number"
                                                         id="quantity_change_{{ $item->equipment_code }}"
-                                                        value="{{ $item->quantity_quote - $item->quantity == 0 ? $item->quantity_quote : $item->quantity }}"
+                                                        value="{{ $item->quantity_quote - $item->quantity < 0 ? $item->quantity_quote : $item->quantity }}"
                                                         min="0"
                                                         oninput="calculateTotalPriceTop('{{ $item->equipment_code }}'); calculateTotalPriceBottom();"
                                                         class="form-control form-control-sm border border-success rounded-pill">
@@ -531,7 +531,7 @@
 
                             foreach ($getListIERD as $detail) {
                                 $priceIerd = $detail->price ?? 0;
-                                $quantityIerd = $detail->quantity;
+                                $quantityIerd = $detail->quantity_quote - $detail->quantity < 0 ? $detail->quantity_quote : $detail->quantity;
                                 $discountIerd = $detail->discount ?? 0;
                                 $vatIerd = $detail->equipments->vat ?? 0;
 

@@ -115,7 +115,11 @@
                                             : 'Không có' !!}
                                     </td>
                                     <td>
-                                        <span class="text-danger fw-bolder">#{{ $item->receipt_no }}</span>
+                                        @if ($item->receipt_no === 'Không có')
+                                            Không Có
+                                        @else
+                                            <span class="text-danger fw-bolder">#{{ $item->receipt_no }}</span>
+                                        @endif
                                     </td>
                                     <td class="custom-w">
                                         {{ $item->receipt_type ?? 'Không có' }}
@@ -484,15 +488,13 @@
                                                     @if ($item->status == 0)
                                                         @if (session('isAdmin') == 1)
                                                             {{-- Nút từ chối --}}
-                                                            @if (empty($item->order_number))
-                                                                <button class="btn btn-sm rounded-pill btn-danger me-2"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#noBrowse_{{ $item->code }}"
-                                                                    type="button">
-                                                                    <i class="fas fa-times-circle"
-                                                                        style="margin-bottom: 2px;"></i>Từ Chối
-                                                                </button>
-                                                            @endif
+                                                            <button class="btn btn-sm rounded-pill btn-danger me-2"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#noBrowse_{{ $item->code }}"
+                                                                type="button">
+                                                                <i class="fas fa-times-circle"
+                                                                    style="margin-bottom: 2px;"></i>Từ Chối
+                                                            </button>
                                                             <button class="btn btn-sm btn-twitter rounded-pill me-2"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#browse-{{ $item->code }}"
@@ -829,6 +831,15 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    @endif
+
+                                                    @if ($item->status == 5 && $item->created_by == session('user_code'))
+                                                        <button class="btn btn-sm btn-danger rounded-pill me-2"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#delete-{{ $item->code }}" type="button">
+                                                            <i class="fas fa-trash" style="margin-bottom: 2px;"></i>
+                                                            Xóa phiếu
+                                                        </button>
                                                     @endif
                                                 </div>
                                             </div>
