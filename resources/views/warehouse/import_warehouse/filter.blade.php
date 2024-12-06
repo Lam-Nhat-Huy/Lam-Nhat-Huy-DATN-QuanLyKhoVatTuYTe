@@ -52,6 +52,7 @@
                 <option value="" {{ request()->stt == '' ? 'selected' : '' }}>--Theo Trạng Thái--</option>
                 <option value="0" {{ request()->stt == '0' ? 'selected' : '' }}>Chờ Duyệt</option>
                 <option value="1" {{ request()->stt == '1' ? 'selected' : '' }}>Đã Duyệt</option>
+                <option value="2" {{ request()->stt == '2' ? 'selected' : '' }}>Bị Từ Chối</option>
                 <option value="3" {{ request()->stt == '3' ? 'selected' : '' }}>Lưu Tạm</option>
             </select>
         </div>

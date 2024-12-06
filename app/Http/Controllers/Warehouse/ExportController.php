@@ -122,10 +122,69 @@ class ExportController extends Controller
                     })
                     ->delete();
 
-                toastr()->success('Hủy phiếu xuất thường thành công');
+                toastr()->success('Hủy phiếu xuất thường của bạn thành công');
 
                 return redirect()->back();
             }
+        }
+
+        if (!empty($request->no_browse_request)) {
+            $reason_refuse = $request->reason_refuse;
+            $user_request = $request->user_request;
+            $email_user_request = $request->email_user_request;
+
+            if (!empty($reason_refuse) && $reason_refuse === 'other') {
+                $reason_refuse = $request->reason_refuse_other;
+            }
+
+            Exports::where('code', $request->no_browse_request)
+                ->where('status', 0)
+                ->update([
+                    'reason_refuse' => $reason_refuse,
+                    'browse_by' => session('user_code'),
+                    'status' => 2,
+                ]);
+
+            $contentNotification = '
+                <p>Phiếu xuất kho với mã <a class="text-primary fw-bolder text-decoration-underline" href="' . route('warehouse.export') . '?kw=' . $request->no_browse_request . '">#' . $request->no_browse_request . '</a> được tạo bởi <a class="text-dark fw-bolder text-decoration-underline" href="' . route('user.index') . '?kw=' . $email_user_request . '">' . $user_request . '</a> đã bị <span class="text-danger fw-bolder">từ chối</span> bởi lý do <strong>' . $reason_refuse . '</strong>, vui lòng liên hệ đến ban quản lý kho để được xử lý.</p>
+            ';
+
+            Notifications::create([
+                'code' => 'TB' . $this->generateRandomString(8),
+                'content' => $contentNotification,
+                'user_code' => session('user_code'),
+            ]);
+
+            toastr()->success('Đã từ chối phiếu xuất kho');
+
+            return redirect()->back();
+        }
+
+        if (!empty($request->restore_status_code)) {
+            $user_request = $request->user_request;
+            $email_user_request = $request->email_user_request;
+
+            Exports::where('code', $request->restore_status_code)
+                ->where('status', 2)
+                ->update([
+                    'reason_refuse' => NULL,
+                    'browse_by' => NULL,
+                    'status' => 0,
+                ]);
+
+            $contentNotification = '
+            <p>Phiếu xuất kho với mã <a class="text-primary fw-bolder text-decoration-underline" href="' . route('warehouse.export') . '?kw=' . $request->restore_status_code . '">#' . $request->restore_status_code . '</a> được tạo bởi <a class="text-dark fw-bolder text-decoration-underline" href="' . route('user.index') . '?kw=' . $email_user_request . '">' . $user_request . '</a> đã được <span class="text-primary fw-bolder">khôi phục</span> về trạng thái <strong>chờ duyệt</strong>.</p>
+            ';
+
+            Notifications::create([
+                'code' => 'TB' . $this->generateRandomString(8),
+                'content' => $contentNotification,
+                'user_code' => session('user_code'),
+            ]);
+
+            toastr()->success('Đã khôi phục trạng thái phiếu xuất kho');
+
+            return redirect()->back();
         }
 
         return view("{$this->route}.export_warehouse.export", [
@@ -151,6 +210,8 @@ class ExportController extends Controller
         $tempExportsCount = Exports::where('status', 3)->onlyTrashed()->count();
 
         $exportTrash = Exports::orderBy('created_at', 'desc')
+            ->where('created_by', session('user_code'))
+            ->orderBy('deleted_at', 'desc')
             ->onlyTrashed()
             ->paginate(10);
 
@@ -328,7 +389,7 @@ class ExportController extends Controller
                 'note' => $note ?? '',
                 'status' => $request->exportStatus == 4 ? 0 : $request->exportStatus,
                 'export_date' => now(),
-                'required_date' => strtotime($required_date) === strtotime('01/01/2090 12:00:00') ? NULL : $required_date,
+                'required_date' => strtotime($required_date) === strtotime('01/01/2090') ? NULL : $required_date,
                 'export_type' => $exportType,
                 'department_code' => $departmentCode == 1 ? NULL : $departmentCode,
                 'supplier_code' => $supplierCode == 1 ? NULL : $supplierCode,
@@ -583,7 +644,13 @@ class ExportController extends Controller
             return redirect()->back();
         }
 
-        if ($export->status == 0 && isset($export->export_request_code)) {
+        if ($export->status == 5) {
+            $export->forceDelete();
+
+            toastr('Đã xóa phiếu xuất');
+
+            return redirect()->back();
+        } elseif ($export->status == 0 && isset($export->export_request_code)) {
             $export->forceDelete();
 
             toastr('Đã xóa phiếu xuất');
@@ -603,14 +670,18 @@ class ExportController extends Controller
                 'status' => 1,
             ]);
 
-            $export->forceDelete();
+            $export->update([
+                'browse_by' => NULL,
+                'status' => 0,
+            ]);
+
+            toastr()->success('Phiếu xuất với mã #' . $request->delete_code . ' đã được trở về trạng thái chờ duyệt');
 
             if (isset($export->export_request_code)) {
-                toastr()->success('Đã xóa phiếu xuất kho và phiếu yêu cầu xuất #' . $export->export_request_code . ' đã được trở về trạng thái chuẩn bị.');
+                toastr()->info('Phiếu yêu cầu xuất kho với mã <a href="' . route('equipment_request.export', ['kw' => $export->export_request_code]) . '">#' . $export->export_request_code . '</a> đã được trở về trạng thái chuẩn bị.');
                 return redirect()->back();
             }
 
-            toastr()->success('Đã xóa phiếu xuất kho.');
             return redirect()->back();
         }
 

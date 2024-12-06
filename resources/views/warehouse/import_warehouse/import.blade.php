@@ -92,7 +92,7 @@
                                         @elseif ($item->status == 1 && $item->receipt_type === 'Nhập Từ Nhà Cung Cấp')
                                             <i class="fa fa-truck text-dark" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title="Nhập từ nhà cung cấp"></i>
-                                        @elseif ($item->status == 5)
+                                        @elseif ($item->status == 2)
                                             <i class="fas fa-times-circle text-danger" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title="Bị từ chối"></i>
                                         @elseif ($item->status == 1 && $item->receipt_type === 'Nhập cân bằng kho')
@@ -141,7 +141,7 @@
                                             <div class="label label-temp bg-info rounded-pill text-white px-2 py-1">
                                                 Lưu tạm
                                             </div>
-                                        @elseif ($item->status == 5)
+                                        @elseif ($item->status == 2)
                                             <div class="rounded-pill px-2 py-1 text-dark bg-warning">
                                                 Bị Từ Chối
                                             </div>
@@ -185,7 +185,7 @@
                                                                 Chờ
                                                                 duyệt
                                                             </div>
-                                                        @elseif ($item->status == 5)
+                                                        @elseif ($item->status == 2)
                                                             <button type="button" data-bs-toggle="modal"
                                                                 data-bs-target="#detail_reason_{{ $item->code }}"
                                                                 class="rounded-pill px-2 py-1 btn btn-dark btn-sm me-2">
@@ -225,12 +225,12 @@
                                                                 Bị Từ Chối
                                                             </div>
                                                         @elseif ($item->status == 1)
-                                                            @if (session('isAdmin') == 1)
+                                                            @if (session('isAdmin') == 1 && $item->browse_by == session('user_code'))
                                                                 <button type="button" style="font-size: 12px !important"
                                                                     class="btn btn-danger px-2 py-1 btn-sm rounded-pill me-2"
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#delete-{{ $item->code }}"
-                                                                    {{ $item->no_action == 1 || str_contains($item->code, 'PN-KK') ? 'disabled' : '' }}>
+                                                                    {{ str_contains($item->code, 'PN-KK') ? 'disabled' : '' }}>
                                                                     <i class="fa fa-trash"
                                                                         style="margin-bottom: 2px; font-size: 12px;"></i>
                                                                     Hủy phiếu
@@ -833,13 +833,26 @@
                                                         </div>
                                                     @endif
 
-                                                    @if ($item->status == 5 && $item->created_by == session('user_code'))
-                                                        <button class="btn btn-sm btn-danger rounded-pill me-2"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#delete-{{ $item->code }}" type="button">
-                                                            <i class="fas fa-trash" style="margin-bottom: 2px;"></i>
-                                                            Xóa phiếu
-                                                        </button>
+                                                    @if ($item->status == 2)
+                                                        @if ($item->browse_by == session('user_code'))
+                                                            <button class="btn btn-sm btn-twitter rounded-pill me-2"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#restore-status-{{ $item->code }}"
+                                                                type="button">
+                                                                <i class="fas fa-rotate-right"
+                                                                    style="margin-bottom: 2px;"></i>
+                                                                Khôi Phục
+                                                            </button>
+                                                        @endif
+                                                        @if ($item->created_by == session('user_code'))
+                                                            <button class="btn btn-sm btn-danger rounded-pill me-2"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#delete-{{ $item->code }}"
+                                                                type="button">
+                                                                <i class="fas fa-trash" style="margin-bottom: 2px;"></i>
+                                                                Xóa phiếu
+                                                            </button>
+                                                        @endif
                                                     @endif
                                                 </div>
                                             </div>
@@ -1179,6 +1192,42 @@
                                 data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" class="btn btn-sm btn-danger px-4 rounded-pill load_animation">
                                 Hủy
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Hủy Phiếu -->
+        <div class="modal fade" id="restore-status-{{ $item->code }}" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-labelledby="restore-statusLabel-{{ $item->code }}"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title text-white" id="restore-statusLabel-{{ $item->code }}">
+                            Xác
+                            Nhận Khôi Phục Trạng Thái</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('warehouse.import') }}" method="POST"
+                        id="restoreSttForm-{{ $item->code }}">
+                        @csrf
+                        <input type="hidden" name="restore_status_code" value="{{ $item->code }}">
+                        <input type="hidden" name="user_request"
+                            value="{{ $item->user->last_name . ' ' . $item->user->first_name }}">
+                        <input type="hidden" name="email_user_request" value="{{ $item->user->email }}">
+                        <div class="modal-body text-center" style="padding-bottom: 0px;">
+                            <p class="text-primary mb-4">Bạn có chắc chắn muốn khôi phục trạng thái của phiếu bị từ chối
+                                này?</p>
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn btn-sm btn-secondary px-4 rounded-pill"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-sm btn-twitter px-4 rounded-pill load_animation">
+                                Khôi Phục
                             </button>
                         </div>
                     </form>

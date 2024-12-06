@@ -27,6 +27,7 @@ class Receipts extends Model
         'receipt_no',
         'receipt_date',
         'receipt_type',
+        'reason_refuse',
         'created_by',
         'updated_by',
         'browse_by',

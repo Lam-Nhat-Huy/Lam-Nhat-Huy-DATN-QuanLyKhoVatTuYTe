@@ -84,9 +84,9 @@
 
                     <div class="col-md-6 fv-row">
                         <label class="required fs-5 fw-bold mb-3">Ngày Cần Thiết</label>
-                        <input type="datetime-local" class="form-control form-control-sm border border-success rounded-pill"
+                        <input type="date" class="form-control form-control-sm border border-success rounded-pill"
                             name="required_date" id="required_date"
-                            value="{{ old('required_date', !empty($editForm->required_date) ? \Carbon\Carbon::parse($editForm->required_date)->format('Y-m-d H:i:s') : '') }}" />
+                            value="{{ old('required_date', !empty($editForm->required_date) ? \Carbon\Carbon::parse($editForm->required_date)->format('Y-m-d') : '') }}" />
                         <div class="message_error" id="required_date_error"></div>
                     </div>
 
@@ -376,7 +376,7 @@
             let hours = ('0' + date.getHours()).slice(-2);
             let minutes = ('0' + date.getMinutes()).slice(-2);
             let seconds = ('0' + date.getSeconds()).slice(-2);
-            let formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+            let formattedDateTime = `${year}-${month}-${day}`;
 
             // Nếu còn thiết bị để random
             if (availableEquipments.length > 0) {

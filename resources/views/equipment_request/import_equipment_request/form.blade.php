@@ -496,7 +496,7 @@
                                             <div class="d-flex align-items-center">
                                                 <input type="number"
                                                     id="quantity_quote_change_{{ $item->equipment_code }}"
-                                                    value="{{ $item->quantity_quote }}" min="0"
+                                                    value="{{ $item->quantity_quote ?? $item->quantity }}" min="0"
                                                     data-vat="{{ $item->equipments->vat }}"
                                                     oninput="calculateTotalPriceQuoteTr('{{ $item->equipment_code }}');"
                                                     class="form-control form-control-sm border border-success rounded-pill"

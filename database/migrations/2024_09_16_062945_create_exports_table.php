@@ -19,6 +19,7 @@ return new class extends Migration
             $table->char('supplier_code', 10)->nullable();
             $table->string('reason', 50)->nullable();
             $table->char('export_request_code', 10)->nullable();
+            $table->text('reason_refuse')->nullable();
             $table->char('created_by')->nullable();
             $table->char('updated_by', 10)->nullable();
             $table->char('deleted_by', 10)->nullable();

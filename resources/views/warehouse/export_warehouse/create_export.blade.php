@@ -57,6 +57,25 @@
         <div class="container">
             <div class="card border-0 px-8 mb-4 rounded-3 mt-3">
                 <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="export_type" class="required form-label fw-semibold">Loại xuất</label>
+                        <div class="d-flex align-items-center">
+                            <select name="export_type" id="export_type" {{ !empty($getExportRequest) ? 'disabled' : '' }}
+                                class="form-select form-select-sm border border-success rounded-pill">
+                                <option value="Xuất Sử Dụng"
+                                    {{ !empty($editExport) && $editExport->export_type === 'Xuất Sử Dụng' ? 'selected' : '' }}>
+                                    Xuất Sử Dụng</option>
+                                <option value="Xuất Trả"
+                                    {{ !empty($editExport) && $editExport->export_type === 'Xuất Trả' ? 'selected' : '' }}>
+                                    Xuất Trả</option>
+                                <option value="Xuất Hủy"
+                                    {{ !empty($editExport) && $editExport->export_type === 'Xuất Hủy' ? 'selected' : '' }}>
+                                    Xuất Hủy</option>
+                            </select>
+                        </div>
+                        <div class="message_error" id="export_type_error"></div>
+                    </div>
+
                     <div class="col-md-6 mb-3 fv-row" id="department_show">
                         <label for="department_code" class="required form-label fw-semibold">Phòng ban</label>
                         <div class="d-flex align-items-center">
@@ -124,25 +143,6 @@
                         <div class="message_error" id="reason_error"></div>
                     </div>
 
-                    <div class="mb-3 col-md-6">
-                        <label for="export_type" class="required form-label fw-semibold">Loại xuất</label>
-                        <div class="d-flex align-items-center">
-                            <select name="export_type" id="export_type" {{ !empty($getExportRequest) ? 'disabled' : '' }}
-                                class="form-select form-select-sm border border-success rounded-pill">
-                                <option value="Xuất Sử Dụng"
-                                    {{ !empty($editExport) && $editExport->export_type === 'Xuất Sử Dụng' ? 'selected' : '' }}>
-                                    Xuất Sử Dụng</option>
-                                <option value="Xuất Trả"
-                                    {{ !empty($editExport) && $editExport->export_type === 'Xuất Trả' ? 'selected' : '' }}>
-                                    Xuất Trả</option>
-                                <option value="Xuất Hủy"
-                                    {{ !empty($editExport) && $editExport->export_type === 'Xuất Hủy' ? 'selected' : '' }}>
-                                    Xuất Hủy</option>
-                            </select>
-                        </div>
-                        <div class="message_error" id="export_type_error"></div>
-                    </div>
-
                     <div class="mb-3 col-md-6 d-none" id="export_date_div">
                         <label for="" class="form-label fw-semibold">Ngày tạo</label>
                         <input type="date" name="export_date" id="export_date" disabled
@@ -157,10 +157,10 @@
                             $action == route('warehouse.update_export', request('code')))
                         <div class="mb-3 col-md-6" id="required_date_div">
                             <label for="" class="form-label fw-semibold">Ngày cần thiết</label>
-                            <input type="datetime-local" name="required_date" id="required_date"
+                            <input type="date" name="required_date" id="required_date"
                                 {{ !empty($getExportRequest) ? 'disabled' : '' }}
                                 class="form-control form-control-sm border-success rounded-pill"
-                                value="{{ !empty($getExportRequest) && $getExportRequest->required_date ? \Carbon\Carbon::parse($getExportRequest->required_date)->format('Y-m-d H:i:s') : (!empty($editExport->required_date) ? \Carbon\Carbon::parse($editExport->required_date)->format('Y-m-d H:i:s') : '') }}">
+                                value="{{ !empty($getExportRequest) && $getExportRequest->required_date ? \Carbon\Carbon::parse($getExportRequest->required_date)->format('Y-m-d') : (!empty($editExport->required_date) ? \Carbon\Carbon::parse($editExport->required_date)->format('Y-m-d') : '') }}">
                             <div class="message_error" id="required_date_error"></div>
                         </div>
                     @endif
@@ -777,6 +777,7 @@
                     batch_number: batchNumber,
                 });
             });
+
             return equipmentList;
         }
 

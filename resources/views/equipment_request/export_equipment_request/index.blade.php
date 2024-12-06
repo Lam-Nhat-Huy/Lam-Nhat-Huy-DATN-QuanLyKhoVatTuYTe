@@ -92,9 +92,9 @@
                                     <input type="checkbox" id="selectAll" />
                                 </th>
                                 <th class="" style="width: 10%;">Mã yêu cầu</th>
-                                <th class="" style="width: 17%;">Phòng ban</th>
-                                <th class="" style="width: 12%;">Lý do xuất</th>
-                                <th class="" style="width: 10%;">Người tạo</th>
+                                <th class="" style="width: 10%;">Phòng ban</th>
+                                <th class="" style="width: 15%;">Lý do xuất</th>
+                                <th class="" style="width: 15%;">Người tạo</th>
                                 <th class="" style="width: 10%;">N.Yêu cầu</th>
                                 <th class="" style="width: 15%;">N.Cần thiết</th>
                                 <th class="text-center" style="width: 10%;">Trạng thái</th>
@@ -132,7 +132,7 @@
                                     </td>
                                     <td>
                                         @if (!empty($item->departments->name))
-                                            <a class="text-decoration-underline fw-bolder"
+                                            <a class="text-decoration-underline fw-bolder truncate-multi-line"
                                                 href="{{ route('department.index') }}?kw={{ $item->departments->name }}">
                                                 {{ $item->departments->name }}
                                             </a>
@@ -444,10 +444,17 @@
                                                                                         toastr.success(data.message);
 
                                                                                         if (data.hide == 1) {
-                                                                                            document.getElementById('action_update_price').classList.add('d-none');
+                                                                                            document.getElementById('action_create').classList.add('d-none');
                                                                                         } else {
-                                                                                            document.getElementById('action_update_price').classList.remove(
+                                                                                            document.getElementById('action_create').classList.remove(
                                                                                                 'd-none');
+                                                                                        }
+
+                                                                                        const actionMain = document.getElementById('action_main');
+                                                                                        if (data.user_code == "{{ session('user_code') }}") {
+                                                                                            actionMain.classList.remove('d-none');
+                                                                                        } else {
+                                                                                            actionMain.classList.add('d-none');
                                                                                         }
                                                                                     } else {
                                                                                         document.getElementById('allow_to_edit').checked = false;
@@ -484,15 +491,13 @@
                                                                 </button>
                                                             </span>
 
-                                                            @if ($item->allow_to_edit == 1 && $item->user_code == session('user_code'))
-                                                                <!-- Nút Sửa đơn -->
-                                                                <a href="{{ route('equipment_request.update_export', $item->code) }}"
-                                                                    class="btn btn-twitter btn-sm me-2 rounded-pill">
-                                                                    <i class="fa fa-edit"
-                                                                        style="margin-bottom: 2px;"></i>Sửa
-                                                                    phiếu
-                                                                </a>
-                                                            @endif
+                                                            <!-- Nút Sửa đơn -->
+                                                            <a href="{{ route('equipment_request.update_export', $item->code) }}"
+                                                                class="btn btn-twitter btn-sm me-2 rounded-pill {{ $item->allow_to_edit == 1 && $item->user_code == session('user_code') ? '' : 'd-none' }}"
+                                                                id="action_main">
+                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
+                                                                phiếu
+                                                            </a>
                                                         @elseif(!empty($item->status == 2) && $item->user_code == session('user_code'))
                                                             <!-- Nút xóa vĩnh viễn đơn -->
                                                             <button class="btn btn-sm rounded-pill btn-danger"

@@ -131,7 +131,7 @@
                                     </td>
                                     <td>
                                         @if (!empty($item->supplier_code))
-                                            <a class="text-decoration-underline fw-bolder"
+                                            <a class="text-decoration-underline fw-bolder truncate-multi-line"
                                                 href="{{ route('supplier.list') }}?keyword={{ $item->suppliers->name }}">
                                                 {{ $item->suppliers->name }}
                                             </a>
@@ -456,13 +456,23 @@
                                                                             .then(data => {
                                                                                 if (data.success) {
                                                                                     toastr.success(data.message);
-                                                                                }
 
-                                                                                if (data.hide == 1) {
-                                                                                    document.getElementById('action_update_price').classList.add('d-none');
+                                                                                    if (data.hide == 1) {
+                                                                                        document.getElementById('action_update_price').classList.add('d-none');
+                                                                                    } else {
+                                                                                        document.getElementById('action_update_price').classList.remove(
+                                                                                            'd-none');
+                                                                                    }
+
+                                                                                    const actionMain = document.getElementById('action_main');
+                                                                                    if (data.update_quote == "{{ session('user_code') }}") {
+                                                                                        actionMain.classList.remove('d-none');
+                                                                                    } else {
+                                                                                        actionMain.classList.add('d-none');
+                                                                                    }
                                                                                 } else {
-                                                                                    document.getElementById('action_update_price').classList.remove(
-                                                                                        'd-none');
+                                                                                    document.getElementById('allow_to_edit').checked = false;
+                                                                                    toastr.info(data.message);
                                                                                 }
                                                                             })
                                                                             .catch(error => console.error('Error:', error))
@@ -497,13 +507,12 @@
                                                             </button>
                                                         </span>
 
-                                                        @if ($item->allow_to_edit == 1 && $item->update_quote_by == session('user_code'))
-                                                            <a href="{{ route('equipment_request.update_import', ['code' => $item->code, 'status' => 'update_quote']) }}"
-                                                                class="btn btn-sm rounded-pill btn-dark me-2">
-                                                                <i class="fas fa-edit" style="margin-bottom: 2px;"></i>
-                                                                Cập nhật giá
-                                                            </a>
-                                                        @endif
+                                                        <a href="{{ route('equipment_request.update_import', ['code' => $item->code, 'status' => 'update_quote']) }}"
+                                                            class="btn btn-sm rounded-pill btn-youtube me-2 {{ $item->allow_to_edit == 1 && $item->update_quote_by == session('user_code') ? '' : 'd-none' }}"
+                                                            id="action_main">
+                                                            <i class="fas fa-edit" style="margin-bottom: 2px;"></i>
+                                                            Cập nhật giá
+                                                        </a>
                                                     @elseif ($item->status == 2)
                                                         @if (session('isAdmin') == 1)
                                                             <button type="button"
@@ -543,13 +552,23 @@
                                                                             .then(data => {
                                                                                 if (data.success) {
                                                                                     toastr.success(data.message);
-                                                                                }
 
-                                                                                if (data.hide == 1) {
-                                                                                    document.getElementById('action_update_price').classList.add('d-none');
+                                                                                    if (data.hide == 1) {
+                                                                                        document.getElementById('action_update_price').classList.add('d-none');
+                                                                                    } else {
+                                                                                        document.getElementById('action_update_price').classList.remove(
+                                                                                            'd-none');
+                                                                                    }
+
+                                                                                    const actionMain = document.getElementById('action_main');
+                                                                                    if (data.user_code == "{{ session('user_code') }}") {
+                                                                                        actionMain.classList.remove('d-none');
+                                                                                    } else {
+                                                                                        actionMain.classList.add('d-none');
+                                                                                    }
                                                                                 } else {
-                                                                                    document.getElementById('action_update_price').classList.remove(
-                                                                                        'd-none');
+                                                                                    document.getElementById('allow_to_edit').checked = false;
+                                                                                    toastr.info(data.message);
                                                                                 }
                                                                             })
                                                                             .catch(error => console.error('Error:', error))
@@ -578,24 +597,19 @@
                                                             </a>
                                                         </span>
 
-                                                        @if ($item->allow_to_edit == 1 && $item->user_code == session('user_code'))
-                                                            <!-- Nút Sửa đơn -->
-                                                            <a href="{{ route('equipment_request.update_import', $item->code) }}?tp={{ md5($item->user_code) }}"
-                                                                class="btn btn-twitter btn-sm me-2 rounded-pill">
-                                                                <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
-                                                                phiếu
-                                                            </a>
-                                                        @endif
+                                                        <!-- Nút Sửa đơn -->
+                                                        <a href="{{ route('equipment_request.update_import', $item->code) }}?tp={{ md5($item->user_code) }}"
+                                                            class="btn btn-twitter btn-sm me-2 rounded-pill {{ $item->allow_to_edit == 1 && $item->user_code == session('user_code') ? '' : 'd-none' }}"
+                                                            id="action_main">
+                                                            <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
+                                                            phiếu
+                                                        </a>
                                                     @endif
                                                 </div>
                                             </div>
 
                                             {{-- In --}}
                                             <div class="fade modal" id="printArea_{{ $item->code }}">
-                                                <span class="link-primary position-absolute"
-                                                    style="top: 5%; right: 4%;"><strong class="text-danger">Số đơn đặt
-                                                        hàng:
-                                                    </strong>{{ $item->code }}</span>
                                                 <div class="modal-body bg-white mx-xl-18 pt-0 pb-15">
                                                     <div class="d-flex mb-5">
                                                         <img src="{{ asset('image/logo_warehouse.png') }}" width="100"
@@ -614,6 +628,10 @@
                                                             <div class="text-muted fs-30">
                                                                 Ngày lập
                                                                 {{ \Carbon\Carbon::parse($item->request_date)->format('d-m-Y') }}
+                                                            </div>
+                                                            <div class="text-muted fs-30 mt-3">
+                                                                Số đơn đặt hàng
+                                                                #{{$item->code}}
                                                             </div>
                                                         </div>
                                                         <div class="mb-15 text-left">

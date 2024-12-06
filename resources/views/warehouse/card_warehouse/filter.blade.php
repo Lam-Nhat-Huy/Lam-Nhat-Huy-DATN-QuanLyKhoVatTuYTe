@@ -4,7 +4,7 @@
         <div class="col-lg-4 col-md-4 col-sm-12">
             <div class="row align-items-center">
                 <div class="col-5 pe-0">
-                    <input type="datetime-local" name="start_date"
+                    <input type="date" name="start_date"
                         class="form-control form-control-sm border-success rounded-pill"
                         value="{{ request()->start_date ? \Carbon\Carbon::parse(request()->start_date)->format('Y-m-d\TH:i') : \Carbon\Carbon::now()->subMonths(3)->format('Y-m-d\TH:i') }}">
                 </div>
@@ -12,7 +12,7 @@
                     Đến
                 </div>
                 <div class="col-5 ps-0">
-                    <input type="datetime-local" name="end_date"
+                    <input type="date" name="end_date"
                         class="form-control form-control-sm border-success rounded-pill"
                         value="{{ request()->end_date ? \Carbon\Carbon::parse(request()->end_date)->format('Y-m-d\TH:i') : \Carbon\Carbon::now()->format('Y-m-d\TH:i') }}">
                 </div>

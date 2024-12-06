@@ -166,7 +166,7 @@ class ImportController extends Controller
                 ->update([
                     'reason_refuse' => $reason_refuse,
                     'browse_by' => session('user_code'),
-                    'status' => 5,
+                    'status' => 2,
                 ]);
 
             $contentNotification = '
@@ -180,6 +180,33 @@ class ImportController extends Controller
             ]);
 
             toastr()->success('Đã từ chối phiếu nhập kho');
+
+            return redirect()->back();
+        }
+
+        if (!empty($request->restore_status_code)) {
+            $user_request = $request->user_request;
+            $email_user_request = $request->email_user_request;
+
+            Receipts::where('code', $request->restore_status_code)
+                ->where('status', 2)
+                ->update([
+                    'reason_refuse' => NULL,
+                    'browse_by' => NULL,
+                    'status' => 0,
+                ]);
+
+            $contentNotification = '
+            <p>Phiếu nhập kho với mã <a class="text-primary fw-bolder text-decoration-underline" href="' . route('warehouse.import') . '?kw=' . $request->restore_status_code . '">#' . $request->restore_status_code . '</a> được tạo bởi <a class="text-dark fw-bolder text-decoration-underline" href="' . route('user.index') . '?kw=' . $email_user_request . '">' . $user_request . '</a> đã được <span class="text-primary fw-bolder">khôi phục</span> về trạng thái <strong>chờ duyệt</strong>.</p>
+            ';
+
+            Notifications::create([
+                'code' => 'TB' . $this->generateRandomString(8),
+                'content' => $contentNotification,
+                'user_code' => session('user_code'),
+            ]);
+
+            toastr()->success('Đã khôi phục trạng thái phiếu nhập kho');
 
             return redirect()->back();
         }
@@ -712,7 +739,9 @@ class ImportController extends Controller
 
                 toastr()->success('Phiếu nhập với mã #' . $request->delete_code . ' đã được trở về trạng thái chờ duyệt');
 
-                toastr()->info('Phiếu yêu cầu nhập với mã <a href="' . route('equipment_request.import', ['kw' => $receipt->order_number]) . '">#' . $receipt->order_number . '</a> đã được trở về trạng thái chuẩn bị.');
+                if (isset($receipt->order_number)) {
+                    toastr()->info('Phiếu yêu cầu nhập với mã <a href="' . route('equipment_request.import', ['kw' => $receipt->order_number]) . '">#' . $receipt->order_number . '</a> đã được trở về trạng thái chuẩn bị.');
+                }
 
                 return redirect()->back();
             } else {

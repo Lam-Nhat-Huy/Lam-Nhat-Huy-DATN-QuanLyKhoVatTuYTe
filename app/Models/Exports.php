@@ -29,6 +29,7 @@ class Exports extends Model
         'supplier_code',
         'reason',
         'export_request_code',
+        'reason_refuse',
         'created_by',
         'updated_by',
         'browse_by',

@@ -196,18 +196,17 @@ class EquipmentRequestController extends Controller
 
             $a = Import_equipment_requests::where('code', $code)->first();
 
-
             if ($a->allow_to_edit == 0) {
 
-                if (isset($b->order_number)) {
+                if (Receipts::where('order_number', $code)->where('status', '!=', 2)->count() > 0) {
 
-                    return response()->json(['success' => false, 'message' => 'Phiếu yêu cầu này đã được tạo phiếu nhập và ở trạng thái chờ duyệt']);
+                    return response()->json(['success' => false, 'message' => 'Phiếu yêu cầu này đã được tạo phiếu nhập và ở trạng thái chờ duyệt, không thể cấp quyền sửa']);
                 } else {
                     $a->update([
                         'allow_to_edit' => 1,
                     ]);
 
-                    return response()->json(['success' => true, 'message' => 'Đã cấp phép sửa phiếu cho người tạo phiếu', 'hide' => 1]);
+                    return response()->json(['success' => true, 'message' => 'Đã cấp phép sửa phiếu cho người tạo phiếu', 'hide' => 1, 'user_code' => $a->user_code, 'update_quote' => $a->update_quote_by]);
                 }
             } else {
                 $a->update([
@@ -226,7 +225,7 @@ class EquipmentRequestController extends Controller
             $a = Export_equipment_requests::where('code', $code)->first();
 
             if ($a->allow_to_edit == 0) {
-                if (Exports::where('export_request_code', $code)->count() > 0) {
+                if (Exports::where('export_request_code', $code)->where('status', '!=', 2)->count() > 0) {
 
                     return response()->json(['success' => false, 'message' => 'Phiếu yêu cầu xuất kho này đã được tạo phiếu xuất và ở trạng thái chờ duyệt, không thể cấp quyền sửa']);
                 } else {
@@ -234,7 +233,7 @@ class EquipmentRequestController extends Controller
                         'allow_to_edit' => 1,
                     ]);
 
-                    return response()->json(['success' => true, 'message' => 'Đã cấp phép sửa phiếu cho người tạo phiếu', 'hide' => 1]);
+                    return response()->json(['success' => true, 'message' => 'Đã cấp phép sửa phiếu cho người tạo phiếu', 'hide' => 1, 'user_code' => $a->user_code]);
                 }
             } else {
                 $a->update([
@@ -531,6 +530,12 @@ class EquipmentRequestController extends Controller
 
             $record = $existingRequest->first();
 
+            if (!empty($record->allow_to_edit) == 1) {
+                $existingRequest->update([
+                    'allow_to_edit' => 0,
+                ]);
+            }
+
             $existingRequest->update([
                 'note' => $note ?? $record->note,
                 'status' => $record->status,
@@ -567,6 +572,14 @@ class EquipmentRequestController extends Controller
             $equipmentList = json_decode($request->input('equipment_list'), true);
 
             $existingRequest = $this->callModel::where('code', $code);
+
+            $record = $existingRequest->first();
+
+            if (!empty($record->allow_to_edit) == 1) {
+                $existingRequest->update([
+                    'allow_to_edit' => 0,
+                ]);
+            }
 
             $existingRequest->update([
                 'supplier_code' => $supplierCode,
@@ -941,6 +954,12 @@ class EquipmentRequestController extends Controller
             $existingRequest = Export_equipment_requests::where('code', $code);
 
             $record = $existingRequest->first();
+
+            if (!empty($record->allow_to_edit) == 1) {
+                $existingRequest->update([
+                    'allow_to_edit' => 0,
+                ]);
+            }
 
             $existingRequest->update([
                 'department_code' => $departmentCode,

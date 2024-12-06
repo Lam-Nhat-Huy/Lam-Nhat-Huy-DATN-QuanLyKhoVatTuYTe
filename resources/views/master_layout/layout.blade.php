@@ -366,22 +366,21 @@
 
             <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
-                @if (request()->is('system'))
-                    <div id="kt_header" class="align-items-stretch">
-                        <div class="container-fluid d-flex align-items-stretch justify-content-between p-0">
-                            <div class="slider-container">
-                                <div id="sliderContent" class="slider-content">
-                                    @foreach ($getNotification as $notification)
-                                        <div class="notification-item">
-                                            <strong>{!! $notification->content !!}</strong>
-                                        </div>
-                                    @endforeach
-                                </div>
+                {{-- @if (request()->is('system')) --}}
+                <div id="kt_header" class="align-items-stretch">
+                    <div class="container-fluid d-flex align-items-stretch justify-content-between p-0">
+                        <div class="slider-container">
+                            <div id="sliderContent" class="slider-content">
+                                @foreach ($getNotification as $notification)
+                                    <div class="notification-item">
+                                        <strong>{!! $notification->content !!}</strong>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
-
-                @endif
+                </div>
+                {{-- @endif --}}
 
                 <sidebar>
                     @include('master_layout.components.sidebar')
