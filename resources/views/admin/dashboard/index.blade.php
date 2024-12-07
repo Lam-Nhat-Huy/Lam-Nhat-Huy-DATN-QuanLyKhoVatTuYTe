@@ -737,7 +737,7 @@
             var monthlyExpenses = @json($monthlyImportExpenses);
 
             var months = monthlyExpenses.map(item => {
-                return new Date(0, item.month - 1).toLocaleString('vi-VN', {
+                return new Date(0, item.month).toLocaleString('vi-VN', {
                     month: 'long'
                 });
             });

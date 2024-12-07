@@ -89,7 +89,13 @@ function addProductToTable(
     );
 
     if (existingMaterial) {
-        return;
+        Swal.fire({
+            icon: "error",
+            title: "Thông báo",
+            text: "Đã thêm tất cả thiết bị vào danh sách. Vui lòng tiến hành kiểm kê kho hàng!",
+            confirmButtonText: "Tôi biết rồi",
+            confirmButtonColor: "#d33",
+        });
     }
 
     var tableBody = document.getElementById("materialList");
