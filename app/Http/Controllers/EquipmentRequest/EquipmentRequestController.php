@@ -19,6 +19,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\DevicePriceImport;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class EquipmentRequestController extends Controller
@@ -450,8 +451,56 @@ class EquipmentRequestController extends Controller
             return response()->json($data, 200);
         }
 
+        // if (!empty($request->file('excel_files'))) {
+        //     // Lưu các file vào storage
+        //     $uploadedFiles = $request->file('excel_files');
+        //     $filePaths = [];
+
+        //     foreach ($uploadedFiles as $file) {
+        //         $filePath = $file->move(public_path('storage/excel_files', $file));
+        //         $filePaths[] = $filePath;
+        //     }
+
+        //     // Xử lý các file đã tải lên
+        //     $comparisonData = [];
+
+        //     foreach ($filePaths as $path) {
+        //         // Sử dụng Excel::toArray() để đọc dữ liệu từ file
+        //         $data = Excel::toArray(new DevicePriceImport, storage_path("storage/{$path}"))[0];
+
+        //         foreach ($data as $item) {
+        //             // Thêm dữ liệu vào mảng với mã thiết bị làm khóa
+        //             $comparisonData[$item['code']][] = $item;
+        //         }
+        //     }
+
+        //     // So sánh giá và tạo kết quả
+        //     $comparisonResult = $this->comparePrices($comparisonData);
+
+        //     return response()->json([
+        //         'success' => true,
+        //         'data' => $comparisonResult,
+        //     ]);
+        // }
+
         return view("{$this->route}.import_equipment_request.form", compact('title', 'action', 'AllSupplier', 'AllEquipment', 'getList'));
     }
+
+    // Hàm so sánh giá
+    // private function comparePrices($allData)
+    // {
+    //     $comparison = [];
+    //     foreach ($allData as $code => $items) {
+    //         $minPrice = min(array_column($items, 'price'));
+
+    //         $comparison[$code] = [
+    //             'name' => $items[0]['name'],
+    //             'min_price' => $minPrice,
+    //         ];
+    //     }
+
+    //     return $comparison;
+    // }
 
     public function store_import_equipment_request(Request $request)
     {

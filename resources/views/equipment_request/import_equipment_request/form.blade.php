@@ -127,13 +127,132 @@
                 <span class="card-label fw-bolder fs-3 mb-1">Thêm Thiết Bị Yêu Cầu</span>
             </h3>
             <div class="{{ $hidden_excel }}">
+                {{-- <button class="btn btn-sm btn-info rounded-pill me-2" data-bs-toggle="modal" data-bs-target="#compareExcel"
+                    type="button">
+                    <i class="fa fa-code-compare" style="margin-bottom: 2px;"></i>So sánh giá
+                </button> --}}
+
                 <button class="btn btn-sm btn-success rounded-pill" data-bs-toggle="modal" data-bs-target="#addExcel"
                     type="button">
                     <i class="fa fa-file-excel" style="margin-bottom: 2px;"></i>Thêm bằng excel
                 </button>
 
-                <div class="modal fade" id="addExcel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                    aria-labelledby="addExcelLabel" aria-hidden="true">
+                {{-- <div class="modal fade" id="compareExcel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                    aria-labelledby="compareExcelLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-md">
+                        <div class="modal-content border-0 shadow">
+                            <div class="modal-header bg-success text-white">
+                                <h5 class="modal-title text-white" id="compareExcelLabel">So sánh báo giá</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center" style="padding-bottom: 0px;" id="upload_file_excels">
+                                <label for="excel_files" class="btn btn-sm btn-success w-100"><i class="fa fa-upload me-1"
+                                        style="margin-bottom: 2px;"></i>Tải File Báo Giá Lên</label>
+                                <input type="file" class="d-none" name="excel_files[]" id="excel_files" multiple
+                                    accept=".xls, .xlsx" onchange="displayFileNames()">
+                                <div id="fileNames" class="mt-3 fw-semibold text-dark"></div>
+                            </div>
+                            <div id="show_compare">
+
+                            </div>
+                            <div class="modal-footer justify-content-center border-0">
+                                <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                                    data-bs-dismiss="modal">Đóng</button>
+                                <button type="button" class="btn rounded-pill btn-sm btn-success px-4" id="compare"
+                                    disabled>
+                                    Thêm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    // Hàm hiển thị tên file đã tải lên
+                    function displayFileNames() {
+                        const excel_files = document.getElementById('excel_files');
+                        const fileNames = document.getElementById('fileNames');
+                        const compare = document.getElementById('compare');
+
+                        if (excel_files.files.length > 0) {
+                            compare.disabled = false;
+
+                            // Tạo danh sách tên file mỗi file một dòng
+                            const fileNamesList = Array.from(excel_files.files).map(file => file.name).join('<br>');
+                            fileNames.innerHTML = `Các file đã tải lên:<br>${fileNamesList}`;
+
+                            // Gọi uploadFiles khi nhấn nút "Thêm"
+                            compare.addEventListener('click', uploadFiles);
+                        } else {
+                            fileNames.textContent = '';
+                            compare.removeEventListener('click', uploadFiles);
+                        }
+                    }
+
+                    // Hàm xử lý upload file
+                    function uploadFiles() {
+                        const excel_files = document.getElementById('excel_files');
+                        console.log(excel_files.file);
+                        const formData = new FormData();
+
+                        // Thêm tất cả các file vào formData
+                        Array.from(excel_files.files).forEach(file => {
+                            formData.append('excel_files[]', file);
+                        });
+
+                        // Gửi dữ liệu lên server thông qua AJAX
+                        fetch('{{ route('equipment_request.create_import') }}', {
+                                method: 'POST',
+                                body: formData,
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Đảm bảo CSRF token được gửi
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    document.getElementById('upload_file_excels').classList.add('d-none');
+                                    toastr.success('Tải lên thành công');
+
+                                    let htmlContent = `
+                                        <h1>Kết Quả So Sánh Báo Giá</h1>
+                                        <table border="1">
+                                            <thead>
+                                                <tr>
+                                                    <th>Mã thiết bị</th>
+                                                    <th>Tên thiết bị</th>
+                                                    <th>Giá thấp nhất</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                    `;
+                                    // Hiển thị kết quả so sánh giá
+                                    for (let code in data.data) {
+                                        const item = data.data[code];
+                                        htmlContent += `
+                                            <tr>
+                                                <td>${code}</td>
+                                                <td>${item.name}</td>
+                                                <td>${item.min_price.toLocaleString()} VND</td>
+                                        `;
+                                    }
+                                    htmlContent += `</tbody></table>`;
+                                    document.getElementById('show_compare').innerHTML = htmlContent;
+
+                                } else {
+                                    alert('Đã xảy ra lỗi: ' + data.message); // Hiển thị lỗi từ server
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Đã xảy ra lỗi khi tải lên file!');
+                            });
+                    }
+                </script> --}}
+
+                <div class="modal fade" id="addExcel" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="addExcelLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-md">
                         <div class="modal-content border-0 shadow">
                             <div class="modal-header bg-success text-white">
@@ -144,8 +263,8 @@
                             <div class="modal-body text-center" style="padding-bottom: 0px;">
                                 <label for="excel_file" class="btn btn-sm btn-success w-100"><i class="fa fa-upload me-1"
                                         style="margin-bottom: 2px;"></i>Tải File Báo Giá Lên</label>
-                                <input type="file" class="d-none" name="excel_file" id="excel_file" accept=".xls, .xlsx"
-                                    onchange="displayFileName()">
+                                <input type="file" class="d-none" name="excel_file" id="excel_file"
+                                    accept=".xls, .xlsx" onchange="displayFileName()">
                                 <div id="fileName" class="mt-3 fw-semibold text-dark"></div>
                             </div>
                             <div class="modal-footer justify-content-center border-0">
@@ -198,6 +317,8 @@
                                 updateTable(data);
                                 toastr.success('Tải lên thành công');
                                 $('#addExcel').modal('hide');
+                                document.getElementById('excel_file').value = '';
+                                document.getElementById('fileName').innerText = '';
                             } else {
                                 toastr.error('File excel không phù hợp!');
                             }
@@ -241,9 +362,9 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <span>
+                                    <div>
                                         ${item.quantity_quote}
-                                    </span>
+                                    </div>
                                     <input type="hidden" id="quantity_quote_change_${item.equipment_code}" data-vat="${item.vat}" value="${item.quantity_quote}"/>
                                     <div class="message_error d-none ms-2 m-0 p-0"
                                         id="quantity_quote_error_${item.equipment_code}"
@@ -274,8 +395,8 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <span>
-                                        ${item.discount}
+                                    <span class="text-center">
+                                        ${item.discount}%
                                     </span>
                                     <input type="hidden" id="discount_change_${item.equipment_code}" value="${item.discount}"/>
                                     <div class="message_error d-none ms-2 m-0 p-0"
