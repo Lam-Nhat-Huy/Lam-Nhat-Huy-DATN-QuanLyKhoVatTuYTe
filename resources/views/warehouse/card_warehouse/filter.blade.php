@@ -6,7 +6,7 @@
                 <div class="col-5 pe-0">
                     <input type="date" name="start_date"
                         class="form-control form-control-sm border-success rounded-pill"
-                        value="{{ request()->start_date ? \Carbon\Carbon::parse(request()->start_date)->format('Y-m-d\TH:i') : \Carbon\Carbon::now()->subMonths(3)->format('Y-m-d\TH:i') }}">
+                        value="{{ request()->start_date ? \Carbon\Carbon::parse(request()->start_date)->format('Y-m-d') : \Carbon\Carbon::now()->subMonths(3)->format('Y-m-d') }}">
                 </div>
                 <div class="col-2 text-center">
                     Đến
@@ -14,7 +14,7 @@
                 <div class="col-5 ps-0">
                     <input type="date" name="end_date"
                         class="form-control form-control-sm border-success rounded-pill"
-                        value="{{ request()->end_date ? \Carbon\Carbon::parse(request()->end_date)->format('Y-m-d\TH:i') : \Carbon\Carbon::now()->format('Y-m-d\TH:i') }}">
+                        value="{{ request()->end_date ? \Carbon\Carbon::parse(request()->end_date)->format('Y-m-d') : \Carbon\Carbon::now()->format('Y-m-d') }}">
                 </div>
             </div>
         </div>

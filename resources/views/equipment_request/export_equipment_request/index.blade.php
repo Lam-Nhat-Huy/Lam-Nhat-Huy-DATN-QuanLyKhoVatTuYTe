@@ -156,7 +156,7 @@
                                         {{ \Carbon\Carbon::parse($item->request_date)->format('d-m-Y') }}
                                     </td>
                                     <td>
-                                        {{ \Carbon\Carbon::parse($item->required_date)->format('d-m-Y H:i:s') }}
+                                        {{ \Carbon\Carbon::parse($item->required_date)->format('d-m-Y') }}
                                     </td>
                                     <td class="text-center">
                                         @if ($item->status == 3)
@@ -498,6 +498,15 @@
                                                                 <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
                                                                 phiếu
                                                             </a>
+                                                        @elseif ($item->browse_by == session('user_code'))
+                                                            <button class="btn btn-sm btn-twitter rounded-pill me-2"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#restore-status-{{ $item->code }}"
+                                                                type="button">
+                                                                <i class="fas fa-rotate-right"
+                                                                    style="margin-bottom: 2px;"></i>
+                                                                Khôi Phục
+                                                            </button>
                                                         @elseif(!empty($item->status == 2) && $item->user_code == session('user_code'))
                                                             <!-- Nút xóa vĩnh viễn đơn -->
                                                             <button class="btn btn-sm rounded-pill btn-danger"
@@ -999,6 +1008,42 @@
                                 data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Tạo
                                 phiếu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Hủy Phiếu -->
+        <div class="modal fade" id="restore-status-{{ $item->code }}" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-labelledby="restore-statusLabel-{{ $item->code }}"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title text-white" id="restore-statusLabel-{{ $item->code }}">
+                            Xác
+                            Nhận Khôi Phục Trạng Thái</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('equipment_request.export') }}" method="POST"
+                        id="restoreSttForm-{{ $item->code }}">
+                        @csrf
+                        <input type="hidden" name="restore_status_code" value="{{ $item->code }}">
+                        <input type="hidden" name="user_request"
+                            value="{{ $item->users->last_name . ' ' . $item->users->first_name }}">
+                        <input type="hidden" name="email_user_request" value="{{ $item->users->email }}">
+                        <div class="modal-body text-center" style="padding-bottom: 0px;">
+                            <p class="text-primary mb-4">Bạn có chắc chắn muốn khôi phục trạng thái của phiếu bị từ chối
+                                này?</p>
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn btn-sm btn-secondary px-4 rounded-pill"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-sm btn-twitter px-4 rounded-pill load_animation">
+                                Khôi Phục
+                            </button>
                         </div>
                     </form>
                 </div>

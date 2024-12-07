@@ -22,13 +22,14 @@
                 <table class="table align-middle gs-0 gy-4">
                     <thead class="bg-success">
                         <tr class="fw-bolder">
-                            <th class="ps-5" style="width: 40%;">Thiết bị</th>
+                            <th class="ps-5" style="width: 10%;">Mã thiết bị</th>
+                            <th style="width: 30%;">Thiết bị</th>
                             <th style="width: 20%;" data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="Tổng số lượng nhập, xuất trước ngày {{ \Carbon\Carbon::parse(request('start_date'))->format('d-m-Y H:i:s') }}">
+                                title="Tổng số lượng nhập, xuất trước ngày {{ \Carbon\Carbon::parse(request('start_date'))->format('d-m-Y') }}">
                                 Tồn đầu
                             </th>
                             <th style="width: 20%; white-space: nowrap;" data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="Tổng số lượng nhập, xuất trong khoảng từ ngày {{ \Carbon\Carbon::parse(request('start_date'))->format('d-m-Y H:i:s') }} đến ngày {{ \Carbon\Carbon::parse(request('end_date'))->format('d-m-Y H:i:s') }}">
+                                title="Tổng số lượng nhập, xuất trong khoảng từ ngày {{ \Carbon\Carbon::parse(request('start_date'))->format('d-m-Y') }} đến ngày {{ \Carbon\Carbon::parse(request('end_date'))->format('d-m-Y') }}">
                                 Tồn cuối</th>
                             <th class="pe-5 text-center" style="width: 20%;">Hành động</th>
                         </tr>
@@ -36,7 +37,8 @@
                     <tbody>
                         @if (!empty($nameEquipment->name))
                             <tr class="hover-table">
-                                <td class="ps-5">{{ $nameEquipment->name }}</td>
+                                <td class="ps-5">#{{ $nameEquipment->code }}</td>
+                                <td>{{ $nameEquipment->name }}</td>
                                 <td>{{ $beginning_balance_total }} {{ $nameEquipment->units->name }}</td>
                                 <td>{{ $ending_balance_total }} {{ $nameEquipment->units->name }}</td>
                                 <td class="text-center pointer" data-bs-toggle="collapse"
@@ -110,7 +112,7 @@
                                                                     </td>
                                                                     <td>{{ number_format($item->VAT, '0', ',', '.') }}%
                                                                     </td>
-                                                                    <td>{{ $item->created_at->format('d-m-Y H:i:s') }}</td>
+                                                                    <td>{{ $item->created_at->format('d-m-Y') }}</td>
                                                                     <td>{{ $item->batch_number }}</td>
                                                                     <td>{{ $item->quantity }}</td>
                                                                     <td>{{ number_format($totalPriceWithVAT, '0', ',', '.') }}
@@ -212,7 +214,7 @@
                                                                     </td>
                                                                     <td>{{ $item->batch_number }}</td>
                                                                     <td>{{ $item->quantity }}</td>
-                                                                    <td>{{ $item->created_at->format('d-m-Y H:i:s') }}</td>
+                                                                    <td>{{ $item->created_at->format('d-m-Y') }}</td>
                                                                 </tr>
                                                             @empty
                                                                 <tr id="noDataAlert">

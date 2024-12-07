@@ -57,10 +57,18 @@ class InventoryController extends Controller
                                                 WHERE inventories.equipment_code = equipments.code 
                                                 AND inventories.deleted_at IS NULL)'), '>=', 20);
                 } elseif ($quantity === 'low') {
-                    $subQuery->where(DB::raw('(SELECT SUM(current_quantity) 
-                                                FROM inventories 
-                                                WHERE inventories.equipment_code = equipments.code 
-                                                AND inventories.deleted_at IS NULL)'), '<', 20);
+                    $subQuery->where(DB::raw('
+                                            (SELECT SUM(current_quantity) 
+                                            FROM inventories 
+                                            WHERE inventories.equipment_code = equipments.code 
+                                            AND inventories.deleted_at IS NULL
+                                            )'), '<', 20)
+                        ->where(DB::raw('
+                                            (SELECT SUM(current_quantity) 
+                                            FROM inventories 
+                                            WHERE inventories.equipment_code = equipments.code 
+                                            AND inventories.deleted_at IS NULL
+                                            )'), '>', 0);
                 } elseif ($quantity === 'out_stock') {
                     $subQuery->where(DB::raw('(SELECT SUM(current_quantity) 
                                                 FROM inventories 

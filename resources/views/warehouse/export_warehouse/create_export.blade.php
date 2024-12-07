@@ -648,7 +648,7 @@
 
                 departmentSelect.value = '1';
                 reasonSelect.value = '1';
-                required_date.value = '2090-01-01T12:00:00';
+                required_date.value = '2090-01-01';
 
                 // Xóa lỗi hiển thị
                 departmentSelectErr.innerText = '';
@@ -670,7 +670,7 @@
 
                 supplierSelect.value = '1';
                 departmentSelect.value = '1';
-                required_date.value = '2090-01-01T12:00:00';
+                required_date.value = '2090-01-01';
 
                 supplierSelectErr.innerText = '';
                 departmentSelectErr.innerText = '';

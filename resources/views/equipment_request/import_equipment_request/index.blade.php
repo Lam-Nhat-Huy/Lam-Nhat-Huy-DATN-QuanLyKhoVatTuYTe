@@ -604,7 +604,26 @@
                                                             <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
                                                             phiếu
                                                         </a>
+                                                    @elseif ($item->browse_by == session('user_code'))
+                                                        <button class="btn btn-sm btn-twitter rounded-pill me-2"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#restore-status-{{ $item->code }}"
+                                                            type="button">
+                                                            <i class="fas fa-rotate-right"
+                                                                style="margin-bottom: 2px;"></i>
+                                                            Khôi Phục
+                                                        </button>
+                                                    @elseif(!empty($item->status == 5) && $item->user_code == session('user_code'))
+                                                        <!-- Nút xóa vĩnh viễn đơn -->
+                                                        <button class="btn btn-sm rounded-pill btn-danger"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#deletedModal_{{ $item->code }}"
+                                                            type="button">
+                                                            <i class="fa fa-trash" style="margin-bottom: 2px;"></i>
+                                                            Xóa vĩnh viễn
+                                                        </button>
                                                     @endif
+
                                                 </div>
                                             </div>
 
@@ -631,7 +650,7 @@
                                                             </div>
                                                             <div class="text-muted fs-30 mt-3">
                                                                 Số đơn đặt hàng
-                                                                #{{$item->code}}
+                                                                #{{ $item->code }}
                                                             </div>
                                                         </div>
                                                         <div class="mb-15 text-left">
@@ -1019,8 +1038,8 @@
         </div>
 
         <!-- Modal Xem Lý Do Từ Chối -->
-        <div class="modal fade" id="detail_reason_{{ $item->code }}" tabindex="-1" aria-labelledby="checkModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="detail_reason_{{ $item->code }}" tabindex="-1"
+            aria-labelledby="checkModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content border-0 shadow">
                     <div class="modal-header bg-success">
@@ -1121,6 +1140,69 @@
                                 data-bs-dismiss="modal">Đóng</button>
                             <button type="submit"
                                 class="btn rounded-pill btn-sm btn-twitter px-4 load_animation">Tạo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- Xóa vĩnh viễn --}}
+        <div class="modal fade" id="deletedModal_{{ $item->code }}" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title text-white" id="deleteModalLabel">Xóa Vĩnh Viễn Yêu Cầu Mua Hàng
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('equipment_request.import_trash') }}" id="form-4" method="POST">
+                        @csrf
+                        <input type="hidden" name="delete_request" value="{{ $item->code }}">
+                        <div class="modal-body pb-0 text-center">
+                            <p class="text-danger mb-4">Xóa vĩnh viễn Yêu Cầu Mua Hàng Này?</p>
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn rounded-pill btn-sm btn-secondary px-4"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn rounded-pill btn-sm btn-danger px-4 load_animation">Xóa Vĩnh
+                                Viễn</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Hủy Phiếu -->
+        <div class="modal fade" id="restore-status-{{ $item->code }}" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-labelledby="restore-statusLabel-{{ $item->code }}"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title text-white" id="restore-statusLabel-{{ $item->code }}">
+                            Xác
+                            Nhận Khôi Phục Trạng Thái</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('equipment_request.import') }}" method="POST"
+                        id="restoreSttForm-{{ $item->code }}">
+                        @csrf
+                        <input type="hidden" name="restore_status_code" value="{{ $item->code }}">
+                        <input type="hidden" name="user_request"
+                            value="{{ $item->users->last_name . ' ' . $item->users->first_name }}">
+                        <input type="hidden" name="email_user_request" value="{{ $item->users->email }}">
+                        <div class="modal-body text-center" style="padding-bottom: 0px;">
+                            <p class="text-primary mb-4">Bạn có chắc chắn muốn khôi phục trạng thái của phiếu bị từ chối
+                                này?</p>
+                        </div>
+                        <div class="modal-footer justify-content-center border-0">
+                            <button type="button" class="btn btn-sm btn-secondary px-4 rounded-pill"
+                                data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-sm btn-twitter px-4 rounded-pill load_animation">
+                                Khôi Phục
+                            </button>
                         </div>
                     </form>
                 </div>

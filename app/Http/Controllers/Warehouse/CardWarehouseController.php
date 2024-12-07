@@ -29,8 +29,8 @@ class CardWarehouseController extends Controller
         $equipments = Equipments::all();
 
         $equipment_code = $request->input('equipment_code');
-        $start_date = Carbon::parse($request->input('start_date'));
-        $end_date = Carbon::parse($request->input('end_date'));
+        $start_date = Carbon::parse($request->input('start_date'))->startOfDay(); // Đặt thời gian thành 00:00:00
+        $end_date = Carbon::parse($request->input('end_date'))->endOfDay(); // Đặt thời gian thành 23:59:59
 
         // Lấy tên thiết bị
         $nameEquipment = Equipments::with('units')
@@ -38,69 +38,68 @@ class CardWarehouseController extends Controller
             ->whereNull('deleted_at')
             ->first();
 
-        // Lấy tất cả dữ liệu nhập trước ngày bắt đầu, gom theo batch_number
-        $receiptsBeforeStart = Receipt_details::where('equipment_code', $equipment_code)
+        // Lấy danh sách tất cả batch_number từ nhập và xuất
+        $allBatchNumbers = Receipt_details::where('equipment_code', $equipment_code)
             ->where('created_at', '<=', $start_date)
-            ->whereHas('receipt', function ($subReceipt) {
-                $subReceipt->whereNull('deleted_at')
-                    ->where('status', 1);
-            })
             ->groupBy('batch_number')
-            ->selectRaw('batch_number, SUM(quantity) as total_import')
-            ->get();
+            ->pluck('batch_number')
+            ->merge(
+                Export_details::where('equipment_code', $equipment_code)
+                    ->where('created_at', '<=', $start_date)
+                    ->groupBy('batch_number')
+                    ->pluck('batch_number')
+            )
+            ->unique();
 
-        // Lấy tất cả dữ liệu xuất trước ngày bắt đầu, gom theo batch_number
-        $exportsBeforeStart = Export_details::where('equipment_code', $equipment_code)
-            ->where('created_at', '<=', $start_date)
-            ->whereHas('export', function ($subReceipt) {
-                $subReceipt->whereNull('deleted_at')
-                    ->where('status', 1);
-            })
-            ->groupBy('batch_number')
-            ->selectRaw('batch_number, SUM(quantity) as total_export')
-            ->get()->keyBy('batch_number');
-
-        // Tính toán số dư đầu kỳ
         $beginning_balance_total = 0;
-        foreach ($receiptsBeforeStart as $receipt) {
-            $batch_number = $receipt->batch_number;
-            $totalImportBeforeStart = $receipt->total_import;
-            $totalExportBeforeStart = $exportsBeforeStart[$batch_number]->total_export ?? 0;
 
+        foreach ($allBatchNumbers as $batch_number) {
+            // Tính tổng nhập cho batch này
+            $totalImportBeforeStart = Receipt_details::where('equipment_code', $equipment_code)
+                ->where('batch_number', $batch_number)
+                ->where('created_at', '<=', $start_date)
+                ->sum('quantity');
+
+            // Tính tổng xuất cho batch này
+            $totalExportBeforeStart = Export_details::where('equipment_code', $equipment_code)
+                ->where('batch_number', $batch_number)
+                ->where('created_at', '<=', $start_date)
+                ->sum('quantity');
+
+            // Cộng dồn vào tồn đầu kỳ
             $beginning_balance_total += ($totalImportBeforeStart - $totalExportBeforeStart);
         }
 
-        // Tính toán số dư cuối kỳ, khởi đầu bằng số dư đầu kỳ
         $ending_balance_total = $beginning_balance_total;
 
-        // Lấy tất cả dữ liệu nhập trong khoảng thời gian giữa start_date và end_date, gom theo batch_number
-        $receiptsInPeriod = Receipt_details::where('equipment_code', $equipment_code)
+        // Lấy các số lô có hành động trong khoảng thời gian từ start_date đến end_date
+        $allBatchNumbersInPeriod = Receipt_details::where('equipment_code', $equipment_code)
             ->whereBetween('created_at', [$start_date, $end_date])
-            ->whereHas('receipt', function ($subReceipt) {
-                $subReceipt->whereNull('deleted_at')
-                    ->where('status', 1);
-            })
             ->groupBy('batch_number')
-            ->selectRaw('batch_number, SUM(quantity) as total_import')
-            ->get();
+            ->pluck('batch_number')
+            ->merge(
+                Export_details::where('equipment_code', $equipment_code)
+                    ->whereBetween('created_at', [$start_date, $end_date])
+                    ->groupBy('batch_number')
+                    ->pluck('batch_number')
+            )
+            ->unique();
 
-        // Lấy tất cả dữ liệu xuất trong khoảng thời gian giữa start_date và end_date, gom theo batch_number
-        $exportsInPeriod = Export_details::where('equipment_code', $equipment_code)
-            ->whereBetween('created_at', [$start_date, $end_date])
-            ->whereHas('export', function ($subReceipt) {
-                $subReceipt->whereNull('deleted_at')
-                    ->where('status', 1);
-            })
-            ->groupBy('batch_number')
-            ->selectRaw('batch_number, SUM(quantity) as total_export')
-            ->get()->keyBy('batch_number');
+        foreach ($allBatchNumbersInPeriod as $batch_number) {
+            // Tính tổng nhập trong kỳ cho batch này
+            $totalImportInPeriod = Receipt_details::where('equipment_code', $equipment_code)
+                ->where('batch_number', $batch_number)
+                ->whereBetween('created_at', [$start_date, $end_date])
+                ->sum('quantity');
 
-        // Tính toán số dư cuối kỳ
-        foreach ($receiptsInPeriod as $receipt) {
-            $batch_number = $receipt->batch_number;
-            $totalImportInPeriod = $receipt->total_import;
-            $totalExportInPeriod = $exportsInPeriod[$batch_number]->total_export ?? 0;
 
+            // Tính tổng xuất trong kỳ cho batch này
+            $totalExportInPeriod = Export_details::where('equipment_code', $equipment_code)
+                ->where('batch_number', $batch_number)
+                ->whereBetween('created_at', [$start_date, $end_date])
+                ->sum('quantity');
+
+            // Cộng dồn vào tồn cuối kỳ
             $ending_balance_total += ($totalImportInPeriod - $totalExportInPeriod);
         }
 

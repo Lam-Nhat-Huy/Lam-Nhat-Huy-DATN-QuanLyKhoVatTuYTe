@@ -157,6 +157,33 @@ class EquipmentRequestController extends Controller
             return redirect()->back();
         }
 
+        if (!empty($request->restore_status_code)) {
+            $user_request = $request->user_request;
+            $email_user_request = $request->email_user_request;
+
+            Import_equipment_requests::where('code', $request->restore_status_code)
+                ->where('status', 5)
+                ->update([
+                    'reason_refuse' => NULL,
+                    'browse_by' => NULL,
+                    'status' => 0,
+                ]);
+
+            $contentNotification = '
+            <p>Phiếu yêu cầu mua hàng với mã <a class="text-primary fw-bolder text-decoration-underline" href="' . route('equipment_request.import') . '?kw=' . $request->restore_status_code . '">#' . $request->restore_status_code . '</a> được tạo bởi <a class="text-dark fw-bolder text-decoration-underline" href="' . route('user.index') . '?kw=' . $email_user_request . '">' . $user_request . '</a> đã được <span class="text-primary fw-bolder">khôi phục</span> về trạng thái <strong>chờ duyệt</strong>.</p>
+            ';
+
+            Notifications::create([
+                'code' => 'TB' . $this->generateRandomString(8),
+                'content' => $contentNotification,
+                'user_code' => session('user_code'),
+            ]);
+
+            toastr()->success('Đã khôi phục trạng thái phiếu yêu cầu mua hàng');
+
+            return redirect()->back();
+        }
+
         if (!empty($request->import_request_codes)) {
 
             if ($request->action_type === 'browse') {
@@ -764,6 +791,33 @@ class EquipmentRequestController extends Controller
             ]);
 
             toastr()->success('Đã từ chối phiếu yêu cầu xuất kho');
+
+            return redirect()->back();
+        }
+
+        if (!empty($request->restore_status_code)) {
+            $user_request = $request->user_request;
+            $email_user_request = $request->email_user_request;
+
+            Export_equipment_requests::where('code', $request->restore_status_code)
+                ->where('status', 2)
+                ->update([
+                    'reason_refuse' => NULL,
+                    'browse_by' => NULL,
+                    'status' => 0,
+                ]);
+
+            $contentNotification = '
+            <p>Phiếu yêu cầu xuất kho với mã <a class="text-primary fw-bolder text-decoration-underline" href="' . route('equipment_request.export') . '?kw=' . $request->restore_status_code . '">#' . $request->restore_status_code . '</a> được tạo bởi <a class="text-dark fw-bolder text-decoration-underline" href="' . route('user.index') . '?kw=' . $email_user_request . '">' . $user_request . '</a> đã được <span class="text-primary fw-bolder">khôi phục</span> về trạng thái <strong>chờ duyệt</strong>.</p>
+            ';
+
+            Notifications::create([
+                'code' => 'TB' . $this->generateRandomString(8),
+                'content' => $contentNotification,
+                'user_code' => session('user_code'),
+            ]);
+
+            toastr()->success('Đã khôi phục trạng thái phiếu yêu cầu xuất kho');
 
             return redirect()->back();
         }
