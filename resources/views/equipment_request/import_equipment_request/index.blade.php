@@ -604,7 +604,7 @@
                                                             <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
                                                             phiếu
                                                         </a>
-                                                    @elseif ($item->browse_by == session('user_code'))
+                                                    @elseif ($item->browse_by == session('user_code') && $item['status'] == 5)
                                                         <button class="btn btn-sm btn-twitter rounded-pill me-2"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#restore-status-{{ $item->code }}"
