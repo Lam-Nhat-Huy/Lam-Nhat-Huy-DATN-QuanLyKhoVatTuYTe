@@ -165,8 +165,8 @@
                                                 Chờ báo giá
                                             </div>
                                         @elseif ($item->status == 5)
-                                            <div class="rounded-pill px-2 py-1 text-dark bg-warning">
-                                                Bị Từ Chối
+                                            <div class="rounded-pill px-2 py-1 text-white bg-warning">
+                                                Bị từ chối
                                             </div>
                                         @elseif ($item->status == 1)
                                             <div class="rounded-pill px-2 py-1 text-white bg-primary">
@@ -219,8 +219,8 @@
                                                                     class="rounded-pill px-2 py-1 btn btn-dark btn-sm me-2">
                                                                     Xem Lý Do
                                                                 </button>
-                                                                <div class="rounded-pill px-2 py-1 text-dark bg-warning">
-                                                                    Bị Từ Chối
+                                                                <div class="rounded-pill px-2 py-1 text-white bg-warning">
+                                                                    Bị từ chối
                                                                 </div>
                                                             @elseif ($item->status == 1)
                                                                 <div class="rounded-pill px-2 py-1 text-white bg-primary">
@@ -362,7 +362,7 @@
                                                                 data-bs-target="#noBrowse_{{ $item->code }}"
                                                                 type="button">
                                                                 <i class="fas fa-times-circle"
-                                                                    style="margin-bottom: 2px;"></i>Từ Chối
+                                                                    style="margin-bottom: 2px;"></i>Từ chối
                                                             </button>
                                                             <!-- Nút Duyệt đơn -->
                                                             <button class="btn btn-sm rounded-pill btn-success me-2"
