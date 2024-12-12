@@ -536,7 +536,7 @@
                                                             @endif
                                                         @endif
 
-                                                        @if (session('isAdmin') == true || ($item['check_count'] != 2 && $item['user_code'] == session('user_code')))
+                                                        @if (session('isAdmin') == true || $item['user_code'] == session('user_code'))
                                                             <button class="btn btn-sm rounded-pill me-2"
                                                                 style="background: linear-gradient(45deg, #FF5252, #FF1744); color: white;"
                                                                 data-bs-toggle="modal"
