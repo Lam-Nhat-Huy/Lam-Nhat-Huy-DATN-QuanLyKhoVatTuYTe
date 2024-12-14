@@ -379,6 +379,7 @@ class ExportController extends Controller
             $departmentCode = $request->department_code;
             $supplierCode = $request->supplier_code;
             $reason = $request->reason;
+            $reason_cancel_input = $request->reason_cancel_input ?? null;
             $exportType = $request->export_type;
             $required_date = $request->required_date;
             $note = $request->note;
@@ -393,7 +394,7 @@ class ExportController extends Controller
                 'export_type' => $exportType,
                 'department_code' => $departmentCode == 1 ? NULL : $departmentCode,
                 'supplier_code' => $supplierCode == 1 ? NULL : $supplierCode,
-                'reason' => $reason == 1 ? NULL : $reason,
+                'reason' => $reason_cancel_input ? $reason_cancel_input : ($reason == 1 ? NULL : $reason),
                 'created_by' => session('user_code'),
                 'created_at' => now(),
                 'deleted_at' => null,
@@ -546,6 +547,7 @@ class ExportController extends Controller
             $departmentCode = $request->department_code;
             $supplierCode = $request->supplier_code;
             $reason = $request->reason;
+            $reason_cancel_input = $request->reason_cancel_input ?? null;
             $exportType = $request->export_type;
             $note = $request->note;
             $equipmentList = json_decode($request->equipment_list, true);
@@ -569,7 +571,7 @@ class ExportController extends Controller
             $existingRequest->update([
                 'department_code' => $departmentCode == 1 ? NULL : $departmentCode,
                 'supplier_code' => $supplierCode == 1 ? NULL : $supplierCode,
-                'reason' => $reason == 1 ? NULL : $reason,
+                'reason' => $reason_cancel_input ? $reason_cancel_input : ($reason == 1 ? NULL : $reason),
                 'note' => $note ?? $record->note,
                 'export_type' => $exportType,
                 'updated_by' => session('user_code'),

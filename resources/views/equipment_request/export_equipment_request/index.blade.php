@@ -150,6 +150,9 @@
                                                 title="Tôi"></i>
                                         @else
                                             {{ $item->users->last_name . ' ' . $item->users->first_name }}
+                                            <i class="fa fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="{{ $item->users->phone ?? '' }}">
+                                            </i>
                                         @endif
                                     </td>
                                     <td>
@@ -246,11 +249,31 @@
                                                     <div class="mb-3">
                                                         <span class="me-5">
                                                             Người sửa:
-                                                            {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                            @if ($item->updated_by == session('user_code'))
+                                                                {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                                <i class="fa fa-user" data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top" title="Tôi"></i>
+                                                            @else
+                                                                {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                                <i class="fa fa-circle-info" data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top"
+                                                                    title="{{ $item->updatedByUser->phone ?? '' }}">
+                                                                </i>
+                                                            @endif
                                                         </span>
                                                         <span class="me-5">
                                                             Người {{ isset($item->reason_refuse) ? 'từ chối' : 'duyệt' }}:
-                                                            {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
+                                                            @if ($item->browse_by == session('user_code'))
+                                                                {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
+                                                                <i class="fa fa-user" data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top" title="Tôi"></i>
+                                                            @else
+                                                                {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
+                                                                <i class="fa fa-circle-info" data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top"
+                                                                    title="{{ $item->browseByUser->phone ?? '' }}">
+                                                                </i>
+                                                            @endif
                                                         </span>
                                                     </div>
                                                     @php

@@ -122,7 +122,11 @@
                                         @endif
                                     </td>
                                     <td class="custom-w">
-                                        {{ $item->receipt_type ?? 'Không có' }}
+                                        @if ($item->receipt_type === 'Nhập Từ Nhà Cung Cấp')
+                                            {{ $item->receipt_type }} <i class="fa fa-truck"></i>
+                                        @elseif ($item->receipt_type === 'Nhập cân bằng kho')
+                                            {{ $item->receipt_type }} <i class="fa fa-scale-balanced"></i>
+                                        @endif
                                     </td>
                                     <td>
                                         @if ($item->created_by == session('user_code'))
@@ -131,6 +135,9 @@
                                                 title="Tôi"></i>
                                         @else
                                             {{ $item->user->last_name . ' ' . $item->user->first_name }}
+                                            <i class="fa fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="{{ $item->user->phone ?? '' }}">
+                                            </i>
                                         @endif
                                     </td>
                                     <td>
@@ -294,26 +301,51 @@
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td class=""><strong>Người tạo</strong>
-                                                                        </td>
-                                                                        <td class="text-dark">
-                                                                            {{ $item->user->last_name . ' ' . $item->user->first_name }}
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
                                                                         <td class=""><strong>Người sửa</strong>
                                                                         </td>
-                                                                        <td class="text-dark">
-                                                                            {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
-                                                                        </td>
+                                                                        @if ($item->updated_by == session('user_code'))
+                                                                            <td class="text-dark">
+                                                                                {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                                                <i class="fa fa-user"
+                                                                                    data-bs-toggle="tooltip"
+                                                                                    data-bs-placement="top"
+                                                                                    title="Tôi">
+                                                                                </i>
+                                                                            </td>
+                                                                        @else
+                                                                            <td class="text-dark">
+                                                                                {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                                                <i class="fa fa-circle-info"
+                                                                                    data-bs-toggle="tooltip"
+                                                                                    data-bs-placement="top"
+                                                                                    title="{{ $item->updatedByUser->phone ?? '' }}">
+                                                                                </i>
+                                                                            </td>
+                                                                        @endif
                                                                     </tr>
                                                                     <tr>
                                                                         <td class=""><strong>Người
                                                                                 {{ isset($item->reason_refuse) ? 'từ chối' : 'duyệt' }}:</strong>
                                                                         </td>
-                                                                        <td class="text-dark">
-                                                                            {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
-                                                                        </td>
+                                                                        @if ($item->browse_by == session('user_code'))
+                                                                            <td class="text-dark">
+                                                                                {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
+                                                                                <i class="fa fa-user"
+                                                                                    data-bs-toggle="tooltip"
+                                                                                    data-bs-placement="top"
+                                                                                    title="Tôi">
+                                                                                </i>
+                                                                            </td>
+                                                                        @else
+                                                                            <td class="text-dark">
+                                                                                {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
+                                                                                <i class="fa fa-circle-info"
+                                                                                    data-bs-toggle="tooltip"
+                                                                                    data-bs-placement="top"
+                                                                                    title="{{ $item->browseByUser->phone ?? '' }}">
+                                                                                </i>
+                                                                            </td>
+                                                                        @endif
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -487,14 +519,16 @@
                                                     <!-- Nút Duyệt đơn, chỉ hiển thị khi là Phiếu Tạm -->
                                                     @if ($item->status == 0)
                                                         @if (session('isAdmin') == 1)
-                                                            {{-- Nút từ chối --}}
-                                                            <button class="btn btn-sm rounded-pill btn-danger me-2"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#noBrowse_{{ $item->code }}"
-                                                                type="button">
-                                                                <i class="fas fa-times-circle"
-                                                                    style="margin-bottom: 2px;"></i>Từ Chối
-                                                            </button>
+                                                            @if (empty($item->order_number))
+                                                                {{-- Nút từ chối --}}
+                                                                <button class="btn btn-sm rounded-pill btn-danger me-2"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#noBrowse_{{ $item->code }}"
+                                                                    type="button">
+                                                                    <i class="fas fa-times-circle"
+                                                                        style="margin-bottom: 2px;"></i>Từ Chối
+                                                                </button>
+                                                            @endif
                                                             <button class="btn btn-sm btn-twitter rounded-pill me-2"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#browse-{{ $item->code }}"
@@ -842,15 +876,6 @@
                                                                 <i class="fas fa-rotate-right"
                                                                     style="margin-bottom: 2px;"></i>
                                                                 Khôi Phục
-                                                            </button>
-                                                        @endif
-                                                        @if ($item->created_by == session('user_code'))
-                                                            <button class="btn btn-sm btn-danger rounded-pill me-2"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#delete-{{ $item->code }}"
-                                                                type="button">
-                                                                <i class="fas fa-trash" style="margin-bottom: 2px;"></i>
-                                                                Xóa phiếu
                                                             </button>
                                                         @endif
                                                     @endif

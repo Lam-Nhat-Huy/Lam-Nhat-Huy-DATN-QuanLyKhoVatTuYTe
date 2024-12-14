@@ -33,10 +33,10 @@
                             <th style="width: 5%;">Ngày tạo</th>
                             <th style="width: 10%;" data-bs-toggle="tooltip" data-bs-placement="top"
                                 title="Tổng lệch dương và tổng lệch âm">Tổng chênh lệch</th>
-                            <th style="width: 9%;">Lệch giảm</th>
-                            <th style="width: 9%;">Lệch tăng</th>
+                            <th style="width: 10%;">Lệch giảm</th>
+                            <th style="width: 10%;">Lệch tăng</th>
                             <th style="width: 10%;">Lần kiểm</th>
-                            <th style="width: 17%;">Ghi chú</th>
+                            <th style="width: 15%;">Ghi chú</th>
                             <th style="width: 10%;">Trạng thái</th>
                             <th class="pe-3" style="width: 10%;"></th>
                         </tr>
@@ -125,8 +125,7 @@
                                     @endif
                                 </td>
 
-                                <td title="{{ $item['note'] }}" data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
+                                <td title="{{ $item['note'] }}" data-bs-toggle="tooltip" data-bs-placement="top"
                                     style="max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                     @if (!empty($item['note']))
                                         <span class="text-start">
@@ -141,9 +140,15 @@
 
                                 <td>
                                     @if ($item->status == 0)
-                                        <div class="label label-final bg-danger rounded-pill text-white px-2 py-1">
-                                            Chờ duyệt
-                                        </div>
+                                        @if ($item->check_count == 1)
+                                            <div class="label label-final bg-primary rounded-pill text-white px-2 py-1">
+                                                Chờ kiểm lại
+                                            </div>
+                                        @else
+                                            <div class="label label-final bg-danger rounded-pill text-white px-2 py-1">
+                                                Chờ duyệt
+                                            </div>
+                                        @endif
                                     @elseif ($item->status == 1)
                                         <div class="label label-final bg-success rounded-pill text-white px-2 py-1">
                                             Đã duyệt
@@ -216,9 +221,14 @@
                                                                 <tr>
                                                                     <td class=""><strong>Trạng thái</strong></td>
                                                                     <td class="text-gray-800">
-                                                                        @if ($item['status'] == 0)
-                                                                            <span class="text-danger">Chờ duyệt</span>
-                                                                        @elseif($item['status'] == 1)
+                                                                        @if ($item->status == 0)
+                                                                            @if ($item->check_count == 1)
+                                                                                <span class="text-danger">Chờ kiểm lần
+                                                                                    cuối</span>
+                                                                            @else
+                                                                                <span class="text-danger">Chờ duyệt</span>
+                                                                            @endif
+                                                                        @elseif($item->status == 1)
                                                                             <span class="text-success">Đã duyệt</span>
                                                                         @else
                                                                             <span class="text-danger">Phiếu đã hủy</span>
@@ -371,7 +381,7 @@
                                                         <h6 class="fw-bold m-0 text-uppercase fw-bolder mb-3">Lần kiểm cuối
                                                         </h6>
 
-                                                        @if ($item['check_count'] == 2 && $item['status'] == 0 && session('user_code') == $item['recheck_user_code'])
+                                                        @if ($item['check_count'] == 2 && $item->status == 0 && session('user_code') == $item['recheck_user_code'])
                                                             <a class="text-dark mb-3"
                                                                 href="{{ route('inventory_check.editByCheckround', ['code' => $item->code, 'check_round' => 2]) }}">
                                                                 <i class="fa fa-edit"></i> Chỉnh sửa phiếu 2
@@ -511,7 +521,7 @@
 
                                             <div class="card-body py-3 mb-3 text-end">
                                                 <div class="button-group">
-                                                    @if ($item['status'] == 0)
+                                                    @if ($item->status == 0)
                                                         @if (session('isAdmin') == true)
                                                             @if ($item->check_count == 2)
                                                                 <button class="btn btn-sm rounded-pill me-2"
@@ -546,7 +556,7 @@
                                                         </a>
                                                     @endif
 
-                                                    @if (session('isAdmin') == true && $item['status'] == 1)
+                                                    @if (session('isAdmin') == true && $item->status == 1)
                                                         <a class="btn btn-sm rounded-pill me-2"
                                                             style="background: linear-gradient(45deg, #FF4081, #F50057); color: white;"
                                                             data-bs-toggle="modal"
@@ -556,7 +566,7 @@
                                                         </a>
                                                     @endif
 
-                                                    @if (session('isAdmin') == true && $item['status'] == 1)
+                                                    @if (session('isAdmin') == true && $item->status == 1)
                                                         <button class="btn btn-sm btn-dark me-2 rounded-pill"
                                                             type="button" onclick="printInvoice('{{ $item->code }}')">
                                                             <i class="fa fa-print" style="margin-bottom: 2px;"></i>

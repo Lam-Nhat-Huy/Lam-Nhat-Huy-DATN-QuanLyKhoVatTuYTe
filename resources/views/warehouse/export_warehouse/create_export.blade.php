@@ -57,7 +57,7 @@
         <div class="container">
             <div class="card border-0 px-8 mb-4 rounded-3 mt-3">
                 <div class="row">
-                    <div class="mb-3 col-md-6">
+                    <div class="mb-3 col-md-4">
                         <label for="export_type" class="required form-label fw-semibold">Loại xuất</label>
                         <div class="d-flex align-items-center">
                             <select name="export_type" id="export_type" {{ !empty($getExportRequest) ? 'disabled' : '' }}
@@ -76,7 +76,7 @@
                         <div class="message_error" id="export_type_error"></div>
                     </div>
 
-                    <div class="col-md-6 mb-3 fv-row" id="department_show">
+                    <div class="col-md-4 mb-3 fv-row" id="department_show">
                         <label for="department_code" class="required form-label fw-semibold">Phòng ban</label>
                         <div class="d-flex align-items-center">
                             <select name="department_code" id="department_code"
@@ -103,7 +103,7 @@
                         <div class="message_error" id="department_code_error"></div>
                     </div>
 
-                    <div class="col-md-6 mb-3 fv-row d-none" id="supplier_show">
+                    <div class="col-md-4 mb-3 fv-row d-none" id="supplier_show">
                         <label for="supplier_code" class="required form-label fw-semibold">Nhà cung cấp</label>
                         <div class="d-flex align-items-center">
                             <select name="supplier_code" id="supplier_code"
@@ -126,7 +126,7 @@
                         <div class="message_error" id="supplier_code_error"></div>
                     </div>
 
-                    <div class="col-md-6 mb-3 fv-row d-none" id="cancel_reason">
+                    <div class="col-md-4 mb-3 fv-row d-none" id="cancel_reason">
                         <label for="reason" class="required form-label fw-semibold">Lý do hủy</label>
                         <select name="reason" id="reason"
                             class="form-select form-select-sm border border-success rounded-pill">
@@ -138,12 +138,30 @@
                             <option value="Thừa Hoặc Không Cần Thiết">Thừa Hoặc Không Cần Thiết</option>
                             <option value="Hàng Bị Trả Về">Hàng Bị Trả Về</option>
                             <option value="Lỗi Kỹ Thuật">Lỗi Kỹ Thuật</option>
-                            <option value="Quyết Định Tiêu Hủy">Quyết Định Tiêu Hủy</option>
+                            <option value="Quyết Định Tiêu Hủy">Quyết Định Tiêu Hủy</option>2
+                            <script>
+                                var jsonData = [];
+                                var selectElement = document.getElementById('reason');
+                                var options = selectElement.options;
+
+                                for (var i = 2; i < options.length; i++) {
+                                    jsonData.push(options[i].value);
+                                }
+                            </script>
+                            <option value="other">Khác</option>
                         </select>
                         <div class="message_error" id="reason_error"></div>
                     </div>
 
-                    <div class="mb-3 col-md-6 d-none" id="export_date_div">
+                    <div class="mb-3 col-md-4 d-none" id="reason_input">
+                        <label for="" class="form-label fw-semibold">Nhập lý do khác</label>
+                        <input type="text" name="reason_cancel_input" id="reason_cancel_input"
+                            class="form-control form-control-sm border-success rounded-pill" placeholder="Nhập lý do khác"
+                            value="{{ !empty($editExport) && $editExport->reason ? $editExport->reason : '' }}">
+                        <div class="message_error" id="reason_cancel_input_error"></div>
+                    </div>
+
+                    <div class="mb-3 col-md-4 d-none" id="export_date_div">
                         <label for="" class="form-label fw-semibold">Ngày tạo</label>
                         <input type="date" name="export_date" id="export_date" disabled
                             class="form-control form-control-sm border-success rounded-pill"
@@ -155,7 +173,7 @@
                         !empty($getExportRequest) ||
                             $action == route('warehouse.store_export') ||
                             $action == route('warehouse.update_export', request('code')))
-                        <div class="mb-3 col-md-6" id="required_date_div">
+                        <div class="mb-3 col-md-4" id="required_date_div">
                             <label for="" class="form-label fw-semibold">Ngày cần thiết</label>
                             <input type="date" name="required_date" id="required_date"
                                 {{ !empty($getExportRequest) ? 'disabled' : '' }}
@@ -165,11 +183,10 @@
                         </div>
                     @endif
 
-                    <div class="mb-3 col-md-6">
+                    <div class="mb-3 col-md-12">
                         <label for="" class="form-label fw-semibold">Ghi chú</label>
-                        <input type="text" name="note" id="note"
-                            value="{{ !empty($editExport) && $editExport->note ? $editExport->note : old('note') }}"
-                            class="form-control form-control-sm border-success rounded-pill" placeholder="Ghi Chú..">
+                        <textarea type="text" name="note" id="note" class="form-control form-control-sm border-success"
+                            rows="5" placeholder="Ghi Chú..">{{ !empty($editExport) && $editExport->note ? $editExport->note : old('note') }}</textarea>
                         <div class="message_error"></div>
                     </div>
                 </div>
@@ -599,6 +616,8 @@
             var export_dateSelect = document.getElementById('export_date_div');
             var required_date = document.getElementById('required_date');
             var required_date_div = document.getElementById('required_date_div');
+            var reason_input = document.getElementById('reason_input');
+            var reason_cancel_input = document.getElementById('reason_cancel_input');
 
             var supplierSelectErr = document.getElementById('supplier_code_error');
             var departmentSelectErr = document.getElementById('department_code_error');
@@ -613,6 +632,7 @@
                 cancelReason.classList.add('d-none');
                 export_dateSelect.classList.add('d-none');
                 required_date_div.classList.remove('d-none');
+                reason_input.classList.add('d-none');
 
                 if ((firstDepartment && firstDepartment.department_code) || (firstDepartmentByRequestExport &&
                         firstDepartmentByRequestExport.department_code)) {
@@ -624,8 +644,10 @@
 
                 supplierSelect.value = '1';
                 reasonSelect.value = '1';
+                reason_cancel_input.value = '';
 
-                if ("{{ $action }}" === "{{ route('warehouse.store_export') }}") {
+                if ("{{ $action }}" === "{{ route('warehouse.store_export') }}" ||
+                    "{{ $action }}" === "{{ route('warehouse.update_export', request('code') ?? 0) }}") {
                     required_date.value = '';
                 }
 
@@ -639,6 +661,7 @@
                 cancelReason.classList.add('d-none');
                 export_dateSelect.classList.remove('d-none');
                 required_date_div.classList.add('d-none');
+                reason_input.classList.add('d-none');
 
                 if (firstSupplier && firstSupplier.supplier_code) {
                     supplierSelect.value = firstSupplier.supplier_code;
@@ -649,6 +672,7 @@
                 departmentSelect.value = '1';
                 reasonSelect.value = '1';
                 required_date.value = '2090-01-01';
+                reason_cancel_input.value = '';
 
                 // Xóa lỗi hiển thị
                 departmentSelectErr.innerText = '';
@@ -663,7 +687,13 @@
                 required_date_div.classList.add('d-none');
 
                 if (firstReason && firstReason.reason) {
-                    reasonSelect.value = firstReason.reason;
+                    if (jsonData.includes(firstReason.reason)) {
+                        reasonSelect.value = firstReason.reason;
+                    } else {
+                        reasonSelect.value = 'other';
+                        reason_input.classList.remove('d-none');
+                        export_dateSelect.classList.add('d-none');
+                    }
                 } else {
                     reasonSelect.value = '0';
                 }
@@ -674,6 +704,22 @@
 
                 supplierSelectErr.innerText = '';
                 departmentSelectErr.innerText = '';
+            }
+        });
+
+        document.getElementById('reason').addEventListener('change', function() {
+            var cancelReasonChange = this.value;
+            var reason_input_change = document.getElementById('reason_input');
+            var reason_cancel_input_change = document.getElementById('reason_cancel_input');
+            var export_date_div_change = document.getElementById('export_date_div');
+            if (cancelReasonChange === 'other') {
+                reason_input_change.classList.remove('d-none');
+                reason_cancel_input_change.value = '';
+                export_date_div_change.classList.add('d-none');
+            } else {
+                reason_input_change.classList.add('d-none');
+                reason_cancel_input_change.value = '';
+                export_date_div_change.classList.remove('d-none');
             }
         });
 
@@ -838,12 +884,14 @@
                 let export_date = document.getElementById('export_date').value.trim();
                 let required_date_create = document.getElementById('required_date').value.trim();
                 let note = document.getElementById('note').value.trim();
+                let reason_cancel_input = document.getElementById('reason_cancel_input').value.trim();
 
                 let department_code_error = document.getElementById('department_code_error');
                 let required_date_error = document.getElementById('required_date_error');
                 let supplier_code_error = document.getElementById('supplier_code_error');
                 let reason_error = document.getElementById('reason_error');
                 let equipment_error = document.getElementById('equipment_error');
+                let reason_cancel_input_error = document.getElementById('reason_cancel_input_error');
                 let equipmentList = getEquipmentList();
 
                 department_code_error.innerText = '';
@@ -869,6 +917,11 @@
                     hasError = true;
                 }
 
+                if (reason === 'other' && !reason_cancel_input) {
+                    reason_cancel_input_error.innerText = 'Vui lòng nhập lý do khác';
+                    hasError = true;
+                }
+
                 let requiredDateCreate = new Date(required_date_create);
                 let currentDate = new Date();
 
@@ -880,15 +933,14 @@
 
                     let differenceInHours = timeDifference / (1000 * 60 * 60);
 
-                    if (differenceInHours < 1) {
+                    if (differenceInHours < 0) {
                         required_date_error.innerText =
-                            "Ngày cần thiết phải lớn hơn thời gian hiện tại ít nhất 1 giờ";
+                            "Ngày cần thiết không được nhỏ hơn ngày hiện tại";
                         hasError = true;
                     } else {
                         required_date_error.innerText = "";
                     }
                 }
-
 
                 if (equipmentList.length === 0) {
                     equipment_error.innerText = "Vui lòng chọn thiết bị cần xuất";
@@ -922,6 +974,7 @@
                 formData.append('department_code', department_code);
                 formData.append('supplier_code', supplier_code);
                 formData.append('reason', reason);
+                formData.append('reason_cancel_input', reason_cancel_input);
                 formData.append(
                     'export_type', export_type);
                 formData.append('export_date', export_date);

@@ -78,11 +78,11 @@
                                     <input type="checkbox" id="selectAll" />
                                 </th>
                                 <th style="width: 10%;">Mã</th>
-                                <th class="" style="width: 13%;">Mã Yêu Cầu</th>
-                                <th class="" style="width: 13%;">Loại xuất</th>
+                                <th class="" style="width: 12%;">Mã Yêu Cầu</th>
+                                <th class="" style="width: 15%;">Loại xuất</th>
                                 <th class="" style="width: 15%;">Tạo bởi</th>
                                 <th class="" style="width: 10%;">Ngày tạo</th>
-                                <th class="" style="width: 15%;">Ngày cần thiết</th>
+                                <th class="" style="width: 13%;">Ngày cần thiết</th>
                                 <th class="text-center" style="width: 10%;">Trạng thái</th>
                                 <th class="pe-3 text-center" style="width: 15%;">Hành động</th>
                             </tr>
@@ -131,7 +131,15 @@
                                             : 'Không có' !!}
                                     </td>
                                     <td>
-                                        {{ $item->export_type ?? 'Không có' }}
+                                        @if ($item->export_type === 'Xuất Sử Dụng')
+                                            {{ $item->export_type }} <i class="fa fa-building"></i>
+                                        @elseif ($item->export_type === 'Xuất Trả')
+                                            {{ $item->export_type }} <i class="fa fa-truck"></i>
+                                        @elseif ($item->export_type === 'Xuất Hủy')
+                                            {{ $item->export_type }} <i class="fa fa-trash"></i>
+                                        @else
+                                            {{ $item->export_type }} <i class="fa fa-scale-balanced"></i>
+                                        @endif
                                     </td>
                                     <td>
                                         @if ($item->created_by == session('user_code'))
@@ -140,6 +148,9 @@
                                                 title="Tôi"></i>
                                         @else
                                             {{ $item->user->last_name . ' ' . $item->user->first_name }}
+                                            <i class="fa fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="{{ $item->user->phone ?? '' }}">
+                                            </i>
                                         @endif
                                     </td>
                                     <td>
@@ -288,7 +299,7 @@
                                                                                     cấp</strong>
                                                                             </td>
                                                                             <td class="text-dark">
-                                                                                <a class="text-decoration-underline fw-bolder text-primary"
+                                                                                <a class="text-decoration-underline fw-bolder"
                                                                                     href="{{ route('supplier.list') }}?keyword={{ $item->suppliers->name }}">
                                                                                     {{ $item->suppliers->name }}
                                                                                 </a>
@@ -323,18 +334,49 @@
                                                                     <tr>
                                                                         <td class=""><strong>Người sửa</strong>
                                                                         </td>
-                                                                        <td class="text-dark">
-                                                                            {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
-                                                                        </td>
+                                                                        @if ($item->updated_by == session('user_code'))
+                                                                            <td class="text-dark">
+                                                                                {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                                                <i class="fa fa-user"
+                                                                                    data-bs-toggle="tooltip"
+                                                                                    data-bs-placement="top"
+                                                                                    title="Tôi">
+                                                                                </i>
+                                                                            </td>
+                                                                        @else
+                                                                            <td class="text-dark">
+                                                                                {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                                                <i class="fa fa-circle-info"
+                                                                                    data-bs-toggle="tooltip"
+                                                                                    data-bs-placement="top"
+                                                                                    title="{{ $item->updatedByUser->phone ?? '' }}">
+                                                                                </i>
+                                                                            </td>
+                                                                        @endif
                                                                     </tr>
                                                                     <tr>
-                                                                        <td class=""><strong>
-                                                                                Người
+                                                                        <td class=""><strong>Người
                                                                                 {{ isset($item->reason_refuse) ? 'từ chối' : 'duyệt' }}:</strong>
                                                                         </td>
-                                                                        <td class="text-dark">
-                                                                            {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
-                                                                        </td>
+                                                                        @if ($item->browse_by == session('user_code'))
+                                                                            <td class="text-dark">
+                                                                                {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
+                                                                                <i class="fa fa-user"
+                                                                                    data-bs-toggle="tooltip"
+                                                                                    data-bs-placement="top"
+                                                                                    title="Tôi">
+                                                                                </i>
+                                                                            </td>
+                                                                        @else
+                                                                            <td class="text-dark">
+                                                                                {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
+                                                                                <i class="fa fa-circle-info"
+                                                                                    data-bs-toggle="tooltip"
+                                                                                    data-bs-placement="top"
+                                                                                    title="{{ $item->browseByUser->phone ?? '' }}">
+                                                                                </i>
+                                                                            </td>
+                                                                        @endif
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -401,7 +443,7 @@
                                                                                 {{ $detail->quantity }}
                                                                             </td>
                                                                             <td>
-                                                                                {{ $inventory->current_quantity }}
+                                                                                {{ $totalBatchQuantity }}
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -418,14 +460,16 @@
                                                     <!-- Nút Duyệt đơn, chỉ hiển thị khi là Phiếu Tạm -->
                                                     @if ($item->status == 0 && now()->lt(\Carbon\Carbon::parse($item->required_date)))
                                                         @if (session('isAdmin') == 1)
-                                                            {{-- Nút từ chối --}}
-                                                            <button class="btn btn-sm rounded-pill btn-danger me-2"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#noBrowse_{{ $item->code }}"
-                                                                type="button">
-                                                                <i class="fas fa-times-circle"
-                                                                    style="margin-bottom: 2px;"></i>Từ Chối
-                                                            </button>
+                                                            @if (empty($item->export_request_code))
+                                                                {{-- Nút từ chối --}}
+                                                                <button class="btn btn-sm rounded-pill btn-danger me-2"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#noBrowse_{{ $item->code }}"
+                                                                    type="button">
+                                                                    <i class="fas fa-times-circle"
+                                                                        style="margin-bottom: 2px;"></i>Từ Chối
+                                                                </button>
+                                                            @endif
                                                             @if ($canApprove)
                                                                 <button class="btn btn-sm btn-twitter rounded-pill me-2"
                                                                     data-bs-toggle="modal"
@@ -636,7 +680,7 @@
                                                                                     <table
                                                                                         class="table table-striped table-sm table-hover border border-dark">
                                                                                         <thead
-                                                                                            class="fw-bolder bg-dark border border-dark">
+                                                                                            class="fw-bolder bg-success border border-dark">
                                                                                             <tr class="text-center">
                                                                                                 <th class="ps-5 text-left text-dark"
                                                                                                     style="width: 70%;">

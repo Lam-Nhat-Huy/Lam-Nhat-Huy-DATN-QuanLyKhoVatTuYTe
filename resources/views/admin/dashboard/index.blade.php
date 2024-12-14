@@ -736,18 +736,17 @@
         document.addEventListener("DOMContentLoaded", function() {
             var monthlyExpenses = @json($monthlyImportExpenses);
 
-            var months = monthlyExpenses.map(item => {
-                return new Date(0, item.month).toLocaleString('vi-VN', {
-                    month: 'long'
-                });
-            });
             var expenses = monthlyExpenses.map(item => item.total_expense);
 
             var ctx = document.getElementById('expenseChart').getContext('2d');
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: months,
+                    labels: [
+                        @foreach ($monthlyImportExpenses as $data)
+                            "Tháng {{ $data->month }}",
+                        @endforeach
+                    ],
                     datasets: [{
                         label: 'Chi phí nhập hàng theo tháng',
                         data: expenses,

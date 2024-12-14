@@ -146,8 +146,10 @@
                                                 title="Tôi"></i>
                                         @else
                                             {{ $item->users->last_name . ' ' . $item->users->first_name }}
+                                            <i class="fa fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="{{ $item->users->phone ?? '' }}">
+                                            </i>
                                         @endif
-                                    </td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->request_date)->format('d-m-Y') }}
                                     </td>
@@ -236,16 +238,46 @@
                                                     <div class="mb-3">
                                                         <span class="me-5">
                                                             Người sửa:
-                                                            {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                            @if ($item->updated_by == session('user_code'))
+                                                                {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                                <i class="fa fa-user" data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top" title="Tôi"></i>
+                                                            @else
+                                                                {{ $item->updatedByUser ? $item->updatedByUser->last_name . ' ' . $item->updatedByUser->first_name : 'N/A' }}
+                                                                <i class="fa fa-circle-info" data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top"
+                                                                    title="{{ $item->updatedByUser->phone ?? '' }}">
+                                                                </i>
+                                                            @endif
                                                         </span>
                                                         <span class="me-5">
                                                             Người {{ isset($item->reason_refuse) ? 'từ chối' : 'duyệt' }}:
-                                                            {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
+                                                            @if ($item->browse_by == session('user_code'))
+                                                                {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
+                                                                <i class="fa fa-user" data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top" title="Tôi"></i>
+                                                            @else
+                                                                {{ $item->browseByUser ? $item->browseByUser->last_name . ' ' . $item->browseByUser->first_name : 'N/A' }}
+                                                                <i class="fa fa-circle-info" data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top"
+                                                                    title="{{ $item->browseByUser->phone ?? '' }}">
+                                                                </i>
+                                                            @endif
                                                         </span>
                                                         @if (empty($item->reason_refuse))
                                                             <span class="me-5">
                                                                 Người cập nhật giá:
-                                                                {{ $item->updateQuoteByUser ? $item->updateQuoteByUser->last_name . ' ' . $item->updateQuoteByUser->first_name : 'N/A' }}
+                                                                @if ($item->update_quote_by == session('user_code'))
+                                                                    {{ $item->updateQuoteByUser ? $item->updateQuoteByUser->last_name . ' ' . $item->updateQuoteByUser->first_name : 'N/A' }}
+                                                                    <i class="fa fa-user" data-bs-toggle="tooltip"
+                                                                        data-bs-placement="top" title="Tôi"></i>
+                                                                @else
+                                                                    {{ $item->updateQuoteByUser ? $item->updateQuoteByUser->last_name . ' ' . $item->updateQuoteByUser->first_name : 'N/A' }}
+                                                                    <i class="fa fa-circle-info" data-bs-toggle="tooltip"
+                                                                        data-bs-placement="top"
+                                                                        title="{{ $item->updateQuoteByUser->phone ?? '' }}">
+                                                                    </i>
+                                                                @endif
                                                             </span>
                                                         @endif
                                                     </div>
@@ -613,15 +645,6 @@
                                                                 style="margin-bottom: 2px;"></i>
                                                             Khôi Phục
                                                         </button>
-                                                    @elseif(!empty($item->status == 5) && $item->user_code == session('user_code'))
-                                                        <!-- Nút xóa vĩnh viễn đơn -->
-                                                        <button class="btn btn-sm rounded-pill btn-danger"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#deletedModal_{{ $item->code }}"
-                                                            type="button">
-                                                            <i class="fa fa-trash" style="margin-bottom: 2px;"></i>
-                                                            Xóa vĩnh viễn
-                                                        </button>
                                                     @endif
 
                                                 </div>
@@ -708,6 +731,7 @@
                                                                         <tbody>
                                                                             @php
                                                                                 $totalMoneyIn = 0;
+                                                                                $totalQuantity = 0;
                                                                             @endphp
                                                                             @foreach ($item->import_equipment_request_details as $key => $detail_in)
                                                                                 @php
@@ -724,6 +748,8 @@
                                                                                             $detail_in->equipments
                                                                                                 ->vat /
                                                                                                 100);
+                                                                                    $totalQuantity +=
+                                                                                        $detail_in->quantity_quote;
                                                                                     $totalMoneyIn += $totalWithVat;
                                                                                 @endphp
                                                                                 <tr class="border border-dark">
@@ -736,7 +762,7 @@
                                                                                     <td class="text-left">
                                                                                         {{ $detail_in->equipments->units->name }}
                                                                                     </td>
-                                                                                    <td class="text-right">
+                                                                                    <td class="text-center">
                                                                                         {{ $detail_in->quantity_quote }}
                                                                                     </td>
                                                                                     <td class="text-right">
@@ -750,13 +776,26 @@
                                                                                 </tr>
                                                                             @endforeach
                                                                             <tr class=" border border-dark">
-                                                                                <td colspan="3" class="text-center">
+                                                                                <td colspan="3" class="text-right">
                                                                                     Tổng cộng
                                                                                 </td>
-                                                                                <td colspan="3" class="text-center"
+                                                                                <td colspan="1" class="text-center"
+                                                                                    style="height: 30px; min-height: 30px;">
+                                                                                    {{ $totalQuantity }}
+                                                                                </td>
+                                                                                <td colspan="2" class="text-right"
                                                                                     style="height: 30px; min-height: 30px;">
                                                                                     {{ number_format($totalMoneyIn, 0, ',', '.') }}
                                                                                     VND
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr class=" border border-dark">
+                                                                                <td colspan="6" class="text-right"
+                                                                                    style="height: 30px; min-height: 30px;">
+                                                                                    <i>Bằng chữ:
+                                                                                        {{ convertNumberToWords($totalMoneyIn) }}
+                                                                                        nghìn đồng
+                                                                                    </i>
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>
@@ -953,7 +992,6 @@
                                 <option value="Ngân sách không đủ">Ngân sách không đủ</option>
                                 <option value="Yêu cầu không hợp lệ">Yêu cầu không hợp lệ</option>
                                 <option value="Chưa được cấp trên phê duyệt">Chưa được cấp trên phê duyệt</option>
-                                <option value="Nhà cung cấp không phù hợp">Nhà cung cấp không phù hợp</option>
                                 <option value="Thời điểm không phù hợp">Thời điểm không phù hợp</option>
                                 <option value="Lỗi hệ thống hoặc yêu cầu trùng lặp">Lỗi hệ thống hoặc yêu cầu trùng lặp
                                 </option>
