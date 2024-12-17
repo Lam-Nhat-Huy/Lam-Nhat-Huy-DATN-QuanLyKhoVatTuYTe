@@ -275,8 +275,7 @@ class EquipmentRequestController extends Controller
 
     public function exportPdfEquipmentRequestList($code)
     {
-        $user_create = Import_equipment_requests::with('users')
-            ->where('code', $code)
+        $user_create = Users::where('code', session('user_code'))
             ->first();
 
         $equipmentRequestList = Import_equipment_request_details::with(['equipments'])
@@ -286,7 +285,7 @@ class EquipmentRequestController extends Controller
         // Chuẩn bị dữ liệu cho view PDF
         $data = [
             'equipmentRequestList' => $equipmentRequestList,
-            'user_create' =>  $user_create->users->last_name . ' ' . $user_create->users->first_name,
+            'user_create' =>  $user_create->last_name . ' ' . $user_create->first_name,
             'code' => $code
         ];
 

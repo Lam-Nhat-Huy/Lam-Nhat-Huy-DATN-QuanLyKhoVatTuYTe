@@ -455,25 +455,28 @@
                                                                 class="checkbox-wrapper-6 me-2 btn btn-sm btn-dark rounded-pill">
                                                                 <div class="d-flex align-items-center">
                                                                     Cho phép sửa
-                                                                    <input class="tgl tgl-light" id="allow_to_edit"
+                                                                    <input class="tgl tgl-light"
+                                                                        id="allow_to_edit_{{ $item->code }}"
                                                                         type="checkbox" value="1"
-                                                                        name="allow_to_edit"
+                                                                        name="allow_to_edit_{{ $item->code }}"
                                                                         {{ !empty($item->allow_to_edit) && $item->allow_to_edit == 1 ? 'checked' : '' }} />
-                                                                    <label class="tgl-btn ms-2" for="allow_to_edit"
+                                                                    <label class="tgl-btn ms-2"
+                                                                        for="allow_to_edit_{{ $item->code }}"
                                                                         style="width: 30px; height: 18px;"></label>
                                                                 </div>
                                                             </button>
 
                                                             <script>
-                                                                document.getElementById('allow_to_edit').addEventListener('change', function(event) {
+                                                                document.getElementById('allow_to_edit_{{ $item->code }}').addEventListener('change', function(event) {
                                                                     event.preventDefault();
 
+                                                                    // Show loading indicators
                                                                     document.getElementById('loading').style.display = 'block';
                                                                     document.getElementById('loading-overlay').style.display = 'block';
                                                                     this.disabled = true;
 
                                                                     setTimeout(() => {
-                                                                        const allow_to_edit = document.getElementById('allow_to_edit').checked ? 1 : 2;
+                                                                        const allow_to_edit = this.checked ? 1 : 2;
 
                                                                         let formData = new FormData();
                                                                         formData.append('allow_to_edit', allow_to_edit);
@@ -484,31 +487,41 @@
                                                                                 headers: {
                                                                                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                                                                                 }
-                                                                            }).then(response => response.json())
+                                                                            })
+                                                                            .then(response => response.json())
                                                                             .then(data => {
                                                                                 if (data.success) {
                                                                                     toastr.success(data.message);
 
+                                                                                    // Toggle visibility of update buttons
+                                                                                    const actionUpdatePrice = document.getElementById(
+                                                                                        'action_update_price_{{ $item->code }}');
+                                                                                    const actionMain = document.getElementById(
+                                                                                        'action_main_{{ $item->code }}');
+
                                                                                     if (data.hide == 1) {
-                                                                                        document.getElementById('action_update_price').classList.add('d-none');
+                                                                                        actionUpdatePrice.classList.add('d-none');
                                                                                     } else {
-                                                                                        document.getElementById('action_update_price').classList.remove(
-                                                                                            'd-none');
+                                                                                        actionUpdatePrice.classList.remove('d-none');
                                                                                     }
 
-                                                                                    const actionMain = document.getElementById('action_main');
                                                                                     if (data.update_quote == "{{ session('user_code') }}") {
                                                                                         actionMain.classList.remove('d-none');
                                                                                     } else {
                                                                                         actionMain.classList.add('d-none');
                                                                                     }
                                                                                 } else {
-                                                                                    document.getElementById('allow_to_edit').checked = false;
+                                                                                    // Reset checkbox state if operation fails
+                                                                                    this.checked = false;
                                                                                     toastr.info(data.message);
                                                                                 }
                                                                             })
-                                                                            .catch(error => console.error('Error:', error))
+                                                                            .catch(error => {
+                                                                                console.error('Error:', error);
+                                                                                toastr.error('Có lỗi xảy ra khi xử lý yêu cầu.');
+                                                                            })
                                                                             .finally(() => {
+                                                                                // Hide loading indicators
                                                                                 document.getElementById('loading').style.display = 'none';
                                                                                 document.getElementById('loading-overlay').style.display = 'none';
                                                                                 this.disabled = false;
@@ -518,7 +531,7 @@
                                                             </script>
                                                         @endif
 
-                                                        <span id="action_update_price"
+                                                        <span id="action_update_price_{{ $item->code }}"
                                                             class="{{ $item->allow_to_edit == 0 ? '' : 'd-none' }}">
                                                             @if ($item->update_quote_by == session('user_code'))
                                                                 <!-- Nút Tạo Phiếu Nhập -->
@@ -541,7 +554,7 @@
 
                                                         <a href="{{ route('equipment_request.update_import', ['code' => $item->code, 'status' => 'update_quote']) }}"
                                                             class="btn btn-sm rounded-pill btn-youtube me-2 {{ $item->allow_to_edit == 1 && $item->update_quote_by == session('user_code') ? '' : 'd-none' }}"
-                                                            id="action_main">
+                                                            id="action_main_{{ $item->code }}">
                                                             <i class="fas fa-edit" style="margin-bottom: 2px;"></i>
                                                             Cập nhật giá
                                                         </a>
@@ -551,25 +564,28 @@
                                                                 class="checkbox-wrapper-6 me-2 btn btn-sm btn-dark rounded-pill">
                                                                 <div class="d-flex align-items-center">
                                                                     Cho phép sửa
-                                                                    <input class="tgl tgl-light" id="allow_to_edit"
+                                                                    <input class="tgl tgl-light"
+                                                                        id="allow_to_edit_{{ $item->code }}"
                                                                         type="checkbox" value="1"
-                                                                        name="allow_to_edit"
+                                                                        name="allow_to_edit_{{ $item->code }}"
                                                                         {{ !empty($item->allow_to_edit) && $item->allow_to_edit == 1 ? 'checked' : '' }} />
-                                                                    <label class="tgl-btn ms-2" for="allow_to_edit"
+                                                                    <label class="tgl-btn ms-2"
+                                                                        for="allow_to_edit_{{ $item->code }}"
                                                                         style="width: 30px; height: 18px;"></label>
                                                                 </div>
                                                             </button>
 
                                                             <script>
-                                                                document.getElementById('allow_to_edit').addEventListener('change', function(event) {
+                                                                document.getElementById('allow_to_edit_{{ $item->code }}').addEventListener('change', function(event) {
                                                                     event.preventDefault();
 
+                                                                    // Show loading indicators
                                                                     document.getElementById('loading').style.display = 'block';
                                                                     document.getElementById('loading-overlay').style.display = 'block';
                                                                     this.disabled = true;
 
                                                                     setTimeout(() => {
-                                                                        const allow_to_edit = document.getElementById('allow_to_edit').checked ? 1 : 2;
+                                                                        const allow_to_edit = this.checked ? 1 : 2;
 
                                                                         let formData = new FormData();
                                                                         formData.append('allow_to_edit', allow_to_edit);
@@ -580,31 +596,41 @@
                                                                                 headers: {
                                                                                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                                                                                 }
-                                                                            }).then(response => response.json())
+                                                                            })
+                                                                            .then(response => response.json())
                                                                             .then(data => {
                                                                                 if (data.success) {
                                                                                     toastr.success(data.message);
 
+                                                                                    // Toggle visibility of update buttons
+                                                                                    const actionUpdatePrice = document.getElementById(
+                                                                                        'action_update_price_{{ $item->code }}');
+                                                                                    const actionMain = document.getElementById(
+                                                                                        'action_main_{{ $item->code }}');
+
                                                                                     if (data.hide == 1) {
-                                                                                        document.getElementById('action_update_price').classList.add('d-none');
+                                                                                        actionUpdatePrice.classList.add('d-none');
                                                                                     } else {
-                                                                                        document.getElementById('action_update_price').classList.remove(
-                                                                                            'd-none');
+                                                                                        actionUpdatePrice.classList.remove('d-none');
                                                                                     }
 
-                                                                                    const actionMain = document.getElementById('action_main');
-                                                                                    if (data.user_code == "{{ session('user_code') }}") {
+                                                                                    if (data.update_quote == "{{ session('user_code') }}") {
                                                                                         actionMain.classList.remove('d-none');
                                                                                     } else {
                                                                                         actionMain.classList.add('d-none');
                                                                                     }
                                                                                 } else {
-                                                                                    document.getElementById('allow_to_edit').checked = false;
+                                                                                    // Reset checkbox state if operation fails
+                                                                                    this.checked = false;
                                                                                     toastr.info(data.message);
                                                                                 }
                                                                             })
-                                                                            .catch(error => console.error('Error:', error))
+                                                                            .catch(error => {
+                                                                                console.error('Error:', error);
+                                                                                toastr.error('Có lỗi xảy ra khi xử lý yêu cầu.');
+                                                                            })
                                                                             .finally(() => {
+                                                                                // Hide loading indicators
                                                                                 document.getElementById('loading').style.display = 'none';
                                                                                 document.getElementById('loading-overlay').style.display = 'none';
                                                                                 this.disabled = false;
@@ -614,7 +640,7 @@
                                                             </script>
                                                         @endif
 
-                                                        <span id="action_update_price"
+                                                        <span id="action_update_price_{{ $item->code }}"
                                                             class="{{ $item->allow_to_edit == 0 ? '' : 'd-none' }}">
                                                             <a href="{{ route('equipment_request.update_import', ['code' => $item->code, 'status' => 'update_quote']) }}"
                                                                 class="btn btn-sm rounded-pill btn-youtube me-2">
@@ -632,7 +658,7 @@
                                                         <!-- Nút Sửa đơn -->
                                                         <a href="{{ route('equipment_request.update_import', $item->code) }}?tp={{ md5($item->user_code) }}"
                                                             class="btn btn-twitter btn-sm me-2 rounded-pill {{ $item->allow_to_edit == 1 && $item->user_code == session('user_code') ? '' : 'd-none' }}"
-                                                            id="action_main">
+                                                            id="action_main_{{ $item->code }}">
                                                             <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
                                                             phiếu
                                                         </a>
@@ -654,8 +680,8 @@
                                             <div class="fade modal" id="printArea_{{ $item->code }}">
                                                 <div class="modal-body bg-white mx-xl-18 pt-0 pb-15">
                                                     <div class="d-flex mb-5">
-                                                        <img src="{{ asset('image/logo_warehouse.png') }}" width="100"
-                                                            alt="">
+                                                        <img src="{{ asset('image/logo_warehouse.png') }}"
+                                                            width="100" alt="">
                                                         <div class="text-left mt-3">
                                                             <h6 class="mb-0 pb-0">BỆNH VIỆN ĐA KHOA BEESOFT</h6>
                                                             <div>307C Nguyễn Văn Linh, An Khánh, Ninh Kiều, Cần Thơ
@@ -789,7 +815,7 @@
                                                                                     VND
                                                                                 </td>
                                                                             </tr>
-                                                                            <tr class=" border border-dark">
+                                                                            {{-- <tr class=" border border-dark">
                                                                                 <td colspan="6" class="text-right"
                                                                                     style="height: 30px; min-height: 30px;">
                                                                                     <i>Bằng chữ:
@@ -797,14 +823,15 @@
                                                                                         nghìn đồng
                                                                                     </i>
                                                                                 </td>
-                                                                            </tr>
+                                                                            </tr> --}}
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
                                                                 <div>
                                                                     <div class="order-form">
                                                                         <p class="mb-0"><strong>Ghi Chú:</strong></p>
-                                                                        <div class="dotted-line">{{ $item->note }}</div>
+                                                                        <div class="dotted-line">{{ $item->note }}
+                                                                        </div>
 
                                                                         <p class="mb-0"><strong>Thời gian giao
                                                                                 hàng:</strong></p>

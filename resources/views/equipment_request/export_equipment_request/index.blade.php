@@ -432,17 +432,19 @@
                                                                     class="checkbox-wrapper-6 me-2 btn btn-sm btn-dark rounded-pill">
                                                                     <div class="d-flex align-items-center">
                                                                         Cho phép sửa
-                                                                        <input class="tgl tgl-light" id="allow_to_edit"
+                                                                        <input class="tgl tgl-light"
+                                                                            id="allow_to_edit_{{ $item->code }}"
                                                                             type="checkbox" value="1"
-                                                                            name="allow_to_edit"
+                                                                            name="allow_to_edit_{{ $item->code }}"
                                                                             {{ !empty($item->allow_to_edit) && $item->allow_to_edit == 1 ? 'checked' : '' }} />
-                                                                        <label class="tgl-btn ms-2" for="allow_to_edit"
+                                                                        <label class="tgl-btn ms-2"
+                                                                            for="allow_to_edit_{{ $item->code }}"
                                                                             style="width: 30px; height: 18px;"></label>
                                                                     </div>
                                                                 </button>
 
                                                                 <script>
-                                                                    document.getElementById('allow_to_edit').addEventListener('change', function(event) {
+                                                                    document.getElementById('allow_to_edit_{{ $item->code }}').addEventListener('change', function(event) {
                                                                         event.preventDefault();
 
                                                                         document.getElementById('loading').style.display = 'block';
@@ -450,7 +452,7 @@
                                                                         this.disabled = true;
 
                                                                         setTimeout(() => {
-                                                                            const allow_to_edit = document.getElementById('allow_to_edit').checked ? 1 : 2;
+                                                                            const allow_to_edit = this.checked ? 1 : 2;
 
                                                                             let formData = new FormData();
                                                                             formData.append('allow_to_edit', allow_to_edit);
@@ -467,20 +469,23 @@
                                                                                         toastr.success(data.message);
 
                                                                                         if (data.hide == 1) {
-                                                                                            document.getElementById('action_create').classList.add('d-none');
+                                                                                            document.getElementById('action_create_{{ $item->code }}').classList
+                                                                                                .add('d-none');
                                                                                         } else {
-                                                                                            document.getElementById('action_create').classList.remove(
-                                                                                                'd-none');
+                                                                                            document.getElementById('action_create_{{ $item->code }}').classList
+                                                                                                .remove(
+                                                                                                    'd-none');
                                                                                         }
 
-                                                                                        const actionMain = document.getElementById('action_main');
+                                                                                        const actionMain = document.getElementById(
+                                                                                            'action_main_{{ $item->code }}');
                                                                                         if (data.user_code == "{{ session('user_code') }}") {
                                                                                             actionMain.classList.remove('d-none');
                                                                                         } else {
                                                                                             actionMain.classList.add('d-none');
                                                                                         }
                                                                                     } else {
-                                                                                        document.getElementById('allow_to_edit').checked = false;
+                                                                                        this.checked = false;
                                                                                         toastr.info(data.message);
                                                                                     }
                                                                                 })
@@ -495,7 +500,7 @@
                                                                 </script>
                                                             @endif
 
-                                                            <span id="action_create"
+                                                            <span id="action_create_{{ $item->code }}"
                                                                 class="{{ $item->allow_to_edit == 0 ? '' : 'd-none' }}">
                                                                 <!-- Nút Tạo Phiếu Xuất -->
                                                                 <a href="{{ route('warehouse.create_export') }}?cd={{ $item->code }}"
@@ -505,19 +510,19 @@
                                                                 </a>
 
                                                                 <!-- Nút In Phiếu -->
-                                                                <button class="btn btn-sm rounded-pill btn-twitter me-2"
+                                                                {{-- <button class="btn btn-sm rounded-pill btn-twitter me-2"
                                                                     onclick="printInvoice('{{ $item->code }}')"
                                                                     type="button">
                                                                     <i class="fa fa-print"
                                                                         style="margin-bottom: 2px;"></i> In
                                                                     phiếu
-                                                                </button>
+                                                                </button> --}}
                                                             </span>
 
                                                             <!-- Nút Sửa đơn -->
                                                             <a href="{{ route('equipment_request.update_export', $item->code) }}"
                                                                 class="btn btn-twitter btn-sm me-2 rounded-pill {{ $item->allow_to_edit == 1 && $item->user_code == session('user_code') ? '' : 'd-none' }}"
-                                                                id="action_main">
+                                                                id="action_main_{{ $item->code }}">
                                                                 <i class="fa fa-edit" style="margin-bottom: 2px;"></i>Sửa
                                                                 phiếu
                                                             </a>
@@ -530,22 +535,13 @@
                                                                     style="margin-bottom: 2px;"></i>
                                                                 Khôi Phục
                                                             </button>
-                                                        @elseif(!empty($item->status == 2) && $item->user_code == session('user_code'))
-                                                            <!-- Nút xóa vĩnh viễn đơn -->
-                                                            <button class="btn btn-sm rounded-pill btn-danger"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#deletedModal_{{ $item->code }}"
-                                                                type="button">
-                                                                <i class="fa fa-trash" style="margin-bottom: 2px;"></i>
-                                                                Xóa vĩnh viễn
-                                                            </button>
                                                         @endif
                                                     @endif
                                                 </div>
                                             </div>
 
                                             {{-- In --}}
-                                            <div class="fade modal position-relative" id="printArea_{{ $item->code }}">
+                                            {{-- <div class="fade modal position-relative" id="printArea_{{ $item->code }}">
                                                 <span class="link-primary position-absolute"
                                                     style="top: 5%; right: 5%;"><strong class="text-danger">Mã:
                                                     </strong>{{ $item->code }}</span>
@@ -685,7 +681,7 @@
                                                         </div>
                                                     </form>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </td>
                                 </tr>

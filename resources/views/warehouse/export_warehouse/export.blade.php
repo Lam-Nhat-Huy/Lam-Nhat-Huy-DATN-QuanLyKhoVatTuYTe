@@ -574,13 +574,6 @@
 
                                                         {{-- In --}}
                                                         <div class="fade modal" id="printArea_{{ $item->code }}">
-                                                            <span class="link-primary position-absolute"
-                                                                style="top: 5%; right: 4%;">
-                                                                <strong class="text-danger">
-                                                                    Mã:
-                                                                </strong>
-                                                                {{ $item->code }}
-                                                            </span>
                                                             <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
                                                                 <div class="d-flex mb-5">
                                                                     <img src="{{ asset('image/logo_warehouse.png') }}"
@@ -602,6 +595,10 @@
                                                                         Ngày Tạo
                                                                         {{ \Carbon\Carbon::parse($item->request_date)->format('d-m-Y') }}
                                                                     </div>
+                                                                    <div class="text-muted fs-30 mt-3">
+                                                                        Mã phiếu xuất
+                                                                        #{{ $item->code }}
+                                                                    </div>
                                                                 </div>
                                                                 <div class="mb-15 text-left">
                                                                     <div class="card card-flush p-2"
@@ -621,17 +618,17 @@
                                                                                                     {{ $item->departments->name ?? 'Không có' }}
                                                                                                 </td>
                                                                                             </tr>
-                                                                                        @elseif($item->export_type === 'Xuất Hủy')
+                                                                                        @elseif($item->export_type === 'Xuất Trả')
                                                                                             <tr>
                                                                                                 <td class="w-25">
                                                                                                     <strong>Nhà cung
                                                                                                         cấp:</strong>
                                                                                                 </td>
                                                                                                 <td class="text-dark">
-                                                                                                    {{ $item->supplier->name ?? 'Không có' }}
+                                                                                                    {{ $item->suppliers->name ?? 'Không có' }}
                                                                                                 </td>
                                                                                             </tr>
-                                                                                        @else
+                                                                                        @elseif($item->export_type === 'Xuất Hủy')
                                                                                             <tr>
                                                                                                 <td class="w-25">
                                                                                                     <strong>Lý Do
@@ -639,6 +636,16 @@
                                                                                                 </td>
                                                                                                 <td class="text-dark">
                                                                                                     {{ $item->reason ?? 'Không có' }}
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        @else
+                                                                                            <tr>
+                                                                                                <td class="w-25">
+                                                                                                    <strong>Loại
+                                                                                                        xuất</strong>
+                                                                                                </td>
+                                                                                                <td class="text-dark">
+                                                                                                    Xuất cân bằng kho
                                                                                                 </td>
                                                                                             </tr>
                                                                                         @endif
@@ -678,7 +685,7 @@
                                                                                 </h6>
                                                                                 <div class="table-responsive">
                                                                                     <table
-                                                                                        class="table table-striped table-sm table-hover border border-dark">
+                                                                                        class="table table-sm table-hover border border-dark">
                                                                                         <thead
                                                                                             class="fw-bolder bg-success border border-dark">
                                                                                             <tr class="text-center">
@@ -730,6 +737,30 @@
                                                                                             @endforeach
                                                                                         </tbody>
                                                                                     </table>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-8 p-0 m-0"></div>
+                                                                                    <div class="col-4 mb-3 p-0 m-0">
+                                                                                        <p class="m-0 p-0">
+                                                                                            Cần Thơ, ngày
+                                                                                            {{ \Carbon\Carbon::now()->day }}
+                                                                                            tháng
+                                                                                            {{ \Carbon\Carbon::now()->month }}
+                                                                                            năm
+                                                                                            {{ \Carbon\Carbon::now()->year }}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div class="col-1"></div>
+                                                                                    <div class="col-7">
+                                                                                        <p class="m-0 p-0">
+                                                                                            <strong>Người lập phiếu</strong>
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div class="col-4 text-center">
+                                                                                        <p class="m-0 p-0">
+                                                                                            <strong>Trưởng bộ phận</strong>
+                                                                                        </p>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>

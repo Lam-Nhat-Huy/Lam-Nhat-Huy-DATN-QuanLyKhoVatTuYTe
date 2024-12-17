@@ -598,20 +598,6 @@
 
                                                         {{-- In --}}
                                                         <div class="fade modal" id="printArea_{{ $item->code }}">
-                                                            <span class="link-primary position-absolute"
-                                                                style="top: 5%; right: 4%;">
-                                                                <strong class="text-danger">
-                                                                    Số đơn đặt hàng:
-                                                                </strong>
-                                                                {{ $item->order_number }}
-                                                            </span>
-                                                            <span class="link-primary position-absolute"
-                                                                style="top: 7%; right: 10.5%;">
-                                                                <strong class="text-danger">
-                                                                    Số hóa đơn:
-                                                                </strong>
-                                                                {{ $item->receipt_no }}
-                                                            </span>
                                                             <div class="modal-body scroll-y mx-5 mx-xl-18 pt-0 pb-15">
                                                                 <div class="d-flex mb-5">
                                                                     <img src="{{ asset('image/logo_warehouse.png') }}"
@@ -625,13 +611,21 @@
                                                                         <div>Hotline: 0900900999</div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="text-center mb-7">
+                                                                <div class="text-center">
                                                                     <h1 class="mb-3 text-uppercase text-primary">
                                                                         THÔNG TIN PHIẾU NHẬP
                                                                     </h1>
                                                                     <div class="text-muted fs-30">
                                                                         Ngày tạo
                                                                         {{ \Carbon\Carbon::parse($item->request_date)->format('d-m-Y') }}
+                                                                    </div>
+                                                                    <div class="text-muted fs-30 mt-3">
+                                                                        Số đơn đặt hàng
+                                                                        #{{ $item->order_number ?? 'Không có' }}
+                                                                    </div>
+                                                                    <div class="text-muted fs-30 mt-3">
+                                                                        Số hóa đơn
+                                                                        #{{ $item->receipt_no }}
                                                                     </div>
                                                                 </div>
                                                                 <div class="mb-15 text-left">
@@ -779,26 +773,30 @@
                                                                                                     Thiết bị
                                                                                                 </th>
                                                                                                 <th class="text-dark">
-                                                                                                    SLYC</th>
+                                                                                                    S.Lô</th>
+                                                                                                {{-- <th class="text-dark">
+                                                                                                    SLYC</th> --}}
                                                                                                 <th class="text-dark">
-                                                                                                    SLN</th>
-                                                                                                <th class="text-dark">
-                                                                                                    Lệch</th>
+                                                                                                    Số lượng nhập</th>
+                                                                                                {{-- <th class="text-dark">
+                                                                                                    Lệch</th> --}}
                                                                                                 <th class="text-dark">
                                                                                                     Giá</th>
-                                                                                                <th class="text-dark">
-                                                                                                    S.Lô</th>
-                                                                                                <th class="text-dark">
+                                                                                                {{-- <th class="text-dark">
                                                                                                     CK(%)
-                                                                                                </th>
-                                                                                                <th class="text-dark">
-                                                                                                    VAT(%)</th>
+                                                                                                </th> --}}
+                                                                                                {{-- <th class="text-dark">
+                                                                                                    VAT(%)</th> --}}
                                                                                                 <th class="text-dark pe-3">
                                                                                                     Tổng
                                                                                                 </th>
                                                                                             </tr>
                                                                                         </thead>
                                                                                         <tbody>
+                                                                                            @php
+                                                                                                $totalMoneyIn = 0;
+                                                                                                $totalQuantity = 0;
+                                                                                            @endphp
                                                                                             @foreach ($item->details as $detail)
                                                                                                 @php
                                                                                                     $price =
@@ -827,39 +825,86 @@
                                                                                                         $totalPrice *
                                                                                                         (1 +
                                                                                                             $vat / 100);
+
+                                                                                                    $totalQuantity +=
+                                                                                                        $detail->quantity;
+                                                                                                    $totalMoneyIn += $totalPriceWithVAT;
                                                                                                 @endphp
                                                                                                 <tr
                                                                                                     class="border border-dark">
                                                                                                     <td>{{ $detail->equipments->name }}
                                                                                                     </td>
-                                                                                                    <td>{{ $detail->quantity_quote ?? 'Không Có' }}
+                                                                                                    {{-- <td>{{ $detail->quantity_quote ?? 'Không Có' }} --}}
+                                                                                                    {{-- </td> --}}
+                                                                                                    <td>{{ $detail->batch_number }}
                                                                                                     </td>
-                                                                                                    <td>{{ $detail->quantity }}
+                                                                                                    <td
+                                                                                                        class="text-center">
+                                                                                                        {{ $detail->quantity }}
                                                                                                     </td>
-                                                                                                    <td>{{ $detail->deviation_quote ?? 'Không Có' }}
-                                                                                                    </td>
+                                                                                                    {{-- <td>{{ $detail->deviation_quote ?? 'Không Có' }} --}}
+                                                                                                    {{-- </td> --}}
                                                                                                     <td>
                                                                                                         {{ number_format($detail->price) }}
                                                                                                         VND
                                                                                                     </td>
-                                                                                                    <td>{{ $detail->batch_number }}
-                                                                                                    </td>
-                                                                                                    <td>{{ $detail->discount }}%
-                                                                                                    </td>
-                                                                                                    <td>{{ $detail->VAT }}%
-                                                                                                    </td>
+                                                                                                    {{-- <td>{{ $detail->discount }}%
+                                                                                                    </td> --}}
+                                                                                                    {{-- <td>{{ $detail->VAT }}%
+                                                                                                    </td> --}}
                                                                                                     <td>
                                                                                                         {{ number_format($totalPriceWithVAT) }}
                                                                                                         VND
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             @endforeach
-
+                                                                                            <tr
+                                                                                                class=" border border-dark">
+                                                                                                <td colspan="2"
+                                                                                                    class="text-right">
+                                                                                                    Tổng cộng
+                                                                                                </td>
+                                                                                                <td colspan="1"
+                                                                                                    class="text-center"
+                                                                                                    style="height: 30px; min-height: 30px;">
+                                                                                                    {{ $totalQuantity }}
+                                                                                                </td>
+                                                                                                <td colspan="2"
+                                                                                                    class="text-right"
+                                                                                                    style="height: 30px; min-height: 30px;">
+                                                                                                    {{ number_format($totalMoneyIn, 0, ',', '.') }}
+                                                                                                    VND
+                                                                                                </td>
+                                                                                            </tr>
                                                                                         </tbody>
                                                                                     </table>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- End::Receipt Items -->
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-8 p-0 m-0"></div>
+                                                                            <div class="col-4 mb-3 p-0 m-0">
+                                                                                <p class="m-0 p-0">
+                                                                                    Cần Thơ, ngày
+                                                                                    {{ \Carbon\Carbon::now()->day }}
+                                                                                    tháng
+                                                                                    {{ \Carbon\Carbon::now()->month }}
+                                                                                    năm
+                                                                                    {{ \Carbon\Carbon::now()->year }}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div class="col-1"></div>
+                                                                            <div class="col-7">
+                                                                                <p class="m-0 p-0">
+                                                                                    <strong>Người lập phiếu</strong>
+                                                                                </p>
+                                                                            </div>
+                                                                            <div class="col-4 text-center">
+                                                                                <p class="m-0 p-0">
+                                                                                    <strong>Trưởng bộ phận</strong>
+                                                                                </p>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
