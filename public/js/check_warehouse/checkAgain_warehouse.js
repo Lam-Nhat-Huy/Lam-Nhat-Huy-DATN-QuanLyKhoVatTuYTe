@@ -96,6 +96,7 @@ function addProductToTable(
             confirmButtonText: "Tôi biết rồi",
             confirmButtonColor: "#d33",
         });
+        return;
     }
 
     var tableBody = document.getElementById("materialList");

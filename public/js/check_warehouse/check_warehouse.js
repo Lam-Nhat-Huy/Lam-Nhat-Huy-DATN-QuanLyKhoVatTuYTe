@@ -82,6 +82,7 @@ function addProductToTable(
     current_quantity,
     batch_number
 ) {
+    // Kiểm tra xem thiết bị đã tồn tại chưa
     var existingMaterial = materialData.find(
         (material) =>
             material.equipment_code === equipment_code &&
@@ -92,42 +93,43 @@ function addProductToTable(
         Swal.fire({
             icon: "error",
             title: "Thông báo",
-            text: "Đã thêm tất cả thiết bị vào danh sách. Vui lòng tiến hành kiểm kê kho hàng!",
+            text: "Thiết bị đã được thêm vào danh sách!",
             confirmButtonText: "Tôi biết rồi",
             confirmButtonColor: "#d33",
         });
+        return; // Nếu tồn tại thì không thêm mới
     }
 
     var tableBody = document.getElementById("materialList");
     var rowCount = materialData.length;
 
     var row = `
-        <tr data-index="${rowCount}" class="unchecked">
-            <td>${rowCount + 1}</td>
-            <td class="text-left">${equipment_code}</td>
-            <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${name}" data-bs-toggle="tooltip" data-bs-placement="top">
-                ${name}
-            </td>
-            <td>${batch_number}</td>
-            <td>${current_quantity}</td>
-            <td>
-                <input type="number" min="0" class="actual-quantity-input" 
-                    style="width: 70px; height: 40px; border-radius: 8px;" 
-                    oninput="validateQuantity(this, ${rowCount}); checkInputs()">
-            </td>
-            <td class="unequal-count" id="unequal-count-${rowCount}">0</td>
-            <td>
-                <textarea class="equipment_note rounded-3" 
-                    placeholder="" name="equipment_note_${rowCount}"
-                    style="width: 150px; height: 40px; border-radius: 8px; padding: 5px; font-size: 12px;"></textarea>
-            </td>
-            <td>
-                <a href="#" class="text-dark" title="Xóa thiết bị" onclick="removeProduct(${rowCount})">
-                    <i class="fa fa-trash"></i>
-                </a>
-            </td>
-        </tr>
-    `;
+    <tr data-index="${rowCount}" class="unchecked">
+        <td>${rowCount + 1}</td>
+        <td class="text-left">${equipment_code}</td>
+        <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${name}" data-bs-toggle="tooltip" data-bs-placement="top">
+            ${name}
+        </td>
+        <td>${batch_number}</td>
+        <td>${current_quantity}</td>
+        <td>
+            <input type="number" min="0" class="actual-quantity-input" 
+                style="width: 70px; height: 40px; border-radius: 8px;" 
+                oninput="validateQuantity(this, ${rowCount}); checkInputs()">
+        </td>
+        <td class="unequal-count" id="unequal-count-${rowCount}">0</td>
+        <td>
+            <textarea class="equipment_note rounded-3" 
+                placeholder="" name="equipment_note_${rowCount}"
+                style="width: 150px; height: 40px; border-radius: 8px; padding: 5px; font-size: 12px;"></textarea>
+        </td>
+        <td>
+            <a href="#" class="text-dark" title="Xóa thiết bị" onclick="removeProduct(${rowCount})">
+                <i class="fa fa-trash"></i>
+            </a>
+        </td>
+    </tr>
+`;
 
     tableBody.insertAdjacentHTML("beforeend", row);
 
