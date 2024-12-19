@@ -356,7 +356,7 @@
                                                     <i class="fa fa-triangle-exclamation text-danger ms-1 d-none"
                                                         id="production_date_error_{{ $item->equipment_code }}"
                                                         data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Vui lòng thêm ngày sản xuất"></i>
+                                                        title="Vui lòng thêm ngày sản xuất và phải bé hơn ngày hiện tại"></i>
                                                 </div>
                                             </td>
                                             <td class="">
@@ -476,7 +476,7 @@
                                                     <i class="fa fa-triangle-exclamation text-danger ms-1 d-none"
                                                         id="production_date_error_{{ $item->equipment_code }}"
                                                         data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="Vui lòng thêm ngày sản xuất"></i>
+                                                        title="Vui lòng thêm ngày sản xuất và phải bé hơn ngày hiện tại"></i>
                                                 </div>
                                             </td>
                                             <td class="">
@@ -911,6 +911,18 @@
 
                     const expiryDate = new Date(item.production_expiry_date);
 
+                    const today = new Date();
+
+                    if (item.production_date > formatDate(today)) {
+                        document.getElementById(`production_date_error_${item.equipment_code}`)
+                            .classList.remove('d-none');
+                        hasError = true;
+                    } else {
+                        document.getElementById(
+                                `production_date_error_${item.equipment_code}`)
+                            .classList.add('d-none');
+                    }
+
                     if (item.production_date && !item.production_expiry_date) {
                         document.getElementById(`production_expiry_date_error_${item.equipment_code}`)
                             .classList.remove('d-none');
@@ -1039,9 +1051,16 @@
                     hasError = true;
                 }
 
-
                 if (!quantity || quantity <= 0) {
                     quantity_error.innerText = "Vui lòng nhập số lượng và phải lớn hơn 0";
+                    hasError = true;
+                }
+
+                const today = new Date();
+
+                if (prodDate > today) {
+                    production_date_error.innerText =
+                        'Ngày sản xuất không thể lớn hơn ngày hiện tại';
                     hasError = true;
                 }
 
@@ -1173,7 +1192,7 @@
                                         <input type="date" id="production_date_change_${data.equipment_code}"
                                             value="${formatDate(data.production_date)}"
                                             class="form-control form-control-sm border border-success rounded-pill">
-                                            <i class="fa fa-triangle-exclamation text-danger ms-1 d-none" id="production_date_error_${data.equipment_code}" data-bs-toggle="tooltip" data-bs-placement="top" title="Vui lòng thêm ngày sản xuất"></i>
+                                            <i class="fa fa-triangle-exclamation text-danger ms-1 d-none" id="production_date_error_${data.equipment_code}" data-bs-toggle="tooltip" data-bs-placement="top" title="Vui lòng thêm ngày sản xuất và phải bé hơn ngày hiện tại"></i>
                                     </div>
                                 </td>
                                 <td class="">

@@ -13,6 +13,8 @@ return new class extends Migration
             $table->char('equipment_code', 10)->nullable();
             $table->char('batch_number', 10);
             $table->integer('current_quantity')->nullable();
+            $table->date('production_date')->nullable();
+            $table->date('production_expiry_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

@@ -111,9 +111,9 @@ class ImportController extends Controller
                         ],
                         [
                             'code' => $countQuantityInventoryWhere ? $countQuantityInventoryWhere->code : 'TK' . $this->generateRandomString(8),
-                            'batch_number' => $item->batch_number,
                             'current_quantity' => $current_quantity,
-                            'import_code' => $item->receipt_code,
+                            'production_date' => $item->production_date,
+                            'production_expiry_date' => $item->production_expiry_date,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ]
@@ -770,6 +770,8 @@ class ImportController extends Controller
         // Insert inventories
         $receiptDetails = Receipt_details::where('receipt_code', $receipt_code)->get();
 
+        $actionMethod = true;
+
         foreach ($receiptDetails as $item) {
             // Tìm bản ghi inventory theo batch_number và equipment_code từ $item
             $countQuantityInventoryWhere = Inventories::where('batch_number', $item->batch_number)
@@ -782,27 +784,34 @@ class ImportController extends Controller
                     $current_quantity = $countQuantityInventoryWhere->current_quantity + $item->quantity;
                 } elseif ($operation === '-') {
                     $current_quantity = $countQuantityInventoryWhere->current_quantity - $item->quantity;
+                    $actionMethod = false;
                 }
             } else {
                 // If inventory record is not found, set current quantity to the item's quantity
                 $current_quantity = $item->quantity;
             }
 
-            // Cập nhật hoặc tạo mới Inventory
-            $inventoryCode = $countQuantityInventoryWhere ? $countQuantityInventoryWhere->code : 'TK' . $this->generateRandomString(8);
+            if ($actionMethod) {
+                // Cập nhật hoặc tạo mới Inventory
+                $inventoryCode = $countQuantityInventoryWhere ? $countQuantityInventoryWhere->code : 'TK' . $this->generateRandomString(8);
 
-            Inventories::updateOrCreate(
-                [
-                    'batch_number' => $item['batch_number'],
-                    'equipment_code' => $item['equipment_code']
-                ],
-                [
-                    'code' => $inventoryCode,
-                    'current_quantity' => $current_quantity,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]
-            );
+                Inventories::updateOrCreate(
+                    [
+                        'batch_number' => $item['batch_number'],
+                        'equipment_code' => $item['equipment_code']
+                    ],
+                    [
+                        'code' => $inventoryCode,
+                        'current_quantity' => $current_quantity,
+                        'production_date' => $item->production_date,
+                        'production_expiry_date' => $item->production_expiry_date,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]
+                );
+            } else {
+                Inventories::where('batch_number', $item['batch_number'])->where('equipment_code', $item['equipment_code'])->forceDelete();
+            }
         }
     }
 

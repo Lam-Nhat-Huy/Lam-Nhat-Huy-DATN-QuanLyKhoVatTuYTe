@@ -203,7 +203,7 @@
         <div class="container {{ !empty($getExportRequest) ? 'd-none' : '' }}">
             <div class="card border-0 px-8 mb-4 rounded-3">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-5">
                         <label for="equipment_code" class="required form-label fw-semibold">Thiết
                             bị</label>
                         <select name="equipment" id="equipment" onchange="cEquipment()"
@@ -220,7 +220,7 @@
                         <div class="message_error" id="equipment_error"></div>
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-4">
                         <label for="batch_number" class="required form-label fw-semibold" id="batch_number_label">Số
                             lô</label>
                         <select class="form-select form-select-sm border-success rounded-pill" name="batch_number"
@@ -256,9 +256,9 @@
                         <table class="table align-middle mb-0 table-striped gs-0 gy-4" id="table_list_equipment">
                             <thead class="table-dark">
                                 <tr class="">
-                                    <th style="width: 50%;" class="ps-5">Thiết bị</th>
+                                    <th style="width: 45%;" class="ps-5">Thiết bị</th>
                                     <th style="width: 25%;">Số lô</th>
-                                    <th style="width: 15%;">Số lượng</th>
+                                    <th style="width: 20%;">Số lượng</th>
                                     <th style="width: 10%;" class="pe-5 {{ !empty($getExportRequest) ? 'd-none' : '' }}">
                                         Hành động
                                     </th>
@@ -336,6 +336,9 @@
                                                     title="Tổng số lượng phải bằng với số lượng yêu cầu là {{ $er->quantity }}">
                                                     <i class="fa-solid fa-triangle-exclamation text-danger"></i>
                                                 </span>
+                                                <span class="" id="remaining_quantity_{{ $er->equipments->code }}">
+                                                    {{ isset($singleBatch) ? '- Đã đủ ✅' : '- Cần thêm ' . $er->quantity . ' ⚠️' }}
+                                                </span>
                                             </td>
                                         </tr>
 
@@ -377,14 +380,34 @@
                                         document.querySelectorAll('input[type="number"]').forEach(input => {
                                             input.addEventListener('input', function() {
                                                 let erCode = this.getAttribute('data-er-code');
+                                                let qtyrqe = parseInt(document.getElementById(`quantity_current_by_batch_${erCode}`)
+                                                    .textContent) || 0;
                                                 let total = 0;
 
+                                                // Tính tổng giá trị từ tất cả các input liên quan
                                                 document.querySelectorAll(`input[data-er-code="${erCode}"]`).forEach(item => {
-                                                    let value = parseInt(item.value) || 0;
+                                                    let value = parseInt(item.value) || 0; // Xử lý giá trị không hợp lệ
                                                     total += value;
                                                 });
 
+                                                // Cập nhật tổng số lượng đã thay đổi
                                                 document.getElementById(`quantity_total_input_${erCode}`).textContent = total;
+
+                                                // Tính số lượng còn lại
+                                                let remaining = qtyrqe - total;
+
+                                                // Cập nhật trạng thái dựa trên remaining
+                                                let remainingText;
+                                                if (total > qtyrqe) {
+                                                    remainingText = `- Dư ${total - qtyrqe} ❌`;
+                                                } else if (total === qtyrqe) {
+                                                    remainingText = `- Đã đủ ✅`;
+                                                } else {
+                                                    remainingText = `- Cần thêm ${Math.abs(remaining)} ⚠️`;
+                                                }
+
+                                                // Hiển thị trạng thái
+                                                document.getElementById(`remaining_quantity_${erCode}`).textContent = remainingText;
                                             });
                                         });
                                     </script>
@@ -723,6 +746,19 @@
             }
         });
 
+        function formatDate(date) {
+            if (!(date instanceof Date) || isNaN(date)) return false; // Kiểm tra nếu không phải là Date hoặc không hợp lệ
+
+            const day = date.getDate();
+            const month = date.getMonth() + 1;
+            const year = date.getFullYear();
+
+            const formattedDay = day < 10 ? `0${day}` : day;
+            const formattedMonth = month < 10 ? `0${month}` : month;
+
+            return `${formattedDay}-${formattedMonth}-${year}`;
+        }
+
         // Đảm bảo thiết lập đúng trạng thái ban đầu dựa trên giá trị đã chọn (nếu có)
         window.addEventListener('DOMContentLoaded', function() {
             var event = new Event('change');
@@ -750,8 +786,10 @@
 
                 filteredBatches.forEach(function(batch) {
                     const option = document.createElement('option');
+                    let created_at = new Date(batch.created_at);
                     option.value = batch.batch_number;
-                    option.textContent = `${batch.batch_number} - Số lượng: ${batch.total_quantity}`;
+                    option.textContent =
+                        `${batch.batch_number} - Số lượng: ${batch.total_quantity} - Ngày nhập: ${formatDate(created_at) === false ? 'Không có' : formatDate(created_at)}`;
                     batchSelect.appendChild(option);
                 });
 

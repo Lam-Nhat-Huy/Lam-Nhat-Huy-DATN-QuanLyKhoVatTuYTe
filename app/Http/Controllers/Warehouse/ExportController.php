@@ -310,8 +310,8 @@ class ExportController extends Controller
 
         $equipmentsWithStock = Equipments::all();
 
-        $getBatchWithQuantity = Inventories::select('batch_number', 'equipment_code', DB::raw('SUM(current_quantity) as total_quantity'))
-            ->groupBy('batch_number', 'equipment_code')
+        $getBatchWithQuantity = Inventories::select('batch_number', 'equipment_code', 'created_at', DB::raw('SUM(current_quantity) as total_quantity'))
+            ->groupBy('batch_number', 'equipment_code', 'created_at')
             ->get();
 
         $equipmentBatches = [];
@@ -320,6 +320,7 @@ class ExportController extends Controller
             $equipmentBatches[] = [
                 'equipment_code' => $inventory->equipment_code,
                 'batch_number' => $inventory->batch_number,
+                'created_at' => $inventory->created_at ?? '',
                 'total_quantity' => $inventory->total_quantity,
             ];
         }
@@ -492,8 +493,8 @@ class ExportController extends Controller
 
         $equipmentsWithStock = Equipments::all();
 
-        $getBatchWithQuantity = Inventories::select('batch_number', 'equipment_code', DB::raw('SUM(current_quantity) as total_quantity'))
-            ->groupBy('batch_number', 'equipment_code')
+        $getBatchWithQuantity = Inventories::select('batch_number', 'equipment_code', 'created_at', DB::raw('SUM(current_quantity) as total_quantity'))
+            ->groupBy('batch_number', 'equipment_code', 'created_at')
             ->get();
 
         $equipmentBatches = [];
@@ -502,6 +503,7 @@ class ExportController extends Controller
             $equipmentBatches[] = [
                 'equipment_code' => $inventory->equipment_code,
                 'batch_number' => $inventory->batch_number,
+                'created_at' => $inventory->created_at ?? '',
                 'total_quantity' => $inventory->total_quantity,
             ];
         }
