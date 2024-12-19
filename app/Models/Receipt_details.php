@@ -12,6 +12,8 @@ class   Receipt_details extends Model
     protected $fillable = [
         'receipt_code',
         'batch_number',
+        'production_date',
+        'production_expiry_date',
         'quantity',
         'quantity_quote',
         'deviation_quote',

@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Warehouse;
 
-use App\Exports\ReceiptsExport;
 use App\Http\Controllers\Controller;
-use App\Imports\ReceiptsImport;
 use App\Models\Equipments;
 use App\Models\Import_equipment_request_details;
 use App\Models\Import_equipment_requests;
@@ -16,7 +14,6 @@ use App\Models\Receipts;
 use App\Models\Suppliers;
 use App\Models\Users;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 
 class ImportController extends Controller
 {
@@ -358,6 +355,8 @@ class ImportController extends Controller
                     'equipment_name' => $equipment->name,
                     'price' => $request->price,
                     'batch_number' => $request->batch_number,
+                    'production_date' => $request->production_date,
+                    'production_expiry_date' => $request->production_expiry_date,
                     'quantity' => $request->quantity,
                     'discount_rate' => $request->discount_rate ?? 0,
                     'vat' => $equipment->vat ?? 0,
@@ -424,6 +423,8 @@ class ImportController extends Controller
                     Receipt_details::create([
                         'receipt_code' => $record->code,
                         'batch_number' => $equipment['batch_number'],
+                        'production_date' => $equipment['production_date'] ?? null,
+                        'production_expiry_date' => $equipment['production_expiry_date'] ?? null,
                         'quantity' => $equipment['quantity'],
                         'VAT' => $equipment['vat'],
                         'discount' => $equipment['discount_rate'],
@@ -485,6 +486,8 @@ class ImportController extends Controller
                     Receipt_details::create([
                         'receipt_code' => $record->code,
                         'batch_number' => $equipment['batch_number'],
+                        'production_date' => $equipment['production_date'],
+                        'production_expiry_date' => $equipment['production_expiry_date'],
                         'quantity' => $equipment['quantity'],
                         'quantity_quote' => $equipment['quantityQuote'],
                         'deviation_quote' => $equipment['deviation_quote'],
@@ -587,6 +590,8 @@ class ImportController extends Controller
                         'quantity' => $equipment['quantity'],
                         'batch_number' => $equipment['batch_number'],
                         'quantity' => $equipment['quantity'],
+                        'production_date' => $equipment['production_date'] ?? null,
+                        'production_expiry_date' => $equipment['production_expiry_date'] ?? null,
                         'VAT' => $equipment['vat'],
                         'discount' => $equipment['discount_rate'],
                         'price' => $equipment['price'],
@@ -758,23 +763,6 @@ class ImportController extends Controller
 
         toastr()->success('Đã hủy phiếu nhập kho.');
         return redirect()->back();
-    }
-
-
-    public function exportExcel()
-    {
-        return Excel::download(new ReceiptsExport, 'receipts_sample.xlsx');
-    }
-
-    public function importExcel(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|file|mimes:xls,xlsx|max:10240', // tối đa 10MB
-        ]);
-
-        Excel::import(new ReceiptsImport, $request->file('file'));
-
-        return redirect()->back()->with('success', 'Dữ liệu đã được nhập thành công!');
     }
 
     private function updateInventories($receipt_code, $operation)

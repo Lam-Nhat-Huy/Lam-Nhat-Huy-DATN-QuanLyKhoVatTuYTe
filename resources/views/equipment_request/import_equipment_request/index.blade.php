@@ -614,7 +614,7 @@
                                                                                         actionUpdatePrice.classList.remove('d-none');
                                                                                     }
 
-                                                                                    if (data.update_quote == "{{ session('user_code') }}") {
+                                                                                    if (data.user_code == "{{ session('user_code') }}") {
                                                                                         actionMain.classList.remove('d-none');
                                                                                     } else {
                                                                                         actionMain.classList.add('d-none');

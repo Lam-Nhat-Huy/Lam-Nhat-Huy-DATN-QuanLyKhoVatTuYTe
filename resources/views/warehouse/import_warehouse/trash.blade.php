@@ -320,11 +320,15 @@
                                                                                 VND
                                                                             </td>
                                                                             <td>{{ $detail->batch_number }}</td>
-                                                                            <td>{{ number_format($detail->discount, 0, ',', '.') }}%
-                                                                            </td>
-                                                                            <td>{{ number_format($detail->VAT, 0, ',', '.') }}%
+                                                                            <td>
+                                                                                {{ $detail->production_date ? \Carbon\Carbon::parse($detail->production_date)->format('d-m-Y') : 'Không có' }}
                                                                             </td>
                                                                             <td>
+                                                                                {{ $detail->production_expiry_date ? \Carbon\Carbon::parse($detail->production_expiry_date)->format('d-m-Y') : 'Không có' }}
+                                                                            </td>
+                                                                            <td data-bs-toggle="tooltip"
+                                                                                data-bs-placement="top"
+                                                                                title="Bao gồm chiết khấu {{ number_format($detail->discount, 0, ',', '.') }}% và VAT {{ number_format($detail->VAT, 0, ',', '.') }}%">
                                                                                 {{ number_format($totalPriceWithVAT, 0, ',', '.') }}
                                                                                 VND
                                                                             </td>

@@ -438,12 +438,9 @@
                                                                         <th style="width: 11%;">Lệch</th>
                                                                         <th style="width: 10%;">Giá nhập</th>
                                                                         <th style="width: 10%;">Số lô</th>
-                                                                        <th style="width: 10%;">CK(%)</th>
-                                                                        <th style="width: 10%;">VAT(%)</th>
-                                                                        <th class="pe-3" style="width: 15%;"
-                                                                            data-bs-toggle="tooltip"
-                                                                            data-bs-placement="top"
-                                                                            title="Bao gồm chiết khấu và thuế VAT">
+                                                                        <th style="width: 10%;">NSX</th>
+                                                                        <th style="width: 10%;">HSD</th>
+                                                                        <th class="pe-3" style="width: 15%;">
                                                                             Tổng
                                                                         </th>
                                                                     </tr>
@@ -464,9 +461,7 @@
                                                                                 $totalPrice * (1 + $vat / 100);
                                                                         @endphp
                                                                         <tr class="text-center">
-                                                                            <td title="{{ $detail->equipments->name ?? 'Không có' }}"
-                                                                                data-bs-toggle="tooltip"
-                                                                                data-bs-placement="top"
+                                                                            <td
                                                                                 style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left;">
                                                                                 {{ $detail->equipments->name }}
                                                                             </td>
@@ -495,11 +490,15 @@
                                                                                 VND
                                                                             </td>
                                                                             <td>{{ $detail->batch_number }}</td>
-                                                                            <td>{{ number_format($detail->discount, 0, ',', '.') }}%
-                                                                            </td>
-                                                                            <td>{{ number_format($detail->VAT, 0, ',', '.') }}%
+                                                                            <td>
+                                                                                {{ $detail->production_date ? \Carbon\Carbon::parse($detail->production_date)->format('d-m-Y') : 'Không có' }}
                                                                             </td>
                                                                             <td>
+                                                                                {{ $detail->production_expiry_date ? \Carbon\Carbon::parse($detail->production_expiry_date)->format('d-m-Y') : 'Không có' }}
+                                                                            </td>
+                                                                            <td data-bs-toggle="tooltip"
+                                                                                data-bs-placement="top"
+                                                                                title="Bao gồm chiết khấu {{ number_format($detail->discount, 0, ',', '.') }}% và VAT {{ number_format($detail->VAT, 0, ',', '.') }}%">
                                                                                 {{ number_format($totalPriceWithVAT, 0, ',', '.') }}
                                                                                 VND
                                                                             </td>
